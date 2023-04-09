@@ -953,9 +953,7 @@ public TupleList readTuples(
     // underlying fact table, unioning the sub-selects.
     RolapCube cube = null;
     boolean virtualCube = false;
-    if ( constraint instanceof SqlContextConstraint ) {
-      SqlContextConstraint sqlConstraint =
-        (SqlContextConstraint) constraint;
+    if ( constraint instanceof SqlContextConstraint sqlConstraint ) {
       Query query = constraint.getEvaluator().getQuery();
       cube = (RolapCube) query.getCube();
       if ( sqlConstraint.isJoinRequired() ) {
@@ -1267,8 +1265,7 @@ public TupleList readTuples(
 
     // lookup RolapHierarchy of base cube that matches this hierarchy
 
-    if ( !level.isAll() && hierarchy instanceof RolapCubeHierarchy ) {
-      RolapCubeHierarchy cubeHierarchy = (RolapCubeHierarchy) hierarchy;
+    if ( !level.isAll() && hierarchy instanceof RolapCubeHierarchy cubeHierarchy ) {
       if ( baseCube != null
         && !cubeHierarchy.getCube().equals( baseCube ) ) {
         // replace the hierarchy with the underlying base cube hierarchy
@@ -1563,13 +1560,10 @@ public TupleList readTuples(
     if ( constraint instanceof SqlContextConstraint ) {
       return constraint.getEvaluator();
     }
-    if ( constraint instanceof DescendantsConstraint ) {
-      DescendantsConstraint descConstraint =
-        (DescendantsConstraint) constraint;
+    if ( constraint instanceof DescendantsConstraint descConstraint ) {
       MemberChildrenConstraint mcc =
         descConstraint.getMemberChildrenConstraint( null );
-      if ( mcc instanceof SqlContextConstraint ) {
-        SqlContextConstraint scc = (SqlContextConstraint) mcc;
+      if ( mcc instanceof SqlContextConstraint scc ) {
         return scc.getEvaluator();
       }
     }
@@ -1628,11 +1622,9 @@ public TupleList readTuples(
         .getMembersArray();
 
     // if measure is calculated, we can't continue
-    if ( !( members[ 0 ] instanceof RolapBaseCubeMeasure ) ) {
+    if ( !( members[ 0 ] instanceof RolapBaseCubeMeasure measure ) ) {
       return null;
     }
-
-    RolapBaseCubeMeasure measure = (RolapBaseCubeMeasure) members[ 0 ];
 
     int bitPosition =
       ( (RolapStar.Measure) measure.getStarMeasure() ).getBitPosition();
@@ -1670,13 +1662,7 @@ public TupleList readTuples(
 
     measureBitKey.set( bitPosition );
 
-    if ( constraint
-      instanceof RolapNativeCrossJoin.NonEmptyCrossJoinConstraint ) {
-      // Cannot evaluate NonEmptyCrossJoinConstraint using an agg
-      // table if one of its args is a DescendantsConstraint.
-      RolapNativeCrossJoin.NonEmptyCrossJoinConstraint necj =
-        (RolapNativeCrossJoin.NonEmptyCrossJoinConstraint)
-          constraint;
+    if ( constraint instanceof RolapNativeCrossJoin.NonEmptyCrossJoinConstraint necj ) {
       for ( CrossJoinArg arg : necj.args ) {
         if ( arg instanceof DescendantsCrossJoinArg
           || arg instanceof MemberListCrossJoinArg ) {

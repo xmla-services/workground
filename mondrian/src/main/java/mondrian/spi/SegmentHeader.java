@@ -137,10 +137,9 @@ public class SegmentHeader implements Serializable {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof SegmentHeader)) {
+        if (!(obj instanceof SegmentHeader that)) {
             return false;
         }
-        final SegmentHeader that = (SegmentHeader) obj;
         return getUniqueID().equals(that.getUniqueID())
             && excludedRegions.equals(that.excludedRegions);
     }

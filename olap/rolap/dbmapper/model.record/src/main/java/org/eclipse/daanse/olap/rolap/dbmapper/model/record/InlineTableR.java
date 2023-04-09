@@ -34,8 +34,7 @@ public record InlineTableR(List<ColumnDef> columnDefs,
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof InlineTable) {
-            InlineTable that = (InlineTable) o;
+        if (o instanceof InlineTable that) {
             return alias().equals(that.alias());
         } else {
             return false;

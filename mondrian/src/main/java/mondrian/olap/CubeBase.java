@@ -180,10 +180,9 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
      * @return Dimension, or null if not found
      */
     public Dimension lookupDimension(Id.Segment s) {
-        if (!(s instanceof Id.NameSegment)) {
+        if (!(s instanceof Id.NameSegment nameSegment)) {
             return null;
         }
-        final Id.NameSegment nameSegment = (Id.NameSegment) s;
         for (Dimension dimension : dimensions) {
             if (Util.equalName(dimension.getName(), nameSegment.name)) {
                 return dimension;

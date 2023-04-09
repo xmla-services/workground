@@ -200,8 +200,7 @@ public class SqlContextConstraint
         Set<RolapCube> baseCubes,
         List<RolapCube> baseCubeList)
     {
-        if (exp instanceof MemberExpr) {
-            MemberExpr memberExpr = (MemberExpr) exp;
+        if (exp instanceof MemberExpr memberExpr) {
             Member member = memberExpr.getMember();
             if (member instanceof RolapStoredMeasure) {
                 addMeasure(
@@ -209,8 +208,7 @@ public class SqlContextConstraint
             } else if (member instanceof RolapCalculatedMember) {
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
-        } else if (exp instanceof ResolvedFunCall) {
-            ResolvedFunCall funCall = (ResolvedFunCall) exp;
+        } else if (exp instanceof ResolvedFunCall funCall) {
             Exp [] args = funCall.getArgs();
             for (Exp arg : args) {
                 findMeasures(arg, baseCubes, baseCubeList);

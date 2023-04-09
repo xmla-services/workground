@@ -51,8 +51,7 @@ public class RolapStatisticsCache {
         if (approxRowCount >= 0) {
             return approxRowCount;
         }
-        if (relation instanceof Table) {
-            final Table table = (Table) relation;
+        if (relation instanceof Table table) {
             return getTableCardinality(
                 null, table.schema(), table.name());
         } else {
@@ -137,10 +136,9 @@ public class RolapStatisticsCache {
         if (approxCardinality >= 0) {
             return approxCardinality;
         }
-        if (relation instanceof Table
+        if (relation instanceof Table table
             && expression instanceof Column)
         {
-            final Table table = (Table) relation;
             final Column column = (Column) expression;
             return getColumnCardinality(
                 null,

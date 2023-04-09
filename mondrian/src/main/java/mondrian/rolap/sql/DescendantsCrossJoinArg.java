@@ -77,10 +77,9 @@ public class DescendantsCrossJoinArg implements CrossJoinArg {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof DescendantsCrossJoinArg)) {
+        if (!(obj instanceof DescendantsCrossJoinArg that)) {
             return false;
         }
-        DescendantsCrossJoinArg that = (DescendantsCrossJoinArg) obj;
         if (!equals(this.level, that.level)) {
             return false;
         }

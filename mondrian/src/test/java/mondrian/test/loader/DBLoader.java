@@ -1239,11 +1239,9 @@ public abstract class DBLoader {
         if (type == Type.Integer) {
             if (value instanceof String) {
                 return (String) value;
-            } else if (value instanceof Double) {
-                Double result = (Double) value;
+            } else if (value instanceof Double result) {
                 return integerFormatter.format(result.doubleValue());
-            } else if (value instanceof Integer) {
-                Integer result = (Integer) value;
+            } else if (value instanceof Integer result) {
                 return result.toString();
             }
 
@@ -1257,8 +1255,7 @@ public abstract class DBLoader {
                 return (String) value;
             } else if (value instanceof Boolean) {
                 return (Boolean) value ? "1" : "0";
-            } else if (value instanceof Integer) {
-                Integer result = (Integer) value;
+            } else if (value instanceof Integer result) {
                 return result.toString();
             }
 
@@ -1269,11 +1266,9 @@ public abstract class DBLoader {
         } else if (type == Type.Bigint) {
             if (value instanceof String) {
                 return (String) value;
-            } else if (value instanceof Double) {
-                Double result = (Double) value;
+            } else if (value instanceof Double result) {
                 return integerFormatter.format(result.doubleValue());
-            } else if (value instanceof Long) {
-                Long result = (Long) value;
+            } else if (value instanceof Long result) {
                 return result.toString();
             }
 
@@ -1302,8 +1297,7 @@ public abstract class DBLoader {
                 default:
                     return "'" + ts + "'";
                 }
-            } else if (value instanceof Timestamp) {
-                Timestamp ts = (Timestamp) value;
+            } else if (value instanceof Timestamp ts) {
                 switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
@@ -1326,8 +1320,7 @@ public abstract class DBLoader {
                 default:
                     return "'" + dateFormatter.format(dt) + "'";
                 }
-            } else if (value instanceof Date) {
-                Date dt = (Date) value;
+            } else if (value instanceof Date dt) {
                 switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
@@ -1343,8 +1336,7 @@ public abstract class DBLoader {
         } else if (type == Type.Real) {
             if (value instanceof String) {
                 return (String) value;
-            } else if (value instanceof Float) {
-                Float result = (Float) value;
+            } else if (value instanceof Float result) {
                 return result.toString();
             }
 
@@ -1362,11 +1354,9 @@ public abstract class DBLoader {
                  }
                 DecimalFormat formatter = new DecimalFormat(
                     decimalFormat(matcher.group(1), matcher.group(2)));
-                if (value instanceof Double) {
-                    Double result = (Double) value;
+                if (value instanceof Double result) {
                     return formatter.format(result.doubleValue());
-                } else if (value instanceof BigDecimal) {
-                    BigDecimal result = (BigDecimal) value;
+                } else if (value instanceof BigDecimal result) {
                     return formatter.format(result);
                 }
             }
@@ -1404,8 +1394,7 @@ public abstract class DBLoader {
                         return "false";
                     }
                 }
-            } else if (value instanceof Boolean) {
-                Boolean result = (Boolean) value;
+            } else if (value instanceof Boolean result) {
                 return result.toString();
             }
 

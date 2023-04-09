@@ -60,8 +60,7 @@ public class TupleType implements Type {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof TupleType) {
-            TupleType that = (TupleType) obj;
+        if (obj instanceof TupleType that) {
             return Arrays.equals(this.elementTypes, that.elementTypes);
         } else {
             return false;
@@ -124,8 +123,7 @@ public class TupleType implements Type {
 
     public Type getValueType() {
         for (Type elementType : elementTypes) {
-            if (elementType instanceof MemberType) {
-                MemberType memberType = (MemberType) elementType;
+            if (elementType instanceof MemberType memberType) {
                 Dimension dimension = memberType.getDimension();
                 if (dimension != null && dimension.isMeasures()) {
                     return memberType.getValueType();
@@ -153,10 +151,9 @@ public class TupleType implements Type {
 
     @Override
 	public boolean isInstance(Object value) {
-        if (!(value instanceof Object[])) {
+        if (!(value instanceof Object[] objects)) {
             return false;
         }
-        Object[] objects = (Object[]) value;
         if (objects.length != elementTypes.length) {
             return false;
         }

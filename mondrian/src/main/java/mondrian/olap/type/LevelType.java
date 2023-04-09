@@ -126,8 +126,7 @@ public class LevelType implements Type {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof LevelType) {
-            LevelType that = (LevelType) obj;
+        if (obj instanceof LevelType that) {
             return Objects.equals(this.level, that.level)
                 && Objects.equals(this.hierarchy, that.hierarchy)
                 && Objects.equals(this.dimension, that.dimension);
@@ -137,10 +136,9 @@ public class LevelType implements Type {
 
     @Override
 	public Type computeCommonType(Type type, int[] conversionCount) {
-        if (!(type instanceof LevelType)) {
+        if (!(type instanceof LevelType that)) {
             return null;
         }
-        LevelType that = (LevelType) type;
         if (this.getLevel() != null
             && this.getLevel().equals(that.getLevel()))
         {

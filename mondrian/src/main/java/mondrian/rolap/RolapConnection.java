@@ -735,9 +735,7 @@ public Statement getInternalStatement() {
 
     @Override
     public boolean equals( Object obj ) {
-      if ( obj instanceof DriverManagerDataSource ) {
-        DriverManagerDataSource
-          that = (DriverManagerDataSource) obj;
+      if ( obj instanceof DriverManagerDataSource that ) {
         return this.loginTimeout == that.loginTimeout
           && this.jdbcConnectString.equals( that.jdbcConnectString )
           && this.jdbcProperties.equals( that.jdbcProperties );

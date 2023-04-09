@@ -422,16 +422,11 @@ public class RolapCube extends CubeBase {
         loadAggGroup(xmlCube);
 
         for(Action action: xmlCube.action()) {
-            if(action instanceof DrillThroughAction) {
-                DrillThroughAction drillThroughAction = (DrillThroughAction)action;
-
+            if(action instanceof DrillThroughAction drillThroughAction) {
                 List<RolapDrillThroughColumn> columns = new ArrayList<>();
 
                 for(DrillThroughElement drillThroughColumn: drillThroughAction.drillThroughElement()) {
-                    if(drillThroughColumn instanceof DrillThroughAttribute) {
-                        DrillThroughAttribute drillThroughAttribute =
-                                (DrillThroughAttribute)drillThroughColumn;
-
+                    if(drillThroughColumn instanceof DrillThroughAttribute drillThroughAttribute) {
                         Dimension dimension = null;
                         Hierarchy hierarchy = null;
                         Level level = null;
@@ -489,10 +484,7 @@ public class RolapCube extends CubeBase {
                         );
 
                     }
-                    else if(drillThroughColumn instanceof DrillThroughMeasure) {
-                        DrillThroughMeasure drillThroughMeasure =
-                                (DrillThroughMeasure)drillThroughColumn;
-
+                    else if(drillThroughColumn instanceof DrillThroughMeasure drillThroughMeasure) {
                         Member measure = null;
                         for(Member currntMeasure: this.getMeasures()) {
                             if(currntMeasure.getName().equals(drillThroughMeasure.name())) {
@@ -526,10 +518,7 @@ public class RolapCube extends CubeBase {
             List<RolapWritebackColumn> columns = new ArrayList<>();
 
             for(WritebackColumn writebackColumn: writebackTable.columns()) {
-                if(writebackColumn instanceof WritebackAttribute) {
-                    WritebackAttribute writebackAttribute =
-                            (WritebackAttribute)writebackColumn;
-
+                if(writebackColumn instanceof WritebackAttribute writebackAttribute) {
                     Dimension dimension = null;
                     for(Dimension currentDimension: this.getDimensions()) {
                         if(currentDimension.getName().equals(writebackAttribute.dimension())) {
@@ -551,10 +540,7 @@ public class RolapCube extends CubeBase {
                     );
 
                 }
-                else if(writebackColumn instanceof WritebackMeasure) {
-                    WritebackMeasure writebackMeasure =
-                            (WritebackMeasure)writebackColumn;
-
+                else if(writebackColumn instanceof WritebackMeasure writebackMeasure) {
                     Member measure = null;
                     for(Member currentMeasure: this.getMeasures()) {
                         if(currentMeasure.getName().equals(writebackMeasure.name())) {
@@ -671,9 +657,8 @@ public class RolapCube extends CubeBase {
             final Object propExpr = propExprs.get(j);
             measure.setProperty(propName, propExpr);
             if (propName.equals(Property.MEMBER_ORDINAL.name)
-                && propExpr instanceof String)
+                && propExpr instanceof String expr)
             {
-                final String expr = (String) propExpr;
                 if (expr.startsWith("\"")
                     && expr.endsWith("\""))
                 {
@@ -906,12 +891,8 @@ public class RolapCube extends CubeBase {
             {
                 List<Member> measures = rolapCube.getMeasures();
                 for (Member measure : measures) {
-                    if (measure instanceof
-                            RolapHierarchy.RolapCalculatedMeasure)
+                    if (measure instanceof RolapHierarchy.RolapCalculatedMeasure calculatedMeasure)
                     {
-                        RolapHierarchy.RolapCalculatedMeasure
-                                calculatedMeasure =
-                                (RolapHierarchy.RolapCalculatedMeasure) measure;
                         if (calculatedMember
                                 .name().equals(calculatedMeasure.getKey()))
                         {
@@ -1093,9 +1074,7 @@ public class RolapCube extends CubeBase {
         List<RolapHierarchy> cubeHierarchyList)
     {
         RolapDimension dimension = null;
-        if (xmlCubeDimension instanceof DimensionUsage) {
-            DimensionUsage usage =
-                (DimensionUsage) xmlCubeDimension;
+        if (xmlCubeDimension instanceof DimensionUsage usage) {
             final RolapHierarchy sharedHierarchy =
                 schema.getSharedHierarchy(usage.source());
             if (sharedHierarchy != null) {
@@ -1768,16 +1747,10 @@ public class RolapCube extends CubeBase {
             // Only one, so let lower level error checking handle problems
             createUsage(hierarchies[0], xmlCubeDimension);
 
-        } else if ((xmlCubeDimension instanceof DimensionUsage)
+        } else if ((xmlCubeDimension instanceof DimensionUsage du)
             && (((DimensionUsage) xmlCubeDimension).level()
                 != null))
         {
-            // More than one, make sure if we are joining by level, that
-            // at least one hierarchy can and those that can not are
-            // not registered
-            DimensionUsage du =
-                (DimensionUsage) xmlCubeDimension;
-
             int cnt = 0;
 
             for (RolapCubeHierarchy hierarchy : hierarchies) {
@@ -2276,9 +2249,7 @@ public class RolapCube extends CubeBase {
         StringBuilder buf,
         String indent)
     {
-        if (relation instanceof Table) {
-            Table table = (Table) relation;
-
+        if (relation instanceof Table table) {
             buf.append(indent);
             buf.append(table.name());
             if (table.alias() != null) {
@@ -2540,16 +2511,11 @@ public class RolapCube extends CubeBase {
         RelationOrJoin relation,
         Map<String, RelNode> map)
     {
-        if (relation instanceof Relation) {
-            Relation table =
-                (Relation) relation;
-
+        if (relation instanceof Relation table) {
             RelNode relNode = RelNode.lookup(table, map);
             return (relNode != null);
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
-
+        } else if (relation instanceof Join join) {
             return validateNodes(left(join), map)
                 && validateNodes(right(join), map);
 
@@ -2570,10 +2536,7 @@ public class RolapCube extends CubeBase {
         RelationOrJoin relation,
         Map<String, RelNode> map)
     {
-        if (relation instanceof Relation) {
-            Relation table =
-                (Relation) relation;
-
+        if (relation instanceof Relation table) {
             RelNode relNode = RelNode.lookup(table, map);
             // Associate the table with its RelNode!!!! This is where this
             // happens.
@@ -2581,8 +2544,7 @@ public class RolapCube extends CubeBase {
 
             return relNode.depth;
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
+        } else if (relation instanceof Join join) {
             int leftDepth = leftToRight(left(join), map);
             int rightDepth = leftToRight(right(join), map);
 
@@ -2620,9 +2582,7 @@ public class RolapCube extends CubeBase {
         if (relation instanceof Table) {
             // nothing
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
-
+        } else if (relation instanceof Join join) {
             while (left(join) instanceof Join) {
                 Join jleft = (Join) left(join);
                 changeLeftRight(join, left(jleft), new JoinR(
@@ -2648,17 +2608,13 @@ public class RolapCube extends CubeBase {
     private static RelationOrJoin copy(
         RelationOrJoin relation)
     {
-        if (relation instanceof Table) {
-            Table table = (Table) relation;
+        if (relation instanceof Table table) {
             return new TableR(table);
 
-        } else if (relation instanceof InlineTable) {
-            InlineTable table = (InlineTable) relation;
+        } else if (relation instanceof InlineTable table) {
             return new InlineTableR(table);
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
-
+        } else if (relation instanceof Join join) {
             RelationOrJoin left = copy(left(join));
             RelationOrJoin right = copy(right(join));
 
@@ -2684,16 +2640,13 @@ public class RolapCube extends CubeBase {
         RelationOrJoin relation,
         String tableName)
     {
-        if (relation instanceof Table) {
-            Table table = (Table) relation;
+        if (relation instanceof Table table) {
             // Return null if the table's name or alias matches tableName
             return ((table.alias() != null) && table.alias().equals(tableName))
                 ? null
                 : (table.name().equals(tableName) ? null : table);
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
-
+        } else if (relation instanceof Join join) {
             // snip left
             RelationOrJoin left = snip(left(join), tableName);
             if (left == null) {
@@ -2959,11 +2912,9 @@ public class RolapCube extends CubeBase {
 	public OlapElement lookupChild(
         SchemaReader schemaReader, Id.Segment s, MatchType matchType)
     {
-        if (!(s instanceof Id.NameSegment)) {
+        if (!(s instanceof Id.NameSegment nameSegment)) {
             return null;
         }
-        final Id.NameSegment nameSegment = (Id.NameSegment) s;
-
         // Note that non-exact matches aren't supported at this level,
         // so the matchType is ignored
         String status = null;
@@ -3528,9 +3479,7 @@ public class RolapCube extends CubeBase {
                     false);
                 return null;
 
-            } else if (member instanceof RolapBaseCubeMeasure) {
-                RolapBaseCubeMeasure baseMeasure =
-                    (RolapBaseCubeMeasure) member;
+            } else if (member instanceof RolapBaseCubeMeasure baseMeasure) {
                 RolapVirtualCubeMeasure virtualCubeMeasure =
                     new RolapVirtualCubeMeasure(
                         null,
@@ -3630,21 +3579,16 @@ public class RolapCube extends CubeBase {
 
 
         for(RolapHierarchy rolapHierarchy: this.hierarchyList){
-            if (rolapHierarchy instanceof RolapCubeHierarchy) {
-                RolapCubeHierarchy rolapCubeHierarchy = (RolapCubeHierarchy) rolapHierarchy;
-
+            if (rolapHierarchy instanceof RolapCubeHierarchy rolapCubeHierarchy) {
                 MemberReader memberReader = rolapCubeHierarchy.getMemberReader();
-                if(memberReader instanceof RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader) {
-                    RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader crhmr =
-                            (RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader)memberReader;
+                if(memberReader instanceof RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader crhmr) {
                     ((MemberCacheHelper)crhmr.getMemberCache()).flushCache();
                     crhmr.getRolapCubeMemberCacheHelper().flushCache();
                 }
 
                 RolapHierarchy sharedRolapHierarchy = rolapCubeHierarchy.getRolapHierarchy();
                 memberReader = sharedRolapHierarchy.getMemberReader();
-                if (memberReader instanceof SmartMemberReader) {
-                    final SmartMemberReader smartMemberReader = (SmartMemberReader) memberReader;
+                if (memberReader instanceof SmartMemberReader smartMemberReader) {
                     final MemberCacheHelper memberCacheHelper = (MemberCacheHelper) smartMemberReader.getMemberCache();
                     memberCacheHelper.flushCache();
                 }
@@ -3654,8 +3598,7 @@ public class RolapCube extends CubeBase {
 
     public RolapDrillThroughAction getDefaultDrillThroughAction() {
         for(RolapAction action: this.actionList) {
-            if(action instanceof RolapDrillThroughAction) {
-                RolapDrillThroughAction rolapDrillThroughAction = (RolapDrillThroughAction)action;
+            if(action instanceof RolapDrillThroughAction rolapDrillThroughAction) {
                 if(rolapDrillThroughAction.getIsDefault()) {
                     return rolapDrillThroughAction;
                 }

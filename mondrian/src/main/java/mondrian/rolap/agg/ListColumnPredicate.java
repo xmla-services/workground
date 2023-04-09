@@ -117,8 +117,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof ListColumnPredicate) {
-            ListColumnPredicate that = (ListColumnPredicate) obj;
+        if (obj instanceof ListColumnPredicate that) {
             return this.children.equals(that.children);
         } else {
             return false;
@@ -246,9 +245,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         if (other instanceof LiteralStarPredicate) {
             return ((LiteralStarPredicate) other).getValue();
         }
-        if (other instanceof ValueColumnPredicate) {
-            ValueColumnPredicate valueColumnPredicate =
-                (ValueColumnPredicate) other;
+        if (other instanceof ValueColumnPredicate valueColumnPredicate) {
             return evaluate(valueColumnPredicate.getValue());
         }
         if (other instanceof ListColumnPredicate) {
@@ -267,9 +264,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
     @Override
 	public StarColumnPredicate minus(StarPredicate predicate) {
         assert predicate != null;
-        if (predicate instanceof LiteralStarPredicate) {
-            LiteralStarPredicate literalStarPredicate =
-                (LiteralStarPredicate) predicate;
+        if (predicate instanceof LiteralStarPredicate literalStarPredicate) {
             if (literalStarPredicate.getValue()) {
                 // X minus TRUE --> FALSE
                 return LiteralStarPredicate.FALSE;
@@ -301,8 +296,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
     @Override
 	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
         assert predicate.getConstrainedColumn() == getConstrainedColumn();
-        if (predicate instanceof ListColumnPredicate) {
-            ListColumnPredicate that = (ListColumnPredicate) predicate;
+        if (predicate instanceof ListColumnPredicate that) {
             final List<StarColumnPredicate> list =
                 new ArrayList<>(children);
             list.addAll(that.children);

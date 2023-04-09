@@ -109,10 +109,9 @@ public class SegmentColumn implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof SegmentColumn)) {
+        if (!(obj instanceof SegmentColumn that)) {
             return false;
         }
-        SegmentColumn that = (SegmentColumn) obj;
         if (this.values == null && that.values == null) {
             return true;
         }

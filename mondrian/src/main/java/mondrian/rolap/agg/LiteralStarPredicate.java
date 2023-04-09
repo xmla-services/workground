@@ -50,9 +50,7 @@ public class LiteralStarPredicate extends AbstractColumnPredicate {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof LiteralStarPredicate) {
-            LiteralStarPredicate that =
-                (LiteralStarPredicate) obj;
+        if (obj instanceof LiteralStarPredicate that) {
             return this.value == that.value;
         } else {
             return false;

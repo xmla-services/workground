@@ -170,8 +170,7 @@ public class RolapCubeLevel extends RolapLevel {
             return exp;
         } else if (exp == null || rel == null) {
             return null;
-        } else if (exp instanceof Column) {
-            Column col = (Column)exp;
+        } else if (exp instanceof Column col) {
             if (rel instanceof Table) {
                 return new ColumnR(
                     RelationUtil.getAlias(((Table) rel)),
@@ -458,9 +457,7 @@ public class RolapCubeLevel extends RolapLevel {
                 return;
             }
 
-            if (predicate instanceof MemberColumnPredicate) {
-                MemberColumnPredicate memberColumnPredicate =
-                    (MemberColumnPredicate) predicate;
+            if (predicate instanceof MemberColumnPredicate memberColumnPredicate) {
                 RolapMember member = memberColumnPredicate.getMember();
                 assert member.getLevel() == cubeLevel;
                 assert !member.isCalculated();
@@ -473,17 +470,13 @@ public class RolapCubeLevel extends RolapLevel {
                 //  optimization potential
                 cacheRegion.addPredicate(column, predicate);
                 return;
-            } else if (predicate instanceof RangeColumnPredicate) {
-                RangeColumnPredicate rangeColumnPredicate =
-                    (RangeColumnPredicate) predicate;
+            } else if (predicate instanceof RangeColumnPredicate rangeColumnPredicate) {
                 final ValueColumnPredicate lowerBound =
                     rangeColumnPredicate.getLowerBound();
                 RolapMember lowerMember;
                 if (lowerBound == null) {
                     lowerMember = null;
-                } else if (lowerBound instanceof MemberColumnPredicate) {
-                    MemberColumnPredicate memberColumnPredicate =
-                        (MemberColumnPredicate) lowerBound;
+                } else if (lowerBound instanceof MemberColumnPredicate memberColumnPredicate) {
                     lowerMember = memberColumnPredicate.getMember();
                 } else {
                     throw new UnsupportedOperationException();
@@ -493,9 +486,7 @@ public class RolapCubeLevel extends RolapLevel {
                 RolapMember upperMember;
                 if (upperBound == null) {
                     upperMember = null;
-                } else if (upperBound instanceof MemberColumnPredicate) {
-                    MemberColumnPredicate memberColumnPredicate =
-                        (MemberColumnPredicate) upperBound;
+                } else if (upperBound instanceof MemberColumnPredicate memberColumnPredicate) {
                     upperMember = memberColumnPredicate.getMember();
                 } else {
                     throw new UnsupportedOperationException();

@@ -183,8 +183,7 @@ public class FunInfo implements Comparable<FunInfo> {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof FunInfo) {
-            final FunInfo that = (FunInfo) obj;
+        if (obj instanceof FunInfo that) {
             if (!name.equals(that.name)) {
                 return false;
             }

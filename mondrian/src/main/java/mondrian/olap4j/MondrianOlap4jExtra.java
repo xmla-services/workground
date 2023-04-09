@@ -89,9 +89,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
 
     @Override
 	public int getLevelCardinality(Level level) throws OlapException {
-        if (level instanceof MondrianOlap4jLevel) {
-            // Improved implementation if the provider is mondrian.
-            final MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
+        if (level instanceof MondrianOlap4jLevel olap4jLevel) {
             final mondrian.olap.SchemaReader schemaReader =
                 olap4jLevel.olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                     .olap4jConnection.getMondrianConnection().getSchemaReader()
@@ -362,8 +360,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
 	public Map<String, Object> getAnnotationMap(MetadataElement element)
         throws SQLException
     {
-        if (element instanceof OlapWrapper) {
-            OlapWrapper wrapper = (OlapWrapper) element;
+        if (element instanceof OlapWrapper wrapper) {
             if (wrapper.isWrapperFor(MetaElement.class)) {
                 final MetaElement annotated = wrapper.unwrap(MetaElement.class);
                 final Map<String, Object> map = new HashMap<>();

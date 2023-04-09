@@ -174,8 +174,7 @@ public class RolapResultShepherd {
 
             // Unwrap any java.concurrent wrappers.
             Throwable node = e;
-            if (e instanceof ExecutionException) {
-                ExecutionException executionException = (ExecutionException) e;
+            if (e instanceof ExecutionException executionException) {
                 node = executionException.getCause();
             }
 

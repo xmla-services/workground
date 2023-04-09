@@ -226,9 +226,7 @@ abstract class MondrianOlap4jPreparedStatement
     @Override
 	public void setObject(int parameterIndex, Object x) throws SQLException {
         final Parameter parameter = getParameter(parameterIndex);
-        if (x instanceof MondrianOlap4jMember) {
-            MondrianOlap4jMember mondrianOlap4jMember =
-                (MondrianOlap4jMember) x;
+        if (x instanceof MondrianOlap4jMember mondrianOlap4jMember) {
             x = mondrianOlap4jMember.member;
         }
         parameter.setValue(x);

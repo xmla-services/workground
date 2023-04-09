@@ -105,8 +105,7 @@ public class TableR implements Table {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Table) {
-            Table that = (Table) o;
+        if (o instanceof Table that) {
             return this.name.equals(that.name()) &&
                 Objects.equals(this.alias, that.alias()) &&
                 Objects.equals(this.schema, that.schema());

@@ -308,8 +308,7 @@ public interface CellKey extends Serializable {
         @Override
 		public boolean equals(Object o) {
             // here we cheat, we know that all CellKey's will be the same size
-            if (o instanceof One) {
-                One other = (One) o;
+            if (o instanceof One other) {
                 return (this.ordinal0 == other.ordinal0);
             } else {
                 return false;
@@ -361,8 +360,7 @@ public interface CellKey extends Serializable {
 
         @Override
 		public boolean equals(Object o) {
-            if (o instanceof Two) {
-                Two other = (Two) o;
+            if (o instanceof Two other) {
                 return (other.ordinal0 == this.ordinal0)
                     && (other.ordinal1 == this.ordinal1);
             } else {
@@ -462,8 +460,7 @@ public interface CellKey extends Serializable {
         @Override
 		public boolean equals(Object o) {
             // here we cheat, we know that all CellKey's will be the same size
-            if (o instanceof Three) {
-                Three other = (Three) o;
+            if (o instanceof Three other) {
                 return (other.ordinal0 == this.ordinal0)
                     && (other.ordinal1 == this.ordinal1)
                     && (other.ordinal2 == this.ordinal2);
@@ -576,8 +573,7 @@ public interface CellKey extends Serializable {
         @Override
 		public boolean equals(Object o) {
             // here we cheat, we know that all CellKey's will be the same size
-            if (o instanceof Four) {
-                Four other = (Four) o;
+            if (o instanceof Four other) {
                 return (other.ordinal0 == this.ordinal0)
                     && (other.ordinal1 == this.ordinal1)
                     && (other.ordinal2 == this.ordinal2)
@@ -728,8 +724,7 @@ public interface CellKey extends Serializable {
 
         @Override
 		public boolean equals(Object o) {
-            if (o instanceof Many) {
-                Many that = (Many) o;
+            if (o instanceof Many that) {
                 return Arrays.equals(this.ordinals, that.ordinals);
             }
             return false;

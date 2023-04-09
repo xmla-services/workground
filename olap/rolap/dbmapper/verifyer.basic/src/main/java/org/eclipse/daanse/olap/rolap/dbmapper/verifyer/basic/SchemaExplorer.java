@@ -32,8 +32,7 @@ public class SchemaExplorer {
             for (int i = 0; i < 2; i++) {
                 // Searches first using the Left Join and then the Right.
                 RelationOrJoin theCurrentRelOrJoin = (i == 0) ? theRelOrJoin_L : theRelOrJoin_R;
-                if (theCurrentRelOrJoin instanceof Table) {
-                    Table theTable = ((Table) theCurrentRelOrJoin);
+                if (theCurrentRelOrJoin instanceof Table theTable) {
                     if (theTable.alias() != null && theTable.alias()
                             .equals(table)) {
                         // If the alias was found get its table name and return
@@ -60,8 +59,7 @@ public class SchemaExplorer {
             for (int i = 0; i < 2; i++) {
                 // Searches first using the Left Join and then the Right.
                 RelationOrJoin theCurrentRelOrJoin = (i == 0) ? theRelOrJoin_L : theRelOrJoin_R;
-                if (theCurrentRelOrJoin instanceof Table) {
-                    Table theTable = ((Table) theCurrentRelOrJoin);
+                if (theCurrentRelOrJoin instanceof Table theTable) {
                     String theTableName = (theTable.alias() != null && theTable.alias()
                             .trim()
                             .length() > 0) ? theTable.alias() : theTable.name();

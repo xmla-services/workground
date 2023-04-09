@@ -104,8 +104,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private void processingDimension(CubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
-        if (d instanceof PrivateDimension) {
-            PrivateDimension privateDimension = (PrivateDimension) d;
+        if (d instanceof PrivateDimension privateDimension) {
             if (privateDimension.hierarchy() != null) {
                 privateDimension.hierarchy().forEach(h -> processingHierarchy(h, tables, schemaName));
             }

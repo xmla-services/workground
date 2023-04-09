@@ -345,8 +345,7 @@ public class SqlQuery {
     {
         registerRootRelation(relation);
 
-        if (relation instanceof Relation) {
-            Relation relation1 = (Relation) relation;
+        if (relation instanceof Relation relation1) {
             if (relations.add(relation1)
                 && !MondrianProperties.instance()
                 .FilterChildlessSnowflakeMembers.get())
@@ -371,8 +370,7 @@ public class SqlQuery {
             }
         }
 
-        if (relation instanceof View) {
-            final View view = (View) relation;
+        if (relation instanceof View view) {
             final String viewAlias =
                 (alias == null)
                 ? RelationUtil.getAlias(view)
@@ -386,8 +384,7 @@ public class SqlQuery {
                     (InlineTable) relation, dialect);
             return addFrom(relation1, alias, failIfExists);
 
-        } else if (relation instanceof Table) {
-            final Table table = (Table) relation;
+        } else if (relation instanceof Table table) {
             final String tableAlias =
                 (alias == null)
                 ? RelationUtil.getAlias(table)
@@ -400,8 +397,7 @@ public class SqlQuery {
                 getHintMap(table),
                 failIfExists);
 
-        } else if (relation instanceof Join) {
-            final Join join = (Join) relation;
+        } else if (relation instanceof Join join) {
             return addJoin(
                 left(join),
                 getLeftAlias(join),
@@ -785,8 +781,7 @@ public class SqlQuery {
         String rightKey,
         String rightAlias)
     {
-        if (root instanceof Join) {
-            Join join = (Join) root;
+        if (root instanceof Join join) {
             flatten(
                 relations, left(join), join.leftKey(), getLeftAlias(join),
                 join.rightKey(), getRightAlias(join));

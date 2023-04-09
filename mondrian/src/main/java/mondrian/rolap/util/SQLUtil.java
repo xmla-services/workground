@@ -38,10 +38,9 @@ public class SQLUtil {
     }
 
     public boolean equals(SQL sql, Object obj) {
-        if (!(obj instanceof SQL)) {
+        if (!(obj instanceof SQL that)) {
             return false;
         }
-        SQL that = (SQL) obj;
         return sql.dialect().equals(that.dialect()) &&
             Objects.equals(sql.content(), that.content());
     }

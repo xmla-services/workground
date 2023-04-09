@@ -686,9 +686,7 @@ abstract class Recognizer {
                 aggUsage.setSymbolicName(symbolicName);
 
                 String tableAlias;
-                if (aggUsage.joinExp instanceof Column) {
-                    Column mcolumn =
-                        (Column) aggUsage.joinExp;
+                if (aggUsage.joinExp instanceof Column mcolumn) {
                     tableAlias = mcolumn.table();
                 } else {
                     tableAlias = getAlias(aggUsage.relation);
@@ -1042,12 +1040,9 @@ abstract class Recognizer {
         msgRecorder.pushContextName("Recognizer.getColumnName");
 
         try {
-            if (expr instanceof Column) {
-                Column column = (Column) expr;
+            if (expr instanceof Column column) {
                 return column.name();
-            } else if (expr instanceof ExpressionView) {
-                ExpressionView key =
-                    (ExpressionView) expr;
+            } else if (expr instanceof ExpressionView key) {
                 return key.toString();
             }
 

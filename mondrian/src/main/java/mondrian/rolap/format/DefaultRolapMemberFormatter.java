@@ -47,8 +47,7 @@ class DefaultRolapMemberFormatter implements MemberFormatter {
      */
     @Override
     public String formatMember(Member member) {
-        if (member instanceof RolapMemberBase) {
-            RolapMemberBase rolapMember = (RolapMemberBase) member;
+        if (member instanceof RolapMemberBase rolapMember) {
             return doFormatMember(rolapMember);
         }
         throw new IllegalArgumentException(

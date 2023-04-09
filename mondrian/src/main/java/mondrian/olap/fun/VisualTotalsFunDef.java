@@ -159,10 +159,7 @@ public class VisualTotalsFunDef extends FunDefBase {
                 if (!descendant.isChildOrEqualTo(member)) {
                     break;
                 }
-                if (descendant instanceof VisualTotalMember) {
-                    // Add the visual total member, but skip over its children.
-                    VisualTotalMember visualTotalMember =
-                            (VisualTotalMember) descendant;
+                if (descendant instanceof VisualTotalMember visualTotalMember) {
                     childMemberList.add(visualTotalMember);
                     i = lastChildIndex(visualTotalMember.member, i, list);
                     continue;

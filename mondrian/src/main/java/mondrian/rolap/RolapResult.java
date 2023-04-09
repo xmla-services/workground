@@ -332,8 +332,7 @@ public class RolapResult extends ResultBase {
 
         final TupleIterable iterable = ( (IterCalc) calc ).evaluateIterable( evaluator );
         TupleCursor cursor;
-        if ( iterable instanceof TupleList ) {
-          TupleList list = (TupleList) iterable;
+        if ( iterable instanceof TupleList list ) {
           cursor = list.tupleCursor();
         } else {
           // Iterable
@@ -1055,8 +1054,7 @@ public Cell getCell( int[] pos ) {
       if ( axisCalc.getClass().getName().indexOf( "OrderFunDef" ) != -1 ) {
         queryAxis.setOrdered( true );
       }
-      if ( iterable instanceof TupleList ) {
-        TupleList list = (TupleList) iterable;
+      if ( iterable instanceof TupleList list ) {
         if ( construct ) {
         } else if ( axisMembers != null ) {
           axisMembers.mergeTupleList( list );
@@ -1159,11 +1157,7 @@ public Cell getCell( int[] pos ) {
         evaluator.setCellReader( batchingReader );
         Object preliminaryValue = calc.evaluate( evaluator );
 
-        if ( preliminaryValue instanceof TupleIterable ) {
-          // During the preliminary phase, we have to materialize the
-          // tuple lists or the evaluation lower down won't take into
-          // account all the tuples.
-          TupleIterable iterable = (TupleIterable) preliminaryValue;
+        if ( preliminaryValue instanceof TupleIterable iterable ) {
           final TupleCursor cursor = iterable.tupleCursor();
           while ( cursor.forward() ) {
             // ignore
@@ -1332,8 +1326,7 @@ public Cell getCell( int[] pos ) {
         for ( List<Member> tuple : tupleList ) {
           List<Member> measures = new ArrayList<>( statement.getQuery().getMeasuresMembers() );
           for ( Member measure : measures ) {
-            if ( measure instanceof RolapBaseCubeMeasure ) {
-              RolapBaseCubeMeasure baseCubeMeasure = (RolapBaseCubeMeasure) measure;
+            if ( measure instanceof RolapBaseCubeMeasure baseCubeMeasure ) {
               if ( baseCubeMeasure.getAggregator() == RolapAggregator.DistinctCount ) {
                 processDistinctMeasureExpr( tuple, baseCubeMeasure );
               }
@@ -1461,22 +1454,18 @@ public Cell getCell( int[] pos ) {
   private static void processMemberExpr( Object o, List<Member> exprMembers ) {
     if ( o instanceof Member && o instanceof RolapCubeMember ) {
       exprMembers.add( (Member) o );
-    } else if ( o instanceof VisualTotalMember ) {
-      VisualTotalMember member = (VisualTotalMember) o;
+    } else if ( o instanceof VisualTotalMember member ) {
       Exp exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
-    } else if ( o instanceof Exp && !( o instanceof MemberExpr ) ) {
-      Exp exp = (Exp) o;
+    } else if ( o instanceof Exp exp && !( o instanceof MemberExpr ) ) {
       ResolvedFunCall funCall = (ResolvedFunCall) exp;
       Exp[] exps = funCall.getArgs();
       processMemberExpr( exps, exprMembers );
-    } else if ( o instanceof Exp[] ) {
-      Exp[] exps = (Exp[]) o;
+    } else if ( o instanceof Exp[] exps ) {
       for ( Exp exp : exps ) {
         processMemberExpr( exp, exprMembers );
       }
-    } else if ( o instanceof MemberExpr ) {
-      MemberExpr memberExp = (MemberExpr) o;
+    } else if ( o instanceof MemberExpr memberExp ) {
       Member member = memberExp.getMember();
       processMemberExpr( member, exprMembers );
     }
@@ -2002,8 +1991,7 @@ public Cell getCell( int[] pos ) {
 
     @Override
 	public boolean equals( Object o ) {
-      if ( o instanceof CellInfo ) {
-        CellInfo that = (CellInfo) o;
+      if ( o instanceof CellInfo that ) {
         return that.key == this.key;
       } else {
         return false;

@@ -103,9 +103,7 @@ public class ValidationUtils {
             if (isEmpty(((MondrianGuiDef.Schema) value).name)) {
                 return nameMustBeSet;
             }
-        } else if (value instanceof MondrianGuiDef.VirtualCube) {
-            MondrianGuiDef.VirtualCube virtCube =
-                (MondrianGuiDef.VirtualCube)value;
+        } else if (value instanceof MondrianGuiDef.VirtualCube virtCube) {
             if (isEmpty(virtCube.name)) {
                 return nameMustBeSet;
             }
@@ -127,8 +125,7 @@ public class ValidationUtils {
             if (isEmpty(((MondrianGuiDef.VirtualCubeMeasure) value).name)) {
                 return nameMustBeSet;
             }
-        } else if (value instanceof MondrianGuiDef.Cube) {
-            MondrianGuiDef.Cube cubeVal = (MondrianGuiDef.Cube) value;
+        } else if (value instanceof MondrianGuiDef.Cube cubeVal) {
             if (isEmpty(cubeVal.name)) {
                 return nameMustBeSet;
             }
@@ -214,9 +211,7 @@ public class ValidationUtils {
                         // successful
                         if (jdbcValidator.isInitialized()) {
                             // TODO: Need to add validation for Views
-                            if (cube.fact instanceof MondrianGuiDef.Table) {
-                                final MondrianGuiDef.Table factTable =
-                                    (MondrianGuiDef.Table) cube.fact;
+                            if (cube.fact instanceof MondrianGuiDef.Table factTable) {
                                 String foreignKey =
                                     ((MondrianGuiDef.Dimension) value)
                                     .foreignKey;
@@ -234,17 +229,13 @@ public class ValidationUtils {
                         }
                     }
                 }
-            } else if (value instanceof MondrianGuiDef.Level) {
+            } else if (value instanceof MondrianGuiDef.Level level) {
                 // Check 'column' exists in 'table' if table is specified
                 // otherwise :: case of join.
 
                 // It should exist in relation table if it is specified
                 // otherwise :: case of table.
 
-                // It should exist in fact table :: case of degenerate dimension
-                // where dimension columns exist in fact table and there is no
-                // separate table.
-                MondrianGuiDef.Level level = (MondrianGuiDef.Level) value;
                 if (!isEmpty(level.levelType)) {
                     // Empty leveltype is treated as default value of "Regular""
                     // which is ok with standard/time dimension.
@@ -323,17 +314,13 @@ public class ValidationUtils {
                     }
                     return theMessage;
                 }
-            } else if (value instanceof MondrianGuiDef.Property) {
+            } else if (value instanceof MondrianGuiDef.Property p) {
                 // Check 'column' exists in 'table' if [level table] is
                 // specified otherwise :: case of join.
 
                 // It should exist in [hierarchy relation table] if it is
                 // specified otherwise :: case of table.
 
-                // It should exist in [fact table] :: case of degenerate
-                // dimension where dimension columns exist in fact table and
-                // there is no separate table.
-                MondrianGuiDef.Property p = (MondrianGuiDef.Property) value;
                 // check property's column is in table
                 String column = p.column;
                 if (isEmpty(column)) {
@@ -367,12 +354,8 @@ public class ValidationUtils {
                                         "Degenerate dimension validation check - Column {0} does not exist in fact table",
                                         column);
                                 }
-                            } else if (parentHierarchy.relation
-                                       instanceof MondrianGuiDef.Table)
+                            } else if (parentHierarchy.relation instanceof MondrianGuiDef.Table parentTable)
                             {
-                                final MondrianGuiDef.Table parentTable =
-                                    (MondrianGuiDef.Table)
-                                    parentHierarchy.relation;
                                 if (!jdbcValidator.isColExists(
                                         parentTable.schema,
                                         parentTable.name,
@@ -395,9 +378,7 @@ public class ValidationUtils {
                         }
                     }
                 }
-            } else if (value instanceof MondrianGuiDef.Measure) {
-                final MondrianGuiDef.Measure measure =
-                    (MondrianGuiDef.Measure) value;
+            } else if (value instanceof MondrianGuiDef.Measure measure) {
                 if (isEmpty(measure.name)) {
                     return nameMustBeSet;
                 }
@@ -415,9 +396,7 @@ public class ValidationUtils {
                 } else if (cube != null && cube.fact != null) {
                     // Database validity check, if database connection is
                     // successful
-                    if (cube.fact instanceof MondrianGuiDef.Table) {
-                        final MondrianGuiDef.Table factTable =
-                            (MondrianGuiDef.Table) cube.fact;
+                    if (cube.fact instanceof MondrianGuiDef.Table factTable) {
                         if (jdbcValidator.isInitialized()) {
                             String column = measure.column;
                             if (jdbcValidator.isColExists(
@@ -463,9 +442,7 @@ public class ValidationUtils {
                         }
                     }
                 }
-            } else if (value instanceof MondrianGuiDef.Hierarchy) {
-                final MondrianGuiDef.Hierarchy hierarchy =
-                    (MondrianGuiDef.Hierarchy) value;
+            } else if (value instanceof MondrianGuiDef.Hierarchy hierarchy) {
                 if (hierarchy.relation instanceof MondrianGuiDef.Join) {
                     if (isEmpty(hierarchy.primaryKeyTable)) {
                         if (isEmpty(hierarchy.primaryKey)) {
@@ -502,9 +479,7 @@ public class ValidationUtils {
                             hierarchy.primaryKeyTable);
                     schema = schemaAndTable[0];
                     pkTable = schemaAndTable[1];
-                } else if (hierarchy.relation instanceof MondrianGuiDef.Table) {
-                    final MondrianGuiDef.Table table =
-                        (MondrianGuiDef.Table) hierarchy.relation;
+                } else if (hierarchy.relation instanceof MondrianGuiDef.Table table) {
                     pkTable = table.name;
                     schema = table.schema;
                 }
@@ -549,10 +524,8 @@ public class ValidationUtils {
                 }
 
                 if (!isEmpty(primaryKeyTable)
-                    && (hierarchy.relation instanceof MondrianGuiDef.Table))
+                    && (hierarchy.relation instanceof MondrianGuiDef.Table theTable))
                 {
-                    MondrianGuiDef.Table theTable =
-                        (MondrianGuiDef.Table) hierarchy.relation;
                     String compareTo =
                         (theTable.alias != null
                          && theTable.alias.trim().length() > 0)
@@ -565,9 +538,7 @@ public class ValidationUtils {
                     }
                 }
 
-            } else if (value instanceof MondrianGuiDef.NamedSet) {
-                final MondrianGuiDef.NamedSet namedSet =
-                    (MondrianGuiDef.NamedSet) value;
+            } else if (value instanceof MondrianGuiDef.NamedSet namedSet) {
                 if (isEmpty(namedSet.name)) {
                     return nameMustBeSet;
                 }
@@ -578,17 +549,13 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.formulaMustBeSet.alert",
                         "Formula must be set");
                 }
-            } else if (value instanceof MondrianGuiDef.Formula) {
-                final MondrianGuiDef.Formula formula =
-                    (MondrianGuiDef.Formula) value;
+            } else if (value instanceof MondrianGuiDef.Formula formula) {
                 if (isEmpty(formula.cdata)) {
                     return messages.getString(
                         "schemaTreeCellRenderer.formulaMustBeSet.alert",
                         "Formula must be set");
                 }
-            } else if (value instanceof MondrianGuiDef.UserDefinedFunction) {
-                final MondrianGuiDef.UserDefinedFunction udf =
-                    (MondrianGuiDef.UserDefinedFunction) value;
+            } else if (value instanceof MondrianGuiDef.UserDefinedFunction udf) {
                 if (isEmpty(udf.name)) {
                     return nameMustBeSet;
                 }
@@ -599,9 +566,7 @@ public class ValidationUtils {
                         "Either a Class Name or a Script are required",
                         "Class name must be set");
                 }
-            } else if (value instanceof MondrianGuiDef.MemberFormatter) {
-                final MondrianGuiDef.MemberFormatter f =
-                    (MondrianGuiDef.MemberFormatter) value;
+            } else if (value instanceof MondrianGuiDef.MemberFormatter f) {
                 if (isEmpty(f.className)
                     && f.script == null)
                 {
@@ -609,9 +574,7 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.classNameOrScriptRequired.alert",
                         "Either a Class Name or a Script are required");
                 }
-            } else if (value instanceof MondrianGuiDef.CellFormatter) {
-                final MondrianGuiDef.CellFormatter f =
-                    (MondrianGuiDef.CellFormatter) value;
+            } else if (value instanceof MondrianGuiDef.CellFormatter f) {
                 if (isEmpty(f.className)
                     && f.script == null)
                 {
@@ -619,9 +582,7 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.classNameOrScriptRequired.alert",
                         "Either a Class Name or a Script are required");
                 }
-            } else if (value instanceof MondrianGuiDef.PropertyFormatter) {
-                final MondrianGuiDef.PropertyFormatter f =
-                    (MondrianGuiDef.PropertyFormatter) value;
+            } else if (value instanceof MondrianGuiDef.PropertyFormatter f) {
                 if (isEmpty(f.className)
                     && f.script == null)
                 {
@@ -629,9 +590,7 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.classNameOrScriptRequired.alert",
                         "Either a Class Name or a Script are required");
                 }
-            } else if (value instanceof MondrianGuiDef.CalculatedMember) {
-                final MondrianGuiDef.CalculatedMember calculatedMember =
-                    (MondrianGuiDef.CalculatedMember) value;
+            } else if (value instanceof MondrianGuiDef.CalculatedMember calculatedMember) {
                 if (isEmpty(calculatedMember.name)) {
                     return nameMustBeSet;
                 }
@@ -647,8 +606,7 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.formulaMustBeSet.alert",
                         "Formula must be set");
                 }
-            } else if (value instanceof MondrianGuiDef.Join) {
-                final MondrianGuiDef.Join join = (MondrianGuiDef.Join) value;
+            } else if (value instanceof MondrianGuiDef.Join join) {
                 if (isEmpty(join.leftKey)) {
                     return messages.getString(
                         "schemaTreeCellRenderer.leftKeyMustBeSet.alert",
@@ -659,8 +617,7 @@ public class ValidationUtils {
                         "schemaTreeCellRenderer.rightKeyMustBeSet.alert",
                         "Right key must be set");
                 }
-            } else if (value instanceof MondrianGuiDef.Table) {
-                final MondrianGuiDef.Table table = (MondrianGuiDef.Table) value;
+            } else if (value instanceof MondrianGuiDef.Table table) {
                 String tableName = table.name;
                 if (!jdbcValidator.isTableExists(null, tableName)) {
                     return messages.getFormattedString(
@@ -917,10 +874,8 @@ public class ValidationUtils {
 
                 if (!isEmpty(table)
                     && parentHierarchy != null
-                    && parentHierarchy.relation instanceof MondrianGuiDef.Table)
+                    && parentHierarchy.relation instanceof MondrianGuiDef.Table parentTable)
                 {
-                    final MondrianGuiDef.Table parentTable =
-                        (MondrianGuiDef.Table) parentHierarchy.relation;
                     MondrianGuiDef.Table theTable = parentTable;
                     String compareTo =
                         (theTable.alias != null
@@ -960,11 +915,8 @@ public class ValidationUtils {
                                     "Degenerate dimension validation check - Column {0} does not exist in fact table",
                                     column);
                             }
-                        } else if (parentHierarchy.relation
-                                   instanceof MondrianGuiDef.Table)
+                        } else if (parentHierarchy.relation instanceof MondrianGuiDef.Table parentTable)
                         {
-                            final MondrianGuiDef.Table parentTable =
-                                (MondrianGuiDef.Table) parentHierarchy.relation;
                             if (!jdbcValidator.isColExists(
                                     parentTable.schema,
                                     parentTable.name,

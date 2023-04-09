@@ -101,9 +101,7 @@ public class MemberTuplePredicate implements StarPredicate {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof MemberTuplePredicate) {
-            MemberTuplePredicate that =
-                (MemberTuplePredicate) obj;
+        if (obj instanceof MemberTuplePredicate that) {
             return this.columnList.equals(that.columnList)
                 && Arrays.equals(this.bounds, that.bounds);
         } else {
@@ -309,8 +307,7 @@ public class MemberTuplePredicate implements StarPredicate {
 
         @Override
 		public boolean equals(Object obj) {
-            if (obj instanceof Bound) {
-                Bound that = (Bound) obj;
+            if (obj instanceof Bound that) {
                 return this.member.equals(that.member)
                     && Arrays.equals(this.values, that.values)
                     && Arrays.equals(this.relOps, that.relOps);

@@ -72,8 +72,7 @@ public class DecimalType extends NumericType {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof DecimalType) {
-            DecimalType that = (DecimalType) obj;
+        if (obj instanceof DecimalType that) {
             return this.precision == that.precision
                 && this.scale == that.scale;
         }

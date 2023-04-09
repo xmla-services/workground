@@ -136,8 +136,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
             if (args.length == 1) {
                 Exp arg = args[0];
                 final Type type1 = arg.getType();
-                if (type1 instanceof SetType) {
-                    SetType type = (SetType) type1;
+                if (type1 instanceof SetType type) {
                     if (type.getElementType() instanceof MemberType) {
                         return AddCalculatedMembersFunDef.instance;
                     } else {

@@ -104,8 +104,7 @@ public class DimensionType implements Type {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof DimensionType) {
-            DimensionType that = (DimensionType) obj;
+        if (obj instanceof DimensionType that) {
             return Objects.equals(this.getDimension(), that.getDimension());
         }
         return false;
@@ -118,18 +117,16 @@ public class DimensionType implements Type {
 
     @Override
 	public Type computeCommonType(Type type, int[] conversionCount) {
-        if (conversionCount != null && type instanceof HierarchyType) {
-            HierarchyType hierarchyType = (HierarchyType) type;
+        if (conversionCount != null && type instanceof HierarchyType hierarchyType) {
             if (Objects.equals(hierarchyType.getDimension(), dimension)) {
                 ++conversionCount[0];
                 return this;
             }
             return null;
         }
-        if (!(type instanceof DimensionType)) {
+        if (!(type instanceof DimensionType that)) {
             return null;
         }
-        DimensionType that = (DimensionType) type;
         if (this.getDimension() != null
             && this.getDimension().equals(that.getDimension()))
         {

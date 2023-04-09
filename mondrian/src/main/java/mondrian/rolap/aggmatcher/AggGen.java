@@ -121,8 +121,7 @@ public class AggGen {
 
     protected String getRolapStarColumnName(RolapStar.Column rColumn) {
         Expression expr = rColumn.getExpression();
-        if (expr instanceof Column) {
-            Column cx = (Column) expr;
+        if (expr instanceof Column cx) {
             return cx.name();
         }
         return null;
@@ -223,8 +222,7 @@ public class AggGen {
 
 
                 Expression expr = column.getExpression();
-                if (expr instanceof Column) {
-                    Column exprColumn = (Column) expr;
+                if (expr instanceof Column exprColumn) {
                     String name = exprColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
@@ -257,8 +255,7 @@ public class AggGen {
                     getLogger().debug("  RolapStar.Condition: cond=" + cond);
                 }
                 Expression left = cond.getLeft();
-                if (left instanceof Column) {
-                    Column leftColumn = (Column) left;
+                if (left instanceof Column leftColumn) {
                     String name = leftColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
@@ -292,13 +289,12 @@ public class AggGen {
                         .append(rColumn).toString());
                 return;
             }
-            if (!(rColumn instanceof RolapStar.Measure)) {
+            if (!(rColumn instanceof RolapStar.Measure rMeasure)) {
                 // TODO: whats the solution to this?
                 // its a funky dimension column in the fact table!!!
                 getLogger().warn("not a measure: " + name);
                 continue;
             }
-            RolapStar.Measure rMeasure = (RolapStar.Measure) rColumn;
             if (!rMeasure.getCubeName().equals(cubeName)) {
                 continue;
             }

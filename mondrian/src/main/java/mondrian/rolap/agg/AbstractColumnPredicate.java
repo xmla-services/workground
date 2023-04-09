@@ -88,9 +88,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     @Override
 	public StarPredicate or(StarPredicate predicate) {
-        if (predicate instanceof StarColumnPredicate) {
-            StarColumnPredicate starColumnPredicate =
-                (StarColumnPredicate) predicate;
+        if (predicate instanceof StarColumnPredicate starColumnPredicate) {
             if (starColumnPredicate.getConstrainedColumn()
                 == getConstrainedColumn())
             {
@@ -106,8 +104,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
     @Override
 	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
         assert predicate.getConstrainedColumn() == getConstrainedColumn();
-        if (predicate instanceof ListColumnPredicate) {
-            ListColumnPredicate that = (ListColumnPredicate) predicate;
+        if (predicate instanceof ListColumnPredicate that) {
             final List<StarColumnPredicate> list =
                 new ArrayList<>();
             list.add(this);

@@ -365,10 +365,9 @@ public abstract class RolapAggregationManager {
 
         } else {
             for (int i = 1; i < members.length; i++) {
-                if (!(members[i] instanceof RolapCubeMember)) {
+                if (!(members[i] instanceof RolapCubeMember member)) {
                     continue;
                 }
-                RolapCubeMember member = (RolapCubeMember) members[i];
                 final RolapCubeLevel level = member.getLevel();
                 final boolean needToReturnNull =
                     level.getLevelReader().constrainRequest(
@@ -810,11 +809,9 @@ public abstract class RolapAggregationManager {
             new ArrayList<>();
         RolapCube baseCube = null;
         for (Member measure : measureList) {
-            if (!(measure instanceof RolapStoredMeasure)) {
+            if (!(measure instanceof RolapStoredMeasure storedMeasure)) {
                 continue;
             }
-            final RolapStoredMeasure storedMeasure =
-                (RolapStoredMeasure) measure;
             final RolapStar.Measure starMeasure =
                 (RolapStar.Measure) storedMeasure.getStarMeasure();
             assert starMeasure != null;
@@ -830,9 +827,7 @@ public abstract class RolapAggregationManager {
         }
         final RolapCacheRegion cacheRegion =
             new RolapCacheRegion(star, starMeasureList);
-        if (region instanceof CacheControlImpl.CrossjoinCellRegion) {
-            final CacheControlImpl.CrossjoinCellRegion crossjoin =
-                (CacheControlImpl.CrossjoinCellRegion) region;
+        if (region instanceof CacheControlImpl.CrossjoinCellRegion crossjoin) {
             for (CacheControl.CellRegion component
                 : crossjoin.getComponents())
             {
@@ -849,9 +844,7 @@ public abstract class RolapAggregationManager {
         final RolapCube baseCube,
         final CacheControl.CellRegion region)
     {
-        if (region instanceof CacheControlImpl.MemberCellRegion) {
-            final CacheControlImpl.MemberCellRegion memberCellRegion =
-                (CacheControlImpl.MemberCellRegion) region;
+        if (region instanceof CacheControlImpl.MemberCellRegion memberCellRegion) {
             final List<Member> memberList = memberCellRegion.getMemberList();
             for (Member member : memberList) {
                 if (member.isMeasure()) {
@@ -875,9 +868,7 @@ public abstract class RolapAggregationManager {
                     baseCube,
                     cacheRegion);
             }
-        } else if (region instanceof CacheControlImpl.MemberRangeCellRegion) {
-            final CacheControlImpl.MemberRangeCellRegion rangeRegion =
-                (CacheControlImpl.MemberRangeCellRegion) region;
+        } else if (region instanceof CacheControlImpl.MemberRangeCellRegion rangeRegion) {
             final RolapCubeLevel level = (RolapCubeLevel)rangeRegion.getLevel();
             RolapStar.Column column = level.getBaseStarKeyColumn(baseCube);
 

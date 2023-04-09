@@ -682,24 +682,18 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             final org.eclipse.daanse.olap.api.model.Cube mondrianCube =
                 ((mondrian.olap.type.CubeType) type).getCube();
             return new CubeType(toOlap4j(mondrianCube));
-        } else if (type instanceof mondrian.olap.type.DecimalType) {
-            mondrian.olap.type.DecimalType decimalType =
-                (mondrian.olap.type.DecimalType) type;
+        } else if (type instanceof mondrian.olap.type.DecimalType decimalType) {
             return new DecimalType(
                 decimalType.getPrecision(),
                 decimalType.getScale());
-        } else if (type instanceof mondrian.olap.type.DimensionType) {
-            mondrian.olap.type.DimensionType dimensionType =
-                (mondrian.olap.type.DimensionType) type;
+        } else if (type instanceof mondrian.olap.type.DimensionType dimensionType) {
             return new DimensionType(
                 toOlap4j(dimensionType.getDimension()));
         } else if (type instanceof mondrian.olap.type.HierarchyType) {
             return new BooleanType();
         } else if (type instanceof mondrian.olap.type.LevelType) {
             return new BooleanType();
-        } else if (type instanceof mondrian.olap.type.MemberType) {
-            final mondrian.olap.type.MemberType memberType =
-                (mondrian.olap.type.MemberType) type;
+        } else if (type instanceof mondrian.olap.type.MemberType memberType) {
             return new MemberType(
                 toOlap4j(memberType.getDimension()),
                 toOlap4j(memberType.getHierarchy()),
@@ -709,15 +703,11 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             return new NullType();
         } else if (type instanceof mondrian.olap.type.NumericType) {
             return new NumericType();
-        } else if (type instanceof mondrian.olap.type.SetType) {
-            final mondrian.olap.type.SetType setType =
-                (mondrian.olap.type.SetType) type;
+        } else if (type instanceof mondrian.olap.type.SetType setType) {
             return new SetType(toOlap4j(setType.getElementType()));
         } else if (type instanceof mondrian.olap.type.StringType) {
             return new StringType();
-        } else if (type instanceof mondrian.olap.type.TupleType) {
-            mondrian.olap.type.TupleType tupleType =
-                (mondrian.olap.type.TupleType) type;
+        } else if (type instanceof mondrian.olap.type.TupleType tupleType) {
             final Type[] types = toOlap4j(tupleType.elementTypes);
             return new TupleType(types);
         } else if (type instanceof mondrian.olap.type.SymbolType) {
@@ -731,8 +721,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         if (member == null) {
             return null;
         }
-        if (member instanceof RolapMeasure) {
-            RolapMeasure measure = (RolapMeasure) member;
+        if (member instanceof RolapMeasure measure) {
             return new MondrianOlap4jMeasure(
                 toOlap4j(member.getDimension().getSchema()),
                 measure);
@@ -1112,46 +1101,38 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
 
         private ParseTreeNode toOlap4j(Exp exp) {
-            if (exp instanceof Id) {
-                Id id = (Id) exp;
+            if (exp instanceof Id id) {
                 return toOlap4j(id);
             }
-            if (exp instanceof ResolvedFunCall) {
-                ResolvedFunCall call = (ResolvedFunCall) exp;
+            if (exp instanceof ResolvedFunCall call) {
                 return toOlap4j(call);
             }
-            if (exp instanceof DimensionExpr) {
-                DimensionExpr dimensionExpr = (DimensionExpr) exp;
+            if (exp instanceof DimensionExpr dimensionExpr) {
                 return new DimensionNode(
                     null,
                     olap4jConnection.toOlap4j(dimensionExpr.getDimension()));
             }
-            if (exp instanceof HierarchyExpr) {
-                HierarchyExpr hierarchyExpr = (HierarchyExpr) exp;
+            if (exp instanceof HierarchyExpr hierarchyExpr) {
                 return new HierarchyNode(
                     null,
                     olap4jConnection.toOlap4j(hierarchyExpr.getHierarchy()));
             }
-            if (exp instanceof LevelExpr) {
-                LevelExpr levelExpr = (LevelExpr) exp;
+            if (exp instanceof LevelExpr levelExpr) {
                 return new LevelNode(
                     null,
                     olap4jConnection.toOlap4j(levelExpr.getLevel()));
             }
-            if (exp instanceof MemberExpr) {
-                MemberExpr memberExpr = (MemberExpr) exp;
+            if (exp instanceof MemberExpr memberExpr) {
                 return new MemberNode(
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));
             }
-            if (exp instanceof Literal) {
-                Literal literal = (Literal) exp;
+            if (exp instanceof Literal literal) {
                 final Object value = literal.getValue();
                 if (literal.getCategory() == Category.Symbol) {
                     return LiteralNode.createSymbol(
                         null, (String) literal.getValue());
-                } else if (value instanceof Number) {
-                    Number number = (Number) value;
+                } else if (value instanceof Number number) {
                     BigDecimal bd = bigDecimalFor(number);
                     return LiteralNode.createNumeric(null, bd, false);
                 } else if (value instanceof String) {
@@ -1232,9 +1213,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     List<PropertyValueNode> memberPropertyList =
                         new ArrayList<>();
                     for (Object child : formula.getChildren()) {
-                        if (child instanceof MemberProperty) {
-                            MemberProperty memberProperty =
-                                (MemberProperty) child;
+                        if (child instanceof MemberProperty memberProperty) {
                             memberPropertyList.add(
                                 new PropertyValueNode(
                                     null,

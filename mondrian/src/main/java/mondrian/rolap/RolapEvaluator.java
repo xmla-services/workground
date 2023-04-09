@@ -518,10 +518,9 @@ public final Evaluator pushAggregation( List<List<Member>> list ) {
    */
   @Override
 public final boolean equals( Object obj ) {
-    if ( !( obj instanceof RolapEvaluator ) ) {
+    if ( !( obj instanceof RolapEvaluator that ) ) {
       return false;
     }
-    RolapEvaluator that = (RolapEvaluator) obj;
     return Arrays.equals( this.currentMembers, that.currentMembers );
   }
 

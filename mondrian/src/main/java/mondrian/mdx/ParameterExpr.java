@@ -143,11 +143,9 @@ public class ParameterExpr extends ExpBase {
             final Object value = parameter.getValue();
             if (value == null) {
                 parameter.getDefaultExp().unparse(pw);
-            } else if (value instanceof String) {
-                String s = (String) value;
+            } else if (value instanceof String s) {
                 pw.print(Util.quoteForMdx(s));
-            } else if (value instanceof List) {
-                List list = (List) value;
+            } else if (value instanceof List list) {
                 pw.print("{");
                 int i = -1;
                 for (Object o : list) {
@@ -201,10 +199,9 @@ public class ParameterExpr extends ExpBase {
      */
     @Override
 	public boolean equals(Object other) {
-        if (!(other instanceof ParameterExpr)) {
+        if (!(other instanceof ParameterExpr that)) {
             return false;
         }
-        ParameterExpr that = (ParameterExpr) other;
         return this.parameter == that.parameter;
     }
 

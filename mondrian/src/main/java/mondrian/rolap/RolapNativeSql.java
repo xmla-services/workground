@@ -178,10 +178,9 @@ public class RolapNativeSql {
                 return null;
             }
             final Member member = ((MemberExpr) exp).getMember();
-            if (!(member instanceof RolapStoredMeasure)) {
+            if (!(member instanceof RolapStoredMeasure measure)) {
                 return null;
             }
-            RolapStoredMeasure measure = (RolapStoredMeasure) member;
             if (measure.isCalculated()) {
                 return null; // ??
             }
@@ -429,10 +428,9 @@ public class RolapNativeSql {
             if ((exp.getCategory() & category) == 0) {
                 return false;
             }
-            if (!(exp instanceof FunCall)) {
+            if (!(exp instanceof FunCall fc)) {
                 return false;
             }
-            FunCall fc = (FunCall) exp;
             if (!mdx.equalsIgnoreCase(fc.getFunName())) {
                 return false;
             }

@@ -563,8 +563,7 @@ public class AggStar {
 
                 pw.print(subprefix);
                 pw.print("left=");
-                if (left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
-                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column c = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) left;
+                if (left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column c) {
                     mondrian.rolap.RolapStar.Column col =
                         getTable().getAggStar().getStar().getFactTable()
                         .lookupColumn(c.name());
@@ -951,9 +950,8 @@ public class AggStar {
                     getName(),
                     usage.rightJoinConditionColumnName);
             } else {
-                if (rleft instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
-                	org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column lcolumn = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) rleft;
-                    left = new ColumnR(getName(), lcolumn.name());
+                if (rleft instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column lcolumn) {
+                	left = new ColumnR(getName(), lcolumn.name());
                 } else {
                     throw Util.newInternal("not implemented: rleft=" + rleft);
 /*
@@ -1156,8 +1154,7 @@ public class AggStar {
             public String generateExprString(SqlQuery query) {
                 String exprString = super.generateExprString(query);
                 RolapAggregator rollupAggregator = getRollupAggregator();
-                if (rollupAggregator instanceof BaseAggor) {
-                    BaseAggor agg = (BaseAggor) rollupAggregator;
+                if (rollupAggregator instanceof BaseAggor agg) {
                     if (agg.alwaysRequiresFactColumn()) {
                         return agg.getScalarExpression(exprString);
                     }

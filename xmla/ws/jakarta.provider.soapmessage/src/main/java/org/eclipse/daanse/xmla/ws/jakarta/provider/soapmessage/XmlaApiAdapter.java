@@ -88,8 +88,7 @@ public class XmlaApiAdapter {
         Iterator<Node> nodeIterator = discover.getChildElements();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
-            if (node instanceof SOAPElement) {
-                SOAPElement element = (SOAPElement) node;
+            if (node instanceof SOAPElement element) {
                 if (requestType == null && Constants.QNAME_MSXMLA_REQUESTTYPE.equals(element.getElementQName())) {
                     requestType = element.getTextContent();
                     continue;

@@ -161,8 +161,7 @@ public final class NameResolver {
         case Category.Hierarchy:
             if (element instanceof Hierarchy) {
                 return element;
-            } else if (element instanceof Dimension) {
-                final Dimension dimension = (Dimension) element;
+            } else if (element instanceof Dimension dimension) {
                 final Hierarchy[] hierarchies = dimension.getHierarchies();
                 if (hierarchies.length == 1) {
                     return hierarchies[0];

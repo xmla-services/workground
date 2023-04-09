@@ -102,8 +102,7 @@ abstract class MondrianOlap4jStatement
             throw olap4jConnection.helper.createException(
                 "mondrian gave exception while parsing query", e);
         }
-        if (parseTree instanceof DrillThrough) {
-            DrillThrough drillThrough = (DrillThrough) parseTree;
+        if (parseTree instanceof DrillThrough drillThrough) {
             final Query query = drillThrough.getQuery();
             query.setResultStyle(ResultStyle.LIST);
             setQuery(query);

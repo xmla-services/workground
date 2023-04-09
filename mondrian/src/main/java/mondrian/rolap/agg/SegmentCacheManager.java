@@ -904,11 +904,9 @@ public class SegmentCacheManager {
       final List<SegmentHeader> headers =
         new ArrayList<>();
       for ( Member member : measures ) {
-        if ( !( member instanceof RolapStoredMeasure ) ) {
+        if ( !( member instanceof RolapStoredMeasure storedMeasure ) ) {
           continue;
         }
-        final RolapStoredMeasure storedMeasure =
-          (RolapStoredMeasure) member;
         final RolapStar star = storedMeasure.getCube().getStar();
         final SegmentCacheIndex index =
           cacheMgr.indexRegistry.getIndex( star );
@@ -1039,8 +1037,7 @@ public class SegmentCacheManager {
             // A message is either a command or an event.
             // A command returns a value that must be read by
             // the caller.
-            if ( message instanceof Command<?> ) {
-              Command<?> command = (Command<?>) message;
+            if ( message instanceof Command<?> command ) {
               try {
                 Locus.push( command.getLocus() );
                 Object result = command.call();

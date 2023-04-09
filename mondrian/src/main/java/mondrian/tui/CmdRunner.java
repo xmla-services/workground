@@ -424,17 +424,13 @@ public class CmdRunner {
             "parseParameter. exp="
             + ((element == null) ? "null" : element.getClass().getName()));
 
-        if (element instanceof Member) {
-            Member member = (Member) element;
+        if (element instanceof Member member) {
             return new Expr(member, Expr.Type.MEMBER);
-        } else if (element instanceof org.eclipse.daanse.olap.api.model.Level) {
-            org.eclipse.daanse.olap.api.model.Level level = (org.eclipse.daanse.olap.api.model.Level) element;
+        } else if (element instanceof org.eclipse.daanse.olap.api.model.Level level) {
             return new Expr(level, Expr.Type.MEMBER);
-        } else if (element instanceof Hierarchy) {
-            Hierarchy hier = (Hierarchy) element;
+        } else if (element instanceof Hierarchy hier) {
             return new Expr(hier, Expr.Type.MEMBER);
-        } else if (element instanceof Dimension) {
-            Dimension dim = (Dimension) element;
+        } else if (element instanceof Dimension dim) {
             return new Expr(dim, Expr.Type.MEMBER);
         }
         return null;

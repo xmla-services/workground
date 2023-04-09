@@ -51,8 +51,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof MinusStarPredicate) {
-            MinusStarPredicate that = (MinusStarPredicate) obj;
+        if (obj instanceof MinusStarPredicate that) {
             return this.plus.equals(that.plus)
                 && this.minus.equals(that.minus);
         } else {
@@ -108,22 +107,16 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
     @Override
 	public StarColumnPredicate minus(StarPredicate predicate) {
         assert predicate != null;
-        if (predicate instanceof ValueColumnPredicate) {
-            ValueColumnPredicate valuePredicate =
-                (ValueColumnPredicate) predicate;
+        if (predicate instanceof ValueColumnPredicate valuePredicate) {
             if (!evaluate(valuePredicate.getValue())) {
                 // Case 3: 'minus' is a list, 'constraint' is a value
                 // which is not matched by this
                 return this;
             }
         }
-        if (minus instanceof ListColumnPredicate) {
-            ListColumnPredicate minusList = (ListColumnPredicate) minus;
+        if (minus instanceof ListColumnPredicate minusList) {
             RolapStar.Column column = plus.getConstrainedColumn();
-            if (predicate instanceof ListColumnPredicate) {
-                // Case 1: 'minus' and 'constraint' are both lists.
-                ListColumnPredicate list =
-                    (ListColumnPredicate) predicate;
+            if (predicate instanceof ListColumnPredicate list) {
                 List<StarColumnPredicate> unionList =
                     new ArrayList<>();
                 unionList.addAll(minusList.getPredicates());
@@ -134,9 +127,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
                         column,
                         unionList));
             }
-            if (predicate instanceof ValueColumnPredicate) {
-                ValueColumnPredicate valuePredicate =
-                    (ValueColumnPredicate) predicate;
+            if (predicate instanceof ValueColumnPredicate valuePredicate) {
                 if (!evaluate(valuePredicate.getValue())) {
                     // Case 3: 'minus' is a list, 'constraint' is a value
                     // which is not matched by this

@@ -101,10 +101,7 @@ public class ParameterFunDef extends FunDefBase {
             // e.g. "[Time]"
             return true;
         }
-        if (typeArg instanceof FunCall) {
-            // e.g. "[Time].CurrentMember.Hierarchy". They probably wrote
-            // "[Time]", and the automatic type conversion did the rest.
-            FunCall hierarchyCall = (FunCall) typeArg;
+        if (typeArg instanceof FunCall hierarchyCall) {
             if (hierarchyCall.getFunName().equals("Hierarchy")
                 && hierarchyCall.getArgCount() > 0
                 && hierarchyCall.getArg(0) instanceof FunCall)
@@ -137,8 +134,7 @@ public class ParameterFunDef extends FunDefBase {
      * can safely be used before the expression has been validated.
      */
     public static Type getParameterType(Exp[] args) {
-        if (args[1] instanceof Id) {
-            Id id = (Id) args[1];
+        if (args[1] instanceof Id id) {
             String[] names = id.toStringArray();
             if (names.length == 1) {
                 final String name = names[0];
@@ -149,8 +145,7 @@ public class ParameterFunDef extends FunDefBase {
                     return new StringType();
                 }
             }
-        } else if (args[1] instanceof Literal) {
-            final Literal literal = (Literal) args[1];
+        } else if (args[1] instanceof Literal literal) {
             if (literal.getValue().equals("NUMERIC")) {
                 return new NumericType();
             } else if (literal.getValue().equals("STRING")) {

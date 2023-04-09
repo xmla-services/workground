@@ -276,23 +276,19 @@ abstract class Rowset implements XmlaConstants {
                             .append(" of rowset ")
                             .append(rowsetDefinition.name()).toString()));
                 }
-            } else if (value instanceof XmlElement[]) {
-                XmlElement[] elements = (XmlElement[]) value;
+            } else if (value instanceof XmlElement[] elements) {
                 for (XmlElement element : elements) {
                     emitXmlElement(writer, element);
                 }
-            } else if (value instanceof Object[]) {
-                Object[] values = (Object[]) value;
+            } else if (value instanceof Object[] values) {
                 for (Object value1 : values) {
                     writer.startElement(column.name);
                     writer.characters(value1.toString());
                     writer.endElement();
                 }
-            } else if (value instanceof List) {
-                List values = (List) value;
+            } else if (value instanceof List values) {
                 for (Object value1 : values) {
-                    if (value1 instanceof XmlElement) {
-                        XmlElement xmlElement = (XmlElement) value1;
+                    if (value1 instanceof XmlElement xmlElement) {
                         emitXmlElement(writer, xmlElement);
                     } else {
                         writer.startElement(column.name);
@@ -300,8 +296,7 @@ abstract class Rowset implements XmlaConstants {
                         writer.endElement();
                     }
                 }
-            } else if (value instanceof Rowset) {
-                Rowset rowset = (Rowset) value;
+            } else if (value instanceof Rowset rowset) {
                 final List<Row> rows = new ArrayList<>();
                 rowset.populate(response, null, rows);
                 writer.startSequence(column.name, "row");
@@ -409,8 +404,7 @@ abstract class Rowset implements XmlaConstants {
 
         if (restriction == null) {
             return (input)->true;
-        } else if (restriction instanceof XmlaUtil.Wildcard) {
-            XmlaUtil.Wildcard wildcard = (XmlaUtil.Wildcard) restriction;
+        } else if (restriction instanceof XmlaUtil.Wildcard wildcard) {
             String regexp =
                 Util.wildcardToRegexp(
                     Collections.singletonList(wildcard.pattern));

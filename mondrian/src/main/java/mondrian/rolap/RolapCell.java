@@ -426,9 +426,7 @@ public class RolapCell implements Cell {
         if (defaultCube != null && defaultCube.isVirtual()) {
             List<RolapCube> cubes = new ArrayList<>();
             for (RolapMember member : defaultCube.getMeasuresMembers()) {
-                if (member instanceof RolapVirtualCubeMeasure) {
-                    RolapVirtualCubeMeasure measure =
-                        (RolapVirtualCubeMeasure) member;
+                if (member instanceof RolapVirtualCubeMeasure measure) {
                     cubes.add(measure.getCube());
                 }
             }
@@ -482,12 +480,10 @@ public class RolapCell implements Cell {
             return;
         }
         // "Aggregate({m})" is equivalent to "m"
-        if (expr instanceof ResolvedFunCall) {
-            ResolvedFunCall call = (ResolvedFunCall) expr;
+        if (expr instanceof ResolvedFunCall call) {
             if (call.getFunDef() instanceof AggregateFunDef) {
                 final Exp[] args = call.getArgs();
-                if (args[0] instanceof ResolvedFunCall) {
-                    final ResolvedFunCall arg0 = (ResolvedFunCall) args[0];
+                if (args[0] instanceof ResolvedFunCall arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
                             && arg0.getArg(0) instanceof MemberExpr)
@@ -791,11 +787,8 @@ public class RolapCell implements Cell {
                 }
             } else if (member instanceof RolapCubeMember) {
                 handleMember(((RolapCubeMember) member).member);
-            } else if (member
-                instanceof RolapHierarchy.RolapCalculatedMeasure)
+            } else if (member instanceof RolapHierarchy.RolapCalculatedMeasure measure)
             {
-                RolapHierarchy.RolapCalculatedMeasure measure =
-                    (RolapHierarchy.RolapCalculatedMeasure) member;
                 measure.getFormula().getExpression().accept(this);
             } else if (member instanceof RolapMember) {
                 // regular RolapMember - fine

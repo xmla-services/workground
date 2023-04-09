@@ -274,10 +274,9 @@ public class MemberListCrossJoinArg implements CrossJoinArg {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof MemberListCrossJoinArg)) {
+        if (!(obj instanceof MemberListCrossJoinArg that)) {
             return false;
         }
-        MemberListCrossJoinArg that = (MemberListCrossJoinArg) obj;
         if (this.restrictMemberTypes != that.restrictMemberTypes) {
             return false;
         }

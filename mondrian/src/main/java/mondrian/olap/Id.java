@@ -242,10 +242,9 @@ public class Id
             if (this == o) {
                 return true;
             }
-            if (!(o instanceof NameSegment)) {
+            if (!(o instanceof NameSegment that)) {
                 return false;
             }
-            NameSegment that = (NameSegment) o;
             return that.name.equals(this.name);
         }
 
@@ -330,10 +329,9 @@ public class Id
             if (this == o) {
                 return true;
             }
-            if (!(o instanceof KeySegment)) {
+            if (!(o instanceof KeySegment that)) {
                 return false;
             }
-            KeySegment that = (KeySegment) o;
             return this.subSegmentList.equals(that.subSegmentList);
         }
 

@@ -65,8 +65,7 @@ public class DataSourceChangeListenerImpl2 implements DataSourceChangeListener {
 
     public String getTableName(RolapHierarchy hierarchy) {
         RelationOrJoin relation = hierarchy.getRelation();
-        if (relation instanceof Table) {
-            Table tableRelation = (Table) relation;
+        if (relation instanceof Table tableRelation) {
             return tableRelation.name();
         } else {
             return null;

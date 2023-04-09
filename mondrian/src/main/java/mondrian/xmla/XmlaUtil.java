@@ -210,8 +210,7 @@ way too noisy
         NodeList nlst = parent.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
             Node n = nlst.item(i);
-            if (n instanceof Element) {
-                Element e = (Element) n;
+            if (n instanceof Element e) {
                 if ((ns == null || ns.equals(e.getNamespaceURI()))
                     && (lname == null || lname.equals(e.getLocalName())))
                 {

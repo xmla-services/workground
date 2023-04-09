@@ -1841,9 +1841,7 @@ public class FunUtil extends Util {
       || exp instanceof DimensionExpr ) {
       return false;
     }
-    if ( exp instanceof ResolvedFunCall ) {
-      ResolvedFunCall call = (ResolvedFunCall) exp;
-
+    if ( exp instanceof ResolvedFunCall call ) {
       // A set of literals is not worth caching.
       if ( call.getFunDef() instanceof SetFunDef ) {
         for ( Exp setArg : call.getArgs() ) {

@@ -232,13 +232,11 @@ public class Aggregation {
         for (int i = 0; i < newPredicates.length; i++) {
             // A set of constraints with only one entry will not be optimized
             // away
-            if (!(newPredicates[i] instanceof ListColumnPredicate)) {
+            if (!(newPredicates[i] instanceof ListColumnPredicate newPredicate)) {
                 bloats[i] = 0.0;
                 continue;
             }
 
-            final ListColumnPredicate newPredicate =
-                (ListColumnPredicate) newPredicates[i];
             final List<StarColumnPredicate> predicateList =
                 newPredicate.getPredicates();
             final int valueCount = predicateList.size();
@@ -262,9 +260,7 @@ public class Aggregation {
             Level level = null;
             for (int j = 0; j < valueCount; j++) {
                 Object value = predicateList.get(j);
-                if (value instanceof MemberColumnPredicate) {
-                    MemberColumnPredicate memberColumnPredicate =
-                        (MemberColumnPredicate) value;
+                if (value instanceof MemberColumnPredicate memberColumnPredicate) {
                     Member m = memberColumnPredicate.getMember();
                     if (j == 0) {
                         parent = m.getParentMember();

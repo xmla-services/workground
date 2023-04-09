@@ -71,8 +71,7 @@ class MondrianOlap4jCube
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof MondrianOlap4jCube) {
-            MondrianOlap4jCube that = (MondrianOlap4jCube) obj;
+        if (obj instanceof MondrianOlap4jCube that) {
             return this.olap4jSchema == that.olap4jSchema
                 && this.cube.equals(that.cube);
         }

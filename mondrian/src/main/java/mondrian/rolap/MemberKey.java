@@ -32,10 +32,9 @@ class MemberKey {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof MemberKey)) {
+        if (!(o instanceof MemberKey other)) {
             return false;
         }
-        MemberKey other = (MemberKey) o;
         return Objects.equals(this.parent, other.parent)
             && Objects.equals(this.value, other.value);
     }

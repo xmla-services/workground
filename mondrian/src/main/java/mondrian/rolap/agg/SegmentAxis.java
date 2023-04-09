@@ -107,11 +107,9 @@ public class SegmentAxis {
     private static Set<Object> predicateValueSet(
         StarColumnPredicate predicate)
     {
-        if (!(predicate instanceof ListColumnPredicate)) {
+        if (!(predicate instanceof ListColumnPredicate listColumnPredicate)) {
             return null;
         }
-        ListColumnPredicate listColumnPredicate =
-            (ListColumnPredicate) predicate;
         final List<StarColumnPredicate> predicates =
             listColumnPredicate.getPredicates();
         if (predicates.size() < 10) {
@@ -119,9 +117,7 @@ public class SegmentAxis {
         }
         final HashSet<Object> set = new HashSet<>();
         for (StarColumnPredicate subPredicate : predicates) {
-            if (subPredicate instanceof ValueColumnPredicate) {
-                ValueColumnPredicate valueColumnPredicate =
-                    (ValueColumnPredicate) subPredicate;
+            if (subPredicate instanceof ValueColumnPredicate valueColumnPredicate) {
                 valueColumnPredicate.values(set);
             } else {
                 return null;

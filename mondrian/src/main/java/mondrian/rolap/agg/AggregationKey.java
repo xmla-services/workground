@@ -123,10 +123,9 @@ public class AggregationKey
 
     @Override
 	public boolean equals(Object other) {
-        if (!(other instanceof AggregationKey)) {
+        if (!(other instanceof AggregationKey that)) {
             return false;
         }
-        final AggregationKey that = (AggregationKey) other;
         return constrainedColumnsBitKey.equals(that.constrainedColumnsBitKey)
             && star.equals(that.star)
             && equal(compoundPredicateList, that.compoundPredicateList);

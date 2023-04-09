@@ -388,11 +388,10 @@ public class RolapHierarchy extends HierarchyBase {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RolapHierarchy)) {
+        if (!(o instanceof RolapHierarchy that)) {
             return false;
         }
 
-        RolapHierarchy that = (RolapHierarchy)o;
         if (sharedHierarchyName == null || that.sharedHierarchyName == null) {
             return false;
         } else {
@@ -532,9 +531,7 @@ public class RolapHierarchy extends HierarchyBase {
         String tableName,
         RelationOrJoin relationOrJoin)
     {
-        if (relationOrJoin instanceof Relation) {
-            Relation relation =
-                (Relation) relationOrJoin;
+        if (relationOrJoin instanceof Relation relation) {
             if (RelationUtil.getAlias(relation).equals(tableName)) {
                 return relation;
             } else {
@@ -794,15 +791,12 @@ public class RolapHierarchy extends HierarchyBase {
         RelationOrJoin relation,
         String alias)
     {
-        if (relation instanceof Relation) {
-            Relation table =
-                (Relation) relation;
+        if (relation instanceof Relation table) {
             return RelationUtil.getAlias(table).equals(alias)
                 ? relation
                 : null;
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
+        } else if (relation instanceof Join join) {
             RelationOrJoin leftRelation =
                 relationSubsetInverse(left(join), alias);
             return (leftRelation == null)
@@ -827,15 +821,12 @@ public class RolapHierarchy extends HierarchyBase {
         RelationOrJoin relation,
         String alias)
     {
-        if (relation instanceof Relation) {
-            Relation table =
-                (Relation) relation;
+        if (relation instanceof Relation table) {
             return RelationUtil.getAlias(table).equals(alias)
                 ? relation
                 : null;
 
-        } else if (relation instanceof Join) {
-            Join join = (Join) relation;
+        } else if (relation instanceof Join join) {
             RelationOrJoin rightRelation =
                 relationSubset(right(join), alias);
             return (rightRelation == null)
@@ -863,18 +854,14 @@ public class RolapHierarchy extends HierarchyBase {
         RelationOrJoin relation,
         RolapStar.Table targetTable)
     {
-        if (relation instanceof Table) {
-            Table table = (Table) relation;
+        if (relation instanceof Table table) {
             if (table.name().equals(targetTable.getTableName())) {
                 return relation;
             } else {
                 // Not the same table if table names are different
                 return null;
             }
-        } else if (relation instanceof Join) {
-            // Search inside relation, starting from the rightmost table,
-            // and move left along the join chain.
-            Join join = (Join) relation;
+        } else if (relation instanceof Join join) {
             RelationOrJoin rightRelation =
                 lookupRelationSubset(right(join), targetTable);
             if (rightRelation == null) {
@@ -1587,11 +1574,9 @@ public class RolapHierarchy extends HierarchyBase {
             Id.Segment s,
             MatchType matchType)
         {
-            if (!(s instanceof Id.NameSegment)) {
+            if (!(s instanceof Id.NameSegment nameSegment)) {
                 return null;
             }
-            final Id.NameSegment nameSegment = (Id.NameSegment) s;
-
             if (Util.equalName(nameSegment.name, dimension.getName())) {
                 return dimension;
             }

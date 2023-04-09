@@ -129,10 +129,9 @@ public class RolapNativeTopCount extends RolapNativeSet {
         }
 
         private boolean deduceNullability(Exp expr) {
-            if (!(expr instanceof MemberExpr)) {
+            if (!(expr instanceof MemberExpr memberExpr)) {
                 return true;
             }
-            final MemberExpr memberExpr = (MemberExpr) expr;
             if (!(memberExpr.getMember() instanceof RolapStoredMeasure)) {
                 return true;
             }

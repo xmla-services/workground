@@ -34,8 +34,7 @@ public record ViewR(String alias,
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof View) {
-            View that = (View) o;
+        if (o instanceof View that) {
             if (!Objects.equals(alias(), that.alias())) {
                 return false;
             }
