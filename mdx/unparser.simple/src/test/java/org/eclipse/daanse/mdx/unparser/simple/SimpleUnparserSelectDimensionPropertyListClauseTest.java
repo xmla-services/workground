@@ -13,7 +13,10 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
+import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +31,16 @@ class SimpleUnparserSelectDimensionPropertyListClauseTest {
     @Test
     void test() {
         SelectDimensionPropertyListClause selectDimensionPropertyListClause =
-            new SelectDimensionPropertyListClauseR(List.of("BACK_COLOR", "FORE_COLOR"));
+            new SelectDimensionPropertyListClauseR(List.of(
+                new CompoundIdR(List.of(
+                    new NameObjectIdentifierR("BACK_COLOR", ObjectIdentifier.Quoting.UNQUOTED))
+                ),
+                new CompoundIdR(List.of(
+                    new NameObjectIdentifierR("FORE_COLOR", ObjectIdentifier.Quoting.UNQUOTED))
+                )
+            ));
 
         assertThat(unparser.unparseSelectDimensionPropertyListClause(selectDimensionPropertyListClause)).asString()
-            .isEqualTo("DIMENSION\r\n PROPERTIES BACK_COLOR\r\n, FORE_COLOR");
+            .isEqualTo("DIMENSION\r\n PROPERTIES BACK_COLOR,FORE_COLOR");
     }
 }

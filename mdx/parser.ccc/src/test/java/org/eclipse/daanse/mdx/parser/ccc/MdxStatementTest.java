@@ -14,10 +14,10 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
 import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause1;
 import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause2;
 import static org.eclipse.daanse.mdx.parser.ccc.SelectSlicerAxisClauseTest.checkSelectSlicerAxisClause1;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectSubCubeClauseTest.SelectSubCubeClauseNameTest.checkSelectSubcubeClauseName;
 
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;

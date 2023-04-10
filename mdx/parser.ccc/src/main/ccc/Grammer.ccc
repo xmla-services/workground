@@ -47,6 +47,7 @@ import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
@@ -99,6 +100,7 @@ import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
+import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
 {
 
 }
@@ -1447,16 +1449,16 @@ CreateSetBodyClause parseCreateSetBodyClause :
 SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
   (< DIMENSION >)?
   {
-    List < String > cellProperties = new LinkedList < String > ();
+    List < CompoundId > cellProperties = new LinkedList < CompoundId > ();
   }
-  < PROPERTIES > <ID>
+  < PROPERTIES >
   {
-    cellProperties.add(getToken(0).getImage());
+    cellProperties.add(parseCompoundId());
   }
   (
-    < COMMA > <ID>
+    < COMMA >
     {
-          cellProperties.add(getToken(0).getImage());
+          cellProperties.add(parseCompoundId());
     }
   )*
   {
@@ -1464,6 +1466,16 @@ SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
   }
 ;
 
+
+RefreshStatement parseRefreshStatement :
+{
+  NameObjectIdentifier cubeName;
+}
+  < REFRESH > < CUBE >  cubeName = parseNameObjectIdentifier
+{
+    return new RefreshStatementR(cubeName);
+}
+;
 
 // <SelectQueryAxisClause> ::= [NON EMPTY] <set> [<dimProps>] ON <axis_name>
 SelectQueryAxisClause parseSelectQueryAxisClause :

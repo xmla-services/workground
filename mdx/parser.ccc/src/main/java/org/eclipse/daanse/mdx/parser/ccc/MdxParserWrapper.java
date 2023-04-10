@@ -16,6 +16,7 @@ package org.eclipse.daanse.mdx.parser.ccc;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
@@ -226,6 +227,17 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause() throws MdxParserException {
         try {
             return delegate.parseSelectDimensionPropertyListClause();
+
+        } catch (Exception e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public RefreshStatement parseRefreshStatement() throws MdxParserException {
+        try {
+            return delegate.parseRefreshStatement();
 
         } catch (Exception e) {
             throw new MdxParserException(e);
