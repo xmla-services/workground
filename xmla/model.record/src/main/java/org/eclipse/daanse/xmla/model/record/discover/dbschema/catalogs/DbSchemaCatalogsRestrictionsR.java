@@ -13,8 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRestrictions;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRestrictions;
 
 public record DbSchemaCatalogsRestrictionsR(Optional<String> catalogName)
     implements DbSchemaCatalogsRestrictions {

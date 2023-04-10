@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.Axis;
 import org.eclipse.daanse.xmla.api.mddataset.Type;
-
-import java.util.List;
 
 public record AxisR(List<Type> setType,
                     String name) implements Axis {

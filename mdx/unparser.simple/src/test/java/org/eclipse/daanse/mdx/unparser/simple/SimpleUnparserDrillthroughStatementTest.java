@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
@@ -28,11 +33,6 @@ import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserDrillthroughStatementTest {
 

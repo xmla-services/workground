@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Account;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.util.List;
 
 public record AccountR(String accountType,
                        String aggregationFunction,

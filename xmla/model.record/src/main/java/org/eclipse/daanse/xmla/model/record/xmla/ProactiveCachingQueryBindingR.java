@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingQueryBinding;
-import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingQueryBinding;
+import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
 
 public record ProactiveCachingQueryBindingR(
     Optional<Duration> refreshInterval,

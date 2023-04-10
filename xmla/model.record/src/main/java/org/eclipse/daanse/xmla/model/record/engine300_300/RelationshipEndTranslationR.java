@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine300_300;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.util.List;
 
 public record RelationshipEndTranslationR(long language,
                                           String caption,

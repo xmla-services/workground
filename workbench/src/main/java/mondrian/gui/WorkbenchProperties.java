@@ -9,9 +9,9 @@
 */
 package mondrian.gui;
 
-import org.pentaho.di.core.encryption.Encr;
-
 import java.util.Properties;
+
+import org.pentaho.di.core.encryption.Encr;
 
 public class WorkbenchProperties extends Properties {
 

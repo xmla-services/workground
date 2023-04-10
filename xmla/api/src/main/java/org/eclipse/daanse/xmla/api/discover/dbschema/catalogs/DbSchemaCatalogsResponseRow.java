@@ -13,11 +13,11 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
-import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
 
 public interface DbSchemaCatalogsResponseRow {
 

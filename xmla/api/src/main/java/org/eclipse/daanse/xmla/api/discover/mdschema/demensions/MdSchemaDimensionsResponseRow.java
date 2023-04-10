@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.demensions;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
-
-import java.util.Optional;
 
 /**
  * This schema rowset describes the dimensions within a database.

@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.Member;
-import org.eclipse.daanse.xmla.api.xmla.Role;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Member;
+import org.eclipse.daanse.xmla.api.xmla.Role;
 
 public record RoleR(String name,
                     Optional<String> id,

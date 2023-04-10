@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
-import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
-
 import java.time.Instant;
+
+import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 
 public record OlapInfoCubeR(String cubeName,
                             Instant lastDataUpdate,

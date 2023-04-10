@@ -12,10 +12,15 @@
 
 package mondrian.gui;
 
-import mondrian.util.CompositeList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+
+import mondrian.util.CompositeList;
 
 /**
  * @author sean

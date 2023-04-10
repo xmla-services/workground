@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.GroupingBehaviorEnum;
@@ -21,8 +23,6 @@ import org.eclipse.daanse.xmla.api.common.enums.InstanceSelectionEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaHierarchiesResponseRowR(Optional<String> catalogName,
                                               Optional<String> schemaName,

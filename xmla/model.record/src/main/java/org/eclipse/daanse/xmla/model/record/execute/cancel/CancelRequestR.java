@@ -13,14 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.execute.cancel;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
 import org.eclipse.daanse.xmla.api.execute.cancel.CancelRequest;
-import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheRequest;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
-import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
-
-import java.util.List;
 
 public record CancelRequestR(PropertiesR properties,
                              List<ExecuteParameter> parameters,

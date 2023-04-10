@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Exception;
+import org.eclipse.daanse.xmla.api.exception.Messages;
 
 public interface Mddataset {
 

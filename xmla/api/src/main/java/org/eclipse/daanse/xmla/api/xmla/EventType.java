@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 
 public interface EventType {
 

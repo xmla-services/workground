@@ -9,9 +9,9 @@
 
 package mondrian.gui.validate.impl;
 
-import mondrian.gui.validate.TreeModelPath;
-
 import javax.swing.tree.TreePath;
+
+import mondrian.gui.validate.TreeModelPath;
 
 /**
  * Implementation of <code>TreeModelPath</code> for Workbench.

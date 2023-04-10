@@ -13,15 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
 import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
 import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
-
-import java.util.List;
-import java.util.Optional;
 
 public record DataItemR(String dataType,
                         Optional<Integer> dataSize,

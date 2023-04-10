@@ -13,15 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DrillThroughAction;
 import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
-
-import java.util.List;
-import java.util.Optional;
 
 public record DrillThroughActionR(String name,
                                   Optional<String> id,

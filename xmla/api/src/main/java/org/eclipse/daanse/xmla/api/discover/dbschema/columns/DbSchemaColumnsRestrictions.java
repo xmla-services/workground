@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.columns;
 
-import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 
 public interface DbSchemaColumnsRestrictions {
     String RESTRICTIONS_TABLE_CATALOG = "TABLE_CATALOG";

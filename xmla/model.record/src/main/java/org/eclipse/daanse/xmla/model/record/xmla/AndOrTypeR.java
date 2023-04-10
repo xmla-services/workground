@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.AndOrType;
 import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
-
-import java.util.List;
 
 public record AndOrTypeR(List<AndOrTypeEnum> notOrOrOrAnd) implements AndOrType {
 

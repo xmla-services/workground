@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
-import org.eclipse.daanse.xmla.api.xmla.TranslationInsertUpdate;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
+import org.eclipse.daanse.xmla.api.xmla.TranslationInsertUpdate;
 
 public record AttributeInsertUpdateR(String attributeName,
                                      String name,

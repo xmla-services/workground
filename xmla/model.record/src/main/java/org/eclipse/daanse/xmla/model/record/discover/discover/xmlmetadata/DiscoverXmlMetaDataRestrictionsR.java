@@ -13,11 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata;
 
-import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
-import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRestrictions;
-import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictions;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
+import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictions;
 
 public record DiscoverXmlMetaDataRestrictionsR(
     Optional<String> databaseId,

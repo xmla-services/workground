@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measures;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRestrictions;
-
-import java.util.Optional;
 
 public record MdSchemaMeasuresRestrictionsR(
     Optional<String> catalogName,

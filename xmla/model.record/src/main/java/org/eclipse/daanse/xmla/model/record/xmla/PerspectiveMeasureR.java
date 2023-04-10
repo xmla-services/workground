@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
-
-import java.util.List;
 
 public record PerspectiveMeasureR(String measureID,
                                   List<Annotation> annotations) implements PerspectiveMeasure {

@@ -13,11 +13,8 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlTransient;
-import jakarta.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CustomRollupSettingEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelOriginEnum;
@@ -25,7 +22,11 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
-import java.io.Serializable;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * This schema rowset describes each level within a particular hierarchy.

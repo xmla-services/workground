@@ -13,17 +13,16 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
-import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.ScalarMiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 public record ScalarMiningStructureColumnR(
     String name,

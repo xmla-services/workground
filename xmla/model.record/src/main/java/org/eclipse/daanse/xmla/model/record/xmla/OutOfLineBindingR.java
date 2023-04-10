@@ -12,10 +12,10 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
-
-import java.util.List;
 
 public record OutOfLineBindingR(String databaseID,
                                 String dimensionID,

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.members;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
-
-import java.util.Optional;
 
 public interface MdSchemaMembersRestrictions {
 

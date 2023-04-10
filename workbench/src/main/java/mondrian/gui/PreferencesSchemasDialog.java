@@ -9,11 +9,15 @@
 
 package mondrian.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.JDialog;
 import javax.swing.table.TableModel;
 
 /**

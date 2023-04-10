@@ -14,7 +14,6 @@
 package org.eclipse.daanse.xmla.model.record.discover.discover.datasources;
 
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
-import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 
 public record DiscoverDataSourcesRequestR(PropertiesR properties,

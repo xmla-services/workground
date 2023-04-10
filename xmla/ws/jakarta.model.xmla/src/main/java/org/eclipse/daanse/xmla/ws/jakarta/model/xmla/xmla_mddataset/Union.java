@@ -13,15 +13,16 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset;
 
+import java.util.List;
+
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTupleSet;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTupleSet;
-
-import java.util.List;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

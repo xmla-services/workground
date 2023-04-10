@@ -11,8 +11,12 @@
 
 package mondrian.gui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
 /**
  * <code>ListRenderer</code> ...

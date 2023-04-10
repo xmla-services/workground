@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
-import org.eclipse.daanse.xmla.api.mddataset.Type;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.mddataset.Type;
 
 public record SetListTypeR(List<Type> setType,
                            Long size) {

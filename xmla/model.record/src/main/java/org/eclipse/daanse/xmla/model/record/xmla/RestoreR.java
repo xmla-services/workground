@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Location;
 import org.eclipse.daanse.xmla.api.xmla.Restore;
-
-import java.util.List;
 
 public record RestoreR(String databaseName,
                        String databaseID,

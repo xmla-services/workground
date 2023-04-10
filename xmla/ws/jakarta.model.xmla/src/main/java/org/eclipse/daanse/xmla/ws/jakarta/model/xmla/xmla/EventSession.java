@@ -13,15 +13,15 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
-
-import java.math.BigInteger;
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "templateCategory", "templateName", "templateDescription", "event", "target" })

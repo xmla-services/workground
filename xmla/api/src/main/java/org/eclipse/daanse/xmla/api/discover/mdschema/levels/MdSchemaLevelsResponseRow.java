@@ -13,13 +13,13 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.levels;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CustomRollupSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
-
-import java.util.Optional;
 
 /**
  * This schema rowset describes each level within a particular hierarchy.

@@ -1,7 +1,6 @@
 package org.eclipse.daanse.odf.api;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 
 public interface OdfWriter {

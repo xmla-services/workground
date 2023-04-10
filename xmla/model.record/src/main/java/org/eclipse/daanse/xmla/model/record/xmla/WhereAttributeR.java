@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.WhereAttribute;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.WhereAttribute;
 
 public record WhereAttributeR(String attributeName,
                               List<Object> keys

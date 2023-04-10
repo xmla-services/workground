@@ -1,9 +1,9 @@
 package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
+import java.nio.charset.StandardCharsets;
+
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-
-import java.nio.charset.StandardCharsets;
 
 @ObjectClassDefinition
 public interface CsvDataLoadServiceConfig {

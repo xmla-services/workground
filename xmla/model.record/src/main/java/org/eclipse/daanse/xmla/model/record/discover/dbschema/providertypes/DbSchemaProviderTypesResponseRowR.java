@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
-
-import java.util.Optional;
 
 public record DbSchemaProviderTypesResponseRowR(Optional<String> typeName,
                                                 Optional<LevelDbTypeEnum> dataType,

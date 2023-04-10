@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.engine300_300;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
 public interface RelationshipEndTranslation {
 

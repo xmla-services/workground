@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 public record MdSchemaCubesResponseRowR(String catalogName,
                                         Optional<String> schemaName,

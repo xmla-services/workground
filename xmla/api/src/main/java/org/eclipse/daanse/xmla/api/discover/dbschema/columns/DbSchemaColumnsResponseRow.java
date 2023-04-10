@@ -13,11 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.columns;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * This schema rowset returns a row for each measure, each cube dimension attribute, and each

@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 
 public record AggregationDesignAttributeR(
     String attributeID,

@@ -11,13 +11,18 @@
 
 package mondrian.gui;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.JComboBox;
+import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreePath;
 
 /**
  *

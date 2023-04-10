@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveDimension;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
-
-import java.util.List;
-import java.util.Optional;
 
 public record PerspectiveDimensionR(String cubeDimensionID,
                                     Optional<List<PerspectiveAttribute>> attributes,

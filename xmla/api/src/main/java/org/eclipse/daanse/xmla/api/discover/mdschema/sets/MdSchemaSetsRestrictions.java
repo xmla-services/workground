@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.sets;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
-
-import java.util.Optional;
 
 public interface MdSchemaSetsRestrictions {
 

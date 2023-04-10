@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import org.w3c.dom.Element;
-
 import java.util.List;
 
 public interface HierarchyInfo {

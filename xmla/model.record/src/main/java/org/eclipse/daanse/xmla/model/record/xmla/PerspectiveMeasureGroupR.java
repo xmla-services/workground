@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
-
-import java.util.List;
-import java.util.Optional;
 
 public record PerspectiveMeasureGroupR(String measureGroupID,
                                        Optional<List<PerspectiveMeasure>> measures,

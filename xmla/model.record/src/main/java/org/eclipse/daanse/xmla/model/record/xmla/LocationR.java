@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Folder;
 import org.eclipse.daanse.xmla.api.xmla.Location;
-
-import java.util.List;
 
 public record LocationR(String dataSourceType,
                         String connectionString,

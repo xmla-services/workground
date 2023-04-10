@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
 
 public interface Hierarchy {
 

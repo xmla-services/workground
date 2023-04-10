@@ -13,7 +13,6 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes;
 
-import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 

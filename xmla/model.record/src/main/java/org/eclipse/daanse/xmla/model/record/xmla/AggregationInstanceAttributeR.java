@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
-import org.eclipse.daanse.xmla.api.xmla.DataItem;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
+import org.eclipse.daanse.xmla.api.xmla.DataItem;
 
 public record AggregationInstanceAttributeR(String attributeID,
                                             Optional<List<DataItem>> keyColumns) implements AggregationInstanceAttribute{

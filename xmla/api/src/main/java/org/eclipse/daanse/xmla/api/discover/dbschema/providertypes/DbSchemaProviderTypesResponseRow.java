@@ -13,11 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.providertypes;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * This schema rowset identifies the (base) data types supported by the server.

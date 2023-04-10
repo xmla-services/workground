@@ -13,9 +13,9 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.discover.enumerators;
 
-import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
 
 public record DiscoverEnumeratorsResponseRowR(String enumName,
                                               Optional<String> enumDescription,

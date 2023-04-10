@@ -13,7 +13,20 @@
 */
 package org.eclipse.daanse.xmla.ws.tck;
 
-import jakarta.xml.soap.SOAPMessage;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Type;
@@ -75,19 +88,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import jakarta.xml.soap.SOAPMessage;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {

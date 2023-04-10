@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBinding;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBinding;
 
 public record ProactiveCachingIncrementalProcessingBindingR(
     Optional<Duration> refreshInterval,

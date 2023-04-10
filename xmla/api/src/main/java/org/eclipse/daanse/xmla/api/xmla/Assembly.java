@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
-
 import java.time.Instant;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 
 public interface Assembly {
 

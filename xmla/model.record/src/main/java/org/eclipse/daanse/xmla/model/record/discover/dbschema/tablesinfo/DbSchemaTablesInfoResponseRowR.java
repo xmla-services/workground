@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo;
 
-import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 
 public record DbSchemaTablesInfoResponseRowR(Optional<String> catalogName,
                                              Optional<String> schemaName,

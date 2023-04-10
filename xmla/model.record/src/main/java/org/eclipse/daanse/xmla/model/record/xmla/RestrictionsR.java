@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Restrictions;
-
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.eclipse.daanse.xmla.api.xmla.Restrictions;
 
 public record RestrictionsR(List<Entry<String, String>> restrictionList) implements Restrictions {
 

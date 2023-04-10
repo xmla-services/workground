@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.CubeDimensionBinding;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.CubeDimensionBinding;
 
 public record CubeDimensionBindingR(
     String dataSourceID,

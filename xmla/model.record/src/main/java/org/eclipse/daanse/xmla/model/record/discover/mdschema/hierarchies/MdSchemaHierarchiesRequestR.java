@@ -13,7 +13,6 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies;
 
-import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 

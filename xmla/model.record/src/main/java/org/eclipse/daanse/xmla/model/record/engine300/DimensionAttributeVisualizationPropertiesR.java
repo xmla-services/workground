@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine300;
 
-import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
-
 import java.math.BigInteger;
+
+import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
 
 public record DimensionAttributeVisualizationPropertiesR(
     BigInteger folderPosition,

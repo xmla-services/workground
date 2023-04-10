@@ -3,7 +3,6 @@ package org.eclipse.daanse.odf.impl.basic;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 

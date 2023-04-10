@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
@@ -28,10 +32,6 @@ import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserSelectWithClauseTest {
 

@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 
 public record FoldingParametersR(Integer foldIndex,
                                  Integer foldCount,

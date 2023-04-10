@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
@@ -22,10 +26,6 @@ import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
-
-import java.math.BigInteger;
-import java.time.Instant;
-import java.util.List;
 
 public record PartitionR(String name,
                          String id,

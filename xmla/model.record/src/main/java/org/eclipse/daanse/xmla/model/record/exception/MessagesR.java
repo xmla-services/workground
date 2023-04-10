@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.exception;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Type;
-
-import java.util.List;
 
 public record MessagesR(List<Type> warningOrError) implements Messages {
 }

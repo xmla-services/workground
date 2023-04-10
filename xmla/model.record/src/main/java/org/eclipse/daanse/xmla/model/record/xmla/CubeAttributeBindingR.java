@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
-import org.eclipse.daanse.xmla.api.xmla.CubeAttributeBinding;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
+import org.eclipse.daanse.xmla.api.xmla.CubeAttributeBinding;
 
 public record CubeAttributeBindingR(String cubeID,
                                     String cubeDimensionID,

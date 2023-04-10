@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Bindings;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
-import org.eclipse.daanse.xmla.api.xmla.Process;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
+import org.eclipse.daanse.xmla.api.xmla.Process;
 import org.eclipse.daanse.xmla.api.xmla.WriteBackTableCreation;
-import org.eclipse.daanse.xmla.api.xmla.Bindings;
 
 public record ProcessR(
     String type,

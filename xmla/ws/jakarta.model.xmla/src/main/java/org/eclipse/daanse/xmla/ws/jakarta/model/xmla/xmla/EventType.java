@@ -13,14 +13,15 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
+import java.util.List;
+
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.XEvent;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.XEvent;
-
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "events", "xEvent" })

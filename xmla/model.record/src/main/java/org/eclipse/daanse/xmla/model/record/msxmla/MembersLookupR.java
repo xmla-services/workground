@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.msxmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
-
-import java.util.List;
 
 public record MembersLookupR(
 

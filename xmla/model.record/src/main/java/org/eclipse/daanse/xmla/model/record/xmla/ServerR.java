@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Database;
@@ -20,9 +23,6 @@ import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Server;
 import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
-
-import java.time.Instant;
-import java.util.List;
 
 public record ServerR(String name,
                       String id,

@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.PropertyList;
-
 import java.math.BigInteger;
+
+import org.eclipse.daanse.xmla.api.xmla.PropertyList;
 
 public record PropertyListR(String dataSourceInfo,
                             BigInteger timeout,

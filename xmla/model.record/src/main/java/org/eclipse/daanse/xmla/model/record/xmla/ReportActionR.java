@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.ReportAction;
 import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
@@ -20,9 +23,6 @@ import org.eclipse.daanse.xmla.api.xmla.ReportParameter;
 import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
-
-import java.util.List;
-import java.util.Optional;
 
 public record ReportActionR(String name,
                             Optional<String> id,

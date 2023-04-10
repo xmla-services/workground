@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.ImageLoad;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.ImageLoad;
 
 public record ImageLoadR(String imagePath,
                          String imageUrl,

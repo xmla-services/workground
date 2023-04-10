@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
-import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
-import org.eclipse.daanse.xmla.api.xmla.TimeBinding;
-
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
+import org.eclipse.daanse.xmla.api.xmla.TimeBinding;
 
 public record TimeBindingR(
     Instant calendarStartDate,

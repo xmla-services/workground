@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Alter;
 import org.eclipse.daanse.xmla.api.xmla.Attach;
 import org.eclipse.daanse.xmla.api.xmla.Backup;
@@ -49,8 +51,6 @@ import org.eclipse.daanse.xmla.api.xmla.Unlock;
 import org.eclipse.daanse.xmla.api.xmla.Unsubscribe;
 import org.eclipse.daanse.xmla.api.xmla.Update;
 import org.eclipse.daanse.xmla.api.xmla.UpdateCells;
-
-import java.util.List;
 
 public record BatchR(List<Batch.Parallel> parallel,
                      OutOfLineBinding bindings,

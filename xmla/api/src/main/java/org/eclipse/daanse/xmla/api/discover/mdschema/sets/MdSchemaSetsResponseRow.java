@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.sets;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
-
-import java.util.Optional;
 
 /**
  * This Discover element describes any sets that are currently defined in a database, including session-

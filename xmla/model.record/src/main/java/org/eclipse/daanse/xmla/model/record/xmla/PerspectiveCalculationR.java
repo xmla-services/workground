@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
 
 public record PerspectiveCalculationR(String name,
                                       String type,

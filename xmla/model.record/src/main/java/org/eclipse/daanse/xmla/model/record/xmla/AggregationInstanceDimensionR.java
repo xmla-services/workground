@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
-import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 
 public record AggregationInstanceDimensionR(String cubeDimensionID,
                                             Optional<List<AggregationInstanceAttribute>> attributes) implements AggregationInstanceDimension {

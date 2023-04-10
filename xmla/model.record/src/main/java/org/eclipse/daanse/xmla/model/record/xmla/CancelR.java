@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Cancel;
-
 import java.math.BigInteger;
+
+import org.eclipse.daanse.xmla.api.xmla.Cancel;
 
 public record CancelR(
     BigInteger connectionID,

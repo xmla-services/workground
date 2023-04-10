@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.actions;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaActionsResponseRowR(Optional<String> catalogName,
                                           Optional<String> schemaName,

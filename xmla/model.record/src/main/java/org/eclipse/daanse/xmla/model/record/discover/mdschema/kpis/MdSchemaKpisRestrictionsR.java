@@ -13,11 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis;
 
-import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
-import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
-import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRestrictions;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRestrictions;
 
 public record MdSchemaKpisRestrictionsR(
     Optional<String> catalogName,

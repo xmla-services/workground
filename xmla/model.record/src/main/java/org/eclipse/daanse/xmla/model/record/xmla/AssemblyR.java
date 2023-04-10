@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
-
-import java.time.Instant;
-import java.util.List;
 
 public record AssemblyR(String id,
                         String name,

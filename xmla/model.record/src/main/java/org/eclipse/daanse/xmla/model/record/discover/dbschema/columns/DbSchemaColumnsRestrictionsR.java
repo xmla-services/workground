@@ -13,11 +13,10 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.columns;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRestrictions;
-import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRestrictions;
-
-import java.util.Optional;
 
 public record DbSchemaColumnsRestrictionsR(
     Optional<String> tableCatalog,

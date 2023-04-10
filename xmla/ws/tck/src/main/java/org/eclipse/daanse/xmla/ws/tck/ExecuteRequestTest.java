@@ -13,6 +13,24 @@
  */
 package org.eclipse.daanse.xmla.ws.tck;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TupleFormat;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Map;
+import java.util.Optional;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
@@ -35,23 +53,6 @@ import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.Duration;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TupleFormat;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {

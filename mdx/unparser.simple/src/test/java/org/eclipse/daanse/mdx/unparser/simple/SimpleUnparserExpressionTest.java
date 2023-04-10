@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
@@ -33,11 +38,6 @@ import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
 import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserExpressionTest {
 

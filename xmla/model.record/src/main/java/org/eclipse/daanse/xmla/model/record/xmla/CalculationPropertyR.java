@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
 import org.eclipse.daanse.xmla.api.xmla.CalculationProperty;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.util.List;
 
 public record CalculationPropertyR(
     String calculationReference,

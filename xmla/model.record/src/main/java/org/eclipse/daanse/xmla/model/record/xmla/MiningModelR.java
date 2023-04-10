@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
@@ -20,10 +24,6 @@ import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 public record MiningModelR(String name,
                            Optional<String> id,

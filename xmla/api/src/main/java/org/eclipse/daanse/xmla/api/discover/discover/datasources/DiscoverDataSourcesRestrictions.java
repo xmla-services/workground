@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.discover.datasources;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
-
-import java.util.Optional;
 
 public interface DiscoverDataSourcesRestrictions {
     public static final String RESTRICTIONS_DATA_SOURCE_NAME = "DataSourceName";

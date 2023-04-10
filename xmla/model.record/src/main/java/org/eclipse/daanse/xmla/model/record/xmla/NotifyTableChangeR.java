@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.TableNotification;
-
-import java.util.List;
 
 public record NotifyTableChangeR(ObjectReference object,
                                  List<TableNotification> tableNotifications) implements NotifyTableChange {

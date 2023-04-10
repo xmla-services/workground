@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions;
 
-import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 
 /**
  * This schema rowset enumerates the dimensions of measure groups.

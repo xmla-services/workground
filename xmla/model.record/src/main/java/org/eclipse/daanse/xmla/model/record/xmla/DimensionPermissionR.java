@@ -13,15 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 public record DimensionPermissionR(Optional<List<AttributePermission>> attributePermissions,
                                    Optional<String> allowedRowsExpression,

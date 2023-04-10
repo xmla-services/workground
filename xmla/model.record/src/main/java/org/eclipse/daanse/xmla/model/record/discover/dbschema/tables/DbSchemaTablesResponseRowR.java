@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.tables;
 
-import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 
 public record DbSchemaTablesResponseRowR(Optional<String> tableCatalog,
                                          Optional<String> tableSchema,

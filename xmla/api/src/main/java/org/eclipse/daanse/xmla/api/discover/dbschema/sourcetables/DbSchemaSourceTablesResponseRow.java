@@ -13,9 +13,9 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables;
 
-import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 
 /**
  * This schema rowset identifies the (base) data types supported by the server.

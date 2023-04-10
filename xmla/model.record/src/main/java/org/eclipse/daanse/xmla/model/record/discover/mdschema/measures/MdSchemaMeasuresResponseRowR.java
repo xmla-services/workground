@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measures;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaMeasuresResponseRowR(Optional<String> catalogName,
                                            Optional<String> schemaName,

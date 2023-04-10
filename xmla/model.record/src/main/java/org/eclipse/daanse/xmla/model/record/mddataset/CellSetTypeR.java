@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
-import org.eclipse.daanse.xmla.api.mddataset.CellSetType;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.mddataset.CellSetType;
 
 public record CellSetTypeR(List<byte[]> data) implements CellSetType {
 

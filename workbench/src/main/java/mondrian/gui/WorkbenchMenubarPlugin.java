@@ -9,7 +9,7 @@
 
 package mondrian.gui;
 
-import javax.swing.*;
+import javax.swing.JMenuBar;
 
 public interface WorkbenchMenubarPlugin {
     public void addItemsToMenubar(JMenuBar menubar);

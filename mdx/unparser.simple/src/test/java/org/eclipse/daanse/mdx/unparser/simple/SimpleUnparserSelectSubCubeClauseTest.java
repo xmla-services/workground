@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
@@ -28,11 +33,6 @@ import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SimpleUnparserSelectSubCubeClauseTest {
 
