@@ -101,7 +101,7 @@ public abstract class RolapAggregationManager {
             cube, members, returnClauseMembers, extendedContext);
         List<OlapElement> nonApplicableMembers =
             new ArrayList<>(
-                (List<OlapElement>)CollectionUtils
+                CollectionUtils
                     .subtract(returnClauseMembers, applicableMembers));
 
         return (DrillThroughCellRequest) makeCellRequest(

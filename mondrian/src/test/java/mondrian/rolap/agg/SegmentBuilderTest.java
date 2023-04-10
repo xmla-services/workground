@@ -908,8 +908,7 @@ class SegmentBuilderTest {
             false);
         loadCacheWithQueries(connection, cachePopulatingQueries);
         Map<SegmentHeader, SegmentBody> map = getReversibleTestMap(connection, Order.FORWARD);
-        Set<String> keepColumnsSet = new HashSet<>();
-        keepColumnsSet.addAll(Arrays.asList(keepColumns));
+        Set<String> keepColumnsSet = new HashSet<>(Arrays.asList(keepColumns));
         Pair<SegmentHeader, SegmentBody> rolledForward = SegmentBuilder.rollup(
             map,
             keepColumnsSet,
@@ -971,8 +970,7 @@ class SegmentBuilderTest {
             @Override
 			public Set<Entry<SegmentHeader, SegmentBody>> entrySet() {
                 List<Entry<SegmentHeader, SegmentBody>> list =
-                    new ArrayList<>();
-                list.addAll(super.entrySet());
+                    new ArrayList<>(super.entrySet());
                 Collections.sort(
                     list,
                     new Comparator<Entry<SegmentHeader, SegmentBody>>() {
@@ -994,8 +992,7 @@ class SegmentBuilderTest {
             }
             @Override
 			public Set<SegmentHeader> keySet() {
-                List<SegmentHeader> list = new ArrayList<>();
-                list.addAll(super.keySet());
+                List<SegmentHeader> list = new ArrayList<>(super.keySet());
                 Collections.sort(
                     list,
                     new Comparator<SegmentHeader>() {

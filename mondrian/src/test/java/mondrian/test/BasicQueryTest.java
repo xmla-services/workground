@@ -3491,8 +3491,7 @@ public class BasicQueryTest {
     // 10 minute per query
     long timeoutMs = (long) threadCount * iterationCount * 600 * 1000;
     final int[] executeCount = new int[] { 0 };
-    final List<QueryAndResult> queries = new ArrayList<>();
-    queries.addAll( Arrays.asList( sampleQueries ) );
+    final List<QueryAndResult> queries = new ArrayList<>(Arrays.asList( sampleQueries ));
     queries.addAll( taglibQueries );
     TestCaseForker threaded = new TestCaseForker( this, timeoutMs, threadCount, new ChooseRunnable() {
       @Override

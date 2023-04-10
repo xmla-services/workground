@@ -3610,8 +3610,7 @@ TODO: see above
                 throws XmlaException, OlapException, SQLException
         {
             mondrian.rolap.RolapConnection rolapConnection =
-                    (mondrian.rolap.RolapConnection)
-                            ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
+                    ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
             java.sql.Connection sqlConnection = rolapConnection.getDataSource().getConnection();
             java.sql.DatabaseMetaData databaseMetaData = sqlConnection.getMetaData();
             String[] tableTypeRestriction = null;

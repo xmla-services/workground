@@ -298,7 +298,7 @@ public class RolapNativeSql {
                 final RolapCubeLevel level =
                     (RolapCubeLevel) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
-                dimension = (RolapCubeDimension) level.getDimension();
+                dimension = level.getDimension();
             } else {
                 return null;
             }

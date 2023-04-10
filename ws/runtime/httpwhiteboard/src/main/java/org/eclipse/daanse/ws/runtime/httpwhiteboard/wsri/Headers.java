@@ -121,7 +121,7 @@ public class Headers implements Map<String,List<String>> {
      * @return the first string value associated with the key
      */
     public String getFirst (String key) {
-        List<String> l = map.get(normalize((String)key));
+        List<String> l = map.get(normalize(key));
         if (l == null) {
             return null;
         }

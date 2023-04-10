@@ -398,8 +398,7 @@ public class SegmentBuilder {
                     // Cache segment axis values as lists for fast lookup
                     axisValueSetsAsArrays = new ArrayList<>();
                     for ( int i = 0; i < body.getAxisValueSets().length; i++ ) {
-                      List<Comparable> columnVals = new ArrayList<>();
-                      columnVals.addAll( body.getAxisValueSets()[i] );
+                      List<Comparable> columnVals = new ArrayList<>(body.getAxisValueSets()[i]);
                       axisValueSetsAsArrays.add( columnVals );
                     }
                   }

@@ -58,7 +58,7 @@ public abstract class Composite {
     public static <T> Iterator<T> of(
         Iterator<? extends T>... iterators)
     {
-        final Iterator[] iterators1 = (Iterator[]) iterators;
+        final Iterator[] iterators1 = iterators;
         return new CompositeIterator<T>(iterators1);
     }
 

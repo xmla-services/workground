@@ -390,9 +390,7 @@ class DbCreatorServiceImplTest {
     }
 
     private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
-        final List<N> someList = new ArrayList<>();
-
-        someList.addAll(Arrays.asList(values));
+        final List<N> someList = new ArrayList<>(Arrays.asList(values));
 
         Answer<List<N>> answer = new Answer<>() {
             @Override

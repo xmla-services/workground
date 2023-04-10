@@ -81,8 +81,7 @@ public class ServiceDiscovery<T> {
         // in the order they were added.
         Set<Class<T>> uniqueClasses = new LinkedHashSet<>();
         ServiceLoader.load(theInterface).forEach(s->uniqueClasses.add((Class<T>) s.getClass()));
-        List<Class<T>> rtn = new ArrayList<>();
-        rtn.addAll(uniqueClasses);
+        List<Class<T>> rtn = new ArrayList<>(uniqueClasses);
         return rtn;
     }
 
