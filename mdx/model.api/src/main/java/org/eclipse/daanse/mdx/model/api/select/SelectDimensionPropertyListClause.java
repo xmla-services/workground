@@ -13,8 +13,10 @@
 */
 package org.eclipse.daanse.mdx.model.api.select;
 
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+
 import java.util.List;
 
 public interface SelectDimensionPropertyListClause {
-    List<String> properties();
+    List<CompoundId> properties();
 }

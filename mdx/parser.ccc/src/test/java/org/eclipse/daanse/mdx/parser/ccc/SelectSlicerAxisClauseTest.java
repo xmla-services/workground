@@ -65,12 +65,18 @@ class SelectSlicerAxisClauseTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "where ", "where", "" })
+	@ValueSource(strings = { "where ", "where", " " })
 	void testThrows(String where) throws MdxParserException {
 
 		MdxParserWrapper parser = new MdxParserWrapper(where);
 		assertThrows(MdxParserException.class, () -> parser.parseSelectSlicerAxisClause());
 	}
+
+    @Test
+    void testThrows1() {
+        assertThrows(MdxParserException.class, () -> new MdxParserWrapper(null));
+        assertThrows(MdxParserException.class, () -> new MdxParserWrapper(""));
+    }
 
 	// WHERE [Measures].[Internet Sales Amount]
 	public static void checkSelectSlicerAxisClause1(SelectSlicerAxisClause selectSlicerAxisClause) {

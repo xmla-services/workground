@@ -80,8 +80,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
                     new SelectSubcubeClauseNameR(new NameObjectIdentifierR("Adventure Works", ObjectIdentifier.Quoting.QUOTED)),
                     Optional.ofNullable(null));
 
-            assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseStatement).toString())
-                .isEqualTo(mdx);
+            assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseStatement)).hasToString(mdx);
         }
 
         @Test
@@ -115,8 +114,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
                         Optional.ofNullable(null)),
                     Optional.ofNullable(null));
 
-            assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseStatement).toString())
-                .isEqualTo(mdx);
+            assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseStatement)).hasToString(mdx);
         }
     }
 }

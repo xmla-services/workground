@@ -14,7 +14,8 @@
 package org.eclipse.daanse.mdx.model.record;
 
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 
-public record RefreshStatementR() implements RefreshStatement {
+public record RefreshStatementR(NameObjectIdentifier cubeName) implements RefreshStatement {
 
 }
