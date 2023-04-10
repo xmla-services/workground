@@ -13,10 +13,11 @@
 */
 package org.eclipse.daanse.mdx.model.record.select;
 
-import java.util.List;
-
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 
-public record SelectDimensionPropertyListClauseR(List<String> properties) implements SelectDimensionPropertyListClause {
+import java.util.List;
+
+public record SelectDimensionPropertyListClauseR(List<CompoundId> properties) implements SelectDimensionPropertyListClause {
 
 }

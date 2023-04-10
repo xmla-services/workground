@@ -54,6 +54,11 @@ import org.slf4j.LoggerFactory;
  * @since Oct 10, 2008
  */
 public abstract class JdbcDialectImpl implements Dialect {
+
+    public static final String CASE_WHEN = "CASE WHEN ";
+    public static final String DESC = " DESC";
+    public static final String ASC = " ASC";
+    public static final String CASE_WHEN_ = "CASE WHEN ";
     private static Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
 
     /**
@@ -201,26 +206,25 @@ public abstract class JdbcDialectImpl implements Dialect {
         DatabaseMetaData databaseMetaData)
     {
         try {
-            final String quoteIdentifierString =
+            final String identifierString =
                 databaseMetaData.getIdentifierQuoteString();
-            return "".equals(quoteIdentifierString)
+            return "".equals(identifierString)
                 // quoting not supported
                 ? null
-                : quoteIdentifierString;
+                : identifierString;
         } catch (SQLException e) {
             throw new RuntimeException("while quoting identifier", e);
         }
     }
 
     protected String deduceProductVersion(DatabaseMetaData databaseMetaData) {
-        String productVersion;
+
         try {
-            productVersion = databaseMetaData.getDatabaseProductVersion();
+            return databaseMetaData.getDatabaseProductVersion();
         } catch (SQLException e11) {
             throw new RuntimeException(
                 "while detecting database product version", e11);
         }
-        return productVersion;
     }
 
     protected Set<List<Integer>> deduceSupportedResultSetStyles(
@@ -257,7 +261,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                     // No harm in interpreting all such exceptions as 'this
                     // database does not support this type/concurrency
                     // combination'.
-                    new RuntimeException(e);
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -290,7 +294,7 @@ public abstract class JdbcDialectImpl implements Dialect {
 
     @Override
     public StringBuilder caseWhenElse(CharSequence cond, CharSequence thenExpr, CharSequence elseExpr) {
-        return new StringBuilder("CASE WHEN ").append(cond)
+        return new StringBuilder(CASE_WHEN).append(cond)
             .append(" THEN ").append(thenExpr).append(" ELSE ")
             .append(elseExpr).append(" END");
     }
@@ -771,7 +775,7 @@ public abstract class JdbcDialectImpl implements Dialect {
             if (ascending) {
                 return new StringBuilder(expr).append(" ASC");
             } else {
-                return new StringBuilder(expr).append(" DESC");
+                return new StringBuilder(expr).append(DESC);
             }
         }
     }
@@ -809,24 +813,24 @@ public abstract class JdbcDialectImpl implements Dialect {
         boolean collateNullsLast)
     {
         if (collateNullsLast) {
-            StringBuilder sb = new StringBuilder("CASE WHEN ")
+            StringBuilder sb = new StringBuilder(CASE_WHEN)
                 .append(expr).append(" IS NULL THEN 1 ELSE 0 END, ").append(expr);
             if (ascending) {
                 return
                     sb.append(" ASC");
             } else {
                 return
-                    sb.append(" DESC");
+                    sb.append(DESC);
             }
         } else {
-            StringBuilder sb = new StringBuilder("CASE WHEN ")
+            StringBuilder sb = new StringBuilder(CASE_WHEN_)
                 .append(expr).append(" IS NULL THEN 0 ELSE 1 END, ").append(expr);
             if (ascending) {
                 return
                     sb.append(" ASC");
             } else {
                 return
-                    sb.append(" DESC");
+                    sb.append(DESC);
             }
         }
     }
@@ -847,9 +851,9 @@ public abstract class JdbcDialectImpl implements Dialect {
         boolean collateNullsLast)
     {
         if (collateNullsLast) {
-            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS LAST");
+            return new StringBuilder(expr).append(ascending ? ASC : DESC).append(" NULLS LAST");
         } else {
-            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS FIRST");
+            return new StringBuilder(expr).append(ascending ? ASC : DESC).append(" NULLS FIRST");
         }
     }
 
@@ -1127,8 +1131,7 @@ public abstract class JdbcDialectImpl implements Dialect {
 
     @Override
     public void clearTable(Connection connection, String schemaName, String tableName) {
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             statement.execute(new StringBuilder("TRUNCATE TABLE ").append(quoteIdentifier(tableName, schemaName)).toString());
         } catch (SQLException e) {
             throw new RuntimeException("clear table error", e);

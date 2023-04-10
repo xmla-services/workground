@@ -14,7 +14,7 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectSubCubeClauseTest.SelectSubCubeClauseNameTest.checkSelectSubcubeClauseName;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
@@ -57,17 +57,10 @@ class SelectSubCubeClauseTest {
 		}
 
 		@Test
-		void testEmpty() throws MdxParserException {
-			MdxParserWrapper parser = new MdxParserWrapper("");
-			assertThrows(MdxParserException.class, () -> parser.parseSelectSubcubeClause());
+		void testEmpty() {
+            assertThrows(MdxParserException.class, () -> new MdxParserWrapper(""));
 		}
 
-		public static void checkSelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName, String name,
-				ObjectIdentifier.Quoting quoting) {
-			assertThat(selectSubcubeClauseName.cubeName()).isNotNull();
-			assertThat(selectSubcubeClauseName.cubeName().name()).isNotNull().isEqualTo(name);
-			assertThat(selectSubcubeClauseName.cubeName().quoting()).isNotNull().isEqualTo(quoting);
-		}
 	}
 
 	@Nested
