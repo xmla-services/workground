@@ -1099,8 +1099,7 @@ public TupleList readTuples(
    */
   private boolean inapplicableTargetsPresent(
     Collection<RolapCube> baseCubes, List<TargetBase> targetGroup ) {
-    List<TargetBase> targetListCopy = new ArrayList<>();
-    targetListCopy.addAll( targetGroup );
+    List<TargetBase> targetListCopy = new ArrayList<>(targetGroup);
     for ( TargetBase target : targetGroup ) {
       if ( targetHasShiftedContext( target ) ) {
         targetListCopy.remove( target );
@@ -1129,10 +1128,7 @@ public TupleList readTuples(
   }
 
   private boolean targetHasShiftedContext( TargetBase target ) {
-    Set<Member> measures = new HashSet<>();
-    measures.addAll(
-      constraint.getEvaluator().getQuery().getMeasuresMembers() );
-
+    Set<Member> measures = new HashSet<>(constraint.getEvaluator().getQuery().getMeasuresMembers());
     for ( Member measure : measures ) {
       if ( measure.isCalculated()
         && SqlConstraintUtils.containsValidMeasure(

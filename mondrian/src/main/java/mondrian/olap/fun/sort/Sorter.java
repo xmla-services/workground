@@ -781,7 +781,7 @@ public class Sorter {
   static <T> void partialSort( T[] items, Comparator<T> comp, int limit ) {
     if ( comp == null ) {
       //noinspection unchecked
-      comp = (Comparator<T>) ComparatorUtils.naturalComparator();
+      comp = ComparatorUtils.naturalComparator();
     }
     new Quicksorter<>( items, comp ).partialSort( limit );
   }

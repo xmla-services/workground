@@ -1231,8 +1231,7 @@ public class UtilTestCase{
         assertTrue(three.compareTo(two) > 0);
         assertEquals(0x02, three.byteAt(1));
 
-        final HashSet<ByteString> set = new HashSet<>();
-        set.addAll(Arrays.asList(empty0, two, three, two, empty1, three));
+        final HashSet<ByteString> set = new HashSet<>(Arrays.asList(empty0, two, three, two, empty1, three));
         assertEquals(3, set.size());
     }
 
@@ -1311,8 +1310,7 @@ public class UtilTestCase{
         checkToString("[]", emptySet);
 
         // same hashCode etc. as similar hashset
-        final HashSet<String> abcHashset = new HashSet<>();
-        abcHashset.addAll(Arrays.asList(abce));
+        final HashSet<String> abcHashset = new HashSet<>(Arrays.asList(abce));
         assertEquals(abcHashset, abceSet);
         assertEquals(abceSet, abcHashset);
         assertEquals(abceSet.hashCode(), abcHashset.hashCode());
@@ -1380,8 +1378,7 @@ public class UtilTestCase{
     private void checkToString(String expected, Set<String> set) {
         assertEquals(expected, set.toString());
 
-        final List<String> list = new ArrayList<>();
-        list.addAll(set);
+        final List<String> list = new ArrayList<>(set);
         assertEquals(expected, list.toString());
 
         list.clear();

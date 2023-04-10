@@ -138,7 +138,7 @@ public class TraversalList<T> extends UnsupportedList<List<T>> {
             array = a;
         } else {
             //noinspection unchecked
-            array = (List<T>[]) new List[this.size()];
+            array = new List[this.size()];
         }
         int k = 0;
         for (List<T> x : this) {

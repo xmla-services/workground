@@ -956,7 +956,7 @@ public class RolapCube extends CubeBase {
         final List<RolapMember> finalMeasureMembers =
             new ArrayList<>();
         for (RolapVirtualCubeMeasure measure : origMeasureList) {
-            finalMeasureMembers.add((RolapMember)measure);
+            finalMeasureMembers.add(measure);
         }
         for (Formula formula : calculatedMemberList) {
             final RolapMember calcMeasure = (RolapMember) formula.getMdxMember();
@@ -3097,9 +3097,7 @@ public class RolapCube extends CubeBase {
         String name,
         Calc calc)
     {
-        final List<Id.Segment> segmentList = new ArrayList<>();
-        segmentList.addAll(
-            Util.parseIdentifier(hierarchy.getUniqueName()));
+        final List<Id.Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
         segmentList.add(new Id.NameSegment(name));
         final Formula formula = new Formula(
             new Id(segmentList),

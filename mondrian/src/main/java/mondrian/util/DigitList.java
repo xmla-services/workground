@@ -321,7 +321,7 @@ final class DigitList {
             int left = MAX_LONG_DIGITS;
             int right;
             while (source > 0) {
-                digits[--left] = (byte) (((long) '0') + (source % 10));
+                digits[--left] = (byte) (('0') + (source % 10));
                 source /= 10;
             }
             decimalAt = MAX_LONG_DIGITS - left;

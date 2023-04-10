@@ -48,7 +48,7 @@ class ScheduleTest {
 
     static void assertEqualsCal(Calendar c1, Calendar c2) {
         if (c1 == null || c2 == null) {
-            assertEquals((Object) c1, (Object) c2);
+            assertEquals(c1, c2);
         } else {
             // do the checks on 'smaller' objects -- otherwise the
             // failure message is too long to see in the debugger
@@ -59,7 +59,7 @@ class ScheduleTest {
 
     static void assertEqualsDate(Date expected, Calendar actual) {
         if (expected == null || actual == null) {
-            assertEquals((Object) expected, (Object) actual);
+            assertEquals(expected, actual);
         } else {
             assertEquals(expected, actual.getTime());
         }
@@ -74,7 +74,7 @@ class ScheduleTest {
 
     static void assertEqualsCalDate(Calendar expected, Date actual) {
         if (expected == null || actual == null) {
-            assertEquals((Object) expected, (Object) actual);
+            assertEquals(expected, actual);
         } else {
             assertEquals(expected.getTime(), actual);
         }

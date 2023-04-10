@@ -273,13 +273,13 @@ public class UdfResolver implements Resolver {
             // For other arity, assume a list of member arrays.
             if (getType().getArity() == 1) {
                 //noinspection unchecked
-                return new UnaryTupleList((List<Member>) list);
+                return new UnaryTupleList(list);
             } else {
                 // Use an adapter to make a list of member arrays look like
                 // a list of members laid end-to-end.
                 final int arity = getType().getArity();
                 //noinspection unchecked
-                final List<Member[]> memberArrayList = (List<Member[]>) list;
+                final List<Member[]> memberArrayList = list;
                 return new ListTupleList(
                     arity,
                     new AbstractList<Member>() {

@@ -110,7 +110,7 @@ class GenerateFunDef extends FunDefBase {
             }
 
             return new GenerateStringCalcImpl(
-                call, (IterCalc) iterCalc, stringCalc, delimCalc);
+                call, iterCalc, stringCalc, delimCalc);
         } else {
             final ListCalc listCalc2 =
                 compiler.compileList(call.getArg(1));

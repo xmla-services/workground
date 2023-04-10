@@ -1900,7 +1900,7 @@ public class RolapStar {
         public boolean containsColumn(String columnName) {
             if (relation instanceof Relation) {
                 return star.containsColumn(
-                    RelationUtil.getAlias(((Relation) relation)),
+                    RelationUtil.getAlias((relation)),
                     columnName);
             } else {
                 // todo: Deal with join.

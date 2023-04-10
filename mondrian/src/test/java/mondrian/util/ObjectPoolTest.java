@@ -262,7 +262,7 @@ class ObjectPoolTest{
     /////////////////////////////////////////////////////////////////////////
     private static String[] genStringsArray(int nos) {
         List<?> l = genStringsList(nos);
-        return (String[]) l.toArray(new String[l.size()]);
+        return l.toArray(new String[l.size()]);
     }
     private static List<String> genStringsList(int nos) {
         List<String> l = new ArrayList<>(nos);

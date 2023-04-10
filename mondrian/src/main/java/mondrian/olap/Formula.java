@@ -625,8 +625,7 @@ public class Formula extends QueryPart {
         }
 
         private List<MemberExpr> cloneForEachBranch(List<MemberExpr> expList) {
-            ArrayList<MemberExpr> list = new ArrayList<>();
-            list.addAll(expList);
+            ArrayList<MemberExpr> list = new ArrayList<>(expList);
             return list;
         }
 

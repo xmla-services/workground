@@ -267,9 +267,7 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
             return;
         }
         // generate the select list
-        final Set<String> columnNameSet = new HashSet<>();
-        columnNameSet.addAll(columnNames);
-
+        final Set<String> columnNameSet = new HashSet<>(columnNames);
         List<StarPredicate> predicateList = getPredicateList();
         for (StarPredicate predicate : predicateList) {
             for (RolapStar.Column column

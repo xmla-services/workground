@@ -118,8 +118,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
             RolapStar.Column column = plus.getConstrainedColumn();
             if (predicate instanceof ListColumnPredicate list) {
                 List<StarColumnPredicate> unionList =
-                    new ArrayList<>();
-                unionList.addAll(minusList.getPredicates());
+                    new ArrayList<>(minusList.getPredicates());
                 unionList.addAll(list.getPredicates());
                 return new MinusStarPredicate(
                     plus,
@@ -135,8 +134,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
                 }
                 // Case 2: 'minus' is a list, 'constraint' is a value.
                 List<StarColumnPredicate> unionList =
-                    new ArrayList<>();
-                unionList.addAll(minusList.getPredicates());
+                    new ArrayList<>(minusList.getPredicates());
                 unionList.add(
                     new ValueColumnPredicate(
                         column, valuePredicate.getValue()));
