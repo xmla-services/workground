@@ -71,68 +71,71 @@ import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseAtom;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseCaseExpression;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseCreateSetBodyClause;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseSelectDimensionPropertyListClause;
+import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseRefreshStatement;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseSelectQueryAxisClause;
-import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
-import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
-import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
-import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
-import org.eclipse.daanse.mdx.model.record.select.MeasureBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
-import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
-import org.eclipse.daanse.mdx.model.record.select.SelectCellPropertyListClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
-import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
-import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.api.ReturnItem;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
-import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
-import java.math.BigDecimal;
-import java.util.List;
-import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.record.expression.FormulaExpressionR;
-import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.record.SelectStatementR;
-import org.eclipse.daanse.mdx.model.record.select.AxisR;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
-import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
-import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
-import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
+import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
+import java.util.Optional;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 import org.eclipse.daanse.mdx.model.record.ExplainStatementR;
-import org.eclipse.daanse.mdx.model.record.ReturnItemR;
-import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
-import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
-import org.eclipse.daanse.mdx.model.api.select.Axis;
-import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
-import org.eclipse.daanse.mdx.model.api.select.CreateCellCalculationBodyClause;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
-import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
-import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
-import java.util.Optional;
-import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
-import java.util.LinkedList;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
+import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.FormulaExpressionR;
 import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
-import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
+import org.eclipse.daanse.mdx.model.record.select.MeasureBodyClauseR;
+import org.eclipse.daanse.mdx.model.api.select.Axis;
 import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
+import java.util.LinkedList;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ReturnItem;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
+import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
+import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
+import org.eclipse.daanse.mdx.model.record.select.AxisR;
+import org.eclipse.daanse.mdx.model.record.ReturnItemR;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
+import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
+import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
+import org.eclipse.daanse.mdx.model.api.select.CreateCellCalculationBodyClause;
+import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
+import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
+import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
+import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
+import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import java.math.BigDecimal;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.record.select.SelectCellPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
+import java.util.List;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.SelectStatementR;
+import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
 
 
 public class MdxParser {
@@ -304,7 +307,7 @@ public class MdxParser {
         return result;
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:405:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:407:1
     final public
     // ----------------------------------------------------------------------------
     // MDX Statement
@@ -343,16 +346,16 @@ public class MdxParser {
         ParseException parseException2 = null;
         int callStackSize3 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:409:3
-            pushOntoCallStack("parseMdxStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 409, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:411:3
+            pushOntoCallStack("parseMdxStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 411, 3);
             try {
                 mdxStatement = parseSelectStatement();
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:422:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:424:3
             consumeToken(EOF);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:423:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:425:3
             return mdxStatement;
         } catch (ParseException e) {
             parseException2 = e;
@@ -370,7 +373,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:429:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:431:1
     final public DrillthroughStatement parseDrillthroughStatement() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -387,46 +390,46 @@ public class MdxParser {
         ParseException parseException18 = null;
         int callStackSize19 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:436:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:438:3
             consumeToken(DRILLTHROUGH);
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:437:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:439:3
             if (nextTokenType() == MAXROWS) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:438:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:440:5
                 consumeToken(MAXROWS);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:438:17
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:440:17
                 consumeToken(UNSIGNED_INTEGER_LITERAL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:439:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:441:5
                 maxRows = Optional.of(Integer.valueOf(getToken(0).getImage()));
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:443:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:445:3
             if (nextTokenType() == FIRSTROWSET) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:444:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:446:5
                 consumeToken(FIRSTROWSET);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:444:21
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:446:21
                 consumeToken(UNSIGNED_INTEGER_LITERAL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:445:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:447:5
                 firstRowSet = Optional.of(Integer.valueOf(getToken(0).getImage()));
             }
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:449:3
-            pushOntoCallStack("parseDrillthroughStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 449, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:451:3
+            pushOntoCallStack("parseDrillthroughStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 451, 3);
             try {
                 selectStatement = parseSelectStatement();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:450:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:452:3
             if (nextTokenType() == RETURN) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:451:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:453:5
                 consumeToken(RETURN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:451:16
-                pushOntoCallStack("parseDrillthroughStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 451, 16);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:453:16
+                pushOntoCallStack("parseDrillthroughStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 453, 16);
                 try {
                     returnItems = parseReturnItems();
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:453:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:455:3
             return new DrillthroughStatementR(maxRows, firstRowSet, selectStatement, returnItems);
         } catch (ParseException e) {
             parseException18 = e;
@@ -444,7 +447,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:458:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:460:1
     final public ExplainStatement parseExplainStatement() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -458,33 +461,33 @@ public class MdxParser {
         ParseException parseException90 = null;
         int callStackSize91 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:462:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:464:3
             consumeToken(EXPLAIN);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:462:15
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:464:15
             consumeToken(PLAN);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:462:23
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:464:23
             consumeToken(FOR);
             if (nextTokenType() == SELECT || nextTokenType == WITH) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:464:5
-                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 464, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:466:5
+                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 466, 5);
                 try {
                     mdxStatement = parseSelectStatement();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == DRILLTHROUGH) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:466:5
-                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 466, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:468:5
+                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 468, 5);
                 try {
                     mdxStatement = parseDrillthroughStatement();
                 } finally {
                     popCallStack();
                 }
             } else {
-                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 464, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$464$5, parsingStack);
+                pushOntoCallStack("parseExplainStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 466, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$466$5, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:468:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:470:3
             return new ExplainStatementR(mdxStatement);
         } catch (ParseException e) {
             parseException90 = e;
@@ -502,7 +505,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:474:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:476:1
     final public List<ReturnItem> parseReturnItems() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -517,31 +520,31 @@ public class MdxParser {
         ParseException parseException131 = null;
         int callStackSize132 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:479:3
-            pushOntoCallStack("parseReturnItems", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 479, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:481:3
+            pushOntoCallStack("parseReturnItems", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 481, 3);
             try {
                 item = parseReturnItem();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:480:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:482:3
             returnItems.add(item);
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:483:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:485:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:484:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:486:5
                 consumeToken(COMMA);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:484:15
-                pushOntoCallStack("parseReturnItems", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 484, 15);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:486:15
+                pushOntoCallStack("parseReturnItems", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 486, 15);
                 try {
                     item = parseReturnItem();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:485:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:487:5
                 returnItems.add(item);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:489:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:491:3
             return returnItems;
         } catch (ParseException e) {
             parseException131 = e;
@@ -559,7 +562,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:495:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:497:1
     final public ReturnItem parseReturnItem() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -573,14 +576,14 @@ public class MdxParser {
         ParseException parseException167 = null;
         int callStackSize168 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:499:3
-            pushOntoCallStack("parseReturnItem", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 499, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:501:3
+            pushOntoCallStack("parseReturnItem", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 501, 3);
             try {
                 compoundId = parseCompoundId();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:500:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:502:3
             return new ReturnItemR(compoundId);
         } catch (ParseException e) {
             parseException167 = e;
@@ -598,7 +601,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:507:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:509:1
     final public
     //https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-cell-calculation?view=sql-server-ver16
     CreateCellCalculationBodyClause parseCreateCellCalculationBodyClause() {
@@ -614,21 +617,21 @@ public class MdxParser {
         ParseException parseException179 = null;
         int callStackSize180 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:2
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:2
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:7
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:7
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:12
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:12
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:17
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:17
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:22
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:22
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:27
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:27
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:511:32
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:513:32
             consumeToken(NOT);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:512:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:514:3
             return createCellCalculationBC;
         } catch (ParseException e) {
             parseException179 = e;
@@ -646,7 +649,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:518:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:520:1
     final public
     // https://learn.microsoft.com/en-us/analysis-services/multidimensional-models/mdx/mdx-building-measures?view=asallproducts-allversions
     MeasureBodyClause parseMeasureBodyClause() {
@@ -661,21 +664,21 @@ public class MdxParser {
         ParseException parseException215 = null;
         int callStackSize216 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:3
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:8
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:8
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:13
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:13
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:18
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:18
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:23
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:23
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:28
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:28
             consumeToken(NOT);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:521:33
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:523:33
             consumeToken(NOT);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:522:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:524:3
             return new MeasureBodyClauseR();
         } catch (ParseException e) {
             parseException215 = e;
@@ -693,7 +696,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:529:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:531:1
     final public
     // https://docs.oracle.com/cd/E57185_01/ESBTR/mdx_grammar_rules.html
     SelectWithClause parseSelectWithClause() {
@@ -710,57 +713,57 @@ public class MdxParser {
         int callStackSize252 = parsingStack.size();
         try {
             if (nextTokenType() == CELL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:533:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:535:5
                 consumeToken(CELL);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:533:12
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:535:12
                 consumeToken(CALCULATION);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:533:26
-                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 533, 26);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:535:26
+                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 535, 26);
                 try {
                     selectWithClause = parseCreateCellCalculationBodyClause();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == MEMBER || nextTokenType == CALCULATED) {
-                // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:534:5
+                // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:5
                 if (nextTokenType() == CALCULATED) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:534:6
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:6
                     consumeToken(CALCULATED);
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:534:21
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:21
                 consumeToken(MEMBER);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:534:32
-                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 534, 32);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:32
+                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 536, 32);
                 try {
                     selectWithClause = parseCreateMemberBodyClause();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == SET) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:535:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:537:5
                 consumeToken(SET);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:535:13
-                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 535, 13);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:537:13
+                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 537, 13);
                 try {
                     selectWithClause = parseCreateSetBodyClause();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == MEASURE) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:538:5
                 consumeToken(MEASURE);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:536:15
-                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 536, 15);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:538:15
+                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 538, 15);
                 try {
                     selectWithClause = parseMeasureBodyClause();
                 } finally {
                     popCallStack();
                 }
             } else {
-                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 533, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$533$5, parsingStack);
+                pushOntoCallStack("parseSelectWithClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 535, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$535$5, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:538:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:540:3
             return selectWithClause;
         } catch (ParseException e) {
             parseException251 = e;
@@ -778,7 +781,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:544:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:546:1
     final public
     //https://learn.microsoft.com/en-us/sql/mdx/mdx-data-manipulation-select?view=sql-server-ver16
     SelectStatement parseSelectStatement() {
@@ -799,85 +802,85 @@ public class MdxParser {
         ParseException parseException328 = null;
         int callStackSize329 = parsingStack.size();
         try {
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:553:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:555:3
             if (nextTokenType() == WITH) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:554:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:556:5
                 consumeToken(WITH);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:555:7
-                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 555, 7);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:557:7
+                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 557, 7);
                 try {
                     selectWithClause = parseSelectWithClause();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:556:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:558:5
                 selectWithClauses.add(selectWithClause);
-                // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:559:5
+                // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:561:5
                 while (true) {
-                    if (!(first_set$Grammer_ccc$560$8.contains(nextTokenType()))) break;
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:560:8
-                    pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 560, 8);
+                    if (!(first_set$Grammer_ccc$562$8.contains(nextTokenType()))) break;
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:562:8
+                    pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 562, 8);
                     try {
                         selectWithClause = parseSelectWithClause();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:561:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:563:7
                     selectWithClauses.add(selectWithClause);
                 }
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:567:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:569:3
             consumeToken(SELECT);
             if (nextTokenType() == ASTERISK) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:569:5
-                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 569, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:571:5
+                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 571, 5);
                 try {
                     selectQueryClause = parseSelectQueryAsteriskClause();
                 } finally {
                     popCallStack();
                 }
-            } else if (first_set$Grammer_ccc$571$5.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:571:5
-                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 571, 5);
+            } else if (first_set$Grammer_ccc$573$5.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:573:5
+                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 573, 5);
                 try {
                     selectQueryClause = parseSelectQueryAxesClause();
                 } finally {
                     popCallStack();
                 }
             } else {
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:573:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:575:5
                 selectQueryClause = new SelectQueryEmptyClauseR();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:577:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:579:3
             consumeToken(FROM);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:577:12
-            pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 577, 12);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:579:12
+            pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 579, 12);
             try {
                 selectSubcubeClause = parseSelectSubcubeClause();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:578:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:580:3
             if (nextTokenType() == WHERE) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:579:5
-                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 579, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:581:5
+                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 581, 5);
                 try {
                     selectSlicerAxisClause = parseSelectSlicerAxisClause();
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:581:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:583:3
             if (nextTokenType() == CELL || nextTokenType == PROPERTIES) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:582:5
-                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 582, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:584:5
+                pushOntoCallStack("parseSelectStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 584, 5);
                 try {
                     selectCellPropertyListClause = parseSelectCellPropertyListClause();
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:584:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:586:3
             return new SelectStatementR(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, Optional.ofNullable(selectCellPropertyListClause));
         } catch (ParseException e) {
             parseException328 = e;
@@ -895,7 +898,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:590:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:592:1
     final public SelectSubcubeClause parseSelectSubcubeClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -909,27 +912,27 @@ public class MdxParser {
         ParseException parseException437 = null;
         int callStackSize438 = parsingStack.size();
         try {
-            if (first_set$Grammer_ccc$595$5.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:595:5
-                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 595, 5);
+            if (first_set$Grammer_ccc$597$5.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:597:5
+                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 597, 5);
                 try {
                     selectSubcubeClause = parseSelectSubcubeClauseName();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == LPAREN) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:597:5
-                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 597, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:599:5
+                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 599, 5);
                 try {
                     selectSubcubeClause = parseSelectSubcubeClauseStatement();
                 } finally {
                     popCallStack();
                 }
             } else {
-                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 595, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$595$5$, parsingStack);
+                pushOntoCallStack("parseSelectSubcubeClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 597, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$597$5$, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:599:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:601:3
             return selectSubcubeClause;
         } catch (ParseException e) {
             parseException437 = e;
@@ -947,7 +950,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:605:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:607:1
     final public SelectSubcubeClauseName parseSelectSubcubeClauseName() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -961,14 +964,14 @@ public class MdxParser {
         ParseException parseException466 = null;
         int callStackSize467 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:609:3
-            pushOntoCallStack("parseSelectSubcubeClauseName", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 609, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:611:3
+            pushOntoCallStack("parseSelectSubcubeClauseName", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 611, 3);
             try {
                 nameObjectIdentifier = parseNameObjectIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:610:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:612:3
             return new SelectSubcubeClauseNameR(nameObjectIdentifier);
         } catch (ParseException e) {
             parseException466 = e;
@@ -986,7 +989,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:616:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:618:1
     final public SelectSubcubeClauseStatement parseSelectSubcubeClauseStatement() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1002,54 +1005,54 @@ public class MdxParser {
         ParseException parseException478 = null;
         int callStackSize479 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:623:5
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:625:5
             consumeToken(LPAREN);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:623:16
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:625:16
             consumeToken(SELECT);
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:624:5
-            // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:625:7
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:626:5
+            // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:627:7
             if (nextTokenType() == ASTERISK) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:625:7
-                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 625, 7);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:627:7
+                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 627, 7);
                 try {
                     selectQueryClause = parseSelectQueryAsteriskClause();
                 } finally {
                     popCallStack();
                 }
-            } else if (first_set$Grammer_ccc$627$7.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:627:7
-                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 627, 7);
+            } else if (first_set$Grammer_ccc$629$7.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:629:7
+                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 629, 7);
                 try {
                     selectQueryClause = parseSelectQueryAxesClause();
                 } finally {
                     popCallStack();
                 }
             } else {
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:628:7
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:630:7
                 selectQueryClause = new SelectQueryEmptyClauseR();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:632:5
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:634:5
             consumeToken(FROM);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:632:14
-            pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 632, 14);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:634:14
+            pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 634, 14);
             try {
                 selectSubcubeClause = parseSelectSubcubeClause();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:633:5
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:635:5
             if (nextTokenType() == WHERE) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:634:7
-                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 634, 7);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:636:7
+                pushOntoCallStack("parseSelectSubcubeClauseStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 636, 7);
                 try {
                     selectSlicerAxisClause = parseSelectSlicerAxisClause();
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:636:5
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:638:5
             consumeToken(RPAREN);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:638:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:640:3
             return new SelectSubcubeClauseStatementR(selectQueryClause, selectSubcubeClause, selectSlicerAxisClause);
         } catch (ParseException e) {
             parseException478 = e;
@@ -1067,7 +1070,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:644:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:646:1
     final public SelectQueryAsteriskClause parseSelectQueryAsteriskClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1080,9 +1083,9 @@ public class MdxParser {
         ParseException parseException555 = null;
         int callStackSize556 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:645:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:647:3
             consumeToken(ASTERISK);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:646:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:648:3
             return new SelectQueryAsteriskClauseR();
         } catch (ParseException e) {
             parseException555 = e;
@@ -1100,7 +1103,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:652:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:654:1
     final public SelectQueryAxesClause parseSelectQueryAxesClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1115,31 +1118,31 @@ public class MdxParser {
         ParseException parseException567 = null;
         int callStackSize568 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:657:3
-            pushOntoCallStack("parseSelectQueryAxesClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 657, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:659:3
+            pushOntoCallStack("parseSelectQueryAxesClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 659, 3);
             try {
                 selectQueryAxisClause = parseSelectQueryAxisClause();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:658:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:660:3
             selectQueryAxisClauses.add(selectQueryAxisClause);
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:661:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:663:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:662:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:664:5
                 consumeToken(COMMA);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:662:15
-                pushOntoCallStack("parseSelectQueryAxesClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 662, 15);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:664:15
+                pushOntoCallStack("parseSelectQueryAxesClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 664, 15);
                 try {
                     selectQueryAxisClause = parseSelectQueryAxisClause();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:663:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:665:5
                 selectQueryAxisClauses.add(selectQueryAxisClause);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:667:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:669:3
             return new SelectQueryAxesClauseR(selectQueryAxisClauses);
         } catch (ParseException e) {
             parseException567 = e;
@@ -1157,7 +1160,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:673:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:675:1
     final public Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1171,16 +1174,16 @@ public class MdxParser {
         ParseException parseException603 = null;
         int callStackSize604 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:677:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:679:3
             consumeToken(WHERE);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:677:13
-            pushOntoCallStack("parseSelectSlicerAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 677, 13);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:679:13
+            pushOntoCallStack("parseSelectSlicerAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 679, 13);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:678:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:680:3
             if (expression == null) {
                 return Optional.empty();
             }
@@ -1201,7 +1204,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:688:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:690:1
     final public SelectCellPropertyListClause parseSelectCellPropertyListClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1217,30 +1220,30 @@ public class MdxParser {
         ParseException parseException619 = null;
         int callStackSize620 = parsingStack.size();
         try {
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:694:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:696:3
             if (nextTokenType() == CELL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:694:4
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:696:4
                 consumeToken(CELL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:695:6
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:697:6
                 cell = true;
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:699:4
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:701:4
             consumeToken(PROPERTIES);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:699:19
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:701:19
             consumeToken(ID);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:700:5
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:702:5
             cellProperties.add(getToken(0).getImage());
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:703:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:705:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:704:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:706:5
                 consumeToken(COMMA);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:704:15
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:706:15
                 consumeToken(ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:705:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:707:5
                 cellProperties.add(getToken(0).getImage());
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:709:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:711:3
             return new SelectCellPropertyListClauseR(cellProperties, cell);
         } catch (ParseException e) {
             parseException619 = e;
@@ -1258,7 +1261,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:715:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:717:1
     final public
     // https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-member?view=sql-server-ver16
     CreateMemberBodyClause parseCreateMemberBodyClause() {
@@ -1277,8 +1280,8 @@ public class MdxParser {
         ParseException parseException675 = null;
         int callStackSize676 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:724:3
-            pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 724, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:726:3
+            pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 726, 3);
             try {
                 //  <CURRENTCUBE>
                 //  |
@@ -1286,31 +1289,31 @@ public class MdxParser {
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:724:32
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:726:32
             consumeToken(AS);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:724:39
-            pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 724, 39);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:726:39
+            pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 726, 39);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:726:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:728:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:727:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:729:5
                 consumeToken(COMMA);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:727:15
-                pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 727, 15);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:729:15
+                pushOntoCallStack("parseCreateMemberBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 729, 15);
                 try {
                     memberPropertyDefinition = parseMemberPropertyDefinition();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:728:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:730:5
                 memberPropertyDefinitions.add(memberPropertyDefinition);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:733:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:735:3
             return new CreateMemberBodyClauseR(compoundId, expression, memberPropertyDefinitions);
         } catch (ParseException e) {
             parseException675 = e;
@@ -1328,7 +1331,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:739:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:741:1
     final public MemberPropertyDefinition parseMemberPropertyDefinition() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1343,23 +1346,23 @@ public class MdxParser {
         ParseException parseException715 = null;
         int callStackSize716 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:744:3
-            pushOntoCallStack("parseMemberPropertyDefinition", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 744, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:746:3
+            pushOntoCallStack("parseMemberPropertyDefinition", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 746, 3);
             try {
                 objectIdentifier = parseIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:744:38
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:746:38
             consumeToken(EQ);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:744:45
-            pushOntoCallStack("parseMemberPropertyDefinition", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 744, 45);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:746:45
+            pushOntoCallStack("parseMemberPropertyDefinition", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 746, 45);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:745:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:747:3
             return new MemberPropertyDefinitionR(objectIdentifier, expression);
         } catch (ParseException e) {
             parseException715 = e;
@@ -1377,7 +1380,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:751:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:753:1
     final public FormulaExpression parseFormulaExpression() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1390,23 +1393,23 @@ public class MdxParser {
         ParseException parseException735 = null;
         int callStackSize736 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:752:3
-            pushOntoCallStack("parseFormulaExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 752, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:754:3
+            pushOntoCallStack("parseFormulaExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 754, 3);
             try {
                 parseIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:752:19
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:754:19
             consumeToken(EQ);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:752:26
-            pushOntoCallStack("parseFormulaExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 752, 26);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:754:26
+            pushOntoCallStack("parseFormulaExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 754, 26);
             try {
                 parseIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:753:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:755:3
             return new FormulaExpressionR();
         } catch (ParseException e) {
             parseException735 = e;
@@ -1424,7 +1427,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:759:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:761:1
     final public Expression parseExpression() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1439,30 +1442,30 @@ public class MdxParser {
         ParseException parseException755 = null;
         int callStackSize756 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:764:3
-            pushOntoCallStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 764, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:3
+            pushOntoCallStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 766, 3);
             try {
                 expression = parseUnaliasedExpression();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:765:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:767:3
             while (true) {
                 if (!(nextTokenType() == AS)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:5
                 consumeToken(AS);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:12
-                pushOntoCallStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 766, 12);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:12
+                pushOntoCallStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 768, 12);
                 try {
                     objectIdentifier = parseIdentifier();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:767:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:769:5
                 CompoundId compundId = new CompoundIdR(List.of(objectIdentifier));
                 expression = new CallExpressionR("AS", CallExpression.Type.Term_Infix, List.of(expression, compundId));
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:775:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:777:3
             return expression;
         } catch (ParseException e) {
             parseException755 = e;
@@ -1480,12 +1483,12 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:781:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:783:1
     final public Expression parseExpressionOrEmpty() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseExpressionOrEmpty";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
         ASTparseExpressionOrEmpty thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseExpressionOrEmpty();
@@ -1495,18 +1498,18 @@ public class MdxParser {
         ParseException parseException787 = null;
         int callStackSize788 = parsingStack.size();
         try {
-            if (first_set$Grammer_ccc$785$3.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
-                pushOntoCallStack("parseExpressionOrEmpty", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 785, 3);
+            if (first_set$Grammer_ccc$787$3.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
+                pushOntoCallStack("parseExpressionOrEmpty", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 787, 3);
                 try {
                     expression = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:786:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:788:3
                 return expression;
             } else {
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:790:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:792:3
                 return new CallExpressionR("", CallExpression.Type.Empty, List.of());
             }
         } catch (ParseException e) {
@@ -1525,7 +1528,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:799:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:801:1
     final public
     // Comma-separated list of expressions, some of which may be empty. Used
     // for functions.
@@ -1543,31 +1546,31 @@ public class MdxParser {
         ParseException parseException811 = null;
         int callStackSize812 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:804:3
-            pushOntoCallStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 804, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:806:3
+            pushOntoCallStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 806, 3);
             try {
                 expression = parseExpressionOrEmpty();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:805:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:807:3
             list.add(expression);
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:808:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:810:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:809:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:811:5
                 consumeToken(COMMA);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:810:5
-                pushOntoCallStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 810, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:812:5
+                pushOntoCallStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 812, 5);
                 try {
                     expression = parseExpressionOrEmpty();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:811:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:813:5
                 list.add(expression);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:815:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:817:3
             return list;
         } catch (ParseException e) {
             parseException811 = e;
@@ -1585,7 +1588,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:822:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:824:1
     final public
     // List of expressions, none of which may be empty.
     List<Expression> expList() {
@@ -1602,31 +1605,31 @@ public class MdxParser {
         ParseException parseException847 = null;
         int callStackSize848 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:827:3
-            pushOntoCallStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 827, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:829:3
+            pushOntoCallStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 829, 3);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:828:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:830:3
             list.add(expression);
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:831:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:833:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:832:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:834:5
                 consumeToken(COMMA);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:833:5
-                pushOntoCallStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 833, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:835:5
+                pushOntoCallStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 835, 5);
                 try {
                     expression = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:834:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:836:5
                 list.add(expression);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:838:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:840:3
             return list;
         } catch (ParseException e) {
             parseException847 = e;
@@ -1644,7 +1647,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:844:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:846:1
     final public Expression parseExpressionEof() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1658,16 +1661,16 @@ public class MdxParser {
         ParseException parseException883 = null;
         int callStackSize884 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:848:3
-            pushOntoCallStack("parseExpressionEof", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 848, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:850:3
+            pushOntoCallStack("parseExpressionEof", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 850, 3);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:848:32
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:850:32
             consumeToken(EOF);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:849:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:851:3
             return expression;
         } catch (ParseException e) {
             parseException883 = e;
@@ -1685,7 +1688,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:855:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:857:1
     final public ObjectIdentifier parseIdentifier() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1699,27 +1702,27 @@ public class MdxParser {
         ParseException parseException899 = null;
         int callStackSize900 = parsingStack.size();
         try {
-            if (first_set$Grammer_ccc$860$5.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:860:5
-                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 860, 5);
+            if (first_set$Grammer_ccc$862$5.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
+                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 862, 5);
                 try {
                     objectIdentifier = parseNameObjectIdentifier();
                 } finally {
                     popCallStack();
                 }
             } else if (nextTokenType() == AMP_QUOTED_ID || nextTokenType == AMP_UNQUOTED_ID) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
-                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 862, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:5
+                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 864, 5);
                 try {
                     objectIdentifier = parseKeyIdentifier();
                 } finally {
                     popCallStack();
                 }
             } else {
-                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 860, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$860$5$, parsingStack);
+                pushOntoCallStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 862, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$862$5$, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:866:3
             return objectIdentifier;
         } catch (ParseException e) {
             parseException899 = e;
@@ -1739,12 +1742,12 @@ public class MdxParser {
 
     static private final EnumSet<TokenType> parseNameObjectIdentifier_FIRST_SET = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:870:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:872:1
     final public NameObjectIdentifier parseNameObjectIdentifier() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseNameObjectIdentifier";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:874:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:876:3
         ASTparseNameObjectIdentifier thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseNameObjectIdentifier();
@@ -1755,35 +1758,35 @@ public class MdxParser {
         int callStackSize929 = parsingStack.size();
         try {
             if (nextTokenType() == DIMENSION || nextTokenType == PROPERTIES) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:874:3
-                pushOntoCallStack("parseNameObjectIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 874, 3);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:876:3
+                pushOntoCallStack("parseNameObjectIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 876, 3);
                 try {
                     id = parseKeyword();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:875:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:877:3
                 // Keywords that are  not Reserved could be used
                 return new NameObjectIdentifierR(id, ObjectIdentifier.Quoting.UNQUOTED);
             } else if (nextTokenType() == ID) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:879:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:881:3
                 consumeToken(ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:880:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:882:3
                 return new NameObjectIdentifierR(getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
             } else if (nextTokenType() == ATSIGN) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:883:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:885:3
                 consumeToken(ATSIGN);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:883:14
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:885:14
                 consumeToken(ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:884:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:886:3
                 return new NameObjectIdentifierR("@" + getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
             } else if (nextTokenType() == QUOTED_ID) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:887:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:889:3
                 consumeToken(QUOTED_ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:888:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:890:3
                 return new NameObjectIdentifierR(MdxParserUtil.stripQuotes(getToken(0).getImage(), "[", "]", "]]"), ObjectIdentifier.Quoting.QUOTED);
             } else {
-                pushOntoCallStack("parseNameObjectIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 874, 3);
+                pushOntoCallStack("parseNameObjectIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 876, 3);
                 throw new ParseException(lastConsumedToken, parseNameObjectIdentifier_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -1802,7 +1805,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:897:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:899:1
     final public
     // for example '&foo&[1]&bar' in '[x].&foo&[1]&bar.[y]'
     KeyObjectIdentifier parseKeyIdentifier() {
@@ -1819,20 +1822,20 @@ public class MdxParser {
         ParseException parseException984 = null;
         int callStackSize985 = parsingStack.size();
         try {
-            // Code for OneOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:902:3
+            // Code for OneOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:904:3
             while (true) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:903:5
-                pushOntoCallStack("parseKeyIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 903, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:905:5
+                pushOntoCallStack("parseKeyIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 905, 5);
                 try {
                     key = parseAmpId();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:904:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:906:5
                 list.add(key);
                 if (!(nextTokenType() == AMP_QUOTED_ID || nextTokenType == AMP_UNQUOTED_ID)) break;
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:908:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:910:3
             return new KeyObjectIdentifierR(list);
         } catch (ParseException e) {
             parseException984 = e;
@@ -1852,12 +1855,12 @@ public class MdxParser {
 
     static private final EnumSet<TokenType> parseAmpId_FIRST_SET = tokenTypeSet(AMP_QUOTED_ID, AMP_UNQUOTED_ID);
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:914:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:916:1
     final public NameObjectIdentifier parseAmpId() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseAmpId";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:915:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:917:3
         ASTparseAmpId thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseAmpId();
@@ -1867,17 +1870,17 @@ public class MdxParser {
         int callStackSize1009 = parsingStack.size();
         try {
             if (nextTokenType() == AMP_QUOTED_ID) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:915:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:917:3
                 consumeToken(AMP_QUOTED_ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:916:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:918:3
                 return new NameObjectIdentifierR(MdxParserUtil.stripQuotes(getToken(0).getImage(), "&[", "]", "]]"), ObjectIdentifier.Quoting.QUOTED);
             } else if (nextTokenType() == AMP_UNQUOTED_ID) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:922:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:924:3
                 consumeToken(AMP_UNQUOTED_ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:923:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:925:3
                 return new NameObjectIdentifierR(getToken(0).getImage().substring(1), ObjectIdentifier.Quoting.UNQUOTED);
             } else {
-                pushOntoCallStack("parseAmpId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 915, 3);
+                pushOntoCallStack("parseAmpId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 917, 3);
                 throw new ParseException(lastConsumedToken, parseAmpId_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -1896,7 +1899,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:932:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:934:1
     final public
     // a keyword that is not a RESERVED_WORD could be used as identifier
     String parseKeyword() {
@@ -1912,16 +1915,16 @@ public class MdxParser {
         int callStackSize1037 = parsingStack.size();
         try {
             if (nextTokenType() == DIMENSION) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:934:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:936:5
                 consumeToken(DIMENSION);
             } else if (nextTokenType() == PROPERTIES) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:935:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:937:5
                 consumeToken(PROPERTIES);
             } else {
-                pushOntoCallStack("parseKeyword", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 934, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$934$5, parsingStack);
+                pushOntoCallStack("parseKeyword", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 936, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$936$5, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:937:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:939:3
             return getToken(0).getImage();
         } catch (ParseException e) {
             parseException1036 = e;
@@ -1939,7 +1942,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:943:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:945:1
     final public CompoundId parseCompoundId() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -1955,31 +1958,31 @@ public class MdxParser {
         ParseException parseException1065 = null;
         int callStackSize1066 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:949:3
-            pushOntoCallStack("parseCompoundId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 949, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:951:3
+            pushOntoCallStack("parseCompoundId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 951, 3);
             try {
                 s = parseIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:950:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:952:3
             list.add(s);
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:953:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:955:3
             while (true) {
-                if (!(scan$Grammer_ccc$954$5())) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:955:5
+                if (!(scan$Grammer_ccc$956$5())) break;
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:957:5
                 consumeToken(DOT);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:955:13
-                pushOntoCallStack("parseCompoundId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 955, 13);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:957:13
+                pushOntoCallStack("parseCompoundId", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 957, 13);
                 try {
                     s = parseIdentifier();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:956:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:958:5
                 list.add(s);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:960:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:962:3
             return new CompoundIdR(list);
         } catch (ParseException e) {
             parseException1065 = e;
@@ -1997,7 +2000,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:968:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:970:1
     final public
     // ----------------------------------------------------------------------------
     // Expressions
@@ -2014,57 +2017,57 @@ public class MdxParser {
         ParseException parseException1101 = null;
         int callStackSize1102 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:972:3
-            pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 972, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:3
+            pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 974, 3);
             try {
                 x = parseTerm5();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:973:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:975:3
             while (true) {
-                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
+                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
                 if (nextTokenType() == OR) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
                     consumeToken(OR);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:12
-                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 974, 12);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:12
+                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 976, 12);
                     try {
                         y = parseTerm5();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:975:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:977:5
                     x = new CallExpressionR("OR", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == XOR) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:5
                     consumeToken(XOR);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:13
-                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 981, 13);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:13
+                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 983, 13);
                     try {
                         y = parseTerm5();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:982:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:984:5
                     x = new CallExpressionR("XOR", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == COLON) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:5
                     consumeToken(COLON);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:15
-                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 990, 15);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:15
+                    pushOntoCallStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 992, 15);
                     try {
                         y = parseTerm5();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:991:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:993:5
                     x = new CallExpressionR(":", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else {
                     break;
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:998:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1000:3
             return x;
         } catch (ParseException e) {
             parseException1101 = e;
@@ -2082,7 +2085,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1004:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1006:1
     final public Expression parseTerm5() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2096,29 +2099,29 @@ public class MdxParser {
         ParseException parseException1169 = null;
         int callStackSize1170 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1008:3
-            pushOntoCallStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1008, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:3
+            pushOntoCallStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1010, 3);
             try {
                 x = parseTerm4();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1009:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1011:3
             while (true) {
                 if (!(nextTokenType() == AND)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:5
                 consumeToken(AND);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:13
-                pushOntoCallStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1010, 13);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:13
+                pushOntoCallStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1012, 13);
                 try {
                     y = parseTerm4();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1011:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1013:5
                 x = new CallExpressionR("AND", CallExpression.Type.Term_Infix, List.of(x, y));
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1018:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1020:3
             return x;
         } catch (ParseException e) {
             parseException1169 = e;
@@ -2142,12 +2145,12 @@ public class MdxParser {
         return tokenTypeSet(CASE, CAST, DIMENSION, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1024:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1026:1
     final public Expression parseTerm4() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseTerm4";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
         ASTparseTerm4 thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseTerm4();
@@ -2157,30 +2160,30 @@ public class MdxParser {
         ParseException parseException1201 = null;
         int callStackSize1202 = parsingStack.size();
         try {
-            if (first_set$Grammer_ccc$1028$3.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
-                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1028, 3);
+            if (first_set$Grammer_ccc$1030$3.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
+                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1030, 3);
                 try {
                     x = parseTerm3();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1029:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1031:3
                 return x;
             } else if (nextTokenType() == NOT) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:3
                 consumeToken(NOT);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:11
-                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1032, 11);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:11
+                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1034, 11);
                 try {
                     x = parseTerm4();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1033:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1035:3
                 return new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(x));
             } else {
-                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1028, 3);
+                pushOntoCallStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1030, 3);
                 throw new ParseException(lastConsumedToken, parseTerm4_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -2199,7 +2202,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1042:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1044:1
     final public Expression parseTerm3() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2214,143 +2217,143 @@ public class MdxParser {
         ParseException parseException1233 = null;
         int callStackSize1234 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1047:3
-            pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1047, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1049:3
+            pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1049, 3);
             try {
                 x = parseTerm2();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1048:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:3
             while (true) {
-                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:5
-                if (first_set$Grammer_ccc$1050$5.contains(nextTokenType())) {
+                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1052:5
+                if (first_set$Grammer_ccc$1052$5.contains(nextTokenType())) {
                     if (nextTokenType() == EQ) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1051:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1053:7
                         consumeToken(EQ);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1052:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1054:7
                         op = getToken(0);
                     } else if (nextTokenType() == NE) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1055:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1057:7
                         consumeToken(NE);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1056:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1058:7
                         op = getToken(0);
                     } else if (nextTokenType() == LT) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1059:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1061:7
                         consumeToken(LT);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1060:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1062:7
                         op = getToken(0);
                     } else if (nextTokenType() == GT) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1063:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1065:7
                         consumeToken(GT);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1064:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1066:7
                         op = getToken(0);
                     } else if (nextTokenType() == LE) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1067:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1069:7
                         consumeToken(LE);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1068:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1070:7
                         op = getToken(0);
                     } else if (nextTokenType() == GE) {
-                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1071:7
+                        // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1073:7
                         consumeToken(GE);
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1072:7
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1074:7
                         op = getToken(0);
                     } else {
-                        pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1051, 7);
-                        throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1051$7, parsingStack);
+                        pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1053, 7);
+                        throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1053$7, parsingStack);
                     }
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1076:5
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1076, 5);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1078:5
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1078, 5);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1077:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1079:5
                     x = new CallExpressionR(op.getImage(), CallExpression.Type.Term_Infix, List.of(x, y));
-                } else if (scan$Grammer_ccc$1086$5()) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:5
+                } else if (scan$Grammer_ccc$1088$5()) {
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:5
                     consumeToken(IS);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:12
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:12
                     consumeToken(NULL);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1088:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1090:5
                     x = new CallExpressionR("IS NULL", CallExpression.Type.Term_Postfix, List.of(x));
-                } else if (scan$Grammer_ccc$1096$5()) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:5
+                } else if (scan$Grammer_ccc$1098$5()) {
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:5
                     consumeToken(IS);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:12
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1097, 12);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:12
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1099, 12);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1098:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1100:5
                     x = new CallExpressionR("IS", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == IS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1104:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1106:5
                     consumeToken(IS);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1104:12
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1106:12
                     consumeToken(EMPTY);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1105:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1107:5
                     x = new CallExpressionR("IS EMPTY", CallExpression.Type.Term_Postfix, List.of(x));
                 } else if (nextTokenType() == MATCHES) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:5
                     consumeToken(MATCHES);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:17
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1109, 17);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:17
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1111, 17);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1110:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1112:5
                     x = new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(x, y));
-                } else if (scan$Grammer_ccc$1116$5()) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:5
+                } else if (scan$Grammer_ccc$1118$5()) {
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:5
                     consumeToken(NOT);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:13
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:13
                     consumeToken(MATCHES);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:25
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1117, 25);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:25
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1119, 25);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1118:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1120:5
                     x = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(x, y))));
                 } else if (nextTokenType() == IN) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:5
                     consumeToken(IN);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:12
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1129, 12);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:12
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1131, 12);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1130:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1132:5
                     x = new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == NOT) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:5
                     consumeToken(NOT);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:13
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:13
                     consumeToken(IN);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:20
-                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1136, 20);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:20
+                    pushOntoCallStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1138, 20);
                     try {
                         y = parseTerm2();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1137:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1139:5
                     x = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(x, y))));
                 } else {
                     break;
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1149:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1151:3
             return x;
         } catch (ParseException e) {
             parseException1233 = e;
@@ -2368,7 +2371,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1155:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1157:1
     final public Expression parseTerm2() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2382,57 +2385,57 @@ public class MdxParser {
         ParseException parseException1462 = null;
         int callStackSize1463 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1159:3
-            pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1159, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:3
+            pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1161, 3);
             try {
                 x = parseTerm();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1160:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1162:3
             while (true) {
-                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
+                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
                 if (nextTokenType() == PLUS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
                     consumeToken(PLUS);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:14
-                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1161, 14);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:14
+                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1163, 14);
                     try {
                         y = parseTerm();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1162:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1164:5
                     x = new CallExpressionR("+", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == MINUS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:5
                     consumeToken(MINUS);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:15
-                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1168, 15);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:15
+                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1170, 15);
                     try {
                         y = parseTerm();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1169:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1171:5
                     x = new CallExpressionR("-", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == CONCAT) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:5
                     consumeToken(CONCAT);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:16
-                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1175, 16);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:16
+                    pushOntoCallStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1177, 16);
                     try {
                         y = parseTerm();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1176:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1178:5
                     x = new CallExpressionR("||", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else {
                     break;
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1183:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1185:3
             return x;
         } catch (ParseException e) {
             parseException1462 = e;
@@ -2450,7 +2453,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1189:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1191:1
     final public Expression parseTerm() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2464,45 +2467,45 @@ public class MdxParser {
         ParseException parseException1530 = null;
         int callStackSize1531 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1193:3
-            pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1193, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:3
+            pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1195, 3);
             try {
                 x = parseFactor();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1194:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1196:3
             while (true) {
-                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
+                // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
                 if (nextTokenType() == ASTERISK) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
                     consumeToken(ASTERISK);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:18
-                    pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1195, 18);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:18
+                    pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1197, 18);
                     try {
                         y = parseFactor();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1196:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1198:5
                     x = new CallExpressionR("*", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else if (nextTokenType() == SOLIDUS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:5
                     consumeToken(SOLIDUS);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:17
-                    pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1202, 17);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:17
+                    pushOntoCallStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1204, 17);
                     try {
                         y = parseFactor();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1203:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1205:5
                     x = new CallExpressionR("/", CallExpression.Type.Term_Infix, List.of(x, y));
                 } else {
                     break;
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1210:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1212:3
             return x;
         } catch (ParseException e) {
             parseException1530 = e;
@@ -2526,12 +2529,12 @@ public class MdxParser {
         return tokenTypeSet(CASE, CAST, DIMENSION, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1216:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1218:1
     final public Expression parseFactor() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseFactor";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
         ASTparseFactor thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseFactor();
@@ -2541,54 +2544,54 @@ public class MdxParser {
         ParseException parseException1582 = null;
         int callStackSize1583 = parsingStack.size();
         try {
-            if (first_set$Grammer_ccc$1220$3.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
-                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1220, 3);
+            if (first_set$Grammer_ccc$1222$3.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
+                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1222, 3);
                 try {
                     p = parsePrimary();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1221:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1223:3
                 return p;
             } else if (nextTokenType() == PLUS) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:3
                 consumeToken(PLUS);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:12
-                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1224, 12);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:12
+                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1226, 12);
                 try {
                     p = parsePrimary();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1225:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1227:3
                 return p;
             } else if (nextTokenType() == MINUS) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:3
                 consumeToken(MINUS);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:13
-                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1228, 13);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:13
+                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1230, 13);
                 try {
                     p = parsePrimary();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1229:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1231:3
                 return new CallExpressionR("-", CallExpression.Type.Term_Prefix, List.of(p));
             } else if (nextTokenType() == EXISTING) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:3
                 consumeToken(EXISTING);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:16
-                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1235, 16);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:16
+                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1237, 16);
                 try {
                     p = parsePrimary();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1236:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1238:3
                 return new CallExpressionR("Existing", CallExpression.Type.Term_Prefix, List.of(p));
             } else {
-                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1220, 3);
+                pushOntoCallStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1222, 3);
                 throw new ParseException(lastConsumedToken, parseFactor_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -2607,7 +2610,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1245:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1247:1
     final public Expression parsePrimary() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2621,27 +2624,27 @@ public class MdxParser {
         ParseException parseException1646 = null;
         int callStackSize1647 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1249:3
-            pushOntoCallStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1249, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:3
+            pushOntoCallStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1251, 3);
             try {
                 expression = parseAtom();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1250:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1252:3
             while (true) {
                 if (!(nextTokenType() == DOT)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:5
                 consumeToken(DOT);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:13
-                pushOntoCallStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1251, 13);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:13
+                pushOntoCallStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1253, 13);
                 try {
                     expression = objectIdentifierOrFuncall(expression);
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1255:3
             return expression;
         } catch (ParseException e) {
             parseException1646 = e;
@@ -2659,7 +2662,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1259:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1261:1
     final public Expression objectIdentifierOrFuncall(Expression left) {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2674,28 +2677,28 @@ public class MdxParser {
         ParseException parseException1674 = null;
         int callStackSize1675 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1264:3
-            pushOntoCallStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1264, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:3
+            pushOntoCallStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1266, 3);
             try {
                 objectIdentifier = parseIdentifier();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1265:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1267:3
             if (nextTokenType() == LPAREN) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:5
                 consumeToken(LPAREN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:7
-                pushOntoCallStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1268, 7);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1270:7
+                pushOntoCallStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1270, 7);
                 try {
                     argList = expOrEmptyList();
                 } finally {
                     popCallStack();
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1270:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1272:5
                 consumeToken(RPAREN);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1272:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1274:3
             return MdxParserUtil.createCall(left, objectIdentifier, argList);
         } catch (ParseException e) {
             parseException1674 = e;
@@ -2715,12 +2718,12 @@ public class MdxParser {
 
     static private final EnumSet<TokenType> parseNumericLiteral_FIRST_SET = tokenTypeSet(UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL);
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1278:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1280:1
     final public NumericLiteral parseNumericLiteral() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseNumericLiteral";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1279:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1281:3
         ASTparseNumericLiteral thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseNumericLiteral();
@@ -2730,22 +2733,22 @@ public class MdxParser {
         int callStackSize1712 = parsingStack.size();
         try {
             if (nextTokenType() == DECIMAL_NUMERIC_LITERAL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1279:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1281:3
                 consumeToken(DECIMAL_NUMERIC_LITERAL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1280:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1282:3
                 return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
             } else if (nextTokenType() == UNSIGNED_INTEGER_LITERAL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1283:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1285:3
                 consumeToken(UNSIGNED_INTEGER_LITERAL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1284:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1286:3
                 return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
             } else if (nextTokenType() == APPROX_NUMERIC_LITERAL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1287:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1289:3
                 consumeToken(APPROX_NUMERIC_LITERAL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1288:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1290:3
                 return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
             } else {
-                pushOntoCallStack("parseNumericLiteral", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1279, 3);
+                pushOntoCallStack("parseNumericLiteral", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1281, 3);
                 throw new ParseException(lastConsumedToken, parseNumericLiteral_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -2770,12 +2773,12 @@ public class MdxParser {
         return tokenTypeSet(CASE, CAST, DIMENSION, NULL, PROPERTIES, LPAREN, LBRACE, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1294:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1296:1
     final public Expression parseAtom() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
         this.currentlyParsedProduction = "parseAtom";
-        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1300:3
+        // Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1302:3
         ASTparseAtom thisProduction = null;
         if (buildTree) {
             thisProduction = new ASTparseAtom();
@@ -2788,106 +2791,106 @@ public class MdxParser {
         int callStackSize1752 = parsingStack.size();
         try {
             if (nextTokenType() == SINGLE_QUOTED_STRING) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1300:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1302:3
                 consumeToken(SINGLE_QUOTED_STRING);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1301:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1303:3
                 return new StringLiteralR(MdxParserUtil.stripQuotes(getToken(0).getImage(), "'", "'", "''"));
             } else if (nextTokenType() == DOUBLE_QUOTED_STRING) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1304:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1306:3
                 consumeToken(DOUBLE_QUOTED_STRING);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1305:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1307:3
                 return new StringLiteralR(MdxParserUtil.stripQuotes(getToken(0).getImage(), '"' + "", '"' + "", '"' + "" + '"'));
             } else if (nextTokenType() == UNSIGNED_INTEGER_LITERAL || nextTokenType == APPROX_NUMERIC_LITERAL || nextTokenType == DECIMAL_NUMERIC_LITERAL) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1308:3
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1308, 3);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1310:3
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1310, 3);
                 try {
                     expression = parseNumericLiteral();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1309:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1311:3
                 return expression;
             } else if (nextTokenType() == NULL) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1312:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1314:3
                 consumeToken(NULL);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1313:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1315:3
                 return NullLiteralR.SINGLETON;
             } else if (nextTokenType() == CAST) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:3
                 consumeToken(CAST);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:12
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:12
                 consumeToken(LPAREN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:23
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1316, 23);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:23
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1318, 23);
                 try {
                     expression = parseUnaliasedExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:3
                 consumeToken(AS);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:10
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1317, 10);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:10
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1319, 10);
                 try {
                     nameObjectIdentifier = parseNameObjectIdentifier();
                 } finally {
                     popCallStack();
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:59
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:59
                 consumeToken(RPAREN);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1320:3
                 return new CallExpressionR("CAST", CallExpression.Type.Cast, List.of(expression, new SymbolLiteralR(nameObjectIdentifier.name())));
             } else if (nextTokenType() == LPAREN) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:3
                 consumeToken(LPAREN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:14
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1326, 14);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:14
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1328, 14);
                 try {
                     expressions = expList();
                 } finally {
                     popCallStack();
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:36
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:36
                 consumeToken(RPAREN);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1327:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1329:3
                 // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
                 // are just expressions.
                 return new CallExpressionR("()", CallExpression.Type.Parentheses, expressions);
             } else if (nextTokenType() == LBRACE) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1335:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:3
                 consumeToken(LBRACE);
-                if (scan$Grammer_ccc$1337$5()) {
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1338:5
+                if (scan$Grammer_ccc$1339$5()) {
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1340:5
                     expressions = Collections.emptyList();
-                } else if (first_set$Grammer_ccc$1342$5.contains(nextTokenType())) {
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1342:5
-                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1342, 5);
+                } else if (first_set$Grammer_ccc$1344$5.contains(nextTokenType())) {
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:5
+                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1344, 5);
                     try {
                         expressions = expList();
                     } finally {
                         popCallStack();
                     }
                 } else {
-                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1337, 5);
-                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1337$5, parsingStack);
+                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1339, 5);
+                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1339$5, parsingStack);
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:3
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1346:3
                 consumeToken(RBRACE);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1345:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1347:3
                 return new CallExpressionR("{}", CallExpression.Type.Braces, expressions);
             } else if (nextTokenType() == CASE) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1349:3
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1349, 3);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1351:3
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1351, 3);
                 try {
                     expression = parseCaseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1350:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1352:3
                 return expression;
-            } else if (first_set$Grammer_ccc$1356$3.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1356:3
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1356, 3);
+            } else if (first_set$Grammer_ccc$1358$3.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:3
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1358, 3);
                 try {
                     // Function call "foo(a, b)" or "whiz!bang!foo(a, b)".
                     // Properties "x.PROP" and methods "exp.meth(a)" are in primary().
@@ -2895,49 +2898,49 @@ public class MdxParser {
                 } finally {
                     popCallStack();
                 }
-                // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1357:3
+                // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1359:3
                 while (true) {
                     if (!(nextTokenType() == BANG)) break;
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:5
                     consumeToken(BANG);
-                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:14
-                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1358, 14);
+                    // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:14
+                    pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1360, 14);
                     try {
                         nameObjectIdentifier = parseNameObjectIdentifier();
                     } finally {
                         popCallStack();
                     }
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1359:5
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1361:5
                     // We support the syntax for qualifying function names with package
                     // names separated by bang ('!'), e.g. 'whiz!bang!foo(a, b)'
                     // but currently we ignore the qualifiers. The previous example is
                     // equivalent to 'foo(a, b)'.
                 }
                 if (nextTokenType() == LPAREN) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1367:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:5
                     consumeToken(LPAREN);
-                    if (scan$Grammer_ccc$1369$7()) {
-                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1370:7
+                    if (scan$Grammer_ccc$1371$7()) {
+                        // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1372:7
                         expressions = Collections.emptyList();
                     } else {
-                        // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1374:7
-                        pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1374, 7);
+                        // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:7
+                        pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1376, 7);
                         try {
                             expressions = expOrEmptyList();
                         } finally {
                             popCallStack();
                         }
                     }
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:5
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1378:5
                     consumeToken(RPAREN);
                 } else {
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1378:16
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1380:16
                     expressions = null;
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1382:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1384:3
                 return MdxParserUtil.createCall(null, nameObjectIdentifier, expressions);
             } else {
-                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1300, 3);
+                pushOntoCallStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1302, 3);
                 throw new ParseException(lastConsumedToken, parseAtom_FIRST_SET, parsingStack);
             }
         } catch (ParseException e) {
@@ -2956,7 +2959,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1388:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1390:1
     final public Expression parseCaseExpression() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -2972,63 +2975,63 @@ public class MdxParser {
         ParseException parseException1982 = null;
         int callStackSize1983 = parsingStack.size();
         try {
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1394:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:3
             consumeToken(CASE);
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1395:3
-            if (first_set$Grammer_ccc$1396$5.contains(nextTokenType())) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:5
-                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1396, 5);
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1397:3
+            if (first_set$Grammer_ccc$1398$5.contains(nextTokenType())) {
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1398:5
+                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1398, 5);
                 try {
                     expression = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1397:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1399:5
                 match = true;
                 expressions.add(expression);
             }
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1402:3
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1404:3
             while (true) {
                 if (!(nextTokenType() == WHEN)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:5
                 consumeToken(WHEN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:14
-                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1403, 14);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:14
+                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1405, 14);
                 try {
                     expression = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:43
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:43
                 consumeToken(THEN);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:52
-                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1403, 52);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:52
+                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1405, 52);
                 try {
                     expression2 = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1404:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1406:5
                 expressions.add(expression);
                 expressions.add(expression2);
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1409:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1411:3
             if (nextTokenType() == ELSE) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:5
                 consumeToken(ELSE);
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:14
-                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1410, 14);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:14
+                pushOntoCallStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1412, 14);
                 try {
                     expression = parseExpression();
                 } finally {
                     popCallStack();
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1411:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1413:5
                 expressions.add(expression);
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1415:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1417:3
             consumeToken(END);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1416:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1418:3
             if (match) {
                 return new CallExpressionR("_CaseMatch", CallExpression.Type.Term_Case, expressions);
             } else {
@@ -3050,7 +3053,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1432:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1434:1
     final public CreateSetBodyClause parseCreateSetBodyClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -3067,23 +3070,23 @@ public class MdxParser {
         ParseException parseException2062 = null;
         int callStackSize2063 = parsingStack.size();
         try {
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1440:3
-            pushOntoCallStack("parseCreateSetBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1440, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1442:3
+            pushOntoCallStack("parseCreateSetBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1442, 3);
             try {
                 compoundId = parseCompoundId();
             } finally {
                 popCallStack();
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1440:32
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1442:32
             consumeToken(AS);
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1440:39
-            pushOntoCallStack("parseCreateSetBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1440, 39);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1442:39
+            pushOntoCallStack("parseCreateSetBodyClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1442, 39);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1441:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1443:3
             return new CreateSetBodyClauseR(compoundId, expression);
         } catch (ParseException e) {
             parseException2062 = e;
@@ -3101,7 +3104,7 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1447:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1449:1
     final public SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause() {
         if (cancelled) throw new CancellationException();
         String prevProduction = currentlyParsedProduction;
@@ -3114,30 +3117,26 @@ public class MdxParser {
         ParseException parseException2082 = null;
         int callStackSize2083 = parsingStack.size();
         try {
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1448:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1450:3
             if (nextTokenType() == DIMENSION) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1448:4
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1450:4
                 consumeToken(DIMENSION);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1449:3
-            List<String> cellProperties = new LinkedList<String>();
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1452:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1451:3
+            List<CompoundId> cellProperties = new LinkedList<CompoundId>();
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1454:3
             consumeToken(PROPERTIES);
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1452:18
-            consumeToken(ID);
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1453:3
-            cellProperties.add(getToken(0).getImage());
-            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1456:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1455:3
+            cellProperties.add(parseCompoundId());
+            // Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1458:3
             while (true) {
                 if (!(nextTokenType() == COMMA)) break;
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1457:5
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1459:5
                 consumeToken(COMMA);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1457:15
-                consumeToken(ID);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1458:5
-                cellProperties.add(getToken(0).getImage());
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1460:5
+                cellProperties.add(parseCompoundId());
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1462:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1464:3
             return new SelectDimensionPropertyListClauseR(cellProperties);
         } catch (ParseException e) {
             parseException2082 = e;
@@ -3155,7 +3154,50 @@ public class MdxParser {
         }
     }
 
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1469:1
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1470:1
+    final public RefreshStatement parseRefreshStatement() {
+        if (cancelled) throw new CancellationException();
+        String prevProduction = currentlyParsedProduction;
+        this.currentlyParsedProduction = "parseRefreshStatement";
+        ASTparseRefreshStatement thisProduction = null;
+        if (buildTree) {
+            thisProduction = new ASTparseRefreshStatement();
+            openNodeScope(thisProduction);
+        }
+        NameObjectIdentifier cubeName;
+        ParseException parseException2130 = null;
+        int callStackSize2131 = parsingStack.size();
+        try {
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1474:3
+            consumeToken(REFRESH);
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1474:15
+            consumeToken(CUBE);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1474:25
+            pushOntoCallStack("parseRefreshStatement", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1474, 25);
+            try {
+                cubeName = parseNameObjectIdentifier();
+            } finally {
+                popCallStack();
+            }
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1475:1
+            return new RefreshStatementR(cubeName);
+        } catch (ParseException e) {
+            parseException2130 = e;
+            throw e;
+        } finally {
+            restoreCallStack(callStackSize2131);
+            if (thisProduction != null) {
+                if (parseException2130 == null) {
+                    closeNodeScope(thisProduction, nodeArity() > 1);
+                } else {
+                    clearNodeScope();
+                }
+            }
+            this.currentlyParsedProduction = prevProduction;
+        }
+    }
+
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1481:1
     final public
     // <SelectQueryAxisClause> ::= [NON EMPTY] <set> [<dimProps>] ON <axis_name>
     SelectQueryAxisClause parseSelectQueryAxisClause() {
@@ -3172,107 +3214,107 @@ public class MdxParser {
         Expression expression;
         int n;
         Axis axis;
-        ParseException parseException2138 = null;
-        int callStackSize2139 = parsingStack.size();
+        ParseException parseException2150 = null;
+        int callStackSize2151 = parsingStack.size();
         try {
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1477:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1489:3
             if (nextTokenType() == NON) {
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1477:4
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1489:4
                 consumeToken(NON);
-                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1477:12
+                // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1489:12
                 consumeToken(EMPTY);
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1478:3
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1490:3
                 nonEmpty = true;
             }
-            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1482:3
-            pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1482, 3);
+            // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1494:3
+            pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1494, 3);
             try {
                 expression = parseExpression();
             } finally {
                 popCallStack();
             }
-            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1483:3
+            // Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1495:3
             if (nextTokenType() == DIMENSION || nextTokenType == PROPERTIES) {
-                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1484:5
-                pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1484, 5);
+                // Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1496:5
+                pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1496, 5);
                 try {
                     selectDimensionPropertyListClause = parseSelectDimensionPropertyListClause();
                 } finally {
                     popCallStack();
                 }
             }
-            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1486:3
+            // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1498:3
             consumeToken(ON);
             if (nextTokenType() == AXIS || nextTokenType == UNSIGNED_INTEGER_LITERAL) {
                 if (nextTokenType() == UNSIGNED_INTEGER_LITERAL) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1489:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1501:7
                     consumeToken(UNSIGNED_INTEGER_LITERAL);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1490:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1502:7
                     n = Integer.valueOf(getToken(0).getImage()).intValue();
                 } else if (nextTokenType() == AXIS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1493:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1505:7
                     consumeToken(AXIS);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1493:16
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1505:16
                     consumeToken(LPAREN);
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1493:27
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1505:27
                     consumeToken(UNSIGNED_INTEGER_LITERAL);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1494:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1506:7
                     n = Integer.valueOf(getToken(0).getImage()).intValue();
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1497:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1509:7
                     consumeToken(RPAREN);
                 } else {
-                    pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1489, 7);
-                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1489$7, parsingStack);
+                    pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1501, 7);
+                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1501$7, parsingStack);
                 }
-                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1499:5
+                // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1511:5
                 if (n < 0) {
                     throw new IllegalArgumentException("Only axis numbers >= 0 allowed.");
                 } else {
                     axis = AxisR.createUnnamed(n);
                 }
-            } else if (first_set$Grammer_ccc$1510$5.contains(nextTokenType())) {
+            } else if (first_set$Grammer_ccc$1522$5.contains(nextTokenType())) {
                 if (nextTokenType() == COLUMNS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1511:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1523:7
                     consumeToken(COLUMNS);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1512:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1524:7
                     axis = AxisR.COLUMNS_NAMED;
                 } else if (nextTokenType() == ROWS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1515:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1527:7
                     consumeToken(ROWS);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1516:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1528:7
                     axis = AxisR.ROWS_NAMED;
                 } else if (nextTokenType() == PAGES) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1519:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1531:7
                     consumeToken(PAGES);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1520:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1532:7
                     axis = AxisR.PAGES_NAMED;
                 } else if (nextTokenType() == SECTIONS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1523:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1535:7
                     consumeToken(SECTIONS);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1524:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1536:7
                     axis = AxisR.SECTIONS_NAMED;
                 } else if (nextTokenType() == CHAPTERS) {
-                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1527:7
+                    // Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1539:7
                     consumeToken(CHAPTERS);
-                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1528:7
+                    // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1540:7
                     axis = AxisR.CHAPTERS_NAMED;
                 } else {
-                    pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1511, 7);
-                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1511$7, parsingStack);
+                    pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1523, 7);
+                    throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1523$7, parsingStack);
                 }
             } else {
-                pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1488, 5);
-                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1488$5, parsingStack);
+                pushOntoCallStack("parseSelectQueryAxisClause", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1500, 5);
+                throw new ParseException(lastConsumedToken, first_set$Grammer_ccc$1500$5, parsingStack);
             }
-            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1533:3
+            // Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1545:3
             return new SelectQueryAxisClauseR(nonEmpty, expression, axis, selectDimensionPropertyListClause);
         } catch (ParseException e) {
-            parseException2138 = e;
+            parseException2150 = e;
             throw e;
         } finally {
-            restoreCallStack(callStackSize2139);
+            restoreCallStack(callStackSize2151);
             if (thisProduction != null) {
-                if (parseException2138 == null) {
+                if (parseException2150 == null) {
                     closeNodeScope(thisProduction, nodeArity() > 1);
                 } else {
                     clearNodeScope();
@@ -3282,69 +3324,69 @@ public class MdxParser {
         }
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$464$5 = tokenTypeSet(DRILLTHROUGH, SELECT, WITH);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$533$5 = tokenTypeSet(CELL, MEMBER, MEASURE, SET, CALCULATED);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$560$8 = tokenTypeSet(CELL, MEMBER, MEASURE, SET, CALCULATED);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$571$5 = first_set$Grammer_ccc$571$5_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$466$5 = tokenTypeSet(DRILLTHROUGH, SELECT, WITH);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$535$5 = tokenTypeSet(CELL, MEMBER, MEASURE, SET, CALCULATED);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$562$8 = tokenTypeSet(CELL, MEMBER, MEASURE, SET, CALCULATED);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$573$5 = first_set$Grammer_ccc$573$5_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$571$5_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$573$5_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NON, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$595$5$ = tokenTypeSet(DIMENSION, PROPERTIES, LPAREN, ATSIGN, ID, QUOTED_ID);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$595$5 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$627$7 = first_set$Grammer_ccc$627$7_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$597$5$ = tokenTypeSet(DIMENSION, PROPERTIES, LPAREN, ATSIGN, ID, QUOTED_ID);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$597$5 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$629$7 = first_set$Grammer_ccc$629$7_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$627$7_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$629$7_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NON, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$785$3 = first_set$Grammer_ccc$785$3_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$787$3 = first_set$Grammer_ccc$787$3_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$785$3_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$787$3_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$860$5$ = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID, AMP_QUOTED_ID, AMP_UNQUOTED_ID);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$860$5 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$934$5 = tokenTypeSet(DIMENSION, PROPERTIES);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1028$3 = first_set$Grammer_ccc$1028$3_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$862$5$ = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID, AMP_QUOTED_ID, AMP_UNQUOTED_ID);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$862$5 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$936$5 = tokenTypeSet(DIMENSION, PROPERTIES);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1030$3 = first_set$Grammer_ccc$1030$3_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$1028$3_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$1030$3_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1050$5 = tokenTypeSet(EQ, GE, GT, LE, LT, NE);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1051$7 = tokenTypeSet(EQ, GE, GT, LE, LT, NE);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1220$3 = first_set$Grammer_ccc$1220$3_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1052$5 = tokenTypeSet(EQ, GE, GT, LE, LT, NE);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1053$7 = tokenTypeSet(EQ, GE, GT, LE, LT, NE);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1222$3 = first_set$Grammer_ccc$1222$3_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$1220$3_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$1222$3_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NULL, PROPERTIES, LPAREN, LBRACE, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1337$5 = first_set$Grammer_ccc$1337$5_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1339$5 = first_set$Grammer_ccc$1339$5_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$1337$5_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$1339$5_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1342$5 = first_set$Grammer_ccc$1342$5_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1344$5 = first_set$Grammer_ccc$1344$5_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$1342$5_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$1344$5_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1356$3 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1396$5 = first_set$Grammer_ccc$1396$5_init();
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1358$3 = tokenTypeSet(DIMENSION, PROPERTIES, ATSIGN, ID, QUOTED_ID);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1398$5 = first_set$Grammer_ccc$1398$5_init();
 
-    static private EnumSet<TokenType> first_set$Grammer_ccc$1396$5_init() {
+    static private EnumSet<TokenType> first_set$Grammer_ccc$1398$5_init() {
         return tokenTypeSet(CASE, CAST, DIMENSION, NOT, NULL, PROPERTIES, EXISTING, LPAREN, LBRACE, MINUS, PLUS, ATSIGN, ID, QUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING);
     }
 
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1488$5 = tokenTypeSet(AXIS, CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS, UNSIGNED_INTEGER_LITERAL);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1489$7 = tokenTypeSet(AXIS, UNSIGNED_INTEGER_LITERAL);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1510$5 = tokenTypeSet(CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS);
-    static private final EnumSet<TokenType> first_set$Grammer_ccc$1511$7 = tokenTypeSet(CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1500$5 = tokenTypeSet(AXIS, CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS, UNSIGNED_INTEGER_LITERAL);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1501$7 = tokenTypeSet(AXIS, UNSIGNED_INTEGER_LITERAL);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1522$5 = tokenTypeSet(CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS);
+    static private final EnumSet<TokenType> first_set$Grammer_ccc$1523$7 = tokenTypeSet(CHAPTERS, COLUMNS, PAGES, ROWS, SECTIONS);
 
     private final boolean scanToken(TokenType expectedType, TokenType...additionalTypes) {
         Token peekedToken = nextToken(currentLookaheadToken);
@@ -3374,9 +3416,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$766$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$768$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3388,15 +3430,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:5
             if (!scanToken(AS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:12
-            // NonTerminal parseIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:12
-            pushOntoLookaheadStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 766, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:12
+            // NonTerminal parseIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:768:12
+            pushOntoLookaheadStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 768, 12);
             currentLookaheadProduction = "parseIdentifier";
             try {
                 if (!check$parseIdentifier(true)) return false;
@@ -3407,7 +3449,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:767:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:769:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3419,9 +3461,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$785$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$787$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3433,9 +3475,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
-            pushOntoLookaheadStack("parseExpressionOrEmpty", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 785, 3);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
+            pushOntoLookaheadStack("parseExpressionOrEmpty", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 787, 3);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(false)) return false;
@@ -3446,7 +3488,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:786:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:788:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3458,9 +3500,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:790:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:792:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$790$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$792$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3472,7 +3514,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:790:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:792:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3484,9 +3526,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:809:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:811:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$809$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$811$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3498,15 +3540,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:809:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:811:5
             if (!scanToken(COMMA)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:810:5
-            // NonTerminal parseExpressionOrEmpty at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:810:5
-            pushOntoLookaheadStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 810, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:812:5
+            // NonTerminal parseExpressionOrEmpty at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:812:5
+            pushOntoLookaheadStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 812, 5);
             currentLookaheadProduction = "parseExpressionOrEmpty";
             try {
                 if (!check$parseExpressionOrEmpty(true)) return false;
@@ -3517,7 +3559,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:811:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:813:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3529,9 +3571,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:832:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:834:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$832$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$834$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3543,15 +3585,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:832:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:834:5
             if (!scanToken(COMMA)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:833:5
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:833:5
-            pushOntoLookaheadStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 833, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:835:5
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:835:5
+            pushOntoLookaheadStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 835, 5);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(true)) return false;
@@ -3562,7 +3604,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:834:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:836:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3574,9 +3616,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:860:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$860$5$(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$862$5$(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3588,9 +3630,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:860:5
-            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:860:5
-            pushOntoLookaheadStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 860, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
+            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
+            pushOntoLookaheadStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 862, 5);
             currentLookaheadProduction = "parseNameObjectIdentifier";
             try {
                 if (!check$parseNameObjectIdentifier(false)) return false;
@@ -3608,9 +3650,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$862$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$864$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3622,9 +3664,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
-            // NonTerminal parseKeyIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
-            pushOntoLookaheadStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 862, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:5
+            // NonTerminal parseKeyIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:5
+            pushOntoLookaheadStack("parseIdentifier", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 864, 5);
             currentLookaheadProduction = "parseKeyIdentifier";
             try {
                 if (!check$parseKeyIdentifier(false)) return false;
@@ -3642,9 +3684,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:883:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:885:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$883$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$885$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3656,19 +3698,19 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:883:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:885:3
             if (!scanToken(ATSIGN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:883:14
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:885:14
             if (!scanToken(ID)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:884:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:886:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3680,9 +3722,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$974$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$976$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3694,34 +3736,34 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
-            Token token2430 = currentLookaheadToken;
-            int remainingLookahead2430 = remainingLookahead;
-            boolean hitFailure2430 = hitFailure, passedPredicate2430 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
+            Token token2442 = currentLookaheadToken;
+            int remainingLookahead2442 = remainingLookahead;
+            boolean hitFailure2442 = hitFailure, passedPredicate2442 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$974$5$(false)) {
-                    currentLookaheadToken = token2430;
-                    remainingLookahead = remainingLookahead2430;
-                    hitFailure = hitFailure2430;
+                if (!check$Grammer_ccc$976$5$(false)) {
+                    currentLookaheadToken = token2442;
+                    remainingLookahead = remainingLookahead2442;
+                    hitFailure = hitFailure2442;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$981$5(false)) {
-                        currentLookaheadToken = token2430;
-                        remainingLookahead = remainingLookahead2430;
-                        hitFailure = hitFailure2430;
+                    if (!check$Grammer_ccc$983$5(false)) {
+                        currentLookaheadToken = token2442;
+                        remainingLookahead = remainingLookahead2442;
+                        hitFailure = hitFailure2442;
                         if (passedPredicate && !legacyGlitchyLookahead) return false;
                         passedPredicate = false;
-                        if (!check$Grammer_ccc$990$5(false)) {
-                            currentLookaheadToken = token2430;
-                            remainingLookahead = remainingLookahead2430;
-                            hitFailure = hitFailure2430;
+                        if (!check$Grammer_ccc$992$5(false)) {
+                            currentLookaheadToken = token2442;
+                            remainingLookahead = remainingLookahead2442;
+                            hitFailure = hitFailure2442;
                             return false;
                         }
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2430;
+                passedPredicate = passedPredicate2442;
             }
         } finally {
             lookaheadRoutineNesting--;
@@ -3734,9 +3776,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$974$5$(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$976$5$(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3748,15 +3790,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:5
             if (!scanToken(OR)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:12
-            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:12
-            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 974, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:12
+            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:976:12
+            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 976, 12);
             currentLookaheadProduction = "parseTerm5";
             try {
                 if (!check$parseTerm5(true)) return false;
@@ -3767,7 +3809,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:975:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:977:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3779,9 +3821,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$981$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$983$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3793,15 +3835,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:5
             if (!scanToken(XOR)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:13
-            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:981:13
-            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 981, 13);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:13
+            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:983:13
+            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 983, 13);
             currentLookaheadProduction = "parseTerm5";
             try {
                 if (!check$parseTerm5(true)) return false;
@@ -3812,7 +3854,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:982:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:984:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3824,9 +3866,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$990$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$992$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3838,15 +3880,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:5
             if (!scanToken(COLON)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:15
-            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:990:15
-            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 990, 15);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:15
+            // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:992:15
+            pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 992, 15);
             currentLookaheadProduction = "parseTerm5";
             try {
                 if (!check$parseTerm5(true)) return false;
@@ -3857,7 +3899,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:991:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:993:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3869,9 +3911,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1010$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1012$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3883,15 +3925,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:5
             if (!scanToken(AND)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:13
-            // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:13
-            pushOntoLookaheadStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1010, 13);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:13
+            // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1012:13
+            pushOntoLookaheadStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1012, 13);
             currentLookaheadProduction = "parseTerm4";
             try {
                 if (!check$parseTerm4(true)) return false;
@@ -3902,7 +3944,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1011:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1013:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3914,9 +3956,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1028$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1030$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3928,9 +3970,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
-            // NonTerminal parseTerm3 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
-            pushOntoLookaheadStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1028, 3);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
+            // NonTerminal parseTerm3 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
+            pushOntoLookaheadStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1030, 3);
             currentLookaheadProduction = "parseTerm3";
             try {
                 if (!check$parseTerm3(false)) return false;
@@ -3941,7 +3983,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1029:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1031:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3953,9 +3995,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1032$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1034$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -3967,15 +4009,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:3
             if (!scanToken(NOT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:11
-            // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1032:11
-            pushOntoLookaheadStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1032, 11);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:11
+            // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1034:11
+            pushOntoLookaheadStack("parseTerm4", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1034, 11);
             currentLookaheadProduction = "parseTerm4";
             try {
                 if (!check$parseTerm4(true)) return false;
@@ -3986,7 +4028,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1033:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1035:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -3998,9 +4040,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1052:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1050$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1052$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4012,58 +4054,58 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:5
-            Token token2455 = currentLookaheadToken;
-            int remainingLookahead2455 = remainingLookahead;
-            boolean hitFailure2455 = hitFailure, passedPredicate2455 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1052:5
+            Token token2467 = currentLookaheadToken;
+            int remainingLookahead2467 = remainingLookahead;
+            boolean hitFailure2467 = hitFailure, passedPredicate2467 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1050$5$(false)) {
-                    currentLookaheadToken = token2455;
-                    remainingLookahead = remainingLookahead2455;
-                    hitFailure = hitFailure2455;
+                if (!check$Grammer_ccc$1052$5$(false)) {
+                    currentLookaheadToken = token2467;
+                    remainingLookahead = remainingLookahead2467;
+                    hitFailure = hitFailure2467;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1086$5(false)) {
-                        currentLookaheadToken = token2455;
-                        remainingLookahead = remainingLookahead2455;
-                        hitFailure = hitFailure2455;
+                    if (!check$Grammer_ccc$1088$5(false)) {
+                        currentLookaheadToken = token2467;
+                        remainingLookahead = remainingLookahead2467;
+                        hitFailure = hitFailure2467;
                         if (passedPredicate && !legacyGlitchyLookahead) return false;
                         passedPredicate = false;
-                        if (!check$Grammer_ccc$1096$5(false)) {
-                            currentLookaheadToken = token2455;
-                            remainingLookahead = remainingLookahead2455;
-                            hitFailure = hitFailure2455;
+                        if (!check$Grammer_ccc$1098$5(false)) {
+                            currentLookaheadToken = token2467;
+                            remainingLookahead = remainingLookahead2467;
+                            hitFailure = hitFailure2467;
                             if (passedPredicate && !legacyGlitchyLookahead) return false;
                             passedPredicate = false;
-                            if (!check$Grammer_ccc$1104$5(false)) {
-                                currentLookaheadToken = token2455;
-                                remainingLookahead = remainingLookahead2455;
-                                hitFailure = hitFailure2455;
+                            if (!check$Grammer_ccc$1106$5(false)) {
+                                currentLookaheadToken = token2467;
+                                remainingLookahead = remainingLookahead2467;
+                                hitFailure = hitFailure2467;
                                 if (passedPredicate && !legacyGlitchyLookahead) return false;
                                 passedPredicate = false;
-                                if (!check$Grammer_ccc$1109$5(false)) {
-                                    currentLookaheadToken = token2455;
-                                    remainingLookahead = remainingLookahead2455;
-                                    hitFailure = hitFailure2455;
+                                if (!check$Grammer_ccc$1111$5(false)) {
+                                    currentLookaheadToken = token2467;
+                                    remainingLookahead = remainingLookahead2467;
+                                    hitFailure = hitFailure2467;
                                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                                     passedPredicate = false;
-                                    if (!check$Grammer_ccc$1116$5(false)) {
-                                        currentLookaheadToken = token2455;
-                                        remainingLookahead = remainingLookahead2455;
-                                        hitFailure = hitFailure2455;
+                                    if (!check$Grammer_ccc$1118$5(false)) {
+                                        currentLookaheadToken = token2467;
+                                        remainingLookahead = remainingLookahead2467;
+                                        hitFailure = hitFailure2467;
                                         if (passedPredicate && !legacyGlitchyLookahead) return false;
                                         passedPredicate = false;
-                                        if (!check$Grammer_ccc$1129$5(false)) {
-                                            currentLookaheadToken = token2455;
-                                            remainingLookahead = remainingLookahead2455;
-                                            hitFailure = hitFailure2455;
+                                        if (!check$Grammer_ccc$1131$5(false)) {
+                                            currentLookaheadToken = token2467;
+                                            remainingLookahead = remainingLookahead2467;
+                                            hitFailure = hitFailure2467;
                                             if (passedPredicate && !legacyGlitchyLookahead) return false;
                                             passedPredicate = false;
-                                            if (!check$Grammer_ccc$1136$5(false)) {
-                                                currentLookaheadToken = token2455;
-                                                remainingLookahead = remainingLookahead2455;
-                                                hitFailure = hitFailure2455;
+                                            if (!check$Grammer_ccc$1138$5(false)) {
+                                                currentLookaheadToken = token2467;
+                                                remainingLookahead = remainingLookahead2467;
+                                                hitFailure = hitFailure2467;
                                                 return false;
                                             }
                                         }
@@ -4074,7 +4116,7 @@ public class MdxParser {
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2455;
+                passedPredicate = passedPredicate2467;
             }
         } finally {
             lookaheadRoutineNesting--;
@@ -4087,9 +4129,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1052:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1050$5$(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1052$5$(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4101,15 +4143,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1051:7
-            if (!scanToken(first_set$Grammer_ccc$1051$7)) return false;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1053:7
+            if (!scanToken(first_set$Grammer_ccc$1053$7)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1076:5
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1076:5
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1076, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1078:5
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1078:5
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1078, 5);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4120,7 +4162,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1077:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1079:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4132,9 +4174,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1086:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1088:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1086$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1088$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 2;
         try {
@@ -4146,19 +4188,19 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:5
             if (!scanToken(IS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:12
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:12
             if (!scanToken(NULL)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1088:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1090:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4170,9 +4212,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1096:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1098:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1096$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1098$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 2;
         try {
@@ -4184,15 +4226,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:5
             if (!scanToken(IS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:12
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:12
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1097, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:12
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:12
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1099, 12);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4203,7 +4245,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1098:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1100:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4215,9 +4257,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1104:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1106:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1104$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1106$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4229,19 +4271,19 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1104:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1106:5
             if (!scanToken(IS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1104:12
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1106:12
             if (!scanToken(EMPTY)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1105:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1107:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4253,9 +4295,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1109$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1111$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4267,15 +4309,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:5
             if (!scanToken(MATCHES)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:17
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1109:17
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1109, 17);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:17
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1111:17
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1111, 17);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4286,7 +4328,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1110:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1112:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4298,9 +4340,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1116:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1118:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1116$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1118$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 2;
         try {
@@ -4312,21 +4354,21 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:5
             if (!scanToken(NOT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:13
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:13
             if (!scanToken(MATCHES)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:25
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:25
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1117, 25);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:25
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:25
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1119, 25);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4337,7 +4379,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1118:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1120:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4349,9 +4391,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1129$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1131$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4363,15 +4405,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:5
             if (!scanToken(IN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:12
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1129:12
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1129, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:12
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1131:12
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1131, 12);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4382,7 +4424,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1130:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1132:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4394,9 +4436,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1136$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1138$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4408,21 +4450,21 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:5
             if (!scanToken(NOT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:13
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:13
             if (!scanToken(IN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:20
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1136:20
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1136, 20);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:20
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1138:20
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1138, 20);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -4433,7 +4475,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1137:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1139:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4445,9 +4487,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1161$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1163$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4459,34 +4501,34 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
-            Token token2492 = currentLookaheadToken;
-            int remainingLookahead2492 = remainingLookahead;
-            boolean hitFailure2492 = hitFailure, passedPredicate2492 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
+            Token token2504 = currentLookaheadToken;
+            int remainingLookahead2504 = remainingLookahead;
+            boolean hitFailure2504 = hitFailure, passedPredicate2504 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1161$5$(false)) {
-                    currentLookaheadToken = token2492;
-                    remainingLookahead = remainingLookahead2492;
-                    hitFailure = hitFailure2492;
+                if (!check$Grammer_ccc$1163$5$(false)) {
+                    currentLookaheadToken = token2504;
+                    remainingLookahead = remainingLookahead2504;
+                    hitFailure = hitFailure2504;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1168$5(false)) {
-                        currentLookaheadToken = token2492;
-                        remainingLookahead = remainingLookahead2492;
-                        hitFailure = hitFailure2492;
+                    if (!check$Grammer_ccc$1170$5(false)) {
+                        currentLookaheadToken = token2504;
+                        remainingLookahead = remainingLookahead2504;
+                        hitFailure = hitFailure2504;
                         if (passedPredicate && !legacyGlitchyLookahead) return false;
                         passedPredicate = false;
-                        if (!check$Grammer_ccc$1175$5(false)) {
-                            currentLookaheadToken = token2492;
-                            remainingLookahead = remainingLookahead2492;
-                            hitFailure = hitFailure2492;
+                        if (!check$Grammer_ccc$1177$5(false)) {
+                            currentLookaheadToken = token2504;
+                            remainingLookahead = remainingLookahead2504;
+                            hitFailure = hitFailure2504;
                             return false;
                         }
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2492;
+                passedPredicate = passedPredicate2504;
             }
         } finally {
             lookaheadRoutineNesting--;
@@ -4499,9 +4541,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1161$5$(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1163$5$(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4513,15 +4555,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:5
             if (!scanToken(PLUS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:14
-            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:14
-            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1161, 14);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:14
+            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1163:14
+            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1163, 14);
             currentLookaheadProduction = "parseTerm";
             try {
                 if (!check$parseTerm(true)) return false;
@@ -4532,7 +4574,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1162:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1164:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4544,9 +4586,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1168$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1170$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4558,15 +4600,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:5
             if (!scanToken(MINUS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:15
-            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1168:15
-            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1168, 15);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:15
+            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1170:15
+            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1170, 15);
             currentLookaheadProduction = "parseTerm";
             try {
                 if (!check$parseTerm(true)) return false;
@@ -4577,7 +4619,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1169:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1171:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4589,9 +4631,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1175$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1177$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4603,15 +4645,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:5
             if (!scanToken(CONCAT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:16
-            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1175:16
-            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1175, 16);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:16
+            // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1177:16
+            pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1177, 16);
             currentLookaheadProduction = "parseTerm";
             try {
                 if (!check$parseTerm(true)) return false;
@@ -4622,7 +4664,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1176:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1178:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4634,9 +4676,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1195$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1197$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4648,27 +4690,27 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
-            Token token2506 = currentLookaheadToken;
-            int remainingLookahead2506 = remainingLookahead;
-            boolean hitFailure2506 = hitFailure, passedPredicate2506 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
+            Token token2518 = currentLookaheadToken;
+            int remainingLookahead2518 = remainingLookahead;
+            boolean hitFailure2518 = hitFailure, passedPredicate2518 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1195$5$(false)) {
-                    currentLookaheadToken = token2506;
-                    remainingLookahead = remainingLookahead2506;
-                    hitFailure = hitFailure2506;
+                if (!check$Grammer_ccc$1197$5$(false)) {
+                    currentLookaheadToken = token2518;
+                    remainingLookahead = remainingLookahead2518;
+                    hitFailure = hitFailure2518;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1202$5(false)) {
-                        currentLookaheadToken = token2506;
-                        remainingLookahead = remainingLookahead2506;
-                        hitFailure = hitFailure2506;
+                    if (!check$Grammer_ccc$1204$5(false)) {
+                        currentLookaheadToken = token2518;
+                        remainingLookahead = remainingLookahead2518;
+                        hitFailure = hitFailure2518;
                         return false;
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2506;
+                passedPredicate = passedPredicate2518;
             }
         } finally {
             lookaheadRoutineNesting--;
@@ -4681,9 +4723,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1195$5$(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1197$5$(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4695,15 +4737,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:5
             if (!scanToken(ASTERISK)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:18
-            // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:18
-            pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1195, 18);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:18
+            // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1197:18
+            pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1197, 18);
             currentLookaheadProduction = "parseFactor";
             try {
                 if (!check$parseFactor(true)) return false;
@@ -4714,7 +4756,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1196:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1198:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4726,9 +4768,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1202$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1204$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4740,15 +4782,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:5
             if (!scanToken(SOLIDUS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:17
-            // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1202:17
-            pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1202, 17);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:17
+            // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1204:17
+            pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1204, 17);
             currentLookaheadProduction = "parseFactor";
             try {
                 if (!check$parseFactor(true)) return false;
@@ -4759,7 +4801,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1203:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1205:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4771,9 +4813,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1220$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1222$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4785,9 +4827,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
-            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
-            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1220, 3);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
+            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
+            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1222, 3);
             currentLookaheadProduction = "parsePrimary";
             try {
                 if (!check$parsePrimary(false)) return false;
@@ -4798,7 +4840,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1221:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1223:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4810,9 +4852,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1224$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1226$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4824,15 +4866,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:3
             if (!scanToken(PLUS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:12
-            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1224:12
-            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1224, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:12
+            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1226:12
+            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1226, 12);
             currentLookaheadProduction = "parsePrimary";
             try {
                 if (!check$parsePrimary(true)) return false;
@@ -4843,7 +4885,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1225:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1227:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4855,9 +4897,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1228$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1230$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4869,15 +4911,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:3
             if (!scanToken(MINUS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:13
-            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1228:13
-            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1228, 13);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:13
+            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1230:13
+            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1230, 13);
             currentLookaheadProduction = "parsePrimary";
             try {
                 if (!check$parsePrimary(true)) return false;
@@ -4888,7 +4930,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1229:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1231:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4900,9 +4942,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1235$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1237$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4914,15 +4956,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:3
             if (!scanToken(EXISTING)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:16
-            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1235:16
-            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1235, 16);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:16
+            // NonTerminal parsePrimary at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1237:16
+            pushOntoLookaheadStack("parseFactor", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1237, 16);
             currentLookaheadProduction = "parsePrimary";
             try {
                 if (!check$parsePrimary(true)) return false;
@@ -4933,7 +4975,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1236:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1238:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -4945,9 +4987,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1251$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1253$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4959,15 +5001,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:5
             if (!scanToken(DOT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:13
-            // NonTerminal objectIdentifierOrFuncall at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:13
-            pushOntoLookaheadStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1251, 13);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:13
+            // NonTerminal objectIdentifierOrFuncall at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:13
+            pushOntoLookaheadStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1253, 13);
             currentLookaheadProduction = "objectIdentifierOrFuncall";
             try {
                 if (!check$objectIdentifierOrFuncall(true)) return false;
@@ -4985,9 +5027,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1266$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1268$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -4999,15 +5041,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:5
             if (!scanToken(LPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:7
-            // NonTerminal expOrEmptyList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1268:7
-            pushOntoLookaheadStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1268, 7);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1270:7
+            // NonTerminal expOrEmptyList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1270:7
+            pushOntoLookaheadStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1270, 7);
             currentLookaheadProduction = "expOrEmptyList";
             try {
                 if (!check$expOrEmptyList(true)) return false;
@@ -5018,7 +5060,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1270:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1272:5
             if (!scanToken(RPAREN)) return false;
         } finally {
             lookaheadRoutineNesting--;
@@ -5031,9 +5073,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1316$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1318$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5045,21 +5087,21 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:3
             if (!scanToken(CAST)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:12
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:12
             if (!scanToken(LPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:23
-            // NonTerminal parseUnaliasedExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:23
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1316, 23);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:23
+            // NonTerminal parseUnaliasedExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:23
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1318, 23);
             currentLookaheadProduction = "parseUnaliasedExpression";
             try {
                 if (!check$parseUnaliasedExpression(true)) return false;
@@ -5070,15 +5112,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:3
             if (!scanToken(AS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:10
-            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:10
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1317, 10);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:10
+            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:10
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1319, 10);
             currentLookaheadProduction = "parseNameObjectIdentifier";
             try {
                 if (!check$parseNameObjectIdentifier(true)) return false;
@@ -5089,13 +5131,13 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1317:59
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1319:59
             if (!scanToken(RPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1318:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1320:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5107,9 +5149,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1326$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1328$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5121,15 +5163,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:3
             if (!scanToken(LPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:14
-            // NonTerminal expList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:14
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1326, 14);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:14
+            // NonTerminal expList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:14
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1328, 14);
             currentLookaheadProduction = "expList";
             try {
                 if (!check$expList(true)) return false;
@@ -5140,13 +5182,13 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1326:36
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1328:36
             if (!scanToken(RPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1327:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1329:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5158,9 +5200,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1335:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1335$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1337$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5172,45 +5214,45 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1335:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:3
             if (!scanToken(LBRACE)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:5
-            Token token2556 = currentLookaheadToken;
-            int remainingLookahead2556 = remainingLookahead;
-            boolean hitFailure2556 = hitFailure, passedPredicate2556 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1339:5
+            Token token2568 = currentLookaheadToken;
+            int remainingLookahead2568 = remainingLookahead;
+            boolean hitFailure2568 = hitFailure, passedPredicate2568 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1337$5(false)) {
-                    currentLookaheadToken = token2556;
-                    remainingLookahead = remainingLookahead2556;
-                    hitFailure = hitFailure2556;
+                if (!check$Grammer_ccc$1339$5(false)) {
+                    currentLookaheadToken = token2568;
+                    remainingLookahead = remainingLookahead2568;
+                    hitFailure = hitFailure2568;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1342$5(false)) {
-                        currentLookaheadToken = token2556;
-                        remainingLookahead = remainingLookahead2556;
-                        hitFailure = hitFailure2556;
+                    if (!check$Grammer_ccc$1344$5(false)) {
+                        currentLookaheadToken = token2568;
+                        remainingLookahead = remainingLookahead2568;
+                        hitFailure = hitFailure2568;
                         return false;
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2556;
+                passedPredicate = passedPredicate2568;
             }
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:3
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1346:3
             if (!scanToken(RBRACE)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1345:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1347:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5222,9 +5264,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1339:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1337$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1339$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 2147483647;
         try {
@@ -5234,14 +5276,14 @@ public class MdxParser {
                 passedPredicate = true;
                 return !hitFailure;
             }
-            if (!check$Grammer_ccc$1337$10(true)) return false;
+            if (!check$Grammer_ccc$1339$10(true)) return false;
             // End BuildPredicateCode macro
             $reachedScanCode$ = true;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1338:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1340:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5253,9 +5295,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1342:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1342$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1344$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5267,9 +5309,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1342:5
-            // NonTerminal expList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1342:5
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1342, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:5
+            // NonTerminal expList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1344:5
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1344, 5);
             currentLookaheadProduction = "expList";
             try {
                 if (!check$expList(false)) return false;
@@ -5287,9 +5329,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1349:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1351:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1349$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1351$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5301,9 +5343,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1349:3
-            // NonTerminal parseCaseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1349:3
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1349, 3);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1351:3
+            // NonTerminal parseCaseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1351:3
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1351, 3);
             currentLookaheadProduction = "parseCaseExpression";
             try {
                 if (!check$parseCaseExpression(false)) return false;
@@ -5314,7 +5356,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1350:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1352:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5326,9 +5368,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1356:3
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:3
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1356$3(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1358$3(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5340,9 +5382,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1356:3
-            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1356:3
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1356, 3);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:3
+            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:3
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1358, 3);
             currentLookaheadProduction = "parseNameObjectIdentifier";
             try {
                 if (!check$parseNameObjectIdentifier(false)) return false;
@@ -5353,53 +5395,53 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1357:3
-            boolean passedPredicate2569 = passedPredicate;
+            // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1359:3
+            boolean passedPredicate2581 = passedPredicate;
             try {
                 while (remainingLookahead > 0 && !hitFailure) {
-                    Token token2570 = currentLookaheadToken;
+                    Token token2582 = currentLookaheadToken;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1358$5(false)) {
+                    if (!check$Grammer_ccc$1360$5(false)) {
                         if (passedPredicate && !legacyGlitchyLookahead) return false;
-                        currentLookaheadToken = token2570;
+                        currentLookaheadToken = token2582;
                         break;
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2569;
+                passedPredicate = passedPredicate2581;
             }
             hitFailure = false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1367:5
-            Token token2573 = currentLookaheadToken;
-            int remainingLookahead2573 = remainingLookahead;
-            boolean hitFailure2573 = hitFailure, passedPredicate2573 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:5
+            Token token2585 = currentLookaheadToken;
+            int remainingLookahead2585 = remainingLookahead;
+            boolean hitFailure2585 = hitFailure, passedPredicate2585 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1367$5(false)) {
-                    currentLookaheadToken = token2573;
-                    remainingLookahead = remainingLookahead2573;
-                    hitFailure = hitFailure2573;
+                if (!check$Grammer_ccc$1369$5(false)) {
+                    currentLookaheadToken = token2585;
+                    remainingLookahead = remainingLookahead2585;
+                    hitFailure = hitFailure2585;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1378$16(false)) {
-                        currentLookaheadToken = token2573;
-                        remainingLookahead = remainingLookahead2573;
-                        hitFailure = hitFailure2573;
+                    if (!check$Grammer_ccc$1380$16(false)) {
+                        currentLookaheadToken = token2585;
+                        remainingLookahead = remainingLookahead2585;
+                        hitFailure = hitFailure2585;
                         return false;
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2573;
+                passedPredicate = passedPredicate2585;
             }
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1382:3
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1384:3
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5411,9 +5453,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1358$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1360$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5425,15 +5467,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:5
             if (!scanToken(BANG)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:14
-            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1358:14
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1358, 14);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:14
+            // NonTerminal parseNameObjectIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1360:14
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1360, 14);
             currentLookaheadProduction = "parseNameObjectIdentifier";
             try {
                 if (!check$parseNameObjectIdentifier(true)) return false;
@@ -5444,7 +5486,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1359:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1361:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5456,9 +5498,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1367:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1367$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1369$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5470,39 +5512,39 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1367:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:5
             if (!scanToken(LPAREN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:7
-            Token token2583 = currentLookaheadToken;
-            int remainingLookahead2583 = remainingLookahead;
-            boolean hitFailure2583 = hitFailure, passedPredicate2583 = passedPredicate;
+            // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1371:7
+            Token token2595 = currentLookaheadToken;
+            int remainingLookahead2595 = remainingLookahead;
+            boolean hitFailure2595 = hitFailure, passedPredicate2595 = passedPredicate;
             try {
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1369$7(false)) {
-                    currentLookaheadToken = token2583;
-                    remainingLookahead = remainingLookahead2583;
-                    hitFailure = hitFailure2583;
+                if (!check$Grammer_ccc$1371$7(false)) {
+                    currentLookaheadToken = token2595;
+                    remainingLookahead = remainingLookahead2595;
+                    hitFailure = hitFailure2595;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$1374$7(false)) {
-                        currentLookaheadToken = token2583;
-                        remainingLookahead = remainingLookahead2583;
-                        hitFailure = hitFailure2583;
+                    if (!check$Grammer_ccc$1376$7(false)) {
+                        currentLookaheadToken = token2595;
+                        remainingLookahead = remainingLookahead2595;
+                        hitFailure = hitFailure2595;
                         return false;
                     }
                 }
             } finally {
-                passedPredicate = passedPredicate2583;
+                passedPredicate = passedPredicate2595;
             }
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1378:5
             if (!scanToken(RPAREN)) return false;
         } finally {
             lookaheadRoutineNesting--;
@@ -5515,9 +5557,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:7
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1371:7
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1369$7(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1371$7(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 2147483647;
         try {
@@ -5527,14 +5569,14 @@ public class MdxParser {
                 passedPredicate = true;
                 return !hitFailure;
             }
-            if (!check$Grammer_ccc$1369$12(true)) return false;
+            if (!check$Grammer_ccc$1371$12(true)) return false;
             // End BuildPredicateCode macro
             $reachedScanCode$ = true;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1370:7
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1372:7
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5546,9 +5588,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1374:7
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:7
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1374$7(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1376$7(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5560,9 +5602,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1374:7
-            // NonTerminal expOrEmptyList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1374:7
-            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1374, 7);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:7
+            // NonTerminal expOrEmptyList at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1376:7
+            pushOntoLookaheadStack("parseAtom", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1376, 7);
             currentLookaheadProduction = "expOrEmptyList";
             try {
                 if (!check$expOrEmptyList(true)) return false;
@@ -5580,9 +5622,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1378:16
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1380:16
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1378$16(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1380$16(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5594,7 +5636,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1378:16
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1380:16
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5606,9 +5648,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1398:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1396$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1398$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5620,9 +5662,9 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:5
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:5
-            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1396, 5);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1398:5
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1398:5
+            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1398, 5);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(false)) return false;
@@ -5633,7 +5675,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1397:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1399:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5645,9 +5687,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1403$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1405$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5659,15 +5701,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:5
             if (!scanToken(WHEN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:14
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:14
-            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1403, 14);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:14
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:14
+            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1405, 14);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(true)) return false;
@@ -5678,15 +5720,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:43
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:43
             if (!scanToken(THEN)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:52
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1403:52
-            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1403, 52);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:52
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1405:52
+            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1405, 52);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(true)) return false;
@@ -5697,7 +5739,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1404:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1406:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5709,9 +5751,9 @@ public class MdxParser {
     }
 
     // scanahead routine for expansion at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:5
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:5
     // BuildScanRoutine macro
-    private final boolean check$Grammer_ccc$1410$5(boolean scanToEnd) {
+    private final boolean check$Grammer_ccc$1412$5(boolean scanToEnd) {
         boolean $reachedScanCode$ = false;
         int passedPredicateThreshold = remainingLookahead - 1;
         try {
@@ -5723,15 +5765,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:5
             if (!scanToken(ELSE)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:14
-            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1410:14
-            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1410, 14);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:14
+            // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1412:14
+            pushOntoLookaheadStack("parseCaseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1412, 14);
             currentLookaheadProduction = "parseExpression";
             try {
                 if (!check$parseExpression(true)) return false;
@@ -5742,7 +5784,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1411:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1413:5
         } finally {
             lookaheadRoutineNesting--;
             if ($reachedScanCode$ && remainingLookahead <= passedPredicateThreshold) {
@@ -5753,8 +5795,8 @@ public class MdxParser {
         return true;
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:954:5
-    private final boolean scan$Grammer_ccc$954$5() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:956:5
+    private final boolean scan$Grammer_ccc$956$5() {
         remainingLookahead = UNLIMITED;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5764,7 +5806,7 @@ public class MdxParser {
                 passedPredicate = true;
                 return !hitFailure;
             }
-            if (!check$Grammer_ccc$954$10(true)) return false;
+            if (!check$Grammer_ccc$956$10(true)) return false;
             // End BuildPredicateCode macro
             return true;
         } finally {
@@ -5774,8 +5816,8 @@ public class MdxParser {
         }
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1086:5
-    private final boolean scan$Grammer_ccc$1086$5() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1088:5
+    private final boolean scan$Grammer_ccc$1088$5() {
         remainingLookahead = 2;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5786,19 +5828,19 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:5
             if (!scanToken(IS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1087:12
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1089:12
             if (!scanToken(NULL)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1088:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1090:5
             return true;
         } finally {
             lookaheadRoutineNesting = 0;
@@ -5807,8 +5849,8 @@ public class MdxParser {
         }
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1096:5
-    private final boolean scan$Grammer_ccc$1096$5() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1098:5
+    private final boolean scan$Grammer_ccc$1098$5() {
         remainingLookahead = 2;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5819,15 +5861,15 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:5
             if (!scanToken(IS)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:12
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1097:12
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1097, 12);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:12
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1099:12
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1099, 12);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -5838,7 +5880,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1098:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1100:5
             return true;
         } finally {
             lookaheadRoutineNesting = 0;
@@ -5847,8 +5889,8 @@ public class MdxParser {
         }
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1116:5
-    private final boolean scan$Grammer_ccc$1116$5() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1118:5
+    private final boolean scan$Grammer_ccc$1118$5() {
         remainingLookahead = 2;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5859,21 +5901,21 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:5
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:5
             if (!scanToken(NOT)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:13
+            // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:13
             if (!scanToken(MATCHES)) return false;
             if (hitFailure) return false;
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:25
-            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1117:25
-            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1117, 25);
+            // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:25
+            // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1119:25
+            pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1119, 25);
             currentLookaheadProduction = "parseTerm2";
             try {
                 if (!check$parseTerm2(true)) return false;
@@ -5884,7 +5926,7 @@ public class MdxParser {
             if (remainingLookahead <= 0) {
                 return true;
             }
-            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1118:5
+            // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1120:5
             return true;
         } finally {
             lookaheadRoutineNesting = 0;
@@ -5893,8 +5935,8 @@ public class MdxParser {
         }
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:5
-    private final boolean scan$Grammer_ccc$1337$5() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1339:5
+    private final boolean scan$Grammer_ccc$1339$5() {
         remainingLookahead = UNLIMITED;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5904,7 +5946,7 @@ public class MdxParser {
                 passedPredicate = true;
                 return !hitFailure;
             }
-            if (!check$Grammer_ccc$1337$10(true)) return false;
+            if (!check$Grammer_ccc$1339$10(true)) return false;
             // End BuildPredicateCode macro
             return true;
         } finally {
@@ -5914,8 +5956,8 @@ public class MdxParser {
         }
     }
 
-    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:7
-    private final boolean scan$Grammer_ccc$1369$7() {
+    // BuildPredicateRoutine: expansion at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1371:7
+    private final boolean scan$Grammer_ccc$1371$7() {
         remainingLookahead = UNLIMITED;
         currentLookaheadToken = lastConsumedToken;
         final boolean scanToEnd = false;
@@ -5925,7 +5967,7 @@ public class MdxParser {
                 passedPredicate = true;
                 return !hitFailure;
             }
-            if (!check$Grammer_ccc$1369$12(true)) return false;
+            if (!check$Grammer_ccc$1371$12(true)) return false;
             // End BuildPredicateCode macro
             return true;
         } finally {
@@ -5936,8 +5978,8 @@ public class MdxParser {
     }
 
     // lookahead routine for lookahead at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:954:5
-    private final boolean check$Grammer_ccc$954$10(boolean scanToEnd) {
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:956:5
+    private final boolean check$Grammer_ccc$956$10(boolean scanToEnd) {
         int prevRemainingLookahead = remainingLookahead;
         boolean prevHitFailure = hitFailure;
         Token prevScanAheadToken = currentLookaheadToken;
@@ -5954,8 +5996,8 @@ public class MdxParser {
     }
 
     // lookahead routine for lookahead at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1337:5
-    private final boolean check$Grammer_ccc$1337$10(boolean scanToEnd) {
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1339:5
+    private final boolean check$Grammer_ccc$1339$10(boolean scanToEnd) {
         int prevRemainingLookahead = remainingLookahead;
         boolean prevHitFailure = hitFailure;
         Token prevScanAheadToken = currentLookaheadToken;
@@ -5972,8 +6014,8 @@ public class MdxParser {
     }
 
     // lookahead routine for lookahead at:
-    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1369:7
-    private final boolean check$Grammer_ccc$1369$12(boolean scanToEnd) {
+    // /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1371:7
+    private final boolean check$Grammer_ccc$1371$12(boolean scanToEnd) {
         int prevRemainingLookahead = remainingLookahead;
         boolean prevHitFailure = hitFailure;
         Token prevScanAheadToken = currentLookaheadToken;
@@ -5995,9 +6037,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:764:3
-        // NonTerminal parseUnaliasedExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:764:3
-        pushOntoLookaheadStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 764, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:3
+        // NonTerminal parseUnaliasedExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:766:3
+        pushOntoLookaheadStack("parseExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 766, 3);
         currentLookaheadProduction = "parseUnaliasedExpression";
         try {
             if (!check$parseUnaliasedExpression(false)) return false;
@@ -6008,27 +6050,27 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:765:3
-        boolean passedPredicate2776 = passedPredicate;
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:767:3
+        boolean passedPredicate2784 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2777 = currentLookaheadToken;
+                Token token2785 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$766$5(false)) {
+                if (!check$Grammer_ccc$768$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2777;
+                    currentLookaheadToken = token2785;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2776;
+            passedPredicate = passedPredicate2784;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:775:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:777:3
         return true;
     }
 
@@ -6038,27 +6080,27 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:785:3
-        Token token2780 = currentLookaheadToken;
-        int remainingLookahead2780 = remainingLookahead;
-        boolean hitFailure2780 = hitFailure, passedPredicate2780 = passedPredicate;
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:787:3
+        Token token2788 = currentLookaheadToken;
+        int remainingLookahead2788 = remainingLookahead;
+        boolean hitFailure2788 = hitFailure, passedPredicate2788 = passedPredicate;
         try {
             passedPredicate = false;
-            if (!check$Grammer_ccc$785$3(false)) {
-                currentLookaheadToken = token2780;
-                remainingLookahead = remainingLookahead2780;
-                hitFailure = hitFailure2780;
+            if (!check$Grammer_ccc$787$3(false)) {
+                currentLookaheadToken = token2788;
+                remainingLookahead = remainingLookahead2788;
+                hitFailure = hitFailure2788;
                 if (passedPredicate && !legacyGlitchyLookahead) return false;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$790$3(false)) {
-                    currentLookaheadToken = token2780;
-                    remainingLookahead = remainingLookahead2780;
-                    hitFailure = hitFailure2780;
+                if (!check$Grammer_ccc$792$3(false)) {
+                    currentLookaheadToken = token2788;
+                    remainingLookahead = remainingLookahead2788;
+                    hitFailure = hitFailure2788;
                     return false;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2780;
+            passedPredicate = passedPredicate2788;
         }
         return true;
     }
@@ -6069,9 +6111,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:804:3
-        // NonTerminal parseExpressionOrEmpty at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:804:3
-        pushOntoLookaheadStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 804, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:806:3
+        // NonTerminal parseExpressionOrEmpty at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:806:3
+        pushOntoLookaheadStack("expOrEmptyList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 806, 3);
         currentLookaheadProduction = "parseExpressionOrEmpty";
         try {
             if (!check$parseExpressionOrEmpty(true)) return false;
@@ -6082,32 +6124,32 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:805:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:807:3
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:808:3
-        boolean passedPredicate2785 = passedPredicate;
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:810:3
+        boolean passedPredicate2793 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2786 = currentLookaheadToken;
+                Token token2794 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$809$5(false)) {
+                if (!check$Grammer_ccc$811$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2786;
+                    currentLookaheadToken = token2794;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2785;
+            passedPredicate = passedPredicate2793;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:815:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:817:3
         return true;
     }
 
@@ -6117,9 +6159,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:827:3
-        // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:827:3
-        pushOntoLookaheadStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 827, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:829:3
+        // NonTerminal parseExpression at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:829:3
+        pushOntoLookaheadStack("expList", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 829, 3);
         currentLookaheadProduction = "parseExpression";
         try {
             if (!check$parseExpression(false)) return false;
@@ -6130,32 +6172,32 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:828:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:830:3
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:831:3
-        boolean passedPredicate2792 = passedPredicate;
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:833:3
+        boolean passedPredicate2800 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2793 = currentLookaheadToken;
+                Token token2801 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$832$5(false)) {
+                if (!check$Grammer_ccc$834$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2793;
+                    currentLookaheadToken = token2801;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2792;
+            passedPredicate = passedPredicate2800;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:838:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:840:3
         return true;
     }
 
@@ -6165,33 +6207,33 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:860:5
-        Token token2802 = currentLookaheadToken;
-        int remainingLookahead2802 = remainingLookahead;
-        boolean hitFailure2802 = hitFailure, passedPredicate2802 = passedPredicate;
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:862:5
+        Token token2810 = currentLookaheadToken;
+        int remainingLookahead2810 = remainingLookahead;
+        boolean hitFailure2810 = hitFailure, passedPredicate2810 = passedPredicate;
         try {
             passedPredicate = false;
-            if (!check$Grammer_ccc$860$5$(false)) {
-                currentLookaheadToken = token2802;
-                remainingLookahead = remainingLookahead2802;
-                hitFailure = hitFailure2802;
+            if (!check$Grammer_ccc$862$5$(false)) {
+                currentLookaheadToken = token2810;
+                remainingLookahead = remainingLookahead2810;
+                hitFailure = hitFailure2810;
                 if (passedPredicate && !legacyGlitchyLookahead) return false;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$862$5(false)) {
-                    currentLookaheadToken = token2802;
-                    remainingLookahead = remainingLookahead2802;
-                    hitFailure = hitFailure2802;
+                if (!check$Grammer_ccc$864$5(false)) {
+                    currentLookaheadToken = token2810;
+                    remainingLookahead = remainingLookahead2810;
+                    hitFailure = hitFailure2810;
                     return false;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2802;
+            passedPredicate = passedPredicate2810;
         }
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:864:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:866:3
         return true;
     }
 
@@ -6201,41 +6243,41 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:874:3
-        Token token2805 = currentLookaheadToken;
-        int remainingLookahead2805 = remainingLookahead;
-        boolean hitFailure2805 = hitFailure, passedPredicate2805 = passedPredicate;
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:876:3
+        Token token2813 = currentLookaheadToken;
+        int remainingLookahead2813 = remainingLookahead;
+        boolean hitFailure2813 = hitFailure, passedPredicate2813 = passedPredicate;
         try {
             passedPredicate = false;
             if (!scanToken(DIMENSION, PROPERTIES)) {
-                currentLookaheadToken = token2805;
-                remainingLookahead = remainingLookahead2805;
-                hitFailure = hitFailure2805;
+                currentLookaheadToken = token2813;
+                remainingLookahead = remainingLookahead2813;
+                hitFailure = hitFailure2813;
                 if (passedPredicate && !legacyGlitchyLookahead) return false;
                 passedPredicate = false;
                 if (!scanToken(ID)) {
-                    currentLookaheadToken = token2805;
-                    remainingLookahead = remainingLookahead2805;
-                    hitFailure = hitFailure2805;
+                    currentLookaheadToken = token2813;
+                    remainingLookahead = remainingLookahead2813;
+                    hitFailure = hitFailure2813;
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     passedPredicate = false;
-                    if (!check$Grammer_ccc$883$3(false)) {
-                        currentLookaheadToken = token2805;
-                        remainingLookahead = remainingLookahead2805;
-                        hitFailure = hitFailure2805;
+                    if (!check$Grammer_ccc$885$3(false)) {
+                        currentLookaheadToken = token2813;
+                        remainingLookahead = remainingLookahead2813;
+                        hitFailure = hitFailure2813;
                         if (passedPredicate && !legacyGlitchyLookahead) return false;
                         passedPredicate = false;
                         if (!scanToken(QUOTED_ID)) {
-                            currentLookaheadToken = token2805;
-                            remainingLookahead = remainingLookahead2805;
-                            hitFailure = hitFailure2805;
+                            currentLookaheadToken = token2813;
+                            remainingLookahead = remainingLookahead2813;
+                            hitFailure = hitFailure2813;
                             return false;
                         }
                     }
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2805;
+            passedPredicate = passedPredicate2813;
         }
         return true;
     }
@@ -6246,28 +6288,28 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for OneOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:902:3
+        // Lookahead Code for OneOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:904:3
         if (!scanToken(AMP_QUOTED_ID, AMP_UNQUOTED_ID)) return false;
-        boolean passedPredicate2809 = passedPredicate;
+        boolean passedPredicate2817 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2810 = currentLookaheadToken;
+                Token token2818 = currentLookaheadToken;
                 passedPredicate = false;
                 if (!scanToken(AMP_QUOTED_ID, AMP_UNQUOTED_ID)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2810;
+                    currentLookaheadToken = token2818;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2809;
+            passedPredicate = passedPredicate2817;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:908:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:910:3
         return true;
     }
 
@@ -6277,9 +6319,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:972:3
-        // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:972:3
-        pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 972, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:3
+        // NonTerminal parseTerm5 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:974:3
+        pushOntoLookaheadStack("parseUnaliasedExpression", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 974, 3);
         currentLookaheadProduction = "parseTerm5";
         try {
             if (!check$parseTerm5(false)) return false;
@@ -6290,27 +6332,27 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:973:3
-        boolean passedPredicate2824 = passedPredicate;
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:975:3
+        boolean passedPredicate2832 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2825 = currentLookaheadToken;
+                Token token2833 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$974$5(false)) {
+                if (!check$Grammer_ccc$976$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2825;
+                    currentLookaheadToken = token2833;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2824;
+            passedPredicate = passedPredicate2832;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:998:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1000:3
         return true;
     }
 
@@ -6320,9 +6362,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1008:3
-        // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1008:3
-        pushOntoLookaheadStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1008, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:3
+        // NonTerminal parseTerm4 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1010:3
+        pushOntoLookaheadStack("parseTerm5", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1010, 3);
         currentLookaheadProduction = "parseTerm4";
         try {
             if (!check$parseTerm4(false)) return false;
@@ -6333,87 +6375,13 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1009:3
-        boolean passedPredicate2830 = passedPredicate;
-        try {
-            while (remainingLookahead > 0 && !hitFailure) {
-                Token token2831 = currentLookaheadToken;
-                passedPredicate = false;
-                if (!check$Grammer_ccc$1010$5(false)) {
-                    if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2831;
-                    break;
-                }
-            }
-        } finally {
-            passedPredicate = passedPredicate2830;
-        }
-        hitFailure = false;
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1018:3
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parseTerm4(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1028:3
-        Token token2834 = currentLookaheadToken;
-        int remainingLookahead2834 = remainingLookahead;
-        boolean hitFailure2834 = hitFailure, passedPredicate2834 = passedPredicate;
-        try {
-            passedPredicate = false;
-            if (!check$Grammer_ccc$1028$3(false)) {
-                currentLookaheadToken = token2834;
-                remainingLookahead = remainingLookahead2834;
-                hitFailure = hitFailure2834;
-                if (passedPredicate && !legacyGlitchyLookahead) return false;
-                passedPredicate = false;
-                if (!check$Grammer_ccc$1032$3(false)) {
-                    currentLookaheadToken = token2834;
-                    remainingLookahead = remainingLookahead2834;
-                    hitFailure = hitFailure2834;
-                    return false;
-                }
-            }
-        } finally {
-            passedPredicate = passedPredicate2834;
-        }
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parseTerm3(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1047:3
-        // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1047:3
-        pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1047, 3);
-        currentLookaheadProduction = "parseTerm2";
-        try {
-            if (!check$parseTerm2(false)) return false;
-        } finally {
-            popLookaheadStack();
-        }
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1048:3
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1011:3
         boolean passedPredicate2838 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
                 Token token2839 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1050$5(false)) {
+                if (!check$Grammer_ccc$1012$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     currentLookaheadToken = token2839;
                     break;
@@ -6427,7 +6395,81 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1149:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1020:3
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parseTerm4(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1030:3
+        Token token2842 = currentLookaheadToken;
+        int remainingLookahead2842 = remainingLookahead;
+        boolean hitFailure2842 = hitFailure, passedPredicate2842 = passedPredicate;
+        try {
+            passedPredicate = false;
+            if (!check$Grammer_ccc$1030$3(false)) {
+                currentLookaheadToken = token2842;
+                remainingLookahead = remainingLookahead2842;
+                hitFailure = hitFailure2842;
+                if (passedPredicate && !legacyGlitchyLookahead) return false;
+                passedPredicate = false;
+                if (!check$Grammer_ccc$1034$3(false)) {
+                    currentLookaheadToken = token2842;
+                    remainingLookahead = remainingLookahead2842;
+                    hitFailure = hitFailure2842;
+                    return false;
+                }
+            }
+        } finally {
+            passedPredicate = passedPredicate2842;
+        }
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parseTerm3(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1049:3
+        // NonTerminal parseTerm2 at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1049:3
+        pushOntoLookaheadStack("parseTerm3", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1049, 3);
+        currentLookaheadProduction = "parseTerm2";
+        try {
+            if (!check$parseTerm2(false)) return false;
+        } finally {
+            popLookaheadStack();
+        }
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1050:3
+        boolean passedPredicate2846 = passedPredicate;
+        try {
+            while (remainingLookahead > 0 && !hitFailure) {
+                Token token2847 = currentLookaheadToken;
+                passedPredicate = false;
+                if (!check$Grammer_ccc$1052$5(false)) {
+                    if (passedPredicate && !legacyGlitchyLookahead) return false;
+                    currentLookaheadToken = token2847;
+                    break;
+                }
+            }
+        } finally {
+            passedPredicate = passedPredicate2846;
+        }
+        hitFailure = false;
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1151:3
         return true;
     }
 
@@ -6437,9 +6479,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1159:3
-        // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1159:3
-        pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1159, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:3
+        // NonTerminal parseTerm at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1161:3
+        pushOntoLookaheadStack("parseTerm2", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1161, 3);
         currentLookaheadProduction = "parseTerm";
         try {
             if (!check$parseTerm(false)) return false;
@@ -6450,27 +6492,27 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1160:3
-        boolean passedPredicate2844 = passedPredicate;
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1162:3
+        boolean passedPredicate2852 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2845 = currentLookaheadToken;
+                Token token2853 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1161$5(false)) {
+                if (!check$Grammer_ccc$1163$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2845;
+                    currentLookaheadToken = token2853;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2844;
+            passedPredicate = passedPredicate2852;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1183:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1185:3
         return true;
     }
 
@@ -6480,9 +6522,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1193:3
-        // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1193:3
-        pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1193, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:3
+        // NonTerminal parseFactor at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1195:3
+        pushOntoLookaheadStack("parseTerm", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1195, 3);
         currentLookaheadProduction = "parseFactor";
         try {
             if (!check$parseFactor(false)) return false;
@@ -6493,101 +6535,13 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1194:3
-        boolean passedPredicate2850 = passedPredicate;
-        try {
-            while (remainingLookahead > 0 && !hitFailure) {
-                Token token2851 = currentLookaheadToken;
-                passedPredicate = false;
-                if (!check$Grammer_ccc$1195$5(false)) {
-                    if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2851;
-                    break;
-                }
-            }
-        } finally {
-            passedPredicate = passedPredicate2850;
-        }
-        hitFailure = false;
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1210:3
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parseFactor(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1220:3
-        Token token2854 = currentLookaheadToken;
-        int remainingLookahead2854 = remainingLookahead;
-        boolean hitFailure2854 = hitFailure, passedPredicate2854 = passedPredicate;
-        try {
-            passedPredicate = false;
-            if (!check$Grammer_ccc$1220$3(false)) {
-                currentLookaheadToken = token2854;
-                remainingLookahead = remainingLookahead2854;
-                hitFailure = hitFailure2854;
-                if (passedPredicate && !legacyGlitchyLookahead) return false;
-                passedPredicate = false;
-                if (!check$Grammer_ccc$1224$3(false)) {
-                    currentLookaheadToken = token2854;
-                    remainingLookahead = remainingLookahead2854;
-                    hitFailure = hitFailure2854;
-                    if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    passedPredicate = false;
-                    if (!check$Grammer_ccc$1228$3(false)) {
-                        currentLookaheadToken = token2854;
-                        remainingLookahead = remainingLookahead2854;
-                        hitFailure = hitFailure2854;
-                        if (passedPredicate && !legacyGlitchyLookahead) return false;
-                        passedPredicate = false;
-                        if (!check$Grammer_ccc$1235$3(false)) {
-                            currentLookaheadToken = token2854;
-                            remainingLookahead = remainingLookahead2854;
-                            hitFailure = hitFailure2854;
-                            return false;
-                        }
-                    }
-                }
-            }
-        } finally {
-            passedPredicate = passedPredicate2854;
-        }
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parsePrimary(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1249:3
-        // NonTerminal parseAtom at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1249:3
-        pushOntoLookaheadStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1249, 3);
-        currentLookaheadProduction = "parseAtom";
-        try {
-            if (!check$parseAtom(false)) return false;
-        } finally {
-            popLookaheadStack();
-        }
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1250:3
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1196:3
         boolean passedPredicate2858 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
                 Token token2859 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1251$5(false)) {
+                if (!check$Grammer_ccc$1197$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
                     currentLookaheadToken = token2859;
                     break;
@@ -6601,7 +6555,95 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1253:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1212:3
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parseFactor(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1222:3
+        Token token2862 = currentLookaheadToken;
+        int remainingLookahead2862 = remainingLookahead;
+        boolean hitFailure2862 = hitFailure, passedPredicate2862 = passedPredicate;
+        try {
+            passedPredicate = false;
+            if (!check$Grammer_ccc$1222$3(false)) {
+                currentLookaheadToken = token2862;
+                remainingLookahead = remainingLookahead2862;
+                hitFailure = hitFailure2862;
+                if (passedPredicate && !legacyGlitchyLookahead) return false;
+                passedPredicate = false;
+                if (!check$Grammer_ccc$1226$3(false)) {
+                    currentLookaheadToken = token2862;
+                    remainingLookahead = remainingLookahead2862;
+                    hitFailure = hitFailure2862;
+                    if (passedPredicate && !legacyGlitchyLookahead) return false;
+                    passedPredicate = false;
+                    if (!check$Grammer_ccc$1230$3(false)) {
+                        currentLookaheadToken = token2862;
+                        remainingLookahead = remainingLookahead2862;
+                        hitFailure = hitFailure2862;
+                        if (passedPredicate && !legacyGlitchyLookahead) return false;
+                        passedPredicate = false;
+                        if (!check$Grammer_ccc$1237$3(false)) {
+                            currentLookaheadToken = token2862;
+                            remainingLookahead = remainingLookahead2862;
+                            hitFailure = hitFailure2862;
+                            return false;
+                        }
+                    }
+                }
+            }
+        } finally {
+            passedPredicate = passedPredicate2862;
+        }
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parsePrimary(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:3
+        // NonTerminal parseAtom at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1251:3
+        pushOntoLookaheadStack("parsePrimary", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1251, 3);
+        currentLookaheadProduction = "parseAtom";
+        try {
+            if (!check$parseAtom(false)) return false;
+        } finally {
+            popLookaheadStack();
+        }
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1252:3
+        boolean passedPredicate2866 = passedPredicate;
+        try {
+            while (remainingLookahead > 0 && !hitFailure) {
+                Token token2867 = currentLookaheadToken;
+                passedPredicate = false;
+                if (!check$Grammer_ccc$1253$5(false)) {
+                    if (passedPredicate && !legacyGlitchyLookahead) return false;
+                    currentLookaheadToken = token2867;
+                    break;
+                }
+            }
+        } finally {
+            passedPredicate = passedPredicate2866;
+        }
+        hitFailure = false;
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1255:3
         return true;
     }
 
@@ -6611,9 +6653,9 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1264:3
-        // NonTerminal parseIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1264:3
-        pushOntoLookaheadStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1264, 3);
+        // Lookahead Code for NonTerminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:3
+        // NonTerminal parseIdentifier at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1266:3
+        pushOntoLookaheadStack("objectIdentifierOrFuncall", "/home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1266, 3);
         currentLookaheadProduction = "parseIdentifier";
         try {
             if (!check$parseIdentifier(false)) return false;
@@ -6624,125 +6666,12 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1265:3
-        Token token2864 = currentLookaheadToken;
-        boolean passedPredicate2864 = passedPredicate;
-        passedPredicate = false;
-        try {
-            if (!check$Grammer_ccc$1266$5(false)) {
-                if (passedPredicate && !legacyGlitchyLookahead) return false;
-                currentLookaheadToken = token2864;
-                hitFailure = false;
-            }
-        } finally {
-            passedPredicate = passedPredicate2864;
-        }
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1272:3
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parseAtom(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1300:3
-        Token token2868 = currentLookaheadToken;
-        int remainingLookahead2868 = remainingLookahead;
-        boolean hitFailure2868 = hitFailure, passedPredicate2868 = passedPredicate;
-        try {
-            passedPredicate = false;
-            if (!scanToken(SINGLE_QUOTED_STRING)) {
-                currentLookaheadToken = token2868;
-                remainingLookahead = remainingLookahead2868;
-                hitFailure = hitFailure2868;
-                if (passedPredicate && !legacyGlitchyLookahead) return false;
-                passedPredicate = false;
-                if (!scanToken(DOUBLE_QUOTED_STRING)) {
-                    currentLookaheadToken = token2868;
-                    remainingLookahead = remainingLookahead2868;
-                    hitFailure = hitFailure2868;
-                    if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    passedPredicate = false;
-                    if (!scanToken(UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL)) {
-                        currentLookaheadToken = token2868;
-                        remainingLookahead = remainingLookahead2868;
-                        hitFailure = hitFailure2868;
-                        if (passedPredicate && !legacyGlitchyLookahead) return false;
-                        passedPredicate = false;
-                        if (!scanToken(NULL)) {
-                            currentLookaheadToken = token2868;
-                            remainingLookahead = remainingLookahead2868;
-                            hitFailure = hitFailure2868;
-                            if (passedPredicate && !legacyGlitchyLookahead) return false;
-                            passedPredicate = false;
-                            if (!check$Grammer_ccc$1316$3(false)) {
-                                currentLookaheadToken = token2868;
-                                remainingLookahead = remainingLookahead2868;
-                                hitFailure = hitFailure2868;
-                                if (passedPredicate && !legacyGlitchyLookahead) return false;
-                                passedPredicate = false;
-                                if (!check$Grammer_ccc$1326$3(false)) {
-                                    currentLookaheadToken = token2868;
-                                    remainingLookahead = remainingLookahead2868;
-                                    hitFailure = hitFailure2868;
-                                    if (passedPredicate && !legacyGlitchyLookahead) return false;
-                                    passedPredicate = false;
-                                    if (!check$Grammer_ccc$1335$3(false)) {
-                                        currentLookaheadToken = token2868;
-                                        remainingLookahead = remainingLookahead2868;
-                                        hitFailure = hitFailure2868;
-                                        if (passedPredicate && !legacyGlitchyLookahead) return false;
-                                        passedPredicate = false;
-                                        if (!check$Grammer_ccc$1349$3(false)) {
-                                            currentLookaheadToken = token2868;
-                                            remainingLookahead = remainingLookahead2868;
-                                            hitFailure = hitFailure2868;
-                                            if (passedPredicate && !legacyGlitchyLookahead) return false;
-                                            passedPredicate = false;
-                                            if (!check$Grammer_ccc$1356$3(false)) {
-                                                currentLookaheadToken = token2868;
-                                                remainingLookahead = remainingLookahead2868;
-                                                hitFailure = hitFailure2868;
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } finally {
-            passedPredicate = passedPredicate2868;
-        }
-        return true;
-    }
-
-    // BuildProductionLookaheadMethod macro
-    private final boolean check$parseCaseExpression(boolean scanToEnd) {
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1394:3
-        if (!scanToken(CASE)) return false;
-        if (hitFailure) return false;
-        if (remainingLookahead <= 0) {
-            return true;
-        }
-        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1395:3
+        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1267:3
         Token token2872 = currentLookaheadToken;
         boolean passedPredicate2872 = passedPredicate;
         passedPredicate = false;
         try {
-            if (!check$Grammer_ccc$1396$5(false)) {
+            if (!check$Grammer_ccc$1268$5(false)) {
                 if (passedPredicate && !legacyGlitchyLookahead) return false;
                 currentLookaheadToken = token2872;
                 hitFailure = false;
@@ -6754,50 +6683,163 @@ public class MdxParser {
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1402:3
-        boolean passedPredicate2874 = passedPredicate;
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1274:3
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parseAtom(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ExpansionChoice specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1302:3
+        Token token2876 = currentLookaheadToken;
+        int remainingLookahead2876 = remainingLookahead;
+        boolean hitFailure2876 = hitFailure, passedPredicate2876 = passedPredicate;
+        try {
+            passedPredicate = false;
+            if (!scanToken(SINGLE_QUOTED_STRING)) {
+                currentLookaheadToken = token2876;
+                remainingLookahead = remainingLookahead2876;
+                hitFailure = hitFailure2876;
+                if (passedPredicate && !legacyGlitchyLookahead) return false;
+                passedPredicate = false;
+                if (!scanToken(DOUBLE_QUOTED_STRING)) {
+                    currentLookaheadToken = token2876;
+                    remainingLookahead = remainingLookahead2876;
+                    hitFailure = hitFailure2876;
+                    if (passedPredicate && !legacyGlitchyLookahead) return false;
+                    passedPredicate = false;
+                    if (!scanToken(UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL)) {
+                        currentLookaheadToken = token2876;
+                        remainingLookahead = remainingLookahead2876;
+                        hitFailure = hitFailure2876;
+                        if (passedPredicate && !legacyGlitchyLookahead) return false;
+                        passedPredicate = false;
+                        if (!scanToken(NULL)) {
+                            currentLookaheadToken = token2876;
+                            remainingLookahead = remainingLookahead2876;
+                            hitFailure = hitFailure2876;
+                            if (passedPredicate && !legacyGlitchyLookahead) return false;
+                            passedPredicate = false;
+                            if (!check$Grammer_ccc$1318$3(false)) {
+                                currentLookaheadToken = token2876;
+                                remainingLookahead = remainingLookahead2876;
+                                hitFailure = hitFailure2876;
+                                if (passedPredicate && !legacyGlitchyLookahead) return false;
+                                passedPredicate = false;
+                                if (!check$Grammer_ccc$1328$3(false)) {
+                                    currentLookaheadToken = token2876;
+                                    remainingLookahead = remainingLookahead2876;
+                                    hitFailure = hitFailure2876;
+                                    if (passedPredicate && !legacyGlitchyLookahead) return false;
+                                    passedPredicate = false;
+                                    if (!check$Grammer_ccc$1337$3(false)) {
+                                        currentLookaheadToken = token2876;
+                                        remainingLookahead = remainingLookahead2876;
+                                        hitFailure = hitFailure2876;
+                                        if (passedPredicate && !legacyGlitchyLookahead) return false;
+                                        passedPredicate = false;
+                                        if (!check$Grammer_ccc$1351$3(false)) {
+                                            currentLookaheadToken = token2876;
+                                            remainingLookahead = remainingLookahead2876;
+                                            hitFailure = hitFailure2876;
+                                            if (passedPredicate && !legacyGlitchyLookahead) return false;
+                                            passedPredicate = false;
+                                            if (!check$Grammer_ccc$1358$3(false)) {
+                                                currentLookaheadToken = token2876;
+                                                remainingLookahead = remainingLookahead2876;
+                                                hitFailure = hitFailure2876;
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            passedPredicate = passedPredicate2876;
+        }
+        return true;
+    }
+
+    // BuildProductionLookaheadMethod macro
+    private final boolean check$parseCaseExpression(boolean scanToEnd) {
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1396:3
+        if (!scanToken(CASE)) return false;
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1397:3
+        Token token2880 = currentLookaheadToken;
+        boolean passedPredicate2880 = passedPredicate;
+        passedPredicate = false;
+        try {
+            if (!check$Grammer_ccc$1398$5(false)) {
+                if (passedPredicate && !legacyGlitchyLookahead) return false;
+                currentLookaheadToken = token2880;
+                hitFailure = false;
+            }
+        } finally {
+            passedPredicate = passedPredicate2880;
+        }
+        if (hitFailure) return false;
+        if (remainingLookahead <= 0) {
+            return true;
+        }
+        // Lookahead Code for ZeroOrMore specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1404:3
+        boolean passedPredicate2882 = passedPredicate;
         try {
             while (remainingLookahead > 0 && !hitFailure) {
-                Token token2875 = currentLookaheadToken;
+                Token token2883 = currentLookaheadToken;
                 passedPredicate = false;
-                if (!check$Grammer_ccc$1403$5(false)) {
+                if (!check$Grammer_ccc$1405$5(false)) {
                     if (passedPredicate && !legacyGlitchyLookahead) return false;
-                    currentLookaheadToken = token2875;
+                    currentLookaheadToken = token2883;
                     break;
                 }
             }
         } finally {
-            passedPredicate = passedPredicate2874;
+            passedPredicate = passedPredicate2882;
         }
         hitFailure = false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1409:3
-        Token token2877 = currentLookaheadToken;
-        boolean passedPredicate2877 = passedPredicate;
+        // Lookahead Code for ZeroOrOne specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1411:3
+        Token token2885 = currentLookaheadToken;
+        boolean passedPredicate2885 = passedPredicate;
         passedPredicate = false;
         try {
-            if (!check$Grammer_ccc$1410$5(false)) {
+            if (!check$Grammer_ccc$1412$5(false)) {
                 if (passedPredicate && !legacyGlitchyLookahead) return false;
-                currentLookaheadToken = token2877;
+                currentLookaheadToken = token2885;
                 hitFailure = false;
             }
         } finally {
-            passedPredicate = passedPredicate2877;
+            passedPredicate = passedPredicate2885;
         }
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1415:3
+        // Lookahead Code for Terminal specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1417:3
         if (!scanToken(END)) return false;
         if (hitFailure) return false;
         if (remainingLookahead <= 0) {
             return true;
         }
-        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1416:3
+        // Lookahead Code for CodeBlock specified at /home/stbischof/git/mondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1418:3
         return true;
     }
 
