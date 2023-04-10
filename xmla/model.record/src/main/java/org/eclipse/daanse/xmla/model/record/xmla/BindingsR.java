@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Bindings;
 import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
-
-import java.util.List;
 
 public record BindingsR(List<OutOfLineBinding> binding) implements Bindings {
 

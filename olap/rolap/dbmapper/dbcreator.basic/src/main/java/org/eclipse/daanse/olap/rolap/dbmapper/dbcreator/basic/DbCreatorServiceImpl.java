@@ -13,6 +13,13 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic;
 
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
@@ -31,13 +38,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DbCreatorServiceImpl implements DbCreatorService {
 

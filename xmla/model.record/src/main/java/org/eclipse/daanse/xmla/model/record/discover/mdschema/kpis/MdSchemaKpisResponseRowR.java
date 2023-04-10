@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaKpisResponseRowR(Optional<String> catalogName,
                                        Optional<String> schemaName,

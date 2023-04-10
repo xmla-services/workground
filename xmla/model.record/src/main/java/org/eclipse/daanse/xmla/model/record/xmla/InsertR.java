@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
 import org.eclipse.daanse.xmla.api.xmla.Insert;
 import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
-
-import java.util.List;
 
 public record InsertR(XmlaObject object,
                       List<AttributeInsertUpdate> attributes) implements Insert {

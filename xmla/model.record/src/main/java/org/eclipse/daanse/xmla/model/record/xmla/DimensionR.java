@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
@@ -25,10 +29,6 @@ import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
-
-import java.math.BigInteger;
-import java.time.Instant;
-import java.util.List;
 
 public record DimensionR(String name,
                          String id,

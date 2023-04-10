@@ -7,11 +7,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvid
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
-import org.osgi.test.junit5.service.ServiceSource;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)

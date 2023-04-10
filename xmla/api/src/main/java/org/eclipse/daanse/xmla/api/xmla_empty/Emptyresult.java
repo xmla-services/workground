@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.xmla_empty;
 
-import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Exception;
+import org.eclipse.daanse.xmla.api.exception.Messages;
 
 public interface Emptyresult {
 

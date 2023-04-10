@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 public record AggregationDesignR(String name,
                                  Optional<String> id,

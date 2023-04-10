@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.functions;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
-
-import java.util.Optional;
 
 public interface MdSchemaFunctionsRestrictions {
 

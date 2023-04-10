@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.execute.alter;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
-
-import java.util.List;
 
 public record AlterRequestR(PropertiesR properties,
                             List<ExecuteParameter> parameters,

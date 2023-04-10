@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.columns;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
-
-import java.util.Optional;
 
 public record DbSchemaColumnsResponseRowR(Optional<String> tableCatalog,
                                           Optional<String> tableSchema,

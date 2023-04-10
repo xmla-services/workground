@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic;
 
-import org.eclipse.daanse.db.jdbc.util.impl.Column;
-import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.eclipse.daanse.db.jdbc.util.impl.Column;
+import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
 
 public class Table {
 

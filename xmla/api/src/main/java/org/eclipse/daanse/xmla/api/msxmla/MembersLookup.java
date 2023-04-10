@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.msxmla;
 
-import org.eclipse.daanse.xmla.api.mddataset.TupleType;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 
 public interface MembersLookup {
 

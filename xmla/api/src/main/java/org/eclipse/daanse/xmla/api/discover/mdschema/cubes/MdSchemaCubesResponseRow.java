@@ -13,12 +13,12 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.cubes;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * This schema rowset describes the structure of cubes within a database. Perspectives are also

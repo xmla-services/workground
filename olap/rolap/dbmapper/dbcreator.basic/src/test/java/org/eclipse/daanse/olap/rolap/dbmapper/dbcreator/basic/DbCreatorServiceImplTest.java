@@ -13,6 +13,22 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
@@ -45,21 +61,6 @@ import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)

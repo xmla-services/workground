@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 public record MiningStructurePermissionR(Optional<Boolean> allowDrillThrough,
                                          String name,

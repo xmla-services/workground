@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine300_300;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEnd;
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
-
-import java.util.List;
 
 public record RelationshipEndR(String role,
                                String multiplicity,

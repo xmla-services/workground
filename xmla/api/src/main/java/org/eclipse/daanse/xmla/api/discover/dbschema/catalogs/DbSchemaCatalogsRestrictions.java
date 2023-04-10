@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
-
 import java.util.Optional;
 
 public interface DbSchemaCatalogsRestrictions {

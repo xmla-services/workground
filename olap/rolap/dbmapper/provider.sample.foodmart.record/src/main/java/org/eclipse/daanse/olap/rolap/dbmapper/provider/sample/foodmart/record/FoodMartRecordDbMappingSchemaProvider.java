@@ -1,5 +1,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
@@ -62,8 +64,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRB
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
-
-import java.util.List;
 
 @Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = { "sample.name=FoodMart",
 		"sample.type=record" })

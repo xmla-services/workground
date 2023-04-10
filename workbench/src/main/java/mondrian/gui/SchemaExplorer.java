@@ -12,26 +12,74 @@
 
 package mondrian.gui;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eigenbase.xom.*;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EventObject;
 import java.util.List;
-import javax.swing.*;
+import java.util.Set;
+
+import javax.swing.AbstractAction;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.basic.BasicArrowButton;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.PlainDocument;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreePath;
+
+import org.eigenbase.xom.NodeDef;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author sean

@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
 import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
@@ -23,9 +26,6 @@ import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttributeTypeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.util.List;
 
 public record DimensionAttributeR(String name,
                                   String id,

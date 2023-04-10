@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo;
 
-import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 
 public interface DbSchemaTablesInfoRestrictions {
 

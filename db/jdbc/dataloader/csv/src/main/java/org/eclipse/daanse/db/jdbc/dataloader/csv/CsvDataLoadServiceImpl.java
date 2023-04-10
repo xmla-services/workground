@@ -13,8 +13,18 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
-import com.univocity.parsers.csv.Csv;
-import com.univocity.parsers.csv.CsvParserSettings;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.dataloader.api.DataLoadService;
@@ -32,16 +42,8 @@ import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.univocity.parsers.csv.Csv;
+import com.univocity.parsers.csv.CsvParserSettings;
 
 @Designate(ocd = CsvDataLoadServiceConfig.class, factory = true)
 @Component(service = DataLoadService.class, scope = ServiceScope.SINGLETON)

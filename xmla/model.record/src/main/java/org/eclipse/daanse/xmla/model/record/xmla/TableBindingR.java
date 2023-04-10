@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.TableBinding;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.TableBinding;
 
 public record TableBindingR(Optional<String> dataSourceID,
                             String dbTableName,

@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
-
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 
 /**
  * The DataSource complex type represents a source of data for cubes, dimensions, and mining

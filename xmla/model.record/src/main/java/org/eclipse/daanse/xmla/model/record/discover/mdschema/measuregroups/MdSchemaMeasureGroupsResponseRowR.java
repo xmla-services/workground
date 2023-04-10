@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups;
 
-import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
 
 public record MdSchemaMeasureGroupsResponseRowR(Optional<String> catalogName,
                                                 Optional<String> schemaName,

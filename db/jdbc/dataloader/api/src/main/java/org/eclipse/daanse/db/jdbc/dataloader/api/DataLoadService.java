@@ -13,10 +13,11 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.api;
 
-import org.eclipse.daanse.db.jdbc.util.impl.Table;
-import javax.sql.DataSource;
-import java.nio.file.Path;
 import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.jdbc.util.impl.Table;
 
 public interface DataLoadService {
 

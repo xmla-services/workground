@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
-
-import java.util.List;
-import java.util.Optional;
 
 public record CubeDimensionPermissionR(String cubeDimensionID,
                                        Optional<String> description,

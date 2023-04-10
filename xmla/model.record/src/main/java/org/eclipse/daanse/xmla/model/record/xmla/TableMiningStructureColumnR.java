@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.TableMiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.util.List;
-import java.util.Optional;
 
 public record TableMiningStructureColumnR(Optional<List<DataItem>> foreignKeyColumns,
                                           Optional<MeasureGroupBinding> sourceMeasureGroup,

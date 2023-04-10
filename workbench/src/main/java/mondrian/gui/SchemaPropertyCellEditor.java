@@ -12,23 +12,50 @@
 
 package mondrian.gui;
 
-import mondrian.gui.MondrianGuiDef.Hierarchy;
-import mondrian.olap.Id;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-
-import org.eigenbase.xom.NodeDef;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
-import javax.swing.*;
+import java.util.TreeSet;
+import java.util.Vector;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.text.JTextComponent;
+
+import org.eigenbase.xom.NodeDef;
+
+import mondrian.gui.MondrianGuiDef.Hierarchy;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
 
 /**
  * @author sean

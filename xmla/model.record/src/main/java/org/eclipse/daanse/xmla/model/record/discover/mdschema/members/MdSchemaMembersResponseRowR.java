@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.members;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaMembersResponseRowR(Optional<String> catalogName,
                                           Optional<String> schemaName,

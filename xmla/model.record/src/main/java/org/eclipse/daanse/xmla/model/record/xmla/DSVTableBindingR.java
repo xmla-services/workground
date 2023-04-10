@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.DSVTableBinding;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.DSVTableBinding;
 
 public record DSVTableBindingR(
     Optional<String> dataSourceViewID,

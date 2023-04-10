@@ -13,12 +13,12 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 public record DbSchemaCatalogsResponseRowR(Optional<String> catalogName,
                                            Optional<String> description,

@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.TranslationInsertUpdate;
-
 import java.math.BigInteger;
+
+import org.eclipse.daanse.xmla.api.xmla.TranslationInsertUpdate;
 
 public record TranslationInsertUpdateR(BigInteger language,
                                        String name) implements TranslationInsertUpdate {

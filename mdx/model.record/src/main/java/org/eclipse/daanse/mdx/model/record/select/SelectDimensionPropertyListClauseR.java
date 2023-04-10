@@ -13,9 +13,9 @@
 */
 package org.eclipse.daanse.mdx.model.record.select;
 
-import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
-
 import java.util.List;
+
+import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 
 public record SelectDimensionPropertyListClauseR(List<String> properties) implements SelectDimensionPropertyListClause {
 

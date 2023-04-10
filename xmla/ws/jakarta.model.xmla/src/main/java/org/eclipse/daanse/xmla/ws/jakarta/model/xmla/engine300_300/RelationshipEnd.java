@@ -14,7 +14,6 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.RelationshipEndVisualizationProperties;

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 import org.eclipse.daanse.xmla.api.xmla.Event;
 import org.eclipse.daanse.xmla.api.xmla.EventType;
-
-import java.util.List;
 
 public record EventTypeR(List<Event> events,
                          XEvent xEvent) implements EventType {

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.execute.cancel;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
-
-import java.util.List;
 
 public interface CancelRequest {
 

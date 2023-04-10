@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
-
-import java.util.List;
 
 public record HierarchyInfoR(List<CellInfoItem> any,
                              String name) implements HierarchyInfo {

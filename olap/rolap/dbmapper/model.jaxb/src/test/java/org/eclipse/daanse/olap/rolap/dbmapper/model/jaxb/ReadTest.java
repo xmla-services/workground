@@ -48,8 +48,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionUsageImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 import org.junit.jupiter.api.Test;
 
 import jakarta.xml.bind.JAXBContext;

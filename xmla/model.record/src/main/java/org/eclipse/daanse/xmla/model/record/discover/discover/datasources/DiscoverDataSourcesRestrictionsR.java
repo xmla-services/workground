@@ -13,11 +13,11 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.discover.datasources;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
-
-import java.util.Optional;
 
 public record DiscoverDataSourcesRestrictionsR(String dataSourceName,
                                                Optional<String> dataSourceDescription,

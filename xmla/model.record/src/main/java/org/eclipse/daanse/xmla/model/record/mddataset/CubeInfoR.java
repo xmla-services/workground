@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.CubeInfo;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
-
-import java.util.List;
 
 public record CubeInfoR(
     List<OlapInfoCube> cube) implements CubeInfo {

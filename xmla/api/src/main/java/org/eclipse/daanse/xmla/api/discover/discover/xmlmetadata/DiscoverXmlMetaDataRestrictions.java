@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
 
-import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
 
 public interface DiscoverXmlMetaDataRestrictions {
     public static final String RESTRICTIONS_DATABASE_ID = "DatabaseID";

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
 
 public record PerspectiveAttributeR(String attributeID,
                                     Optional<Boolean> attributeHierarchyVisible,

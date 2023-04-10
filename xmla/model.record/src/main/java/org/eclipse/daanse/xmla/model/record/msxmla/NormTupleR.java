@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.msxmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.msxmla.MemberRef;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
-
-import java.util.List;
 
 public record NormTupleR (
     List<MemberRef> memberRef) implements NormTuple {

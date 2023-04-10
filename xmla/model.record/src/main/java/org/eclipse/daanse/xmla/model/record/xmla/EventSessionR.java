@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.EventSession;
 import org.eclipse.daanse.xmla.api.xmla.PartitionModes;
 import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
-
-import java.math.BigInteger;
-import java.util.List;
 
 public record EventSessionR(String templateCategory,
                             String templateName,

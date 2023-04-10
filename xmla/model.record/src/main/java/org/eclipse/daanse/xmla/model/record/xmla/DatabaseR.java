@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.xmla.Account;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
@@ -26,10 +30,6 @@ import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.time.Instant;
-import java.util.List;
 
 public record DatabaseR(String name,
                         String id,

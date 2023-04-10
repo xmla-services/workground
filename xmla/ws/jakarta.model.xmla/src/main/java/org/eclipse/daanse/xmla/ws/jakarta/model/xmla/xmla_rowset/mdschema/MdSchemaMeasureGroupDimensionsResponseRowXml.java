@@ -13,18 +13,19 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
+import java.io.Serializable;
+import java.util.List;
+
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionCardinalityEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionCardinalityEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * This schema rowset enumerates the dimensions of measure groups.

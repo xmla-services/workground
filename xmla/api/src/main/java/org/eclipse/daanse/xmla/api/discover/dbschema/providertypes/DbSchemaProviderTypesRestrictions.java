@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.dbschema.providertypes;
 
-import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 
 public interface DbSchemaProviderTypesRestrictions {
 

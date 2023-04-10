@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api;
 
+import java.sql.SQLException;
+
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-
-import java.sql.SQLException;
 
 public interface DbCreatorService {
 

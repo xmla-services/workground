@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 
 public record ErrorConfigurationR(Optional<Long> keyErrorLimit,
                                   Optional<String> keyErrorLogFile,

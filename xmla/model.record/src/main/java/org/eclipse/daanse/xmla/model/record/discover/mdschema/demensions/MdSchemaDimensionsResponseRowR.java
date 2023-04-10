@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaDimensionsResponseRowR(Optional<String> catalogName,
                                              Optional<String> schemaName,

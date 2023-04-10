@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.util.List;
-import java.util.Optional;
 
 public record AggregationR(Optional<String> id,
                            String name,

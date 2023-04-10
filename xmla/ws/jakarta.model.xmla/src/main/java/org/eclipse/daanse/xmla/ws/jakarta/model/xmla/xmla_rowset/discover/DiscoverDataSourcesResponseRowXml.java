@@ -13,16 +13,17 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 
+import java.io.Serializable;
+
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
-
-import java.io.Serializable;
 
 /**
  * This schema rowset returns a list of names, data types, and enumeration values of enumerators

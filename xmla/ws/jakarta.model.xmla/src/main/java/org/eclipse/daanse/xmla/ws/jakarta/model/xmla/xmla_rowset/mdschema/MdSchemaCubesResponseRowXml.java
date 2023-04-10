@@ -13,20 +13,21 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlTransient;
-import jakarta.xml.bind.annotation.XmlType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters.LocalDateTimeAdapter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PreferredQueryPatternsEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * This schema rowset describes the structure of cubes within a database. Perspectives are also

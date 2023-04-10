@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups;
 
-import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRestrictions;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRestrictions;
 
 public record MdSchemaMeasureGroupsRestrictionsR(
     Optional<String> catalogName,

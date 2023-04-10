@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine300;
 
-import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
-
 import java.math.BigInteger;
+
+import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
 
 public record RelationshipEndVisualizationPropertiesR(
     BigInteger folderPosition,

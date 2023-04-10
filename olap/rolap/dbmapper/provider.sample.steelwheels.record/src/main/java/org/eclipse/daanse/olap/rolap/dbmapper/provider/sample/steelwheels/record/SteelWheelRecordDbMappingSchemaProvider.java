@@ -1,5 +1,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
@@ -20,8 +22,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilde
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
-
-import java.util.List;
 
 @Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = { "sample.name=SteelWheels",
 		"sample.type=record" })

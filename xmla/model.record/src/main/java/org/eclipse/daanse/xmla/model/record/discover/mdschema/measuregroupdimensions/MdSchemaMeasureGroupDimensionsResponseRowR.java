@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
-
-import java.util.List;
-import java.util.Optional;
 
 public record MdSchemaMeasureGroupDimensionsResponseRowR(Optional<String> catalogName,
                                                          Optional<String> schemaName,

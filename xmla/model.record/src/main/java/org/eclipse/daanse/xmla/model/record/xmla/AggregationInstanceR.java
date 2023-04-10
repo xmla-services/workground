@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
-
-import java.util.List;
 
 public record AggregationInstanceR(String id,
                                    String name,

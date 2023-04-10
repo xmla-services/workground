@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 
 public record AttributePermissionR(String attributeID,
                                    Optional<String> description,

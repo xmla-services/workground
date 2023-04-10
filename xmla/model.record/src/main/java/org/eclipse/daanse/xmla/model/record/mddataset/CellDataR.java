@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.CellData;
 import org.eclipse.daanse.xmla.api.mddataset.CellType;
-
-import java.util.List;
 
 public record CellDataR(
 

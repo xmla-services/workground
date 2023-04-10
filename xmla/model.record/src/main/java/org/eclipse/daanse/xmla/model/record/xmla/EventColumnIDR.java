@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
-
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
 
 public record EventColumnIDR(List<String> columnID) implements EventColumnID {
 

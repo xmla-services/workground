@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Location;
 import org.eclipse.daanse.xmla.api.xmla.Source;
 import org.eclipse.daanse.xmla.api.xmla.Synchronize;
-
-import java.util.List;
 
 public record SynchronizeR(Source source,
                            String synchronizeSecurity,

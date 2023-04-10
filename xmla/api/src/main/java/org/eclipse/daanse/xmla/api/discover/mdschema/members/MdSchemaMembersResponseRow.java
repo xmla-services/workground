@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.members;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
-
-import java.util.Optional;
 
 /**
  * This schema rowset describes the members within a database.

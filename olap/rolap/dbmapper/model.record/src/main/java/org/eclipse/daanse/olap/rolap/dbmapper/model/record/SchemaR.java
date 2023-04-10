@@ -18,8 +18,6 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 
-import io.soabase.recordbuilder.core.RecordBuilder;
-
 public record SchemaR(String name,
                       String description,
                       String measuresCaption,

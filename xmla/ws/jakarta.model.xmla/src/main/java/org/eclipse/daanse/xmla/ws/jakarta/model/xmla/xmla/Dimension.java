@@ -13,6 +13,13 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
+import java.math.BigInteger;
+import java.util.List;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.Relationships;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -20,11 +27,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.Relationships;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.math.BigInteger;
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Dimension", propOrder = {

@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
@@ -24,10 +28,6 @@ import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.time.Instant;
-import java.util.List;
 
 public record MeasureGroupR(String name,
                             String id,

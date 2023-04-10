@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine300_300;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
 import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
-
-import java.util.List;
 
 public record RelationshipsR(List<Relationship> relationship) implements Relationships {
 

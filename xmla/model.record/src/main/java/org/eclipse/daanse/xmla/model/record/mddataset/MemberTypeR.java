@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
-
-import java.util.List;
 
 public record MemberTypeR(List<CellInfoItem> any,
                           String hierarchy) implements MemberType {

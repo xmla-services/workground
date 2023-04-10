@@ -13,12 +13,10 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes;
 
-import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
-import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRestrictions;
-import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictions;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictions;
 
 public record DbSchemaProviderTypesRestrictionsR(
     Optional<LevelDbTypeEnum> dataType,

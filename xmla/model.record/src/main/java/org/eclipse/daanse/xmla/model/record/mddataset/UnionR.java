@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.Type;
 import org.eclipse.daanse.xmla.api.mddataset.Union;
-
-import java.util.List;
 
 public record UnionR(List<Type> setType) implements Union {
 

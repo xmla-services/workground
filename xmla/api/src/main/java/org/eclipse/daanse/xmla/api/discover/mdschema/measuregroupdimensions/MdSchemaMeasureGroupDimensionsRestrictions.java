@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions;
 
-import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 
 public interface MdSchemaMeasureGroupDimensionsRestrictions {
 

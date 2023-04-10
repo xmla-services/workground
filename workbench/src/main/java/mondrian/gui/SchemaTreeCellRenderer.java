@@ -11,14 +11,20 @@
 */
 package mondrian.gui;
 
-import mondrian.gui.validate.ValidationUtils;
-import mondrian.gui.validate.impl.*;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.eigenbase.xom.ElementDef;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.tree.TreePath;
+import mondrian.gui.validate.ValidationUtils;
+import mondrian.gui.validate.impl.WorkbenchJdbcValidator;
+import mondrian.gui.validate.impl.WorkbenchMessages;
+import mondrian.gui.validate.impl.WorkbenchTreeModel;
+import mondrian.gui.validate.impl.WorkbenchTreeModelPath;
 
 /**
  * Render an entry for the tree.

@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.CubeAttribute;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
 import org.eclipse.daanse.xmla.api.xmla.CubeHierarchy;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.util.List;
 
 public record CubeDimensionR(String id,
                              String name,

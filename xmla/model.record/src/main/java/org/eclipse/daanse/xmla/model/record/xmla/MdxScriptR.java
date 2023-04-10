@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.CalculationProperty;
 import org.eclipse.daanse.xmla.api.xmla.Command;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
-
-import java.time.Instant;
-import java.util.List;
 
 public record MdxScriptR(String name,
                          String id,

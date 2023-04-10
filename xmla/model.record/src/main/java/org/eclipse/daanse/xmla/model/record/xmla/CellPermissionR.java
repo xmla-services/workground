@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AccessEnum;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.CellPermission;
-
-import java.util.List;
-import java.util.Optional;
 
 public record CellPermissionR(Optional<AccessEnum> access,
                               Optional<String> description,

@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
@@ -21,9 +24,6 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveDimension;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveKpi;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.time.Instant;
-import java.util.List;
 
 public record PerspectiveR(String name,
                            String id,

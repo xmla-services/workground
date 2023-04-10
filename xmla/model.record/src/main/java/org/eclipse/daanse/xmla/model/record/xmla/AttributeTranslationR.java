@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
-
-import java.util.List;
-import java.util.Optional;
 
 public record AttributeTranslationR(long language,
                                     Optional<String> caption,

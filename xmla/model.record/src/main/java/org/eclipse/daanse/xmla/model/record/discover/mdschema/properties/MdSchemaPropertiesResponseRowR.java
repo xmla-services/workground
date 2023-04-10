@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.properties;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaPropertiesResponseRowR(Optional<String> catalogName,
                                              Optional<String> schemaName,

@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.levels;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.CustomRollupSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelOriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
-
-import java.util.Optional;
 
 public record MdSchemaLevelsResponseRowR(Optional<String> catalogName,
                                          Optional<String> schemaName,

@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
 import org.eclipse.daanse.xmla.api.xmla.ReferenceMeasureGroupDimension;
-
-import java.util.List;
 
 public record ReferenceMeasureGroupDimensionR(
     String cubeDimensionID,

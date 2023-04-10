@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.TableNotification;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.TableNotification;
 
 public record TableNotificationR(String dbTableName,
                                  Optional<String> dbSchemaName) implements TableNotification {

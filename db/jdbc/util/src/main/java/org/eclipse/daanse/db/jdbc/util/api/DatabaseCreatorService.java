@@ -13,10 +13,11 @@
  */
 package org.eclipse.daanse.db.jdbc.util.api;
 
-import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
+
+import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 
 public interface DatabaseCreatorService {
     void createDatabaseSchema(DataSource dataSource, DBStructure dbStructure) throws SQLException;

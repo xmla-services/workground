@@ -13,11 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
-import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
+import java.util.Optional;
 
 import javax.xml.datatype.Duration;
-import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 
 public record ProactiveCachingR(Optional<String> onlineMode,
                                 Optional<String> aggregationStorage,

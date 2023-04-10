@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
 
 public interface CalculationProperty {
 

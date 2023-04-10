@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
-
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 
 public interface Dimension {
 

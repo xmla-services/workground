@@ -13,6 +13,14 @@
  */
 package org.eclipse.daanse.db.jdbc.util.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
@@ -21,14 +29,6 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component(service = DatabaseCreatorService.class, scope = ServiceScope.SINGLETON)
 public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {

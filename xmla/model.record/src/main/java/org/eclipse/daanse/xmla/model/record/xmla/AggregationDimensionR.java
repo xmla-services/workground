@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.util.List;
-import java.util.Optional;
 
 public record AggregationDimensionR(String cubeDimensionID,
                                     Optional<List<AggregationAttribute>> attributes,

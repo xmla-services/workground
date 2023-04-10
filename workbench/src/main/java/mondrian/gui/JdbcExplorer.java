@@ -11,16 +11,21 @@
 
 package mondrian.gui;
 
-import mondrian.gui.JdbcMetaData.DbColumn;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Enumeration;
-import java.util.List;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.*;
+import mondrian.gui.JdbcMetaData.DbColumn;
 
 /**
  * @author sean

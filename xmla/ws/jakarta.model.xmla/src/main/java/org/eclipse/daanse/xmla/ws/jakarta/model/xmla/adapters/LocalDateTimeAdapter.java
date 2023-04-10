@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters;
 
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
-
 import java.time.LocalDateTime;
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 

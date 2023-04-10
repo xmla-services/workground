@@ -13,13 +13,13 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.util.List;
-import java.util.Optional;
 
 public record MiningModelColumnR(String name,
                                  Optional<String> id,

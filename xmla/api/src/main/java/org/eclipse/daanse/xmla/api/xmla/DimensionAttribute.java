@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
-import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
-
 import java.math.BigInteger;
 import java.util.List;
+
+import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
+import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
 
 public interface DimensionAttribute {
 

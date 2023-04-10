@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.cubes;
 
-import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 
 public interface MdSchemaCubesRestrictions {
 

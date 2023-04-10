@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.engine;
 
-import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
-
 import java.util.Optional;
+
+import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 
 public record ImpersonationInfoR(String impersonationMode,
                                  Optional<String> account,

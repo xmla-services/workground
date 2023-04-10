@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.Action;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
@@ -27,10 +31,6 @@ import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
-
-import java.math.BigInteger;
-import java.time.Instant;
-import java.util.List;
 
 public record CubeR(String name,
                     String id,

@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.mddataset;
 
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
-
-import java.util.List;
 
 public record AxisInfoR (List<HierarchyInfo> hierarchyInfo,
                          String name) implements AxisInfo {

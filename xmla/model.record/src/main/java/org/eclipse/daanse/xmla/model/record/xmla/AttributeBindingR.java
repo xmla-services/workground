@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AttributeBinding;
 import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
-
-import java.util.Optional;
 
 public record AttributeBindingR(
     String attributeID,

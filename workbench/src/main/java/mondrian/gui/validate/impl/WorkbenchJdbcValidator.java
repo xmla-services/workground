@@ -9,10 +9,10 @@
 
 package mondrian.gui.validate.impl;
 
+import java.util.List;
+
 import mondrian.gui.JdbcMetaData;
 import mondrian.gui.validate.JdbcValidator;
-
-import java.util.List;
 
 /**
  * Implementation of <code>JdbcValidator</code> for Workbench.

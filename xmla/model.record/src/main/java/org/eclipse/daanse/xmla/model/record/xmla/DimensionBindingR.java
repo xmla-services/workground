@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import java.time.Duration;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.DimensionBinding;
 import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
 import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
-
-import java.time.Duration;
-import java.util.Optional;
 
 public record DimensionBindingR(
     String dataSourceID,

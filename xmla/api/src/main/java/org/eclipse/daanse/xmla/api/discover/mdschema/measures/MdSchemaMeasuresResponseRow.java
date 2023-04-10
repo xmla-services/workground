@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.measures;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
-
-import java.util.Optional;
 
 /**
  * This schema rowset describes each measure.

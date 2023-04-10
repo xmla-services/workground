@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
-
-import java.util.Optional;
 
 public record DbSchemaSourceTablesResponseRowR(Optional<String> catalogName,
                                                Optional<String> schemaName,

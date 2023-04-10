@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRestrictions;
-
-import java.util.Optional;
 
 public record DbSchemaSourceTablesRestrictionsR(
     Optional<String> catalogName,

@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRestrictions;
-
-import java.util.Optional;
 
 public record MdSchemaMeasureGroupDimensionsRestrictionsR(
     Optional<String> catalogName,

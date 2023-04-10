@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
+import java.util.List;
+
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlElementRefs;
 import jakarta.xml.bind.annotation.XmlType;
-
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "boolean_expr", propOrder = {"content"})

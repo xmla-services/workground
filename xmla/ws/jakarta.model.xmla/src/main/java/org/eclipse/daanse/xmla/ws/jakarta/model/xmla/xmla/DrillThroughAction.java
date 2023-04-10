@@ -13,13 +13,12 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-
-import java.math.BigInteger;
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DrillThroughAction", propOrder = {"name", "id", "caption", "captionIsMdx", "translations",
