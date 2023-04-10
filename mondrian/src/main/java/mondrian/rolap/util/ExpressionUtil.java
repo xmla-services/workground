@@ -13,13 +13,13 @@
  */
 package mondrian.rolap.util;
 
-import mondrian.rolap.sql.SqlQuery;
-
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+
+import mondrian.rolap.sql.SqlQuery;
 
 public class ExpressionUtil {
 

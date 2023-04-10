@@ -10,24 +10,27 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+import static mondrian.rolap.util.LevelUtil.getPropertyExp;
+
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.rolap.util.ExpressionUtil;
-import mondrian.rolap.util.LevelUtil;
-import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.olap4j.impl.UnmodifiableArrayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +46,10 @@ import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
+import mondrian.rolap.util.ExpressionUtil;
+import mondrian.rolap.util.LevelUtil;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.PropertyFormatter;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
-import static mondrian.rolap.util.LevelUtil.getPropertyExp;
 
 /**
  * <code>RolapLevel</code> implements {@link Level} for a ROLAP database.

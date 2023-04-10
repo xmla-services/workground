@@ -11,11 +11,8 @@ package mondrian.rolap.format;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ElementFormatterImpl;
 import org.junit.jupiter.api.Test;
-
-import mondrian.olap.MondrianDef;
 
 class FormatterCreateContextTest {
 

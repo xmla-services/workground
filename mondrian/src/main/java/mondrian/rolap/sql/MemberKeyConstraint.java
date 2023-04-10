@@ -14,7 +14,6 @@ import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
 import mondrian.olap.Evaluator;
-import mondrian.olap.MondrianDef;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;

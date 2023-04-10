@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -38,6 +37,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;

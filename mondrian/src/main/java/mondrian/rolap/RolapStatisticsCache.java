@@ -9,22 +9,24 @@
 
 package mondrian.rolap;
 
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Execution;
-import mondrian.spi.impl.SqlStatisticsProviderNew;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 
-import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.server.Execution;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
 
 /**
  * Provides and caches statistics.

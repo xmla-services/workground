@@ -12,6 +12,8 @@
 */
 package mondrian.rolap.agg;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,8 +27,6 @@ import mondrian.rolap.CompoundPredicateInfo;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * A <code>CellRequest</code> contains the context necessary to get a cell

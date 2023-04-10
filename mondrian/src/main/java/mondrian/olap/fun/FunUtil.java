@@ -11,8 +11,6 @@
 */
 package mondrian.olap.fun;
 
-import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

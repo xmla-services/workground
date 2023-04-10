@@ -18,7 +18,6 @@ import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Exp;
 import mondrian.olap.type.Type;
 
 /**

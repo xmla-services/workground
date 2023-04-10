@@ -13,8 +13,6 @@
 
 package mondrian.olap.fun;
 
-import static mondrian.olap.fun.sort.Sorter.hierarchizeMemberList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

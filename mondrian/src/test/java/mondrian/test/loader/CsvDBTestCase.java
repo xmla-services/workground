@@ -15,8 +15,6 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 import java.io.File;
 
-import mondrian.rolap.RolapSchemaPool;
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.opencube.junit5.Constants;
@@ -24,7 +22,9 @@ import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapSchemaPool;
 
 /**
  * Base class for tests that use

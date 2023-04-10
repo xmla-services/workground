@@ -11,38 +11,51 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.Aggregator;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-import mondrian.rolap.RolapAggregator.BaseAggor;
-import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column.Usage;
-import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.rolap.util.ExpressionUtil;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
-import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
+import mondrian.olap.Aggregator;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.recorder.MessageRecorder;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapAggregator.BaseAggor;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SqlStatement;
+import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column.Usage;
+import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.util.ExpressionUtil;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
 
 /**
  * Aggregate table version of a RolapStar for a fact table.

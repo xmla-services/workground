@@ -10,22 +10,32 @@
 */
 package mondrian.rolap;
 
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.fun.MondrianEvaluationException;
-import mondrian.olap.type.MemberType;
-import mondrian.olap.type.StringType;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.FunCall;
+import mondrian.olap.Literal;
+import mondrian.olap.fun.MondrianEvaluationException;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.StringType;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Creates SQL from parse tree nodes. Currently it creates the SQL that

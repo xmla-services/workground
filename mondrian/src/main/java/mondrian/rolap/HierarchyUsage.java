@@ -13,11 +13,20 @@
 
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
+import static mondrian.rolap.util.RelationUtil.find;
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +34,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
-
-import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
-import static mondrian.rolap.util.RelationUtil.find;
-import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context

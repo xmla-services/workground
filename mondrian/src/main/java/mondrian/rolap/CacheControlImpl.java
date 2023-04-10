@@ -8,6 +8,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
@@ -46,8 +48,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.spi.SegmentColumn;
 import mondrian.util.ArraySortedSet;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * Implementation of {@link CacheControl} API.

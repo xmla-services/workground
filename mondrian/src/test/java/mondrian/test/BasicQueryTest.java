@@ -12,8 +12,8 @@
 */
 package mondrian.test;
 
-import static mondrian.olap.Util.assertTrue;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
@@ -58,7 +58,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -87,6 +86,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 
 import mondrian.calc.ResultStyle;
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianException;

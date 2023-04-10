@@ -11,6 +11,8 @@
 
 package mondrian.test.loader;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,8 +45,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 
 /**
  * This is an abstract base class for the creation and load of one or more

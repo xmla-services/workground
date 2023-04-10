@@ -13,12 +13,12 @@
  */
 package mondrian.rolap.util;
 
-import mondrian.rolap.sql.SqlQuery;
-
 import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+
+import mondrian.rolap.sql.SqlQuery;
 
 public class SQLUtil {
     /**

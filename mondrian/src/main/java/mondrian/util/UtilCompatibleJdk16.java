@@ -15,7 +15,10 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
 
-import javax.script.*;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptException;
 
 import org.eclipse.daanse.repackage.rhino.engine.QuickFixRhinoScriptEngineFactory;
 import org.slf4j.Logger;

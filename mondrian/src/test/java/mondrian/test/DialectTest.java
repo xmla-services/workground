@@ -36,7 +36,6 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -50,6 +49,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opentest4j.AssertionFailedError;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.sql.SqlQuery;

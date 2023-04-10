@@ -39,7 +39,6 @@ import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.ScalarType;
-import mondrian.olap.type.TypeWrapperExp;
 
 /**
  * Definition of the <code>DrilldownLevelTop</code> and

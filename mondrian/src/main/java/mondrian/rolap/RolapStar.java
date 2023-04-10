@@ -12,41 +12,71 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.agg.*;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.rolap.util.RelationUtil;
-import mondrian.server.Locus;
-import mondrian.spi.DataSourceChangeListener;
-import mondrian.util.Bug;
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+import static mondrian.rolap.util.JoinUtil.getLeftAlias;
+import static mondrian.rolap.util.JoinUtil.getRightAlias;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.ref.SoftReference;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.collections.map.ReferenceMap;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.InlineTableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ViewR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.ref.SoftReference;
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
-import static mondrian.rolap.util.JoinUtil.getLeftAlias;
-import static mondrian.rolap.util.JoinUtil.getRightAlias;
-import static mondrian.rolap.util.JoinUtil.left;
-import static mondrian.rolap.util.JoinUtil.right;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.agg.Aggregation;
+import mondrian.rolap.agg.AggregationKey;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.util.RelationUtil;
+import mondrian.server.Locus;
+import mondrian.spi.DataSourceChangeListener;
+import mondrian.util.Bug;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell

@@ -12,8 +12,8 @@
 */
 package mondrian.test;
 
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +38,6 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -58,6 +57,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;

@@ -33,7 +33,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.TypeWrapperExp;
 
 /**
  * Evaluator which checks dependencies of expressions.

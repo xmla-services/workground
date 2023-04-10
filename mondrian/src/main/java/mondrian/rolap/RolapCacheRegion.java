@@ -9,13 +9,13 @@
 
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * A <code>RolapCacheRegion</code> represents a region of multidimensional space

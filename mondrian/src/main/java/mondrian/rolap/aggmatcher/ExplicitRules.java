@@ -10,28 +10,51 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelPropertyR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.Category;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.*;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelPropertyR;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * A class containing a RolapCube's Aggregate tables exclude/include
