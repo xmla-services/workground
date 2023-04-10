@@ -11,7 +11,52 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.*;
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
+import static mondrian.rolap.util.JoinUtil.changeLeftRight;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+import static mondrian.rolap.util.LevelUtil.getKeyExp;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.JoinImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -19,8 +64,20 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.DimensionType;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.HierarchyBase;
+import mondrian.olap.Id;
+import mondrian.olap.LevelType;
+import mondrian.olap.MatchType;
+import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.*;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.olap.fun.FunDefBase;
@@ -37,27 +94,6 @@ import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.CellFormatter;
 import mondrian.util.UnionIterator;
-import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.HierarchyAccess;
-import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.JoinImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.PrintWriter;
-import java.util.*;
-
-import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
-import static mondrian.rolap.util.JoinUtil.changeLeftRight;
-import static mondrian.rolap.util.JoinUtil.left;
-import static mondrian.rolap.util.JoinUtil.right;
-import static mondrian.rolap.util.LevelUtil.getKeyExp;
 
 /**
  * <code>RolapHierarchy</code> implements {@link Hierarchy} for a ROLAP database.

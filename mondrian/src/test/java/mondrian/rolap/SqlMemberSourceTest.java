@@ -37,9 +37,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.opencube.junit5.SchemaUtil;
 
 import mondrian.util.ByteString;
-import org.opencube.junit5.SchemaUtil;
 
 class SqlMemberSourceTest {
   private static final String STORE_TABLE = "store";

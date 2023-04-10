@@ -54,7 +54,6 @@ import mondrian.olap.ParameterImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.TypeWrapperExp;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 

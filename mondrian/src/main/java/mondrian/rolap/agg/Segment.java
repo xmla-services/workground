@@ -13,6 +13,8 @@
 
 package mondrian.rolap.agg;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.io.PrintWriter;
 import java.util.AbstractList;
 import java.util.List;
@@ -25,8 +27,6 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 import mondrian.spi.SegmentHeader;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * A <code>Segment</code> is a collection of cell values parameterized by a measure, and a set of (column, value) pairs.

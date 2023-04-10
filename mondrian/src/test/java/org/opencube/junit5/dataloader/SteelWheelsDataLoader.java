@@ -23,7 +23,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 //import mondrian.spi.DialectManager;

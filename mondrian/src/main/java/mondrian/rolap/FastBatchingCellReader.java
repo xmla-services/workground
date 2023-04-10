@@ -10,6 +10,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,13 +27,11 @@ import java.util.SortedSet;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.AggregationKey;
@@ -55,8 +55,6 @@ import mondrian.server.Locus;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.Pair;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * A <code>FastBatchingCellReader</code> doesn't really Read cells: when asked

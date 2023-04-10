@@ -8,6 +8,58 @@
 */
 package mondrian.rolap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeGrantImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionGrantImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyGrantImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.RoleUsageImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaGrantImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.UnionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberGrantR;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.opencube.junit5.SchemaUtil;
+
 import mondrian.olap.Category;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
@@ -19,32 +71,6 @@ import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.test.PropertySaver5;
 import mondrian.util.ByteString;
-import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MemberGrantR;
-import org.eigenbase.xom.DOMWrapper;
-import org.eigenbase.xom.Parser;
-import org.eigenbase.xom.XOMException;
-import org.eigenbase.xom.XOMUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.opencube.junit5.SchemaUtil;
-
-import java.lang.reflect.Field;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Andrey Khayrutdinov

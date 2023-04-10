@@ -11,8 +11,6 @@
 
 package mondrian.olap.fun;
 
-import static mondrian.olap.fun.sort.Sorter.partiallySortTuples;
-
 import java.util.AbstractList;
 import java.util.List;
 

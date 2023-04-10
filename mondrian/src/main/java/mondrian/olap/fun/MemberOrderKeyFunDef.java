@@ -15,7 +15,6 @@ import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Exp;
 import mondrian.olap.fun.sort.OrderKey;
 import mondrian.olap.type.Type;
 

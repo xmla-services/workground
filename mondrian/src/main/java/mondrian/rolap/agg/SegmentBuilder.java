@@ -8,6 +8,8 @@
 */
 package mondrian.rolap.agg;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 import java.math.BigInteger;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -45,8 +47,6 @@ import mondrian.spi.SegmentColumn;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.ArraySortedSet;
 import mondrian.util.Pair;
-
-import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 
 /**
  * Helper class that contains methods to convert between

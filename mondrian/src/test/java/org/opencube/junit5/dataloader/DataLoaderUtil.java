@@ -18,6 +18,8 @@
  */
 package org.opencube.junit5.dataloader;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,15 +36,13 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 
 public class DataLoaderUtil {
 

@@ -11,6 +11,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -55,8 +57,6 @@ import mondrian.util.CancellationChecker;
 import mondrian.util.CreationException;
 import mondrian.util.ObjectFactory;
 import mondrian.util.Pair;
-
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 /**
  * A <code>SqlMemberSource</code> reads members from a SQL database.

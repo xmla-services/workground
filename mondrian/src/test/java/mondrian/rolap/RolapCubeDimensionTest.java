@@ -10,14 +10,6 @@
 */
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeDimensionImpl;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,6 +17,14 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeDimensionImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class RolapCubeDimensionTest {
 

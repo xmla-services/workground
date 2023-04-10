@@ -10,8 +10,8 @@
 */
 package mondrian.rolap;
 
-import static mondrian.test.FoodmartTestContextImpl.levelName;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.test.FoodmartTestContextImpl.levelName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -28,7 +28,6 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.Collection;
 import java.util.List;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -49,6 +48,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;

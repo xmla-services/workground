@@ -20,7 +20,6 @@ import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +35,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;

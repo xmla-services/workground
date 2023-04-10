@@ -13,12 +13,17 @@
  */
 package mondrian.rolap.util;
 
-import java.util.Objects;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
-
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
+
+import java.util.Objects;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 public class RelationUtil {
 

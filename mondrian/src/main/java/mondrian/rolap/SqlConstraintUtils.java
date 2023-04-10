@@ -12,6 +12,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,8 +68,6 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.FilteredIterableList;
-
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 /**
  * Utility class used by implementations of {@link mondrian.rolap.sql.SqlConstraint}, used to generate constraints into

@@ -42,13 +42,11 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Syntax;
-import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.fun.sort.SortKeySpec;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.fun.sort.Sorter.Flag;
 import mondrian.olap.type.Type;
-import mondrian.olap.type.TypeWrapperExp;
 
 /**
  * Definition of the <code>Order</code> MDX function.

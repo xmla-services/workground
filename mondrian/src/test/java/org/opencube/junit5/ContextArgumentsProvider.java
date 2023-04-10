@@ -31,7 +31,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.engine.api.Context;

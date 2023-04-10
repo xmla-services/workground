@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -64,6 +63,7 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 import mondrian.calc.Calc;
 import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;

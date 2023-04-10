@@ -9,7 +9,6 @@
 */
 package mondrian.rolap;
 
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -18,7 +17,6 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

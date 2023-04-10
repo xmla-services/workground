@@ -30,7 +30,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
-import mondrian.rolap.util.ExpressionUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -60,6 +59,7 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.MemberListCrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
+import mondrian.rolap.util.ExpressionUtil;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;

@@ -14,7 +14,6 @@ package mondrian.rolap;
 
 import java.util.Map;
 
-import mondrian.rolap.util.DimensionTypeUtil;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -28,6 +27,7 @@ import mondrian.olap.DimensionBase;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
+import mondrian.rolap.util.DimensionTypeUtil;
 
 /**
  * <code>RolapDimension</code> implements {@link Dimension}for a ROLAP

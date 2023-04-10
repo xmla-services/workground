@@ -27,7 +27,6 @@ import mondrian.olap.Formula;
 import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;
-import mondrian.olap.type.TypeWrapperExp;
 
 /**
  * Implementation of {@link org.olap4j.Scenario}.

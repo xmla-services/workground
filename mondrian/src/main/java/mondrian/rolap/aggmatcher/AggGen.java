@@ -27,7 +27,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapStar;

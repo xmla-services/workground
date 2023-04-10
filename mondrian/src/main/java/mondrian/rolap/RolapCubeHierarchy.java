@@ -11,6 +11,9 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,11 +22,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
 import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
@@ -32,10 +38,8 @@ import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.util.UnsupportedList;
-
-import static mondrian.rolap.util.JoinUtil.left;
-import static mondrian.rolap.util.JoinUtil.right;
 
 /**
  * Hierarchy that is associated with a specific Cube.

@@ -25,7 +25,6 @@ import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunDef;
 import mondrian.olap.Syntax;
-import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;

@@ -11,8 +11,8 @@ package mondrian.rolap.agg;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonMap;
-import static mondrian.util.Pair.of;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static mondrian.util.Pair.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,7 +35,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -49,6 +48,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.BitKey;

@@ -16,7 +16,6 @@ package mondrian.test.clearview;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +25,7 @@ import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;

@@ -18,8 +18,8 @@
  */
 package org.opencube.junit5;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -43,7 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -68,6 +67,7 @@ import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;

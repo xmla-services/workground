@@ -13,6 +13,8 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -37,7 +39,12 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ViewImpl;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
@@ -47,7 +54,6 @@ import mondrian.calc.ExpCompiler;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Id;
 import mondrian.olap.MatchType;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
@@ -60,8 +66,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.util.ClassResolver;
-
-import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * Utility methods for classes in the <code>mondrian.rolap</code> package.

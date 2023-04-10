@@ -11,6 +11,9 @@
 
 package mondrian.rolap.aggmatcher;
 
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,9 +44,6 @@ import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.sql.SqlQuery;
-
-import static mondrian.rolap.util.ExpressionUtil.getExpression;
-import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * Abstract Recognizer class used to determine if a candidate aggregate table

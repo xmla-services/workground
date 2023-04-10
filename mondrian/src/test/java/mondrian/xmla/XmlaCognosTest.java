@@ -11,7 +11,6 @@ package mondrian.xmla;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +21,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.test.DiffRepository;
 

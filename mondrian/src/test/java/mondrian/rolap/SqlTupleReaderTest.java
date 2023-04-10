@@ -29,7 +29,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Property;
 import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.aggmatcher.AggStar;

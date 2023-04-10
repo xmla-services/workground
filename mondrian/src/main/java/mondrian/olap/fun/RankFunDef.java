@@ -40,7 +40,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
-import mondrian.olap.type.TypeWrapperExp;
 import mondrian.rolap.RolapUtil;
 
 /**

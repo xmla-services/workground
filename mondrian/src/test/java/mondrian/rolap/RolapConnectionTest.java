@@ -10,15 +10,14 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.DriverManager;
-import mondrian.olap.MondrianException;
-import mondrian.olap.Util;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Hashtable;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -26,14 +25,17 @@ import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Hashtable;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
 
 /**
  * Unit test for {@link RolapConnection}.

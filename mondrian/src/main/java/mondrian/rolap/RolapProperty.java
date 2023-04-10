@@ -11,12 +11,12 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Property;
-import mondrian.spi.PropertyFormatter;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mondrian.olap.Property;
+import mondrian.spi.PropertyFormatter;
 
 /**
  * <code>RolapProperty</code> is the definition of a member property.

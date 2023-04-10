@@ -10,6 +10,9 @@
 */
 package mondrian.test.loader;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+//import mondrian.spi.DialectManager;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,17 +42,14 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-
-import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
-//import mondrian.spi.DialectManager;
 
 /**
  * Utility to load the FoodMart dataset into an arbitrary JDBC database.

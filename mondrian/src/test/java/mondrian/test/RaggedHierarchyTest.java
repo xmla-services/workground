@@ -15,7 +15,6 @@ import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +26,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.enums.DatabaseProduct;
 import mondrian.olap.MondrianProperties;
 
 /**

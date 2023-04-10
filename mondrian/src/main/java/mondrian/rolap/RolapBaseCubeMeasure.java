@@ -16,7 +16,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
 import mondrian.olap.Literal;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Property;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
