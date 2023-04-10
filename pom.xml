@@ -283,7 +283,7 @@
                 <formats>
                   <format>XML</format>
                 </formats>
-                <dataFile>${project.build.directory}/tmp/TEST/test/generated/jacoco.exec</dataFile>
+                <dataFile>${project.build.directory}/test/tmp/testing/test/generated/jacoco.exec</dataFile>
                 <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                </configuration>
             </execution>
