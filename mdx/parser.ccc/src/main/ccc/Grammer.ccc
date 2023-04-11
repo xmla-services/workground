@@ -48,6 +48,7 @@ import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
@@ -101,6 +102,7 @@ import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
 import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
+import org.eclipse.daanse.mdx.model.record.DMVStatementR;
 {
 
 }
@@ -1474,6 +1476,32 @@ RefreshStatement parseRefreshStatement :
   < REFRESH > < CUBE >  cubeName = parseNameObjectIdentifier
 {
     return new RefreshStatementR(cubeName);
+}
+;
+
+DMVStatement parseDMVStatement :
+{
+  CompoundId c;
+  List<CompoundId> columns = new ArrayList<CompoundId>();
+  NameObjectIdentifier tableId = null;
+  Expression expression = null;
+}
+  < SELECT >
+(
+    c = parseCompoundId()
+    { columns.add(c); }
+    (
+        < COMMA >
+    { columns.add(parseCompoundId()); }
+    )*
+
+)?
+< FROM > < $SYSTEM >< DOT > tableId = parseNameObjectIdentifier()
+(
+          < WHERE > expression = parseExpression()
+)?
+{
+    return new DMVStatementR(columns, tableId, expression);
 }
 ;
 

@@ -517,8 +517,14 @@ public class SimpleUnparser implements UnParser {
     }
 
     public StringBuilder unparseDMVStatement(DMVStatement selectStatement) {
-        return null;
-
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ").append(DELIMITER);
+        sb.append(unparseCompoundIds(selectStatement.columns())).append(DELIMITER);
+        sb.append("FROM $SYSTEM.").append(unparseNameObjectIdentifier(selectStatement.table()));
+        if (selectStatement.where() != null) {
+            sb.append(DELIMITER).append("WHERE ").append(unparseExpression(selectStatement.where()));
+        }
+        return sb;
     }
 
     public StringBuilder unparseRefreshStatement(RefreshStatement selectStatement) {

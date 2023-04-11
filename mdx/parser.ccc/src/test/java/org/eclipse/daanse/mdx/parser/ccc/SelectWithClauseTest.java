@@ -14,6 +14,7 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
@@ -33,6 +34,7 @@ class SelectWithClauseTest {
 	class CreateSetBodyClauseTest {
 
 		@Test
+        @SuppressWarnings("java:S5961")
 		void testCreateSetBodyClause() throws MdxParserException {
 			String mdx = """
 					SET MySet AS
@@ -44,12 +46,8 @@ class SelectWithClauseTest {
 			CreateSetBodyClause createSetBodyClause = (CreateSetBodyClause) selectWithClause;
 			assertThat(createSetBodyClause.compoundId()).isNotNull();
 			assertThat(createSetBodyClause.compoundId().objectIdentifiers()).hasSize(1);
-			assertThat(createSetBodyClause.compoundId().objectIdentifiers().get(0))
-					.isInstanceOf(NameObjectIdentifier.class);
-			NameObjectIdentifier nameObjectIdentifier = (NameObjectIdentifier) createSetBodyClause.compoundId()
-					.objectIdentifiers().get(0);
-			assertThat(nameObjectIdentifier.name()).isEqualTo("MySet");
-			assertThat(nameObjectIdentifier.quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
+            checkNameObjectIdentifiers(
+                createSetBodyClause.compoundId().objectIdentifiers(), 0, "MySet", ObjectIdentifier.Quoting.UNQUOTED);
 
 			assertThat(createSetBodyClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 			CallExpression callExpression = (CallExpression) createSetBodyClause.expression();
@@ -66,34 +64,27 @@ class SelectWithClauseTest {
 			assertThat(callExpression1.expressions().get(0)).isInstanceOf(CompoundId.class);
 			CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
 			assertThat(compoundId1.objectIdentifiers()).hasSize(2);
-			assertThat(compoundId1.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
-			assertThat(((NameObjectIdentifier) compoundId1.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
-			assertThat((compoundId1.objectIdentifiers().get(0)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-			assertThat(compoundId1.objectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
-			assertThat(((NameObjectIdentifier) compoundId1.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
-			assertThat((compoundId1.objectIdentifiers().get(1)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-
+            checkNameObjectIdentifiers(
+                compoundId1.objectIdentifiers(), 0, "Customer", ObjectIdentifier.Quoting.QUOTED);
+            checkNameObjectIdentifiers(
+                compoundId1.objectIdentifiers(), 1, "Gender", ObjectIdentifier.Quoting.QUOTED);
 			assertThat(callExpression2.name()).isEqualTo("{}");
 			assertThat(callExpression2.type()).isEqualTo(CallExpression.Type.Braces);
 			assertThat(callExpression2.expressions()).hasSize(1);
 			CompoundId compoundId2 = (CompoundId) callExpression2.expressions().get(0);
 			assertThat(compoundId2.objectIdentifiers()).hasSize(3);
-			assertThat(compoundId2.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+            assertThat(compoundId2.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
 			assertThat(compoundId2.objectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
 			assertThat(compoundId2.objectIdentifiers().get(2)).isInstanceOf(KeyObjectIdentifier.class);
-
-			assertThat(((NameObjectIdentifier) compoundId2.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
-			assertThat((compoundId2.objectIdentifiers().get(0)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-			assertThat(((NameObjectIdentifier) compoundId2.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
-			assertThat((compoundId2.objectIdentifiers().get(1)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+            checkNameObjectIdentifiers(
+                compoundId2.objectIdentifiers(), 0, "Customer", ObjectIdentifier.Quoting.QUOTED);
+            checkNameObjectIdentifiers(
+                compoundId2.objectIdentifiers(), 1, "Gender", ObjectIdentifier.Quoting.QUOTED);
 			assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers())
 					.hasSize(1);
-			assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0))
-					.isInstanceOf(NameObjectIdentifier.class);
-			assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0)
-					.name()).isEqualTo("F");
-			assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0)
-					.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+            checkNameObjectIdentifiers(
+                ((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers(),
+                0, "F", ObjectIdentifier.Quoting.QUOTED);
 		}
 	}
 
