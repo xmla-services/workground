@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MdxTestUtils {
 
     public static void checkNameObjectIdentifiers(
-        List<ObjectIdentifier> objectIdentifiers,
+        List<? extends ObjectIdentifier> objectIdentifiers,
         int i,
         String name,
         ObjectIdentifier.Quoting quoted
@@ -52,6 +52,7 @@ public class MdxTestUtils {
     }
 
     public static void checkAxis(Axis axis, int ordinal, boolean named) {
+        assertThat(axis).isNotNull();
         assertThat(axis.ordinal()).isEqualTo(ordinal);
         assertThat(axis.named()).isEqualTo(named);
     }

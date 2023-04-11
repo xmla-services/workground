@@ -16,6 +16,7 @@ package org.eclipse.daanse.mdx.parser.ccc;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
@@ -238,6 +239,17 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public RefreshStatement parseRefreshStatement() throws MdxParserException {
         try {
             return delegate.parseRefreshStatement();
+
+        } catch (Exception e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public DMVStatement parseDMVStatement() throws MdxParserException {
+        try {
+            return delegate.parseDMVStatement();
 
         } catch (Exception e) {
             throw new MdxParserException(e);
