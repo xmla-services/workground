@@ -66,7 +66,7 @@ import org.osgi.test.junit5.service.ServiceExtension;
 @ExtendWith(ServiceExtension.class)
 class DbCreatorServiceImplTest {
 
-    public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.creator.impl.DbCreatorServiceFactoryImpl";
+    public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic.DbCreatorServiceFactoryImpl";
     @InjectBundleContext
     BundleContext bc;
     DialectResolver dialectResolver = mock(DialectResolver.class);
