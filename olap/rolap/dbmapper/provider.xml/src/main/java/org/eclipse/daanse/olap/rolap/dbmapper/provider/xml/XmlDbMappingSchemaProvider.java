@@ -33,7 +33,6 @@ public class XmlDbMappingSchemaProvider implements DbMappingSchemaProvider {
 		URL url = new URL(config.url());
 		try (InputStream in = url.openStream()) {
 			schema = reader.read(in);
-			System.out.println(schema);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

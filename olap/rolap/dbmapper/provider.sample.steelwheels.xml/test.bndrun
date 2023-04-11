@@ -25,6 +25,7 @@
 
 -runrequires: \
 	bnd.identity;id='${project.artifactId}-tests',\
+	bnd.identity;id='${project.artifactId}',\
 	bnd.identity;id=junit-jupiter-engine,\
 	bnd.identity;id=junit-platform-launcher,\
 	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.xml',\

@@ -18,6 +18,7 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
+    <!--
   <build>
     <plugins>
       <plugin>
@@ -42,11 +43,19 @@
       </plugin>
     </plugins>
   </build>
+      -->
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.api</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
