@@ -39,4 +39,29 @@ class ExplainStatementTest {
 		assertThat(explainStatement).isNotNull();
 		assertThat(explainStatement.mdxStatement()).isNotNull().isInstanceOf(DrillthroughStatement.class);
 	}
+
+    @Test
+    void testExplain() throws MdxParserException {
+        assertParseExplainStatement("""
+            explain plan for
+            with member [Mesaures].[Foo] as 1 + 3
+            select [Measures].[Unit Sales] on 0,
+            [Product].Children on 1
+            from [Sales]
+            """);
+
+        assertParseExplainStatement("""
+            explain plan for
+            drillthrough maxrows 5
+            with member [Mesaures].[Foo] as 1 + 3
+            select [Measures].[Unit Sales] on 0,
+            [Product].Children on 1
+            from [Sales]
+            """);
+    }
+
+    private void assertParseExplainStatement(String mdx) throws MdxParserException {
+        ExplainStatement selectStatement = new MdxParserWrapper(mdx).parseExplainStatement();
+        assertThat(selectStatement).isNotNull();
+    }
 }

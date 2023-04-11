@@ -1,13 +1,13 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DrillthroughStatementTest {
 
@@ -63,4 +63,40 @@ class DrillthroughStatementTest {
 				.isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
 	}
 
+    @Test
+    void testDrillThroughExtended1() throws MdxParserException {
+        assertParseDrillthroughStatement("""
+            DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7
+            SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]
+            RETURN [Xxx].[AAa]
+            """);
+    }
+
+    @Test
+    void testDrillThroughExtended() throws MdxParserException {
+        assertParseDrillthroughStatement("""
+            DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7
+            SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]
+            RETURN [Xxx].[AAa], [YYY]
+            """);
+    }
+
+    @Test
+    void testDrillThroughExtended3() throws MdxParserException {
+        assertParseDrillthroughStatement("""
+            DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7
+            SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]
+            RETURN [Xxx].[AAa], [YYY], [zzz]
+            """);
+    }
+
+    @Test
+    void testDrillThrough() throws MdxParserException {
+        assertParseDrillthroughStatement("DRILLTHROUGH SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]");
+    }
+
+    private void assertParseDrillthroughStatement(String mdx) throws MdxParserException {
+        DrillthroughStatement drillthroughStatement = new MdxParserWrapper(mdx).parseDrillthroughStatement();
+        assertThat(drillthroughStatement).isNotNull();
+    }
 }

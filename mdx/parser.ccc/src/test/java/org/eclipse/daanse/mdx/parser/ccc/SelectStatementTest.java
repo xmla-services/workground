@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkAxis;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SelectStatementTest {
 
@@ -186,4 +187,237 @@ class SelectStatementTest {
         assertThat(selectSubcubeClauseName.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
     }
 
+    @Test
+    void testCase1() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].__Foo as 1 + 2
+            select __Foo on 0
+            from _Bar_Baz"
+            """);
+    }
+
+    @Test
+    void testCase2() throws MdxParserException {
+        String mdx = """
+            with member [Measures].#_Foo as 1 + 2
+            select __Foo on 0
+            from _Bar#Baz
+            """;
+        assertParseQueryFails(mdx);
+    }
+
+    @Test
+    void testCase3() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].$Foo as 1 + 2
+            select $Foo on 0
+            from Bar$Baz
+            """);
+    }
+
+    @Test
+    void testCase4() throws MdxParserException {
+        assertParseQuery("""
+            select [measures].[$foo] on columns from sales
+            """);
+    }
+
+    @Test
+    void testCase5() throws MdxParserException {
+        String mdx = """
+            select { Customers].Children } on columns from [Sales]
+            """;
+        assertParseQueryFails(mdx);
+    }
+
+    @Test
+    void testCase6() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].[Foo] as ' 123 '
+            select {[Measures].members} on columns,
+            CrossJoin([Product].members, {[Gender].Children}) on rows
+            from [Sales]
+            where [Marital Status].[S]
+            """);
+    }
+
+    @Test
+    void testCase7() throws MdxParserException {
+        assertParseQuery("select {[axis0mbr]} on axis(0), {[axis1mbr]} on axis(1) from cube1");
+    }
+
+    @Test
+    void testCase8() throws MdxParserException {
+        assertParseQuery("select {[axis1mbr]} on aXiS(1), {[axis0mbr]} on AxIs(0) from cube1");
+    }
+
+    @Test
+    void testCaseTest() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].[Foo] as
+            ' case when x = y then \"eq\" when x < y then \"lt\" else \"gt\" end '
+            select {[foo]} on axis(0) from [cube]
+            """);
+    }
+
+    @Test
+    void testCaseSwitch() throws MdxParserException {
+        assertParseQuery("""
+             with member [Measures].[Foo] as
+            ' case x when 1 then 2 when 3 then 4 else 5 end '
+              select {[foo]} on axis(0) from [cube]
+            """);
+    }
+
+    /**
+     * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-306">
+     * MONDRIAN-306, "Parser should not require braces around range op in WITH
+     * SET"</a>.
+     */
+    @Test
+    void testSetExpr() throws MdxParserException {
+        assertParseQuery("""
+            with set [Set1] as '[Product].[Drink]:[Product].[Food]'
+            select [Set1] on columns, {[Measures].defaultMember} on rows
+            from Sales
+            """);
+
+        // set expr in axes
+        assertParseQuery("""
+            select [Product].[Drink]:[Product].[Food] on columns,
+                 {[Measures].defaultMember} on rows
+                from Sales
+            """);
+    }
+
+    @Test
+    void testDimensionProperties() throws MdxParserException {
+        assertParseQuery("""
+            select {[foo]} properties p1,   p2 on columns from [cube]
+            """);
+    }
+
+    @Test
+    void testCellProperties() throws MdxParserException {
+        assertParseQuery("""
+            select {[foo]} on columns
+            from [cube] CELL PROPERTIES FORMATTED_VALUE
+            """);
+    }
+
+    /**
+     * Testcase for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-272">
+     * MONDRIAN-272, "High precision number in MDX causes overflow"</a>.
+     * The problem was that "5000001234" exceeded the precision of the int being
+     * used to gather the mantissa.
+     */
+    @Test
+    void testLargePrecision() throws MdxParserException {
+        // Now, a query with several numeric literals. This is the original
+        // testcase for the bug.
+        assertParseQuery("""
+            with member [Measures].[Small Number] as '[Measures].[Store Sales] / 9000'
+            select
+            {[Measures].[Small Number]} on columns,
+            {Filter([Product].[Product Department].members, [Measures].[Small Number] >= 0.3
+            and [Measures].[Small Number] <= 0.5000001234)} on rows
+            from Sales
+            where ([Time].[1997].[Q2].[4])
+            """);
+    }
+
+    /**
+     * Test case for empty expressions. Test case for <a href=
+     * "http://sf.net/tracker/?func=detail&aid=3030772&group_id=168953&atid=848534"
+     * > bug 3030772, "DrilldownLevelTop parser error"</a>.
+     */
+    @Test
+    void testEmptyExpr() throws MdxParserException {
+        assertParseQuery("""
+            select NON EMPTY HIERARCHIZE(
+            {DrillDownLevelTop(
+            {[Product].[All Products]},3,,[Measures].[Unit Sales])}
+            ) ON COLUMNS
+            from [Sales]
+            """);
+
+        // more advanced; the actual test case in the bug
+        assertParseQuery("""
+            SELECT {[Measures].[NetSales]}
+            DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS ,
+            NON EMPTY HIERARCHIZE(AddCalculatedMembers(
+            {DrillDownLevelTop({[ProductDim].[Name].[All]}, 10, ,
+            [Measures].[NetSales])}))
+            DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON ROWS
+            FROM [cube]
+            """);
+    }
+
+    /**
+     * Test case for SELECT in the FROM clause.
+     */
+    @Test
+    void _testInnerSelect() throws MdxParserException {
+        assertParseQuery("""
+            SELECT FROM
+            (SELECT ({[ProductDim].[Product Group].&[Mobile Phones]})
+            ON COLUMNS FROM [cube]) CELL PROPERTIES VALUE
+            """);
+    }
+
+    /**
+     * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-648">
+     * MONDRIAN-648, "AS operator has lower precedence than required by MDX
+     * specification"</a>.
+     *
+     * <p>Currently that bug is not fixed. We give the AS operator low
+     * precedence, so CAST works as it should but 'expr AS namedSet' does not.
+     */
+    @Test
+    void testAsPrecedence() throws MdxParserException {
+        // low precedence operator (AND) in CAST.
+        assertParseQuery(
+            "select cast(a and b as string) on 0 from [cube]");
+
+        // medium precedence operator (:) in CAST
+        assertParseQuery(
+            "select cast(a : b as string) on 0 from [cube]");
+
+        // high precedence operator (IS) in CAST
+        assertParseQuery("select cast(a is b as string) on 0 from [cube]");
+
+        // low precedence operator in axis expression. According to spec, 'AS'
+        // has higher precedence than '*' but we give it lower. Bug.
+        assertParseQuery("select a * b as c on 0 from [cube]");
+
+        //if (Bug.BugMondrian648Fixed) {
+        if (false)
+        // Note that 'AS' has higher precedence than '*'.
+        assertParseQuery("select a * b as c * d on 0 from [cube]");
+
+        assertParseQueryFails("select a * b as c * d on 0 from [cube]");
+
+        // Spec says that ':' has a higher precedence than '*'.
+        // Mondrian currently does it wrong.
+        assertParseQuery("select a : b * c : d on 0 from [cube]");
+
+        //if (Bug.BugMondrian648Fixed) {
+        if (false)
+        // Note that 'AS' has higher precedence than ':', has higher
+        // precedence than '*'.
+        assertParseQuery("select a : b as n * c : d as n2 as n3 on 0 from [cube]");
+
+        assertParseQueryFails("select a : b as n * c : d as n2 as n3 on 0 from [cube]");
+
+    }
+
+    private void assertParseQuery(String mdx) throws MdxParserException {
+        SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+        assertThat(selectStatement).isNotNull();
+    }
+
+    private void assertParseQueryFails(String s) throws MdxParserException {
+        MdxParserWrapper parser = new MdxParserWrapper(s);
+        assertThrows(MdxParserException.class, () -> parser.parseSelectStatement());
+    }
 }
