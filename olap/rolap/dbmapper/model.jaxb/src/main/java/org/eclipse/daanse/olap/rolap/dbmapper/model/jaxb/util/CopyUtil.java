@@ -28,6 +28,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 
 public class CopyUtil {
 
+	private CopyUtil() {
+	}
+	
     public static SchemaImpl copy(Schema schemaApi) {
         SchemaImpl schemaImpl = new SchemaImpl();
         schemaImpl.setAnnotations(copyAnnotation(schemaApi.annotations()));

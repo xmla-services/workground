@@ -22,14 +22,14 @@ class IntegrationFoodMartVerifyerTest {
 
 	@Test
 	protected void testSteelWheelsXml(
-			@InjectService(filter = "(&(sample.type=xml)(sample.name=SteelWheels))") DbMappingSchemaProvider provider)
+			@InjectService(filter = "(&(sample.type=xml)(sample.name=FoodMart))") DbMappingSchemaProvider provider)
 			throws CloneNotSupportedException {
 		doTest(provider);
 	}
 
 	@Test
 	protected void testSteelWheelsRecord(
-			@InjectService(filter = "(&(sample.type=record)(sample.name=SteelWheels))") DbMappingSchemaProvider provider)
+			@InjectService(filter = "(&(sample.type=record)(sample.name=FoodMart))") DbMappingSchemaProvider provider)
 			throws CloneNotSupportedException {
 		doTest(provider);
 	}
