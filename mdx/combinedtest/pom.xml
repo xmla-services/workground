@@ -19,17 +19,23 @@
   </parent>
   <artifactId>org.eclipse.daanse.mdx.combinedtest</artifactId>
   <dependencies>
+  
+      <!--
+	Using the dependency scope allows to distinguish projects which contribute execution data but should not become part of the report:
+    	compile , runtime , provided : Project source and execution data is included in the report.
+    	test : Only execution data is considered for the report.
+    -->
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.mdx.parser.ccc</artifactId>
-      <scope>test</scope>
+      <scope>runtime</scope>
       <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.mdx.unparser.simple</artifactId>
       <version>${revision}</version>
-	  <scope>test</scope>
+	  <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>

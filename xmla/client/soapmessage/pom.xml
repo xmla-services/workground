@@ -11,12 +11,14 @@
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.xmla.api</artifactId>
+      <scope>compile</scope>
       <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.ws</groupId>
@@ -37,23 +39,29 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
+
+    <!--
+	Using the dependency scope allows to distinguish projects which contribute execution data but should not become part of the report:
+    	compile , runtime , provided : Project source and execution data is included in the report.
+    	test : Only execution data is considered for the report.
+    -->
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.ws.runtime.registrar</artifactId>
       <version>${revision}</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.ws.handler</artifactId>
       <version>${revision}</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.ws.runtime.httpwhiteboard</artifactId>
       <version>${revision}</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
