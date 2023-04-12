@@ -25,11 +25,22 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
+    <!--
+	Using the dependency scope allows to distinguish projects which contribute execution data but should not become part of the report:
+    	compile , runtime , provided : Project source and execution data is included in the report.
+    	test : Only execution data is considered for the report.
+    -->
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.xml</artifactId>
       <version>${revision}</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>

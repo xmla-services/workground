@@ -24,7 +24,12 @@ import jakarta.xml.bind.Unmarshaller;
 class MinimumSchemaTest {
 
 	public static String MINIMUM_SCHEMA = """
-
+			<Schema name="MinimumSchema">
+			  <Cube name="OnlyCube">
+			    <Table name="OnlyFactTable"></Table>
+			    <Measure name="OnlyMeaseure" column="onlyColumn" aggregator="sum"></Measure>
+			  </Cube>
+			</Schema>
 			""";
 
 	@org.junit.jupiter.api.Test
