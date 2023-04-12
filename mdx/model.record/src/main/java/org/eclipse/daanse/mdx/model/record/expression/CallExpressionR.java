@@ -30,16 +30,16 @@ public record CallExpressionR(String name,
         assert expressions != null;
 
         switch (type) {
-        case Braces:
+        case BRACES:
             assert name.equals("{}");
             break;
-        case Parentheses:
+        case PARENTHESES:
             assert name.equals("()");
             break;
-        case Internal:
+        case INTERNAL:
             assert name.startsWith("$");
             break;
-        case Empty:
+        case EMPTY:
             assert name.equals("");
             break;
         default:

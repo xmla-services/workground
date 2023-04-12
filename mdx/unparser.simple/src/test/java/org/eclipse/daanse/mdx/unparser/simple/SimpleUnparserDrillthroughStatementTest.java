@@ -44,7 +44,7 @@ class SimpleUnparserDrillthroughStatementTest {
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
                 new CallExpressionR("{}",
-                    CallExpression.Type.Braces,
+                    CallExpression.Type.BRACES,
                     List.of(
                         new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),

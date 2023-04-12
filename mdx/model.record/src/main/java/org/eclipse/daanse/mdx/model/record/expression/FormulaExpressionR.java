@@ -16,5 +16,4 @@ package org.eclipse.daanse.mdx.model.record.expression;
 import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
 
 public record FormulaExpressionR() implements FormulaExpression {
-// TODO: may be removed soon
 }

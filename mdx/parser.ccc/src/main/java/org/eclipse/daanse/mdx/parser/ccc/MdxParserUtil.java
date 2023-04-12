@@ -29,7 +29,9 @@ public class MdxParserUtil {
 	}
 
 	public static String stripQuotes(String s, String prefix, String suffix, String quoted) {
-		assert s.startsWith(prefix) && s.endsWith(suffix);
+		if (!(s.startsWith(prefix) && s.endsWith(suffix))) {
+            throw new IllegalArgumentException("Invalid quotes: " + s);
+        }
 		s = s.substring(prefix.length(), s.length() - suffix.length());
 		s = s.replace(quoted, suffix);
 		return s;
@@ -44,10 +46,10 @@ public class MdxParserUtil {
 			if (left != null) {
 				// Method syntax: "x.foo(arg1, arg2)" or "x.foo()"
 				expressions.add(0, left);
-				return new CallExpressionR(name, CallExpression.Type.Method, expressions);
+				return new CallExpressionR(name, CallExpression.Type.METHOD, expressions);
 			} else {
 				// Function syntax: "foo(arg1, arg2)" or "foo()"
-				return new CallExpressionR(name, CallExpression.Type.Function, expressions);
+				return new CallExpressionR(name, CallExpression.Type.FUNCTION, expressions);
 			}
 		} else {
 			// Member syntax: "foo.bar"
@@ -56,15 +58,14 @@ public class MdxParserUtil {
 			boolean call = false;
 			switch (objectIdentifier.quoting()) {
 			case UNQUOTED:
-				type = CallExpression.Type.Property;
+				type = CallExpression.Type.PROPERTY;
 				call = true;
-				// funTable.isProperty(name); TODO: all is call
 				break;
 			case QUOTED:
-				type = CallExpression.Type.PropertyQuoted;
+				type = CallExpression.Type.PROPERTY_QUOTED;
 				break;
 			default:
-				type = CallExpression.Type.PropertyAmpersAndQuoted;
+				type = CallExpression.Type.PROPERTY_AMPERS_AND_QUOTED;
 				break;
 			}
 			if (left instanceof CompoundId compoundIdLeft && !call) {

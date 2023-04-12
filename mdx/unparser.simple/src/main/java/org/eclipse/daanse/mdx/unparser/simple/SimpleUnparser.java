@@ -81,6 +81,7 @@ public class SimpleUnparser implements UnParser {
 
     int indent = 0;
 
+    @SuppressWarnings("java:S1068")
     private Config config = null;
 
     @Activate
@@ -352,24 +353,24 @@ public class SimpleUnparser implements UnParser {
         List<Expression> expressions = callExpression.expressions();
         String expressionText;
         String object = "";
-        if (CallExpression.Type.Method.equals(callExpression.type()) && !expressions.isEmpty()) {
+        if (CallExpression.Type.METHOD.equals(callExpression.type()) && !expressions.isEmpty()) {
             expressionText = unparseExpressions(expressions.subList(1, expressions.size()));
             object = unparseExpression(expressions.get(0)).toString();
         } else {
             expressionText = unparseExpressions(expressions);
         }
         switch (callExpression.type()) {
-            case Braces -> sb.append("{").append(expressionText).append("}");
-            case Cast -> sb.append("CAST(").append(expressionText.replace(",", " AS ")).append(")");
-            case Empty -> sb.append("");
-            case Function -> sb.append(name).append("(").append(expressionText).append(")");
-            case Internal -> sb.append("$").append(expressionText);
-            case Method -> sb.append(object).append(".").append(name).append("(").append(expressionText).append(")");
-            case Parentheses -> sb.append("(").append(expressionText).append(")");
-            case Property -> sb.append(expressionText).append(".").append(name);
-            case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&").append(name).append("]");
-            case PropertyQuoted -> sb.append(expressionText).append(".&").append(name).append("");
-            case Term_Case -> {
+            case BRACES -> sb.append("{").append(expressionText).append("}");
+            case CAST -> sb.append("CAST(").append(expressionText.replace(",", " AS ")).append(")");
+            case EMPTY -> sb.append("");
+            case FUNCTION -> sb.append(name).append("(").append(expressionText).append(")");
+            case INTERNAL -> sb.append("$").append(expressionText);
+            case METHOD -> sb.append(object).append(".").append(name).append("(").append(expressionText).append(")");
+            case PARENTHESES -> sb.append("(").append(expressionText).append(")");
+            case PROPERTY -> sb.append(expressionText).append(".").append(name);
+            case PROPERTY_AMPERS_AND_QUOTED -> sb.append(expressionText).append(".[&").append(name).append("]");
+            case PROPERTY_QUOTED -> sb.append(expressionText).append(".&").append(name).append("");
+            case TERM_CASE -> {
                 int size = expressions.size();
                 sb.append("CASE ");
                 sb.append(unparseExpression(expressions.get(0)));
@@ -385,15 +386,15 @@ public class SimpleUnparser implements UnParser {
                 sb.append(" END ");
 
             }
-            case Term_Infix -> {
+            case TERM_INFIX -> {
                 sb.append(unparseExpression(expressions.get(0)));
                 sb.append(" ");
                 sb.append(name);
                 sb.append(" ");
                 sb.append(unparseExpression(expressions.get(1)));
             }
-            case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
-            case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
+            case TERM_POSTFIX -> sb.append(expressionText).append(" ").append(name);
+            case TERM_PREFIX -> sb.append(name).append(" ").append(expressionText);
 
             default -> sb.append(":xxx");
         }
@@ -418,22 +419,22 @@ public class SimpleUnparser implements UnParser {
     }
 
     public StringBuilder unparseSelectWithClause(SelectWithClause clause) {
-        if (clause instanceof CreateCellCalculationBodyClause c) {
-            return unparseCreateCellCalculationBodyClause(c);
+        if (clause instanceof CreateCellCalculationBodyClause) {
+            return unparseCreateCellCalculationBodyClause();
         } else if (clause instanceof CreateMemberBodyClause c) {
             return unparseCreateMemberBodyClause(c);
         } else if (clause instanceof CreateSetBodyClause c) {
             return unparseCreateSetBodyClause(c);
-        } else if (clause instanceof MeasureBodyClause c) {
-            return unparseMeasureBodyClause(c);
+        } else if (clause instanceof MeasureBodyClause) {
+            return unparseMeasureBodyClause();
         }
         return new StringBuilder();
 
     }
 
-    public StringBuilder unparseCreateCellCalculationBodyClause(CreateCellCalculationBodyClause clause) {
+    public StringBuilder unparseCreateCellCalculationBodyClause() {
 
-        return null;
+        return new StringBuilder();
 
     }
 
@@ -475,8 +476,8 @@ public class SimpleUnparser implements UnParser {
 
     }
 
-    public StringBuilder unparseMeasureBodyClause(MeasureBodyClause clause) {
-        return null;
+    public StringBuilder unparseMeasureBodyClause() {
+        return new StringBuilder();
 
     }
 

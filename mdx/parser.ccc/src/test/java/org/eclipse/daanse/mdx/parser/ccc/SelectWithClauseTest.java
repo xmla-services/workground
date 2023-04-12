@@ -52,14 +52,14 @@ class SelectWithClauseTest {
 			assertThat(createSetBodyClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 			CallExpression callExpression = (CallExpression) createSetBodyClause.expression();
 			assertThat(callExpression.name()).isEqualTo("Union");
-			assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Function);
+			assertThat(callExpression.type()).isEqualTo(CallExpression.Type.FUNCTION);
 			assertThat(callExpression.expressions()).hasSize(2);
 			assertThat(callExpression.expressions().get(0)).isInstanceOf(CallExpression.class);
 			assertThat(callExpression.expressions().get(1)).isInstanceOf(CallExpression.class);
 			CallExpression callExpression1 = (CallExpression) callExpression.expressions().get(0);
 			CallExpression callExpression2 = (CallExpression) callExpression.expressions().get(1);
 			assertThat(callExpression1.name()).isEqualTo("Members");
-			assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.Property);
+			assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.PROPERTY);
 			assertThat(callExpression1.expressions()).hasSize(1);
 			assertThat(callExpression1.expressions().get(0)).isInstanceOf(CompoundId.class);
 			CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
@@ -69,7 +69,7 @@ class SelectWithClauseTest {
             checkNameObjectIdentifiers(
                 compoundId1.objectIdentifiers(), 1, "Gender", ObjectIdentifier.Quoting.QUOTED);
 			assertThat(callExpression2.name()).isEqualTo("{}");
-			assertThat(callExpression2.type()).isEqualTo(CallExpression.Type.Braces);
+			assertThat(callExpression2.type()).isEqualTo(CallExpression.Type.BRACES);
 			assertThat(callExpression2.expressions()).hasSize(1);
 			CompoundId compoundId2 = (CompoundId) callExpression2.expressions().get(0);
 			assertThat(compoundId2.objectIdentifiers()).hasSize(3);

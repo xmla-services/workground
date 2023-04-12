@@ -75,7 +75,7 @@ class SelectStatementTest {
         assertThat(selectQueryAxisClause2.expression()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) selectQueryAxisClause2.expression();
         assertThat(callExpression.name()).isEqualTo("{}");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Braces);
+        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
         assertThat(callExpression.expressions()).hasSize(2);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         assertThat(callExpression.expressions().get(1)).isNotNull().isInstanceOf(CompoundId.class);
@@ -102,7 +102,7 @@ class SelectStatementTest {
         assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) selectQueryAxisClause.expression();
         assertThat(callExpression.name()).isEqualTo("Membmers");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Property);
+        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PROPERTY);
         assertThat(callExpression.expressions()).hasSize(1);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);
@@ -141,7 +141,7 @@ class SelectStatementTest {
         CallExpression callExpression =
             (CallExpression) selectQueryAxesClause.selectQueryAxisClauses().get(0).expression();
         assertThat(callExpression.name()).isEqualTo("Members");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Property);
+        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PROPERTY);
         assertThat(callExpression.expressions()).hasSize(1);
         assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
         CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);

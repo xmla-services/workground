@@ -53,7 +53,7 @@ class SimpleUnparserDMVStatementTest {
                 new CompoundIdR(List.of(new NameObjectIdentifierR("columnName2", ObjectIdentifier.Quoting.UNQUOTED)))
             ),
             new NameObjectIdentifierR("tableName", ObjectIdentifier.Quoting.UNQUOTED),
-            new CallExpressionR("=", CallExpression.Type.Term_Infix,
+            new CallExpressionR("=", CallExpression.Type.TERM_INFIX,
                 List.of(
                     new CompoundIdR(List.of(new NameObjectIdentifierR("nameColumn", ObjectIdentifier.Quoting.UNQUOTED))),
                     new StringLiteralR("\"test\"")

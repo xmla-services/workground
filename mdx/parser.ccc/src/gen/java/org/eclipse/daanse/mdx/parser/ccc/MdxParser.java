@@ -73,71 +73,71 @@ import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseSelectDimensionPropertyLis
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseRefreshStatement;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseDMVStatement;
 import org.eclipse.daanse.mdx.parser.ccc.tree.ASTparseSelectQueryAxisClause;
-import java.util.LinkedList;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
+import java.util.List;
+import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
+import org.eclipse.daanse.mdx.model.record.select.SelectCellPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
+import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
 import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
-import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
+import org.eclipse.daanse.mdx.model.record.select.AxisR;
+import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
+import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
+import org.eclipse.daanse.mdx.model.record.select.MeasureBodyClauseR;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
+import org.eclipse.daanse.mdx.model.api.ReturnItem;
+import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
+import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
+import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
+import org.eclipse.daanse.mdx.model.record.ReturnItemR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
+import java.util.LinkedList;
+import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
+import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
+import java.util.Optional;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
+import org.eclipse.daanse.mdx.model.api.select.Axis;
+import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
+import org.eclipse.daanse.mdx.model.record.SelectStatementR;
+import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
+import org.eclipse.daanse.mdx.model.record.ExplainStatementR;
+import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
+import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.expression.FormulaExpressionR;
+import org.eclipse.daanse.mdx.model.record.DMVStatementR;
+import java.math.BigDecimal;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.CreateCellCalculationBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
-import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
-import java.math.BigDecimal;
-import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
-import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
-import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
-import org.eclipse.daanse.mdx.model.record.expression.FormulaExpressionR;
-import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
-import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
-import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.record.ExplainStatementR;
-import java.util.List;
-import org.eclipse.daanse.mdx.model.record.select.AxisR;
-import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.select.Axis;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
-import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
-import org.eclipse.daanse.mdx.model.record.select.MeasureBodyClauseR;
-import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
-import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
-import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
-import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
-import org.eclipse.daanse.mdx.model.record.RefreshStatementR;
-import org.eclipse.daanse.mdx.model.api.ReturnItem;
-import org.eclipse.daanse.mdx.model.record.select.SelectCellPropertyListClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
-import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
-import org.eclipse.daanse.mdx.model.record.SelectStatementR;
-import java.util.Optional;
-import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
-import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.record.ReturnItemR;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
-import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
-import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
-import org.eclipse.daanse.mdx.model.record.DMVStatementR;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 
 
 public class MdxParser {
@@ -1486,7 +1486,7 @@ public class MdxParser {
                 }
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:765:5
                 CompoundId compundId = new CompoundIdR(List.of(objectIdentifier));
-                expression = new CallExpressionR("AS", CallExpression.Type.Term_Infix, List.of(expression, compundId));
+                expression = new CallExpressionR("AS", CallExpression.Type.TERM_INFIX, List.of(expression, compundId));
             }
             // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:773:3
             return expression;
@@ -1533,7 +1533,7 @@ public class MdxParser {
                 return expression;
             } else {
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:788:3
-                return new CallExpressionR("", CallExpression.Type.Empty, List.of());
+                return new CallExpressionR("", CallExpression.Type.EMPTY, List.of());
             }
         } catch (ParseException e) {
             parseException812 = e;
@@ -2061,7 +2061,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:973:5
-                    x = new CallExpressionR("OR", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("OR", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == XOR) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:979:5
                     consumeToken(XOR);
@@ -2073,7 +2073,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:980:5
-                    x = new CallExpressionR("XOR", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("XOR", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == COLON) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:988:5
                     consumeToken(COLON);
@@ -2085,7 +2085,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:989:5
-                    x = new CallExpressionR(":", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR(":", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else {
                     break;
                 }
@@ -2142,7 +2142,7 @@ public class MdxParser {
                     popCallStack();
                 }
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1009:5
-                x = new CallExpressionR("AND", CallExpression.Type.Term_Infix, List.of(x, y));
+                x = new CallExpressionR("AND", CallExpression.Type.TERM_INFIX, List.of(x, y));
             }
             // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1016:3
             return x;
@@ -2204,7 +2204,7 @@ public class MdxParser {
                     popCallStack();
                 }
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1031:3
-                return new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(x));
+                return new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX, List.of(x));
             } else {
                 pushOntoCallStack("parseTerm4", "/home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1026, 3);
                 throw new ParseException(lastConsumedToken, parseTerm4_FIRST_SET, parsingStack);
@@ -2293,14 +2293,14 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1075:5
-                    x = new CallExpressionR(op.getImage(), CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR(op.getImage(), CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (scan$Grammer_ccc$1084$5()) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1085:5
                     consumeToken(IS);
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1085:12
                     consumeToken(NULL);
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1086:5
-                    x = new CallExpressionR("IS NULL", CallExpression.Type.Term_Postfix, List.of(x));
+                    x = new CallExpressionR("IS NULL", CallExpression.Type.TERM_POSTFIX, List.of(x));
                 } else if (scan$Grammer_ccc$1094$5()) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1095:5
                     consumeToken(IS);
@@ -2312,14 +2312,14 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1096:5
-                    x = new CallExpressionR("IS", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("IS", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == IS) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1102:5
                     consumeToken(IS);
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1102:12
                     consumeToken(EMPTY);
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1103:5
-                    x = new CallExpressionR("IS EMPTY", CallExpression.Type.Term_Postfix, List.of(x));
+                    x = new CallExpressionR("IS EMPTY", CallExpression.Type.TERM_POSTFIX, List.of(x));
                 } else if (nextTokenType() == MATCHES) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1107:5
                     consumeToken(MATCHES);
@@ -2331,7 +2331,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1108:5
-                    x = new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("MATCHES", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (scan$Grammer_ccc$1114$5()) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1115:5
                     consumeToken(NOT);
@@ -2345,7 +2345,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1116:5
-                    x = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(x, y))));
+                    x = new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX, List.of(new CallExpressionR("MATCHES", CallExpression.Type.TERM_INFIX, List.of(x, y))));
                 } else if (nextTokenType() == IN) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1127:5
                     consumeToken(IN);
@@ -2357,7 +2357,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1128:5
-                    x = new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("IN", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == NOT) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1134:5
                     consumeToken(NOT);
@@ -2371,7 +2371,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1135:5
-                    x = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(x, y))));
+                    x = new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX, List.of(new CallExpressionR("IN", CallExpression.Type.TERM_INFIX, List.of(x, y))));
                 } else {
                     break;
                 }
@@ -2429,7 +2429,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1160:5
-                    x = new CallExpressionR("+", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("+", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == MINUS) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1166:5
                     consumeToken(MINUS);
@@ -2441,7 +2441,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1167:5
-                    x = new CallExpressionR("-", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("-", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == CONCAT) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1173:5
                     consumeToken(CONCAT);
@@ -2453,7 +2453,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1174:5
-                    x = new CallExpressionR("||", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("||", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else {
                     break;
                 }
@@ -2511,7 +2511,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1194:5
-                    x = new CallExpressionR("*", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("*", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else if (nextTokenType() == SOLIDUS) {
                     // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1200:5
                     consumeToken(SOLIDUS);
@@ -2523,7 +2523,7 @@ public class MdxParser {
                         popCallStack();
                     }
                     // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1201:5
-                    x = new CallExpressionR("/", CallExpression.Type.Term_Infix, List.of(x, y));
+                    x = new CallExpressionR("/", CallExpression.Type.TERM_INFIX, List.of(x, y));
                 } else {
                     break;
                 }
@@ -2600,7 +2600,7 @@ public class MdxParser {
                     popCallStack();
                 }
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1227:3
-                return new CallExpressionR("-", CallExpression.Type.Term_Prefix, List.of(p));
+                return new CallExpressionR("-", CallExpression.Type.TERM_PREFIX, List.of(p));
             } else if (nextTokenType() == EXISTING) {
                 // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1233:3
                 consumeToken(EXISTING);
@@ -2612,7 +2612,7 @@ public class MdxParser {
                     popCallStack();
                 }
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1234:3
-                return new CallExpressionR("Existing", CallExpression.Type.Term_Prefix, List.of(p));
+                return new CallExpressionR("Existing", CallExpression.Type.TERM_PREFIX, List.of(p));
             } else {
                 pushOntoCallStack("parseFactor", "/home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1218, 3);
                 throw new ParseException(lastConsumedToken, parseFactor_FIRST_SET, parsingStack);
@@ -2862,7 +2862,7 @@ public class MdxParser {
                 // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1315:59
                 consumeToken(RPAREN);
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1316:3
-                return new CallExpressionR("CAST", CallExpression.Type.Cast, List.of(expression, new SymbolLiteralR(nameObjectIdentifier.name())));
+                return new CallExpressionR("CAST", CallExpression.Type.CAST, List.of(expression, new SymbolLiteralR(nameObjectIdentifier.name())));
             } else if (nextTokenType() == LPAREN) {
                 // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1324:3
                 consumeToken(LPAREN);
@@ -2878,7 +2878,7 @@ public class MdxParser {
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1325:3
                 // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
                 // are just expressions.
-                return new CallExpressionR("()", CallExpression.Type.Parentheses, expressions);
+                return new CallExpressionR("()", CallExpression.Type.PARENTHESES, expressions);
             } else if (nextTokenType() == LBRACE) {
                 // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1333:3
                 consumeToken(LBRACE);
@@ -2900,7 +2900,7 @@ public class MdxParser {
                 // Code for Terminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1342:3
                 consumeToken(RBRACE);
                 // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1343:3
-                return new CallExpressionR("{}", CallExpression.Type.Braces, expressions);
+                return new CallExpressionR("{}", CallExpression.Type.BRACES, expressions);
             } else if (nextTokenType() == CASE) {
                 // Code for NonTerminal specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1347:3
                 pushOntoCallStack("parseAtom", "/home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc", 1347, 3);
@@ -3056,9 +3056,9 @@ public class MdxParser {
             consumeToken(END);
             // Code for CodeBlock specified at /home/oem/repod/deMondrian/mdx/parser.ccc/src/main/ccc/Grammer.ccc:1414:3
             if (match) {
-                return new CallExpressionR("_CaseMatch", CallExpression.Type.Term_Case, expressions);
+                return new CallExpressionR("_CaseMatch", CallExpression.Type.TERM_CASE, expressions);
             } else {
-                return new CallExpressionR("_CaseTest", CallExpression.Type.Term_Case, expressions);
+                return new CallExpressionR("_CaseTest", CallExpression.Type.TERM_CASE, expressions);
             }
         } catch (ParseException e) {
             parseException2007 = e;

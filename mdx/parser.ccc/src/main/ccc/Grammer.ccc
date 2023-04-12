@@ -764,7 +764,7 @@ Expression parseExpression :
     < AS > objectIdentifier = parseIdentifier
     {
       CompoundId compundId = new CompoundIdR(List.of(objectIdentifier));
-      expression = new CallExpressionR("AS", CallExpression.Type.Term_Infix, List.of(
+      expression = new CallExpressionR("AS", CallExpression.Type.TERM_INFIX, List.of(
       expression, compundId
       )
       );
@@ -786,7 +786,7 @@ Expression parseExpressionOrEmpty :
   }
 | /* empty */
   {
-    return new CallExpressionR("", CallExpression.Type.Empty, List.of()
+    return new CallExpressionR("", CallExpression.Type.EMPTY, List.of()
     );
   }
 ;
@@ -971,14 +971,14 @@ Expression parseUnaliasedExpression :
   (
     < OR > y = parseTerm5
     {
-      x = new CallExpressionR("OR", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("OR", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
     }
   | < XOR > y = parseTerm5
     {
-      x = new CallExpressionR("XOR", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("XOR", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -987,7 +987,7 @@ Expression parseUnaliasedExpression :
     // range 'm1 : m2' yields set of members
     < COLON > y = parseTerm5
     {
-      x = new CallExpressionR(":", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR(":", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1007,7 +1007,7 @@ Expression parseTerm5 :
   (
     < AND > y = parseTerm4
     {
-      x = new CallExpressionR("AND", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("AND", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1029,7 +1029,7 @@ Expression parseTerm4 :
   }
 | < NOT > x = parseTerm4
   {
-    return new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX, List.of(
     x
     )
     );
@@ -1073,7 +1073,7 @@ Expression parseTerm3 :
     )
     y = parseTerm2
     {
-      x = new CallExpressionR(op.getImage(), CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR(op.getImage(), CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1084,7 +1084,7 @@ Expression parseTerm3 :
     SCAN 2 =>
     < IS > < NULL >
     {
-      x = new CallExpressionR("IS NULL", CallExpression.Type.Term_Postfix, List.of(
+      x = new CallExpressionR("IS NULL", CallExpression.Type.TERM_POSTFIX, List.of(
       x
       )
       );
@@ -1094,7 +1094,7 @@ Expression parseTerm3 :
     SCAN 2 =>
     < IS > y = parseTerm2
     {
-      x = new CallExpressionR("IS", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("IS", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1102,11 +1102,11 @@ Expression parseTerm3 :
   | < IS > < EMPTY >
     {
       x = new CallExpressionR(
-      "IS EMPTY", CallExpression.Type.Term_Postfix, List.of(x));
+      "IS EMPTY", CallExpression.Type.TERM_POSTFIX, List.of(x));
     }
   | < MATCHES > y = parseTerm2
     {
-      x = new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("MATCHES", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1115,9 +1115,9 @@ Expression parseTerm3 :
     < NOT > < MATCHES > y = parseTerm2
     {
       x = new CallExpressionR(
-      "NOT", CallExpression.Type.Term_Prefix, List.of(
+      "NOT", CallExpression.Type.TERM_PREFIX, List.of(
       new CallExpressionR(
-      "MATCHES", CallExpression.Type.Term_Infix, List.of(
+      "MATCHES", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       )
@@ -1126,7 +1126,7 @@ Expression parseTerm3 :
     }
   | < IN > y = parseTerm2
     {
-      x = new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("IN", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1134,9 +1134,9 @@ Expression parseTerm3 :
   | < NOT > < IN > y = parseTerm2
     {
       x = new CallExpressionR(
-      "NOT", CallExpression.Type.Term_Prefix, List.of(
+      "NOT", CallExpression.Type.TERM_PREFIX, List.of(
       new CallExpressionR(
-      "IN", CallExpression.Type.Term_Infix, List.of(
+      "IN", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       )
@@ -1158,21 +1158,21 @@ Expression parseTerm2 :
   (
     < PLUS > y = parseTerm
     {
-      x = new CallExpressionR("+", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("+", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
     }
   | < MINUS > y = parseTerm
     {
-      x = new CallExpressionR("-", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("-", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
     }
   | < CONCAT > y = parseTerm
     {
-      x = new CallExpressionR("||", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("||", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1192,14 +1192,14 @@ Expression parseTerm :
   (
     < ASTERISK > y = parseFactor
     {
-      x = new CallExpressionR("*", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("*", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
     }
   | < SOLIDUS > y = parseFactor
     {
-      x = new CallExpressionR("/", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("/", CallExpression.Type.TERM_INFIX, List.of(
       x, y
       )
       );
@@ -1225,14 +1225,14 @@ Expression parseFactor :
   }
 | < MINUS > p = parsePrimary
   {
-    return new CallExpressionR("-", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("-", CallExpression.Type.TERM_PREFIX, List.of(
     p
     )
     );
   }
 | < EXISTING > p = parsePrimary
   {
-    return new CallExpressionR("Existing", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("Existing", CallExpression.Type.TERM_PREFIX, List.of(
     p
     )
     );
@@ -1315,7 +1315,7 @@ Expression parseAtom :
   < AS > nameObjectIdentifier = parseNameObjectIdentifier < RPAREN >
   {
     return new CallExpressionR(
-    "CAST", CallExpression.Type.Cast, List.of(
+    "CAST", CallExpression.Type.CAST, List.of(
     expression,
     new SymbolLiteralR(nameObjectIdentifier.name())
     )
@@ -1326,7 +1326,7 @@ Expression parseAtom :
     // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
     // are just expressions.
     return new CallExpressionR(
-    "()", CallExpression.Type.Parentheses, expressions);
+    "()", CallExpression.Type.PARENTHESES, expressions);
   }
 |
   // set built from sets/tuples
@@ -1342,7 +1342,7 @@ Expression parseAtom :
   < RBRACE >
   {
     return new CallExpressionR(
-    "{}", CallExpression.Type.Braces, expressions);
+    "{}", CallExpression.Type.BRACES, expressions);
   }
 | expression = parseCaseExpression
   {
@@ -1415,12 +1415,12 @@ Expression parseCaseExpression :
     if (match)
     {
       return new CallExpressionR(
-      "_CaseMatch", CallExpression.Type.Term_Case, expressions);
+      "_CaseMatch", CallExpression.Type.TERM_CASE, expressions);
     }
     else
     {
       return new CallExpressionR(
-      "_CaseTest", CallExpression.Type.Term_Case, expressions);
+      "_CaseTest", CallExpression.Type.TERM_CASE, expressions);
     }
   }
 ;

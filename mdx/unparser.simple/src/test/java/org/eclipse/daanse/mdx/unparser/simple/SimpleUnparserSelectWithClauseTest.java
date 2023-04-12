@@ -58,13 +58,13 @@ class SimpleUnparserSelectWithClauseTest {
                 ObjectIdentifier.Quoting.QUOTED);
             KeyObjectIdentifier keyObjectIdentifier = new KeyObjectIdentifierR(List.of(nameObjectIdentifier3));
 
-            CallExpression callExpression1 = new CallExpressionR("Members", CallExpression.Type.Property,
+            CallExpression callExpression1 = new CallExpressionR("Members", CallExpression.Type.PROPERTY,
                 List.of(new CompoundIdR(List.of(nameObjectIdentifier11, nameObjectIdentifier12))));
 
-            CallExpression callExpression2 = new CallExpressionR("{}", CallExpression.Type.Braces,
+            CallExpression callExpression2 = new CallExpressionR("{}", CallExpression.Type.BRACES,
                 List.of(new CompoundIdR(List.of(nameObjectIdentifier21, nameObjectIdentifier22, keyObjectIdentifier))));
 
-            CallExpression callExpression = new CallExpressionR("Union", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("Union", CallExpression.Type.FUNCTION,
                 List.of(callExpression1, callExpression2));
             CreateSetBodyClause createSetBodyClause =
                 new CreateSetBodyClauseR(new CompoundIdR(List.of(nameObjectIdentifier)), callExpression);
