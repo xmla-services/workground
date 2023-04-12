@@ -410,19 +410,13 @@ MdxStatement parseMdxStatement :
 {
   MdxStatement mdxStatement = null;
 }
-  mdxStatement = parseSelectStatement
-  //	|
-  //	DrillthroughStatement
-  //    |
-  //	CreateFormulaStatement
-  //    |
-  //    ExplainStatement
-  //    |
-  //    RefreshStatement
-  //    |
-  //    UpdateStatement
-  //    |
-  //    TransactionCommandStatement
+(
+    mdxStatement = parseSelectStatement
+  	|
+  	mdxStatement = parseDrillthroughStatement
+    |
+    mdxStatement = parseExplainStatement
+)
   < EOF >
   {
     return mdxStatement;

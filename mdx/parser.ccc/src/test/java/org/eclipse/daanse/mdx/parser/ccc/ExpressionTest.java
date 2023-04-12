@@ -120,14 +120,14 @@ class ExpressionTest {
 		@Test
 		void testCallExpressionPropertyQuoted() throws MdxParserException {
 			Expression clause = new MdxParserWrapper("object.&PROPERTY").parseExpression();
-			assertThat(clause).isNotNull().isInstanceOf(CallExpressionR.class);
+			assertThat(clause).isNotNull().isInstanceOf(CallExpression.class);
 			assertThat(((CallExpressionR) clause).type()).isEqualTo(CallExpression.Type.PropertyQuoted);
 		}
 
 		@Test
 		void testCallExpressionPropertyAmpersAndQuoted() throws MdxParserException {
 			Expression clause = new MdxParserWrapper("object.[&PROPERTY]").parseExpression();
-			assertThat(clause).isNotNull().isInstanceOf(CallExpressionR.class);
+			assertThat(clause).isNotNull().isInstanceOf(CallExpression.class);
 			assertThat(((CallExpressionR) clause).type()).isEqualTo(CallExpression.Type.PropertyAmpersAndQuoted);
 		}
 
@@ -461,4 +461,178 @@ class ExpressionTest {
 		}
 	}
 
+    @Test
+    void testIsEmpty() throws MdxParserException {
+        assertParseExpr("[Measures].[Unit Sales] IS EMPTY");
+
+        assertParseExpr("[Measures].[Unit Sales] IS EMPTY AND 1 IS NULL");
+
+        assertParseExpr("- x * 5 is empty is empty is null + 56");
+    }
+
+    @Test
+    void testIs() throws MdxParserException {
+        assertParseExpr(
+            """
+                [Measures].[Unit Sales] IS [Measures].[Unit Sales]
+                AND [Measures].[Unit Sales] IS NULL
+                """);
+    }
+
+    @Test
+    void testIsNull() throws MdxParserException {
+        assertParseExpr(
+            "[Measures].[Unit Sales] IS NULL");
+
+        assertParseExpr("[Measures].[Unit Sales] IS NULL AND 1 <> 2");
+
+        assertParseExpr("x is null or y is null and z = 5");
+
+        assertParseExpr("(x is null) + 56 > 6");
+
+        assertParseExpr("x is null and a = b or c = d + 5 is null + 5");
+    }
+
+    @Test
+    void testNull() throws MdxParserException {
+        assertParseExpr("Filter({[Measures].[Foo]}, Iif(1 = 2, NULL, 'X'))");
+    }
+
+    @Test
+    void testCast() throws MdxParserException {
+        assertParseExpr("Cast([Measures].[Unit Sales] AS Numeric)");
+
+        assertParseExpr("Cast(1 + 2 AS String)");
+    }
+
+    @Test
+    void testBangFunction() throws MdxParserException {
+        // Parser accepts '<id> [! <id>] *' as a function name, but ignores
+        // all but last name.
+        assertParseExpr("foo!bar!Exp(2.0)");
+        assertParseExpr("1 + VBA!Exp(2.0 + 3)");
+    }
+
+    @Test
+    void testId() throws MdxParserException {
+        assertParseExpr("foo");
+        assertParseExpr("fOo");
+        assertParseExpr("[Foo].[Bar Baz]");
+        assertParseExpr("[Foo].&[Bar]");
+    }
+
+    @Test
+    void testIdComplex() throws MdxParserException {
+        // simple key
+        assertParseExpr(
+            "[Foo].&[Key1]&[Key2].[Bar]");
+        // compound key
+        assertParseExpr(
+            "[Foo].&[1]&[Key 2]&[3].[Bar]");
+        // compound key sans brackets
+        assertParseExpr(
+            "[Foo].&Key1&Key2 + 4");
+        // brackets are required for numbers
+
+        if (false)
+            assertParseExprFails(
+                "[Foo].&[1]&[Key2]&^3.[Bar]");
+        // space between ampersand and key is unacceptable
+        assertParseExprFails(
+            "[Foo].&^ [Key2].[Bar]");
+        // underscore after ampersand is unacceptable
+        assertParseExprFails(
+            "[Foo].&^_Key2.[Bar]");
+        // but underscore is OK within brackets
+        assertParseExpr(
+            "[Foo].&[_Key2].[Bar]");
+    }
+
+    /**
+     * Tests parsing of numbers.
+     */
+    @Test
+    void testNumbers() throws MdxParserException {
+        // Number: [+-] <digits> [ . <digits> ] [e [+-] <digits> ]
+        assertParseExpr("2");
+
+        // leading '-' is treated as an operator -- that's ok
+        assertParseExpr("-3");
+
+        // leading '+' is ignored -- that's ok
+        assertParseExpr("+45");
+
+        // space bad
+        assertParseExprFails(
+            "4 5");
+
+        assertParseExpr("3.14");
+        assertParseExpr(".12345");
+
+        // lots of digits left and right of point
+        assertParseExpr("31415926535.89793");
+        assertParseExpr(
+            "31415926535897.9314159265358979");
+        assertParseExpr("3.141592653589793");
+        assertParseExpr(
+            "-3141592653589793.14159265358979");
+
+        // exponents akimbo
+        assertParseExpr("1e2");
+
+        assertParseExprFails("1e2e3");
+
+        assertParseExpr("1.2e3");
+
+        assertParseExpr("-1.2345e3");
+        assertParseExprFails(
+            "1.2e3.4");
+        assertParseExpr(".00234e0003");
+        assertParseExpr(
+            ".00234e-0067");
+    }
+
+    /**
+     * We give the AS operator low
+     * precedence, so CAST works as it should but 'expr AS namedSet' does not.
+     */
+    @Test
+    void testAsPrecedence() throws MdxParserException {
+        // low precedence operator (AND) in CAST.
+        assertParseExpr(
+            "cast(a and b as string)");
+
+        // medium precedence operator (:) in CAST
+        assertParseExpr(
+            "cast(a : b as string)");
+
+        // high precedence operator (IS) in CAST
+        assertParseExpr("cast(a is b as string)");
+
+        // low precedence operator in axis expression. According to spec, 'AS'
+        // has higher precedence than '*' but we give it lower. Bug.
+        assertParseExpr("a * b as c");
+
+
+        // Note that 'AS' has higher precedence than '*'.
+        assertParseExpr("a * b as c * d");
+
+        // Spec says that ':' has a higher precedence than '*'.
+        // Mondrian currently does it wrong.
+        assertParseExpr("a : b * c : d");
+
+        // Note that 'AS' has higher precedence than ':', has higher
+        // precedence than '*'.
+        assertParseExpr("a : b as n * c : d as n2 as n3");
+    }
+
+    private void assertParseExprFails(String s) throws MdxParserException {
+        MdxParserWrapper parser = new MdxParserWrapper(s);
+        assertThrows(MdxParserException.class, () -> parser.parseExpression());
+    }
+
+    private void assertParseExpr(String s) throws MdxParserException {
+        Expression clause = new MdxParserWrapper(s).parseExpression();
+        assertThat(clause).isNotNull();
+    }
 }
