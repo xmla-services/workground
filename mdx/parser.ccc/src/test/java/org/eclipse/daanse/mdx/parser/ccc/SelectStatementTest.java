@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkAxis;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
 import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SelectStatementTest {
 
@@ -186,4 +187,186 @@ class SelectStatementTest {
         assertThat(selectSubcubeClauseName.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
     }
 
+    @Test
+    void testSelectStatement1() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].__Foo as 1 + 2
+            select __Foo on 0
+            from _Bar_Baz"
+            """);
+    }
+
+    @Test
+    void testSelectStatement2() throws MdxParserException {
+        String mdx = """
+            with member [Measures].#_Foo as 1 + 2
+            select __Foo on 0
+            from _Bar#Baz
+            """;
+        assertParseQueryFails(mdx);
+    }
+
+    @Test
+    void testSelectStatement3() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].$Foo as 1 + 2
+            select $Foo on 0
+            from Bar$Baz
+            """);
+    }
+
+    @Test
+    void testSelectStatement4() throws MdxParserException {
+        assertParseQuery("""
+            select [measures].[$foo] on columns from sales
+            """);
+    }
+
+    @Test
+    void testSelectStatement5() throws MdxParserException {
+        String mdx = """
+            select { Customers].Children } on columns from [Sales]
+            """;
+        assertParseQueryFails(mdx);
+    }
+
+    @Test
+    void testSelectStatement6() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].[Foo] as ' 123 '
+            select {[Measures].members} on columns,
+            CrossJoin([Product].members, {[Gender].Children}) on rows
+            from [Sales]
+            where [Marital Status].[S]
+            """);
+    }
+
+    @Test
+    void testSelectStatement7() throws MdxParserException {
+        assertParseQuery("select {[axis0mbr]} on axis(0), {[axis1mbr]} on axis(1) from cube1");
+    }
+
+    @Test
+    void testSelectStatement8() throws MdxParserException {
+        assertParseQuery("select {[axis1mbr]} on aXiS(1), {[axis0mbr]} on AxIs(0) from cube1");
+    }
+
+    @Test
+    void testSwitch1() throws MdxParserException {
+        assertParseQuery("""
+            with member [Measures].[Foo] as
+            ' case when x = y then \"eq\" when x < y then \"lt\" else \"gt\" end '
+            select {[foo]} on axis(0) from [cube]
+            """);
+    }
+
+    @Test
+    void testSwitch2() throws MdxParserException {
+        assertParseQuery("""
+             with member [Measures].[Foo] as
+            ' case x when 1 then 2 when 3 then 4 else 5 end '
+              select {[foo]} on axis(0) from [cube]
+            """);
+    }
+
+    /**
+     * Parser should not require braces around range op in WITH SET.
+     */
+    @Test
+    void testSetExpr() throws MdxParserException {
+        assertParseQuery("""
+            with set [Set1] as '[Product].[Drink]:[Product].[Food]'
+            select [Set1] on columns, {[Measures].defaultMember} on rows
+            from Sales
+            """);
+
+        // set expr in axes
+        assertParseQuery("""
+            select [Product].[Drink]:[Product].[Food] on columns,
+                 {[Measures].defaultMember} on rows
+                from Sales
+            """);
+    }
+
+    @Test
+    void testDimensionProperties() throws MdxParserException {
+        assertParseQuery("""
+            select {[foo]} properties p1,   p2 on columns from [cube]
+            """);
+    }
+
+    @Test
+    void testCellProperties() throws MdxParserException {
+        assertParseQuery("""
+            select {[foo]} on columns
+            from [cube] CELL PROPERTIES FORMATTED_VALUE
+            """);
+    }
+
+    /**
+     * High precision number in MDX causes overflow
+     * The problem was that "5000001234" exceeded the precision of the int being
+     * used to gather the mantissa.
+     */
+    @Test
+    void testLargePrecision() throws MdxParserException {
+        // Now, a query with several numeric literals. This is the original
+        // testcase for the bug.
+        assertParseQuery("""
+            with member [Measures].[Small Number] as '[Measures].[Store Sales] / 9000'
+            select
+            {[Measures].[Small Number]} on columns,
+            {Filter([Product].[Product Department].members, [Measures].[Small Number] >= 0.3
+            and [Measures].[Small Number] <= 0.5000001234)} on rows
+            from Sales
+            where ([Time].[1997].[Q2].[4])
+            """);
+    }
+
+    /**
+     * DrilldownLevelTop parser error.
+     */
+    @Test
+    void testEmptyExpr() throws MdxParserException {
+        assertParseQuery("""
+            select NON EMPTY HIERARCHIZE(
+            {DrillDownLevelTop(
+            {[Product].[All Products]},3,,[Measures].[Unit Sales])}
+            ) ON COLUMNS
+            from [Sales]
+            """);
+
+        // more advanced; the actual test case in the bug
+        assertParseQuery("""
+            SELECT {[Measures].[NetSales]}
+            DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON COLUMNS ,
+            NON EMPTY HIERARCHIZE(AddCalculatedMembers(
+            {DrillDownLevelTop({[ProductDim].[Name].[All]}, 10, ,
+            [Measures].[NetSales])}))
+            DIMENSION PROPERTIES PARENT_UNIQUE_NAME ON ROWS
+            FROM [cube]
+            """);
+    }
+
+    /**
+     * Test case for SELECT in the FROM clause.
+     */
+    @Test
+    void testInnerSelect() throws MdxParserException {
+        assertParseQuery("""
+            SELECT FROM
+            (SELECT ({[ProductDim].[Product Group].&[Mobile Phones]})
+            ON COLUMNS FROM [cube]) CELL PROPERTIES VALUE
+            """);
+    }
+
+    private void assertParseQuery(String mdx) throws MdxParserException {
+        SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+        assertThat(selectStatement).isNotNull();
+    }
+
+    private void assertParseQueryFails(String s) throws MdxParserException {
+        MdxParserWrapper parser = new MdxParserWrapper(s);
+        assertThrows(MdxParserException.class, () -> parser.parseSelectStatement());
+    }
 }
