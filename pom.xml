@@ -270,11 +270,6 @@
         </plugin>
 
         <plugin>
-   	      <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.9</version>
-        </plugin>
-        <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
           <version>3.9.1.2184</version>
@@ -344,19 +339,6 @@
           <skipTests>true</skipTests>
         </configuration>
       </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>report-aggregate</id>
-			            <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>report-aggregate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
     </plugins>
   </build>
   <dependencyManagement>
@@ -1022,6 +1004,7 @@
     <module>ws</module>
     <module>xmla</module>
     <module>odf</module>
+    <module>aggregate-report-jacoco</module>
   </modules>
   <profiles>
     <profile>
