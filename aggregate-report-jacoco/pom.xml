@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
+    <version>${revision}</version>
+  </parent>
+  <groupId>CI</groupId>
+  <artifactId>aggregate-report-jacoco</artifactId>
+  
+   <dependencies>
+
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.clickhouse</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.common</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.jtdssqlserver</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.mssqlserver</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.mysql</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.oracle11</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.sqlite</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.access</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.clickhouse</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.common</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.db2</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.derby</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.firebird</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.googlebigquery</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.greenplum</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.hsqldb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.impala</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.infobright</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.informix</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.ingres</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.interbase</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.luciddb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.mariadb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.monetdb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.mssqlserver</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.neoview</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.nuodb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.pdidataservice</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.postgresql</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.redshift</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.snowflake</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.sqlstream</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.sybase</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.teradata</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.vectorwise</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.db.vertica</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.dialect.resolver.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.jdbc.dataloader.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.jdbc.dataloader.csv</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.jdbc.metadata</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.jdbc.util</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.loader.csv</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.metadata</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.nop</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.query</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.emondrian</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.engine.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.engine.impl</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.core.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.core.impl</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.user.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.lcid</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.combinedtest</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.model.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.parser.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.parser.ccc</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.unparser.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.mdx.unparser.simple</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.impl.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.odf.xml</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.xml</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.xml</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.provider.xml</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.demo</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.handler</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.itest</artifactId>       <version>${revision}</version>       <scope>test</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.runtime.embedded</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.runtime.httpwhiteboard</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.ws.runtime.registrar</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.client.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.demo.server</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xsd</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>       <version>${revision}</version>       <scope>test</scope>     </dependency>
+
+
+
+  </dependencies>
+  
+    <build>
+    <plugins>
+      <plugin>
+   	    <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.9</version>
+        <executions>
+          <execution>
+            <id>report-aggregate</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
