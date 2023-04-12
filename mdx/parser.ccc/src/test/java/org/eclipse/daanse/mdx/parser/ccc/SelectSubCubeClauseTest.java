@@ -101,7 +101,7 @@ class SelectSubCubeClauseTest {
             assertThat(selectQueryAxisClause.expression()).isInstanceOf(CallExpression.class);
             CallExpression callExpression = (CallExpression) selectQueryAxisClause.expression();
             assertThat(callExpression.name()).isEqualTo("{}");
-            assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Braces);
+            assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
             assertThat(callExpression.expressions()).isNotNull().hasSize(1);
             assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
             CompoundId compoundId = (CompoundId) callExpression.expressions().get(0);
@@ -149,7 +149,7 @@ class SelectSubCubeClauseTest {
 
         CallExpression callExpressionInner = (CallExpression) selectQueryAxisClauseInner.expression();
         assertThat(callExpressionInner.name()).isEqualTo("{}");
-        assertThat(callExpressionInner.type()).isEqualTo(CallExpression.Type.Braces);
+        assertThat(callExpressionInner.type()).isEqualTo(CallExpression.Type.BRACES);
         assertThat(callExpressionInner.expressions()).isNotNull().hasSize(1);
         assertThat(callExpressionInner.expressions().get(0)).isInstanceOf(CompoundId.class);
         CompoundId compoundIdInner = (CompoundId) callExpressionInner.expressions().get(0);

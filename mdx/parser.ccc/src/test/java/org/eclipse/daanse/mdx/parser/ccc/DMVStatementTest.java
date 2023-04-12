@@ -59,7 +59,7 @@ class DMVStatementTest {
         assertThat(clause.where()).isNotNull().isInstanceOf(CallExpression.class);
         CallExpression callExpression = (CallExpression) clause.where();
         assertThat(callExpression.name()).isEqualTo("=");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Infix);
+        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.TERM_INFIX);
         assertThat(callExpression.expressions()).isNotNull().hasSize(2);
         assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
         assertThat(callExpression.expressions().get(1)).isNotNull().isInstanceOf(StringLiteral.class);

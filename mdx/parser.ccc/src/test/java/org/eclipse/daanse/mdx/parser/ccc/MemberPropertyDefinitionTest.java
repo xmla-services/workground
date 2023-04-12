@@ -61,7 +61,7 @@ class MemberPropertyDefinitionTest {
 
 		assertThat(memberPropertyDefinition.expression()).isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) memberPropertyDefinition.expression();
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Braces);
+		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.BRACES);
 		assertThat(callExpression.name()).isEqualTo("{}");
 		assertThat(callExpression.expressions()).hasSize(2);
 		checkArgument(callExpression, 0, "expression1");
@@ -80,7 +80,7 @@ class MemberPropertyDefinitionTest {
 
 		assertThat(memberPropertyDefinition.expression()).isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) memberPropertyDefinition.expression();
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Function);
+		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.FUNCTION);
 		assertThat(callExpression.name()).isEqualTo("FunctionName");
 		assertThat(callExpression.expressions()).hasSize(1);
 		checkArgument(callExpression, 0, "arg1, arg2");

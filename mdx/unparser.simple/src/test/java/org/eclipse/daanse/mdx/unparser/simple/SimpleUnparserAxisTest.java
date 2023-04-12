@@ -52,7 +52,7 @@ class SimpleUnparserAxisTest {
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
                 new CallExpressionR("{}",
-                    CallExpression.Type.Braces,
+                    CallExpression.Type.BRACES,
                     List.of(
                         new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -78,7 +78,7 @@ class SimpleUnparserAxisTest {
             new SelectQueryAxisClauseR(
                 false,
                 new CallExpressionR("Membmers",
-                    CallExpression.Type.Property,
+                    CallExpression.Type.PROPERTY,
                     List.of(new CompoundIdR(List.of(
                         new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED),
                         new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED),

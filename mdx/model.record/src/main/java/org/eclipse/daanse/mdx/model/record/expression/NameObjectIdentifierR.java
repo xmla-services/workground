@@ -14,14 +14,13 @@
 package org.eclipse.daanse.mdx.model.record.expression;
 
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
 
 public record NameObjectIdentifierR(String name,
                                     Quoting quoting)
         implements NameObjectIdentifier {
 
     public NameObjectIdentifierR {
-        if (name == null) {
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
         if (!(quoting == Quoting.QUOTED || quoting == Quoting.UNQUOTED)) {

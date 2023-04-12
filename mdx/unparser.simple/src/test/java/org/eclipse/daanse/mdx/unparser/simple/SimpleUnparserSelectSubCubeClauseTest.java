@@ -68,7 +68,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
                 new SelectSubcubeClauseStatementR(
                     new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
                         new CallExpressionR("{}",
-                            CallExpression.Type.Braces,
+                            CallExpression.Type.BRACES,
                             List.of(
                                 new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                                 new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -91,7 +91,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
                 new SelectSubcubeClauseStatementR(
                     new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
                         new CallExpressionR("{}",
-                            CallExpression.Type.Braces,
+                            CallExpression.Type.BRACES,
                             List.of(
                                 new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
                                 new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
@@ -104,7 +104,7 @@ class SimpleUnparserSelectSubCubeClauseTest {
                     new SelectSubcubeClauseStatementR(
                         new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
                             new CallExpressionR("{}",
-                                CallExpression.Type.Braces,
+                                CallExpression.Type.BRACES,
                                 List.of(
                                     new NameObjectIdentifierR("test", ObjectIdentifier.Quoting.UNQUOTED)
                                 )),

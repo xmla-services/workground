@@ -46,7 +46,7 @@ class SelectQueryAxisClauseTest {
 		assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression1 = (CallExpression) selectQueryAxisClause.expression();
 		assertThat(callExpression1.name()).isEqualTo("Membmers");
-		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.Property);
+		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.PROPERTY);
 		assertThat(callExpression1.expressions()).isNotNull().hasSize(1);
 		assertThat(callExpression1.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
 		CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
@@ -77,7 +77,7 @@ class SelectQueryAxisClauseTest {
 		assertThat(selectQueryAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression1 = (CallExpression) selectQueryAxisClause.expression();
 		assertThat(callExpression1.name()).isEqualTo("{}");
-		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.Braces);
+		assertThat(callExpression1.type()).isEqualTo(CallExpression.Type.BRACES);
 		assertThat(callExpression1.expressions()).isNotNull().hasSize(2);
 		assertThat(callExpression1.expressions().get(0)).isNotNull().isInstanceOf(CompoundId.class);
 		CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);

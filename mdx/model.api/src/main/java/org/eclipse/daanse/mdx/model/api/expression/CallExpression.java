@@ -28,71 +28,71 @@ public non-sealed interface CallExpression extends Expression {
         /**
          * FunctionName() FunctionName(arg) FunctionName(args[])
          */
-        Function,
+        FUNCTION,
         /**
          * object.PROPERTY
          */
-        Property,
+        PROPERTY,
         /**
          * object.&PROPERTY
          */
-        PropertyQuoted,
+        PROPERTY_QUOTED,
         /**
          * object.[&PROPERTY]
          */
-        PropertyAmpersAndQuoted,
+        PROPERTY_AMPERS_AND_QUOTED,
         /**
          * object.FunctionName() object.FunctionName(arg) object.FunctionName(args[])
          */
-        Method,
+        METHOD,
         /**
          * { expression } { expression,expression } { [a][a] : [a][c] } { [a][a] ,
          * [a][b] , [a][c] }
          */
-        Braces,
+        BRACES,
         /**
          * ( arg, arg )
          */
-        Parentheses, Internal,
+        PARENTHESES, INTERNAL,
 
         /**
          * the 2. argument in this expression FunctionOrMethod(1, ,3)
          */
-        Empty,
+        EMPTY,
 
-        Term_Prefix,
+        TERM_PREFIX,
 
         /**
-         * 
+         *
          * arg OPERATOR
-         * 
+         *
          * arg IS EMPTY //maybe it is an infix
          */
-        Term_Postfix,
+        TERM_POSTFIX,
 
         /**
-         * 
+         *
          * arg OPERATOR arg
-         * 
+         *
          * 1 < 2 1 AND 2 1 + 2
          */
 
-        Term_Infix,
+        TERM_INFIX,
 
         /**
          * CASE
-         * 
+         *
          * WHEN
-         * 
+         *
          * THEN
-         * 
+         *
          * END
-         * 
+         *
          */
-        Term_Case,
+        TERM_CASE,
 
         // may be replaced
-        Cast
+        CAST
 
     }
 }

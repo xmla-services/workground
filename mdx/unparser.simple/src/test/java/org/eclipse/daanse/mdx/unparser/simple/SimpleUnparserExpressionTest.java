@@ -50,7 +50,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionFunctionWithArrayParam() {
             ObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg1, arg2", Quoting.QUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName([arg1, arg2])");
@@ -59,7 +59,7 @@ class SimpleUnparserExpressionTest {
         @Test
         void testCallExpressionFunctionWithoutParams() {
             CompoundId compoundId = new CompoundIdR(List.of());
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName()");
@@ -69,7 +69,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionFunctionWithOneParam() {
             ObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName(arg)");
@@ -81,7 +81,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId, compoundId1));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName(arg1,arg2)");
@@ -93,7 +93,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg2, arg3", Quoting.QUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId, compoundId1));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName(arg1,[arg2, arg3])");
@@ -107,7 +107,7 @@ class SimpleUnparserExpressionTest {
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.FUNCTION,
                 List.of(compoundId, compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("FunctionName(arg1,,arg2)");
@@ -117,7 +117,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionProperty() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.Property,
+            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PROPERTY,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.PROPERTY");
@@ -127,7 +127,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionPropertyQuoted() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PropertyQuoted,
+            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PROPERTY_QUOTED,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.&PROPERTY");
@@ -137,7 +137,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionPropertyAmpersAndQuoted() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PropertyAmpersAndQuoted,
+            CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PROPERTY_AMPERS_AND_QUOTED,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.[&PROPERTY]");
@@ -146,9 +146,9 @@ class SimpleUnparserExpressionTest {
         @Test
         void testCallExpressionMethod() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
-            CallExpression callExpressionEmpty = new CallExpressionR("", CallExpression.Type.Empty, List.of());
+            CallExpression callExpressionEmpty = new CallExpressionR("", CallExpression.Type.EMPTY, List.of());
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Method,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.METHOD,
                 List.of(compoundId, callExpressionEmpty));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.FunctionName()");
@@ -160,7 +160,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Method,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.METHOD,
                 List.of(compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.FunctionName(arg)");
@@ -172,7 +172,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg1, arg2", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Method,
+            CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.METHOD,
                 List.of(compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.FunctionName([arg1, arg2])");
@@ -181,10 +181,10 @@ class SimpleUnparserExpressionTest {
         @Test
         void testCallExpressionMethodWithInnerFunction() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
-            CallExpression сallExpression = new CallExpressionR("FunctionInner", CallExpression.Type.Function,
+            CallExpression сallExpression = new CallExpressionR("FunctionInner", CallExpression.Type.FUNCTION,
                 List.of());
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("FunctionOuter", CallExpression.Type.Method,
+            CallExpression callExpression = new CallExpressionR("FunctionOuter", CallExpression.Type.METHOD,
                 List.of(compoundId, сallExpression));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("object.FunctionOuter(FunctionInner())");
@@ -198,7 +198,7 @@ class SimpleUnparserExpressionTest {
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
             CompoundId compoundId3 = new CompoundIdR(List.of(objectIdentifier3));
-            CallExpression callExpression = new CallExpressionR("_CaseMatch", CallExpression.Type.Term_Case,
+            CallExpression callExpression = new CallExpressionR("_CaseMatch", CallExpression.Type.TERM_CASE,
                 List.of(compoundId1, compoundId2, compoundId3));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("CASE a WHEN b THEN c END ");
@@ -208,7 +208,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionBraces1() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("expression", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.Braces,
+            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.BRACES,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("{expression}");
@@ -220,7 +220,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("expression2", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.Braces,
+            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.BRACES,
                 List.of(compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("{expression1,expression2}");
@@ -232,9 +232,9 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("c", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpressionCh = new CallExpressionR(":", CallExpression.Type.Term_Infix,
+            CallExpression callExpressionCh = new CallExpressionR(":", CallExpression.Type.TERM_INFIX,
                 List.of(compoundId1, compoundId2));
-            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.Braces,
+            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.BRACES,
                 List.of(callExpressionCh));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("{[a] : [c]}");
@@ -251,7 +251,7 @@ class SimpleUnparserExpressionTest {
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier11, objectIdentifier12));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier21, objectIdentifier22));
             CompoundId compoundId3 = new CompoundIdR(List.of(objectIdentifier31, objectIdentifier32));
-            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.Braces,
+            CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.BRACES,
                 List.of(compoundId1, compoundId2, compoundId3));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("{[a].[a],[a].[b],[a].[c]}");
@@ -263,7 +263,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("()", CallExpression.Type.Parentheses,
+            CallExpression callExpression = new CallExpressionR("()", CallExpression.Type.PARENTHESES,
                 List.of(compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("(arg1,arg2)");
@@ -275,7 +275,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg2, arg3", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
             CompoundId compoundId2 = new CompoundIdR(List.of(objectIdentifier2));
-            CallExpression callExpression = new CallExpressionR("()", CallExpression.Type.Parentheses,
+            CallExpression callExpression = new CallExpressionR("()", CallExpression.Type.PARENTHESES,
                 List.of(compoundId1, compoundId2));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("(arg1,[arg2, arg3])");
@@ -285,7 +285,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionTermPostfix() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("IS EMPTY", CallExpression.Type.Term_Postfix,
+            CallExpression callExpression = new CallExpressionR("IS EMPTY", CallExpression.Type.TERM_POSTFIX,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("arg IS EMPTY");
@@ -295,7 +295,7 @@ class SimpleUnparserExpressionTest {
         void testCallExpressionTermPrefix() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-            CallExpression callExpression = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix,
+            CallExpression callExpression = new CallExpressionR("NOT", CallExpression.Type.TERM_PREFIX,
                 List.of(compoundId));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("NOT arg");
@@ -307,7 +307,7 @@ class SimpleUnparserExpressionTest {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
-            CallExpression callExpression = new CallExpressionR("AND", CallExpression.Type.Term_Infix,
+            CallExpression callExpression = new CallExpressionR("AND", CallExpression.Type.TERM_INFIX,
                 List.of(compoundId, compoundId1));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("arg1 AND arg2");
@@ -335,7 +335,7 @@ class SimpleUnparserExpressionTest {
         @Test
         void testNumericLiteral3() {
             NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10.25));
-            CallExpression callExpression = new CallExpressionR("-", CallExpression.Type.Term_Prefix,
+            CallExpression callExpression = new CallExpressionR("-", CallExpression.Type.TERM_PREFIX,
                 List.of(numericLiteral));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("- 10.25");
@@ -367,7 +367,7 @@ class SimpleUnparserExpressionTest {
             StringLiteral stringLiteral = new StringLiteralR("the_date");
             SymbolLiteral symbolLiteral = new SymbolLiteralR("DATE");
             CallExpression callExpression = new CallExpressionR("cast",
-                CallExpression.Type.Cast,
+                CallExpression.Type.CAST,
                 List.of(stringLiteral, symbolLiteral));
             assertThat(unparser.unparseExpression(callExpression)).asString()
                 .isEqualTo("CAST(the_date AS DATE)");

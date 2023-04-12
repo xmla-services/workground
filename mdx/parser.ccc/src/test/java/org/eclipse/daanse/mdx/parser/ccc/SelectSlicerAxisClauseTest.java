@@ -47,7 +47,7 @@ class SelectSlicerAxisClauseTest {
 		assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
 		CallExpression callExpression = (CallExpression) selectSlicerAxisClause.expression();
 		assertThat(callExpression.name()).isEqualTo("=");
-		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Infix);
+		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.TERM_INFIX);
 		assertThat(callExpression.expressions()).isNotNull().hasSize(2);
 		assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
 		assertThat(callExpression.expressions().get(1)).isInstanceOf(CompoundId.class);
