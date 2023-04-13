@@ -70,21 +70,21 @@
     <sonar.organization>xmla-services</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.coverage.jacoco.xmlReportPaths> <!-- each project cateches its data from aggregator, but we have no absolut path in mvn-->
-    ${project.basedir}/../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../../../jacoco-aggregate/target/site/jacoco-aggregate/jacoco.xml
+    ${project.basedir}/../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
+    ${project.basedir}/../../../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml
 	</sonar.coverage.jacoco.xmlReportPaths>
 
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
