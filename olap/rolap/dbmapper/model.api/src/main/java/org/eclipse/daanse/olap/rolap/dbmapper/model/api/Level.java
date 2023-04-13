@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 
 public interface Level {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
     Expression keyExpression();
 
@@ -36,7 +36,7 @@ public interface Level {
 
     Closure closure();
 
-    List<? extends Property> property();
+    List<Property> property();
 
     String approxRowCount();
 

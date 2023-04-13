@@ -19,5 +19,5 @@ public interface WritebackTable {
 
     String name();
 
-    Iterable<? extends WritebackColumn> columns();
+    Iterable<WritebackColumn> columns();
 }

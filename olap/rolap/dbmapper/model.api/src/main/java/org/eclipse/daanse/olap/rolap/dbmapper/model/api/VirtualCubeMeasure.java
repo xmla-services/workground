@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface VirtualCubeMeasure {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
     String cubeName();
 

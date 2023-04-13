@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -19,6 +19,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 public class ObjectFactory {
 
     public ObjectFactory() {
+        //constructor
     }
 
     public WritebackTableImpl createWritebackTable() {
@@ -151,7 +152,7 @@ public class ObjectFactory {
 
     /**
      * Impl create an instance of {@link HintImpl }
-     * 
+     *
      */
     public HintImpl createTableHint() {
         return new HintImpl();

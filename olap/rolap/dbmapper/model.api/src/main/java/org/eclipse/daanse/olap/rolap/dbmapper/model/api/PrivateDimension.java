@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 
 public interface PrivateDimension extends CubeDimension {
 
-    List<? extends Hierarchy> hierarchy();
+    List<Hierarchy> hierarchy();
 
     DimensionTypeEnum type();
 

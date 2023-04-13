@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc;
 
@@ -44,4 +44,4 @@ public class NoDatabaseVerificationResult implements VerificationResult {
     public Cause cause() {
         return Cause.DATABASE;
     }
-};
+}

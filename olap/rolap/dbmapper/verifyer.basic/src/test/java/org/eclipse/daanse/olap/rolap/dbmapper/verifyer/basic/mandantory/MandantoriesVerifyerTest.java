@@ -29,7 +29,7 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_NAME_MUST_SET;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_USAGE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_USAGE_CUBE_NAME_MUST_BE_SET;
-import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_WITH_NAME_MUST_CONTAIN_;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_WITH_NAME_MUST_CONTAIN;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSIONS;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSION_MUST_BE_SET_FOR_CALCULATED_MEMBER;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DRILL_THROUGH_ATTRIBUTE;
@@ -63,7 +63,7 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER_NAME_MUST_BE_SET;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER_TYPE_MUST_BE_SET;
-import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN_;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY_COLUMN_MUST_BE_SET;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.ROLE_NAME_MUST_BE_SET;
@@ -272,7 +272,7 @@ class MandantoriesVerifyerTest {
             .contains(SCHEMA_NAME_MUST_BE_SET)
             .contains(CUBE_NAME_MUST_SET)
             .contains(String.format(FACT_NAME_MUST_BE_SET, NOT_SET))
-            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN_, NOT_SET, DIMENSIONS))
+            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN, NOT_SET, DIMENSIONS))
             .contains(VIRTUAL_CUBE_NAME_MUST_BE_SET)
             .contains(String.format(VIRTUAL_CUBE_MUST_CONTAIN_DIMENSIONS, NOT_SET))
             .contains(String.format(VIRTUAL_CUBE_MUST_CONTAIN_MEASURES, NOT_SET))
@@ -331,7 +331,7 @@ class MandantoriesVerifyerTest {
             .contains(SCHEMA_NAME_MUST_BE_SET)
             .contains(CUBE_NAME_MUST_SET)
             .contains(String.format(FACT_NAME_MUST_BE_SET, NOT_SET))
-            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN_, NOT_SET, DIMENSIONS))
+            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN, NOT_SET, DIMENSIONS))
             .contains(VIRTUAL_CUBE_NAME_MUST_BE_SET)
             .contains(String.format(VIRTUAL_CUBE_MUST_CONTAIN_DIMENSIONS, NOT_SET))
             .contains(String.format(VIRTUAL_CUBE_MUST_CONTAIN_MEASURES, NOT_SET))
@@ -369,7 +369,7 @@ class MandantoriesVerifyerTest {
             .extracting(VerificationResult::description)
             .contains(SCHEMA_NAME_MUST_BE_SET)
             .contains(String.format(FACT_NAME_MUST_BE_SET, "cubeName"))
-            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN_, "cubeName", DIMENSIONS))
+            .contains(String.format(CUBE_WITH_NAME_MUST_CONTAIN, "cubeName", DIMENSIONS))
             .contains(String.format(MEASURE_NAME_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_AGGREGATOR_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_COLUMN_MUST_BE_SET, "cubeName"))
@@ -399,7 +399,7 @@ class MandantoriesVerifyerTest {
         when(table.sql()).thenReturn(sql);
         when(table.hint()).thenAnswer(setupDummyListAnswer(hint));
         when(table.aggTable()).thenAnswer(setupDummyListAnswer(aggTable));
-        when(level.memberFormatter()).thenReturn(elementFormatter);        
+        when(level.memberFormatter()).thenReturn(elementFormatter);
         when(aggTable.aggIgnoreColumn()).thenAnswer(setupDummyListAnswer(aggColumnName));
         when(aggTable.aggForeignKey()).thenAnswer(setupDummyListAnswer(aggForeignKey));
         when(aggTable.aggMeasure()).thenAnswer(setupDummyListAnswer(aggMeasure));
@@ -480,7 +480,7 @@ class MandantoriesVerifyerTest {
             .contains(String.format(MEASURE_NAME_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_AGGREGATOR_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_COLUMN_MUST_BE_SET, "cubeName"))
-            .contains(String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN_, NOT_SET))
+            .contains(String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN, NOT_SET))
             .contains(String.format(LEVEL_NAME_MUST_BE_SET, NOT_SET))
             .contains(FORMATTER_EITHER_A_CLASS_NAME_OR_A_SCRIPT_ARE_REQUIRED)
             .contains(PROPERTY_COLUMN_MUST_BE_SET);
@@ -559,7 +559,7 @@ class MandantoriesVerifyerTest {
             .contains(String.format(MEASURE_NAME_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_AGGREGATOR_MUST_BE_SET, "cubeName"))
             .contains(String.format(MEASURE_COLUMN_MUST_BE_SET, "cubeName"))
-            .contains(String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN_, NOT_SET))
+            .contains(String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN, NOT_SET))
             .contains(PROPERTY_COLUMN_MUST_BE_SET)
             .contains(TABLE_VALUE_DOES_NOT_CORRESPOND_TO_ANY_JOIN);
 

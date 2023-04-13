@@ -860,7 +860,7 @@ class FoodMartReadTest {
 		assertEquals("FoodMart", schema.name());
 		checkPrivateDimension(schema, schema.dimension(), foodmartDimensionList);
 		assertNotNull(schema.dimension());
-		assertEquals(schema.dimension().size(), 6);
+		assertEquals(6, schema.dimension().size());
 		checkCubes(schema.cube(), foodmartCubeList);
 		checkVirtualCubes(schema.virtualCube(), foodmartVirtualCubeList);
 		checkRoles(schema.roles(), foodmartRoleList);

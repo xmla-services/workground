@@ -13,7 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-@Deprecated
+/**
+ * @deprecated will removed in new version
+ */
+@Deprecated(since="new version", forRemoval=true)
 public interface UserDefinedFunction {
 
     String name();

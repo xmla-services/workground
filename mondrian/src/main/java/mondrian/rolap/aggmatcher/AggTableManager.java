@@ -366,7 +366,7 @@ public class AggTableManager {
             RelationOrJoin relation =
                 star.getFactTable().getRelation();
             String schema = null;
-            List<? extends Hint> tableHints = null;
+            List<Hint> tableHints = null;
             if (relation instanceof Table) {
                 schema = ((Table) relation).schema();
                 tableHints = ((Table) relation).hint();

@@ -30,7 +30,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
     private static String SCHEMA_NAME = "SteelWheels";
     private static final String CUBE_NAME_1 = "SteelWheelsSales";
 
-    public static LevelR
+    private static LevelR
         LEVEL_1_1 = LevelRBuilder
         .builder()
         .name("Territory")
@@ -145,14 +145,14 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
             .hideMemberIf(HideMemberIfEnum.NEVER)
             .build();
 
-    public static TableR
+    private static TableR
         TABLE_1 = new TableR(null, "customer_w_ter", null, List.of()),
         TABLE_2 = new TableR(null, "customer_w_ter", null, List.of()),
         TABLE_3 = new TableR(null, "products", null, List.of()),
         TABLE_4 = new TableR(null, "time", null, List.of()),
         TABLE_CUBE = new TableR(null, "time", null, List.of());
 
-    public static MeasureR
+    private static MeasureR
         MEASURE_1 = MeasureRBuilder
         .builder()
         .name("Quantity")
@@ -168,7 +168,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
             .aggregator("sum")
             .build();
 
-    public static HierarchyR
+    private static HierarchyR
         HIERARCHY_1 = HierarchyRBuilder
         .builder()
         .allMemberName("All Markets")
@@ -211,7 +211,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
             .primaryKey("STATUS")
             .level(List.of(LEVEL_5))
             .build();
-    public static PrivateDimensionR
+    private static PrivateDimensionR
         DIMENSION_1 = PrivateDimensionRBuilder
         .builder()
         .name("Markets")
@@ -244,7 +244,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
             .hierarchy(List.of(HIERARCHY_5))
             .build();
 
-    public static CubeR
+    private static CubeR
         CUBE_1 = CubeRBuilder.builder()
         .name(CUBE_NAME_1)
         .fact(TABLE_CUBE)
@@ -254,7 +254,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .dimensionUsageOrDimension(List.of(DIMENSION_1, DIMENSION_2, DIMENSION_3, DIMENSION_4, DIMENSION_5))
         .build();
 
-    public static Schema
+    private static Schema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
         .cube(List.of(CUBE_1))

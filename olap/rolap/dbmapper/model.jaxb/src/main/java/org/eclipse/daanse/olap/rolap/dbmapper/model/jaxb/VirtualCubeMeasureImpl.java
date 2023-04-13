@@ -9,12 +9,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -28,9 +29,9 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = { "annotations" })
 public class VirtualCubeMeasureImpl implements VirtualCubeMeasure {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    protected List<Annotation> annotations;
     @XmlAttribute(name = "cubeName", required = true)
     protected String cubeName;
     @XmlAttribute(name = "name", required = true)
@@ -39,11 +40,11 @@ public class VirtualCubeMeasureImpl implements VirtualCubeMeasure {
     protected Boolean visible;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

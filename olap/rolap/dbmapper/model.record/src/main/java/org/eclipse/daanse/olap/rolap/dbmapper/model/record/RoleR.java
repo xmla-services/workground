@@ -9,17 +9,19 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
-public record RoleR(List<AnnotationR> annotations,
-                    List<SchemaGrantR> schemaGrant,
+public record RoleR(List<Annotation> annotations,
+                    List<SchemaGrant> schemaGrant,
                     Union union,
                     String name)
         implements Role {

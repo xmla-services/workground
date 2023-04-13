@@ -30,7 +30,7 @@ public class CopyUtil {
 
 	private CopyUtil() {
 	}
-	
+
     public static SchemaImpl copy(Schema schemaApi) {
         SchemaImpl schemaImpl = new SchemaImpl();
         schemaImpl.setAnnotations(copyAnnotation(schemaApi.annotations()));
@@ -47,7 +47,7 @@ public class CopyUtil {
 
     }
 
-    private static List<AnnotationImpl> copyAnnotation(List<? extends Annotation> annotations) {
+    private static List<Annotation> copyAnnotation(List<Annotation> annotations) {
 
         // Please no null checks in List. getList must provide minimal a empty List.
         return annotations.stream()
@@ -56,13 +56,13 @@ public class CopyUtil {
 
     }
 
-    private static List<NamedSetImpl> copyNamedSet(List<? extends NamedSet> namedSet) {
+    private static List<NamedSet> copyNamedSet(List<? extends NamedSet> namedSet) {
         return namedSet.stream()
             .map(CopyUtil::copy)
             .toList();
     }
 
-    private static List<ParameterImpl> copyParameter(List<? extends Parameter> parameter) {
+    private static List<Parameter> copyParameter(List<? extends Parameter> parameter) {
         return parameter.stream()
             .map(CopyUtil::copy)
             .toList();
@@ -75,14 +75,14 @@ public class CopyUtil {
         return impl;
     }
 
-    private static AnnotationImpl copy(Annotation annotationApi) {
+    private static Annotation copy(Annotation annotationApi) {
         AnnotationImpl impl = new AnnotationImpl();
         impl.setContent(annotationApi.content());
         impl.setName(annotationApi.name());
         return impl;
     }
 
-    private static NamedSetImpl copy(NamedSet namedSetApi) {
+    private static NamedSet copy(NamedSet namedSetApi) {
         NamedSetImpl impl = new NamedSetImpl();
         impl.setAnnotations(copyAnnotation(namedSetApi.annotations()));
         impl.setCaption(namedSetApi.caption());
@@ -94,7 +94,7 @@ public class CopyUtil {
         return impl;
     }
 
-    private static ParameterImpl copy(Parameter parameterApi) {
+    private static Parameter copy(Parameter parameterApi) {
         ParameterImpl impl = new ParameterImpl();
         impl.setDefaultValue(parameterApi.defaultValue());
         impl.setDescription(parameterApi.description());

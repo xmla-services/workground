@@ -15,8 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
@@ -30,12 +32,12 @@ public record MeasureR(String name,
                        String description,
                        boolean visible,
                        String displayFolder,
-                       List<AnnotationR> annotations,
-                       ExpressionViewR measureExpression,
-                       List<CalculatedMemberPropertyR> calculatedMemberProperty,
+                       List<Annotation> annotations,
+                       ExpressionView measureExpression,
+                       List<CalculatedMemberProperty> calculatedMemberProperty,
                        ElementFormatter cellFormatter,
                        String backColor,
-                       List<? extends CalculatedMemberProperty> memberProperties
+                       List<CalculatedMemberProperty> memberProperties
                        )
         implements Measure {
 

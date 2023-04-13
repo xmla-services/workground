@@ -67,7 +67,7 @@ public class SchemaWalkerMessages {
     public static final String DRILL_THROUGH_ACTION = "DrillThroughAction";
 
 
-    public static final String SCHEMA_ = "schema ";
+    public static final String SCHEMA_SPACE = "schema ";
     public static final String WRITEBACK_TABLE_NAME_MUST_BE_SET = "WritebackTable name must be set";
     public static final String TABLE_NAME_MUST_BE_SET = "Table name must be set";
     public static final String JOIN_RELATION_MUST_BE_SET_LEFT_AND_RIGHT = "Join: relation must be set left and right";
@@ -120,10 +120,10 @@ public class SchemaWalkerMessages {
 
 
     public static final String FACT_NAME_MUST_BE_SET = "Fact name must be set for cube with name %s";
-    public static final String CUBE_WITH_NAME_MUST_CONTAIN_ = "Cube with name %s must contain %s";
+    public static final String CUBE_WITH_NAME_MUST_CONTAIN = "Cube with name %s must contain %s";
     public static final String MEASURE_NAME_MUST_BE_SET = "Measure name must be set for cube with name %s";
     public static final String MEASURE_AGGREGATOR_MUST_BE_SET = "Measure Aggregator must be set for cube with name %s";
-    public static final String PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN_ =
+    public static final String PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN =
         "Hierarchy: PrimaryKeyTable and PrimaryKey must be set for Join in dimension with name %s";
     public static final String PRIMARY_KEY_TABLE_MUST_BE_SET_FOR_JOIN =
         "Hierarchy : PrimaryKeyTable must be set for Join in dimension with name %s";
@@ -251,4 +251,7 @@ public class SchemaWalkerMessages {
         "DrillThroughAction must contain description";
     public static final String SCHEMA_MUST_CONTAIN_DESCRIPTION = "Schema must contain description";
 
+    private SchemaWalkerMessages() {
+        //private constructor
+    }
 }

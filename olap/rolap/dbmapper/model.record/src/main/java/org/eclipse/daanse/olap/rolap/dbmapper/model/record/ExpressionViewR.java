@@ -16,8 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 
-public record ExpressionViewR(List<SQLR> sql,
+public record ExpressionViewR(List<SQL> sql,
                               String gnericExpression,
                               String table,
                               String name) implements ExpressionView {

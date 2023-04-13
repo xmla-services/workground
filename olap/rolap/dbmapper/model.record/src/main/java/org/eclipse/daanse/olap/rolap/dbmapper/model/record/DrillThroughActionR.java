@@ -9,20 +9,21 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
 
 public record DrillThroughActionR(String name,
                                   String caption,
                                   String description,
-                                  Boolean _default,
-                                  List<AnnotationR> annotations,
+                                  Boolean defaultt,
+                                  List<Annotation> annotations,
                                   List<DrillThroughElement> drillThroughElement)
         implements DrillThroughAction {
 

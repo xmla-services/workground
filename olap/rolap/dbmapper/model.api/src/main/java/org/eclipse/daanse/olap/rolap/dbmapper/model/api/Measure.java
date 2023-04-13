@@ -19,11 +19,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnu
 
 public interface Measure {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
     ExpressionView measureExpression();
 
-    List<? extends CalculatedMemberProperty> calculatedMemberProperty();
+    List<CalculatedMemberProperty> calculatedMemberProperty();
 
     String name();
 

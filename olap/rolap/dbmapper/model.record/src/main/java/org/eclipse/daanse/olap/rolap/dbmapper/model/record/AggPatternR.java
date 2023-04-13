@@ -15,18 +15,23 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
 
 public record AggPatternR(String pattern,
-                          AggColumnNameR aggFactCount,
-                          List<AggColumnNameR> aggIgnoreColumn,
-                          List<AggForeignKeyR> aggForeignKey,
-                          List<AggMeasureR> aggMeasure,
-                          List<AggLevelR> aggLevel,
-                          List<AggExcludeR> aggExclude,
+                          AggColumnName aggFactCount,
+                          List<AggColumnName> aggIgnoreColumn,
+                          List<AggForeignKey> aggForeignKey,
+                          List<AggMeasure> aggMeasure,
+                          List<AggLevel> aggLevel,
+                          List<AggExclude> aggExclude,
                           boolean ignorecase,
-                          List<? extends AggMeasureFactCount> measuresFactCount)
+                          List<AggMeasureFactCount> measuresFactCount)
         implements AggPattern {
 
 }

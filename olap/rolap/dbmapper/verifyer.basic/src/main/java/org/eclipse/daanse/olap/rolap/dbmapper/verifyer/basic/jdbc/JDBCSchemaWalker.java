@@ -47,7 +47,7 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PRIMARY_KEY;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.RELATON;
-import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_SPACE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_S_DOES_NOT_EXIST;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.TABLE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.TABLE_S_DOES_NOT_EXIST_IN_DATABASE;
@@ -83,8 +83,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     protected void checkCube(Cube cube) {
         super.checkCube(cube);
 
-        if (cube.fact() instanceof Table) {
-            final Table table = (Table) cube.fact();
+        if (cube.fact() instanceof Table table) {
             String schemaName = table.schema();
             String factTable = table.name();
             try {
@@ -94,12 +93,12 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                         ERROR, DATABASE));
 
                     String message = String.format(FACT_TABLE_0_DOES_NOT_EXIST_IN_DATABASE, factTable,
-                        ((schemaName == null || schemaName.equals("")) ? "." : SCHEMA_ + schemaName));
+                        ((schemaName == null || schemaName.equals("")) ? "." : SCHEMA_SPACE + schemaName));
                     results.add(new VerificationResultR(CUBE, message, ERROR, DATABASE));
                 }
             } catch (SQLException e) {
                 String message = String.format(COULD_NOT_CHECK_EXISTANCE_OF_FACT_TABLE_0_DOES_NOT_EXIST_IN_DATABASE, factTable,
-                    ((schemaName == null || schemaName.equals("")) ? "." : SCHEMA_ + schemaName));
+                    ((schemaName == null || schemaName.equals("")) ? "." : SCHEMA_SPACE + schemaName));
                 results.add(new VerificationResultR(CUBE, message, ERROR, DATABASE));
             }
         }
@@ -112,8 +111,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         if (cube != null && cube.fact() != null) {
             // Database validity check, if database connection is
             // successful
-            if (cube.fact() instanceof Table) {
-                final Table factTable = (Table) cube.fact();
+            if (cube.fact() instanceof Table factTable) {
 
                 String column = measure.column();
                 try {
@@ -175,8 +173,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
             if (!isEmpty((cubeDimension).foreignKey())) {
 
                 // TODO: Need to add validation for Views
-                if (cube != null && cube.fact() instanceof Table) {
-                    final Table factTable = (Table) cube.fact();
+                if (cube != null && cube.fact() instanceof Table factTable) {
                     String foreignKey = (cubeDimension).foreignKey();
                     try {
                         if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), foreignKey)) {
@@ -209,8 +206,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                 hierarchy.primaryKeyTable());
             schema = schemaAndTable[0];
             pkTable = schemaAndTable[1];
-        } else if (hierarchy.relation() instanceof Table) {
-            final Table table = (Table) hierarchy.relation();
+        } else if (hierarchy.relation() instanceof Table table) {
             pkTable = table.name();
             schema = table.schema();
         }
@@ -272,8 +268,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                             isEmpty(column.trim()) ? "' '" : column, RELATON, factTable.name());
                         results.add(new VerificationResultR(PROPERTY, msg, ERROR, DATABASE));
                     }
-                } else if (hierarchy.relation() instanceof Table) {
-                    final Table parentTable = (Table) hierarchy.relation();
+                } else if (hierarchy.relation() instanceof Table parentTable) {
                     try {
                         if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
                             String msg = String.format(COLUMN_0_DOES_NOT_EXIST_IN_DIMENSION_TABLE,
@@ -369,8 +364,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                                 isEmpty(column.trim()) ? "' '" : column, fieldName, table);
                             results.add(new VerificationResultR(LEVEL, msg, ERROR, DATABASE));
                         }
-                    } else if (parentHierarchy.relation() instanceof Table) {
-                        final Table parentTable = (Table) parentHierarchy.relation();
+                    } else if (parentHierarchy.relation() instanceof Table parentTable) {
                         try {
                             if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
                                 String msg = String.format(COLUMN_DEFINED_IN_FIELD_DOES_NOT_EXIST_IN_TABLE,
@@ -390,11 +384,11 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                 String schema = null;
                 // if using Joins then gets the table name for doesColumnExist
                 // validation.
-                if (parentHierarchy != null && parentHierarchy.relation() instanceof Join) {
+                if (parentHierarchy != null && parentHierarchy.relation() instanceof Join join) {
                     String[] schemaAndTable = SchemaExplorer.getTableNameForAlias(parentHierarchy.relation(), table);
                     schema = schemaAndTable[0];
                     table = schemaAndTable[1];
-                    checkJoin((Join) parentHierarchy.relation());
+                    checkJoin(join);
                 }
                 try {
                     if (!jmds.doesColumnExist(schema, table, column)) {

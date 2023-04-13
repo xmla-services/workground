@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.DimensionTypeAdaptor;
@@ -34,11 +36,11 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "Dimension")
 public class PrivateDimensionImpl implements PrivateDimension {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Hierarchy", required = true)
-    protected List<HierarchyImpl> hierarchy;
+    protected List<Annotation> annotations;
+    @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
+    protected List<Hierarchy> hierarchy;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -59,7 +61,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     private String usagePrefix;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }
@@ -67,7 +69,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     }
 
     @Override
-    public List<HierarchyImpl> hierarchy() {
+    public List<Hierarchy> hierarchy() {
         if (hierarchy == null) {
             hierarchy = new ArrayList<>();
         }
@@ -146,7 +148,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
         this.visible = visible;
     }
 
-    public void setHierarchy(List<HierarchyImpl> hierarchy) {
+    public void setHierarchy(List<Hierarchy> hierarchy) {
         this.hierarchy = hierarchy;
     }
 }
