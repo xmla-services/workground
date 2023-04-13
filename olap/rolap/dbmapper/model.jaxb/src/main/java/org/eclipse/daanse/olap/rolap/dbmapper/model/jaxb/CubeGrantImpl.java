@@ -23,22 +23,24 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "dimensionGrant", "hierarchyGrant" })
 public class CubeGrantImpl implements CubeGrant {
 
-    @XmlElement(name = "DimensionGrant")
-    protected List<DimensionGrantImpl> dimensionGrant;
-    @XmlElement(name = "HierarchyGrant")
-    protected List<HierarchyGrantImpl> hierarchyGrant;
+    @XmlElement(name = "DimensionGrant", type = DimensionGrantImpl.class)
+    protected List<DimensionGrant> dimensionGrant;
+    @XmlElement(name = "HierarchyGrant", type = HierarchyGrantImpl.class)
+    protected List<HierarchyGrant> hierarchyGrant;
     @XmlAttribute(name = "cube", required = true)
     protected String cube;
     @XmlAttribute(name = "access", required = true)
     protected String access;
 
     @Override
-    public List<DimensionGrantImpl> dimensionGrant() {
+    public List<DimensionGrant> dimensionGrant() {
         if (dimensionGrant == null) {
             dimensionGrant = new ArrayList<>();
         }
@@ -46,7 +48,7 @@ public class CubeGrantImpl implements CubeGrant {
     }
 
     @Override
-    public List<HierarchyGrantImpl> hierarchyGrant() {
+    public List<HierarchyGrant> hierarchyGrant() {
         if (hierarchyGrant == null) {
             hierarchyGrant = new ArrayList<>();
         }
@@ -71,11 +73,11 @@ public class CubeGrantImpl implements CubeGrant {
         this.access = value;
     }
 
-    public void setDimensionGrant(List<DimensionGrantImpl> dimensionGrant) {
+    public void setDimensionGrant(List<DimensionGrant> dimensionGrant) {
         this.dimensionGrant = dimensionGrant;
     }
 
-    public void setHierarchyGrant(List<HierarchyGrantImpl> hierarchyGrant) {
+    public void setHierarchyGrant(List<HierarchyGrant> hierarchyGrant) {
         this.hierarchyGrant = hierarchyGrant;
     }
 }

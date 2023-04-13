@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
 
@@ -31,24 +35,24 @@ import jakarta.xml.bind.annotation.XmlType;
         "aggExclude", "measuresFactCount" })
 public class AggPatternImpl implements AggPattern {
 
-    @XmlElement(name = "AggFactCount", required = true)
-    protected AggColumnNameImpl aggFactCount;
-    @XmlElement(name = "AggIgnoreColumn")
-    protected List<AggColumnNameImpl> aggIgnoreColumn;
-    @XmlElement(name = "AggForeignKey")
-    protected List<AggForeignKeyImpl> aggForeignKey;
-    @XmlElement(name = "AggMeasure", required = true)
-    protected List<AggMeasureImpl> aggMeasure;
-    @XmlElement(name = "AggLevel")
-    protected List<AggLevelImpl> aggLevel;
-    @XmlElement(name = "AggExclude")
-    protected List<AggExcludeImpl> aggExclude;
+    @XmlElement(name = "AggFactCount", required = true, type = AggColumnNameImpl.class)
+    protected AggColumnName aggFactCount;
+    @XmlElement(name = "AggIgnoreColumn", type = AggColumnNameImpl.class)
+    protected List<AggColumnName> aggIgnoreColumn;
+    @XmlElement(name = "AggForeignKey", type = AggForeignKeyImpl.class)
+    protected List<AggForeignKey> aggForeignKey;
+    @XmlElement(name = "AggMeasure", required = true, type = AggMeasureImpl.class)
+    protected List<AggMeasure> aggMeasure;
+    @XmlElement(name = "AggLevel", type = AggLevelImpl.class)
+    protected List<AggLevel> aggLevel;
+    @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
+    protected List<AggExclude> aggExclude;
     @XmlAttribute(name = "pattern", required = true)
     protected String pattern;
     @XmlAttribute(name = "ignorecase")
     protected Boolean ignorecase;
-    @XmlElement(name = "AggMeasureFactCount")
-    protected List<AggMeasureFactCountImpl> measuresFactCount;
+    @XmlElement(name = "AggMeasureFactCount", type = AggMeasureFactCountImpl.class)
+    protected List<AggMeasureFactCount> measuresFactCount;
 
     @Override
     public AggColumnName aggFactCount() {
@@ -60,7 +64,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggColumnNameImpl> aggIgnoreColumn() {
+    public List<AggColumnName> aggIgnoreColumn() {
         if (aggIgnoreColumn == null) {
             aggIgnoreColumn = new ArrayList<>();
         }
@@ -68,7 +72,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggForeignKeyImpl> aggForeignKey() {
+    public List<AggForeignKey> aggForeignKey() {
         if (aggForeignKey == null) {
             aggForeignKey = new ArrayList<>();
         }
@@ -76,7 +80,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggMeasureImpl> aggMeasure() {
+    public List<AggMeasure> aggMeasure() {
         if (aggMeasure == null) {
             aggMeasure = new ArrayList<>();
         }
@@ -84,7 +88,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggLevelImpl> aggLevel() {
+    public List<AggLevel> aggLevel() {
         if (aggLevel == null) {
             aggLevel = new ArrayList<>();
         }
@@ -92,7 +96,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggExcludeImpl> aggExclude() {
+    public List<AggExclude> aggExclude() {
         if (aggExclude == null) {
             aggExclude = new ArrayList<>();
         }
@@ -118,7 +122,7 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<? extends AggMeasureFactCount> measuresFactCount() {
+    public List<AggMeasureFactCount> measuresFactCount() {
         return measuresFactCount;
     }
 

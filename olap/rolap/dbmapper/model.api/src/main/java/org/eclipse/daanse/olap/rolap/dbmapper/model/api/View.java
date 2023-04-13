@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface View extends Relation {
 
-    List<? extends SQL> sqls();
+    List<SQL> sqls();
 
     void addCode(String generic, String generateInline);
 }

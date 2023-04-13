@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 
 public record DimensionUsageR(String name,
@@ -23,7 +24,7 @@ public record DimensionUsageR(String name,
                               String usagePrefix,
                               String foreignKey,
                               boolean highCardinality,
-                              List<AnnotationR> annotations,
+                              List<Annotation> annotations,
                               String caption,
                               boolean visible,
                               String description)

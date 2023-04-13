@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface CubeDimension {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
     String name();
 

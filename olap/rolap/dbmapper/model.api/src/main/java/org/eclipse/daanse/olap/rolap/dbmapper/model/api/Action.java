@@ -20,6 +20,6 @@ public interface Action {
     String name();
     String caption();
     String description();
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
 }

@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -22,16 +22,17 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "value" })
 public class RowImpl implements Row {
 
-    @XmlElement(name = "Value", required = true)
-    protected List<ValueImpl> value;
+    @XmlElement(name = "Value", required = true, type = ValueImpl.class)
+    protected List<Value> value;
 
     @Override
-    public List<ValueImpl> values() {
+    public List<Value> values() {
         if (value == null) {
             value = new ArrayList<>();
         }

@@ -17,13 +17,13 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Adaptor<T extends Enum<T>> extends XmlAdapter<String,  Enum<T>> {
 
-    private Class<T> _enumClass;
+    private Class<T> enumClass;
 
     public Adaptor() {
     }
 
     protected Adaptor(Class<T> enumClass) {
-        _enumClass = enumClass;
+        this.enumClass = enumClass;
     }
 
     @Override
@@ -33,6 +33,6 @@ public class Adaptor<T extends Enum<T>> extends XmlAdapter<String,  Enum<T>> {
 
     @Override
     public Enum<T> unmarshal(String v) {
-        return T.valueOf(_enumClass, v);
+        return T.valueOf(enumClass, v);
     }
 }

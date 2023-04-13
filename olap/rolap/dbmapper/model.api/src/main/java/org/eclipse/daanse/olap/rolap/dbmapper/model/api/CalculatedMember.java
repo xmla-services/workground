@@ -17,12 +17,12 @@ import java.util.List;
 
 public interface CalculatedMember {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
 
     String formula();
 
-    List<? extends CalculatedMemberProperty> calculatedMemberProperty();
+    List<CalculatedMemberProperty> calculatedMemberProperty();
 
     String name();
 

@@ -15,19 +15,25 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
 
 public record VirtualCubeR(String name,
                            String caption,
                            String description,
                            String defaultMeasure,
                            boolean enabled,
-                           List<AnnotationR> annotations,
-                           List<CubeUsageR> cubeUsages,
-                           List<VirtualCubeDimensionR> virtualCubeDimension,
-                           List<VirtualCubeMeasureR> virtualCubeMeasure,
-                           List<CalculatedMemberR> calculatedMember,
-                           List<NamedSetR> namedSet,
+                           List<Annotation> annotations,
+                           List<CubeUsage> cubeUsages,
+                           List<VirtualCubeDimension> virtualCubeDimension,
+                           List<VirtualCubeMeasure> virtualCubeMeasure,
+                           List<CalculatedMember> calculatedMember,
+                           List<NamedSet> namedSet,
                            boolean visible
 ) implements VirtualCube {
 

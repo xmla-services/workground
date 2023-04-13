@@ -17,8 +17,8 @@ import java.util.List;
 
 public interface InlineTable extends Relation {
 
-    List<? extends ColumnDef> columnDefs();
+    List<ColumnDef> columnDefs();
 
-    List<? extends Row> rows();
+    List<Row> rows();
 
 }

@@ -17,19 +17,19 @@ import java.util.List;
 
 public interface Cube {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends CubeDimension> dimensionUsageOrDimension();
+    List<CubeDimension> dimensionUsageOrDimension();
 
-    List<? extends Measure> measure();
+    List<Measure> measure();
 
-    List<? extends CalculatedMember> calculatedMember();
+    List<CalculatedMember> calculatedMember();
 
-    List<? extends NamedSet> namedSet();
+    List<NamedSet> namedSet();
 
-    List<? extends DrillThroughAction> drillThroughAction();
+    List<DrillThroughAction> drillThroughAction();
 
-    List<? extends WritebackTable> writebackTable();
+    List<WritebackTable> writebackTable();
 
 
     String name();
@@ -48,5 +48,5 @@ public interface Cube {
 
     Relation fact();
 
-    Iterable<? extends Action> action();
+    Iterable<Action> action();
 }

@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -35,13 +37,13 @@ public class TableImpl implements Table {
 
     @XmlElement(name = "SQL")
     protected SQLImpl sql;
-    @XmlElement(name = "AggExclude")
-    protected List<AggExcludeImpl> aggExclude;
+    @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
+    protected List<AggExclude> aggExclude;
     @XmlElements({ @XmlElement(name = "AggName", type = AggNameImpl.class),
             @XmlElement(name = "AggPattern", type = AggPatternImpl.class) })
     protected List<AggTable> aggTable;
-    @XmlElement(name = "Hint")
-    protected List<HintImpl> hint;
+    @XmlElement(name = "Hint", type = HintImpl.class)
+    protected List<Hint> hint;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "schema")
@@ -59,7 +61,7 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<AggExcludeImpl> aggExclude() {
+    public List<AggExclude> aggExclude() {
         if (aggExclude == null) {
             aggExclude = new ArrayList<>();
         }
@@ -75,7 +77,7 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<HintImpl> hint() {
+    public List<Hint> hint() {
         if (hint == null) {
             hint = new ArrayList<>();
         }

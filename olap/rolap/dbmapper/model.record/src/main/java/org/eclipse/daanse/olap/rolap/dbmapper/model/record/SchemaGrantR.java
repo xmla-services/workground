@@ -15,10 +15,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
-public record SchemaGrantR(List<CubeGrantR> cubeGrant,
+public record SchemaGrantR(List<CubeGrant> cubeGrant,
                            AccessEnum access)
         implements SchemaGrant {
 

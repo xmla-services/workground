@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
 
 public record WritebackTableR(String schema,
                               String name,
-                              List<? extends WritebackColumn> columns)
+                              List<WritebackColumn> columns)
         implements WritebackTable {
 
 }

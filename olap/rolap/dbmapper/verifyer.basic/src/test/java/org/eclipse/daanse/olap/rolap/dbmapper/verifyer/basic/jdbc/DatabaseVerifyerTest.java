@@ -15,7 +15,7 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.NOT_SET;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PRIMARY_KEY;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY;
-import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_SPACE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.TABLE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.TABLE_S_DOES_NOT_EXIST_IN_DATABASE;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.description.DescriptionVerifyerTest.setupDummyListAnswer;
@@ -82,8 +82,7 @@ class DatabaseVerifyerTest {
     @Test
     void testSchema() {
         List<VerificationResult> result = verifyer.verify(schema, dataSource);
-        assertThat(result).isNotNull()
-            .hasSize(0);
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @Test
@@ -102,7 +101,7 @@ class DatabaseVerifyerTest {
             .extracting(VerificationResult::description)
             .contains(String.format(CUBE_MUST_CONTAIN_MEASURES, NOT_SET))
             .contains(String.format(FACT_TABLE_0_DOES_NOT_EXIST_IN_DATABASE, "name",
-                SCHEMA_ + "schema"));
+                SCHEMA_SPACE + "schema"));
         assertThat(result).extracting(VerificationResult::title)
             .contains(CUBE);
         assertThat(result).extracting(VerificationResult::level)

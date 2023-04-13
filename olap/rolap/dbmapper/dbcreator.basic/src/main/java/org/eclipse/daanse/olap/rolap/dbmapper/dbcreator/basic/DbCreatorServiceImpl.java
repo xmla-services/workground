@@ -104,10 +104,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private void processingDimension(CubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
-        if (d instanceof PrivateDimension privateDimension) {
-            if (privateDimension.hierarchy() != null) {
-                privateDimension.hierarchy().forEach(h -> processingHierarchy(h, tables, schemaName));
-            }
+        if (d instanceof PrivateDimension privateDimension && privateDimension.hierarchy() != null) {
+            privateDimension.hierarchy().forEach(h -> processingHierarchy(h, tables, schemaName));
         }
         if (tableName != null) {
                 Table table = getTableOrCreateNew(tables, tableName, schemaName);
@@ -135,14 +133,14 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private String processingRelation(RelationOrJoin relation, Map<String, Table> tables, String schemaName) {
-        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) {
-            return processingTable((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) relation, tables, schemaName);
+        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table) {
+            return processingTable(table, tables, schemaName);
         }
-        if (relation instanceof Join) {
-            return processingJoin((Join) relation, tables, schemaName);
+        if (relation instanceof Join join) {
+            return processingJoin(join, tables, schemaName);
         }
-        if (relation instanceof InlineTable) {
-            return processingInlineTable((InlineTable) relation, tables, schemaName);
+        if (relation instanceof InlineTable inlineTable) {
+            return processingInlineTable(inlineTable, tables, schemaName);
         }
         return null;
     }

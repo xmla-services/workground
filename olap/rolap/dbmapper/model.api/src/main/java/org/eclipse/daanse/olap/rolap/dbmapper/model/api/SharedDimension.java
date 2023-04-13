@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 import java.util.List;
 
 public interface SharedDimension {
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends Hierarchy> hierarchy();
+    List<Hierarchy> hierarchy();
 
     String name();
 

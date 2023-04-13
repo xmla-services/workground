@@ -17,11 +17,11 @@ import java.util.List;
 
 public interface Hierarchy {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends Level> level();
+    List<Level> level();
 
-    List<? extends MemberReaderParameter> memberReaderParameter();
+    List<MemberReaderParameter> memberReaderParameter();
 
     String name();
 

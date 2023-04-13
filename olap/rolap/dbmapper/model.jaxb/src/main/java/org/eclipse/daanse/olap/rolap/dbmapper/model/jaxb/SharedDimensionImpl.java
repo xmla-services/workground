@@ -17,6 +17,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -30,11 +32,11 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "SharedDimension", propOrder = { "annotations", "hierarchy" })
 public class SharedDimensionImpl implements SharedDimension {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Hierarchy", required = true)
-    protected List<HierarchyImpl> hierarchy;
+    protected List<Annotation> annotations;
+    @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
+    protected List<Hierarchy> hierarchy;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -47,7 +49,7 @@ public class SharedDimensionImpl implements SharedDimension {
     private String foreignKey;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }
@@ -55,7 +57,7 @@ public class SharedDimensionImpl implements SharedDimension {
     }
 
     @Override
-    public List<HierarchyImpl> hierarchy() {
+    public List<Hierarchy> hierarchy() {
         if (hierarchy == null) {
             hierarchy = new ArrayList<>();
         }

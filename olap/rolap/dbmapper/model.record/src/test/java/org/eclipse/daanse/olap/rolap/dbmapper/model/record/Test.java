@@ -8,7 +8,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilde
 
 class Test {
     @org.junit.jupiter.api.Test
-    void testName() throws Exception {
+    void testName() {
         SchemaRBuilder.builder()
                 .name("foo")
                 .description("bar")

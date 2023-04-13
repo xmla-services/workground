@@ -467,7 +467,7 @@ class SteelwheelReadTest {
         assertThat(schema).isNotNull();
         assertEquals("SteelWheels", schema.name());
         assertThat(schema.cube()).isNotNull();
-        assertEquals(schema.cube().size(), 1);
+        assertEquals(1, schema.cube().size());
 
         Cube cube = schema.cube().get(0);
         assertThat(cube).isNotNull();
@@ -495,10 +495,10 @@ class SteelwheelReadTest {
 
         List<? extends Object> measuries = cube.measure();
         assertThat(measuries).isNotNull();
-        assertEquals(measuries.size(), 2);
+        assertEquals(2, measuries.size());
     }
 
-   
+
 
     private void checkRoleItem(Role role, Map<String, Object> map) {
         assertNull(role.annotations());

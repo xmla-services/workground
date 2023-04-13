@@ -26,22 +26,22 @@ public class TableR implements Table {
 
     private SQL sql;
     private String alias;
-    private List<? extends AggExclude> aggExclude;
+    private List<AggExclude> aggExclude;
     private String name;
     private String schema;
-    private List<? extends Hint> hint;
-    private List<? extends AggTable> aggTable;
+    private List<Hint> hint;
+    private List<AggTable> aggTable;
 
     public TableR(Table table) {
         this(table.schema(), table.name(), table.alias(), table.hint());
     }
 
-    public TableR(String name, List<? extends AggExclude> aggExclude, List<? extends AggTable> aggTable) {
+    public TableR(String name, List<AggExclude> aggExclude, List<AggTable> aggTable) {
         this.name = name;
         this.aggExclude = aggExclude;
         this.aggTable = aggTable;
     }
-    public TableR(String schema, String name, String alias, List<? extends Hint> hint) {
+    public TableR(String schema, String name, String alias, List<Hint> hint) {
         this.name = name;
         this.schema = schema;
         this.alias = alias;
@@ -79,17 +79,17 @@ public class TableR implements Table {
     }
 
     @Override
-    public List<? extends AggExclude> aggExclude() {
+    public List<AggExclude> aggExclude() {
         return aggExclude;
     }
 
     @Override
-    public List<? extends AggTable> aggTable() {
+    public List<AggTable> aggTable() {
         return aggTable;
     }
 
     @Override
-    public List<? extends Hint> hint() {
+    public List<Hint> hint() {
         return hint;
     }
 

@@ -17,7 +17,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -33,13 +36,13 @@ import jakarta.xml.bind.annotation.XmlType;
         "memberReaderParameter", "relation" })
 public class HierarchyImpl implements Hierarchy {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Level", required = true)
-    protected List<LevelImpl> level;
-    @XmlElement(name = "MemberReaderParameter")
-    protected List<MemberReaderParameterImpl> memberReaderParameter;
+    protected List<Annotation> annotations;
+    @XmlElement(name = "Level", required = true, type = LevelImpl.class)
+    protected List<Level> level;
+    @XmlElement(name = "MemberReaderParameter", type = MemberReaderParameterImpl.class)
+    protected List<MemberReaderParameter> memberReaderParameter;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "hasAll", required = true)
@@ -76,16 +79,16 @@ public class HierarchyImpl implements Hierarchy {
     protected RelationOrJoin relation;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<LevelImpl> level() {
+    public List<Level> level() {
         if (level == null) {
             level = new ArrayList<>();
         }
@@ -93,7 +96,7 @@ public class HierarchyImpl implements Hierarchy {
     }
 
     @Override
-    public List<MemberReaderParameterImpl> memberReaderParameter() {
+    public List<MemberReaderParameter> memberReaderParameter() {
         if (memberReaderParameter == null) {
             memberReaderParameter = new ArrayList<>();
         }
@@ -236,7 +239,7 @@ public class HierarchyImpl implements Hierarchy {
         this.uniqueKeyLevelName = value;
     }
 
-    public void setLevel(List<LevelImpl> level) {
+    public void setLevel(List<Level> level) {
         this.level = level;
     }
 

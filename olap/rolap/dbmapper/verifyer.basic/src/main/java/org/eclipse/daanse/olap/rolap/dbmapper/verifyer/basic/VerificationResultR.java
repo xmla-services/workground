@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic;
 
@@ -23,4 +23,4 @@ public record VerificationResultR(String title,
                                   Cause cause)
         implements VerificationResult {
 
-};
+}

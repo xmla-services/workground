@@ -15,7 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
 
 public record CalculatedMemberR(String name,
@@ -25,9 +27,9 @@ public record CalculatedMemberR(String name,
                                 String dimension,
                                 boolean visible,
                                 String displayFolder,
-                                List<AnnotationR> annotations,
+                                List<Annotation> annotations,
                                 String formula,
-                                List<CalculatedMemberPropertyR> calculatedMemberProperty,
+                                List<CalculatedMemberProperty> calculatedMemberProperty,
                                 String hierarchy,
                                 String parent,
                                 CellFormatterR cellFormatter,

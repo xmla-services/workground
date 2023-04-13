@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 public record ViewR(String alias,
-                    List<? extends SQL> sqls)
+                    List<SQL> sqls)
         implements View {
 
     public ViewR(View view, String alias) {

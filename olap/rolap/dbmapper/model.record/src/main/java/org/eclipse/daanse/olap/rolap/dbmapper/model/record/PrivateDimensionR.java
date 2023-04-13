@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 
@@ -25,10 +26,10 @@ public record PrivateDimensionR(String name,
                                 String description,
                                 String foreignKey,
                                 boolean highCardinality,
-                                List<AnnotationR> annotations,
-                                List<HierarchyR> hierarchy,
+                                List<Annotation> annotations,
+                                List<Hierarchy> hierarchy,
                                 boolean visible,
-                                List<? extends Annotation> annotation,
+                                List<Annotation> annotation,
                                 String usagePrefix
                                 )
         implements PrivateDimension {
