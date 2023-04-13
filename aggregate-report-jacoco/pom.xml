@@ -143,6 +143,17 @@
             <goals>
               <goal>report-aggregate</goal>
             </goals>
+            <configuration>
+              <dataFileIncludes>
+                <dataFileInclude>target/*.exec</dataFileInclude>
+              </dataFileIncludes>
+              <dataFileExcludes>
+                <dataFileExclude>target/*/jacoco.exec</dataFileExclude>
+              </dataFileExcludes>
+         	  <dataFileExcludes>
+                <dataFileExclude>target/test/tmp/testing/test/generated/jacoco.exec</dataFileExclude>
+              </dataFileExcludes>
+            </configuration>
           </execution>
         </executions>
       </plugin>
