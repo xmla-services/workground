@@ -69,26 +69,10 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <sonar.organization>xmla-services</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.coverage.jacoco.xmlReportPaths> <!-- each project cateches its data from aggregator, but we have no absolut path in mvn-->
-    ${project.basedir}/../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml,
-    ${project.basedir}/../../../../../../../../../../../../../../../aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml
-	</sonar.coverage.jacoco.xmlReportPaths>
+     <!-- each project cateches its data from aggregator, but we have no absolut path in mvn-->
+    <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/aggregate-report-jacoco/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.junit.reportPaths>${project.basedir}/target/test-reports/</sonar.junit.reportPaths>
+    <sonar.junit.reportPaths>${project.basedir}/target/test-reports/test/</sonar.junit.reportPaths>
     <slf4j.version>2.0.4</slf4j.version>
     <asm.version>9.4</asm.version>
     <spifly.version>1.3.6</spifly.version>
