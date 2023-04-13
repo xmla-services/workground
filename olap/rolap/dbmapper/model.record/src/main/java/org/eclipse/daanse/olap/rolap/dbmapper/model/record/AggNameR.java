@@ -15,17 +15,21 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
 
 public record AggNameR(String name,
-                       AggColumnNameR aggFactCount,
-                       List<AggMeasureR> aggMeasure,
-                       List<AggColumnNameR> aggIgnoreColumn,
-                       List<AggForeignKeyR> aggForeignKey,
-                       List<AggLevelR> aggLevel,
+                       AggColumnName aggFactCount,
+                       List<AggMeasure> aggMeasure,
+                       List<AggColumnName> aggIgnoreColumn,
+                       List<AggForeignKey> aggForeignKey,
+                       List<AggLevel> aggLevel,
                        boolean ignorecase,
-                       List<? extends AggMeasureFactCount> measuresFactCount,
+                       List<AggMeasureFactCount> measuresFactCount,
                        String approxRowCount)
         implements AggName {
 

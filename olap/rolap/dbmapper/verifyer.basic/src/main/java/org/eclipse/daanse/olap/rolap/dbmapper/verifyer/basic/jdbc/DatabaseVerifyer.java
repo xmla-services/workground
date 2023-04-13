@@ -13,14 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
@@ -36,14 +28,18 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Designate(ocd = DatabaseVerifierConfig.class)
 @Component(service = Verifyer.class)
 public class DatabaseVerifyer implements Verifyer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseVerifyer.class);
     public static final Converter CONVERTER = Converters.standardConverter();
 
     @Reference

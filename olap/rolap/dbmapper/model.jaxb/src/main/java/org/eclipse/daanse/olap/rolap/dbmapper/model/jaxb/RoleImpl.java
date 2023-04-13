@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -24,32 +25,34 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "schemaGrant", "union" })
 public class RoleImpl implements Role {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "SchemaGrant")
-    protected List<SchemaGrantImpl> schemaGrant;
-    @XmlElement(name = "Union", required = true)
-    protected UnionImpl union;
+    protected List<Annotation> annotations;
+    @XmlElement(name = "SchemaGrant", type = SchemaGrantImpl.class)
+    protected List<SchemaGrant> schemaGrant;
+    @XmlElement(name = "Union", required = true, type = UnionImpl.class)
+    protected Union union;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<SchemaGrantImpl> schemaGrant() {
+    public List<SchemaGrant> schemaGrant() {
         if (schemaGrant == null) {
             schemaGrant = new ArrayList<>();
         }
@@ -57,7 +60,7 @@ public class RoleImpl implements Role {
     }
 
     @Override
-    public UnionImpl union() {
+    public Union union() {
         return union;
     }
 
@@ -74,7 +77,7 @@ public class RoleImpl implements Role {
         this.name = value;
     }
 
-    public void setSchemaGrant(List<SchemaGrantImpl> schemaGrant) {
+    public void setSchemaGrant(List<SchemaGrant> schemaGrant) {
         this.schemaGrant = schemaGrant;
     }
 }

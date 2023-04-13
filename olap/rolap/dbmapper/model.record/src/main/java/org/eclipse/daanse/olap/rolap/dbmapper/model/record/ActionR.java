@@ -21,6 +21,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 public record ActionR(String name,
                       String caption,
                       String description,
-                      List<? extends Annotation> annotations) implements Action {
+                      List<Annotation> annotations) implements Action {
 
 }

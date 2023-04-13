@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -27,18 +28,18 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = { "roleUsage" })
 public class UnionImpl implements Union {
 
-    @XmlElement(name = "RoleUsage", required = true)
-    protected List<RoleUsageImpl> roleUsage;
+    @XmlElement(name = "RoleUsage", required = true, type = RoleUsageImpl.class)
+    protected List<RoleUsage> roleUsage;
 
     @Override
-    public List<RoleUsageImpl> roleUsage() {
+    public List<RoleUsage> roleUsage() {
         if (roleUsage == null) {
             roleUsage = new ArrayList<>();
         }
         return this.roleUsage;
     }
 
-    public void setRoleUsage(List<RoleUsageImpl> roleUsage) {
+    public void setRoleUsage(List<RoleUsage> roleUsage) {
         this.roleUsage = roleUsage;
     }
 

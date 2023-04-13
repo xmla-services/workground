@@ -15,8 +15,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -38,14 +41,14 @@ public record LevelR(String name,
                      String caption,
                      String description,
                      String captionColumn,
-                     List<AnnotationR> annotations,
-                     ExpressionViewR keyExpression,
-                     ExpressionViewR nameExpression,
-                     ExpressionViewR captionExpression,
-                     ExpressionViewR ordinalExpression,
-                     ExpressionViewR parentExpression,
+                     List<Annotation> annotations,
+                     ExpressionView keyExpression,
+                     ExpressionView nameExpression,
+                     ExpressionView captionExpression,
+                     ExpressionView ordinalExpression,
+                     ExpressionView parentExpression,
                      ClosureR closure,
-                     List<PropertyR> property,
+                     List<Property> property,
                      boolean visible,
                      InternalTypeEnum internalType,
                      ElementFormatter memberFormatter

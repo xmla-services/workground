@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -30,13 +31,13 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "View", propOrder = { "sql" })
 public class ViewImpl implements View {
 
-    @XmlElement(name = "SQL", required = true)
-    protected List<SQLImpl> sql;
+    @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
+    protected List<SQL> sql;
     @XmlAttribute(name = "alias", required = true)
     protected String alias;
 
     @Override
-    public List<SQLImpl> sqls() {
+    public List<SQL> sqls() {
         if (sql == null) {
             sql = new ArrayList<>();
         }
@@ -87,6 +88,6 @@ public class ViewImpl implements View {
 
     @Override
 	public String toString() {
-        return sql.get(0).content;
+        return sql.get(0).content();
     }
 }

@@ -18,6 +18,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -27,6 +33,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 
 /**
  * A schema is a collection of cubes and virtual cubes. It can also contain
@@ -42,24 +50,24 @@ public class SchemaImpl implements Schema {
     /**
      * A bcd
      */
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Parameter")
-    protected List<ParameterImpl> parameter;
-    @XmlElement(name = "Dimension")
-    protected List<PrivateDimensionImpl> dimension;
-    @XmlElement(name = "Cube", required = true)
-    protected List<CubeImpl> cube;
-    @XmlElement(name = "VirtualCube")
-    protected List<VirtualCubeImpl> virtualCube;
-    @XmlElement(name = "NamedSet")
-    protected List<NamedSetImpl> namedSet;
-    @XmlElement(name = "Role")
-    protected List<RoleImpl> role;
+    protected List<Annotation> annotations;
+    @XmlElement(name = "Parameter", type = ParameterImpl.class)
+    protected List<Parameter> parameter;
+    @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class)
+    protected List<PrivateDimension> dimension;
+    @XmlElement(name = "Cube", required = true, type = CubeImpl.class)
+    protected List<Cube> cube;
+    @XmlElement(name = "VirtualCube", type = VirtualCubeImpl.class)
+    protected List<VirtualCube> virtualCube;
+    @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
+    protected List<NamedSet> namedSet;
+    @XmlElement(name = "Role", type = RoleImpl.class)
+    protected List<Role> role;
     @Deprecated
-    @XmlElement(name = "UserDefinedFunction")
-    protected List<UserDefinedFunctionImpl> userDefinedFunction;
+    @XmlElement(name = "UserDefinedFunction", type = UserDefinedFunctionImpl.class)
+    protected List<UserDefinedFunction> userDefinedFunction;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "description")
@@ -70,16 +78,16 @@ public class SchemaImpl implements Schema {
     protected String defaultRole;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<ParameterImpl> parameter() {
+    public List<Parameter> parameter() {
         if (parameter == null) {
             parameter = new ArrayList<>();
         }
@@ -87,7 +95,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<PrivateDimensionImpl> dimension() {
+    public List<PrivateDimension> dimension() {
         if (dimension == null) {
             dimension = new ArrayList<>();
         }
@@ -95,7 +103,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<CubeImpl> cube() {
+    public List<Cube> cube() {
         if (cube == null) {
             cube = new ArrayList<>();
         }
@@ -103,7 +111,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<VirtualCubeImpl> virtualCube() {
+    public List<VirtualCube> virtualCube() {
         if (virtualCube == null) {
             virtualCube = new ArrayList<>();
         }
@@ -111,7 +119,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<NamedSetImpl> namedSet() {
+    public List<NamedSet> namedSet() {
         if (namedSet == null) {
             namedSet = new ArrayList<>();
         }
@@ -119,7 +127,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<RoleImpl> roles() {
+    public List<Role> roles() {
         if (role == null) {
             role = new ArrayList<>();
         }
@@ -128,7 +136,7 @@ public class SchemaImpl implements Schema {
 
     @Override
     @Deprecated
-    public List<UserDefinedFunctionImpl> userDefinedFunctions() {
+    public List<UserDefinedFunction> userDefinedFunctions() {
         if (userDefinedFunction == null) {
             userDefinedFunction = new ArrayList<>();
         }
@@ -176,26 +184,26 @@ public class SchemaImpl implements Schema {
         this.defaultRole = value;
     }
 
-    public void setNamedSet(List<NamedSetImpl> namedSet) {
+    public void setNamedSet(List<NamedSet> namedSet) {
         this.namedSet = namedSet;
 
     }
 
-    public void setParameter(List<ParameterImpl> parameter) {
+    public void setParameter(List<Parameter> parameter) {
         this.parameter = parameter;
 
     }
 
-    public void setRole(List<RoleImpl> role) {
+    public void setRole(List<Role> role) {
         this.role = role;
 
     }
 
-    public void setUserDefinedFunction(List<UserDefinedFunctionImpl> userDefinedFunction) {
+    public void setUserDefinedFunction(List<UserDefinedFunction> userDefinedFunction) {
         this.userDefinedFunction = userDefinedFunction;
     }
 
-    public void setVirtualCube(List<VirtualCubeImpl> virtualCub) {
+    public void setVirtualCube(List<VirtualCube> virtualCub) {
         this.virtualCube = virtualCub;
     }
 

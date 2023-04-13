@@ -15,19 +15,26 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 public record HierarchyR(String name,
                          String caption,
                          String description,
-                         List<AnnotationR> annotations,
-                         TableR table,
-                         ViewR view,
-                         JoinR join,
-                         InlineTableR inlineTable,
-                         List<LevelR> level,
-                         List<MemberReaderParameterR> memberReaderParameter,
+                         List<Annotation> annotations,
+                         Table table,
+                         View view,
+                         Join join,
+                         InlineTable inlineTable,
+                         List<Level> level,
+                         List<MemberReaderParameter> memberReaderParameter,
                          boolean hasAll,
                          String allMemberName,
                          String allMemberCaption,

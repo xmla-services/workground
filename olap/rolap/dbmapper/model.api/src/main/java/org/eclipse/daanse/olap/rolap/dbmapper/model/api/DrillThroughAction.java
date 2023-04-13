@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
@@ -17,13 +17,13 @@ import java.util.List;
 
 public interface DrillThroughAction {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends DrillThroughElement> drillThroughElement();
+    List<DrillThroughElement> drillThroughElement();
 
     String name();
 
-    Boolean _default();
+    Boolean defaultt();
 
     String caption();
 

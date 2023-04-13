@@ -11,22 +11,11 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
+package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic;
 
-import java.util.List;
+public class SchemaExplorerException extends RuntimeException {
 
-public interface Table extends Relation {
-
-    SQL sql();
-
-    List<AggExclude> aggExclude();
-
-    List<AggTable> aggTable();
-
-    List<Hint> hint();
-
-    String name();
-
-    String schema();
-
+    public SchemaExplorerException(String msg) {
+        super(msg);
+    }
 }

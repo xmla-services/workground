@@ -44,6 +44,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
@@ -393,7 +394,7 @@ public class RolapCube extends CubeBase {
             AnnotationImpl internalUsage = new AnnotationImpl();
             internalUsage.setName("Internal Use");
             internalUsage.setContent("For internal use");
-            List<AnnotationImpl> annotations = new ArrayList<>();
+            List<Annotation> annotations = new ArrayList<>();
             annotations.add(internalUsage);
             final MeasureImpl xmlMeasure = new MeasureImpl();
             xmlMeasure.setName("Fact Count");
@@ -507,7 +508,7 @@ public class RolapCube extends CubeBase {
                         drillThroughAction.name(),
                         drillThroughAction.caption(),
                         drillThroughAction.description(),
-                        drillThroughAction._default() != null && drillThroughAction._default().equals("true"),
+                        drillThroughAction.defaultt() != null && drillThroughAction.defaultt().equals("true"),
                         columns
                 );
                 this.actionList.add(rolapDrillThroughAction);

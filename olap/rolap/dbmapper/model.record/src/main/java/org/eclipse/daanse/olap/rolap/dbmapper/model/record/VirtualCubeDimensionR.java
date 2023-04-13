@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 
 public record VirtualCubeDimensionR(String name,
                                     String cubeName,
-                                    List<? extends Annotation> annotations,
+                                    List<Annotation> annotations,
                                     String foreignKey,
                                     boolean highCardinality,
                                     String caption,

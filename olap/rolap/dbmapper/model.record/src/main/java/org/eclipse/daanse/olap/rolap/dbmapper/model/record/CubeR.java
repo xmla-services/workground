@@ -15,26 +15,33 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
 
 public record CubeR(String name,
                     String caption,
                     String description,
                     String defaultMeasure,
-                    List<AnnotationR> annotations,
+                    List<Annotation> annotations,
                     List<CubeDimension> dimensionUsageOrDimension,
-                    List<MeasureR> measure,
-                    List<CalculatedMemberR> calculatedMember,
-                    List<NamedSetR> namedSet,
-                    List<DrillThroughActionR> drillThroughAction,
-                    List<WritebackTableR> writebackTable,
+                    List<Measure> measure,
+                    List<CalculatedMember> calculatedMember,
+                    List<NamedSet> namedSet,
+                    List<DrillThroughAction> drillThroughAction,
+                    List<WritebackTable> writebackTable,
                     boolean enabled,
                     boolean cache,
                     boolean visible,
                     Relation fact,
-                    List<ActionR> action
+                    List<Action> action
                     )
         implements Cube {
 

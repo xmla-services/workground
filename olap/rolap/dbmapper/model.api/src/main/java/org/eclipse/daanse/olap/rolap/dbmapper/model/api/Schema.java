@@ -24,21 +24,21 @@ import java.util.List;
  */
 public interface Schema {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends Parameter> parameter();
+    List<Parameter> parameter();
 
-    List<? extends PrivateDimension> dimension();
+    List<PrivateDimension> dimension();
 
-    List<? extends Cube> cube();
+    List<Cube> cube();
 
-    List<? extends VirtualCube> virtualCube();
+    List<VirtualCube> virtualCube();
 
-    List<? extends NamedSet> namedSet();
+    List<NamedSet> namedSet();
 
-    List<? extends Role> roles();
+    List<Role> roles();
 
-    List<? extends UserDefinedFunction> userDefinedFunctions();
+    List<UserDefinedFunction> userDefinedFunctions();
 
     String name();
 

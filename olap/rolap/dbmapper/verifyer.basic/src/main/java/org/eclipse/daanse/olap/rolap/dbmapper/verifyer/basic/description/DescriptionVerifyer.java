@@ -13,11 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.description;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
@@ -28,14 +23,15 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Map;
 
 @Designate(ocd = DescriptionVerifierConfig.class, factory = true)
 @Component(service = Verifyer.class, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class DescriptionVerifyer implements Verifyer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionVerifyer.class);
     public static final Converter CONVERTER = Converters.standardConverter();
 
     private DescriptionVerifierConfig config;

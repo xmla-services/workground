@@ -131,11 +131,11 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkDrillThroughElement(DrillThroughElement drillThroughElement) {
         if (drillThroughElement != null) {
-            if (drillThroughElement instanceof DrillThroughMeasure) {
-                checkDrillThroughMeasure((DrillThroughMeasure) drillThroughElement);
+            if (drillThroughElement instanceof DrillThroughMeasure drillThroughMeasure) {
+                checkDrillThroughMeasure(drillThroughMeasure);
             }
-            if (drillThroughElement instanceof DrillThroughAttribute) {
-                checkDrillThroughAttribute((DrillThroughAttribute) drillThroughElement);
+            if (drillThroughElement instanceof DrillThroughAttribute drillThroughAttribute) {
+                checkDrillThroughAttribute(drillThroughAttribute);
             }
         }
     }
@@ -148,6 +148,7 @@ public abstract class AbstractSchemaWalker {
         //empty
     }
 
+    @SuppressWarnings("java:S1172")
     protected void checkMeasure(Measure measure, Cube cube) {
         if (measure != null) {
             checkAnnotationList(measure.annotations());
@@ -178,11 +179,9 @@ public abstract class AbstractSchemaWalker {
     protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
         if (cubeDimension != null) {
             checkAnnotationList(cubeDimension.annotations());
-            if (cubeDimension instanceof PrivateDimension) {
-                if (((PrivateDimension) cubeDimension).hierarchy() != null) {
-                    ((PrivateDimension) cubeDimension).hierarchy()
-                        .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
-                }
+            if (cubeDimension instanceof PrivateDimension privateDimension && privateDimension.hierarchy() != null) {
+                privateDimension.hierarchy()
+                    .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
             }
         }
     }
@@ -211,17 +210,17 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkRelationOrJoin(RelationOrJoin relationOrJoin) {
         if (relationOrJoin != null) {
-            if (relationOrJoin instanceof InlineTable) {
-                checkInlineTable((InlineTable) relationOrJoin);
+            if (relationOrJoin instanceof InlineTable inlineTable) {
+                checkInlineTable(inlineTable);
             }
-            if (relationOrJoin instanceof Join) {
-                checkJoin((Join) relationOrJoin);
+            if (relationOrJoin instanceof Join join) {
+                checkJoin(join);
             }
-            if (relationOrJoin instanceof Table) {
-                checkTable((Table) relationOrJoin);
+            if (relationOrJoin instanceof Table table) {
+                checkTable(table);
             }
-            if (relationOrJoin instanceof View) {
-                checkView((View) relationOrJoin);
+            if (relationOrJoin instanceof View view) {
+                checkView(view);
             }
         }
     }
@@ -277,11 +276,11 @@ public abstract class AbstractSchemaWalker {
             checkAggMeasureList(aggTable.aggMeasure());
             checkAggLevelList(aggTable.aggLevel());
             checkAggMeasureFactCountList(aggTable.measuresFactCount());
-            if (aggTable instanceof AggName) {
-                checkAggName((AggName) aggTable);
+            if (aggTable instanceof AggName aggName) {
+                checkAggName(aggName);
             }
-            if (aggTable instanceof AggPattern) {
-                checkAggPattern((AggPattern) aggTable);
+            if (aggTable instanceof AggPattern aggPattern) {
+                checkAggPattern(aggPattern);
             }
         }
     }
@@ -319,10 +318,8 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkAggColumnName(AggColumnName aggFactCount) {
-        if (aggFactCount != null) {
-            if (aggFactCount instanceof AggMeasureFactCount) {
-                checkAggMeasureFactCount((AggMeasureFactCount) aggFactCount);
-            }
+        if (aggFactCount != null && aggFactCount instanceof AggMeasureFactCount aggMeasureFactCount) {
+            checkAggMeasureFactCount(aggMeasureFactCount);
         }
     }
 
@@ -330,6 +327,7 @@ public abstract class AbstractSchemaWalker {
         //empty
     }
 
+    @SuppressWarnings("java:S1172")
     protected void checkLevel(
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, Hierarchy hierarchy,
         PrivateDimension parentDimension, Cube cube
@@ -364,11 +362,11 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkExpression(Expression keyExpression) {
         if (keyExpression != null) {
-            if (keyExpression instanceof Column) {
-                checkColumn((Column) keyExpression);
+            if (keyExpression instanceof Column column) {
+                checkColumn(column);
             }
-            if (keyExpression instanceof ExpressionView) {
-                checkExpressionView((ExpressionView) keyExpression);
+            if (keyExpression instanceof ExpressionView expressionView) {
+                checkExpressionView(expressionView);
             }
         }
     }
@@ -377,6 +375,7 @@ public abstract class AbstractSchemaWalker {
         //empty
     }
 
+    @SuppressWarnings("java:S1172")
     protected void checkProperty(
         Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
         Hierarchy hierarchy, Cube cube
@@ -462,6 +461,7 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
+    @SuppressWarnings("java:S1874")
     protected void checkUserDefinedFunction(UserDefinedFunction udf) {
         //empty
     }
@@ -537,20 +537,18 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkWritebackTable(WritebackTable writebackTable) {
-        if (writebackTable != null) {
-            if (writebackTable.columns() != null) {
-                writebackTable.columns().forEach(this::checkWritebackColumn);
-            }
+        if (writebackTable != null && writebackTable.columns() != null) {
+            writebackTable.columns().forEach(this::checkWritebackColumn);
         }
     }
 
     protected void checkWritebackColumn(WritebackColumn writebackColumn) {
         if (writebackColumn != null) {
-            if (writebackColumn instanceof WritebackAttribute) {
-                checkWritebackAttribute((WritebackAttribute) writebackColumn);
+            if (writebackColumn instanceof WritebackAttribute writebackAttribute) {
+                checkWritebackAttribute(writebackAttribute);
             }
-            if (writebackColumn instanceof WritebackMeasure) {
-                checkWritebackMeasure((WritebackMeasure) writebackColumn);
+            if (writebackColumn instanceof WritebackMeasure writebackMeasure) {
+                checkWritebackMeasure(writebackMeasure);
             }
         }
     }
@@ -742,6 +740,7 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
+    @SuppressWarnings("java:S1874")
     private void checkUserDefinedFunctionList(List<? extends UserDefinedFunction> list) {
         if (list != null) {
             list.forEach(this::checkUserDefinedFunction);

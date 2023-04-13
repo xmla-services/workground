@@ -16,11 +16,13 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -43,23 +45,23 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
         "ordinalExpression", "parentExpression", "closure", "property", "memberFormatter" })
 public class LevelImpl implements Level {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    protected List<Annotation> annotations;
     @XmlElement(name = "KeyExpression", type = ExpressionViewImpl.class)
     protected ExpressionView keyExpression;
     @XmlElement(name = "NameExpression", type = ExpressionViewImpl.class)
     protected ExpressionView nameExpression;
     @XmlElement(name = "CaptionExpression", type = ExpressionViewImpl.class)
     protected ExpressionView captionExpression;
-    @XmlElement(name = "OrdinalExpression")
-    protected ExpressionViewImpl ordinalExpression;
-    @XmlElement(name = "ParentExpression")
-    protected ExpressionViewImpl parentExpression;
+    @XmlElement(name = "OrdinalExpression", type = ExpressionViewImpl.class)
+    protected ExpressionView ordinalExpression;
+    @XmlElement(name = "ParentExpression", type = ExpressionViewImpl.class)
+    protected ExpressionView parentExpression;
     @XmlElement(name = "Closure")
     protected ClosureImpl closure;
-    @XmlElement(name = "Property")
-    protected List<PropertyImpl> property;
+    @XmlElement(name = "Property", type = PropertyImpl.class)
+    protected List<Property> property;
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlAttribute(name = "name", required = true)
@@ -97,18 +99,18 @@ public class LevelImpl implements Level {
     protected String captionColumn;
     @XmlAttribute(name = "visible")
     protected Boolean visible = true;
-    @XmlAttribute(name = "internalType") //{"int", "long", "Object", "String"}
+    @XmlAttribute(name = "internalType")
     @XmlJavaTypeAdapter(InternalTypeAdaptor.class)
     protected InternalTypeEnum internalType;
     @XmlElement(name = "MemberFormatter")
     ElementFormatterImpl memberFormatter;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
@@ -167,7 +169,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<PropertyImpl> property() {
+    public List<Property> property() {
         if (property == null) {
             property = new ArrayList<>();
         }
@@ -345,7 +347,7 @@ public class LevelImpl implements Level {
         this.captionColumn = value;
     }
 
-    public void setProperty(List<PropertyImpl> property) {
+    public void setProperty(List<Property> property) {
         this.property = property;
     }
 

@@ -9,14 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
-public record UnionR(List<RoleUsageR> roleUsage) implements Union {
+public record UnionR(List<RoleUsage> roleUsage) implements Union {
 
 }

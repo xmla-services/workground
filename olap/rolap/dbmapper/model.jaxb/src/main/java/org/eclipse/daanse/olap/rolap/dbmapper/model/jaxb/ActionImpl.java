@@ -35,8 +35,8 @@ public class ActionImpl implements Action {
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
-    @XmlElement(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    @XmlElement(name = "Annotations", type = AnnotationImpl.class)
+    protected List<Annotation> annotations;
 
     @Override
     public String name() {
@@ -54,7 +54,7 @@ public class ActionImpl implements Action {
     }
 
     @Override
-    public List<? extends Annotation> annotations() {
+    public List<Annotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }

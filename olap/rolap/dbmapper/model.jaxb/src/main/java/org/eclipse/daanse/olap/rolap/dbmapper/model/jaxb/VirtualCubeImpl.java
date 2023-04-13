@@ -16,6 +16,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -24,26 +28,28 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "cubeUsages", "virtualCubeDimension", "virtualCubeMeasure",
         "calculatedMember", "namedSet" })
 public class VirtualCubeImpl implements VirtualCube {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    protected List<Annotation> annotations;
     @XmlElementWrapper(name = "CubeUsages", required = true)
-    @XmlElement(name = "CubeUsage", required = true)
-    protected List<CubeUsageImpl> cubeUsages;
-    @XmlElement(name = "VirtualCubeDimension", required = true)
-    protected List<VirtualCubeDimensionImpl> virtualCubeDimension;
-    @XmlElement(name = "VirtualCubeMeasure", required = true)
-    protected List<VirtualCubeMeasureImpl> virtualCubeMeasure;
-    @XmlElement(name = "CalculatedMember")
-    protected List<CalculatedMemberImpl> calculatedMember;
-    @XmlElement(name = "NamedSet")
-    protected List<NamedSetImpl> namedSet;
+    @XmlElement(name = "CubeUsage", required = true, type = CubeUsageImpl.class)
+    protected List<CubeUsage> cubeUsages;
+    @XmlElement(name = "VirtualCubeDimension", required = true, type = VirtualCubeDimensionImpl.class)
+    protected List<VirtualCubeDimension> virtualCubeDimension;
+    @XmlElement(name = "VirtualCubeMeasure", required = true, type = VirtualCubeMeasureImpl.class)
+    protected List<VirtualCubeMeasure> virtualCubeMeasure;
+    @XmlElement(name = "CalculatedMember", type = CalculatedMemberImpl.class)
+    protected List<CalculatedMember> calculatedMember;
+    @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
+    protected List<NamedSet> namedSet;
     @XmlAttribute(name = "enabled")
     protected Boolean enabled;
     @XmlAttribute(name = "name", required = true)
@@ -58,25 +64,25 @@ public class VirtualCubeImpl implements VirtualCube {
     protected Boolean visible = true;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<CubeUsageImpl> cubeUsages() {
+    public List<CubeUsage> cubeUsages() {
         return cubeUsages;
     }
 
-    public void setCubeUsages(List<CubeUsageImpl> value) {
+    public void setCubeUsages(List<CubeUsage> value) {
         this.cubeUsages = value;
     }
 
     @Override
-    public List<VirtualCubeDimensionImpl> virtualCubeDimension() {
+    public List<VirtualCubeDimension> virtualCubeDimension() {
         if (virtualCubeDimension == null) {
             virtualCubeDimension = new ArrayList<>();
         }
@@ -84,7 +90,7 @@ public class VirtualCubeImpl implements VirtualCube {
     }
 
     @Override
-    public List<VirtualCubeMeasureImpl> virtualCubeMeasure() {
+    public List<VirtualCubeMeasure> virtualCubeMeasure() {
         if (virtualCubeMeasure == null) {
             virtualCubeMeasure = new ArrayList<>();
         }
@@ -92,7 +98,7 @@ public class VirtualCubeImpl implements VirtualCube {
     }
 
     @Override
-    public List<CalculatedMemberImpl> calculatedMember() {
+    public List<CalculatedMember> calculatedMember() {
         if (calculatedMember == null) {
             calculatedMember = new ArrayList<>();
         }
@@ -100,7 +106,7 @@ public class VirtualCubeImpl implements VirtualCube {
     }
 
     @Override
-    public List<NamedSetImpl> namedSet() {
+    public List<NamedSet> namedSet() {
         if (namedSet == null) {
             namedSet = new ArrayList<>();
         }

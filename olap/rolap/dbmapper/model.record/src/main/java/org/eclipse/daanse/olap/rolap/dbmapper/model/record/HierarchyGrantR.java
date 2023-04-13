@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public record HierarchyGrantR(
@@ -24,7 +25,7 @@ public record HierarchyGrantR(
                               String topLevel,
                               String bottomLevel,
                               String rollupPolicy,
-                              List<MemberGrantR> memberGrant
+                              List<MemberGrant> memberGrant
 
 ) implements HierarchyGrant {
 

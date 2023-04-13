@@ -9,13 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
 
@@ -31,27 +32,27 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "DrillThroughAction", propOrder = { "annotations", "drillThroughElement" })
 public class DrillThroughActionImpl implements DrillThroughAction {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    protected List<Annotation> annotations;
     @XmlElements({ @XmlElement(name = "Attribute", type = DrillThroughAttributeImpl.class),
             @XmlElement(name = "Measure", type = DrillThroughMeasureImpl.class) })
     protected List<DrillThroughElement> drillThroughElement;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "default")
-    protected Boolean _default;
+    protected Boolean defaultt;
     @XmlAttribute(name = "caption")
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
@@ -73,12 +74,12 @@ public class DrillThroughActionImpl implements DrillThroughAction {
     }
 
     @Override
-    public Boolean _default() {
-        return _default;
+    public Boolean defaultt() {
+        return defaultt;
     }
 
-    public void setDefault(Boolean value) {
-        this._default = value;
+    public void setDefaultt(Boolean value) {
+        this.defaultt = value;
     }
 
     @Override

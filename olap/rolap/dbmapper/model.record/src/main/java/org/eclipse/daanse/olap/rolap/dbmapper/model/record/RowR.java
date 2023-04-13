@@ -9,14 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
 
-public record RowR(List<ValueR> values) implements Row {
+public record RowR(List<Value> values) implements Row {
 
 }

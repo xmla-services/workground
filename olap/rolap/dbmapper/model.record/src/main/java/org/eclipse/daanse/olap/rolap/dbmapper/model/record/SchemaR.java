@@ -16,20 +16,28 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 
 public record SchemaR(String name,
                       String description,
                       String measuresCaption,
                       String defaultRole,
-                      List<AnnotationR> annotations,
-                      List<ParameterR> parameter,
-                      List<PrivateDimensionR> dimension,
-                      List<CubeR> cube,
-                      List<VirtualCubeR> virtualCube,
-                      List<NamedSetR> namedSet,
-                      List<RoleR> roles,
-                      List<UserDefinedFunctionR> userDefinedFunctions)
+                      List<Annotation> annotations,
+                      List<Parameter> parameter,
+                      List<PrivateDimension> dimension,
+                      List<Cube> cube,
+                      List<VirtualCube> virtualCube,
+                      List<NamedSet> namedSet,
+                      List<Role> roles,
+                      List<UserDefinedFunction> userDefinedFunctions)
         implements Schema {
 
     @Override

@@ -32,8 +32,8 @@ public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
     protected String cubeName;
     @XmlAttribute(name = "name")
     protected String name;
-    @XmlElement(name = "Annotation")
-    protected List<? extends AnnotationImpl> annotations;
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
+    protected List<Annotation> annotations;
     @XmlAttribute(name = "foreignKey")
     protected String foreignKey;
     @XmlAttribute(name = "highCardinality")
@@ -55,7 +55,7 @@ public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
     }
 
     @Override
-    public List<? extends Annotation> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 

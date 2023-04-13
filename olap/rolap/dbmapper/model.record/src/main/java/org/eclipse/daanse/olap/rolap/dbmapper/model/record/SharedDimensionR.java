@@ -15,14 +15,16 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
 
 public record SharedDimensionR(String name,
                                String type,
                                String caption,
                                String description,
-                               List<AnnotationR> annotations,
-                               List<HierarchyR> hierarchy,
+                               List<Annotation> annotations,
+                               List<Hierarchy> hierarchy,
                                String foreignKey)
         implements SharedDimension {
 

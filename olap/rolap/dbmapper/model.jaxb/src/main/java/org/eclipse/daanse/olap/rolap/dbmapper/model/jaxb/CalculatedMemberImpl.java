@@ -17,7 +17,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
 
@@ -34,13 +36,13 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "CalculatedMember")
 public class CalculatedMemberImpl implements CalculatedMember {
 
-    @XmlElement(name = "Annotation")
+    @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<AnnotationImpl> annotations;
+    protected List<Annotation> annotations;
     @XmlAttribute(name = "formula")
     protected String formula;
-    @XmlElement(name = "CalculatedMemberProperty")
-    protected List<CalculatedMemberPropertyImpl> calculatedMemberProperty;
+    @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
+    protected List<CalculatedMemberProperty> calculatedMemberProperty;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "formatString")
@@ -67,17 +69,17 @@ public class CalculatedMemberImpl implements CalculatedMember {
 
 
     @Override
-    public List<AnnotationImpl> annotations() {
+    public List<Annotation> annotations() {
         return annotations;
     }
 
     /**
      * Sets the value of the annotations property.
      *
-     * @param value allowed object is {@link Annotations }
+     * @param value allowed object is {@link Annotation }
      *
      */
-    public void setAnnotations(List<AnnotationImpl> value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
@@ -126,7 +128,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
      *
      */
     @Override
-    public List<CalculatedMemberPropertyImpl> calculatedMemberProperty() {
+    public List<CalculatedMemberProperty> calculatedMemberProperty() {
         if (calculatedMemberProperty == null) {
             calculatedMemberProperty = new ArrayList<>();
         }

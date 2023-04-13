@@ -18,17 +18,17 @@ import java.util.List;
 
 public interface VirtualCube {
 
-    List<? extends Annotation> annotations();
+    List<Annotation> annotations();
 
-    List<? extends CubeUsage> cubeUsages();
+    List<CubeUsage> cubeUsages();
 
-    List<? extends VirtualCubeDimension> virtualCubeDimension();
+    List<VirtualCubeDimension> virtualCubeDimension();
 
-    List<? extends VirtualCubeMeasure> virtualCubeMeasure();
+    List<VirtualCubeMeasure> virtualCubeMeasure();
 
-    List<? extends CalculatedMember> calculatedMember();
+    List<CalculatedMember> calculatedMember();
 
-    List<? extends NamedSet> namedSet();
+    List<NamedSet> namedSet();
 
     boolean enabled();
 
