@@ -19,7 +19,11 @@
   </parent>
   <groupId>CI</groupId>
   <artifactId>aggregate-report-jacoco</artifactId>
-  
+ 
+     <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
    <dependencies>
 
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.clickhouse</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
