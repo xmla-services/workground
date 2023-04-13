@@ -147,12 +147,15 @@
               <dataFileIncludes>
                 <dataFileInclude>target/*.exec</dataFileInclude>
               </dataFileIncludes>
-              <dataFileExcludes>
-                <dataFileExclude>target/*/jacoco.exec</dataFileExclude>
-              </dataFileExcludes>
-         	  <dataFileExcludes>
-                <dataFileExclude>target/test/tmp/testing/test/generated/jacoco.exec</dataFileExclude>
-              </dataFileExcludes>
+			  <dataFileIncludes>
+                <dataFileInclude>*.exec</dataFileInclude>
+              </dataFileIncludes>
+              <dataFileIncludes>
+                <dataFileInclude>target/*/jacoco.exec</dataFileInclude>
+              </dataFileIncludes>
+         	  <dataFileIncludes>
+                <dataFileInclude>target/test/tmp/testing/test/generated/jacoco.exec</dataFileInclude>
+              </dataFileIncludes>
             </configuration>
           </execution>
         </executions>
