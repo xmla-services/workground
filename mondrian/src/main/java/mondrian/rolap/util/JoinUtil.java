@@ -22,23 +22,23 @@ import mondrian.olap.Util;
 public class JoinUtil {
 
     public static RelationOrJoin left(Join join) {
-        if (join.relation() != null && join.relation().size() > 0) {
-            return join.relation().get(0);
+        if (join.relations() != null && join.relations().size() > 0) {
+            return join.relations().get(0);
         }
         throw new RuntimeException("Join left error");
     }
 
     public static RelationOrJoin right(Join join) {
-        if (join.relation() != null && join.relation().size() > 1) {
-            return join.relation().get(1);
+        if (join.relations() != null && join.relations().size() > 1) {
+            return join.relations().get(1);
         }
         throw new RuntimeException("Join left error");
     }
 
     public static void changeLeftRight(Join join, RelationOrJoin left, RelationOrJoin right) {
-        join.relation().clear();
-        join.relation().add(left);
-        join.relation().add(right);
+        join.relations().clear();
+        join.relations().add(left);
+        join.relations().add(right);
     }
 
     /**

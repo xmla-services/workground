@@ -32,7 +32,7 @@ public class CalculatedMemberUtil {
      * "formatString".
      */
     public static String getFormatString(CalculatedMember calculatedMember) {
-        for (CalculatedMemberProperty prop : calculatedMember.calculatedMemberProperty()) {
+        for (CalculatedMemberProperty prop : calculatedMember.calculatedMemberProperties()) {
             if (prop.name().equals(
                 mondrian.olap.Property.FORMAT_STRING.name))
             {

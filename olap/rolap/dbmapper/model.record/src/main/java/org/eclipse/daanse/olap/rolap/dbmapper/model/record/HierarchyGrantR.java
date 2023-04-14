@@ -25,7 +25,7 @@ public record HierarchyGrantR(
                               String topLevel,
                               String bottomLevel,
                               String rollupPolicy,
-                              List<MemberGrant> memberGrant
+                              List<MemberGrant> memberGrants
 
 ) implements HierarchyGrant {
 

@@ -18,32 +18,6 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
-    <!--
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <id>schemagen</id>
-            <goals>
-              <goal>schemagen</goal>
-            </goals>
-            <phase>generate-resources</phase>
-            <configuration>
-              <sources>
-                <source>src/main/java/org/eclipse/daanse/olap/rolap/dbmapper/model/jaxb</source>
-              </sources>
-              <outputDirectory>${project.build.directory}/schemas</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-      -->
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>

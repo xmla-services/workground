@@ -27,7 +27,7 @@ public record PrivateDimensionR(String name,
                                 String foreignKey,
                                 boolean highCardinality,
                                 List<Annotation> annotations,
-                                List<Hierarchy> hierarchy,
+                                List<Hierarchy> hierarchies,
                                 boolean visible,
                                 List<Annotation> annotation,
                                 String usagePrefix

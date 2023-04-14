@@ -31,17 +31,17 @@ public record SchemaR(String name,
                       String measuresCaption,
                       String defaultRole,
                       List<Annotation> annotations,
-                      List<Parameter> parameter,
-                      List<PrivateDimension> dimension,
-                      List<Cube> cube,
-                      List<VirtualCube> virtualCube,
-                      List<NamedSet> namedSet,
+                      List<Parameter> parameters,
+                      List<PrivateDimension> dimensions,
+                      List<Cube> cubes,
+                      List<VirtualCube> virtualCubes,
+                      List<NamedSet> namedSets,
                       List<Role> roles,
                       List<UserDefinedFunction> userDefinedFunctions)
         implements Schema {
 
     @Override
     public void display(PrintWriter pw, int i) {
-
+        //empty
     }
 }

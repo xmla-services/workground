@@ -42,7 +42,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "keyExpression", "nameExpression", "captionExpression",
-        "ordinalExpression", "parentExpression", "closure", "property", "memberFormatter" })
+        "ordinalExpression", "parentExpression", "closure", "properties", "memberFormatter" })
 public class LevelImpl implements Level {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
@@ -61,7 +61,7 @@ public class LevelImpl implements Level {
     @XmlElement(name = "Closure")
     protected ClosureImpl closure;
     @XmlElement(name = "Property", type = PropertyImpl.class)
-    protected List<Property> property;
+    protected List<Property> properties;
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlAttribute(name = "name", required = true)
@@ -169,11 +169,11 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Property> property() {
-        if (property == null) {
-            property = new ArrayList<>();
+    public List<Property> properties() {
+        if (properties == null) {
+            properties = new ArrayList<>();
         }
-        return this.property;
+        return this.properties;
     }
 
     @Override
@@ -347,8 +347,8 @@ public class LevelImpl implements Level {
         this.captionColumn = value;
     }
 
-    public void setProperty(List<Property> property) {
-        this.property = property;
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
     }
 
     public void setVisible(Boolean visible) {

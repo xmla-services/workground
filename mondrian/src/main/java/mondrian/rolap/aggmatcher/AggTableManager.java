@@ -369,7 +369,7 @@ public class AggTableManager {
             List<Hint> tableHints = null;
             if (relation instanceof Table) {
                 schema = ((Table) relation).schema();
-                tableHints = ((Table) relation).hint();
+                tableHints = ((Table) relation).hints();
             }
             String tableName = dbFactTable.getName();
             String alias = null;

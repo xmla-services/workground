@@ -2,21 +2,26 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
+import org.junit.jupiter.api.Test;
 
-class Test {
-    @org.junit.jupiter.api.Test
+import static org.assertj.core.api.Assertions.assertThat;
+
+class SchemaRBuilderTest {
+    @Test
     void testName() {
-        SchemaRBuilder.builder()
+        Schema schema = SchemaRBuilder.builder()
                 .name("foo")
                 .description("bar")
-                .cube(List.of(CubeRBuilder.builder()
+                .cubes(List.of(CubeRBuilder.builder()
                         .name("FooCube")
-                        .measure(List.of(MeasureRBuilder.builder()
+                        .measures(List.of(MeasureRBuilder.builder()
                                 .column("saldo")
                                 .build()))
-                        .build()));
+                        .build())).build();
+        assertThat(schema).isNotNull();
     }
 }

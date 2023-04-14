@@ -48,7 +48,7 @@ public record LevelR(String name,
                      ExpressionView ordinalExpression,
                      ExpressionView parentExpression,
                      ClosureR closure,
-                     List<Property> property,
+                     List<Property> properties,
                      boolean visible,
                      InternalTypeEnum internalType,
                      ElementFormatter memberFormatter

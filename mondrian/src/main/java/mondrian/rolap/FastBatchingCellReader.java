@@ -1512,7 +1512,7 @@ class BatchLoader {
                 {
                     ExpressionView measureExpr =
                         (ExpressionView) measure.getExpression();
-                    SQL measureSql = measureExpr.sql().get(0);
+                    SQL measureSql = measureExpr.sqls().get(0);
                     // Checks if the SQL contains "SELECT" to detect the case a
                     // subquery is used to define the measure. This is not a
                     // perfect check, because a SQL expression on column names

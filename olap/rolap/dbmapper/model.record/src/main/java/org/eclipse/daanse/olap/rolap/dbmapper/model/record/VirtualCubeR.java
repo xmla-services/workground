@@ -30,10 +30,10 @@ public record VirtualCubeR(String name,
                            boolean enabled,
                            List<Annotation> annotations,
                            List<CubeUsage> cubeUsages,
-                           List<VirtualCubeDimension> virtualCubeDimension,
-                           List<VirtualCubeMeasure> virtualCubeMeasure,
-                           List<CalculatedMember> calculatedMember,
-                           List<NamedSet> namedSet,
+                           List<VirtualCubeDimension> virtualCubeDimensions,
+                           List<VirtualCubeMeasure> virtualCubeMeasures,
+                           List<CalculatedMember> calculatedMembers,
+                           List<NamedSet> namedSets,
                            boolean visible
 ) implements VirtualCube {
 

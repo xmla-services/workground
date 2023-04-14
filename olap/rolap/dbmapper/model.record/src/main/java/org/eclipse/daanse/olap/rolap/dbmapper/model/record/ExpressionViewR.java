@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 
-public record ExpressionViewR(List<SQL> sql,
+public record ExpressionViewR(List<SQL> sqls,
                               String gnericExpression,
                               String table,
                               String name) implements ExpressionView {
@@ -28,11 +28,11 @@ public record ExpressionViewR(List<SQL> sql,
         if (!(obj instanceof ExpressionView that)) {
             return false;
         }
-        if (sql().size() != that.sql().size()) {
+        if (sqls().size() != that.sqls().size()) {
             return false;
         }
-        for (int i = 0; i < sql().size(); i++) {
-            if (! sql().get(i).equals(that.sql().get(i))) {
+        for (int i = 0; i < sqls().size(); i++) {
+            if (! sqls().get(i).equals(that.sqls().get(i))) {
                 return false;
             }
         }

@@ -13,12 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+
+import java.util.SortedSet;
 
 public class SchemaExplorer {
 
@@ -80,17 +79,17 @@ public class SchemaExplorer {
     }
 
     private static RelationOrJoin left(Join join) {
-        if (join.relation() != null && !join.relation().isEmpty()) {
-            return join.relation()
+        if (join.relations() != null && !join.relations().isEmpty()) {
+            return join.relations()
                     .get(0);
         }
         throw new SchemaExplorerException("Join left error");
     }
 
     private static RelationOrJoin right(Join join) {
-        if (join.relation() != null && join.relation()
+        if (join.relations() != null && join.relations()
                 .size() > 1) {
-            return join.relation()
+            return join.relations()
                     .get(1);
         }
         throw new SchemaExplorerException("Join left error");

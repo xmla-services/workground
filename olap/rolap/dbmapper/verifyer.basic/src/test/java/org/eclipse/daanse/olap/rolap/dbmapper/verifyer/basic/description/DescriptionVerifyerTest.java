@@ -108,11 +108,11 @@ public class DescriptionVerifyerTest {
     @Test
     void testSchema() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(schema.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
-        when(schema.parameter()).thenAnswer(setupDummyListAnswer(parameter));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCubes()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(schema.namedSets()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(schema.parameters()).thenAnswer(setupDummyListAnswer(parameter));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -140,11 +140,11 @@ public class DescriptionVerifyerTest {
     @Test
     void testCube() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
-        when(cube.action()).thenAnswer(setupDummyListAnswer(action));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
+        when(cube.actions()).thenAnswer(setupDummyListAnswer(action));
 
 
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -173,11 +173,11 @@ public class DescriptionVerifyerTest {
     @Test
     void testDimension() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(virtualCube.virtualCubeDimension()).thenAnswer(setupDummyListAnswer(dimension));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCubes()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(virtualCube.virtualCubeDimensions()).thenAnswer(setupDummyListAnswer(dimension));
 
 
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -202,8 +202,8 @@ public class DescriptionVerifyerTest {
     @Test
     void testMeasure() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -225,9 +225,9 @@ public class DescriptionVerifyerTest {
     @Test
     void testCalculatedMemberProperty() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
-        when(measure.calculatedMemberProperty()).thenAnswer(setupDummyListAnswer(calculatedMemberProperty));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
+        when(measure.calculatedMemberProperties()).thenAnswer(setupDummyListAnswer(calculatedMemberProperty));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -250,10 +250,10 @@ public class DescriptionVerifyerTest {
     @Test
     void testCalculatedMember() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
-        when(cube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
-        when(virtualCube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCubes()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(cube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(virtualCube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -277,8 +277,8 @@ public class DescriptionVerifyerTest {
     @Test
     void testHierarchy() {
 
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(privateDimension));
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(privateDimension));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
 
 
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -300,9 +300,9 @@ public class DescriptionVerifyerTest {
 
     @Test
     void testLevel() {
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(privateDimension));
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(privateDimension));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -326,10 +326,10 @@ public class DescriptionVerifyerTest {
     @Test
     void testProperty() {
 
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(privateDimension));
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level));
-        when(level.property()).thenAnswer(setupDummyListAnswer(property));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(privateDimension));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level));
+        when(level.properties()).thenAnswer(setupDummyListAnswer(property));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -355,9 +355,9 @@ public class DescriptionVerifyerTest {
     @Test
     void testNamedSet() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
-        when(cube.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.namedSets()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(cube.namedSets()).thenAnswer(setupDummyListAnswer(namedSet));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -378,7 +378,7 @@ public class DescriptionVerifyerTest {
 
     void testParameter() {
 
-        when(schema.parameter()).thenAnswer(setupDummyListAnswer(parameter));
+        when(schema.parameters()).thenAnswer(setupDummyListAnswer(parameter));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -398,8 +398,8 @@ public class DescriptionVerifyerTest {
     @Test
     void testDrillThroughAction() {
 
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.drillThroughAction()).thenAnswer(setupDummyListAnswer(drillThroughAction));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.drillThroughActions()).thenAnswer(setupDummyListAnswer(drillThroughAction));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -420,8 +420,8 @@ public class DescriptionVerifyerTest {
 
     @Test
     void testAction() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.action()).thenAnswer(setupDummyListAnswer(action));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.actions()).thenAnswer(setupDummyListAnswer(action));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()

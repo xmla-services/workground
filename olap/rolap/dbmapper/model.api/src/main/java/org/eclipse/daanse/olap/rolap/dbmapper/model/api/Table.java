@@ -19,11 +19,11 @@ public interface Table extends Relation {
 
     SQL sql();
 
-    List<AggExclude> aggExclude();
+    List<AggExclude> aggExcludes();
 
-    List<AggTable> aggTable();
+    List<AggTable> aggTables();
 
-    List<Hint> hint();
+    List<Hint> hints();
 
     String name();
 

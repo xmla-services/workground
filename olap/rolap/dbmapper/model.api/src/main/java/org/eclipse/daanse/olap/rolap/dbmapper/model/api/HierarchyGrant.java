@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public interface HierarchyGrant {
 
-    List<MemberGrant> memberGrant();
+    List<MemberGrant> memberGrants();
 
     String hierarchy();
 

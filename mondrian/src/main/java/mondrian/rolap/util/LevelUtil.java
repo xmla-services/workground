@@ -73,6 +73,6 @@ public class LevelUtil {
     }
 
     public static Expression getPropertyExp(Level level, int i) {
-        return new ColumnImpl(level.table(), level.property().get(i).column());
+        return new ColumnImpl(level.table(), level.properties().get(i).column());
     }
 }

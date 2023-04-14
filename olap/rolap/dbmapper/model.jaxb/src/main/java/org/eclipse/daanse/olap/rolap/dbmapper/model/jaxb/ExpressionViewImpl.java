@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
@@ -28,22 +29,22 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ExpressionView", propOrder = { "sql" })
+@XmlType(name = "ExpressionView", propOrder = { "sqls" })
 public class ExpressionViewImpl implements ExpressionView {
 
     @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
-    protected List<SQL> sql;
+    protected List<SQL> sqls;
     @XmlAttribute(name = "table")
     protected String table;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
     @Override
-    public List<SQL> sql() {
-        if (sql == null) {
-            sql = new ArrayList<>();
+    public List<SQL> sqls() {
+        if (sqls == null) {
+            sqls = new ArrayList<>();
         }
-        return this.sql;
+        return this.sqls;
     }
 
     @Override
@@ -58,8 +59,8 @@ public class ExpressionViewImpl implements ExpressionView {
 
     public int hashCode(Expression expression) {
             int h = 17;
-            for (int i = 0; i < ((ExpressionView) expression).sql().size(); i++) {
-                h = 37 * h + ((ExpressionView) expression).sql().get(i).dialect().hashCode();
+            for (int i = 0; i < ((ExpressionView) expression).sqls().size(); i++) {
+                h = 37 * h + ((ExpressionView) expression).sqls().get(i).dialect().hashCode();
             }
             return h;
     }
@@ -69,14 +70,19 @@ public class ExpressionViewImpl implements ExpressionView {
         if (!(obj instanceof ExpressionView that)) {
             return false;
         }
-        if (sql().size() != that.sql().size()) {
+        if (sqls().size() != that.sqls().size()) {
             return false;
         }
-        for (int i = 0; i < sql().size(); i++) {
-            if (! sql().get(i).equals(that.sql().get(i))) {
+        for (int i = 0; i < sqls().size(); i++) {
+            if (! sqls().get(i).equals(that.sqls().get(i))) {
                 return false;
             }
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sqls, table, name);
     }
 }

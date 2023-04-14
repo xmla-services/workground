@@ -21,8 +21,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
 
 public record CubeGrantR(String cube,
                          String access,
-                         List<DimensionGrant> dimensionGrant,
-                         List<HierarchyGrant> hierarchyGrant)
+                         List<DimensionGrant> dimensionGrants,
+                         List<HierarchyGrant> hierarchyGrants)
         implements CubeGrant {
 
 }

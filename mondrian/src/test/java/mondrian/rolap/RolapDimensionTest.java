@@ -57,7 +57,7 @@ class RolapDimensionTest {
     xmlDimension.setName("dimensionName");
     xmlDimension.setVisible(true);
     xmlDimension.setHighCardinality(true);
-    xmlDimension.setHierarchy(List.of(hierarchy));
+    xmlDimension.setHierarchies(List.of(hierarchy));
 
 
     hierarchy.setVisible(true);
@@ -65,7 +65,7 @@ class RolapDimensionTest {
     hierarchy.setLevel(List.of(level));
 
     level.setVisible(true);
-    level.setProperty(List.of());
+    level.setProperties(List.of());
     level.setUniqueMembers(true);
     level.setType(TypeEnum.STRING);
     level.setHideMemberIf(HideMemberIfEnum.NEVER);

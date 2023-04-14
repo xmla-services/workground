@@ -33,7 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "measureExpression", "calculatedMemberProperty", "cellFormatter" })
+@XmlType(name = "", propOrder = { "annotations", "measureExpression", "calculatedMemberProperties", "cellFormatter" })
 public class MeasureImpl implements Measure {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
@@ -42,7 +42,7 @@ public class MeasureImpl implements Measure {
     @XmlElement(name = "MeasureExpression", type = ExpressionViewImpl.class)
     protected ExpressionView measureExpression;
     @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
-    protected List<CalculatedMemberProperty> calculatedMemberProperty;
+    protected List<CalculatedMemberProperty> calculatedMemberProperties;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "column")
@@ -88,11 +88,11 @@ public class MeasureImpl implements Measure {
     }
 
     @Override
-    public List<CalculatedMemberProperty> calculatedMemberProperty() {
-        if (calculatedMemberProperty == null) {
-            calculatedMemberProperty = new ArrayList<>();
+    public List<CalculatedMemberProperty> calculatedMemberProperties() {
+        if (calculatedMemberProperties == null) {
+            calculatedMemberProperties = new ArrayList<>();
         }
-        return this.calculatedMemberProperty;
+        return this.calculatedMemberProperties;
     }
 
     @Override

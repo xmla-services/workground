@@ -32,8 +32,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "cubeUsages", "virtualCubeDimension", "virtualCubeMeasure",
-        "calculatedMember", "namedSet" })
+@XmlType(name = "", propOrder = { "annotations", "cubeUsages", "virtualCubeDimensions", "virtualCubeMeasures",
+        "calculatedMembers", "namedSets" })
 public class VirtualCubeImpl implements VirtualCube {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
@@ -43,13 +43,13 @@ public class VirtualCubeImpl implements VirtualCube {
     @XmlElement(name = "CubeUsage", required = true, type = CubeUsageImpl.class)
     protected List<CubeUsage> cubeUsages;
     @XmlElement(name = "VirtualCubeDimension", required = true, type = VirtualCubeDimensionImpl.class)
-    protected List<VirtualCubeDimension> virtualCubeDimension;
+    protected List<VirtualCubeDimension> virtualCubeDimensions;
     @XmlElement(name = "VirtualCubeMeasure", required = true, type = VirtualCubeMeasureImpl.class)
-    protected List<VirtualCubeMeasure> virtualCubeMeasure;
+    protected List<VirtualCubeMeasure> virtualCubeMeasures;
     @XmlElement(name = "CalculatedMember", type = CalculatedMemberImpl.class)
-    protected List<CalculatedMember> calculatedMember;
+    protected List<CalculatedMember> calculatedMembers;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
-    protected List<NamedSet> namedSet;
+    protected List<NamedSet> namedSets;
     @XmlAttribute(name = "enabled")
     protected Boolean enabled;
     @XmlAttribute(name = "name", required = true)
@@ -82,35 +82,35 @@ public class VirtualCubeImpl implements VirtualCube {
     }
 
     @Override
-    public List<VirtualCubeDimension> virtualCubeDimension() {
-        if (virtualCubeDimension == null) {
-            virtualCubeDimension = new ArrayList<>();
+    public List<VirtualCubeDimension> virtualCubeDimensions() {
+        if (virtualCubeDimensions == null) {
+            virtualCubeDimensions = new ArrayList<>();
         }
-        return this.virtualCubeDimension;
+        return this.virtualCubeDimensions;
     }
 
     @Override
-    public List<VirtualCubeMeasure> virtualCubeMeasure() {
-        if (virtualCubeMeasure == null) {
-            virtualCubeMeasure = new ArrayList<>();
+    public List<VirtualCubeMeasure> virtualCubeMeasures() {
+        if (virtualCubeMeasures == null) {
+            virtualCubeMeasures = new ArrayList<>();
         }
-        return this.virtualCubeMeasure;
+        return this.virtualCubeMeasures;
     }
 
     @Override
-    public List<CalculatedMember> calculatedMember() {
-        if (calculatedMember == null) {
-            calculatedMember = new ArrayList<>();
+    public List<CalculatedMember> calculatedMembers() {
+        if (calculatedMembers == null) {
+            calculatedMembers = new ArrayList<>();
         }
-        return this.calculatedMember;
+        return this.calculatedMembers;
     }
 
     @Override
-    public List<NamedSet> namedSet() {
-        if (namedSet == null) {
-            namedSet = new ArrayList<>();
+    public List<NamedSet> namedSets() {
+        if (namedSets == null) {
+            namedSets = new ArrayList<>();
         }
-        return this.namedSet;
+        return this.namedSets;
     }
 
     @Override

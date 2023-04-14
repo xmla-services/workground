@@ -21,10 +21,10 @@ public class TableUtil {
     public static Map<String,String> getHintMap(Table table) {
         java.util.Map<String,String> h =
             new java.util.HashMap<>();
-        if (table.hint() != null) {
-            int size = table.hint().size();
+        if (table.hints() != null) {
+            int size = table.hints().size();
             for (int i = 0; i < size; i++) {
-                h.put(table.hint().get(i).type(), table.hint().get(i).content());
+                h.put(table.hints().get(i).type(), table.hints().get(i).content());
             }
         }
         return h;

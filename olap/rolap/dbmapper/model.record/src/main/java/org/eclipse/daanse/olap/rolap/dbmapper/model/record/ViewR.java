@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import java.util.List;
-import java.util.Objects;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+
+import java.util.List;
+import java.util.Objects;
 
 public record ViewR(String alias,
                     List<SQL> sqls)
@@ -28,8 +28,8 @@ public record ViewR(String alias,
     }
 
     @Override
-    public void addCode(String generic, String generateInline) {
-
+    public void addCode(String dialect, String code) {
+        sqls.add(new SQLR(code, dialect));
     }
 
     @Override

@@ -34,7 +34,7 @@ public record MeasureR(String name,
                        String displayFolder,
                        List<Annotation> annotations,
                        ExpressionView measureExpression,
-                       List<CalculatedMemberProperty> calculatedMemberProperty,
+                       List<CalculatedMemberProperty> calculatedMemberProperties,
                        ElementFormatter cellFormatter,
                        String backColor,
                        List<CalculatedMemberProperty> memberProperties

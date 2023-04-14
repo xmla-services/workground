@@ -17,6 +17,6 @@ import java.util.List;
 
 public interface ExpressionView extends Expression {
 
-    List<SQL> sql();
+    List<SQL> sqls();
 
 }

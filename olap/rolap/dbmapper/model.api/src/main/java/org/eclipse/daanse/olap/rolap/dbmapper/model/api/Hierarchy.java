@@ -19,9 +19,9 @@ public interface Hierarchy {
 
     List<Annotation> annotations();
 
-    List<Level> level();
+    List<Level> levels();
 
-    List<MemberReaderParameter> memberReaderParameter();
+    List<MemberReaderParameter> memberReaderParameters();
 
     String name();
 

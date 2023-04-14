@@ -19,7 +19,7 @@ public interface DrillThroughAction {
 
     List<Annotation> annotations();
 
-    List<DrillThroughElement> drillThroughElement();
+    List<DrillThroughElement> drillThroughElements();
 
     String name();
 

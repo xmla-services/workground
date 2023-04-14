@@ -26,38 +26,36 @@ public class TableR implements Table {
 
     private SQL sql;
     private String alias;
-    private List<AggExclude> aggExclude;
+    private List<AggExclude> aggExcludes;
     private String name;
     private String schema;
-    private List<Hint> hint;
-    private List<AggTable> aggTable;
+    private List<Hint> hints;
+    private List<AggTable> aggTables;
 
     public TableR(Table table) {
-        this(table.schema(), table.name(), table.alias(), table.hint());
+        this(table.schema(), table.name(), table.alias(), table.hints());
     }
 
-    public TableR(String name, List<AggExclude> aggExclude, List<AggTable> aggTable) {
+    public TableR(String name, List<AggExclude> aggExcludes, List<AggTable> aggTables) {
         this.name = name;
-        this.aggExclude = aggExclude;
-        this.aggTable = aggTable;
+        this.aggExcludes = aggExcludes;
+        this.aggTables = aggTables;
     }
-    public TableR(String schema, String name, String alias, List<Hint> hint) {
+    public TableR(String schema, String name, String alias, List<Hint> hints) {
         this.name = name;
         this.schema = schema;
         this.alias = alias;
-        this.hint = hint;
+        this.hints = hints;
     }
 
     public TableR(Table tbl, String possibleName) {
-        this(tbl.schema(), tbl.name(), possibleName, tbl.hint());
+        this(tbl.schema(), tbl.name(), possibleName, tbl.hints());
 
         // Remake the filter with the new alias
         if (tbl.sql() != null) {
-            this.sql = new SQLR(tbl.sql().content() != null ? tbl.sql().content().replace(
-                tbl.alias() == null
-                    ? tbl.name()
-                    : tbl.alias(),
-                possibleName) : null, tbl.sql().dialect());
+            String aliasOrName = tbl.alias() == null ? tbl.name() : tbl.alias();
+            this.sql = new SQLR(tbl.sql().content() != null ? tbl.sql().content().replace(aliasOrName, possibleName) : null,
+                tbl.sql().dialect());
         }
     }
 
@@ -65,7 +63,7 @@ public class TableR implements Table {
     	this.name = name;
     	this.schema = null;
     	this.alias = null;
-    	this.hint = List.of();
+    	this.hints = List.of();
     }
 
     @Override
@@ -79,18 +77,18 @@ public class TableR implements Table {
     }
 
     @Override
-    public List<AggExclude> aggExclude() {
-        return aggExclude;
+    public List<AggExclude> aggExcludes() {
+        return aggExcludes;
     }
 
     @Override
-    public List<AggTable> aggTable() {
-        return aggTable;
+    public List<AggTable> aggTables() {
+        return aggTables;
     }
 
     @Override
-    public List<Hint> hint() {
-        return hint;
+    public List<Hint> hints() {
+        return hints;
     }
 
     @Override

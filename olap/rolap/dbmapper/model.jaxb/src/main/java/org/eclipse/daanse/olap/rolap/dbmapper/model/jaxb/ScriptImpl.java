@@ -29,7 +29,7 @@ public class ScriptImpl implements Script {
     private String language = "JavaScript";  // attribute default: JavaScript
 
     @XmlValue
-    public String cdata;  // All text goes here
+    private String cdata;  // All text goes here
 
     @Override
     public String language() {

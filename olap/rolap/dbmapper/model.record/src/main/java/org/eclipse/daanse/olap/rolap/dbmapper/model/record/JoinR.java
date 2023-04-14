@@ -20,19 +20,19 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
 public class JoinR implements Join {
 
-    private List<RelationOrJoin> relation;
+    private List<RelationOrJoin> relations;
     private String leftAlias;
     private String leftKey;
     private String rightAlias;
     private String rightKey;
 
-    public JoinR(List<RelationOrJoin> relation,
+    public JoinR(List<RelationOrJoin> relations,
                     String leftAlias,
                     String leftKey,
                     String rightAlias,
                     String rightKey)
     {
-        this.relation = relation;
+        this.relations = relations;
         this.leftAlias = leftAlias;
         this.leftKey = leftKey;
         this.rightAlias = rightAlias;
@@ -40,8 +40,8 @@ public class JoinR implements Join {
     }
 
     @Override
-    public List<RelationOrJoin> relation() {
-        return relation;
+    public List<RelationOrJoin> relations() {
+        return relations;
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 public interface SharedDimension {
     List<Annotation> annotations();
 
-    List<Hierarchy> hierarchy();
+    List<Hierarchy> hierarchies();
 
     String name();
 

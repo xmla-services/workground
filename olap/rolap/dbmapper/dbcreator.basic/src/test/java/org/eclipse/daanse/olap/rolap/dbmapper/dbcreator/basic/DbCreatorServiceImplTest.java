@@ -106,11 +106,11 @@ class DbCreatorServiceImplTest {
     @Test
     void testPrivateDimension(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
         when(schema.name()).thenReturn("schemaName");
-        when(schema.dimension()).thenAnswer(setupDummyListAnswer(privateDimension));
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(schema.dimensions()).thenAnswer(setupDummyListAnswer(privateDimension));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
         when(hierarchy.relation()).thenReturn(table);
         when(table.name()).thenReturn("tableName");
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level1, level2));
         when(hierarchy.primaryKey()).thenReturn("id");
         when(level1.type()).thenReturn(TypeEnum.INTEGER);
         when(level2.type()).thenReturn(TypeEnum.NUMERIC);
@@ -123,7 +123,7 @@ class DbCreatorServiceImplTest {
         when(level1.parentColumn()).thenReturn("parentColumn1");
         when(level2.parentColumn()).thenReturn("parentColumn2");
         when(level1.nameColumn()).thenReturn("nameColumn1");
-        when(level1.property()).thenAnswer(setupDummyListAnswer(property1, property11));
+        when(level1.properties()).thenAnswer(setupDummyListAnswer(property1, property11));
         when(property1.column()).thenReturn("property1Column");
         when(property11.column()).thenReturn("property11Column");
         when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
@@ -178,10 +178,10 @@ class DbCreatorServiceImplTest {
     @Test
     void testCube(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
         when(schema.name()).thenReturn("schemaName");
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
         when(hierarchy.relation()).thenReturn(table);
         when(table.name()).thenReturn("tableName");
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level1, level2));
         when(hierarchy.primaryKey()).thenReturn("id");
         when(level1.type()).thenReturn(TypeEnum.INTEGER);
         when(level2.type()).thenReturn(TypeEnum.NUMERIC);
@@ -194,14 +194,14 @@ class DbCreatorServiceImplTest {
         when(level1.parentColumn()).thenReturn("parentColumn1");
         when(level2.parentColumn()).thenReturn("parentColumn2");
         when(level1.nameColumn()).thenReturn("nameColumn1");
-        when(level1.property()).thenAnswer(setupDummyListAnswer(property1, property11));
+        when(level1.properties()).thenAnswer(setupDummyListAnswer(property1, property11));
         when(property1.column()).thenReturn("property1Column");
         when(property11.column()).thenReturn("property11Column");
         when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
         when(cube.fact()).thenReturn(tableFact);
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure1, measure2));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure1, measure2));
         when(measure1.column()).thenReturn("measure1Column");
         when(measure2.column()).thenReturn("measure2Column");
         when(measure1.datatype()).thenReturn(MeasureDataTypeEnum.NUMERIC);
@@ -283,10 +283,10 @@ class DbCreatorServiceImplTest {
     @Test
     void testInlineTableColumnDef(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
         when(schema.name()).thenReturn("schemaName");
-        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
         when(hierarchy.relation()).thenReturn(table);
         when(table.name()).thenReturn("tableName");
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level1, level2));
         when(hierarchy.primaryKey()).thenReturn("id");
         when(level1.type()).thenReturn(TypeEnum.INTEGER);
         when(level2.type()).thenReturn(TypeEnum.NUMERIC);
@@ -299,19 +299,19 @@ class DbCreatorServiceImplTest {
         when(level1.parentColumn()).thenReturn("parentColumn1");
         when(level2.parentColumn()).thenReturn("parentColumn2");
         when(level1.nameColumn()).thenReturn("nameColumn1");
-        when(level1.property()).thenAnswer(setupDummyListAnswer(property1, property11));
+        when(level1.properties()).thenAnswer(setupDummyListAnswer(property1, property11));
         when(property1.column()).thenReturn("property1Column");
         when(property11.column()).thenReturn("property11Column");
         when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
         when(cube.fact()).thenReturn(inlineTable);
         when(inlineTable.alias()).thenReturn("inlineTableName");
         when(inlineTable.columnDefs()).thenAnswer(setupDummyListAnswer(columnDef1, columnDef2));
         when(columnDef1.name()).thenReturn("columnDef1Name");
         when(columnDef2.name()).thenReturn("columnDef2Name");
         when(columnDef1.type()).thenReturn(TypeEnum.BOOLEAN);
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure1, measure2));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure1, measure2));
         when(measure1.column()).thenReturn("measure1Column");
         when(measure2.column()).thenReturn("measure2Column");
         when(measure1.datatype()).thenReturn(MeasureDataTypeEnum.NUMERIC);

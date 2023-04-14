@@ -22,9 +22,12 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+/**
+ * @deprecated
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@Deprecated
+@Deprecated(since = "new version")
 public class UserDefinedFunctionImpl implements UserDefinedFunction {
 
     @XmlAttribute(name = "name", required = true)

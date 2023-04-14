@@ -32,7 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchy" })
+@XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchies" })
 @XmlRootElement(name = "Dimension")
 public class PrivateDimensionImpl implements PrivateDimension {
 
@@ -40,7 +40,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     @XmlElementWrapper(name = "Annotations")
     protected List<Annotation> annotations;
     @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
-    protected List<Hierarchy> hierarchy;
+    protected List<Hierarchy> hierarchies;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -69,11 +69,11 @@ public class PrivateDimensionImpl implements PrivateDimension {
     }
 
     @Override
-    public List<Hierarchy> hierarchy() {
-        if (hierarchy == null) {
-            hierarchy = new ArrayList<>();
+    public List<Hierarchy> hierarchies() {
+        if (hierarchies == null) {
+            hierarchies = new ArrayList<>();
         }
-        return this.hierarchy;
+        return this.hierarchies;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
         this.visible = visible;
     }
 
-    public void setHierarchy(List<Hierarchy> hierarchy) {
-        this.hierarchy = hierarchy;
+    public void setHierarchies(List<Hierarchy> hierarchies) {
+        this.hierarchies = hierarchies;
     }
 }

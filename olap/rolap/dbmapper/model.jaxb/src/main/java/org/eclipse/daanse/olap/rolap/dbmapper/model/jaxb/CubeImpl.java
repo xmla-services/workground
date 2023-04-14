@@ -37,8 +37,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Cube", propOrder = { "annotations", "dimensionUsageOrDimension", "measure",
-        "calculatedMember", "namedSet", "drillThroughAction", "writebackTable", "fact", "action"})
+@XmlType(name = "Cube", propOrder = { "annotations", "dimensionUsageOrDimensions", "measures",
+        "calculatedMembers", "namedSets", "drillThroughActions", "writebackTables", "fact", "actions"})
 @XmlRootElement(name = "Cube")
 public class CubeImpl implements Cube {
 
@@ -47,17 +47,17 @@ public class CubeImpl implements Cube {
     protected List<Annotation> annotations;
     @XmlElements({ @XmlElement(name = "DimensionUsage", type = DimensionUsageImpl.class),
             @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class) })
-    protected List<CubeDimension> dimensionUsageOrDimension;
+    protected List<CubeDimension> dimensionUsageOrDimensions;
     @XmlElement(name = "Measure", required = true, type = MeasureImpl.class)
-    protected List<Measure> measure;
+    protected List<Measure> measures;
     @XmlElement(name = "CalculatedMember",  type = CalculatedMemberImpl.class)
-    protected List<CalculatedMember> calculatedMember;
+    protected List<CalculatedMember> calculatedMembers;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
-    protected List<NamedSet> namedSet;
+    protected List<NamedSet> namedSets;
     @XmlElement(name = "DrillThroughAction", type = DrillThroughActionImpl.class)
-    protected List<DrillThroughAction> drillThroughAction;
+    protected List<DrillThroughAction> drillThroughActions;
     @XmlElement(name = "WritebackTable", type = WritebackTableImpl.class)
-    protected List<WritebackTable> writebackTable;
+    protected List<WritebackTable> writebackTables;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
@@ -76,7 +76,7 @@ public class CubeImpl implements Cube {
         @XmlElement(name = "Table", type = TableImpl.class), @XmlElement(name = "View", type = ViewImpl.class)})
     protected Relation fact;
     @XmlElement(name = "Action", type = ActionImpl.class)
-    protected List<Action> action;
+    protected List<Action> actions;
 
     @Override
     public List<Annotation> annotations() {
@@ -88,43 +88,43 @@ public class CubeImpl implements Cube {
     }
 
     @Override
-    public List<CubeDimension> dimensionUsageOrDimension() {
-        if (dimensionUsageOrDimension == null) {
-            dimensionUsageOrDimension = new ArrayList<>();
+    public List<CubeDimension> dimensionUsageOrDimensions() {
+        if (dimensionUsageOrDimensions == null) {
+            dimensionUsageOrDimensions = new ArrayList<>();
         }
-        return this.dimensionUsageOrDimension;
+        return this.dimensionUsageOrDimensions;
     }
 
     @Override
-    public List<Measure> measure() {
-        if (measure == null) {
-            measure = new ArrayList<>();
+    public List<Measure> measures() {
+        if (measures == null) {
+            measures = new ArrayList<>();
         }
-        return this.measure;
+        return this.measures;
     }
 
     @Override
-    public List<CalculatedMember> calculatedMember() {
-        if (calculatedMember == null) {
-            calculatedMember = new ArrayList<>();
+    public List<CalculatedMember> calculatedMembers() {
+        if (calculatedMembers == null) {
+            calculatedMembers = new ArrayList<>();
         }
-        return this.calculatedMember;
+        return this.calculatedMembers;
     }
 
     @Override
-    public List<NamedSet> namedSet() {
-        if (namedSet == null) {
-            namedSet = new ArrayList<>();
+    public List<NamedSet> namedSets() {
+        if (namedSets == null) {
+            namedSets = new ArrayList<>();
         }
-        return this.namedSet;
+        return this.namedSets;
     }
 
     @Override
-    public List<DrillThroughAction> drillThroughAction() {
-        if (drillThroughAction == null) {
-            drillThroughAction = new ArrayList<>();
+    public List<DrillThroughAction> drillThroughActions() {
+        if (drillThroughActions == null) {
+            drillThroughActions = new ArrayList<>();
         }
-        return this.drillThroughAction;
+        return this.drillThroughActions;
     }
 
     @Override
@@ -190,11 +190,11 @@ public class CubeImpl implements Cube {
     }
 
     @Override
-    public List<WritebackTable> writebackTable() {
-        if (writebackTable == null) {
-            writebackTable = new ArrayList<>();
+    public List<WritebackTable> writebackTables() {
+        if (writebackTables == null) {
+            writebackTables = new ArrayList<>();
         }
-        return this.writebackTable;
+        return this.writebackTables;
     }
 
     @Override
@@ -212,10 +212,10 @@ public class CubeImpl implements Cube {
     }
 
     @Override
-    public List<Action> action() {
-        if (action == null) {
-            action = new ArrayList<>();
+    public List<Action> actions() {
+        if (actions == null) {
+            actions = new ArrayList<>();
         }
-        return action;
+        return actions;
     }
 }

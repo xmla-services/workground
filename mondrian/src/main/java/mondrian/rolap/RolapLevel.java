@@ -406,8 +406,8 @@ public class RolapLevel extends LevelBase {
                     nameExp, null, null, null, true,
                     Property.NAME.description));
         }
-        for (int i = 0; i < xmlLevel.property().size(); i++) {
-            org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property xmlProperty = xmlLevel.property().get(i);
+        for (int i = 0; i < xmlLevel.properties().size(); i++) {
+            org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property xmlProperty = xmlLevel.properties().get(i);
 
             FormatterCreateContext formatterContext =
                     new FormatterCreateContext.Builder(xmlProperty.name())
@@ -425,7 +425,7 @@ public class RolapLevel extends LevelBase {
                     getPropertyExp(xmlLevel, i),
                     formatter,
                     xmlProperty.caption(),
-                    xmlLevel.property().get(i).dependsOnLevelValue(),
+                    xmlLevel.properties().get(i).dependsOnLevelValue(),
                     false,
                     xmlProperty.description()));
         }

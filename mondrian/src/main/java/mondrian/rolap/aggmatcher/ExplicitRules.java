@@ -122,7 +122,7 @@ public class ExplicitRules {
 
             if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) {
                 List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> aggExcludes =
-                    ((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) relation).aggExclude();
+                    ((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) relation).aggExcludes();
                 if (aggExcludes != null) {
                     for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude : aggExcludes) {
                         Exclude exclude =
@@ -131,7 +131,7 @@ public class ExplicitRules {
                     }
                 }
                 List<? extends AggTable> aggTables =
-                    ((Table) relation).aggTable();
+                    ((Table) relation).aggTables();
                 if (aggTables != null) {
                     for (AggTable aggTable : aggTables) {
                         TableDef tableDef = TableDef.make(aggTable, group);
@@ -554,11 +554,11 @@ public class ExplicitRules {
             }
 
 
-            if (aggTable.measuresFactCount() != null) {
+            if (aggTable.measuresFactCounts() != null) {
                 Map<String, String> measuresFactCount =
                         tableDef.getMeasuresFactCount();
                 for (AggMeasureFactCount measureFact
-                        : aggTable.measuresFactCount())
+                        : aggTable.measuresFactCounts())
                 {
                     measuresFactCount.put
                             (measureFact.factColumn(),
@@ -567,7 +567,7 @@ public class ExplicitRules {
             }
 
             List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName> ignores =
-                aggTable.aggIgnoreColumn();
+                aggTable.aggIgnoreColumns();
 
             if (ignores != null) {
                 for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName ignore : ignores) {
@@ -575,20 +575,20 @@ public class ExplicitRules {
                 }
             }
 
-            List<? extends AggForeignKey> fks = aggTable.aggForeignKey();
+            List<? extends AggForeignKey> fks = aggTable.aggForeignKeys();
             if (fks != null) {
                 for (AggForeignKey fk : fks) {
                     tableDef.addFK(fk);
                 }
             }
-            List<? extends AggMeasure> measures = aggTable.aggMeasure();
+            List<? extends AggMeasure> measures = aggTable.aggMeasures();
             if (measures != null) {
                 for (AggMeasure measure : measures) {
                     addTo(tableDef, measure);
                 }
             }
 
-            List<? extends AggLevel> levels = aggTable.aggLevel();
+            List<? extends AggLevel> levels = aggTable.aggLevels();
             if (levels != null) {
                 for (AggLevel level : levels) {
                     addTo(tableDef, level);
@@ -1533,7 +1533,7 @@ public class ExplicitRules {
                     aggPattern.ignorecase(),
                     group);
 
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> excludes = aggPattern.aggExclude();
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> excludes = aggPattern.aggExcludes();
             if (excludes != null) {
                 for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude exclude1 : excludes) {
                     Exclude exclude = ExplicitRules.make(exclude1);

@@ -28,31 +28,31 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "View", propOrder = { "sql" })
+@XmlType(name = "View", propOrder = { "sqls" })
 public class ViewImpl implements View {
 
     @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
-    protected List<SQL> sql;
+    protected List<SQL> sqls;
     @XmlAttribute(name = "alias", required = true)
     protected String alias;
 
     @Override
     public List<SQL> sqls() {
-        if (sql == null) {
-            sql = new ArrayList<>();
+        if (sqls == null) {
+            sqls = new ArrayList<>();
         }
-        return this.sql;
+        return this.sqls;
     }
 
     @Override
     public void addCode(String dialect, String code) {
-        if (sql == null) {
-            sql = new ArrayList<>();
+        if (sqls == null) {
+            sqls = new ArrayList<>();
         }
         SQLImpl sqlImpl = new SQLImpl();
         sqlImpl.setDialect(dialect);
         sqlImpl.setContent(code);
-        sql.add(sqlImpl);
+        sqls.add(sqlImpl);
     }
 
     @Override
@@ -62,6 +62,11 @@ public class ViewImpl implements View {
 
     public void setAlias(String value) {
         this.alias = value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sqls, alias);
     }
 
     @Override
@@ -88,6 +93,6 @@ public class ViewImpl implements View {
 
     @Override
 	public String toString() {
-        return sql.get(0).content();
+        return sqls.get(0).content();
     }
 }

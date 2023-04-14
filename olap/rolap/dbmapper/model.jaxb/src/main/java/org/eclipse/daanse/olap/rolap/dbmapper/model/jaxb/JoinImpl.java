@@ -27,13 +27,13 @@ import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "relation" })
+@XmlType(name = "", propOrder = { "relations" })
 public class JoinImpl implements Join {
 
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
             @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
             @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
-    protected List<RelationOrJoin> relation;
+    protected List<RelationOrJoin> relations;
     @XmlAttribute(name = "leftAlias")
     protected String leftAlias;
     @XmlAttribute(name = "leftKey")
@@ -44,11 +44,11 @@ public class JoinImpl implements Join {
     protected String rightKey;
 
     @Override
-    public List<RelationOrJoin> relation() {
-        if (relation == null) {
-            relation = new ArrayList<>();
+    public List<RelationOrJoin> relations() {
+        if (relations == null) {
+            relations = new ArrayList<>();
         }
-        return this.relation;
+        return this.relations;
     }
 
     @Override

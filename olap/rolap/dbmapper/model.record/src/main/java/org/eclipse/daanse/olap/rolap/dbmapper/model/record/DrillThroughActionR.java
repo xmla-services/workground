@@ -24,7 +24,7 @@ public record DrillThroughActionR(String name,
                                   String description,
                                   Boolean defaultt,
                                   List<Annotation> annotations,
-                                  List<DrillThroughElement> drillThroughElement)
+                                  List<DrillThroughElement> drillThroughElements)
         implements DrillThroughAction {
 
 }

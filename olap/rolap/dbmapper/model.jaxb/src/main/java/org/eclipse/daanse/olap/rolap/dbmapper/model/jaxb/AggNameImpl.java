@@ -30,19 +30,19 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumn", "aggForeignKey", "aggMeasure", "aggLevel", "measuresFactCount" })
+@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumns", "aggForeignKeys", "aggMeasures", "aggLevels", "measuresFactCounts" })
 public class AggNameImpl implements AggName {
 
     @XmlElement(name = "AggFactCount", required = true)
     protected AggColumnNameImpl aggFactCount;
     @XmlElement(name = "AggIgnoreColumn", type = AggColumnNameImpl.class)
-    protected List<AggColumnName> aggIgnoreColumn;
+    protected List<AggColumnName> aggIgnoreColumns;
     @XmlElement(name = "AggForeignKey", type = AggForeignKeyImpl.class)
-    protected List<AggForeignKey> aggForeignKey;
+    protected List<AggForeignKey> aggForeignKeys;
     @XmlElement(name = "AggMeasure", required = true, type = AggMeasureImpl.class)
-    protected List<AggMeasure> aggMeasure;
+    protected List<AggMeasure> aggMeasures;
     @XmlElement(name = "AggLevel", type = AggLevelImpl.class)
-    protected List<AggLevel> aggLevel;
+    protected List<AggLevel> aggLevels;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "ignorecase")
@@ -50,7 +50,7 @@ public class AggNameImpl implements AggName {
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlElement(name = "AggMeasureFactCount", type = AggMeasureFactCountImpl.class)
-    private List<AggMeasureFactCount> measuresFactCount;
+    private List<AggMeasureFactCount> measuresFactCounts;
 
     @Override
     public AggColumnNameImpl aggFactCount() {
@@ -62,35 +62,35 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggColumnName> aggIgnoreColumn() {
-        if (aggIgnoreColumn == null) {
-            aggIgnoreColumn = new ArrayList<>();
+    public List<AggColumnName> aggIgnoreColumns() {
+        if (aggIgnoreColumns == null) {
+            aggIgnoreColumns = new ArrayList<>();
         }
-        return this.aggIgnoreColumn;
+        return this.aggIgnoreColumns;
     }
 
     @Override
-    public List<AggForeignKey> aggForeignKey() {
-        if (aggForeignKey == null) {
-            aggForeignKey = new ArrayList<>();
+    public List<AggForeignKey> aggForeignKeys() {
+        if (aggForeignKeys == null) {
+            aggForeignKeys = new ArrayList<>();
         }
-        return this.aggForeignKey;
+        return this.aggForeignKeys;
     }
 
     @Override
-    public List<AggMeasure> aggMeasure() {
-        if (aggMeasure == null) {
-            aggMeasure = new ArrayList<>();
+    public List<AggMeasure> aggMeasures() {
+        if (aggMeasures == null) {
+            aggMeasures = new ArrayList<>();
         }
-        return this.aggMeasure;
+        return this.aggMeasures;
     }
 
     @Override
-    public List<AggLevel> aggLevel() {
-        if (aggLevel == null) {
-            aggLevel = new ArrayList<>();
+    public List<AggLevel> aggLevels() {
+        if (aggLevels == null) {
+            aggLevels = new ArrayList<>();
         }
-        return this.aggLevel;
+        return this.aggLevels;
     }
 
     @Override
@@ -117,11 +117,11 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggMeasureFactCount> measuresFactCount() {
-        if (measuresFactCount == null) {
-            measuresFactCount = new ArrayList<>();
+    public List<AggMeasureFactCount> measuresFactCounts() {
+        if (measuresFactCounts == null) {
+            measuresFactCounts = new ArrayList<>();
         }
-        return measuresFactCount;
+        return measuresFactCounts;
     }
 
     public void setIgnorecase(Boolean value) {

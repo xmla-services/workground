@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
-public record SchemaGrantR(List<CubeGrant> cubeGrant,
+public record SchemaGrantR(List<CubeGrant> cubeGrants,
                            AccessEnum access)
         implements SchemaGrant {
 

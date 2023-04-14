@@ -29,11 +29,11 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "memberGrant" })
+@XmlType(name = "", propOrder = { "memberGrants" })
 public class HierarchyGrantImpl implements HierarchyGrant {
 
     @XmlElement(name = "MemberGrant", type = MemberGrantImpl.class)
-    protected List<MemberGrant> memberGrant;
+    protected List<MemberGrant> memberGrants;
     @XmlAttribute(name = "hierarchy", required = true)
     protected String hierarchy;
     @XmlAttribute(name = "access", required = true)
@@ -47,11 +47,11 @@ public class HierarchyGrantImpl implements HierarchyGrant {
     protected String rollupPolicy;
 
     @Override
-    public List<MemberGrant> memberGrant() {
-        if (memberGrant == null) {
-            memberGrant = new ArrayList<>();
+    public List<MemberGrant> memberGrants() {
+        if (memberGrants == null) {
+            memberGrants = new ArrayList<>();
         }
-        return this.memberGrant;
+        return this.memberGrants;
     }
 
     @Override
@@ -103,8 +103,8 @@ public class HierarchyGrantImpl implements HierarchyGrant {
         this.rollupPolicy = value;
     }
 
-    public void setMemberGrant(List<MemberGrant> memberGrant) {
-        this.memberGrant = memberGrant;
+    public void setMemberGrants(List<MemberGrant> memberGrants) {
+        this.memberGrants = memberGrants;
     }
 
 }
