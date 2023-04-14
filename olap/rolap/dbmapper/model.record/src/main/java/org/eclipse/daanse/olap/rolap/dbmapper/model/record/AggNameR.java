@@ -24,12 +24,12 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
 
 public record AggNameR(String name,
                        AggColumnName aggFactCount,
-                       List<AggMeasure> aggMeasure,
-                       List<AggColumnName> aggIgnoreColumn,
-                       List<AggForeignKey> aggForeignKey,
-                       List<AggLevel> aggLevel,
+                       List<AggMeasure> aggMeasures,
+                       List<AggColumnName> aggIgnoreColumns,
+                       List<AggForeignKey> aggForeignKeys,
+                       List<AggLevel> aggLevels,
                        boolean ignorecase,
-                       List<AggMeasureFactCount> measuresFactCount,
+                       List<AggMeasureFactCount> measuresFactCounts,
                        String approxRowCount)
         implements AggName {
 

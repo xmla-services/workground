@@ -17,7 +17,7 @@ import java.util.List;
 
 public non-sealed interface AggPattern extends AggTable {
 
-    List<AggExclude> aggExclude();
+    List<AggExclude> aggExcludes();
 
     String pattern();
 }

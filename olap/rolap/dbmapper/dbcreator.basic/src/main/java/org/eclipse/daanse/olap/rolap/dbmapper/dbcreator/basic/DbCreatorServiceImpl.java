@@ -60,11 +60,11 @@ public class DbCreatorServiceImpl implements DbCreatorService {
 
         String schemaName = schema.name();
         Map<String, Table> tables = new HashMap<>();
-        if (schema.dimension() != null) {
-            schema.dimension().forEach(d -> processingDimension(d, tables, null, schemaName));
+        if (schema.dimensions() != null) {
+            schema.dimensions().forEach(d -> processingDimension(d, tables, null, schemaName));
         }
-        if (schema.cube() != null) {
-            schema.cube().forEach(c -> processingCube(c, tables, schemaName));
+        if (schema.cubes() != null) {
+            schema.cubes().forEach(c -> processingCube(c, tables, schemaName));
         }
         List<org.eclipse.daanse.db.jdbc.util.impl.Table> tList = tables.values().stream().map(t -> new org.eclipse.daanse.db.jdbc.util.impl.Table(
             t.getSchema(),
@@ -80,13 +80,13 @@ public class DbCreatorServiceImpl implements DbCreatorService {
             if (cube.fact() != null) {
                 tableName = processingRelation(cube.fact(), tables, schemaName);
             }
-            if (cube.dimensionUsageOrDimension() != null) {
+            if (cube.dimensionUsageOrDimensions() != null) {
                 String tName = tableName;
-                cube.dimensionUsageOrDimension().forEach(d -> processingDimension(d, tables, tName, schemaName));
+                cube.dimensionUsageOrDimensions().forEach(d -> processingDimension(d, tables, tName, schemaName));
             }
-            if (cube.measure() != null) {
+            if (cube.measures() != null) {
                 String tName = tableName;
-                cube.measure().forEach(m -> processingMeasure(m, tables, tName, schemaName));
+                cube.measures().forEach(m -> processingMeasure(m, tables, tName, schemaName));
             }
         }
     }
@@ -104,8 +104,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private void processingDimension(CubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
-        if (d instanceof PrivateDimension privateDimension && privateDimension.hierarchy() != null) {
-            privateDimension.hierarchy().forEach(h -> processingHierarchy(h, tables, schemaName));
+        if (d instanceof PrivateDimension privateDimension && privateDimension.hierarchies() != null) {
+            privateDimension.hierarchies().forEach(h -> processingHierarchy(h, tables, schemaName));
         }
         if (tableName != null) {
                 Table table = getTableOrCreateNew(tables, tableName, schemaName);
@@ -120,8 +120,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     private void processingHierarchy(Hierarchy h, Map<String, Table> tables, String schemaName) {
         if (h.relation() != null) {
             String tName = processingRelation(h.relation(), tables, schemaName);
-            if (h.level() != null) {
-                h.level().forEach(l -> processingLevel(l, tables, tName, schemaName));
+            if (h.levels() != null) {
+                h.levels().forEach(l -> processingLevel(l, tables, tName, schemaName));
             }
             if (h.primaryKey() != null && (tName != null || h.primaryKeyTable() != null)) {
                     String t = h.primaryKeyTable() != null ? h.primaryKeyTable() : tName;
@@ -175,8 +175,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private String processingJoin(Join relation, Map<String, Table> tables, String schemaName) {
-        if (relation.relation() != null) {
-            relation.relation().forEach(r -> processingRelation(r, tables, schemaName));
+        if (relation.relations() != null) {
+            relation.relations().forEach(r -> processingRelation(r, tables, schemaName));
         }
         return null;
     }
@@ -202,8 +202,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
                 getColumnOrCreateNew(t.getColumns(), level.ordinalColumn(), Type.INTEGER);
             }
         }
-        if (level.property() != null) {
-            level.property().forEach(p -> processingProperty(p, tables, tName, schema));
+        if (level.properties() != null) {
+            level.properties().forEach(p -> processingProperty(p, tables, tName, schema));
         }
 
     }
@@ -241,12 +241,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private void getConstraintOrCreateNew(Map<String, Constraint> constraintMap, String primaryKey, boolean unique, List<String> columnNames) {
-        Constraint constrain;
-        if (!constraintMap.containsKey(primaryKey)) {
-            constrain = new Constraint(primaryKey, unique, columnNames);
-            constraintMap.put(primaryKey, constrain);
-        }
-
+        constraintMap.computeIfAbsent(primaryKey, k -> new Constraint(primaryKey, unique, columnNames));
     }
 
 }

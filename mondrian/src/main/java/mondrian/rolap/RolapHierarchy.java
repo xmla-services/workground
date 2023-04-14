@@ -333,13 +333,13 @@ public class RolapHierarchy extends HierarchyBase {
         }
         this.allMember.setOrdinal(0);
 
-        if (xmlHierarchy.level().size() == 0) {
+        if (xmlHierarchy.levels().size() == 0) {
             throw MondrianResource.instance().HierarchyHasNoLevels.ex(
                 getUniqueName());
         }
 
         Set<String> levelNameSet = new HashSet<>();
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level : xmlHierarchy.level()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level : xmlHierarchy.levels()) {
             if (!levelNameSet.add(level.name())) {
                 throw MondrianResource.instance().HierarchyLevelNamesNotUnique
                     .ex(
@@ -349,10 +349,10 @@ public class RolapHierarchy extends HierarchyBase {
 
         // If the hierarchy has an 'all' member, the 'all' level is level 0.
         if (hasAll) {
-            this.levels = new RolapLevel[xmlHierarchy.level().size() + 1];
+            this.levels = new RolapLevel[xmlHierarchy.levels().size() + 1];
             this.levels[0] = allLevel;
-            for (int i = 0; i < xmlHierarchy.level().size(); i++) {
-                final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel = xmlHierarchy.level().get(i);
+            for (int i = 0; i < xmlHierarchy.levels().size(); i++) {
+                final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel = xmlHierarchy.levels().get(i);
                 if (getKeyExp(xmlLevel) == null
                     && xmlHierarchy.memberReaderClass() == null)
                 {
@@ -362,9 +362,9 @@ public class RolapHierarchy extends HierarchyBase {
                 levels[i + 1] = new RolapLevel(this, i + 1, xmlLevel);
             }
         } else {
-            this.levels = new RolapLevel[xmlHierarchy.level().size()];
-            for (int i = 0; i < xmlHierarchy.level().size(); i++) {
-                levels[i] = new RolapLevel(this, i, xmlHierarchy.level().get(i));
+            this.levels = new RolapLevel[xmlHierarchy.levels().size()];
+            for (int i = 0; i < xmlHierarchy.levels().size(); i++) {
+                levels[i] = new RolapLevel(this, i, xmlHierarchy.levels().get(i));
             }
         }
 

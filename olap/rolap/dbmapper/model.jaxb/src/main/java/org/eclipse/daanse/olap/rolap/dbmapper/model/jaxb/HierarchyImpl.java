@@ -32,17 +32,17 @@ import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Hierarchy", propOrder = { "annotations", "level",
-        "memberReaderParameter", "relation" })
+@XmlType(name = "Hierarchy", propOrder = { "annotations", "levels",
+        "memberReaderParameters", "relation" })
 public class HierarchyImpl implements Hierarchy {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
     protected List<Annotation> annotations;
     @XmlElement(name = "Level", required = true, type = LevelImpl.class)
-    protected List<Level> level;
+    protected List<Level> levels;
     @XmlElement(name = "MemberReaderParameter", type = MemberReaderParameterImpl.class)
-    protected List<MemberReaderParameter> memberReaderParameter;
+    protected List<MemberReaderParameter> memberReaderParameters;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "hasAll", required = true)
@@ -88,19 +88,19 @@ public class HierarchyImpl implements Hierarchy {
     }
 
     @Override
-    public List<Level> level() {
-        if (level == null) {
-            level = new ArrayList<>();
+    public List<Level> levels() {
+        if (levels == null) {
+            levels = new ArrayList<>();
         }
-        return this.level;
+        return this.levels;
     }
 
     @Override
-    public List<MemberReaderParameter> memberReaderParameter() {
-        if (memberReaderParameter == null) {
-            memberReaderParameter = new ArrayList<>();
+    public List<MemberReaderParameter> memberReaderParameters() {
+        if (memberReaderParameters == null) {
+            memberReaderParameters = new ArrayList<>();
         }
-        return this.memberReaderParameter;
+        return this.memberReaderParameters;
     }
 
     @Override
@@ -239,8 +239,8 @@ public class HierarchyImpl implements Hierarchy {
         this.uniqueKeyLevelName = value;
     }
 
-    public void setLevel(List<Level> level) {
-        this.level = level;
+    public void setLevel(List<Level> levels) {
+        this.levels = levels;
     }
 
     public void setRelation(RelationOrJoin relation) {

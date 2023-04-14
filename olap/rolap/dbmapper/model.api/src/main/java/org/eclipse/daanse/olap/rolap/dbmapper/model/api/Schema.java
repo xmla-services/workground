@@ -26,18 +26,22 @@ public interface Schema {
 
     List<Annotation> annotations();
 
-    List<Parameter> parameter();
+    List<Parameter> parameters();
 
-    List<PrivateDimension> dimension();
+    List<PrivateDimension> dimensions();
 
-    List<Cube> cube();
+    List<Cube> cubes();
 
-    List<VirtualCube> virtualCube();
+    List<VirtualCube> virtualCubes();
 
-    List<NamedSet> namedSet();
+    List<NamedSet> namedSets();
 
     List<Role> roles();
 
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version")
     List<UserDefinedFunction> userDefinedFunctions();
 
     String name();

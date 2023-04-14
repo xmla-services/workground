@@ -98,6 +98,10 @@ public class ObjectFactory {
         return new NamedSetImpl();
     }
 
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version", forRemoval=true)
     public UserDefinedFunctionImpl createSchemaUserDefinedFunction() {
         return new UserDefinedFunctionImpl();
     }

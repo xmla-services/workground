@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DrillThroughAction", propOrder = { "annotations", "drillThroughElement" })
+@XmlType(name = "DrillThroughAction", propOrder = { "annotations", "drillThroughElements" })
 public class DrillThroughActionImpl implements DrillThroughAction {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
@@ -37,7 +37,7 @@ public class DrillThroughActionImpl implements DrillThroughAction {
     protected List<Annotation> annotations;
     @XmlElements({ @XmlElement(name = "Attribute", type = DrillThroughAttributeImpl.class),
             @XmlElement(name = "Measure", type = DrillThroughMeasureImpl.class) })
-    protected List<DrillThroughElement> drillThroughElement;
+    protected List<DrillThroughElement> drillThroughElements;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "default")
@@ -57,11 +57,11 @@ public class DrillThroughActionImpl implements DrillThroughAction {
     }
 
     @Override
-    public List<DrillThroughElement> drillThroughElement() {
-        if (drillThroughElement == null) {
-            drillThroughElement = new ArrayList<>();
+    public List<DrillThroughElement> drillThroughElements() {
+        if (drillThroughElements == null) {
+            drillThroughElements = new ArrayList<>();
         }
-        return this.drillThroughElement;
+        return this.drillThroughElements;
     }
 
     @Override

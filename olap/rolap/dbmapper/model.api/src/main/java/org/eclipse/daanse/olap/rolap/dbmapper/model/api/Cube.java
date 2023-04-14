@@ -19,17 +19,17 @@ public interface Cube {
 
     List<Annotation> annotations();
 
-    List<CubeDimension> dimensionUsageOrDimension();
+    List<CubeDimension> dimensionUsageOrDimensions();
 
-    List<Measure> measure();
+    List<Measure> measures();
 
-    List<CalculatedMember> calculatedMember();
+    List<CalculatedMember> calculatedMembers();
 
-    List<NamedSet> namedSet();
+    List<NamedSet> namedSets();
 
-    List<DrillThroughAction> drillThroughAction();
+    List<DrillThroughAction> drillThroughActions();
 
-    List<WritebackTable> writebackTable();
+    List<WritebackTable> writebackTables();
 
 
     String name();
@@ -48,5 +48,5 @@ public interface Cube {
 
     Relation fact();
 
-    Iterable<Action> action();
+    Iterable<Action> actions();
 }

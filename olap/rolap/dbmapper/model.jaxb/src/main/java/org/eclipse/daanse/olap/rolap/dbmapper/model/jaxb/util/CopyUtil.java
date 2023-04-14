@@ -38,11 +38,11 @@ public class CopyUtil {
         schemaImpl.setDescription(schemaApi.description());
         schemaImpl.setMeasuresCaption(schemaApi.measuresCaption());
         schemaImpl.setName(schemaApi.name());
-        schemaImpl.setNamedSet(copyNamedSet(schemaApi.namedSet()));
-        schemaImpl.setParameter(copyParameter(schemaApi.parameter()));
-        schemaImpl.setRole(null);
-        schemaImpl.setUserDefinedFunction(null);
-        schemaImpl.setVirtualCube(null);
+        schemaImpl.setNamedSets(copyNamedSet(schemaApi.namedSets()));
+        schemaImpl.setParameters(copyParameter(schemaApi.parameters()));
+        schemaImpl.setRoles(null);
+        schemaImpl.setUserDefinedFunctions(null);
+        schemaImpl.setVirtualCubes(null);
         return schemaImpl;
 
     }

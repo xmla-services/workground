@@ -18,6 +18,6 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
-public record UnionR(List<RoleUsage> roleUsage) implements Union {
+public record UnionR(List<RoleUsage> roleUsages) implements Union {
 
 }

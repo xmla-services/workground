@@ -343,7 +343,7 @@ public class RolapCube extends CubeBase {
             xmlCube.description(),
             xmlCube.cache(),
             xmlCube.fact(),
-            xmlCube.dimensionUsageOrDimension(),
+            xmlCube.dimensionUsageOrDimensions(),
             load,
             RolapHierarchy.createMetadataMap(xmlCube.annotations()), context);
 
@@ -364,11 +364,11 @@ public class RolapCube extends CubeBase {
         RolapLevel measuresLevel = this.measuresHierarchy.newMeasuresLevel();
 
         List<RolapMember> measureList =
-            new ArrayList<>(xmlCube.measure().size());
+            new ArrayList<>(xmlCube.measures().size());
         Member defaultMeasure = null;
-        for (int i = 0; i < xmlCube.measure().size(); i++) {
+        for (int i = 0; i < xmlCube.measures().size(); i++) {
             RolapBaseCubeMeasure measure =
-                createMeasure(xmlCube, measuresLevel, i, xmlCube.measure().get(i));
+                createMeasure(xmlCube, measuresLevel, i, xmlCube.measures().get(i));
             measureList.add(measure);
 
             // Is this the default measure?
@@ -412,7 +412,7 @@ public class RolapCube extends CubeBase {
                 new MeasureMemberSource(this.measuresHierarchy, measureList)));
 
         this.measuresHierarchy.setDefaultMember(defaultMeasure);
-        init(xmlCube.dimensionUsageOrDimension());
+        init(xmlCube.dimensionUsageOrDimensions());
         init(xmlCube, measureList);
 
         setMeasuresHierarchyMemberReader(
@@ -422,11 +422,11 @@ public class RolapCube extends CubeBase {
         checkOrdinals(xmlCube.name(), measureList);
         loadAggGroup(xmlCube);
 
-        for(Action action: xmlCube.action()) {
+        for(Action action: xmlCube.actions()) {
             if(action instanceof DrillThroughAction drillThroughAction) {
                 List<RolapDrillThroughColumn> columns = new ArrayList<>();
 
-                for(DrillThroughElement drillThroughColumn: drillThroughAction.drillThroughElement()) {
+                for(DrillThroughElement drillThroughColumn: drillThroughAction.drillThroughElements()) {
                     if(drillThroughColumn instanceof DrillThroughAttribute drillThroughAttribute) {
                         Dimension dimension = null;
                         Hierarchy hierarchy = null;
@@ -515,7 +515,7 @@ public class RolapCube extends CubeBase {
             }
         }
 
-        for(org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable writebackTable: xmlCube.writebackTable()) {
+        for(org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable writebackTable: xmlCube.writebackTables()) {
             List<RolapWritebackColumn> columns = new ArrayList<>();
 
             for(WritebackColumn writebackColumn: writebackTable.columns()) {
@@ -652,7 +652,7 @@ public class RolapCube extends CubeBase {
         List<String> propNames = new ArrayList<>();
         List<String> propExprs = new ArrayList<>();
         validateMemberProps(
-            xmlMeasure.calculatedMemberProperty(), propNames, propExprs, xmlMeasure.name());
+            xmlMeasure.calculatedMemberProperties(), propNames, propExprs, xmlMeasure.name());
         for (int j = 0; j < propNames.size(); j++) {
             String propName = propNames.get(j);
             final Object propExpr = propExprs.get(j);
@@ -708,7 +708,7 @@ public class RolapCube extends CubeBase {
             xmlVirtualCube.description(),
             true,
             null,
-            xmlVirtualCube.virtualCubeDimension(),
+            xmlVirtualCube.virtualCubeDimensions(),
             load,
             RolapHierarchy.createMetadataMap(xmlVirtualCube.annotations()),
             context);
@@ -736,7 +736,7 @@ public class RolapCube extends CubeBase {
         HashMap<String, VirtualCubeMeasure> measureHash = new HashMap<>();
 
         for (VirtualCubeMeasure xmlMeasure
-            : xmlVirtualCube.virtualCubeMeasure())
+            : xmlVirtualCube.virtualCubeMeasures())
         {
         	measureHash.put(xmlMeasure.name(), xmlMeasure);
 
@@ -825,7 +825,7 @@ public class RolapCube extends CubeBase {
         }
 
         // Must init the dimensions before dealing with calculated members
-        init(xmlVirtualCube.virtualCubeDimension());
+        init(xmlVirtualCube.virtualCubeDimensions());
 
         // Loop through the base cubes containing calculated members
         // referenced by this virtual cube.  Resolve those members relative
@@ -859,7 +859,7 @@ public class RolapCube extends CubeBase {
                 calculatedMembersMap.get(baseCube));
         }
         xmlCalculatedMemberList.addAll(
-            xmlVirtualCube.calculatedMember());
+            xmlVirtualCube.calculatedMembers());
 
 
         // Resolve all calculated members relative to this virtual cube,
@@ -873,7 +873,7 @@ public class RolapCube extends CubeBase {
 
         createCalcMembersAndNamedSets(
             xmlCalculatedMemberList,
-            xmlVirtualCube.namedSet(),
+            xmlVirtualCube.namedSets(),
             new ArrayList<RolapMember>(),
             new ArrayList<Formula>(),
             this,
@@ -917,7 +917,7 @@ public class RolapCube extends CubeBase {
         this.measuresHierarchy.setDefaultMember(defaultMeasure);
 
         List<? extends CalculatedMember> xmlVirtualCubeCalculatedMemberList =
-                xmlVirtualCube.calculatedMember();
+                xmlVirtualCube.calculatedMembers();
         if (!vcHasAllCalcMembers(
                 origCalcMeasureList, xmlVirtualCubeCalculatedMemberList))
         {
@@ -1114,8 +1114,8 @@ public class RolapCube extends CubeBase {
         // set in the cube at this point.)
         List<Formula> formulaList = new ArrayList<>();
         createCalcMembersAndNamedSets(
-            xmlCube.calculatedMember(),
-            xmlCube.namedSet(),
+            xmlCube.calculatedMembers(),
+            xmlCube.namedSets(),
             memberList,
             formulaList,
             this,
@@ -1456,7 +1456,7 @@ public class RolapCube extends CubeBase {
         }
 
         final List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty> xmlProperties =
-                xmlCalcMember.calculatedMemberProperty();
+                xmlCalcMember.calculatedMemberProperties();
         List<String> propNames = new ArrayList<>();
         List<String> propExprs = new ArrayList<>();
         validateMemberProps(

@@ -31,28 +31,28 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumn", "aggForeignKey", "aggMeasure", "aggLevel",
-        "aggExclude", "measuresFactCount" })
+@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumns", "aggForeignKeys", "aggMeasures", "aggLevels",
+        "aggExcludes", "measureFactCounts" })
 public class AggPatternImpl implements AggPattern {
 
     @XmlElement(name = "AggFactCount", required = true, type = AggColumnNameImpl.class)
     protected AggColumnName aggFactCount;
     @XmlElement(name = "AggIgnoreColumn", type = AggColumnNameImpl.class)
-    protected List<AggColumnName> aggIgnoreColumn;
+    protected List<AggColumnName> aggIgnoreColumns;
     @XmlElement(name = "AggForeignKey", type = AggForeignKeyImpl.class)
-    protected List<AggForeignKey> aggForeignKey;
+    protected List<AggForeignKey> aggForeignKeys;
     @XmlElement(name = "AggMeasure", required = true, type = AggMeasureImpl.class)
-    protected List<AggMeasure> aggMeasure;
+    protected List<AggMeasure> aggMeasures;
     @XmlElement(name = "AggLevel", type = AggLevelImpl.class)
-    protected List<AggLevel> aggLevel;
+    protected List<AggLevel> aggLevels;
     @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
-    protected List<AggExclude> aggExclude;
+    protected List<AggExclude> aggExcludes;
     @XmlAttribute(name = "pattern", required = true)
     protected String pattern;
     @XmlAttribute(name = "ignorecase")
     protected Boolean ignorecase;
     @XmlElement(name = "AggMeasureFactCount", type = AggMeasureFactCountImpl.class)
-    protected List<AggMeasureFactCount> measuresFactCount;
+    protected List<AggMeasureFactCount> measureFactCounts;
 
     @Override
     public AggColumnName aggFactCount() {
@@ -64,43 +64,43 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggColumnName> aggIgnoreColumn() {
-        if (aggIgnoreColumn == null) {
-            aggIgnoreColumn = new ArrayList<>();
+    public List<AggColumnName> aggIgnoreColumns() {
+        if (aggIgnoreColumns == null) {
+            aggIgnoreColumns = new ArrayList<>();
         }
-        return this.aggIgnoreColumn;
+        return this.aggIgnoreColumns;
     }
 
     @Override
-    public List<AggForeignKey> aggForeignKey() {
-        if (aggForeignKey == null) {
-            aggForeignKey = new ArrayList<>();
+    public List<AggForeignKey> aggForeignKeys() {
+        if (aggForeignKeys == null) {
+            aggForeignKeys = new ArrayList<>();
         }
-        return this.aggForeignKey;
+        return this.aggForeignKeys;
     }
 
     @Override
-    public List<AggMeasure> aggMeasure() {
-        if (aggMeasure == null) {
-            aggMeasure = new ArrayList<>();
+    public List<AggMeasure> aggMeasures() {
+        if (aggMeasures == null) {
+            aggMeasures = new ArrayList<>();
         }
-        return this.aggMeasure;
+        return this.aggMeasures;
     }
 
     @Override
-    public List<AggLevel> aggLevel() {
-        if (aggLevel == null) {
-            aggLevel = new ArrayList<>();
+    public List<AggLevel> aggLevels() {
+        if (aggLevels == null) {
+            aggLevels = new ArrayList<>();
         }
-        return this.aggLevel;
+        return this.aggLevels;
     }
 
     @Override
-    public List<AggExclude> aggExclude() {
-        if (aggExclude == null) {
-            aggExclude = new ArrayList<>();
+    public List<AggExclude> aggExcludes() {
+        if (aggExcludes == null) {
+            aggExcludes = new ArrayList<>();
         }
-        return this.aggExclude;
+        return this.aggExcludes;
     }
 
     @Override
@@ -122,8 +122,8 @@ public class AggPatternImpl implements AggPattern {
     }
 
     @Override
-    public List<AggMeasureFactCount> measuresFactCount() {
-        return measuresFactCount;
+    public List<AggMeasureFactCount> measuresFactCounts() {
+        return measureFactCounts;
     }
 
     public void setIgnorecase(Boolean value) {

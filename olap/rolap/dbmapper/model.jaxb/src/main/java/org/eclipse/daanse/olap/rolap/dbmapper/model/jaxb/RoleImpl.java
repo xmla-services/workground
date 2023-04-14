@@ -29,14 +29,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "schemaGrant", "union" })
+@XmlType(name = "", propOrder = { "annotations", "schemaGrants", "union" })
 public class RoleImpl implements Role {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
     protected List<Annotation> annotations;
     @XmlElement(name = "SchemaGrant", type = SchemaGrantImpl.class)
-    protected List<SchemaGrant> schemaGrant;
+    protected List<SchemaGrant> schemaGrants;
     @XmlElement(name = "Union", required = true, type = UnionImpl.class)
     protected Union union;
     @XmlAttribute(name = "name", required = true)
@@ -52,11 +52,11 @@ public class RoleImpl implements Role {
     }
 
     @Override
-    public List<SchemaGrant> schemaGrant() {
-        if (schemaGrant == null) {
-            schemaGrant = new ArrayList<>();
+    public List<SchemaGrant> schemaGrants() {
+        if (schemaGrants == null) {
+            schemaGrants = new ArrayList<>();
         }
-        return this.schemaGrant;
+        return this.schemaGrants;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class RoleImpl implements Role {
         this.name = value;
     }
 
-    public void setSchemaGrant(List<SchemaGrant> schemaGrant) {
-        this.schemaGrant = schemaGrant;
+    public void setSchemaGrants(List<SchemaGrant> schemaGrants) {
+        this.schemaGrants = schemaGrants;
     }
 }

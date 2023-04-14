@@ -89,11 +89,11 @@ public abstract class AbstractSchemaWalker {
 
         if (schema != null) {
             checkAnnotationList(schema.annotations());
-            checkParameterList(schema.parameter());
-            checkCubeDimensionList(schema.dimension(), null);
-            checkCubeList(schema.cube());
-            checkVirtualCubeList(schema.virtualCube());
-            checkNamedSetList(schema.namedSet());
+            checkParameterList(schema.parameters());
+            checkCubeDimensionList(schema.dimensions(), null);
+            checkCubeList(schema.cubes());
+            checkVirtualCubeList(schema.virtualCubes());
+            checkNamedSetList(schema.namedSets());
             checkRoleList(schema.roles());
             checkUserDefinedFunctionList(schema.userDefinedFunctions());
         }
@@ -104,14 +104,14 @@ public abstract class AbstractSchemaWalker {
     protected void checkCube(Cube cube) {
         if (cube != null) {
             checkAnnotationList(cube.annotations());
-            checkCubeDimensionList(cube.dimensionUsageOrDimension(), cube);
-            checkMeasureList(cube.measure(), cube);
-            checkCalculatedMemberList(cube.calculatedMember());
-            checkNamedSetList(cube.namedSet());
-            checkDrillThroughActionList(cube.drillThroughAction());
-            checkWritebackTableList(cube.writebackTable());
-            if (cube.action() != null) {
-                cube.action().forEach(this::checkAction);
+            checkCubeDimensionList(cube.dimensionUsageOrDimensions(), cube);
+            checkMeasureList(cube.measures(), cube);
+            checkCalculatedMemberList(cube.calculatedMembers());
+            checkNamedSetList(cube.namedSets());
+            checkDrillThroughActionList(cube.drillThroughActions());
+            checkWritebackTableList(cube.writebackTables());
+            if (cube.actions() != null) {
+                cube.actions().forEach(this::checkAction);
             }
         }
     }
@@ -125,7 +125,7 @@ public abstract class AbstractSchemaWalker {
     protected void checkDrillThroughAction(DrillThroughAction drillThroughAction) {
         if (drillThroughAction != null) {
             checkAnnotationList(drillThroughAction.annotations());
-            checkDrillThroughElementList(drillThroughAction.drillThroughElement());
+            checkDrillThroughElementList(drillThroughAction.drillThroughElements());
         }
     }
 
@@ -152,7 +152,7 @@ public abstract class AbstractSchemaWalker {
     protected void checkMeasure(Measure measure, Cube cube) {
         if (measure != null) {
             checkAnnotationList(measure.annotations());
-            checkCalculatedMemberPropertyList(measure.calculatedMemberProperty());
+            checkCalculatedMemberPropertyList(measure.calculatedMemberProperties());
             checkExpressionView(measure.measureExpression());
             checkElementFormatter(measure.cellFormatter());
         }
@@ -164,7 +164,7 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkExpressionView(ExpressionView measureExpression) {
         if (measureExpression != null) {
-            checkSQLList(measureExpression.sql());
+            checkSQLList(measureExpression.sqls());
         }
     }
 
@@ -179,8 +179,8 @@ public abstract class AbstractSchemaWalker {
     protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
         if (cubeDimension != null) {
             checkAnnotationList(cubeDimension.annotations());
-            if (cubeDimension instanceof PrivateDimension privateDimension && privateDimension.hierarchy() != null) {
-                privateDimension.hierarchy()
+            if (cubeDimension instanceof PrivateDimension privateDimension && privateDimension.hierarchies() != null) {
+                privateDimension.hierarchies()
                     .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
             }
         }
@@ -189,11 +189,11 @@ public abstract class AbstractSchemaWalker {
     protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
         if (hierarchy != null) {
             checkAnnotationList(hierarchy.annotations());
-            checkMemberReaderParameterList(hierarchy.memberReaderParameter());
+            checkMemberReaderParameterList(hierarchy.memberReaderParameters());
 
             //Level
-            if (hierarchy.level() != null) {
-                hierarchy.level().forEach(l -> checkLevel(l, hierarchy, cubeDimension, cube));
+            if (hierarchy.levels() != null) {
+                hierarchy.levels().forEach(l -> checkLevel(l, hierarchy, cubeDimension, cube));
             }
         }
     }
@@ -204,7 +204,7 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkJoin(Join join) {
         if (join != null) {
-            checkRelationOrJoinList(join.relation());
+            checkRelationOrJoinList(join.relations());
         }
     }
 
@@ -256,11 +256,11 @@ public abstract class AbstractSchemaWalker {
         if (table != null) {
             checkSQL(table.sql());
 
-            checkAggExcludeList(table.aggExclude());
+            checkAggExcludeList(table.aggExcludes());
 
-            checkAggTableList(table.aggTable());
+            checkAggTableList(table.aggTables());
 
-            checkHintList(table.hint());
+            checkHintList(table.hints());
         }
     }
 
@@ -271,11 +271,11 @@ public abstract class AbstractSchemaWalker {
     protected void checkAggTable(AggTable aggTable) {
         if (aggTable != null) {
             checkAggColumnName(aggTable.aggFactCount());
-            checkAggColumnNameList(aggTable.aggIgnoreColumn());
-            checkAggForeignKeyList(aggTable.aggForeignKey());
-            checkAggMeasureList(aggTable.aggMeasure());
-            checkAggLevelList(aggTable.aggLevel());
-            checkAggMeasureFactCountList(aggTable.measuresFactCount());
+            checkAggColumnNameList(aggTable.aggIgnoreColumns());
+            checkAggForeignKeyList(aggTable.aggForeignKeys());
+            checkAggMeasureList(aggTable.aggMeasures());
+            checkAggLevelList(aggTable.aggLevels());
+            checkAggMeasureFactCountList(aggTable.measuresFactCounts());
             if (aggTable instanceof AggName aggName) {
                 checkAggName(aggName);
             }
@@ -287,7 +287,7 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkAggPattern(AggPattern aggTable) {
         if (aggTable != null) {
-            checkAggExcludeList(aggTable.aggExclude());
+            checkAggExcludeList(aggTable.aggExcludes());
         }
     }
 
@@ -347,7 +347,7 @@ public abstract class AbstractSchemaWalker {
 
             checkClosure(level.closure());
 
-            checkPropertyList(level.property(), level, hierarchy,
+            checkPropertyList(level.properties(), level, hierarchy,
                 cube);
 
             checkElementFormatter(level.memberFormatter());
@@ -392,15 +392,15 @@ public abstract class AbstractSchemaWalker {
 
             checkCubeUsageList(virtCube.cubeUsages());
 
-            checkCubeDimensionList(virtCube.virtualCubeDimension(), null);
+            checkCubeDimensionList(virtCube.virtualCubeDimensions(), null);
 
-            checkVirtualCubeMeasureList(virtCube.virtualCubeMeasure());
+            checkVirtualCubeMeasureList(virtCube.virtualCubeMeasures());
 
-            checkNamedSetList(virtCube.namedSet());
+            checkNamedSetList(virtCube.namedSets());
 
             //CalculatedMember
-            if (virtCube.calculatedMember() != null) {
-                virtCube.calculatedMember()
+            if (virtCube.calculatedMembers() != null) {
+                virtCube.calculatedMembers()
                     .forEach(this::checkCalculatedMember);
             }
         }
@@ -419,7 +419,7 @@ public abstract class AbstractSchemaWalker {
     protected void checkCalculatedMember(CalculatedMember calculatedMember) {
         if (calculatedMember != null) {
             checkAnnotationList(calculatedMember.annotations());
-            checkCalculatedMemberPropertyList(calculatedMember.calculatedMemberProperty());
+            checkCalculatedMemberPropertyList(calculatedMember.calculatedMemberProperties());
 
             if (calculatedMember.formulaElement() != null) {
                 checkFormula(calculatedMember.formulaElement());
@@ -461,7 +461,10 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    @SuppressWarnings("java:S1874")
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version", forRemoval=true)
     protected void checkUserDefinedFunction(UserDefinedFunction udf) {
         //empty
     }
@@ -477,14 +480,14 @@ public abstract class AbstractSchemaWalker {
     protected void checkRole(Role role) {
         if (role != null) {
             checkAnnotationList(role.annotations());
-            checkSchemaGrantList(role.schemaGrant());
+            checkSchemaGrantList(role.schemaGrants());
             checkUnion(role.union());
         }
     }
 
     protected void checkUnion(Union union){
         if (union != null) {
-            checkRoleUsageList(union.roleUsage());
+            checkRoleUsageList(union.roleUsages());
         }
     }
 
@@ -500,20 +503,20 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkSchemaGrant(SchemaGrant schemaGrant) {
         if (schemaGrant != null) {
-            checkCubeGrantList(schemaGrant.cubeGrant());
+            checkCubeGrantList(schemaGrant.cubeGrants());
         }
     }
 
     protected void checkCubeGrant(CubeGrant cubeGrant) {
         if (cubeGrant != null) {
-            checkDimensionGrantList(cubeGrant.dimensionGrant());
-            checkHierarchyGrantList(cubeGrant.hierarchyGrant());
+            checkDimensionGrantList(cubeGrant.dimensionGrants());
+            checkHierarchyGrantList(cubeGrant.hierarchyGrants());
         }
     }
 
     protected void checkHierarchyGrant(HierarchyGrant hierarchyGrant) {
         if (hierarchyGrant != null) {
-            checkMemberGrantList(hierarchyGrant.memberGrant());
+            checkMemberGrantList(hierarchyGrant.memberGrants());
         }
     }
 
@@ -740,7 +743,10 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    @SuppressWarnings("java:S1874")
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version", forRemoval=true)
     private void checkUserDefinedFunctionList(List<? extends UserDefinedFunction> list) {
         if (list != null) {
             list.forEach(this::checkUserDefinedFunction);

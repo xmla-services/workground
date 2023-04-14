@@ -17,9 +17,9 @@ import java.util.List;
 
 public interface CubeGrant {
 
-    List<DimensionGrant> dimensionGrant();
+    List<DimensionGrant> dimensionGrants();
 
-    List<HierarchyGrant> hierarchyGrant();
+    List<HierarchyGrant> hierarchyGrants();
 
     String cube();
 

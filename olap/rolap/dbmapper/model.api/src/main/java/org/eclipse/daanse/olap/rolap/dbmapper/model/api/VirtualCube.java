@@ -22,13 +22,13 @@ public interface VirtualCube {
 
     List<CubeUsage> cubeUsages();
 
-    List<VirtualCubeDimension> virtualCubeDimension();
+    List<VirtualCubeDimension> virtualCubeDimensions();
 
-    List<VirtualCubeMeasure> virtualCubeMeasure();
+    List<VirtualCubeMeasure> virtualCubeMeasures();
 
-    List<CalculatedMember> calculatedMember();
+    List<CalculatedMember> calculatedMembers();
 
-    List<NamedSet> namedSet();
+    List<NamedSet> namedSets();
 
     boolean enabled();
 

@@ -31,17 +31,17 @@ public record CubeR(String name,
                     String description,
                     String defaultMeasure,
                     List<Annotation> annotations,
-                    List<CubeDimension> dimensionUsageOrDimension,
-                    List<Measure> measure,
-                    List<CalculatedMember> calculatedMember,
-                    List<NamedSet> namedSet,
-                    List<DrillThroughAction> drillThroughAction,
-                    List<WritebackTable> writebackTable,
+                    List<CubeDimension> dimensionUsageOrDimensions,
+                    List<Measure> measures,
+                    List<CalculatedMember> calculatedMembers,
+                    List<NamedSet> namedSets,
+                    List<DrillThroughAction> drillThroughActions,
+                    List<WritebackTable> writebackTables,
                     boolean enabled,
                     boolean cache,
                     boolean visible,
                     Relation fact,
-                    List<Action> action
+                    List<Action> actions
                     )
         implements Cube {
 

@@ -22,7 +22,7 @@ public interface CalculatedMember {
 
     String formula();
 
-    List<CalculatedMemberProperty> calculatedMemberProperty();
+    List<CalculatedMemberProperty> calculatedMemberProperties();
 
     String name();
 

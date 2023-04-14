@@ -19,7 +19,7 @@ public interface Role {
 
     List<Annotation> annotations();
 
-    List<SchemaGrant> schemaGrant();
+    List<SchemaGrant> schemaGrants();
 
     Union union();
 

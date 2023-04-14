@@ -29,21 +29,21 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "cubeGrant" })
+@XmlType(name = "", propOrder = { "cubeGrants" })
 public class SchemaGrantImpl implements SchemaGrant {
 
     @XmlElement(name = "CubeGrant", required = true, type = CubeGrantImpl.class)
-    protected List<CubeGrant> cubeGrant;
+    protected List<CubeGrant> cubeGrants;
     @XmlAttribute(name = "access", required = true)
     @XmlJavaTypeAdapter(AccessAdaptor.class)
     protected AccessEnum access;
 
     @Override
-    public List<CubeGrant> cubeGrant() {
-        if (cubeGrant == null) {
-            cubeGrant = new ArrayList<>();
+    public List<CubeGrant> cubeGrants() {
+        if (cubeGrants == null) {
+            cubeGrants = new ArrayList<>();
         }
-        return this.cubeGrant;
+        return this.cubeGrants;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SchemaGrantImpl implements SchemaGrant {
         this.access = value;
     }
 
-    public void setCubeGrant(List<CubeGrant> cubeGrant) {
-        this.cubeGrant = cubeGrant;
+    public void setCubeGrants(List<CubeGrant> cubeGrants) {
+        this.cubeGrants = cubeGrants;
     }
 }

@@ -42,8 +42,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
  * declarations of user-defined functions.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"annotations", "parameter", "dimension", "cube", "virtualCube", "namedSet", "role",
-    "userDefinedFunction"})
+@XmlType(name = "", propOrder = {"annotations", "parameters", "dimensions", "cubes", "virtualCubes", "namedSets", "roles",
+    "userDefinedFunctions"})
 @XmlRootElement(name = "Schema")
 public class SchemaImpl implements Schema {
 
@@ -54,20 +54,23 @@ public class SchemaImpl implements Schema {
     @XmlElementWrapper(name = "Annotations")
     protected List<Annotation> annotations;
     @XmlElement(name = "Parameter", type = ParameterImpl.class)
-    protected List<Parameter> parameter;
+    protected List<Parameter> parameters;
     @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class)
-    protected List<PrivateDimension> dimension;
+    protected List<PrivateDimension> dimensions;
     @XmlElement(name = "Cube", required = true, type = CubeImpl.class)
-    protected List<Cube> cube;
+    protected List<Cube> cubes;
     @XmlElement(name = "VirtualCube", type = VirtualCubeImpl.class)
-    protected List<VirtualCube> virtualCube;
+    protected List<VirtualCube> virtualCubes;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
-    protected List<NamedSet> namedSet;
+    protected List<NamedSet> namedSets;
     @XmlElement(name = "Role", type = RoleImpl.class)
-    protected List<Role> role;
-    @Deprecated
+    protected List<Role> roles;
+    /**
+     * @deprecated
+     */
+    @Deprecated(since = "new version")
     @XmlElement(name = "UserDefinedFunction", type = UserDefinedFunctionImpl.class)
-    protected List<UserDefinedFunction> userDefinedFunction;
+    protected List<UserDefinedFunction> userDefinedFunctions;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "description")
@@ -87,60 +90,63 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<Parameter> parameter() {
-        if (parameter == null) {
-            parameter = new ArrayList<>();
+    public List<Parameter> parameters() {
+        if (parameters == null) {
+            parameters = new ArrayList<>();
         }
-        return this.parameter;
+        return this.parameters;
     }
 
     @Override
-    public List<PrivateDimension> dimension() {
-        if (dimension == null) {
-            dimension = new ArrayList<>();
+    public List<PrivateDimension> dimensions() {
+        if (dimensions == null) {
+            dimensions = new ArrayList<>();
         }
-        return this.dimension;
+        return this.dimensions;
     }
 
     @Override
-    public List<Cube> cube() {
-        if (cube == null) {
-            cube = new ArrayList<>();
+    public List<Cube> cubes() {
+        if (cubes == null) {
+            cubes = new ArrayList<>();
         }
-        return this.cube;
+        return this.cubes;
     }
 
     @Override
-    public List<VirtualCube> virtualCube() {
-        if (virtualCube == null) {
-            virtualCube = new ArrayList<>();
+    public List<VirtualCube> virtualCubes() {
+        if (virtualCubes == null) {
+            virtualCubes = new ArrayList<>();
         }
-        return this.virtualCube;
+        return this.virtualCubes;
     }
 
     @Override
-    public List<NamedSet> namedSet() {
-        if (namedSet == null) {
-            namedSet = new ArrayList<>();
+    public List<NamedSet> namedSets() {
+        if (namedSets == null) {
+            namedSets = new ArrayList<>();
         }
-        return this.namedSet;
+        return this.namedSets;
     }
 
     @Override
     public List<Role> roles() {
-        if (role == null) {
-            role = new ArrayList<>();
+        if (roles == null) {
+            roles = new ArrayList<>();
         }
-        return this.role;
+        return this.roles;
     }
 
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version")
     @Override
-    @Deprecated
     public List<UserDefinedFunction> userDefinedFunctions() {
-        if (userDefinedFunction == null) {
-            userDefinedFunction = new ArrayList<>();
+        if (userDefinedFunctions == null) {
+            userDefinedFunctions = new ArrayList<>();
         }
-        return this.userDefinedFunction;
+        return this.userDefinedFunctions;
     }
 
     @Override
@@ -184,27 +190,32 @@ public class SchemaImpl implements Schema {
         this.defaultRole = value;
     }
 
-    public void setNamedSet(List<NamedSet> namedSet) {
-        this.namedSet = namedSet;
+    public void setNamedSets(List<NamedSet> namedSets) {
+        this.namedSets = namedSets;
 
     }
 
-    public void setParameter(List<Parameter> parameter) {
-        this.parameter = parameter;
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
 
     }
 
-    public void setRole(List<Role> role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
 
     }
 
-    public void setUserDefinedFunction(List<UserDefinedFunction> userDefinedFunction) {
-        this.userDefinedFunction = userDefinedFunction;
+
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version")
+    public void setUserDefinedFunctions(List<UserDefinedFunction> userDefinedFunctions) {
+        this.userDefinedFunctions = userDefinedFunctions;
     }
 
-    public void setVirtualCube(List<VirtualCube> virtualCub) {
-        this.virtualCube = virtualCub;
+    public void setVirtualCubes(List<VirtualCube> virtualCubs) {
+        this.virtualCubes = virtualCubs;
     }
 
 }

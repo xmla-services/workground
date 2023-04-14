@@ -244,7 +244,7 @@ public class RolapStar {
         }
         if(expression instanceof ExpressionView) {
             SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
-            ((ExpressionView) expression).sql().forEach(e ->codeSet.put(e.dialect(), e.content()));
+            ((ExpressionView) expression).sqls().forEach(e ->codeSet.put(e.dialect(), e.content()));
             return codeSet.chooseQuery(query.getDialect());
         }
         return null;

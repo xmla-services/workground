@@ -27,32 +27,32 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "dimensionGrant", "hierarchyGrant" })
+@XmlType(name = "", propOrder = { "dimensionGrants", "hierarchyGrants" })
 public class CubeGrantImpl implements CubeGrant {
 
     @XmlElement(name = "DimensionGrant", type = DimensionGrantImpl.class)
-    protected List<DimensionGrant> dimensionGrant;
+    protected List<DimensionGrant> dimensionGrants;
     @XmlElement(name = "HierarchyGrant", type = HierarchyGrantImpl.class)
-    protected List<HierarchyGrant> hierarchyGrant;
+    protected List<HierarchyGrant> hierarchyGrants;
     @XmlAttribute(name = "cube", required = true)
     protected String cube;
     @XmlAttribute(name = "access", required = true)
     protected String access;
 
     @Override
-    public List<DimensionGrant> dimensionGrant() {
-        if (dimensionGrant == null) {
-            dimensionGrant = new ArrayList<>();
+    public List<DimensionGrant> dimensionGrants() {
+        if (dimensionGrants == null) {
+            dimensionGrants = new ArrayList<>();
         }
-        return this.dimensionGrant;
+        return this.dimensionGrants;
     }
 
     @Override
-    public List<HierarchyGrant> hierarchyGrant() {
-        if (hierarchyGrant == null) {
-            hierarchyGrant = new ArrayList<>();
+    public List<HierarchyGrant> hierarchyGrants() {
+        if (hierarchyGrants == null) {
+            hierarchyGrants = new ArrayList<>();
         }
-        return this.hierarchyGrant;
+        return this.hierarchyGrants;
     }
 
     @Override
@@ -73,11 +73,11 @@ public class CubeGrantImpl implements CubeGrant {
         this.access = value;
     }
 
-    public void setDimensionGrant(List<DimensionGrant> dimensionGrant) {
-        this.dimensionGrant = dimensionGrant;
+    public void setDimensionGrant(List<DimensionGrant> dimensionGrants) {
+        this.dimensionGrants = dimensionGrants;
     }
 
-    public void setHierarchyGrant(List<HierarchyGrant> hierarchyGrant) {
-        this.hierarchyGrant = hierarchyGrant;
+    public void setHierarchyGrant(List<HierarchyGrant> hierarchyGrants) {
+        this.hierarchyGrants = hierarchyGrants;
     }
 }

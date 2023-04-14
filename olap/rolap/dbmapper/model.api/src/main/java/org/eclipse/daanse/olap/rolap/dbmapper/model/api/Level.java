@@ -36,7 +36,7 @@ public interface Level {
 
     Closure closure();
 
-    List<Property> property();
+    List<Property> properties();
 
     String approxRowCount();
 

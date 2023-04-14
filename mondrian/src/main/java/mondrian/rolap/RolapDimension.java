@@ -123,10 +123,10 @@ class RolapDimension extends DimensionBase {
         if (!Util.isEmpty(xmlDimension.caption())) {
             setCaption(xmlDimension.caption());
         }
-        this.hierarchies = new RolapHierarchy[xmlDimension.hierarchy().size()];
-        for (int i = 0; i < xmlDimension.hierarchy().size(); i++) {
+        this.hierarchies = new RolapHierarchy[xmlDimension.hierarchies().size()];
+        for (int i = 0; i < xmlDimension.hierarchies().size(); i++) {
             RolapHierarchy hierarchy = new RolapHierarchy(
-                cube, this, xmlDimension.hierarchy().get(i), xmlCubeDimension);
+                cube, this, xmlDimension.hierarchies().get(i), xmlCubeDimension);
             hierarchies[i] = hierarchy;
         }
 

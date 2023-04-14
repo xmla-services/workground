@@ -222,7 +222,7 @@ class MandantoriesVerifyerTest {
     void testSchema() {
 
         when(schema.userDefinedFunctions()).thenAnswer(setupDummyListAnswer(userDefinedFunction));
-        when(schema.parameter()).thenAnswer(setupDummyListAnswer(parameter));
+        when(schema.parameters()).thenAnswer(setupDummyListAnswer(parameter));
         when(schema.roles()).thenAnswer(setupDummyListAnswer(role));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -248,18 +248,18 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testCubeAndVirtualCubeAndCalculatedMemberAndAction() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
-        when(cube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
-        when(virtualCube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
-        when(cube.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
-        when(virtualCube.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCubes()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(cube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(virtualCube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(cube.namedSets()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(virtualCube.namedSets()).thenAnswer(setupDummyListAnswer(namedSet));
         when(virtualCube.cubeUsages()).thenAnswer(setupDummyListAnswer(cubeUsage));
-        when(cube.action()).thenAnswer(setupDummyListAnswer(action));
-        when(cube.writebackTable()).thenAnswer(setupDummyListAnswer(writebackTable));
+        when(cube.actions()).thenAnswer(setupDummyListAnswer(action));
+        when(cube.writebackTables()).thenAnswer(setupDummyListAnswer(writebackTable));
         when(writebackTable.columns()).thenAnswer(setupDummyListAnswer(writebackAttribute, writebackMeasure));
-        when(cube.drillThroughAction()).thenAnswer(setupDummyListAnswer(drillThroughAction));
-        when(drillThroughAction.drillThroughElement()).thenAnswer(setupDummyListAnswer(drillThroughMeasure,
+        when(cube.drillThroughActions()).thenAnswer(setupDummyListAnswer(drillThroughAction));
+        when(drillThroughAction.drillThroughElements()).thenAnswer(setupDummyListAnswer(drillThroughMeasure,
             drillThroughAttribute));
         when(drillThroughAction.annotations()).thenAnswer(setupDummyListAnswer(annotation));
 
@@ -316,10 +316,10 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testCubeAndVirtualCubeAndCalculatedMemberAndFormula() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
-        when(cube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
-        when(virtualCube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCubes()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(cube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(virtualCube.calculatedMembers()).thenAnswer(setupDummyListAnswer(calculatedMember));
         when(calculatedMember.formulaElement()).thenReturn(formula);
 
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -356,10 +356,10 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testMeasure() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
         when(cube.name()).thenReturn("cubeName");
-        when(measure.calculatedMemberProperty()).thenAnswer(setupDummyListAnswer(calculatedMemberProperty));
+        when(measure.calculatedMemberProperties()).thenAnswer(setupDummyListAnswer(calculatedMemberProperty));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -386,25 +386,25 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testHierarchyWithJoin() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
         when(cube.name()).thenReturn("cubeName");
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(dimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(dimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level));
         when(hierarchy.relation()).thenReturn(join);
         when(hierarchy.primaryKeyTable()).thenReturn("primaryKeyTable");
-        when(join.relation()).thenAnswer(setupDummyListAnswer(table, table));
+        when(join.relations()).thenAnswer(setupDummyListAnswer(table, table));
         when(table.name()).thenReturn("tableName");
         when(table.sql()).thenReturn(sql);
-        when(table.hint()).thenAnswer(setupDummyListAnswer(hint));
-        when(table.aggTable()).thenAnswer(setupDummyListAnswer(aggTable));
+        when(table.hints()).thenAnswer(setupDummyListAnswer(hint));
+        when(table.aggTables()).thenAnswer(setupDummyListAnswer(aggTable));
         when(level.memberFormatter()).thenReturn(elementFormatter);
-        when(aggTable.aggIgnoreColumn()).thenAnswer(setupDummyListAnswer(aggColumnName));
-        when(aggTable.aggForeignKey()).thenAnswer(setupDummyListAnswer(aggForeignKey));
-        when(aggTable.aggMeasure()).thenAnswer(setupDummyListAnswer(aggMeasure));
-        when(aggTable.aggLevel()).thenAnswer(setupDummyListAnswer(aggLevel));
-        when(aggTable.measuresFactCount()).thenAnswer(setupDummyListAnswer(measuresFactCount));
+        when(aggTable.aggIgnoreColumns()).thenAnswer(setupDummyListAnswer(aggColumnName));
+        when(aggTable.aggForeignKeys()).thenAnswer(setupDummyListAnswer(aggForeignKey));
+        when(aggTable.aggMeasures()).thenAnswer(setupDummyListAnswer(aggMeasure));
+        when(aggTable.aggLevels()).thenAnswer(setupDummyListAnswer(aggLevel));
+        when(aggTable.measuresFactCounts()).thenAnswer(setupDummyListAnswer(measuresFactCount));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -459,15 +459,15 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testHierarchyWithoutJoin() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
         when(cube.name()).thenReturn("cubeName");
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(dimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(dimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level));
         when(hierarchy.relation()).thenReturn(join);
         when(level.memberFormatter()).thenReturn(elementFormatter);
-        when(level.property()).thenAnswer(setupDummyListAnswer(property));
+        when(level.properties()).thenAnswer(setupDummyListAnswer(property));
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -502,12 +502,12 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testCheckColumn_With_Table() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
         when(cube.name()).thenReturn("cubeName");
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(dimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(l));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(dimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(l));
         when(hierarchy.relation()).thenReturn(table);
         when(table.name()).thenReturn("tableName");
         List<VerificationResult> result = verifyer.verify(schema, null);
@@ -539,14 +539,14 @@ class MandantoriesVerifyerTest {
 
     @Test
     void testCheckColumn_With_Join() {
-        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
-        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.measures()).thenAnswer(setupDummyListAnswer(measure));
         when(cube.name()).thenReturn("cubeName");
-        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
-        when(dimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
-        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(l));
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(dimension));
+        when(dimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(l));
         when(hierarchy.relation()).thenReturn(join);
-        when(join.relation()).thenAnswer(setupDummyListAnswer(table, table));
+        when(join.relations()).thenAnswer(setupDummyListAnswer(table, table));
         when(table.name()).thenReturn("tableName");
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
@@ -598,7 +598,7 @@ class MandantoriesVerifyerTest {
                             ExpressionView ordinalExpression,
                             ExpressionView parentExpression,
                             Closure closure,
-                            List<Property> property,
+                            List<Property> properties,
                             boolean visible,
                             InternalTypeEnum internalType,
                             ElementFormatter memberFormatter

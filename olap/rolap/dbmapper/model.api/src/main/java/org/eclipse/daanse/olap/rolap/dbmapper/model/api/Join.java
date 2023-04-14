@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface Join extends RelationOrJoin {
 
-    List<RelationOrJoin> relation();
+    List<RelationOrJoin> relations();
 
     String leftAlias();
 

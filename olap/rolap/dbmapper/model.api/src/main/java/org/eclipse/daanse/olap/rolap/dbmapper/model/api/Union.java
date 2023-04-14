@@ -17,6 +17,6 @@ import java.util.List;
 
 public interface Union {
 
-    List<RoleUsage> roleUsage();
+    List<RoleUsage> roleUsages();
 
 }

@@ -29,14 +29,14 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SharedDimension", propOrder = { "annotations", "hierarchy" })
+@XmlType(name = "SharedDimension", propOrder = { "annotations", "hierarchies" })
 public class SharedDimensionImpl implements SharedDimension {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
     protected List<Annotation> annotations;
     @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
-    protected List<Hierarchy> hierarchy;
+    protected List<Hierarchy> hierarchies;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -57,11 +57,11 @@ public class SharedDimensionImpl implements SharedDimension {
     }
 
     @Override
-    public List<Hierarchy> hierarchy() {
-        if (hierarchy == null) {
-            hierarchy = new ArrayList<>();
+    public List<Hierarchy> hierarchies() {
+        if (hierarchies == null) {
+            hierarchies = new ArrayList<>();
         }
-        return this.hierarchy;
+        return this.hierarchies;
     }
 
     @Override

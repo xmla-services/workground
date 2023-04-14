@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
 
 public record RoleR(List<Annotation> annotations,
-                    List<SchemaGrant> schemaGrant,
+                    List<SchemaGrant> schemaGrants,
                     Union union,
                     String name)
         implements Role {

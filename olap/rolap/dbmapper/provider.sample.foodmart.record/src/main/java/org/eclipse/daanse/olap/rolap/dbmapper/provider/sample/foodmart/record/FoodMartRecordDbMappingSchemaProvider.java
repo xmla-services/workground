@@ -69,8 +69,108 @@ import org.osgi.service.component.annotations.ServiceScope;
     "sample.type=record"})
 public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
 
-    private static final String SCHEMA_NAME = "FoodMart";
-    private static final String CUBE_NAME_1 = "Sales";
+	private static final String CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME =
+        "CONCAT(CONCAT(\"customer\".\"fname\", ' '), \"customer\".\"lname\")";
+	private static final String STORE_MANAGER_COLUMN = "store_manager";
+	private static final String STORE_COUNTRY_COLUMN = "store_country";
+	private static final String STORE_CITY_COLUMN = "store_city";
+	private static final String STORE_TABLE_NAME = "store";
+	private static final String SALES_FACT_1997 = "sales_fact_1997";
+	private static final String PROMOTION_ID = "promotion_id";
+	private static final String PRODUCT_ID = "product_id";
+	private static final String PRODUCT_CLASS = "product_class";
+	private static final String PRODUCT_TABLE_NAME = "product";
+	private static final String POSITION_ID = "position_id";
+	private static final String MEAT_SQFT_COLUMN = "meat_sqft";
+	private static final String MARITAL_STATUS_COLUMN = "marital_status";
+	private static final String SNOWFLAKE = "snowflake";
+	private static final String TERADATA = "teradata";
+	private static final String NEOVIEW = "neoview";
+	private static final String LUCIDDB = "luciddb";
+	private static final String DB2 = "db2";
+	private static final String MSSQL = "mssql";
+	private static final String MARIADB = "mariadb";
+	private static final String MYSQL = "mysql";
+	private static final String POSTGRES = "postgres";
+	private static final String HIVE = "hive";
+	private static final String ORACLE = "oracle";
+	private static final String HSQLDB = "hsqldb";
+	private static final String GROCERY_SQFT_COLUMN = "grocery_sqft";
+	private static final String GENERIC = "generic";
+	private static final String GENDER2 = "gender";
+	private static final String FULLNAME = "fullname";
+	private static final String FROZEN_SQFT_COLUMN = "frozen_sqft";
+	private static final String EDUCATION = "education";
+	private static final String DISTINCT_COUNT = "distinct-count";
+	private static final String DERBY = "derby";
+	private static final String DEPARTMENT_ID = "department_id";
+	private static final String COUNT = "count";
+	private static final String COFFEE_BAR = "coffee_bar";
+	private static final String AGG_C_SPECIAL_SALES_FACT_1997 = "agg_c_special_sales_fact_1997";
+	private static final String ACCESS = "access";
+	private static final String WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST = "`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`";
+	private static final String FNAME_LNAME2 = "\"fname\" || ' ' || \"lname\"";
+	private static final String STORE_STATE_COLUMN = "store_state";
+	private static final String EMPLOYEE = "employee";
+	private static final String FNAME_LNAME = "fname + ' ' + lname";
+	private static final String EMPLOYEE_ID = "employee_id";
+	private static final String STORE_NAME_COLUMN = "store_name";
+	private static final String STORE_SALES_COLUMN = "store_sales";
+	private static final String STORE_SQFT_COLUMN = "store_sqft";
+	private static final String STORE_STREET_ADDRESS = "store_street_address";
+	private static final String STORE_TYPE_COLUMN = "store_type";
+	private static final String THE_YEAR = "the_year";
+	private static final String TIME_BY_DAY = "time_by_day";
+	private static final String CUSTOMER_ID = "customer_id";
+	private static final String CUSTOMER_FULLNAME = "\"customer\".\"fullname\"";
+	private static final String YEARLY_INCOME = "Yearly Income";
+	private static final String WAREHOUSE = "Warehouse";
+	private static final String STORE = "Store";
+	private static final String STORE_TYPE = "Store Type";
+	private static final String STORE_STATE = "Store State";
+	private static final String STORE_SQFT = "Store Sqft";
+	private static final String STORE_SIZE_IN_SQFT = "Store Size in SQFT";
+	private static final String STORE_SALES = "Store Sales";
+	private static final String STORE_NAME = "Store Name";
+	private static final String STORE_MANAGER = "Store Manager";
+	private static final String STORE_COUNTRY = "Store Country";
+	private static final String STORE_COST = "Store Cost";
+	private static final String STORE_CITY = "Store City";
+	private static final String STATE_PROVINCE = "State Province";
+	private static final String STANDARD = "Standard";
+	private static final String SALES_COUNT = "Sales Count";
+	private static final String PROMOTIONS = "Promotions";
+	private static final String PROMOTION_MEDIA = "Promotion Media";
+	private static final String PRODUCT = "Product";
+	private static final String MEAT_SQFT = "Meat Sqft";
+	private static final String MEASURES = "Measures";
+	private static final String MARITAL_STATUS = "Marital Status";
+	private static final String MEMBER_ORDINAL = "MEMBER_ORDINAL";
+	private static final String HAS_COFFEE_BAR = "Has coffee bar";
+	private static final String GROCERY_SQFT = "Grocery Sqft";
+	private static final String GENDER = "Gender";
+	private static final String FROZEN_SQFT = "Frozen Sqft";
+	private static final String ALL_MEDIA = "All Media";
+	private static final String STORE_ID_KEY = "store_id";
+	private static final String TIME_ID_KEY = "time_id";
+	private static final String UNIT_SALES = "Unit Sales";
+	private static final String UNIT_SALES_KEY = "unit_sales";
+	private static final String YEARLY_INCOME_COLUMN = "yearly_income";
+	private static final String SALES = "Sales";
+	private static final String FORMAT_STRING_NAME = "FORMAT_STRING";
+	private static final String EDUCATION_LEVEL = "Education Level";
+	private static final String CUSTOMERS = "Customers";
+	private static final String CUSTOMER_COUNT = "Customer Count";
+	private static final String CURRENCY = "Currency";
+	private static final String COUNTRY = "Country";
+	private static final String CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME = "CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)";
+	private static final String CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997 =
+        "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\".\"store_sales\" end)";
+	private static final String FORMAT_STRING_0_00 = "$#,##0.00";
+	private static final String FORMAT_STRING_00 = "#,###.00";
+	private static final String FORMAT_STRING = "#,###";
+	private static final String SCHEMA_NAME = "FoodMart";
+    private static final String CUBE_NAME_1 = SALES;
 
     private static final TableR TABLE_1 = new TableR("promotion");
     private static final TableR TABLE_2 = TABLE_1;
@@ -80,10 +180,10 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final TableR TABLE_6 = TABLE_3;
     private static final TableR TABLE_7 = TABLE_3;
 
-    private static final TableR TABLE_4_1 = new TableR("time_by_day");
-    private static final TableR TABLE_4_5 = new TableR("employee");
+    private static final TableR TABLE_4_1 = new TableR(TIME_BY_DAY);
+    private static final TableR TABLE_4_5 = new TableR(EMPLOYEE);
     private static final TableR TABLE_4_6 = new TableR("department");
-    private static final TableR TABLE_4_7 = new TableR("employee");
+    private static final TableR TABLE_4_7 = new TableR(EMPLOYEE);
 
     private static final TableR TABLE_5_1 = new TableR("store_ragged");
     private static final TableR TABLE_5_2 = TABLE_5_1;
@@ -97,74 +197,74 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
 
     private static final TableR TABLE_6_1 = TABLE_5_5;
 
-    private static final TableR TABLE_SHARED_1 = new TableR("store");
-    private static final TableR TABLE_SHARED_2 = new TableR("store");
-    private static final TableR TABLE_SHARED_3 = new TableR("store");
-    private static final TableR TABLE_SHARED_4_A = new TableR("time_by_day");
-    private static final TableR TABLE_SHARED_4_B = new TableR("time_by_day");
+    private static final TableR TABLE_SHARED_1 = new TableR(STORE_TABLE_NAME);
+    private static final TableR TABLE_SHARED_2 = new TableR(STORE_TABLE_NAME);
+    private static final TableR TABLE_SHARED_3 = new TableR(STORE_TABLE_NAME);
+    private static final TableR TABLE_SHARED_4_A = new TableR(TIME_BY_DAY);
+    private static final TableR TABLE_SHARED_4_B = new TableR(TIME_BY_DAY);
     private static final TableR TABLE_SHARED_6 = new TableR("warehouse");
 
-    private static final TableR TABLE_JOIN_1_A = new TableR("product");
-    private static final TableR TABLE_JOIN_1_B = new TableR("product_class");
-    private static final TableR TABLE_JOIN_4_2_A = new TableR("employee");
-    private static final TableR TABLE_JOIN_4_2_B = new TableR("store");
-    private static final TableR TABLE_JOIN_4_3_A = new TableR("employee");
+    private static final TableR TABLE_JOIN_1_A = new TableR(PRODUCT_TABLE_NAME);
+    private static final TableR TABLE_JOIN_1_B = new TableR(PRODUCT_CLASS);
+    private static final TableR TABLE_JOIN_4_2_A = new TableR(EMPLOYEE);
+    private static final TableR TABLE_JOIN_4_2_B = new TableR(STORE_TABLE_NAME);
+    private static final TableR TABLE_JOIN_4_3_A = new TableR(EMPLOYEE);
     private static final TableR TABLE_JOIN_4_3_B = new TableR("position");
-    private static final TableR TABLE_JOIN_4_4_A = new TableR("employee");
-    private static final TableR TABLE_JOIN_4_4_B = new TableR("store");
+    private static final TableR TABLE_JOIN_4_4_A = new TableR(EMPLOYEE);
+    private static final TableR TABLE_JOIN_4_4_B = new TableR(STORE_TABLE_NAME);
 
     private static final TableR TABLE_CLOSURE_4_7 = new TableR("employee_closure");
 
     private static final PropertyR PROPERTY_1_A = PropertyRBuilder
         .builder()
-        .name("Store Type")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .column(STORE_TYPE_COLUMN)
         .build();
     private static final PropertyR PROPERTY_1_B = PropertyRBuilder
         .builder()
-        .name("Store Manager")
-        .column("store_manager")
+        .name(STORE_MANAGER)
+        .column(STORE_MANAGER_COLUMN)
         .build();
     private static final PropertyR PROPERTY_1_C = PropertyRBuilder
         .builder()
-        .name("Store Sqft")
-        .column("store_sqft")
+        .name(STORE_SQFT)
+        .column(STORE_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_1_D = PropertyRBuilder
         .builder()
-        .name("Grocery Sqft")
-        .column("grocery_sqft")
+        .name(GROCERY_SQFT)
+        .column(GROCERY_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_1_E = PropertyRBuilder
         .builder()
-        .name("Frozen Sqft")
-        .column("frozen_sqft")
+        .name(FROZEN_SQFT)
+        .column(FROZEN_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_1_F = PropertyRBuilder
         .builder()
-        .name("Meat Sqft")
-        .column("meat_sqft")
+        .name(MEAT_SQFT)
+        .column(MEAT_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_1_G = PropertyRBuilder
         .builder()
-        .name("Has coffee bar")
-        .column("coffee_bar")
+        .name(HAS_COFFEE_BAR)
+        .column(COFFEE_BAR)
         .type(PropertyTypeEnum.BOOLEAN)
         .build();
     private static final PropertyR PROPERTY_1_H = PropertyRBuilder
         .builder()
         .name("Street Address")
-        .column("store_street_address")
+        .column(STORE_STREET_ADDRESS)
         .type(PropertyTypeEnum.STRING)
         .build();
     private static final PropertyR PROPERTY_3_4_1 = PropertyRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .build();
     private static final PropertyR PROPERTY_3_4_2 = PropertyRBuilder
         .builder()
@@ -174,63 +274,63 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final PropertyR PROPERTY_3_4_3 = PropertyRBuilder
         .builder()
         .name("Education")
-        .column("education")
+        .column(EDUCATION)
         .build();
     private static final PropertyR PROPERTY_3_4_4 = PropertyRBuilder
         .builder()
-        .name("Yearly Income")
-        .column("yearly_income")
+        .name(YEARLY_INCOME)
+        .column(YEARLY_INCOME_COLUMN)
         .build();
     private static final PropertyR PROPERTY_4_2_D_a = PropertyRBuilder
         .builder()
-        .name("Store Type")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .column(STORE_TYPE_COLUMN)
         .build();
     private static final PropertyR PROPERTY_4_2_D_b = PropertyRBuilder
         .builder()
-        .name("Store Manager")
-        .column("store_manager")
+        .name(STORE_MANAGER)
+        .column(STORE_MANAGER_COLUMN)
         .build();
     private static final PropertyR PROPERTY_4_2_D_c = PropertyRBuilder
         .builder()
-        .name("Store Sqft")
+        .name(STORE_SQFT)
         .column("stoe_sqft")
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_4_2_D_d = PropertyRBuilder
         .builder()
-        .name("Grocery Sqft")
-        .column("grocery_sqft")
+        .name(GROCERY_SQFT)
+        .column(GROCERY_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_4_2_D_e = PropertyRBuilder
         .builder()
-        .name("Frozen Sqft")
-        .column("frozen_sqft")
+        .name(FROZEN_SQFT)
+        .column(FROZEN_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_4_2_D_f = PropertyRBuilder
         .builder()
-        .name("Meat Sqft")
-        .column("meat_sqft")
+        .name(MEAT_SQFT)
+        .column(MEAT_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_4_2_D_g = PropertyRBuilder
         .builder()
-        .name("Has coffee bar")
-        .column("coffee_bar")
+        .name(HAS_COFFEE_BAR)
+        .column(COFFEE_BAR)
         .type(PropertyTypeEnum.BOOLEAN)
         .build();
     private static final PropertyR PROPERTY_4_2_D_h = PropertyRBuilder
         .builder()
         .name("Street address")
-        .column("store_street_address")
+        .column(STORE_STREET_ADDRESS)
         .type(PropertyTypeEnum.STRING)
         .build();
     private static final PropertyR PROPERTY_4_7_A = PropertyRBuilder
         .builder()
-        .name("Marital Status")
-        .column("marital_status")
+        .name(MARITAL_STATUS)
+        .column(MARITAL_STATUS_COLUMN)
         .build();
     private static final PropertyR PROPERTY_4_7_B = PropertyRBuilder
         .builder()
@@ -239,8 +339,8 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final PropertyR PROPERTY_4_7_C = PropertyRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .build();
     private static final PropertyR PROPERTY_4_7_D = PropertyRBuilder
         .builder()
@@ -249,7 +349,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final PropertyR PROPERTY_4_7_E = PropertyRBuilder
         .builder()
-        .name("Education Level")
+        .name(EDUCATION_LEVEL)
         .column("education_level")
         .build();
     private static final PropertyR PROPERTY_4_7_F = PropertyRBuilder
@@ -259,178 +359,168 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final PropertyR PROPERTY_5_1_D_1 = PropertyRBuilder
         .builder()
-        .name("Store Type")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .column(STORE_TYPE_COLUMN)
         .build();
     private static final PropertyR PROPERTY_5_1_D_2 = PropertyRBuilder
         .builder()
-        .name("Store Manager")
-        .column("store_manager")
+        .name(STORE_MANAGER)
+        .column(STORE_MANAGER_COLUMN)
         .build();
     private static final PropertyR PROPERTY_5_1_D_3 = PropertyRBuilder
         .builder()
-        .name("Store Sqft")
-        .column("store_sqft")
+        .name(STORE_SQFT)
+        .column(STORE_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_5_1_D_4 = PropertyRBuilder
         .builder()
-        .name("Grocery Sqft")
-        .column("grocery_sqft")
+        .name(GROCERY_SQFT)
+        .column(GROCERY_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_5_1_D_5 = PropertyRBuilder
         .builder()
-        .name("Frozen Sqft")
-        .column("frozen_sqft")
+        .name(FROZEN_SQFT)
+        .column(FROZEN_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_5_1_D_6 = PropertyRBuilder
         .builder()
-        .name("Meat Sqft")
-        .column("meat_sqft")
+        .name(MEAT_SQFT)
+        .column(MEAT_SQFT_COLUMN)
         .type(PropertyTypeEnum.NUMERIC)
         .build();
     private static final PropertyR PROPERTY_5_1_D_7 = PropertyRBuilder
         .builder()
-        .name("Has coffee bar")
-        .column("coffee_bar")
+        .name(HAS_COFFEE_BAR)
+        .column(COFFEE_BAR)
         .type(PropertyTypeEnum.BOOLEAN)
         .build();
     private static final PropertyR PROPERTY_5_1_D_8 = PropertyRBuilder
         .builder()
         .name("Street Address")
-        .column("store_street_address")
+        .column(STORE_STREET_ADDRESS)
         .type(PropertyTypeEnum.STRING)
         .build();
     private static final PropertyR PROPERTY_5_5_D_1 = PropertyRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .build();
     private static final PropertyR PROPERTY_5_5_D_2 = PropertyRBuilder
         .builder()
-        .name("Marital Status")
-        .column("marital_status")
+        .name(MARITAL_STATUS)
+        .column(MARITAL_STATUS_COLUMN)
         .build();
     private static final PropertyR PROPERTY_5_5_D_3 = PropertyRBuilder
         .builder()
         .name("Education")
-        .column("education")
+        .column(EDUCATION)
         .build();
     private static final PropertyR PROPERTY_5_5_D_4 = PropertyRBuilder
         .builder()
-        .name("Yearly Income")
-        .column("yearly_income")
+        .name(YEARLY_INCOME)
+        .column(YEARLY_INCOME_COLUMN)
         .build();
     private static final ExpressionViewR NAMEEXPRESSION_1 = ExpressionViewRBuilder
         .builder()
-        .sql(List.of(
-            SQLRBuilder.builder().dialect("oracle").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("hive").content("`customer`.`fullname`").build(),
-            SQLRBuilder.builder().dialect("hsqldb").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("access").content("fname + ' ' + lname").build(),
-            SQLRBuilder.builder().dialect("postgres").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("mysql").content("CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)").build(),
-            SQLRBuilder.builder().dialect("mariadb").content("CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)").build(),
-            SQLRBuilder.builder().dialect("mssql").content("fname + ' ' + lname").build(),
-            SQLRBuilder.builder().dialect("derby").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("db2").content("CONCAT(CONCAT(\"customer\".\"fname\", ' '), " +
-                "\"customer\".\"lname\")").build(),
-            SQLRBuilder.builder().dialect("luciddb").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("neoview").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("teradata").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("snowflake").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("generic").content("fullname").build()
+        .sqls(List.of(
+            SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(HIVE).content("`customer`.`fullname`").build(),
+            SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
+            SQLRBuilder.builder().dialect(POSTGRES).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(MYSQL).content(CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+            SQLRBuilder.builder().dialect(MARIADB).content(CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+            SQLRBuilder.builder().dialect(MSSQL).content(FNAME_LNAME).build(),
+            SQLRBuilder.builder().dialect(DERBY).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(DB2).content(CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+            SQLRBuilder.builder().dialect(LUCIDDB).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(NEOVIEW).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(TERADATA).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(SNOWFLAKE).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(GENERIC).content(FULLNAME).build()
         ))
         .build();
     private static final ExpressionViewR ORDINAL_EXPRESSION_1 = ExpressionViewRBuilder
         .builder()
-        .sql(List.of(
-            SQLRBuilder.builder().dialect("oracle").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("hsqldb").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("access").content("fname + ' ' + lname").build(),
-            SQLRBuilder.builder().dialect("postgres").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("mysql").content("CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)").build(),
-            SQLRBuilder.builder().dialect("mariadb").content("CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)"
+        .sqls(List.of(
+            SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
+            SQLRBuilder.builder().dialect(POSTGRES).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(MYSQL).content(CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+            SQLRBuilder.builder().dialect(MARIADB).content(CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME
             ).build(),
-            SQLRBuilder.builder().dialect("mssql").content("fname + ' ' + lname").build(),
-            SQLRBuilder.builder().dialect("neoview").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("derby").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("db2").content("CONCAT(CONCAT(\"customer\".\"fname\", ' '), " +
-                "\"customer\".\"lname\")").build(),
-            SQLRBuilder.builder().dialect("luciddb").content("\"fname\" || ' ' || \"lname\"").build(),
-            SQLRBuilder.builder().dialect("snowflake").content("\"customer\".\"fullname\"").build(),
-            SQLRBuilder.builder().dialect("generic").content("fullname").build()
+            SQLRBuilder.builder().dialect(MSSQL).content(FNAME_LNAME).build(),
+            SQLRBuilder.builder().dialect(NEOVIEW).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(DERBY).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(DB2).content(CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+            SQLRBuilder.builder().dialect(LUCIDDB).content(FNAME_LNAME2).build(),
+            SQLRBuilder.builder().dialect(SNOWFLAKE).content(CUSTOMER_FULLNAME).build(),
+            SQLRBuilder.builder().dialect(GENERIC).content(FULLNAME).build()
         ))
         .build();
     private static final ExpressionViewR MEASUREEXPRESSION_1 = ExpressionViewRBuilder
         .builder()
-        .sql(List.of(
-            SQLRBuilder.builder().dialect("access")
+        .sqls(List.of(
+            SQLRBuilder.builder().dialect(ACCESS)
                 .content("Iif(\"sales_fact_1997\".\"promotion_id\" = 0, 0, \"sales_fact_1997\".\"store_sales\")")
                 .build(),
-            SQLRBuilder.builder().dialect("oracle")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(ORACLE)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("hsqldb")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(HSQLDB)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("postgres")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(POSTGRES)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("mysql")
+            SQLRBuilder.builder().dialect(MYSQL)
                 .content("(case when `sales_fact_1997`.`promotion_id` = 0 then 0 else `sales_fact_1997`" +
                     ".`store_sales` end)")
                 .build(),
-            SQLRBuilder.builder().dialect("mariadb")
+            SQLRBuilder.builder().dialect(MARIADB)
                 .content("(case when `sales_fact_1997`.`promotion_id` = 0 then 0 else `sales_fact_1997`" +
                     ".`store_sales` end)")
                 .build(),
-            SQLRBuilder.builder().dialect("neoview")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(NEOVIEW)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
             SQLRBuilder.builder().dialect("infobright")
                 .content("`sales_fact_1997`.`store_sales`")
                 .build(),
-            SQLRBuilder.builder().dialect("derby")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(DERBY)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("luciddb")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(LUCIDDB)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("db2")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(DB2)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("snowflake")
-                .content("(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else \"sales_fact_1997\"" +
-                    ".\"store_sales\" end)")
+            SQLRBuilder.builder().dialect(SNOWFLAKE)
+                .content(CASE_WHEN_SALES_FACT_1997_PROMOTION_ID_0_THEN_0_ELSE_SALES_FACT_1997)
                 .build(),
-            SQLRBuilder.builder().dialect("generic")
+            SQLRBuilder.builder().dialect(GENERIC)
                 .content("(case when sales_fact_1997.promotion_id = 0 then 0 else sales_fact_1997.store_sales end)")
                 .build()
         ))
         .build();
     private static final ExpressionViewR MEASUREEXPRESSION_2_7 = ExpressionViewRBuilder
         .builder()
-        .sql(List.of(
-            SQLRBuilder.builder().dialect("mysql")
-                .content("`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`")
+        .sqls(List.of(
+            SQLRBuilder.builder().dialect(MYSQL)
+                .content(WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST)
                 .build(),
-            SQLRBuilder.builder().dialect("mariadb")
-                .content("`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`")
+            SQLRBuilder.builder().dialect(MARIADB)
+                .content(WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST)
                 .build(),
             SQLRBuilder.builder().dialect("infobright")
-                .content("`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`")
+                .content(WAREHOUSE_SALES_INVENTORY_FACT_1997_WAREHOUSE_COST)
                 .build(),
-            SQLRBuilder.builder().dialect("generic")
+            SQLRBuilder.builder().dialect(GENERIC)
                 .content("&quot;warehouse_sales&quot; - &quot;inventory_fact_1997&quot;.&quot;warehouse_cost&quot;")
                 .build()
         ))
@@ -439,7 +529,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         CLOSURE_4_7 = ClosureRBuilder
         .builder()
         .parentColumn("supervisor_id")
-        .childColumn("employee_id")
+        .childColumn(EMPLOYEE_ID)
         .table(TABLE_CLOSURE_4_7)
         .build();
 
@@ -457,13 +547,13 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_1_3_A = LevelRBuilder
         .builder()
-        .name("Country")
+        .name(COUNTRY)
         .column("country")
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_1_3_B = LevelRBuilder
         .builder()
-        .name("State Province")
+        .name(STATE_PROVINCE)
         .column("state_province")
         .uniqueMembers(true)
         .build();
@@ -476,12 +566,12 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final LevelR LEVEL_1_3_D = LevelRBuilder
         .builder()
         .name("Name")
-        .column("customer_id")
+        .column(CUSTOMER_ID)
         .uniqueMembers(true)
         .type(TypeEnum.NUMERIC)
         .nameExpression(NAMEEXPRESSION_1)
         .ordinalExpression(ORDINAL_EXPRESSION_1)
-        .property(List.of(
+        .properties(List.of(
             PROPERTY_3_4_1,
             PROPERTY_3_4_2,
             PROPERTY_3_4_3,
@@ -489,46 +579,46 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_1_4 = LevelRBuilder
         .builder()
-        .name("Education Level")
-        .column("education")
+        .name(EDUCATION_LEVEL)
+        .column(EDUCATION)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_1_5 = LevelRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_1_6 = LevelRBuilder
         .builder()
-        .name("Marital Status")
-        .column("marital_status")
+        .name(MARITAL_STATUS)
+        .column(MARITAL_STATUS_COLUMN)
         .uniqueMembers(true)
         .approxRowCount("111")
         .build();
     private static final LevelR LEVEL_1_7 = LevelRBuilder
         .builder()
-        .name("Yearly Income")
-        .column("yearly_income")
+        .name(YEARLY_INCOME)
+        .column(YEARLY_INCOME_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_3_1 = LevelRBuilder
         .builder()
-        .name("Store Type")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .column(STORE_TYPE_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_3_2 = LevelRBuilder
         .builder()
-        .name("Has coffee bar")
-        .column("coffee_bar")
+        .name(HAS_COFFEE_BAR)
+        .column(COFFEE_BAR)
         .uniqueMembers(true)
         .type(TypeEnum.BOOLEAN)
         .build();
     private static final LevelR LEVEL_4_1_A = LevelRBuilder
         .builder()
         .name("Year")
-        .column("the_year")
+        .column(THE_YEAR)
         .type(TypeEnum.NUMERIC)
         .uniqueMembers(true)
         .levelType(LevelTypeEnum.TIME_YEARS)
@@ -551,32 +641,32 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_4_2_A = LevelRBuilder
         .builder()
-        .name("Store Country")
-        .table("store")
-        .column("store_country")
+        .name(STORE_COUNTRY)
+        .table(STORE_TABLE_NAME)
+        .column(STORE_COUNTRY_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_4_2_B = LevelRBuilder
         .builder()
-        .name("Store State")
-        .table("store")
-        .column("store_state")
+        .name(STORE_STATE)
+        .table(STORE_TABLE_NAME)
+        .column(STORE_STATE_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_4_2_C = LevelRBuilder
         .builder()
-        .name("Store City")
-        .table("store")
-        .column("store_city")
+        .name(STORE_CITY)
+        .table(STORE_TABLE_NAME)
+        .column(STORE_CITY_COLUMN)
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_4_2_D = LevelRBuilder
         .builder()
-        .name("Store Name")
-        .table("store")
-        .column("store_name")
+        .name(STORE_NAME)
+        .table(STORE_TABLE_NAME)
+        .column(STORE_NAME_COLUMN)
         .uniqueMembers(true)
-        .property(List.of(
+        .properties(List.of(
             PROPERTY_4_2_D_a,
             PROPERTY_4_2_D_b,
             PROPERTY_4_2_D_c,
@@ -595,9 +685,9 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_4_4 = LevelRBuilder
         .builder()
-        .name("Store Type")
-        .table("store")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .table(STORE_TABLE_NAME)
+        .column(STORE_TYPE_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_4_5_A = LevelRBuilder
@@ -611,26 +701,26 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .name("Position Title")
         .uniqueMembers(false)
         .column("position_title")
-        .ordinalColumn("position_id")
+        .ordinalColumn(POSITION_ID)
         .build();
     private static final LevelR LEVEL_4_6 = LevelRBuilder
         .builder()
         .name("Department Description")
         .type(TypeEnum.NUMERIC)
         .uniqueMembers(true)
-        .column("department_id")
+        .column(DEPARTMENT_ID)
         .build();
     private static final LevelR LEVEL_4_7 = LevelRBuilder
         .builder()
         .name("Employee Id")
         .type(TypeEnum.NUMERIC)
         .uniqueMembers(true)
-        .column("employee_id")
+        .column(EMPLOYEE_ID)
         .parentColumn("supervisor_id")
         .nameColumn("full_name")
         .nullParentValue("0")
         .closure(CLOSURE_4_7)
-        .property(List.of(PROPERTY_4_7_A,
+        .properties(List.of(PROPERTY_4_7_A,
             PROPERTY_4_7_B,
             PROPERTY_4_7_C,
             PROPERTY_4_7_D,
@@ -639,32 +729,32 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_5_1_A = LevelRBuilder
         .builder()
-        .name("Store Country")
-        .column("store_country")
+        .name(STORE_COUNTRY)
+        .column(STORE_COUNTRY_COLUMN)
         .uniqueMembers(true)
         .hideMemberIf(HideMemberIfEnum.NEVER)
         .build();
     private static final LevelR LEVEL_5_1_B = LevelRBuilder
         .builder()
-        .name("Store State")
-        .column("store_state")
+        .name(STORE_STATE)
+        .column(STORE_STATE_COLUMN)
         .uniqueMembers(true)
         .hideMemberIf(HideMemberIfEnum.IF_PARENTS_NAME)
         .build();
     private static final LevelR LEVEL_5_1_C = LevelRBuilder
         .builder()
-        .name("Store City")
-        .column("store_city")
+        .name(STORE_CITY)
+        .column(STORE_CITY_COLUMN)
         .uniqueMembers(false)
         .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
         .build();
     private static final LevelR LEVEL_5_1_D = LevelRBuilder
         .builder()
-        .name("Store Name")
-        .column("store_name")
+        .name(STORE_NAME)
+        .column(STORE_NAME_COLUMN)
         .uniqueMembers(true)
         .hideMemberIf(HideMemberIfEnum.NEVER)
-        .property(List.of(PROPERTY_5_1_D_1,
+        .properties(List.of(PROPERTY_5_1_D_1,
             PROPERTY_5_1_D_2,
             PROPERTY_5_1_D_3,
             PROPERTY_5_1_D_4,
@@ -675,22 +765,22 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_5_2_A = LevelRBuilder
         .builder()
-        .name("Country")
-        .column("store_country")
+        .name(COUNTRY)
+        .column(STORE_COUNTRY_COLUMN)
         .uniqueMembers(true)
         .hideMemberIf(HideMemberIfEnum.NEVER)
         .build();
     private static final LevelR LEVEL_5_2_B = LevelRBuilder
         .builder()
         .name("State")
-        .column("store_state")
+        .column(STORE_STATE_COLUMN)
         .uniqueMembers(true)
         .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
         .build();
     private static final LevelR LEVEL_5_2_C = LevelRBuilder
         .builder()
         .name("City")
-        .column("store_city")
+        .column(STORE_CITY_COLUMN)
         .uniqueMembers(false)
         .hideMemberIf(HideMemberIfEnum.IF_BLANK_NAME)
         .build();
@@ -708,13 +798,13 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_5_5_A = LevelRBuilder
         .builder()
-        .name("Country")
+        .name(COUNTRY)
         .column("country")
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_5_5_B = LevelRBuilder
         .builder()
-        .name("State Province")
+        .name(STATE_PROVINCE)
         .column("state_province")
         .uniqueMembers(true)
         .build();
@@ -730,26 +820,25 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .uniqueMembers(true)
         //KeyExpressions missing
         .keyExpression(ExpressionViewRBuilder.builder()
-            .sql(List.of(
-                SQLRBuilder.builder().dialect("oracle").content("\"fname\" || ' ' || \"lname\"").build(),
-                SQLRBuilder.builder().dialect("hsqldb").content("\"fname\" || ' ' || \"lname\"").build(),
-                SQLRBuilder.builder().dialect("access").content("fname + ' ' + lname").build(),
-                SQLRBuilder.builder().dialect("postgres").content("\"fname\" || ' ' || \"lname\"").build(),
-                SQLRBuilder.builder().dialect("mysql").content("CONCAT(`customer`.`fname`, ' ', `customer`" +
+            .sqls(List.of(
+                SQLRBuilder.builder().dialect(ORACLE).content(FNAME_LNAME2).build(),
+                SQLRBuilder.builder().dialect(HSQLDB).content(FNAME_LNAME2).build(),
+                SQLRBuilder.builder().dialect(ACCESS).content(FNAME_LNAME).build(),
+                SQLRBuilder.builder().dialect(POSTGRES).content(FNAME_LNAME2).build(),
+                SQLRBuilder.builder().dialect(MYSQL).content("CONCAT(`customer`.`fname`, ' ', `customer`" +
                     ".`lname`)").build(),
-                SQLRBuilder.builder().dialect("mariadb").content("CONCAT(`customer`.`fname`, ' ', `customer`" +
+                SQLRBuilder.builder().dialect(MARIADB).content("CONCAT(`customer`.`fname`, ' ', `customer`" +
                     ".`lname`)").build(),
-                SQLRBuilder.builder().dialect("mssql").content("fname + ' ' + lname").build(),
-                SQLRBuilder.builder().dialect("derby").content("\"customer\".\"fullname\"").build(),
-                SQLRBuilder.builder().dialect("db2").content("CONCAT(CONCAT(\"customer\".\"fname\", ' '), " +
-                    "\"customer\".\"lname\")").build(),
-                SQLRBuilder.builder().dialect("luciddb").content("\"fname\" || ' ' || \"lname\"").build(),
-                SQLRBuilder.builder().dialect("neoview").content("\"customer\".\"fullname\"").build(),
-                SQLRBuilder.builder().dialect("snowflake").content("\"customer\".\"fullname\"").build(),
-                SQLRBuilder.builder().dialect("generic").content("fullname").build()
+                SQLRBuilder.builder().dialect(MSSQL).content(FNAME_LNAME).build(),
+                SQLRBuilder.builder().dialect(DERBY).content(CUSTOMER_FULLNAME).build(),
+                SQLRBuilder.builder().dialect(DB2).content(CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME).build(),
+                SQLRBuilder.builder().dialect(LUCIDDB).content(FNAME_LNAME2).build(),
+                SQLRBuilder.builder().dialect(NEOVIEW).content(CUSTOMER_FULLNAME).build(),
+                SQLRBuilder.builder().dialect(SNOWFLAKE).content(CUSTOMER_FULLNAME).build(),
+                SQLRBuilder.builder().dialect(GENERIC).content(FULLNAME).build()
             ))
             .build())
-        .property(List.of(
+        .properties(List.of(
             PROPERTY_5_5_D_1,
             PROPERTY_5_5_D_2,
             PROPERTY_5_5_D_3,
@@ -757,59 +846,59 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_5_6 = LevelRBuilder
         .builder()
-        .name("Education Level")
-        .column("education")
+        .name(EDUCATION_LEVEL)
+        .column(EDUCATION)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_5_7 = LevelRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_5_8 = LevelRBuilder
         .builder()
-        .name("Marital Status")
-        .column("marital_status")
+        .name(MARITAL_STATUS)
+        .column(MARITAL_STATUS_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_5_9 = LevelRBuilder
         .builder()
-        .name("Yearly Income")
-        .column("yearly_income")
+        .name(YEARLY_INCOME)
+        .column(YEARLY_INCOME_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_6_1 = LevelRBuilder
         .builder()
-        .name("Gender")
-        .column("gender")
+        .name(GENDER)
+        .column(GENDER2)
         .uniqueMembers(true)
         .build();
 
     private static final LevelR LEVEL_SHARED_1_A = LevelRBuilder
         .builder()
-        .name("Store Country")
-        .column("store_country")
+        .name(STORE_COUNTRY)
+        .column(STORE_COUNTRY_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_1_B = LevelRBuilder
         .builder()
-        .name("Store State")
-        .column("store_state")
+        .name(STORE_STATE)
+        .column(STORE_STATE_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_1_C = LevelRBuilder
         .builder()
-        .name("Store City")
-        .column("store_city")
+        .name(STORE_CITY)
+        .column(STORE_CITY_COLUMN)
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_SHARED_1_D = LevelRBuilder
         .builder()
-        .name("Store Name")
-        .column("store_name")
+        .name(STORE_NAME)
+        .column(STORE_NAME_COLUMN)
         .uniqueMembers(true)
-        .property(List.of(PROPERTY_1_A,
+        .properties(List.of(PROPERTY_1_A,
             PROPERTY_1_B,
             PROPERTY_1_C,
             PROPERTY_1_D,
@@ -821,21 +910,21 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final LevelR LEVEL_SHARED_2 = LevelRBuilder
         .builder()
-        .name("Store Sqft")
-        .column("store_sqft")
+        .name(STORE_SQFT)
+        .column(STORE_SQFT_COLUMN)
         .type(TypeEnum.NUMERIC)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_3 = LevelRBuilder
         .builder()
-        .name("Store Type")
-        .column("store_type")
+        .name(STORE_TYPE)
+        .column(STORE_TYPE_COLUMN)
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_4_A_1 = LevelRBuilder
         .builder()
         .name("Year")
-        .column("the_year")
+        .column(THE_YEAR)
         .uniqueMembers(true)
         .type(TypeEnum.NUMERIC)
         .levelType(LevelTypeEnum.TIME_YEARS)
@@ -858,7 +947,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final LevelR LEVEL_SHARED_4_B_1 = LevelRBuilder
         .builder()
         .name("Year")
-        .column("the_year")
+        .column(THE_YEAR)
         .type(TypeEnum.NUMERIC)
         .uniqueMembers(true)
         .levelType(LevelTypeEnum.TIME_YEARS)
@@ -881,54 +970,54 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final LevelR LEVEL_SHARED_5_1 = LevelRBuilder
         .builder()
         .name("Product Family")
-        .table("product_class")
+        .table(PRODUCT_CLASS)
         .column("product_family")
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_5_2 = LevelRBuilder
         .builder()
         .name("Product Department")
-        .table("product_class")
+        .table(PRODUCT_CLASS)
         .column("product_department")
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_SHARED_5_3 = LevelRBuilder
         .builder()
         .name("Product Category")
-        .table("product_class")
+        .table(PRODUCT_CLASS)
         .column("product_category")
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_SHARED_5_4 = LevelRBuilder
         .builder()
         .name("Product Subcategory")
-        .table("product_class")
+        .table(PRODUCT_CLASS)
         .column("product_subcategory")
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_SHARED_5_5 = LevelRBuilder
         .builder()
         .name("Brand Name")
-        .table("product")
+        .table(PRODUCT_TABLE_NAME)
         .column("brand_name")
         .uniqueMembers(false)
         .build();
     private static final LevelR LEVEL_SHARED_5_6 = LevelRBuilder
         .builder()
         .name("Product Name")
-        .table("product")
+        .table(PRODUCT_TABLE_NAME)
         .column("product_name")
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_6_1 = LevelRBuilder
         .builder()
-        .name("Country")
+        .name(COUNTRY)
         .column("warehouse_country")
         .uniqueMembers(true)
         .build();
     private static final LevelR LEVEL_SHARED_6_2 = LevelRBuilder
         .builder()
-        .name("State Province")
+        .name(STATE_PROVINCE)
         .column("warehouse_state_province")
         .uniqueMembers(true)
         .build();
@@ -953,122 +1042,122 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final JoinR JOIN_4_2 = new JoinR(List.of(TABLE_JOIN_4_2_A,
         TABLE_JOIN_4_2_B),
         null,
-        "store_id",
+        STORE_ID_KEY,
         null,
-        "store_id");
+        STORE_ID_KEY);
     private static final JoinR JOIN_4_3 = new JoinR(List.of(TABLE_JOIN_4_3_A,
         TABLE_JOIN_4_3_B),
         null,
-        "position_id",
+        POSITION_ID,
         null,
-        "position_id");
+        POSITION_ID);
     private static final JoinR JOIN_4_4 = new JoinR(List.of(TABLE_JOIN_4_4_A,
         TABLE_JOIN_4_4_B),
         null,
-        "store_id",
+        STORE_ID_KEY,
         null,
-        "store_id");
+        STORE_ID_KEY);
 
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_1 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("FORMAT_STRING")
-        .value("$#,##0.00")
+        .name(FORMAT_STRING_NAME)
+        .value(FORMAT_STRING_0_00)
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_2_1 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("FORMAT_STRING")
-        .value("$#,##0.00")
+        .name(FORMAT_STRING_NAME)
+        .value(FORMAT_STRING_0_00)
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_2_2 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("18")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_3 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("FORMAT_STRING")
+        .name(FORMAT_STRING_NAME)
         .value("0.0%")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_1 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("1")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_2 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("2")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_3 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("3")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_4 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("6")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_5 = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("7")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_1_A = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("FORMAT_STRING")
-        .value("$#,##0.00")
+        .name(FORMAT_STRING_NAME)
+        .value(FORMAT_STRING_0_00)
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_1_B = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("4")
         .build();
     private static final CalculatedMemberPropertyR CALCULATEDMEMBER_PROPERTY_6_2_A = CalculatedMemberPropertyRBuilder
         .builder()
-        .name("MEMBER_ORDINAL")
+        .name(MEMBER_ORDINAL)
         .value("5")
         .build();
     private static final MeasureR MEASURE_1_1 = MeasureRBuilder
         .builder()
-        .name("Unit Sales")
-        .column("unit_sales")
+        .name(UNIT_SALES)
+        .column(UNIT_SALES_KEY)
         .aggregator("sum")
-        .formatString("Standard")
+        .formatString(STANDARD)
         .build();
     private static final MeasureR MEASURE_1_2 = MeasureRBuilder
         .builder()
-        .name("Store Cost")
+        .name(STORE_COST)
         .column("sotre_cost")
         .aggregator("sum")
-        .formatString("#,###.00")
+        .formatString(FORMAT_STRING_00)
         .build();
     private static final MeasureR MEASURE_1_3 = MeasureRBuilder
         .builder()
-        .name("Store Sales")
-        .column("store_sales")
+        .name(STORE_SALES)
+        .column(STORE_SALES_COLUMN)
         .aggregator("sum")
-        .formatString("#,###.00")
+        .formatString(FORMAT_STRING_00)
         .build();
     private static final MeasureR MEASURE_1_4 = MeasureRBuilder
         .builder()
-        .name("Sales Count")
-        .column("product_id")
-        .aggregator("count")
-        .formatString("#,###")
+        .name(SALES_COUNT)
+        .column(PRODUCT_ID)
+        .aggregator(COUNT)
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_1_5 = MeasureRBuilder
         .builder()
-        .name("Customer Count")
-        .column("customer_id")
-        .aggregator("distinct-count")
-        .formatString("#,###")
+        .name(CUSTOMER_COUNT)
+        .column(CUSTOMER_ID)
+        .aggregator(DISTINCT_COUNT)
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_1_6 = MeasureRBuilder
         .builder()
         .name("Promotion Sales")
         .aggregator("sum")
-        .formatString("#,###.00")
+        .formatString(FORMAT_STRING_00)
         .measureExpression(MEASUREEXPRESSION_1)
         .build();
     private static final MeasureR MEASURE_2_1 = MeasureRBuilder
@@ -1117,132 +1206,132 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final MeasureR MEASURE_3_1 = MeasureRBuilder
         .builder()
-        .name("Store Sqft")
-        .column("store_sqft")
+        .name(STORE_SQFT)
+        .column(STORE_SQFT_COLUMN)
         .aggregator("sum")
-        .formatString("#,###")
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_3_2 = MeasureRBuilder
         .builder()
-        .name("Grocery Sqft")
-        .column("grocery_sqft")
+        .name(GROCERY_SQFT)
+        .column(GROCERY_SQFT_COLUMN)
         .aggregator("sum")
-        .formatString("#,###")
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_4_1 = MeasureRBuilder
         .builder()
         .name("Org Salary")
         .column("salary_paid")
         .aggregator("sum")
-        .formatString("Currency")
+        .formatString(CURRENCY)
         .build();
     private static final MeasureR MEASURE_4_2 = MeasureRBuilder
         .builder()
         .name("Count")
-        .column("employee_id")
-        .aggregator("count")
+        .column(EMPLOYEE_ID)
+        .aggregator(COUNT)
         .formatString("#,#")
         .build();
     private static final MeasureR MEASURE_4_3 = MeasureRBuilder
         .builder()
         .name("Number of Employees")
-        .column("employee_id")
-        .aggregator("distinct-count")
+        .column(EMPLOYEE_ID)
+        .aggregator(DISTINCT_COUNT)
         .formatString("#,#")
         .build();
     private static final MeasureR MEASURE_5_1 = MeasureRBuilder
         .builder()
-        .name("Unit Sales")
-        .column("unit_sales")
+        .name(UNIT_SALES)
+        .column(UNIT_SALES_KEY)
         .aggregator("sum")
-        .formatString("Standard")
+        .formatString(STANDARD)
         .build();
     private static final MeasureR MEASURE_5_2 = MeasureRBuilder
         .builder()
-        .name("Store Cost")
+        .name(STORE_COST)
         .column("store_cost")
         .aggregator("sum")
-        .formatString("#,###.00")
+        .formatString(FORMAT_STRING_00)
         .build();
     private static final MeasureR MEASURE_5_3 = MeasureRBuilder
         .builder()
-        .name("Store Sales")
-        .column("store_sales")
+        .name(STORE_SALES)
+        .column(STORE_SALES_COLUMN)
         .aggregator("sum")
-        .formatString("#,###.00")
+        .formatString(FORMAT_STRING_00)
         .build();
     private static final MeasureR MEASURE_5_4 = MeasureRBuilder
         .builder()
-        .name("Sales Count")
-        .column("product_id")
-        .aggregator("count")
-        .formatString("#,###")
+        .name(SALES_COUNT)
+        .column(PRODUCT_ID)
+        .aggregator(COUNT)
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_5_5 = MeasureRBuilder
         .builder()
-        .name("Customer Count")
-        .column("customer_id")
-        .aggregator("distinct-count")
-        .formatString("#,###")
+        .name(CUSTOMER_COUNT)
+        .column(CUSTOMER_ID)
+        .aggregator(DISTINCT_COUNT)
+        .formatString(FORMAT_STRING)
         .build();
     private static final MeasureR MEASURE_6_1 = MeasureRBuilder
         .builder()
-        .name("Sales Count")
-        .column("product_id")
-        .aggregator("count")
-        .formatString("#,###")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_1))
+        .name(SALES_COUNT)
+        .column(PRODUCT_ID)
+        .aggregator(COUNT)
+        .formatString(FORMAT_STRING)
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_1))
         .build();
     private static final MeasureR MEASURE_6_2 = MeasureRBuilder
         .builder()
-        .name("Unit Sales")
-        .column("unit_sales")
+        .name(UNIT_SALES)
+        .column(UNIT_SALES_KEY)
         .aggregator("sum")
-        .formatString("Standard")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_2))
+        .formatString(STANDARD)
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_2))
         .build();
     private static final MeasureR MEASURE_6_3 = MeasureRBuilder
         .builder()
-        .name("Store Sales")
-        .column("store_sales")
+        .name(STORE_SALES)
+        .column(STORE_SALES_COLUMN)
         .aggregator("sum")
-        .formatString("#,###.00")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_3))
+        .formatString(FORMAT_STRING_00)
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_3))
         .build();
     private static final MeasureR MEASURE_6_4 = MeasureRBuilder
         .builder()
-        .name("Store Cost")
+        .name(STORE_COST)
         .column("store_cost")
         .aggregator("sum")
-        .formatString("#,###.00")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_4))
+        .formatString(FORMAT_STRING_00)
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_4))
         .build();
     private static final MeasureR MEASURE_6_5 = MeasureRBuilder
         .builder()
-        .name("Customer Count")
-        .column("customer_id")
-        .aggregator("distinct-count")
-        .formatString("#,###")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_5))
+        .name(CUSTOMER_COUNT)
+        .column(CUSTOMER_ID)
+        .aggregator(DISTINCT_COUNT)
+        .formatString(FORMAT_STRING)
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_5))
         .build();
 
     private static final HierarchyR HIERARCHY_1 = HierarchyRBuilder
         .builder()
-        .allMemberName("All Media")
+        .allMemberName(ALL_MEDIA)
         .hasAll(true)
-        .primaryKey("promotion_id")
-        .defaultMember("All Media")
+        .primaryKey(PROMOTION_ID)
+        .defaultMember(ALL_MEDIA)
         .table(TABLE_1)
-        .level(List.of(LEVEL_1_1))
+        .levels(List.of(LEVEL_1_1))
         .build();
     private static final HierarchyR HIERARCHY_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Promotions")
-        .primaryKey("promotion_id")
+        .primaryKey(PROMOTION_ID)
         .defaultMember("[All Promotions]")
         .table(TABLE_2)
-        .level(List.of(LEVEL_1_2))
+        .levels(List.of(LEVEL_1_2))
         .build();
     private static final HierarchyR HIERARCHY_3 = HierarchyRBuilder
         .builder()
@@ -1250,7 +1339,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .allMemberName("All Customors")
         .primaryKey("customor_id")
         .table(TABLE_3)
-        .level(List.of(LEVEL_1_3_A,
+        .levels(List.of(LEVEL_1_3_A,
             LEVEL_1_3_B,
             LEVEL_1_3_C,
             LEVEL_1_3_D))
@@ -1258,49 +1347,49 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_4 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_4)
-        .level(List.of(LEVEL_1_4))
+        .levels(List.of(LEVEL_1_4))
         .build();
     private static final HierarchyR HIERARCHY_5 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Genders")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5)
-        .level(List.of(LEVEL_1_5))
+        .levels(List.of(LEVEL_1_5))
         .build();
     private static final HierarchyR HIERARCHY_6 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Merital Status")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_6)
-        .level(List.of(LEVEL_1_6))
+        .levels(List.of(LEVEL_1_6))
         .build();
     private static final HierarchyR HIERARCHY_7 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_7)
-        .level(List.of(LEVEL_1_7))
+        .levels(List.of(LEVEL_1_7))
         .build();
     private static final HierarchyR HIERARCHY_3_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .level(List.of(LEVEL_3_1))
+        .levels(List.of(LEVEL_3_1))
         .build();
     private static final HierarchyR HIERARCHY_3_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .level(List.of(LEVEL_3_2))
+        .levels(List.of(LEVEL_3_2))
         .build();
     private static final HierarchyR HIERARCHY_4_1 = HierarchyRBuilder
         .builder()
         .hasAll(false)
         .primaryKey("the_date")
         .table(TABLE_4_1)
-        .level(List.of(
+        .levels(List.of(
             LEVEL_4_1_A,
             LEVEL_4_1_B,
             LEVEL_4_1_C))
@@ -1308,10 +1397,10 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_4_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("employee_id")
-        .primaryKeyTable("employee")
+        .primaryKey(EMPLOYEE_ID)
+        .primaryKeyTable(EMPLOYEE)
         .join(JOIN_4_2)
-        .level(List.of(
+        .levels(List.of(
             LEVEL_4_2_A,
             LEVEL_4_2_B,
             LEVEL_4_2_C,
@@ -1320,49 +1409,49 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_4_3 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("employee_id")
-        .primaryKeyTable("employee")
+        .primaryKey(EMPLOYEE_ID)
+        .primaryKeyTable(EMPLOYEE)
         .join(JOIN_4_3)
-        .level(List.of(LEVEL_4_3))
+        .levels(List.of(LEVEL_4_3))
         .build();
     private static final HierarchyR HIERARCHY_4_4 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKeyTable("employee")
-        .primaryKey("employee_id")
+        .primaryKeyTable(EMPLOYEE)
+        .primaryKey(EMPLOYEE_ID)
         .join(JOIN_4_4)
-        .level(List.of(LEVEL_4_4))
+        .levels(List.of(LEVEL_4_4))
         .build();
     private static final HierarchyR HIERARCHY_4_5 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Position")
-        .primaryKey("employee_id")
+        .primaryKey(EMPLOYEE_ID)
         .table(TABLE_4_5)
-        .level(List.of(LEVEL_4_5_A,
+        .levels(List.of(LEVEL_4_5_A,
             LEVEL_4_5_B))
         .build();
     private static final HierarchyR HIERARCHY_4_6 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("department_id")
+        .primaryKey(DEPARTMENT_ID)
         .table(TABLE_4_6)
-        .level(List.of(LEVEL_4_6))
+        .levels(List.of(LEVEL_4_6))
         .build();
     private static final HierarchyR HIERARCHY_4_7 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberCaption("All Employees")
-        .primaryKey("employee_id")
+        .primaryKey(EMPLOYEE_ID)
         .table(TABLE_4_7)
-        .level(List.of(LEVEL_4_7))
+        .levels(List.of(LEVEL_4_7))
         .build();
     private static final HierarchyR HIERARCHY_5_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("store_id")
+        .primaryKey(STORE_ID_KEY)
         .table(TABLE_5_1)
-        .level(List.of(LEVEL_5_1_A,
+        .levels(List.of(LEVEL_5_1_A,
             LEVEL_5_1_B,
             LEVEL_5_1_C,
             LEVEL_5_1_D))
@@ -1370,35 +1459,35 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_5_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("store_id")
+        .primaryKey(STORE_ID_KEY)
         .table(TABLE_5_2)
-        .level(List.of(LEVEL_5_2_A,
+        .levels(List.of(LEVEL_5_2_A,
             LEVEL_5_2_B,
             LEVEL_5_2_C))
         .build();
     private static final HierarchyR HIERARCHY_5_3 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .allMemberName("All Media")
-        .primaryKey("promotion_id")
+        .allMemberName(ALL_MEDIA)
+        .primaryKey(PROMOTION_ID)
         .table(TABLE_5_3)
-        .level(List.of(LEVEL_5_3))
+        .levels(List.of(LEVEL_5_3))
         .build();
     private static final HierarchyR HIERARCHY_5_4 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Promotions")
-        .primaryKey("promotion_id")
+        .primaryKey(PROMOTION_ID)
         .table(TABLE_5_4)
-        .level(List.of(LEVEL_5_4))
+        .levels(List.of(LEVEL_5_4))
         .build();
     private static final HierarchyR HIERARCHY_5_5 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Customers")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5_5)
-        .level(List.of(LEVEL_5_5_A,
+        .levels(List.of(LEVEL_5_5_A,
             LEVEL_5_5_B,
             LEVEL_5_5_C,
             LEVEL_5_5_D))
@@ -1406,47 +1495,47 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_5_6 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5_6)
-        .level(List.of(LEVEL_5_6))
+        .levels(List.of(LEVEL_5_6))
         .build();
     private static final HierarchyR HIERARCHY_5_7 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Gender")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5_7)
-        .level(List.of(LEVEL_5_7))
+        .levels(List.of(LEVEL_5_7))
         .build();
     private static final HierarchyR HIERARCHY_5_8 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Marital Status")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5_8)
-        .level(List.of(LEVEL_5_8))
+        .levels(List.of(LEVEL_5_8))
         .build();
     private static final HierarchyR HIERARCHY_5_9 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_5_9)
-        .level(List.of(LEVEL_5_9))
+        .levels(List.of(LEVEL_5_9))
         .build();
     private static final HierarchyR HIERARCHY_6_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .allMemberName("All Gender")
-        .primaryKey("customer_id")
+        .primaryKey(CUSTOMER_ID)
         .table(TABLE_6_1)
-        .level(List.of(LEVEL_6_1))
+        .levels(List.of(LEVEL_6_1))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("store_id")
+        .primaryKey(STORE_ID_KEY)
         .table(TABLE_SHARED_1)
-        .level(List.of(LEVEL_SHARED_1_A,
+        .levels(List.of(LEVEL_SHARED_1_A,
             LEVEL_SHARED_1_B,
             LEVEL_SHARED_1_C,
             LEVEL_SHARED_1_D
@@ -1455,23 +1544,23 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_SCHEMA_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("store_id")
+        .primaryKey(STORE_ID_KEY)
         .table(TABLE_SHARED_2)
-        .level(List.of(LEVEL_SHARED_2))
+        .levels(List.of(LEVEL_SHARED_2))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_3 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("store_id")
+        .primaryKey(STORE_ID_KEY)
         .table(TABLE_SHARED_3)
-        .level(List.of(LEVEL_SHARED_3))
+        .levels(List.of(LEVEL_SHARED_3))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_4_1 = HierarchyRBuilder
         .builder()
         .hasAll(false)
-        .primaryKey("time_id")
+        .primaryKey(TIME_ID_KEY)
         .table(TABLE_SHARED_4_A)
-        .level(List.of(LEVEL_SHARED_4_A_1,
+        .levels(List.of(LEVEL_SHARED_4_A_1,
             LEVEL_SHARED_4_A_2,
             LEVEL_SHARED_4_A_3
         ))
@@ -1479,16 +1568,16 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final HierarchyR HIERARCHY_SCHEMA_4_2 = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .primaryKey("time_id")
+        .primaryKey(TIME_ID_KEY)
         .table(TABLE_SHARED_4_B)
-        .level(List.of(LEVEL_SHARED_4_B_1,
+        .levels(List.of(LEVEL_SHARED_4_B_1,
             LEVEL_SHARED_4_B_2,
             LEVEL_SHARED_4_B_3
         ))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_5 = HierarchyRBuilder
         .builder()
-        .level(List.of(LEVEL_SHARED_5_1,
+        .levels(List.of(LEVEL_SHARED_5_1,
             LEVEL_SHARED_5_2,
             LEVEL_SHARED_5_3,
             LEVEL_SHARED_5_4,
@@ -1501,7 +1590,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .hasAll(true)
         .primaryKey("warehouse_id")
         .table(TABLE_SHARED_6)
-        .level(List.of(LEVEL_SHARED_6_1,
+        .levels(List.of(LEVEL_SHARED_6_1,
             LEVEL_SHARED_6_2,
             LEVEL_SHARED_6_3,
             LEVEL_SHARED_6_4))
@@ -1509,231 +1598,231 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
 
     private static final DimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
         .builder()
-        .name("Store")
-        .source("Store")
-        .foreignKey("store_id")
+        .name(STORE)
+        .source(STORE)
+        .foreignKey(STORE_ID_KEY)
         .build();
     private static final DimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
         .builder()
-        .name("Store Size in SQFT")
-        .source("Store Size in SQFT")
-        .foreignKey("store_id")
+        .name(STORE_SIZE_IN_SQFT)
+        .source(STORE_SIZE_IN_SQFT)
+        .foreignKey(STORE_ID_KEY)
         .build();
     private static final DimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
         .builder()
-        .name("Store Type")
-        .source("Store Type")
-        .foreignKey("store_id")
+        .name(STORE_TYPE)
+        .source(STORE_TYPE)
+        .foreignKey(STORE_ID_KEY)
         .build();
     private static final DimensionUsage DIMENSION_USAGE_4 = DimensionUsageRBuilder
         .builder()
         .name("Time")
         .source("Time")
-        .foreignKey("time_id")
+        .foreignKey(TIME_ID_KEY)
         .build();
     private static final DimensionUsage DIMENSION_USAGE_5 = DimensionUsageRBuilder
         .builder()
-        .name("Product")
-        .source("Product")
-        .foreignKey("product_id")
+        .name(PRODUCT)
+        .source(PRODUCT)
+        .foreignKey(PRODUCT_ID)
         .build();
     private static final DimensionUsage DIMENSION_USAGE_6 = DimensionUsageRBuilder
         .builder()
-        .name("Warehouse")
-        .source("Warehouse")
+        .name(WAREHOUSE)
+        .source(WAREHOUSE)
         .foreignKey("warehouse_id")
         .build();
     private static final DimensionUsage DIMENSION_USAGE_3_1 = DimensionUsageRBuilder
         .builder()
-        .name("Store")
-        .source("Store")
+        .name(STORE)
+        .source(STORE)
         .build();
 
     private static final PrivateDimensionR DIMENSION_1 = PrivateDimensionRBuilder
         .builder()
-        .name("Promotion Media")
-        .foreignKey("promotion_id")
-        .hierarchy(List.of(HIERARCHY_1))
+        .name(PROMOTION_MEDIA)
+        .foreignKey(PROMOTION_ID)
+        .hierarchies(List.of(HIERARCHY_1))
         .build();
     private static final PrivateDimensionR DIMENSION_2 = PrivateDimensionRBuilder
         .builder()
-        .name("Promotions")
-        .foreignKey("promotion_id")
-        .hierarchy(List.of(HIERARCHY_2))
+        .name(PROMOTIONS)
+        .foreignKey(PROMOTION_ID)
+        .hierarchies(List.of(HIERARCHY_2))
         .build();
     private static final PrivateDimensionR DIMENSION_3 = PrivateDimensionRBuilder
         .builder()
-        .name("Customers")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_3))
+        .name(CUSTOMERS)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_3))
         .build();
     private static final PrivateDimensionR DIMENSION_4 = PrivateDimensionRBuilder
         .builder()
-        .name("Education Level")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_4))
+        .name(EDUCATION_LEVEL)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_4))
         .build();
     private static final PrivateDimensionR DIMENSION_5 = PrivateDimensionRBuilder
         .builder()
-        .name("Gender")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5))
+        .name(GENDER)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5))
         .build();
     private static final PrivateDimensionR DIMENSION_6 = PrivateDimensionRBuilder
         .builder()
         .name("Material Status")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_6))
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_6))
         .build();
     private static final PrivateDimensionR DIMENSION_7 = PrivateDimensionRBuilder
         .builder()
-        .name("Yearly Income")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_7))
+        .name(YEARLY_INCOME)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_7))
         .build();
     private static final PrivateDimensionR DIMENSION_3_1 = PrivateDimensionRBuilder
         .builder()
-        .name("Store Type")
-        .hierarchy(List.of(HIERARCHY_3_1))
+        .name(STORE_TYPE)
+        .hierarchies(List.of(HIERARCHY_3_1))
         .build();
     private static final PrivateDimensionR DIMENSION_3_2 = PrivateDimensionRBuilder
         .builder()
-        .name("Has coffee bar")
-        .hierarchy(List.of(HIERARCHY_3_2))
+        .name(HAS_COFFEE_BAR)
+        .hierarchies(List.of(HIERARCHY_3_2))
         .build();
     private static final PrivateDimensionR DIMENSION_4_1 = PrivateDimensionRBuilder
         .builder()
         .name("Time")
         .type(DimensionTypeEnum.TIME_DIMENSION)
         .foreignKey("pay_date")
-        .hierarchy(List.of(HIERARCHY_4_1))
+        .hierarchies(List.of(HIERARCHY_4_1))
         .build();
     private static final PrivateDimensionR DIMENSION_4_2 = PrivateDimensionRBuilder
         .builder()
-        .name("Store")
-        .foreignKey("employee_id")
-        .hierarchy(List.of(HIERARCHY_4_2))
+        .name(STORE)
+        .foreignKey(EMPLOYEE_ID)
+        .hierarchies(List.of(HIERARCHY_4_2))
         .build();
     private static final PrivateDimensionR DIMENSION_4_3 = PrivateDimensionRBuilder
         .builder()
         .name("Pay Type")
-        .foreignKey("employee_id")
-        .hierarchy(List.of(HIERARCHY_4_3))
+        .foreignKey(EMPLOYEE_ID)
+        .hierarchies(List.of(HIERARCHY_4_3))
         .build();
     private static final PrivateDimensionR DIMENSION_4_4 = PrivateDimensionRBuilder
         .builder()
-        .name("Store Type")
-        .foreignKey("employee_id")
-        .hierarchy(List.of(HIERARCHY_4_4))
+        .name(STORE_TYPE)
+        .foreignKey(EMPLOYEE_ID)
+        .hierarchies(List.of(HIERARCHY_4_4))
         .build();
     private static final PrivateDimensionR DIMENSION_4_5 = PrivateDimensionRBuilder
         .builder()
         .name("Position")
-        .foreignKey("employee_id")
-        .hierarchy(List.of(HIERARCHY_4_5))
+        .foreignKey(EMPLOYEE_ID)
+        .hierarchies(List.of(HIERARCHY_4_5))
         .build();
     private static final PrivateDimensionR DIMENSION_4_6 = PrivateDimensionRBuilder
         .builder()
         .name("Department")
-        .foreignKey("department_id")
-        .hierarchy(List.of(HIERARCHY_4_6))
+        .foreignKey(DEPARTMENT_ID)
+        .hierarchies(List.of(HIERARCHY_4_6))
         .build();
     private static final PrivateDimensionR DIMENSION_4_7 = PrivateDimensionRBuilder
         .builder()
         .name("Employees")
-        .foreignKey("employee_id")
-        .hierarchy(List.of(HIERARCHY_4_7))
+        .foreignKey(EMPLOYEE_ID)
+        .hierarchies(List.of(HIERARCHY_4_7))
         .build();
     private static final PrivateDimensionR DIMENSION_5_1 = PrivateDimensionRBuilder
         .builder()
-        .name("Store")
-        .foreignKey("store_id")
-        .hierarchy(List.of(HIERARCHY_5_1))
+        .name(STORE)
+        .foreignKey(STORE_ID_KEY)
+        .hierarchies(List.of(HIERARCHY_5_1))
         .build();
     private static final PrivateDimensionR DIMENSION_5_2 = PrivateDimensionRBuilder
         .builder()
         .name("Geography")
-        .foreignKey("store_id")
-        .hierarchy(List.of(HIERARCHY_5_2))
+        .foreignKey(STORE_ID_KEY)
+        .hierarchies(List.of(HIERARCHY_5_2))
         .build();
     private static final PrivateDimensionR DIMENSION_5_3 = PrivateDimensionRBuilder
         .builder()
-        .name("Promotion Media")
-        .foreignKey("promotion_id")
-        .hierarchy(List.of(HIERARCHY_5_3))
+        .name(PROMOTION_MEDIA)
+        .foreignKey(PROMOTION_ID)
+        .hierarchies(List.of(HIERARCHY_5_3))
         .build();
     private static final PrivateDimensionR DIMENSION_5_4 = PrivateDimensionRBuilder
         .builder()
-        .name("Promotions")
-        .foreignKey("promotion_id")
-        .hierarchy(List.of(HIERARCHY_5_4))
+        .name(PROMOTIONS)
+        .foreignKey(PROMOTION_ID)
+        .hierarchies(List.of(HIERARCHY_5_4))
         .build();
     private static final PrivateDimensionR DIMENSION_5_5 = PrivateDimensionRBuilder
         .builder()
-        .name("Customers")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5_5))
+        .name(CUSTOMERS)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5_5))
         .build();
     private static final PrivateDimensionR DIMENSION_5_6 = PrivateDimensionRBuilder
         .builder()
-        .name("Education Level")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5_6))
+        .name(EDUCATION_LEVEL)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5_6))
         .build();
     private static final PrivateDimensionR DIMENSION_5_7 = PrivateDimensionRBuilder
         .builder()
-        .name("Gender")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5_7))
+        .name(GENDER)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5_7))
         .build();
     private static final PrivateDimensionR DIMENSION_5_8 = PrivateDimensionRBuilder
         .builder()
-        .name("Marital Status")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5_8))
+        .name(MARITAL_STATUS)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5_8))
         .build();
     private static final PrivateDimensionR DIMENSION_5_9 = PrivateDimensionRBuilder
         .builder()
-        .name("Yearly Income")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_5_9))
+        .name(YEARLY_INCOME)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_5_9))
         .build();
     private static final PrivateDimensionR DIMENSION_6_1 = PrivateDimensionRBuilder
         .builder()
-        .name("Gender")
-        .foreignKey("customer_id")
-        .hierarchy(List.of(HIERARCHY_6_1))
+        .name(GENDER)
+        .foreignKey(CUSTOMER_ID)
+        .hierarchies(List.of(HIERARCHY_6_1))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_1 = PrivateDimensionRBuilder
         .builder()
-        .name("Store")
-        .hierarchy(List.of(HIERARCHY_SCHEMA_1))
+        .name(STORE)
+        .hierarchies(List.of(HIERARCHY_SCHEMA_1))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_2 = PrivateDimensionRBuilder
         .builder()
-        .name("Store Size in SQFT")
-        .hierarchy(List.of(HIERARCHY_SCHEMA_2))
+        .name(STORE_SIZE_IN_SQFT)
+        .hierarchies(List.of(HIERARCHY_SCHEMA_2))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_3 = PrivateDimensionRBuilder
         .builder()
-        .name("Store Type")
-        .hierarchy(List.of(HIERARCHY_SCHEMA_3))
+        .name(STORE_TYPE)
+        .hierarchies(List.of(HIERARCHY_SCHEMA_3))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_4 = PrivateDimensionRBuilder
         .builder()
         .name("Time")
         .type(DimensionTypeEnum.TIME_DIMENSION)
-        .hierarchy(List.of(HIERARCHY_SCHEMA_4_1, HIERARCHY_SCHEMA_4_2))
+        .hierarchies(List.of(HIERARCHY_SCHEMA_4_1, HIERARCHY_SCHEMA_4_2))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_5 = PrivateDimensionRBuilder
         .builder()
-        .name("Product")
-        .hierarchy(List.of(HIERARCHY_SCHEMA_5))
+        .name(PRODUCT)
+        .hierarchies(List.of(HIERARCHY_SCHEMA_5))
         .build();
     private static final PrivateDimensionR DIMENSION_SCHEMA_6 = PrivateDimensionRBuilder
         .builder()
-        .name("Warehouse")
-        .hierarchy(List.of(HIERARCHY_SCHEMA_6))
+        .name(WAREHOUSE)
+        .hierarchies(List.of(HIERARCHY_SCHEMA_6))
         .build();
 
     private static final AnnotationR ANNOTATION_1 = AnnotationRBuilder
@@ -1764,7 +1853,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
 
     private static final AggExcludeR CUBE1_TABLE_AGG_EXCLUDE1 = AggExcludeRBuilder
         .builder()
-        .name("agg_c_special_sales_fact_1997")
+        .name(AGG_C_SPECIAL_SALES_FACT_1997)
         .build();
     private static final AggExcludeR CUBE1_TABLE_AGG_EXCLUDE2 = AggExcludeRBuilder
         .builder()
@@ -1781,32 +1870,32 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
 
     private static final AggTable CUBE1_TABLE_AGG_TABLE1 = AggNameRBuilder
         .builder()
-        .name("agg_c_special_sales_fact_1997")
+        .name(AGG_C_SPECIAL_SALES_FACT_1997)
         .aggFactCount(
-            AggColumnNameRBuilder.builder().column("agg_c_special_sales_fact_1997").build())
-        .aggIgnoreColumn(List.of(
+            AggColumnNameRBuilder.builder().column(AGG_C_SPECIAL_SALES_FACT_1997).build())
+        .aggIgnoreColumns(List.of(
             AggColumnNameRBuilder.builder().column("foo").build(),
             AggColumnNameRBuilder.builder().column("bar").build()
         ))
-        .aggForeignKey(List.of(
-            AggForeignKeyRBuilder.builder().factColumn("product_id").aggColumn("PRODUCT_ID").build(),
-            AggForeignKeyRBuilder.builder().factColumn("customer_id").aggColumn("CUSTOMER_ID").build(),
-            AggForeignKeyRBuilder.builder().factColumn("promotion_id").aggColumn("PROMOTION_ID").build(),
-            AggForeignKeyRBuilder.builder().factColumn("store_id").aggColumn("STORE_ID").build()
+        .aggForeignKeys(List.of(
+            AggForeignKeyRBuilder.builder().factColumn(PRODUCT_ID).aggColumn("PRODUCT_ID").build(),
+            AggForeignKeyRBuilder.builder().factColumn(CUSTOMER_ID).aggColumn("CUSTOMER_ID").build(),
+            AggForeignKeyRBuilder.builder().factColumn(PROMOTION_ID).aggColumn("PROMOTION_ID").build(),
+            AggForeignKeyRBuilder.builder().factColumn(STORE_ID_KEY).aggColumn("STORE_ID").build()
         ))
-        .aggMeasure(List.of(
+        .aggMeasures(List.of(
             AggMeasureRBuilder.builder().name("[Measures].[Unit Sales]").column("UNIT_SALES_SUM").build(),
             AggMeasureRBuilder.builder().name("[Measures].[Store Cost]").column("STORE_COST_SUM").build(),
             AggMeasureRBuilder.builder().name("[Measures].[Store Sales]").column("STORE_SALES_SUM").build()
         ))
-        .aggLevel(List.of(
+        .aggLevels(List.of(
             AggLevelRBuilder.builder().name("[Time].[Year]").column("TIME_YEAR").build(),
             AggLevelRBuilder.builder().name("[Time].[Quarter]").column("TIME_QUARTER").build(),
             AggLevelRBuilder.builder().name("[Time].[Month]").column("TIME_MONTH").build()
         ))
         .build();
 
-    private static final TableR CUBE1_TABLE = new TableR("sales_fact_1997",
+    private static final TableR CUBE1_TABLE = new TableR(SALES_FACT_1997,
         List.of(
             CUBE1_TABLE_AGG_EXCLUDE1,
             CUBE1_TABLE_AGG_EXCLUDE2,
@@ -1817,83 +1906,83 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             CUBE1_TABLE_AGG_TABLE1
         ));
     private static final TableR CUBE2_TABLE = new TableR("inventory_fact_1997");
-    private static final TableR CUBE3_TABLE = new TableR("store");
+    private static final TableR CUBE3_TABLE = new TableR(STORE_TABLE_NAME);
     private static final TableR CUBE4_TABLE = new TableR("salary");
-    private static final TableR CUBE5_TABLE = new TableR("sales_fact_1997",
+    private static final TableR CUBE5_TABLE = new TableR(SALES_FACT_1997,
         List.of(
             AggExcludeRBuilder.builder().name("agg_pc_10_sales_fact_1997").build(),
             AggExcludeRBuilder.builder().name("agg_lc_10_sales_fact_1997").build()
         ),
         null);
-    private static final TableR CUBE6_TABLE = new TableR("sales_fact_1997");
+    private static final TableR CUBE6_TABLE = new TableR(SALES_FACT_1997);
 
     private static final CalculatedMemberR CALCULATEDMEMBER_1 = CalculatedMemberRBuilder
         .builder()
         .name("Profit")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formula("[Measures].[Store Sales] - [Measures].[Store Cost]")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_1))
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_1))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_2 = CalculatedMemberRBuilder
         .builder()
         .name("Profit last Period")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formula("COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit]")
         .visible(false)
-        .calculatedMemberProperty(List.of(
+        .calculatedMemberProperties(List.of(
             CALCULATEDMEMBER_PROPERTY_2_1,
             CALCULATEDMEMBER_PROPERTY_2_2))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_3 = CalculatedMemberRBuilder
         .builder()
         .name("Profit Growth")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formula("([Measures].[Profit] - [Measures].[Profit last Period]) / [Measures].[Profit last Period]")
         .visible(true)
         .caption("Gewinn-Wachstum")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_3))
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_3))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_2_1 = CalculatedMemberRBuilder
         .builder()
         .name("Average Warehouse Sale")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formula("[Measures].[Warehouse Sales] / [Measures].[Warehouse Cost]")
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_2_1))
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_2_1))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_4_1 = CalculatedMemberRBuilder
         .builder()
         .name("Employee Salary")
-        .dimension("Measures")
-        .formatString("Currency")
+        .dimension(MEASURES)
+        .formatString(CURRENCY)
         .formula("([Employees].currentmember.datamember, [Measures].[Org Salary])")
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_4_2 = CalculatedMemberRBuilder
         .builder()
         .name("Avg Salary")
-        .dimension("Measures")
-        .formatString("Currency")
+        .dimension(MEASURES)
+        .formatString(CURRENCY)
         .formula("[Measures].[Org Salary]/[Measures].[Number of Employees]")
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_6_1 = CalculatedMemberRBuilder
         .builder()
         .name("Profit")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formulaElement(FormulaRBuilder.builder().cdata("[Measures].[Store Sales] - [Measures].[Store Cost]").build())
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_1_A,
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_1_A,
             CALCULATEDMEMBER_PROPERTY_6_1_B))
         .build();
     private static final CalculatedMemberR CALCULATEDMEMBER_6_2 = CalculatedMemberRBuilder
         .builder()
         .name("Profit last Period")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formula("COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit])")
         .visible(false)
-        .calculatedMemberProperty(List.of(CALCULATEDMEMBER_PROPERTY_6_2_A))
+        .calculatedMemberProperties(List.of(CALCULATEDMEMBER_PROPERTY_6_2_A))
         .build();
     private static final CalculatedMemberR VIRTUAL_CALCULATED_MEMBER_1 = CalculatedMemberRBuilder
         .builder()
         .name("Profit Per Unit Shipped")
-        .dimension("Measures")
+        .dimension(MEASURES)
         .formulaElement(FormulaRBuilder
             .builder()
             .cdata("[Measures].[Profit] / [Measures].[Units Shipped]</Formula")
@@ -1910,14 +1999,14 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final CubeR CUBE_1 = CubeRBuilder
         .builder()
         .name(CUBE_NAME_1)
-        .defaultMeasure("Unit Sales")
+        .defaultMeasure(UNIT_SALES)
         .annotations(List.of(ANNOTATION_1,
             ANNOTATION_2,
             ANNOTATION_3,
             ANNOTATION_4,
             ANNOTATION_5))
         .fact(CUBE1_TABLE)
-        .dimensionUsageOrDimension(List.of(
+        .dimensionUsageOrDimensions(List.of(
             DIMENSION_USAGE_1,
             DIMENSION_USAGE_2,
             DIMENSION_USAGE_3,
@@ -1930,29 +2019,29 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             DIMENSION_5,
             DIMENSION_6,
             DIMENSION_7))
-        .measure(List.of(
+        .measures(List.of(
             MEASURE_1_1,
             MEASURE_1_2,
             MEASURE_1_3,
             MEASURE_1_4,
             MEASURE_1_5,
             MEASURE_1_6))
-        .calculatedMember(List.of(
+        .calculatedMembers(List.of(
             CALCULATEDMEMBER_1,
             CALCULATEDMEMBER_2,
             CALCULATEDMEMBER_3))
         .build();
     private static final CubeR CUBE_2 = CubeRBuilder
         .builder()
-        .name("Warehouse")
+        .name(WAREHOUSE)
         .fact(CUBE2_TABLE)
-        .dimensionUsageOrDimension(List.of(DIMENSION_USAGE_1,
+        .dimensionUsageOrDimensions(List.of(DIMENSION_USAGE_1,
             DIMENSION_USAGE_2,
             DIMENSION_USAGE_3,
             DIMENSION_USAGE_4,
             DIMENSION_USAGE_5,
             DIMENSION_USAGE_6))
-        .measure(List.of(
+        .measures(List.of(
             MEASURE_2_1,
             MEASURE_2_2,
             MEASURE_2_3,
@@ -1960,18 +2049,18 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             MEASURE_2_5,
             MEASURE_2_6,
             MEASURE_2_7))
-        .calculatedMember(List.of(CALCULATEDMEMBER_2_1))
-        .namedSet(List.of(NAMED_SET_2_1))
+        .calculatedMembers(List.of(CALCULATEDMEMBER_2_1))
+        .namedSets(List.of(NAMED_SET_2_1))
         .build();
     private static final CubeR CUBE_3 = CubeRBuilder
         .builder()
-        .name("Store")
+        .name(STORE)
         .fact(CUBE3_TABLE)
-        .dimensionUsageOrDimension(List.of(
+        .dimensionUsageOrDimensions(List.of(
             DIMENSION_3_1,
             DIMENSION_3_2,
             DIMENSION_USAGE_3_1))
-        .measure(List.of(
+        .measures(List.of(
             MEASURE_3_1,
             MEASURE_3_2))
         .build();
@@ -1979,7 +2068,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .builder()
         .name("HR")
         .fact(CUBE4_TABLE)
-        .dimensionUsageOrDimension(List.of(
+        .dimensionUsageOrDimensions(List.of(
             DIMENSION_4_1,
             DIMENSION_4_2,
             DIMENSION_4_3,
@@ -1987,11 +2076,11 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             DIMENSION_4_5,
             DIMENSION_4_6,
             DIMENSION_4_7))
-        .measure(List.of(
+        .measures(List.of(
             MEASURE_4_1,
             MEASURE_4_2,
             MEASURE_4_3))
-        .calculatedMember(List.of(
+        .calculatedMembers(List.of(
             CALCULATEDMEMBER_4_1,
             CALCULATEDMEMBER_4_2))
         .build();
@@ -1999,13 +2088,13 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .builder()
         .name("Sales Ragged")
         .fact(CUBE5_TABLE)
-        .measure(List.of(
+        .measures(List.of(
             MEASURE_5_1,
             MEASURE_5_2,
             MEASURE_5_3,
             MEASURE_5_4,
             MEASURE_5_5))
-        .dimensionUsageOrDimension(List.of(
+        .dimensionUsageOrDimensions(List.of(
             DIMENSION_5_1,
             DIMENSION_5_2,
             DIMENSION_5_3,
@@ -2024,55 +2113,55 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .builder()
         .name("Sales 2")
         .fact(CUBE6_TABLE)
-        .measure(List.of(MEASURE_6_1,
+        .measures(List.of(MEASURE_6_1,
             MEASURE_6_2,
             MEASURE_6_3,
             MEASURE_6_4,
             MEASURE_6_5))
-        .calculatedMember(List.of(CALCULATEDMEMBER_6_1,
+        .calculatedMembers(List.of(CALCULATEDMEMBER_6_1,
             CALCULATEDMEMBER_6_2))
-        .dimensionUsageOrDimension(List.of(DIMENSION_USAGE_4,
+        .dimensionUsageOrDimensions(List.of(DIMENSION_USAGE_4,
             DIMENSION_USAGE_5,
             DIMENSION_6_1))
         .build();
 
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_1 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Customers")
+        .cubeName(SALES)
+        .name(CUSTOMERS)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_2 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Education Level")
+        .cubeName(SALES)
+        .name(EDUCATION_LEVEL)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_3 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Gender")
+        .cubeName(SALES)
+        .name(GENDER)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_4 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Marital Status")
+        .cubeName(SALES)
+        .name(MARITAL_STATUS)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_5 = VirtualCubeDimensionRBuilder
         .builder()
-        .name("Product")
+        .name(PRODUCT)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_6 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Promotion Media")
+        .cubeName(SALES)
+        .name(PROMOTION_MEDIA)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_7 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Promotions")
+        .cubeName(SALES)
+        .name(PROMOTIONS)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_8 = VirtualCubeDimensionRBuilder
         .builder()
-        .name("Store")
+        .name(STORE)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_9 = VirtualCubeDimensionRBuilder
         .builder()
@@ -2080,92 +2169,92 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_10 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Sales")
-        .name("Yearly Income")
+        .cubeName(SALES)
+        .name(YEARLY_INCOME)
         .build();
     private static final VirtualCubeDimensionR VIRTUAL_DIMENSION_11 = VirtualCubeDimensionRBuilder
         .builder()
-        .cubeName("Warehouse")
-        .name("Warehouse")
+        .cubeName(WAREHOUSE)
+        .name(WAREHOUSE)
         .build();
 
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_1 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Sales Count]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_2 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Store Cost]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_3 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Store Sales]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_4 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Unit Sales]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_5 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Profit]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_6 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Sales")
+        .cubeName(SALES)
         .name("[Measures].[Profit Growth]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_7 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Store Invoice]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_8 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Supply Time]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_9 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Units Ordered]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_10 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Units Shipped]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_11 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Warehouse Cost]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_12 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Warehouse Profit]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_13 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Warehouse Sales]")
         .build();
     private static final VirtualCubeMeasureR VIRTUAL_MEASURE_14 = VirtualCubeMeasureRBuilder
         .builder()
-        .cubeName("Warehouse")
+        .cubeName(WAREHOUSE)
         .name("[Measures].[Average Warehouse Sale]")
         .build();
 
     private static final VirtualCubeR VIRTUAL_CUBE_1 = VirtualCubeRBuilder
         .builder()
         .name("Warehouse and Sales")
-        .defaultMeasure("Store Sales")
-        .calculatedMember(List.of(VIRTUAL_CALCULATED_MEMBER_1))
-        .virtualCubeMeasure(List.of(VIRTUAL_MEASURE_1,
+        .defaultMeasure(STORE_SALES)
+        .calculatedMembers(List.of(VIRTUAL_CALCULATED_MEMBER_1))
+        .virtualCubeMeasures(List.of(VIRTUAL_MEASURE_1,
             VIRTUAL_MEASURE_2,
             VIRTUAL_MEASURE_3,
             VIRTUAL_MEASURE_4,
@@ -2179,7 +2268,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             VIRTUAL_MEASURE_12,
             VIRTUAL_MEASURE_13,
             VIRTUAL_MEASURE_14))
-        .virtualCubeDimension(List.of(VIRTUAL_DIMENSION_1,
+        .virtualCubeDimensions(List.of(VIRTUAL_DIMENSION_1,
             VIRTUAL_DIMENSION_2,
             VIRTUAL_DIMENSION_3,
             VIRTUAL_DIMENSION_4,
@@ -2194,19 +2283,19 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
 
     private static final RoleR ROLE_1 = RoleRBuilder
         .builder().name("California manager")
-        .schemaGrant(List.of(SchemaGrantRBuilder
+        .schemaGrants(List.of(SchemaGrantRBuilder
             .builder()
             .access(AccessEnum.NONE)
-            .cubeGrant(List.of(CubeGrantRBuilder
+            .cubeGrants(List.of(CubeGrantRBuilder
                 .builder()
-                .cube("Sales")
+                .cube(SALES)
                 .access("all")
-                .hierarchyGrant(List.of(HierarchyGrantRBuilder
+                .hierarchyGrants(List.of(HierarchyGrantRBuilder
                         .builder()
                         .hierarchy("[Store]")
                         .access(AccessEnum.CUSTOM)
                         .topLevel("[Store].[Store Country]")
-                        .memberGrant(List.of(MemberGrantRBuilder
+                        .memberGrants(List.of(MemberGrantRBuilder
                                 .builder()
                                 .member("[Store].[USA].[CA]")
                                 .access(MemberGrantAccessEnum.ALL)
@@ -2223,7 +2312,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
                         .access(AccessEnum.CUSTOM)
                         .topLevel("[Customers].[State Province]")
                         .bottomLevel("[Customers].[City]")
-                        .memberGrant(List.of(MemberGrantRBuilder
+                        .memberGrants(List.of(MemberGrantRBuilder
                                 .builder()
                                 .member("[Customers].[USA].[CA]")
                                 .access(MemberGrantAccessEnum.ALL)
@@ -2245,10 +2334,10 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final RoleR ROLE_2 = RoleRBuilder
         .builder()
         .name("No HR Cube")
-        .schemaGrant(List.of(SchemaGrantRBuilder
+        .schemaGrants(List.of(SchemaGrantRBuilder
             .builder()
             .access(AccessEnum.ALL)
-            .cubeGrant(List.of(CubeGrantRBuilder
+            .cubeGrants(List.of(CubeGrantRBuilder
                 .builder()
                 .cube("HR")
                 .access("none")
@@ -2258,7 +2347,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final RoleR ROLE_3 = RoleRBuilder
         .builder()
         .name("Administrator")
-        .schemaGrant(List.of(SchemaGrantRBuilder
+        .schemaGrants(List.of(SchemaGrantRBuilder
             .builder()
             .access(AccessEnum.ALL)
             .build()))
@@ -2267,7 +2356,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
     private static final Schema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
-        .dimension(List.of(
+        .dimensions(List.of(
             DIMENSION_SCHEMA_1,
             DIMENSION_SCHEMA_2,
             DIMENSION_SCHEMA_3,
@@ -2275,13 +2364,13 @@ public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaPro
             DIMENSION_SCHEMA_5,
             DIMENSION_SCHEMA_6
         ))
-        .cube(List.of(CUBE_1,
+        .cubes(List.of(CUBE_1,
             CUBE_2,
             CUBE_3,
             CUBE_4,
             CUBE_5,
             CUBE_6))
-        .virtualCube(List.of(VIRTUAL_CUBE_1))
+        .virtualCubes(List.of(VIRTUAL_CUBE_1))
         .roles(List.of(ROLE_1, ROLE_2, ROLE_3))
         .build();
 

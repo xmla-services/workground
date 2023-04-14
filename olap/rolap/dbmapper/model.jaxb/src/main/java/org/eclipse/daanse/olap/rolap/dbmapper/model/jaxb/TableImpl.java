@@ -31,19 +31,19 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Table", propOrder = { "sql", "aggExclude", "aggTable", "hint" })
+@XmlType(name = "Table", propOrder = { "sql", "aggExcludes", "aggTables", "hints" })
 @XmlRootElement(name = "Table")
 public class TableImpl implements Table {
 
     @XmlElement(name = "SQL")
     protected SQLImpl sql;
     @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
-    protected List<AggExclude> aggExclude;
+    protected List<AggExclude> aggExcludes;
     @XmlElements({ @XmlElement(name = "AggName", type = AggNameImpl.class),
             @XmlElement(name = "AggPattern", type = AggPatternImpl.class) })
-    protected List<AggTable> aggTable;
+    protected List<AggTable> aggTables;
     @XmlElement(name = "Hint", type = HintImpl.class)
-    protected List<Hint> hint;
+    protected List<Hint> hints;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "schema")
@@ -61,27 +61,27 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<AggExclude> aggExclude() {
-        if (aggExclude == null) {
-            aggExclude = new ArrayList<>();
+    public List<AggExclude> aggExcludes() {
+        if (aggExcludes == null) {
+            aggExcludes = new ArrayList<>();
         }
-        return this.aggExclude;
+        return this.aggExcludes;
     }
 
     @Override
-    public List<AggTable> aggTable() {
-        if (aggTable == null) {
-            aggTable = new ArrayList<>();
+    public List<AggTable> aggTables() {
+        if (aggTables == null) {
+            aggTables = new ArrayList<>();
         }
-        return this.aggTable;
+        return this.aggTables;
     }
 
     @Override
-    public List<Hint> hint() {
-        if (hint == null) {
-            hint = new ArrayList<>();
+    public List<Hint> hints() {
+        if (hints == null) {
+            hints = new ArrayList<>();
         }
-        return this.hint;
+        return this.hints;
     }
 
     @Override

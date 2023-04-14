@@ -23,7 +23,7 @@ public interface Measure {
 
     ExpressionView measureExpression();
 
-    List<CalculatedMemberProperty> calculatedMemberProperty();
+    List<CalculatedMemberProperty> calculatedMemberProperties();
 
     String name();
 

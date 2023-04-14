@@ -127,7 +127,7 @@ class RolapSchemaTest {
     @Test
     void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
         RoleImpl role = new RoleImpl();
-        role.setSchemaGrant(
+        role.setSchemaGrants(
             List.of(new SchemaGrantImpl()));
         role.setUnion(new UnionImpl());
 
@@ -149,7 +149,7 @@ class RolapSchemaTest {
 
         RoleImpl role = new RoleImpl();
         UnionImpl unionImpl = new UnionImpl();
-        unionImpl.setRoleUsage(List.of(usage));
+        unionImpl.setRoleUsages(List.of(usage));
         role.setUnion(unionImpl);
 
         try {
@@ -173,7 +173,7 @@ class RolapSchemaTest {
 
         SchemaGrantImpl grant = new SchemaGrantImpl();
         grant.setAccess(AccessEnum.CUSTOM);
-        grant.setCubeGrant(List.of(new CubeGrantImpl(), new CubeGrantImpl()));
+        grant.setCubeGrants(List.of(new CubeGrantImpl(), new CubeGrantImpl()));
 
         mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
@@ -397,7 +397,7 @@ class RolapSchemaTest {
         grant.setAccess(AccessEnum.CUSTOM);
         grant.setRollupPolicy(RollupPolicy.FULL.toString());
         grant.setHierarchy("hierarchy");
-        grant.setMemberGrant(List.of(memberGrant));
+        grant.setMemberGrants(List.of(memberGrant));
 
         Level level = mock(Level.class);
         Hierarchy hierarchy = mock(Hierarchy.class);

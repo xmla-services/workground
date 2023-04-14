@@ -25,13 +25,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
 
 public record AggPatternR(String pattern,
                           AggColumnName aggFactCount,
-                          List<AggColumnName> aggIgnoreColumn,
-                          List<AggForeignKey> aggForeignKey,
-                          List<AggMeasure> aggMeasure,
-                          List<AggLevel> aggLevel,
-                          List<AggExclude> aggExclude,
+                          List<AggColumnName> aggIgnoreColumns,
+                          List<AggForeignKey> aggForeignKeys,
+                          List<AggMeasure> aggMeasures,
+                          List<AggLevel> aggLevels,
+                          List<AggExclude> aggExcludes,
                           boolean ignorecase,
-                          List<AggMeasureFactCount> measuresFactCount)
+                          List<AggMeasureFactCount> measuresFactCounts)
         implements AggPattern {
 
 }

@@ -32,7 +32,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperty", "cellFormatter", "formulaElement" })
+@XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperties", "cellFormatter", "formulaElement" })
 @XmlRootElement(name = "CalculatedMember")
 public class CalculatedMemberImpl implements CalculatedMember {
 
@@ -42,7 +42,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
     @XmlAttribute(name = "formula")
     protected String formula;
     @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
-    protected List<CalculatedMemberProperty> calculatedMemberProperty;
+    protected List<CalculatedMemberProperty> calculatedMemberProperties;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "formatString")
@@ -128,11 +128,11 @@ public class CalculatedMemberImpl implements CalculatedMember {
      *
      */
     @Override
-    public List<CalculatedMemberProperty> calculatedMemberProperty() {
-        if (calculatedMemberProperty == null) {
-            calculatedMemberProperty = new ArrayList<>();
+    public List<CalculatedMemberProperty> calculatedMemberProperties() {
+        if (calculatedMemberProperties == null) {
+            calculatedMemberProperties = new ArrayList<>();
         }
-        return this.calculatedMemberProperty;
+        return this.calculatedMemberProperties;
     }
 
     /**

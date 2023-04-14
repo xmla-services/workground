@@ -5,6 +5,7 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -71,8 +72,8 @@ import org.slf4j.LoggerFactory;
 
 public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(MandantoriesSchemaWalker.class);
-    private final String[] DEF_LEVEL = {"column", "nameColumn", "parentColumn", "ordinalColumn", "captionColumn"};
+    private static final Logger LOGGER = LoggerFactory.getLogger(MandantoriesSchemaWalker.class);
+    private static final String[] DEF_LEVEL = {"column", "nameColumn", "parentColumn", "ordinalColumn", "captionColumn"};
 
     public MandantoriesSchemaWalker(MandantoriesVerifierConfig config) {
     }
@@ -80,13 +81,12 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     public List<VerificationResult> checkSchema(Schema schema) {
         super.checkSchema(schema);
-        if (schema != null ) {
+        if (schema != null) {
             if (isEmpty(schema.name())) {
                 results.add(new VerificationResultR(SCHEMA, SCHEMA_NAME_MUST_BE_SET, ERROR,
                     Cause.SCHEMA));
             }
-        }
-        else {
+        } else {
             results.add(new VerificationResultR(SCHEMA, SCHEMA_MUST_BE_NOT_NULL, ERROR,
                 Cause.SCHEMA));
         }
@@ -97,7 +97,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkCube(Cube cube) {
         super.checkCube(cube);
-        if (cube != null ) {
+        if (cube != null) {
             if (isEmpty(cube.name())) {
                 results.add(new VerificationResultR(CUBE, CUBE_NAME_MUST_SET, Level.ERROR,
                     Cause.SCHEMA));
@@ -112,7 +112,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             }
 
             //CubeDimension
-            if (cube.dimensionUsageOrDimension() == null || cube.dimensionUsageOrDimension()
+            if (cube.dimensionUsageOrDimensions() == null || cube.dimensionUsageOrDimensions()
                 .isEmpty()) {
                 String msg = String.format(CUBE_WITH_NAME_MUST_CONTAIN, orNotSet(cube.name()), DIMENSIONS);
                 results.add(new VerificationResultR(DIMENSIONS, msg,
@@ -120,7 +120,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             }
 
             //Measure
-            if (cube.measure() == null || cube.measure()
+            if (cube.measures() == null || cube.measures()
                 .isEmpty()) {
                 String msg = String.format(CUBE_WITH_NAME_MUST_CONTAIN, orNotSet(cube.name()), MEASURE);
                 results.add(new VerificationResultR(MEASURE, msg, ERROR,
@@ -132,7 +132,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkMeasure(Measure measure, Cube cube) {
         super.checkMeasure(measure, cube);
-        if (measure != null ) {
+        if (measure != null) {
             if (isEmpty(measure.name())) {
                 String msg = String.format(MEASURE_NAME_MUST_BE_SET, orNotSet(cube.name()));
                 results.add(new VerificationResultR(MEASURE, msg, ERROR, Cause.SCHEMA));
@@ -170,7 +170,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
         super.checkCubeDimension(cubeDimension, cube);
-        if (cube != null ) {
+        if (cube != null) {
             if (isEmpty(cubeDimension.name())) {
                 String msg = String.format(CUBE_DIMENSION_NAME_MUST_BE_SET, orNotSet(cube.name()));
                 results.add(new VerificationResultR(CUBE_DIMENSION, msg, ERROR, Cause.SCHEMA));
@@ -188,71 +188,21 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
         super.checkHierarchy(hierarchy, cubeDimension, cube);
 
-        if (hierarchy != null ) {
-            if (hierarchy.relation() instanceof Join) {
-                if (isEmpty(hierarchy.primaryKeyTable())) {
-                    if (isEmpty(hierarchy.primaryKey())) {
-                        String msg = String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN,
-                            orNotSet(cubeDimension.name()));
-                        results.add(new VerificationResultR(
-                            HIERARCHY, msg, ERROR, Cause.SCHEMA));
+        if (hierarchy != null) {
+            checkHierarchyJoin(hierarchy, cubeDimension);
 
-                    } else {
-                        String msg = String.format(PRIMARY_KEY_TABLE_MUST_BE_SET_FOR_JOIN, orNotSet(cubeDimension.name()));
-                        results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
-                    }
-                }
-                if (isEmpty(hierarchy.primaryKey())) {
-                    String msg = String.format(PRIMARY_KEY_MUST_BE_SET_FOR_JOIN, orNotSet(cubeDimension.name()));
-                    results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
-                }
-            }
 
             //Level
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level> levels = hierarchy.level();
-            if (levels == null || levels.isEmpty()) {
-                String msg = String.format(LEVEL_MUST_BE_SET_FOR_HIERARCHY, orNotSet(cubeDimension.name()));
-                results.add(new VerificationResultR(HIERARCHY,
-                    msg, ERROR, Cause.SCHEMA));
-            }
+            checkHierarchyLevels(hierarchy, cubeDimension);
+
 
             // Validates against primaryKeyTable name on field when using
             // Table.
-            if (hierarchy.relation() instanceof Table table) {
-                if (!isEmpty(hierarchy.primaryKeyTable())) {
-                    String msg = String.format(HIERARCHY_TABLE_FIELD_MUST_BE_EMPTY, orNotSet(cubeDimension.name()));
-                    results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
-                }
-                checkTable(table);
-            }
+            checkHierarchyTable(hierarchy, cubeDimension);
 
             // Validates that the value at primaryKeyTable corresponds to
             // tables in joins.
-            String primaryKeyTable = hierarchy.primaryKeyTable();
-            if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Join join)) {
-                TreeSet<String> joinTables = new TreeSet<>();
-                SchemaExplorer.getTableNamesForJoin(hierarchy.relation(), joinTables);
-                if (!joinTables.contains(primaryKeyTable)) {
-                    String msg = String.format(HIERARCHY_TABLE_VALUE_DOES_NOT_CORRESPOND_TO_ANY_JOIN,
-                        orNotSet(cubeDimension.name()));
-                    results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.DATABASE));
-                }
-                checkJoin(join);
-            }
-
-            if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Table theTable)) {
-                String compareTo = (theTable.alias() != null && theTable.alias()
-                    .trim()
-                    .length() > 0) ? theTable.alias() : theTable.name();
-                if (!primaryKeyTable.equals(compareTo)) {
-                    String msg = String.format(HIERARCHY_TABLE_VALUE_DOES_NOT_CORRESPOND_TO_HIERARCHY_RELATION,
-                        orNotSet(cubeDimension.name()));
-                    results.add(new VerificationResultR(HIERARCHY,
-                        msg, ERROR,
-                        Cause.DATABASE));
-                }
-                checkTable(theTable);
-            }
+            checkHierarchyPrimaryKeyTable(hierarchy, cubeDimension);
         }
 
     }
@@ -260,7 +210,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkJoin(Join join) {
         super.checkJoin(join);
-        if (join != null ) {
+        if (join != null) {
             if (isEmpty(join.leftKey())) {
                 results.add(new VerificationResultR(JOIN, JOIN_LEFT_KEY_MUST_BE_SET, ERROR,
                     Cause.SCHEMA));
@@ -269,7 +219,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
                 results.add(new VerificationResultR(JOIN, JOIN_RIGHT_KEY_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
             }
-            if (join.relation() == null || join.relation().size() < 2) {
+            if (join.relations() == null || join.relations().size() < 2) {
                 results.add(new VerificationResultR(JOIN, JOIN_RELATION_MUST_BE_SET_LEFT_AND_RIGHT,
                     ERROR, Cause.SCHEMA));
             }
@@ -279,7 +229,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkTable(Table table) {
         super.checkTable(table);
-        if (table != null ) {
+        if (table != null) {
             if (isEmpty(table.name())) {
                 results.add(
                     new VerificationResultR(TABLE, TABLE_NAME_MUST_BE_SET, ERROR, Cause.DATABASE));
@@ -309,37 +259,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         // where dimension columns exist in fact table and there is no
         // separate table.
 
-        if (level != null ) {
-            if (level.levelType() != null) {
-                // Empty leveltype is treated as default value of "Regular""
-                // which is ok with standard/time dimension.
-                if (parentDimension != null) {
-                    if ((parentDimension.type() == null || parentDimension.type()
-                        .equals(DimensionTypeEnum.STANDARD_DIMENSION)) && level.levelType() != null
-                        && (!level.levelType()
-                        .equals(LevelTypeEnum.REGULAR))) {
-                        // If dimension type is 'standard' then leveltype
-                        // should be 'regular'
-                        String msg = String.format(LEVEL_LEVEL_TYPE_S_CAN_ONLY_BE_USED_WITH_A_TIME_DIMENSION,
-                            level.levelType()
-                                .getValue());
-                        results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
-
-                    } else if (parentDimension.type() != null && (parentDimension.type()
-                        .equals(DimensionTypeEnum.TIME_DIMENSION)) && level.levelType() != null && (level.levelType()
-                        .equals(LevelTypeEnum.REGULAR))) {
-                        // If dimension type is 'time' then leveltype value
-                        // could be 'timeyears', 'timedays' etc'
-                        String msg = String.format(LEVEL_TYPE_S_CAN_ONLY_BE_USED_WITH_A_STANDARD_DIMENSION,
-                            level.levelType()
-                                .getValue());
-                        results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
-                    }
-                }
-            }
-            if (level.type() != null) {
-                results.add(new VerificationResultR(LEVEL, LEVEL_TYPE_MUST_BE_SET, WARNING, Cause.SCHEMA));
-            }
+        if (level != null) {
+            checkLevelType(level, parentDimension);
             // verify level's name is set
             if (isEmpty(level.name())) {
                 String msg = String.format(LEVEL_NAME_MUST_BE_SET, orNotSet(hierarchy.name()));
@@ -347,34 +268,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             }
 
             // check level's column is in fact table
-            String column = level.column();
-            if (isEmpty(column)) {
-                if (level.property() == null || level.property().isEmpty()) {
-                    String msg = String.format(LEVEL_COLUMN_MUST_BE_SET, orNotSet(hierarchy.name()));
-                    results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
-                } else {
-                    level.property()
-                        .forEach(p -> checkProperty(p, level, hierarchy, cube));
-                }
-            } else {
-                // Enforces validation for all column types against invalid
-                // value.
-                String theMessage = null;
-                try {
-                    for (String element : DEF_LEVEL) {
-                        Field theField = level.getClass()
-                            .getDeclaredField(element);
-                        theField.setAccessible(true);
-                        column = (String) theField.get(level);
-                        checkColumn(column, element, level, cube, hierarchy);
-                        if (theMessage != null) {
-                            break;
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOGGER.error("Validation", ex);
-                }
-            }
+            checkLevelColumn(level, hierarchy, cube);
             if (level.memberFormatter() != null) {
                 checkElementFormatter(level.memberFormatter());
             }
@@ -398,7 +292,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         // there is no separate table.
 
         // check property's column is in table
-        if (property != null ) {
+        if (property != null) {
             String column = property.column();
             if (isEmpty(column)) {
                 results.add(new VerificationResultR(PROPERTY, PROPERTY_COLUMN_MUST_BE_SET, ERROR, Cause.SCHEMA));
@@ -414,18 +308,18 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkVirtualCube(VirtualCube virtCube) {
         super.checkVirtualCube(virtCube);
-        if (virtCube != null ) {
+        if (virtCube != null) {
             if (isEmpty(virtCube.name())) {
                 results.add(new VerificationResultR(VIRTUAL_CUBE, VIRTUAL_CUBE_NAME_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
 
             }
-            if (virtCube.virtualCubeDimension() == null || virtCube.virtualCubeDimension().isEmpty()) {
+            if (virtCube.virtualCubeDimensions() == null || virtCube.virtualCubeDimensions().isEmpty()) {
                 String msg = String.format(VIRTUAL_CUBE_MUST_CONTAIN_DIMENSIONS, orNotSet(virtCube.name()));
                 results.add(new VerificationResultR(VIRTUAL_CUBE,
                     msg, ERROR, Cause.SCHEMA));
             }
-            if (virtCube.virtualCubeMeasure() == null || virtCube.virtualCubeMeasure().isEmpty()) {
+            if (virtCube.virtualCubeMeasures() == null || virtCube.virtualCubeMeasures().isEmpty()) {
                 String msg = String.format(VIRTUAL_CUBE_MUST_CONTAIN_MEASURES, orNotSet(virtCube.name()));
                 results.add(new VerificationResultR(VIRTUAL_CUBE, msg, ERROR, Cause.SCHEMA));
             }
@@ -435,17 +329,19 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkCalculatedMember(CalculatedMember calculatedMember) {
         super.checkCalculatedMember(calculatedMember);
-        if (calculatedMember != null ) {
+        if (calculatedMember != null) {
             if (isEmpty(calculatedMember.name())) {
                 results.add(new VerificationResultR(CALCULATED_MEMBER,
                     CALCULATED_MEMBER_NAME_MUST_BE_SET, ERROR, Cause.SCHEMA));
             }
             if (isEmpty(calculatedMember.dimension())) {
-                String msg = String.format(DIMENSION_MUST_BE_SET_FOR_CALCULATED_MEMBER, orNotSet(calculatedMember.name()));
+                String msg = String.format(DIMENSION_MUST_BE_SET_FOR_CALCULATED_MEMBER,
+                    orNotSet(calculatedMember.name()));
                 results.add(new VerificationResultR(CALCULATED_MEMBER, msg, ERROR, Cause.SCHEMA));
             }
             if (isEmpty(calculatedMember.formula()) && calculatedMember.formulaElement() == null) {
-                String msg = String.format(FORMULA_MUST_BE_SET_FOR_CALCULATED_MEMBER, orNotSet(calculatedMember.name()));
+                String msg = String.format(FORMULA_MUST_BE_SET_FOR_CALCULATED_MEMBER,
+                    orNotSet(calculatedMember.name()));
                 results.add(new VerificationResultR(CALCULATED_MEMBER, msg, ERROR, Cause.SCHEMA));
             }
         }
@@ -479,37 +375,9 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
             // specified table for level's column
             String table = level.table();
-            // If table has been changed in join then sets the table value
-            // to null to cause "tableMustBeSet" validation fail.
-            if (!isEmpty(table) && parentHierarchy != null
-                && parentHierarchy.relation() instanceof Join) {
-                TreeSet<String> joinTables = new TreeSet<>();
-                SchemaExplorer.getTableNamesForJoin(parentHierarchy.relation(), joinTables);
-                if (!joinTables.contains(table)) {
-
-                    results.add(new VerificationResultR(LEVEL,
-                        TABLE_VALUE_DOES_NOT_CORRESPOND_TO_ANY_JOIN, ERROR, Cause.SCHEMA));
-                }
-            }
-
-            if (!isEmpty(table) && parentHierarchy != null
-                && parentHierarchy.relation() instanceof Table parentTable) {
-                Table theTable = parentTable;
-                String compareTo = (theTable.alias() != null && theTable.alias()
-                    .trim()
-                    .length() > 0) ? theTable.alias() : theTable.name();
-                if (!table.equals(compareTo)) {
-                    results.add(new VerificationResultR(LEVEL,
-                        TABLE_VALUE_DOES_NOT_CORRESPOND_TO_HIERARCHY_RELATION, ERROR, Cause.SCHEMA));
-                }
-                checkTable(parentTable);
-            }
-
-            if (!isEmpty(table) && parentHierarchy != null
-                && parentHierarchy.relation() instanceof View) {
-                results.add(new VerificationResultR(LEVEL,
-                    TABLE_FOR_COLUMN_CANNOT_BE_SET_IN_VIEW, ERROR, Cause.SCHEMA));
-            }
+            checkColumnJoin(table, parentHierarchy);
+            checkColumnTable(table, parentHierarchy);
+            checkColumnView(table, parentHierarchy);
 
             if (isEmpty(table)) {
                 if (parentHierarchy != null && parentHierarchy.relation() instanceof Join join) {
@@ -532,7 +400,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkNamedSet(NamedSet namedSet) {
         super.checkNamedSet(namedSet);
-        if (namedSet != null ) {
+        if (namedSet != null) {
             if (isEmpty(namedSet.name())) {
                 results.add(new VerificationResultR(NAMED_SET, NAMED_SET_NAME_MUST_BE_SET, ERROR,
                     Cause.SCHEMA));
@@ -544,10 +412,14 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
+    /**
+     * @return @deprecated
+     */
+    @Deprecated(since="new version", forRemoval=true)
     @Override
     protected void checkUserDefinedFunction(UserDefinedFunction udf) {
         super.checkUserDefinedFunction(udf);
-        if (udf != null ) {
+        if (udf != null) {
             if (isEmpty(udf.name())) {
                 results.add(new VerificationResultR(USER_DEFINED_FUNCTION,
                     USER_DEFINED_FUNCTION_NAME_MUST_BE_SET, ERROR, Cause.SCHEMA));
@@ -558,6 +430,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             }
         }
     }
+
     // were add from mondrian.xml
     @Override
     protected void checkCubeUsage(CubeUsage cubeUsage) {
@@ -626,7 +499,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkInlineTable(InlineTable inlineTable) {
         super.checkInlineTable(inlineTable);
-        if (inlineTable != null ) {
+        if (inlineTable != null) {
             if (inlineTable.columnDefs() == null) {
                 results.add(new VerificationResultR(INLINE_TABLE, INLINE_TABLE_COLUMN_DEFS_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -641,7 +514,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkColumnDef(ColumnDef columnDef) {
         super.checkColumnDef(columnDef);
-        if (columnDef != null ) {
+        if (columnDef != null) {
             if (isEmpty(columnDef.name())) {
                 results.add(new VerificationResultR(COLUMN_DEF, COLUMN_DEF_NAME_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -710,7 +583,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkAggForeignKey(AggForeignKey aggForeignKey) {
         super.checkAggForeignKey(aggForeignKey);
-        if (aggForeignKey != null ) {
+        if (aggForeignKey != null) {
             if (isEmpty(aggForeignKey.factColumn())) {
                 results.add(new VerificationResultR(AGG_FOREIGN_KEY, AGG_FOREIGN_KEY_FACT_COLUMN_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -725,7 +598,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkAggLevel(AggLevel aggLevel) {
         super.checkAggLevel(aggLevel);
-        if (aggLevel != null ) {
+        if (aggLevel != null) {
             if (aggLevel.name() == null) {
                 results.add(new VerificationResultR(AGG_LEVEL, AGG_LEVEL_NAME_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -740,7 +613,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkAggMeasure(AggMeasure aggMeasure) {
         super.checkAggMeasure(aggMeasure);
-        if (aggMeasure != null ) {
+        if (aggMeasure != null) {
             if (aggMeasure.column() == null) {
                 results.add(new VerificationResultR(AGG_MEASURE, AGG_MEASURE_COLUMN_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -809,7 +682,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkMemberGrant(MemberGrant memberGrant) {
         super.checkMemberGrant(memberGrant);
-        if (memberGrant != null ) {
+        if (memberGrant != null) {
             if (isEmpty(memberGrant.member())) {
                 results.add(new VerificationResultR(MEMBER_GRANT, MEMBER_GRANT_MEMBER_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -824,7 +697,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkUnion(Union union) {
         super.checkUnion(union);
-        if (union != null && union.roleUsage() == null) {
+        if (union != null && union.roleUsages() == null) {
             results.add(new VerificationResultR(UNION, UNION_ROLE_USAGE_MUST_BE_SET,
                 ERROR, Cause.SCHEMA));
         }
@@ -842,7 +715,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkParameter(Parameter parameter) {
         super.checkParameter(parameter);
-        if(parameter != null) {
+        if (parameter != null) {
             if (isEmpty(parameter.name())) {
                 results.add(new VerificationResultR(PARAMETER, PARAMETER_NAME_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -896,7 +769,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkWritebackAttribute(WritebackAttribute writebackAttribute) {
         super.checkWritebackAttribute(writebackAttribute);
-        if (writebackAttribute != null ) {
+        if (writebackAttribute != null) {
             if (isEmpty(writebackAttribute.dimension())) {
                 results.add(new VerificationResultR(WRITEBACK_ATTRIBUTE, WRITEBACK_ATTRIBUTE_DIMENSION_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -911,7 +784,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     @Override
     protected void checkWritebackMeasure(WritebackMeasure writebackMeasure) {
         super.checkWritebackMeasure(writebackMeasure);
-        if (writebackMeasure != null ) {
+        if (writebackMeasure != null) {
             if (isEmpty(writebackMeasure.name())) {
                 results.add(new VerificationResultR(WRITEBACK_MEASURE, WRITEBACK_MEASURE_NAME_MUST_BE_SET,
                     ERROR, Cause.SCHEMA));
@@ -929,6 +802,171 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         if (writebackTable != null && isEmpty(writebackTable.name())) {
             results.add(new VerificationResultR(WRITEBACK_TABLE, WRITEBACK_TABLE_NAME_MUST_BE_SET,
                 ERROR, Cause.SCHEMA));
+        }
+    }
+
+    private void checkHierarchyJoin(Hierarchy hierarchy, PrivateDimension cubeDimension) {
+        if (hierarchy.relation() instanceof Join) {
+            if (isEmpty(hierarchy.primaryKeyTable())) {
+                if (isEmpty(hierarchy.primaryKey())) {
+                    String msg = String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN,
+                        orNotSet(cubeDimension.name()));
+                    results.add(new VerificationResultR(
+                        HIERARCHY, msg, ERROR, Cause.SCHEMA));
+
+                } else {
+                    String msg = String.format(PRIMARY_KEY_TABLE_MUST_BE_SET_FOR_JOIN,
+                        orNotSet(cubeDimension.name()));
+                    results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
+                }
+            }
+            if (isEmpty(hierarchy.primaryKey())) {
+                String msg = String.format(PRIMARY_KEY_MUST_BE_SET_FOR_JOIN, orNotSet(cubeDimension.name()));
+                results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
+            }
+        }
+    }
+
+    private void checkHierarchyLevels(Hierarchy hierarchy, PrivateDimension cubeDimension) {
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level> levels = hierarchy.levels();
+        if (levels == null || levels.isEmpty()) {
+            String msg = String.format(LEVEL_MUST_BE_SET_FOR_HIERARCHY, orNotSet(cubeDimension.name()));
+            results.add(new VerificationResultR(HIERARCHY,
+                msg, ERROR, Cause.SCHEMA));
+        }
+    }
+
+    private void checkHierarchyTable(Hierarchy hierarchy, PrivateDimension cubeDimension) {
+        if (hierarchy.relation() instanceof Table table) {
+            if (!isEmpty(hierarchy.primaryKeyTable())) {
+                String msg = String.format(HIERARCHY_TABLE_FIELD_MUST_BE_EMPTY, orNotSet(cubeDimension.name()));
+                results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
+            }
+            checkTable(table);
+        }
+    }
+
+    private void checkHierarchyPrimaryKeyTable(Hierarchy hierarchy, PrivateDimension cubeDimension) {
+        String primaryKeyTable = hierarchy.primaryKeyTable();
+        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Join join)) {
+            TreeSet<String> joinTables = new TreeSet<>();
+            SchemaExplorer.getTableNamesForJoin(hierarchy.relation(), joinTables);
+            if (!joinTables.contains(primaryKeyTable)) {
+                String msg = String.format(HIERARCHY_TABLE_VALUE_DOES_NOT_CORRESPOND_TO_ANY_JOIN,
+                    orNotSet(cubeDimension.name()));
+                results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.DATABASE));
+            }
+            checkJoin(join);
+        }
+
+        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Table theTable)) {
+            String compareTo = (theTable.alias() != null && theTable.alias()
+                .trim()
+                .length() > 0) ? theTable.alias() : theTable.name();
+            if (!primaryKeyTable.equals(compareTo)) {
+                String msg = String.format(HIERARCHY_TABLE_VALUE_DOES_NOT_CORRESPOND_TO_HIERARCHY_RELATION,
+                    orNotSet(cubeDimension.name()));
+                results.add(new VerificationResultR(HIERARCHY,
+                    msg, ERROR,
+                    Cause.DATABASE));
+            }
+            checkTable(theTable);
+        }
+    }
+
+    private void checkLevelType(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, PrivateDimension parentDimension) {
+        if (level.levelType() != null && parentDimension != null) {
+            // Empty leveltype is treated as default value of "Regular""
+            // which is ok with standard/time dimension.
+            if ((parentDimension.type() == null || parentDimension.type()
+                .equals(DimensionTypeEnum.STANDARD_DIMENSION)) && level.levelType() != null
+                && (!level.levelType()
+                .equals(LevelTypeEnum.REGULAR))) {
+                // If dimension type is 'standard' then leveltype
+                // should be 'regular'
+                String msg = String.format(LEVEL_LEVEL_TYPE_S_CAN_ONLY_BE_USED_WITH_A_TIME_DIMENSION,
+                    level.levelType()
+                        .getValue());
+                results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
+
+            } else if (parentDimension.type() != null && (parentDimension.type()
+                .equals(DimensionTypeEnum.TIME_DIMENSION)) && level.levelType() != null && (level.levelType()
+                .equals(LevelTypeEnum.REGULAR))) {
+                // If dimension type is 'time' then leveltype value
+                // could be 'timeyears', 'timedays' etc'
+                String msg = String.format(LEVEL_TYPE_S_CAN_ONLY_BE_USED_WITH_A_STANDARD_DIMENSION,
+                    level.levelType()
+                        .getValue());
+                results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
+            }
+        }
+        if (level.type() != null) {
+            results.add(new VerificationResultR(LEVEL, LEVEL_TYPE_MUST_BE_SET, WARNING, Cause.SCHEMA));
+        }
+    }
+
+    private void checkLevelColumn(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, Hierarchy hierarchy,
+                                  Cube cube) {
+        String column = level.column();
+        if (isEmpty(column)) {
+            if (level.properties() == null || level.properties().isEmpty()) {
+                String msg = String.format(LEVEL_COLUMN_MUST_BE_SET, orNotSet(hierarchy.name()));
+                results.add(new VerificationResultR(LEVEL, msg, ERROR, Cause.SCHEMA));
+            } else {
+                level.properties()
+                    .forEach(p -> checkProperty(p, level, hierarchy, cube));
+            }
+        } else {
+            // Enforces validation for all column types against invalid
+            // value.
+            try {
+                for (String element : DEF_LEVEL) {
+                    Method method = level.getClass()
+                        .getDeclaredMethod(element);
+                    column = (String) method.invoke(level);
+                    checkColumn(column, element, level, cube, hierarchy);
+                }
+            } catch (Exception ex) {
+                LOGGER.error("Validation", ex);
+            }
+        }
+    }
+
+    private void checkColumnJoin(String table, Hierarchy parentHierarchy) {
+        // If table has been changed in join then sets the table value
+        // to null to cause "tableMustBeSet" validation fail.
+        if (!isEmpty(table) && parentHierarchy != null
+            && parentHierarchy.relation() instanceof Join) {
+            TreeSet<String> joinTables = new TreeSet<>();
+            SchemaExplorer.getTableNamesForJoin(parentHierarchy.relation(), joinTables);
+            if (!joinTables.contains(table)) {
+
+                results.add(new VerificationResultR(LEVEL,
+                    TABLE_VALUE_DOES_NOT_CORRESPOND_TO_ANY_JOIN, ERROR, Cause.SCHEMA));
+            }
+        }
+    }
+
+    private void checkColumnTable(String table, Hierarchy parentHierarchy) {
+        if (!isEmpty(table) && parentHierarchy != null
+            && parentHierarchy.relation() instanceof Table parentTable) {
+            Table theTable = parentTable;
+            String compareTo = (theTable.alias() != null && theTable.alias()
+                .trim()
+                .length() > 0) ? theTable.alias() : theTable.name();
+            if (!table.equals(compareTo)) {
+                results.add(new VerificationResultR(LEVEL,
+                    TABLE_VALUE_DOES_NOT_CORRESPOND_TO_HIERARCHY_RELATION, ERROR, Cause.SCHEMA));
+            }
+            checkTable(parentTable);
+        }
+    }
+
+    private void checkColumnView(String table, Hierarchy parentHierarchy) {
+        if (!isEmpty(table) && parentHierarchy != null
+            && parentHierarchy.relation() instanceof View) {
+            results.add(new VerificationResultR(LEVEL,
+                TABLE_FOR_COLUMN_CANNOT_BE_SET_IN_VIEW, ERROR, Cause.SCHEMA));
         }
     }
 }

@@ -18,15 +18,15 @@ import java.util.List;
 public sealed interface AggTable permits AggName, AggPattern {
     AggColumnName aggFactCount();
 
-    List<AggColumnName> aggIgnoreColumn();
+    List<AggColumnName> aggIgnoreColumns();
 
-    List<AggForeignKey> aggForeignKey();
+    List<AggForeignKey> aggForeignKeys();
 
-    List<AggMeasure> aggMeasure();
+    List<AggMeasure> aggMeasures();
 
-    List<AggLevel> aggLevel();
+    List<AggLevel> aggLevels();
 
     boolean ignorecase();
 
-    List<AggMeasureFactCount> measuresFactCount();
+    List<AggMeasureFactCount> measuresFactCounts();
 }

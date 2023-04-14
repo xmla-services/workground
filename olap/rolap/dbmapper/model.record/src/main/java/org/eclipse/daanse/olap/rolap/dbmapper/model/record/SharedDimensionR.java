@@ -24,7 +24,7 @@ public record SharedDimensionR(String name,
                                String caption,
                                String description,
                                List<Annotation> annotations,
-                               List<Hierarchy> hierarchy,
+                               List<Hierarchy> hierarchies,
                                String foreignKey)
         implements SharedDimension {
 
