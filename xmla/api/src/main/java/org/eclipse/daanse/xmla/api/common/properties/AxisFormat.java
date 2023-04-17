@@ -19,16 +19,39 @@ public enum AxisFormat {
      * The MDDataSet axis is made up of one or more CrossProduct
      * elements.
      */
-    TupleFormat,
+    TUPLE_FORMAT("TupleFormat"),
 
     /**
      * Analysis Services uses the TupleFormat format for this setting.
      */
-    ClusterFormat,
+    CLUSTER_FORMAT("ClusterFormat"),
 
     /**
      * The MDDataSet axis contains one or more Tuple elements.
      */
-    CustomFormat;
+    CUSTOM_FORMAT("CustomFormat");
+
+    private final String value;
+
+    AxisFormat(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static AxisFormat fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
+        for (AxisFormat e : AxisFormat.values()) {
+            if (e.getValue().equals(v)) {
+                return e;
+            }
+        }
+        throw new IllegalArgumentException(new StringBuilder("AxisFormat Illegal argument ")
+            .append(v).toString());
+    }
 
 }

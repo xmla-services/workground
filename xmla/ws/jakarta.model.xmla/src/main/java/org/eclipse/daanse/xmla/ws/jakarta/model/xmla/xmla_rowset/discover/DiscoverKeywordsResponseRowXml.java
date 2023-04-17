@@ -33,7 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverKeywordsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 3242326701758575261L;
+    private static final long serialVersionUID = 3242326701758575261L;
 
     @XmlElement(name = "Keyword", required = true)
     private String keyword;

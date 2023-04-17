@@ -27,19 +27,29 @@ public enum ReadWritePermissionEnum {
      * implies no read access to object metadata or
      * data.<99>
      */
-    None,
+    NONE("None"),
 
     /**
      * implies full read access to object metadata or data.
      */
-    Allowed;
+    ALLOWED("Allowed");
+
+    private final String value;
+
+    ReadWritePermissionEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static ReadWritePermissionEnum fromValue(String v) {
         if (v == null) {
-            return None;
+            return NONE;
         }
         for (ReadWritePermissionEnum e : ReadWritePermissionEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

@@ -142,7 +142,7 @@ public enum MeasureAggregatorEnum {
     }
 
     public static MeasureAggregatorEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (MeasureAggregatorEnum c : MeasureAggregatorEnum.values()) {
             if (c.value == vi) {
                 return c;

@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "WarningLocationObject", propOrder = { "warningColumn", "warningMeasure" })
 public class WarningLocationObject implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "WarningColumn", namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200")
   protected WarningColumn warningColumn;
   @XmlElement(name = "WarningMeasure", namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200")

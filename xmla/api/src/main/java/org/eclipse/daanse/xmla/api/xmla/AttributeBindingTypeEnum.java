@@ -18,54 +18,64 @@ public enum AttributeBindingTypeEnum {
     /**
      * All Level
      */
-     All,
+     ALL("All"),
 
     /**
      * Member keys
      */
-    Key,
+    KEY("Key"),
 
     /**
      * Member name
      */
-    Name,
+    NAME("Name"),
 
     /**
      * Member value
      */
-    Value,
+    VALUE("Value"),
 
     /**
      * Member translations
      */
-    Translation,
+    TRANSLATION("Translation"),
 
     /**
      * Unary operators
      */
-    UnaryOperator,
+    UNARY_OPERATOR("UnaryOperator"),
 
     /**
      * Skipped levels
      */
-    SkippedLevels,
+    SKIPPED_LEVELS("SkippedLevels"),
 
     /**
      * Custom rollup formulas
      */
-    CustomRollup,
+    CUSTOM_ROLLUP("CustomRollup"),
 
     /**
      * Custom rollup properties
      */
-    CustomRollupProperties;
+    CUSTOM_ROLLUP_PROPERTIES("CustomRollupProperties");
+
+    private final String value;
+
+    AttributeBindingTypeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static AttributeBindingTypeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (AttributeBindingTypeEnum e : AttributeBindingTypeEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

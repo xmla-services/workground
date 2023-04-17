@@ -27,21 +27,21 @@ public enum TypeEnum {
      * Multidimensional database
      */
     @XmlEnumValue("0x00")
-    Multidimensional(0x00),
+    MULTIDIMENSIONAL(0x00),
 
     /**
      * TabularMetadata. The Tabular
      * model is built by using Tabular metadata.
      */
     @XmlEnumValue("0x01")
-    TabularMetadata(0x01),
+    TABULAR_METADATA(0x01),
 
     /**
      * TabularModel. This is a Tabular
      * model, including those built using Tabular
      * or Multidimensional metadata.
      */
-    TabularModel(0x02);
+    TABULAR_MODEL(0x02);
 
     private final int value;
 

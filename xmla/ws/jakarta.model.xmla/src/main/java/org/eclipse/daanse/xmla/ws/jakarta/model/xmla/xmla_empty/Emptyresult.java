@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "root")
 public class Emptyresult implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "Exception")
     protected Exception exception;
     @XmlElement(name = "Messages")

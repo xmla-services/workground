@@ -36,7 +36,7 @@ public enum GroupingBehaviorEnum {
     }
 
     public static GroupingBehaviorEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (GroupingBehaviorEnum c : GroupingBehaviorEnum.values()) {
             if (c.value == vi) {
                 return c;

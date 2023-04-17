@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverPropertiesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @XmlElement(name = "PropertyName", required = true)
     private String propertyName;

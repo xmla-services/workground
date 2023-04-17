@@ -27,7 +27,7 @@ public record DiscoverXmlMetaDataRestrictionsR(
     Optional<String> perspectiveId,
     Optional<String> dimensionPermissionId,
     Optional<String> roleId,
-    Optional<String> DatabasePermissionId,
+    Optional<String> databasePermissionId,
     Optional<String> miningModelId,
     Optional<String> miningModelPermissionId,
     Optional<String> dataSourceId,

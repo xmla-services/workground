@@ -81,14 +81,14 @@ public class CubeAttributeBinding extends Binding {
     public static class Ordinal {
 
         @XmlElement(name = "Ordinal")
-        protected List<BigInteger> ordinal;
+        protected List<BigInteger> ordinalField;
 
         public List<BigInteger> getOrdinal() {
-            return this.ordinal;
+            return this.ordinalField;
         }
 
-        public void setOrdinal(List<BigInteger> ordinal) {
-            this.ordinal = ordinal;
+        public void setOrdinal(List<BigInteger> ordinalF) {
+            this.ordinalField = ordinalF;
         }
     }
 

@@ -20,7 +20,7 @@ import org.eclipse.daanse.xmla.api.xmla.NotType;
 public record NotTypeR(NotType not,
                        AndOrType or,
                        AndOrType and,
-                       BoolBinop equal,
+                       BoolBinop isEqual,
                        BoolBinop notEqual,
                        BoolBinop less,
                        BoolBinop lessOrEqual,

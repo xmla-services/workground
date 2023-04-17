@@ -33,7 +33,7 @@ public enum ClientCacheRefreshPolicyEnum {
      * query/interaction needs newer data.
      */
     @XmlEnumValue("0")
-    refresh_newer_data(0),
+    REFRESH_NEWER_DATA(0),
 
     /**
      * (default) – Client applications are
@@ -41,7 +41,7 @@ public enum ClientCacheRefreshPolicyEnum {
      * refreshes.
      */
     @XmlEnumValue("1")
-    all_cache_refresh(1);
+    ALL_CACHE_REFRESH(1);
 
     private final int value;
 

@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "HierarchyVisualizationProperties", propOrder = { "contextualNameRule", "folderPosition" })
 public class HierarchyVisualizationProperties implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "ContextualNameRule", defaultValue = "None")
   protected String contextualNameRule;
   @XmlElement(name = "FolderPosition", defaultValue = "-1")

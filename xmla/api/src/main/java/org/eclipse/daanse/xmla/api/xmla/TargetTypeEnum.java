@@ -33,43 +33,53 @@ public enum TargetTypeEnum {
     /**
      * A Cube object.
      */
-    Cube,
+    CUBE("Cube"),
 
     /**
      * A subcube. Subcubes are created by using MDX [MSDN-
      * CREATESUBCUBE].
      */
-    Cells,
+    CELLS("Cells"),
 
     /**
      * A Hierarchy object.
      */
-    Hierarchy,
+    HIERARCHY("Hierarchy"),
 
     /**
      * A Level object.
      */
-    Level,
+    LEVEL("Level"),
 
     /**
      * The members of a Dimension.
      */
-    DimensionMembers,
+    DIMENSION_MEMBERS("DimensionMembers"),
 
     /**
      * The members of a Hierarchy.
      */
-    HierarchyMembers,
+    HIERARCHY_MEMBERS("HierarchyMembers"),
 
     /**
      * The members of a Level.
      */
-    LevelMembers,
+    LEVEL_MEMBERS("LevelMembers"),
 
     /**
      * The members of a DimensionAttribute
      */
-    AttributeMembers;
+    ATTRIBUTE_MEMBERS("AttributeMembers");
+
+    private final String value;
+
+    TargetTypeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static TargetTypeEnum fromValue(String v) {
         if (v == null) {

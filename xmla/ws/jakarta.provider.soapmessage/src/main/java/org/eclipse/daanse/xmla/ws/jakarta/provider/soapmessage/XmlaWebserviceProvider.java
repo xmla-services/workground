@@ -40,6 +40,8 @@ import jakarta.xml.ws.Service;
 import jakarta.xml.ws.ServiceMode;
 import jakarta.xml.ws.WebServiceProvider;
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebServiceProvider()
 @ServiceMode(value = Service.Mode.MESSAGE)
@@ -48,6 +50,7 @@ import jakarta.xml.ws.soap.SOAPFaultException;
 @Designate(factory = true, ocd = XmlaWebserviceProvider.Config.class)
 @SOAPWhiteboardEndpoint(contextpath = "xmla")
 public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlaWebserviceProvider.class);
 
     @ObjectClassDefinition()
     @interface Config {
@@ -75,12 +78,10 @@ public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
 
     @Override
     public SOAPMessage invoke(SOAPMessage request) {
-        System.out.println("===== The provider got a request =====");
+        LOGGER.debug("===== The provider got a request =====");
         try {
-            request.writeTo(System.out);
-            System.out.println();
-
-            System.out.println(SOAPUtil.string(request));
+            String reqString = SOAPUtil.string(request);
+            LOGGER.debug(reqString);
 
             wsAdapter.handleRequest(request);
 

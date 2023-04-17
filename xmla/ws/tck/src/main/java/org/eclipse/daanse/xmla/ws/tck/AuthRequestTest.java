@@ -28,8 +28,6 @@ import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -37,7 +35,6 @@ import org.slf4j.LoggerFactory;
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
 class AuthRequestTest {
-    private Logger logger = LoggerFactory.getLogger(AuthRequestTest.class);
 
     public static final String REQUEST_AUTHENTICATE_1 = """
             <Authenticate xmlns="http://schemas.microsoft.com/analysisservices/2003/ext">
@@ -58,7 +55,7 @@ class AuthRequestTest {
     }
 
     @Test()
-    void test_AUTH(@InjectService XmlaService xmlaService) throws Exception {
+    void testAUTH(@InjectService XmlaService xmlaService) throws Exception {
 
 //        AuthenticateResponse ar = new AuthenticateResponse();
 //        ReturnValue rv = new ReturnValue();

@@ -29,33 +29,33 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _DbStorageLocation_QNAME = new QName(
+  private static final QName _DbStorageLocation_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "DbStorageLocation");
-  private final static QName _HoldoutMaxPercent_QNAME = new QName(
+  private static final QName _HoldoutMaxPercent_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutMaxPercent");
-  private final static QName _HoldoutMaxCases_QNAME = new QName(
+  private static final QName _HoldoutMaxCases_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutMaxCases");
-  private final static QName _HoldoutSeed_QNAME = new QName(
+  private static final QName _HoldoutSeed_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutSeed");
-  private final static QName _HoldoutActualSize_QNAME = new QName(
+  private static final QName _HoldoutActualSize_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutActualSize");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.eng100_100
-   * 
+   *
    */
   public ObjectFactory() {
   }
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -67,7 +67,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}
@@ -79,7 +79,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}
@@ -91,7 +91,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}
@@ -103,7 +103,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}

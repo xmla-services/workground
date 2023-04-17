@@ -14,5 +14,31 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 public enum Format {
-    Tabular, Multidimensional, Native;
+
+    TABULAR("Tabular"),
+    MULTIDIMENSIONAL("Multidimensional"),
+    NATIVE("Native");
+
+    private final String value;
+
+    Format(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static Format fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
+        for (Format e : Format.values()) {
+            if (e.getValue().equals(v)) {
+                return e;
+            }
+        }
+        throw new IllegalArgumentException(new StringBuilder("Format enum Illegal argument ")
+            .append(v).toString());
+    }
 }

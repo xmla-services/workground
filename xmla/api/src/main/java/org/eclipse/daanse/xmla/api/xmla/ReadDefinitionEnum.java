@@ -26,24 +26,34 @@ public enum ReadDefinitionEnum {
     /**
      * implies no access to object definition.
      */
-    None,
+    NONE("None"),
 
     /**
      * implies limited access to object definition.
      */
-    Basic,
+    BASIC("Basic"),
 
     /**
      * implies full access to object definition.
      */
-    Allowed;
+    ALLOWED("Allowed");
+
+    private final String value;
+
+    ReadDefinitionEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static ReadDefinitionEnum fromValue(String v) {
         if (v == null) {
-            return None;
+            return NONE;
         }
         for (ReadDefinitionEnum e : ReadDefinitionEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

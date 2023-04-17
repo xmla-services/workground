@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "WarningColumn")
 public class WarningColumn implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "Dimension", required = true)
   protected String dimension;
   @XmlElement(name = "Attribute", required = true)

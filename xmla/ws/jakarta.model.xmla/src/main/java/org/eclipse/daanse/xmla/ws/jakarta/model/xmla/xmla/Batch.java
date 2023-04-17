@@ -406,14 +406,6 @@ public class Batch {
         this.setAuthContext = setAuthContext;
     }
 
-    public DBCC getDbcc() {
-        return dbcc;
-    }
-
-    public void setDbcc(DBCC dbcc) {
-        this.dbcc = dbcc;
-    }
-
     public void setDiscover(List<Discover> discover) {
         this.discover = discover;
     }

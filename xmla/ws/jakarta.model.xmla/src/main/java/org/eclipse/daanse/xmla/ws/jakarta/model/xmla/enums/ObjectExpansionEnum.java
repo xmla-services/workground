@@ -25,25 +25,25 @@ public enum ObjectExpansionEnum {
      * Returns only the name/ID/timestamp/state requested for the requested objects and all descendant major objects recursively.
      */
     @XmlEnumValue("ReferenceOnly")
-    ReferenceOnly,
+    REFERENCE_ONLY,
 
     /**
      *  Expands the requested object with no references to contained objects (includes expanded minor contained objects).
      */
     @XmlEnumValue("ObjectProperties")
-    ObjectProperties,
+    OBJECT_PROPERTIES,
 
     /**
      * Same as ObjectProperties, but also returns the name, ID, and timestamp for contained major objects.
      */
     @XmlEnumValue("ExpandObject")
-    ExpandObject,
+    EXPAND_OBJECT,
 
     /**
      * Fully expands the requested object recursively to the bottom of every contained object.
      */
     @XmlEnumValue("ExpandFull")
-    ExpandFull;
+    EXPAND_FULL;
 
     public static ObjectExpansionEnum fromValue(String v) {
         if (v == null) {

@@ -26,14 +26,14 @@ public enum ClientCacheRefreshPolicyEnum {
      * refresh their caches only if a user
      * query/interaction needs newer data.
      */
-    refresh_newer_data(0),
+    REFRESH_NEWER_DATA(0),
 
     /**
      * (default) – Client applications are
      * notified to allow all background cache
      * refreshes.
      */
-    all_cache_refresh(1);
+    ALL_CACHE_REFRESH(1);
 
     private final int value;
 
@@ -47,9 +47,9 @@ public enum ClientCacheRefreshPolicyEnum {
 
     public static ClientCacheRefreshPolicyEnum fromValue(String v) {
         if (v == null) {
-            return all_cache_refresh;
+            return ALL_CACHE_REFRESH;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (ClientCacheRefreshPolicyEnum c : ClientCacheRefreshPolicyEnum.values()) {
             if (c.value == vi) {
                 return c;

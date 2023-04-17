@@ -22,20 +22,30 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum StructureTypeEnum {
 
     @XmlEnumValue("Natural")
-    Natural,
+    NATURAL("Natural"),
 
     @XmlEnumValue("Unnatural")
-    Unnatural,
+    UNNATURAL("Unnatural"),
 
     @XmlEnumValue("Unknown")
-    Unknown;
+    UNKNOWN("Unknown");
+
+    private final String value;
+
+    StructureTypeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static StructureTypeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (StructureTypeEnum e : StructureTypeEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

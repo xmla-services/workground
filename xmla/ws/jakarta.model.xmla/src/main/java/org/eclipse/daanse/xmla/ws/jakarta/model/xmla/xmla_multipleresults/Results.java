@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "results")
 public class Results implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(namespace = "urn:schemas-microsoft-com:xml-analysis:empty")
     protected List<Emptyresult> root;
 

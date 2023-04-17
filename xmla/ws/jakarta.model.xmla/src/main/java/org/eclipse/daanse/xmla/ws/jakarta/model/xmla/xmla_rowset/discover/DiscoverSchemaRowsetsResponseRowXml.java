@@ -32,7 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverSchemaRowsetsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 8000363696884603878L;
+    private static final long serialVersionUID = 8000363696884603878L;
 
     @XmlElement(name = "SchemaName", required = true)
     private String schemaName;

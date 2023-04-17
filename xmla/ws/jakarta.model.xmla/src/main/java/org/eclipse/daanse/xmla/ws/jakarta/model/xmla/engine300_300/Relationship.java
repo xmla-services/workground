@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "Relationship", propOrder = { "id", "visible", "fromRelationshipEnd", "toRelationshipEnd" })
 public class Relationship implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "ID", required = true)
   protected String id;
   @XmlElement(name = "Visible")

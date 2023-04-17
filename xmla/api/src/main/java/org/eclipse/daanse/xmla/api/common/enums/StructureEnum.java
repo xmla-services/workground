@@ -46,7 +46,7 @@ public enum StructureEnum {
     }
 
     public static StructureEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (StructureEnum c : StructureEnum.values()) {
             if (c.value == vi) {
                 return c;

@@ -31,21 +31,21 @@ public enum PropertyTypeEnum {
      * a member.
      */
     @XmlEnumValue("1")
-    property_member(1),
+    PROPERTY_MEMBER(1),
 
     /**
      * Identifies a property of
      * a cell.
      */
     @XmlEnumValue("2")
-    property_cell(2),
+    PROPERTY_CELL(2),
 
     /**
      * Identifies an internal
      * property.
      */
     @XmlEnumValue("4")
-    internal_property(4),
+    INTERNAL_PROPERTY(4),
 
     /**
      * Identifies a property
@@ -53,7 +53,7 @@ public enum PropertyTypeEnum {
      * large object (BLOB).
      */
     @XmlEnumValue("8")
-    BLOB_property(8);
+    BLOB_PROPERTY(8);
 
     private final int value;
 

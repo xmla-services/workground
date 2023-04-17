@@ -22,16 +22,26 @@ package org.eclipse.daanse.xmla.api.common.enums;
  */
 public enum StructureTypeEnum {
 
-    Natural,
-    Unnatural,
-    Unknown;
+    NATURAL("Natural"),
+    UNNATURAL("Unnatural"),
+    UNKNOWN("Unknown");
+
+    private final String value;
+
+    StructureTypeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static StructureTypeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (StructureTypeEnum e : StructureTypeEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.value.equals(v)) {
                 return e;
             }
         }

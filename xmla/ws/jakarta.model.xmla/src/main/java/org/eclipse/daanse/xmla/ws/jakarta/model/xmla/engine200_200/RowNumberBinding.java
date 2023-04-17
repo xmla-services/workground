@@ -25,6 +25,6 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "RowNumberBinding")
 public class RowNumberBinding extends Binding implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
 }

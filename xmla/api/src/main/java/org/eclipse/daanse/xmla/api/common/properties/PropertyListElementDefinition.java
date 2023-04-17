@@ -19,15 +19,15 @@ import java.util.Set;
 
 public enum PropertyListElementDefinition {
 
-    Content(Type.EnumString, EnumSet.allOf(Content.class), Access.Write,
-            org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData.name(), true, true),
+    Content(Type.EnumString, EnumSet.allOf(Content.class), Access.WRITE,
+            org.eclipse.daanse.xmla.api.common.properties.Content.SCHEMA_DATA.getValue(), true, true),
 
-    DataSourceInfo(Type.String, null, Access.ReadWrite, "Empty", true, true),
+    DataSourceInfo(Type.String, null, Access.READ_WRITE, "Empty", true, true),
 
-    Format(Type.EnumString, EnumSet.allOf(Format.class), Access.Write,
-            org.eclipse.daanse.xmla.api.common.properties.Format.Native.name(), true, true),
+    Format(Type.EnumString, EnumSet.allOf(Format.class), Access.WRITE,
+            org.eclipse.daanse.xmla.api.common.properties.Format.NATIVE.getValue(), true, true),
 
-    LocaleIdentifier(Type.UnsignedInteger, null, Access.ReadWrite, null, true, true);
+    LocaleIdentifier(Type.UnsignedInteger, null, Access.READ_WRITE, null, true, true);
 
     final Type type;
     final Set<? extends Enum> enumSet;
@@ -47,7 +47,7 @@ public enum PropertyListElementDefinition {
         this.discover = discover;
         this.execute = execute;
     }
-    
+
    public static Optional<PropertyListElementDefinition> byName(String name) {
         return EnumSet.allOf(PropertyListElementDefinition.class).stream().filter(pd->pd.toString().equalsIgnoreCase(name)).findAny();
     }

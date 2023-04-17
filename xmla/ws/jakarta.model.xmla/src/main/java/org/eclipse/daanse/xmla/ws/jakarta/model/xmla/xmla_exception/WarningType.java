@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class WarningType implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "Location")
     protected MessageLocation location;
     @XmlAttribute(name = "WarningCode")

@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "WarningMeasure")
 public class WarningMeasure implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "Cube", required = true)
   protected String cube;
   @XmlElement(name = "MeasureGroup", required = true)

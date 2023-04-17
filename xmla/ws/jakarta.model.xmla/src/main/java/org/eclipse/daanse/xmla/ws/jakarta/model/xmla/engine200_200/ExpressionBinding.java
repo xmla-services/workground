@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ExpressionBinding", propOrder = { "expression" })
 public class ExpressionBinding extends Binding implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "Expression", required = true)
   protected String expression;
 

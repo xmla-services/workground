@@ -21,7 +21,7 @@ public interface TraceFilter {
 
     AndOrType and();
 
-    BoolBinop equal();
+    BoolBinop isEqual();
 
     BoolBinop notEqual();
 

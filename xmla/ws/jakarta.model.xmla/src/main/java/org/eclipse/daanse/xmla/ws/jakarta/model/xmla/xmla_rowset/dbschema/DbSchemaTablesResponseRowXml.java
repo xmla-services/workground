@@ -34,7 +34,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class DbSchemaTablesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 6603458218433022717L;
+    private static final long serialVersionUID = 6603458218433022717L;
 
     /**
      * The name of the database.

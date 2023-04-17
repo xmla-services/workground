@@ -235,7 +235,7 @@ public enum LevelDbTypeEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (LevelDbTypeEnum c : LevelDbTypeEnum.values()) {
             if (c.value == vi) {
                 return c;

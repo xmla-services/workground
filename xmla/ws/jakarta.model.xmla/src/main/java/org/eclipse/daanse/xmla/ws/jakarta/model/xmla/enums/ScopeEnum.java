@@ -29,10 +29,10 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum ScopeEnum {
 
     @XmlEnumValue("1")
-    Global(1),
+    GLOBAL(1),
 
     @XmlEnumValue("2")
-    Session(2);
+    SESSION(2);
 
     private final int value;
 

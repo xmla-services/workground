@@ -28,20 +28,30 @@ public enum RefreshPolicyEnum {
      * Every query checks to see whether the source data
      * has changed.
      */
-    ByQuery,
+    BY_QUERY("ByQuery"),
 
     /**
      * Source data is checked for changes only at the
      * interval that is specified by the RefreshInterval element.
      */
-    ByInterval;
+    BY_INTERVAL("ByInterval");
+
+    private final String value;
+
+    RefreshPolicyEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static RefreshPolicyEnum fromValue(String v) {
         if (v == null) {
-            return ByQuery;
+            return BY_QUERY;
         }
         for (RefreshPolicyEnum e : RefreshPolicyEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

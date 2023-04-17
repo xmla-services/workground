@@ -33,7 +33,7 @@ public class Discover {
     protected Properties properties;
 
     public Discover() {
-
+        //default constructor
     }
 
     public String getRequestType() {

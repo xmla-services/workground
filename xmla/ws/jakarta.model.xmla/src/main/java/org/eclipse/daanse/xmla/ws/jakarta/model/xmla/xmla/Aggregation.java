@@ -77,14 +77,6 @@ public class Aggregation {
         this.description = value;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {"annotation"})
     public static class Annotations {

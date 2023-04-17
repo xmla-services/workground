@@ -29,29 +29,29 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _DirectQueryMode_QNAME = new QName(
+  private static final QName _DirectQueryMode_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "DirectQueryMode");
-  private final static QName _AllowedRowsExpression_QNAME = new QName(
+  private static final QName _AllowedRowsExpression_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "AllowedRowsExpression");
-  private final static QName _DirectQueryUsage_QNAME = new QName(
+  private static final QName _DirectQueryUsage_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "DirectQueryUsage");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.eng300_300
-   * 
+   *
    */
   public ObjectFactory() {
   }
 
   /**
    * Create an instance of {@link RelationshipEndTranslation }
-   * 
+   *
    */
   public RelationshipEndTranslation createRelationshipEndTranslation() {
     return new RelationshipEndTranslation();
@@ -59,7 +59,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RelationshipEnd }
-   * 
+   *
    */
   public RelationshipEnd createRelationshipEnd() {
     return new RelationshipEnd();
@@ -67,7 +67,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RelationshipEnd.Attributes }
-   * 
+   *
    */
   public RelationshipEnd.Attributes createRelationshipEndAttributes() {
     return new RelationshipEnd.Attributes();
@@ -75,7 +75,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link XEvent }
-   * 
+   *
    */
   public XEvent createXEvent() {
     return new XEvent();
@@ -83,7 +83,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link Relationship }
-   * 
+   *
    */
   public Relationship createRelationship() {
     return new Relationship();
@@ -91,7 +91,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link Relationships }
-   * 
+   *
    */
   public Relationships createRelationships() {
     return new Relationships();
@@ -99,7 +99,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RelationshipEndTranslation.Annotations }
-   * 
+   *
    */
   public RelationshipEndTranslation.Annotations createRelationshipEndTranslationAnnotations() {
     return new RelationshipEndTranslation.Annotations();
@@ -107,7 +107,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RelationshipEnd.Translations }
-   * 
+   *
    */
   public RelationshipEnd.Translations createRelationshipEndTranslations() {
     return new RelationshipEnd.Translations();
@@ -115,7 +115,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link RelationshipEnd.Attributes.Attribute }
-   * 
+   *
    */
   public RelationshipEnd.Attributes.Attribute createRelationshipEndAttributesAttribute() {
     return new RelationshipEnd.Attributes.Attribute();
@@ -123,7 +123,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -135,7 +135,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -147,7 +147,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}

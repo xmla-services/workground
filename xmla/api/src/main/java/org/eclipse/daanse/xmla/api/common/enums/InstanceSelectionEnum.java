@@ -46,7 +46,7 @@ public enum InstanceSelectionEnum {
     }
 
     public static InstanceSelectionEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (InstanceSelectionEnum c : InstanceSelectionEnum.values()) {
             if (c.value == vi) {
                 return c;

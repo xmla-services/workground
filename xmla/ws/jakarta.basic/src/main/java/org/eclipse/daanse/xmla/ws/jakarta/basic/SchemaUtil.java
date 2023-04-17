@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,12 +28,15 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.SchemaOutputResolver;
 import jakarta.xml.bind.util.JAXBResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SchemaUtil {
 
 	private SchemaUtil() {
 	}
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchemaUtil.class);
 	static Map<Class<?>[], Schema> map = new ConcurrentHashMap<>();
 
 	//
@@ -49,7 +53,10 @@ public class SchemaUtil {
 		Marshaller marshaller = schemaContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		schema = (Schema) resolver.schemas.get(ns).getResult();
-		marshaller.marshal(schema, System.out);
+        StringWriter sw = new StringWriter();
+		marshaller.marshal(schema, sw);
+		String msg = sw.toString();
+		LOGGER.debug(msg);
 		map.put(classes, schema);
 		return schema;
 	}
@@ -65,7 +72,7 @@ public class SchemaUtil {
 
 		@Override
 		public Result createOutput(String namespaceURI, String suggestedFileName) throws IOException {
-			System.out.println("Generate schema for " + namespaceURI + " with suggested name " + suggestedFileName);
+            LOGGER.debug("Generate schema for {} with suggested name {}", namespaceURI, suggestedFileName);
 			try {
 				JAXBResult result = new JAXBResult(context);
 				result.setSystemId(namespaceURI);

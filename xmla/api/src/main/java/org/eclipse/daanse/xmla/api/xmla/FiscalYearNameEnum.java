@@ -20,16 +20,26 @@ package org.eclipse.daanse.xmla.api.xmla;
  */
 public enum FiscalYearNameEnum {
 
-    CalendarYearName,
+    CALENDAR_YEAR_NAME("CalendarYearName"),
 
-    NextCalendarYearName;
+    NEXT_CALENDAR_YEAR_NAME("NextCalendarYearName");
+
+    private final String value;
+
+    FiscalYearNameEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static FiscalYearNameEnum fromValue(String v) {
         if (v == null) {
-            return NextCalendarYearName;
+            return NEXT_CALENDAR_YEAR_NAME;
         }
         for (FiscalYearNameEnum e : FiscalYearNameEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

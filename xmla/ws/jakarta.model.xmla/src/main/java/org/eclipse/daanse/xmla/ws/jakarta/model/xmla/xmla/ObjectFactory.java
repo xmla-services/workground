@@ -29,42 +29,42 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _AllowedRowsExpression_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis",
+    private static final QName _AllowedRowsExpression_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis",
             "AllowedRowsExpression");
-    private final static QName _ShareDimensionStorage_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis",
+    private static final QName _ShareDimensionStorage_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis",
             "ShareDimensionStorage");
-    private final static QName _BooleanExprAnd_QNAME = new QName("", "and");
-    private final static QName _BooleanExprOr_QNAME = new QName("", "or");
-    private final static QName _BooleanExprNot_QNAME = new QName("", "not");
-    private final static QName _BooleanExprLeaf_QNAME = new QName("", "leaf");
-    private final static QName _AndOrTypeNot_QNAME = new QName("", "Not");
-    private final static QName _AndOrTypeOr_QNAME = new QName("", "Or");
-    private final static QName _AndOrTypeAnd_QNAME = new QName("", "And");
-    private final static QName _AndOrTypeEqual_QNAME = new QName("", "Equal");
-    private final static QName _AndOrTypeNotEqual_QNAME = new QName("", "NotEqual");
-    private final static QName _AndOrTypeLess_QNAME = new QName("", "Less");
-    private final static QName _AndOrTypeLessOrEqual_QNAME = new QName("", "LessOrEqual");
-    private final static QName _AndOrTypeGreater_QNAME = new QName("", "Greater");
-    private final static QName _AndOrTypeGreaterOrEqual_QNAME = new QName("", "GreaterOrEqual");
-    private final static QName _AndOrTypeLike_QNAME = new QName("", "Like");
-    private final static QName _AndOrTypeNotLike_QNAME = new QName("", "NotLike");
+    private static final QName _BooleanExprAnd_QNAME = new QName("", "and");
+    private static final QName _BooleanExprOr_QNAME = new QName("", "or");
+    private static final QName _BooleanExprNot_QNAME = new QName("", "not");
+    private static final QName _BooleanExprLeaf_QNAME = new QName("", "leaf");
+    private static final QName _AndOrTypeNot_QNAME = new QName("", "Not");
+    private static final QName _AndOrTypeOr_QNAME = new QName("", "Or");
+    private static final QName _AndOrTypeAnd_QNAME = new QName("", "And");
+    private static final QName _AndOrTypeEqual_QNAME = new QName("", "Equal");
+    private static final QName _AndOrTypeNotEqual_QNAME = new QName("", "NotEqual");
+    private static final QName _AndOrTypeLess_QNAME = new QName("", "Less");
+    private static final QName _AndOrTypeLessOrEqual_QNAME = new QName("", "LessOrEqual");
+    private static final QName _AndOrTypeGreater_QNAME = new QName("", "Greater");
+    private static final QName _AndOrTypeGreaterOrEqual_QNAME = new QName("", "GreaterOrEqual");
+    private static final QName _AndOrTypeLike_QNAME = new QName("", "Like");
+    private static final QName _AndOrTypeNotLike_QNAME = new QName("", "NotLike");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema
      * derived classes for package: org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla
-     * 
+     *
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link EventType }
-     * 
+     *
      */
     public EventType createEventType() {
         return new EventType();
@@ -72,7 +72,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Execute }
-     * 
+     *
      */
     public Execute createExecute() {
         return new Execute();
@@ -80,7 +80,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Discover }
-     * 
+     *
      */
     public Discover createDiscover() {
         return new Discover();
@@ -88,7 +88,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DiscoverResponse }
-     * 
+     *
      */
     public DiscoverResponse createDiscoverResponse() {
         return new DiscoverResponse();
@@ -96,7 +96,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Account }
-     * 
+     *
      */
     public Account createAccount() {
         return new Account();
@@ -104,7 +104,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstanceAttribute }
-     * 
+     *
      */
     public AggregationInstanceAttribute createAggregationInstanceAttribute() {
         return new AggregationInstanceAttribute();
@@ -112,7 +112,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstanceDimension }
-     * 
+     *
      */
     public AggregationInstanceDimension createAggregationInstanceDimension() {
         return new AggregationInstanceDimension();
@@ -120,7 +120,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstance }
-     * 
+     *
      */
     public AggregationInstance createAggregationInstance() {
         return new AggregationInstance();
@@ -128,7 +128,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Partition }
-     * 
+     *
      */
     public Partition createPartition() {
         return new Partition();
@@ -136,7 +136,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationAttribute }
-     * 
+     *
      */
     public AggregationAttribute createAggregationAttribute() {
         return new AggregationAttribute();
@@ -144,7 +144,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDimension }
-     * 
+     *
      */
     public AggregationDimension createAggregationDimension() {
         return new AggregationDimension();
@@ -152,7 +152,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Aggregation }
-     * 
+     *
      */
     public Aggregation createAggregation() {
         return new Aggregation();
@@ -160,7 +160,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesignDimension }
-     * 
+     *
      */
     public AggregationDesignDimension createAggregationDesignDimension() {
         return new AggregationDesignDimension();
@@ -168,7 +168,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesign }
-     * 
+     *
      */
     public AggregationDesign createAggregationDesign() {
         return new AggregationDesign();
@@ -176,7 +176,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Measure }
-     * 
+     *
      */
     public Measure createMeasure() {
         return new Measure();
@@ -184,7 +184,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroupAttribute }
-     * 
+     *
      */
     public MeasureGroupAttribute createMeasureGroupAttribute() {
         return new MeasureGroupAttribute();
@@ -192,7 +192,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataMiningMeasureGroupDimension }
-     * 
+     *
      */
     public DataMiningMeasureGroupDimension createDataMiningMeasureGroupDimension() {
         return new DataMiningMeasureGroupDimension();
@@ -200,7 +200,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DegenerateMeasureGroupDimension }
-     * 
+     *
      */
     public DegenerateMeasureGroupDimension createDegenerateMeasureGroupDimension() {
         return new DegenerateMeasureGroupDimension();
@@ -208,7 +208,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReferenceMeasureGroupDimension }
-     * 
+     *
      */
     public ReferenceMeasureGroupDimension createReferenceMeasureGroupDimension() {
         return new ReferenceMeasureGroupDimension();
@@ -216,7 +216,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RegularMeasureGroupDimension }
-     * 
+     *
      */
     public RegularMeasureGroupDimension createRegularMeasureGroupDimension() {
         return new RegularMeasureGroupDimension();
@@ -224,7 +224,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ManyToManyMeasureGroupDimension }
-     * 
+     *
      */
     public ManyToManyMeasureGroupDimension createManyToManyMeasureGroupDimension() {
         return new ManyToManyMeasureGroupDimension();
@@ -232,7 +232,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup }
-     * 
+     *
      */
     public MeasureGroup createMeasureGroup() {
         return new MeasureGroup();
@@ -240,7 +240,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveAction }
-     * 
+     *
      */
     public PerspectiveAction createPerspectiveAction() {
         return new PerspectiveAction();
@@ -248,7 +248,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveKpi }
-     * 
+     *
      */
     public PerspectiveKpi createPerspectiveKpi() {
         return new PerspectiveKpi();
@@ -256,7 +256,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveCalculation }
-     * 
+     *
      */
     public PerspectiveCalculation createPerspectiveCalculation() {
         return new PerspectiveCalculation();
@@ -264,7 +264,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveMeasure }
-     * 
+     *
      */
     public PerspectiveMeasure createPerspectiveMeasure() {
         return new PerspectiveMeasure();
@@ -272,7 +272,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveMeasureGroup }
-     * 
+     *
      */
     public PerspectiveMeasureGroup createPerspectiveMeasureGroup() {
         return new PerspectiveMeasureGroup();
@@ -280,7 +280,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveHierarchy }
-     * 
+     *
      */
     public PerspectiveHierarchy createPerspectiveHierarchy() {
         return new PerspectiveHierarchy();
@@ -288,7 +288,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveAttribute }
-     * 
+     *
      */
     public PerspectiveAttribute createPerspectiveAttribute() {
         return new PerspectiveAttribute();
@@ -296,7 +296,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveDimension }
-     * 
+     *
      */
     public PerspectiveDimension createPerspectiveDimension() {
         return new PerspectiveDimension();
@@ -304,7 +304,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective }
-     * 
+     *
      */
     public Perspective createPerspective() {
         return new Perspective();
@@ -312,7 +312,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CalculationProperty }
-     * 
+     *
      */
     public CalculationProperty createCalculationProperty() {
         return new CalculationProperty();
@@ -320,7 +320,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MdxScript }
-     * 
+     *
      */
     public MdxScript createMdxScript() {
         return new MdxScript();
@@ -328,7 +328,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DrillThroughAction }
-     * 
+     *
      */
     public DrillThroughAction createDrillThroughAction() {
         return new DrillThroughAction();
@@ -336,7 +336,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportAction }
-     * 
+     *
      */
     public ReportAction createReportAction() {
         return new ReportAction();
@@ -344,7 +344,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link StandardAction }
-     * 
+     *
      */
     public StandardAction createStandardAction() {
         return new StandardAction();
@@ -352,7 +352,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Kpi }
-     * 
+     *
      */
     public Kpi createKpi() {
         return new Kpi();
@@ -360,7 +360,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeHierarchy }
-     * 
+     *
      */
     public CubeHierarchy createCubeHierarchy() {
         return new CubeHierarchy();
@@ -368,7 +368,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeAttribute }
-     * 
+     *
      */
     public CubeAttribute createCubeAttribute() {
         return new CubeAttribute();
@@ -376,7 +376,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimension }
-     * 
+     *
      */
     public CubeDimension createCubeDimension() {
         return new CubeDimension();
@@ -384,7 +384,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube }
-     * 
+     *
      */
     public Cube createCube() {
         return new Cube();
@@ -392,7 +392,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelColumn }
-     * 
+     *
      */
     public MiningModelColumn createMiningModelColumn() {
         return new MiningModelColumn();
@@ -400,7 +400,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel }
-     * 
+     *
      */
     public MiningModel createMiningModel() {
         return new MiningModel();
@@ -408,7 +408,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableMiningStructureColumn }
-     * 
+     *
      */
     public TableMiningStructureColumn createTableMiningStructureColumn() {
         return new TableMiningStructureColumn();
@@ -416,7 +416,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn }
-     * 
+     *
      */
     public ScalarMiningStructureColumn createScalarMiningStructureColumn() {
         return new ScalarMiningStructureColumn();
@@ -424,7 +424,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure }
-     * 
+     *
      */
     public MiningStructure createMiningStructure() {
         return new MiningStructure();
@@ -432,7 +432,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database }
-     * 
+     *
      */
     public Database createDatabase() {
         return new Database();
@@ -440,7 +440,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PredLeaf }
-     * 
+     *
      */
     public PredLeaf createPredLeaf() {
         return new PredLeaf();
@@ -448,7 +448,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Trace }
-     * 
+     *
      */
     public Trace createTrace() {
         return new Trace();
@@ -456,7 +456,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClrAssembly }
-     * 
+     *
      */
     public ClrAssembly createClrAssembly() {
         return new ClrAssembly();
@@ -464,7 +464,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server }
-     * 
+     *
      */
     public Server createServer() {
         return new Server();
@@ -472,7 +472,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Level }
-     * 
+     *
      */
     public Level createLevel() {
         return new Level();
@@ -480,7 +480,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Hierarchy }
-     * 
+     *
      */
     public Hierarchy createHierarchy() {
         return new Hierarchy();
@@ -488,7 +488,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeRelationship }
-     * 
+     *
      */
     public AttributeRelationship createAttributeRelationship() {
         return new AttributeRelationship();
@@ -496,7 +496,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeTranslation }
-     * 
+     *
      */
     public AttributeTranslation createAttributeTranslation() {
         return new AttributeTranslation();
@@ -505,7 +505,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation createTranslation() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation();
@@ -513,7 +513,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataItem }
-     * 
+     *
      */
     public DataItem createDataItem() {
         return new DataItem();
@@ -521,7 +521,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute }
-     * 
+     *
      */
     public DimensionAttribute createDimensionAttribute() {
         return new DimensionAttribute();
@@ -529,7 +529,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension }
-     * 
+     *
      */
     public Dimension createDimension() {
         return new Dimension();
@@ -537,7 +537,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PushedDataSource }
-     * 
+     *
      */
     public PushedDataSource createPushedDataSource() {
         return new PushedDataSource();
@@ -545,7 +545,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceColumns }
-     * 
+     *
      */
     public TraceColumns createTraceColumns() {
         return new TraceColumns();
@@ -553,7 +553,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceColumns.Data }
-     * 
+     *
      */
     public TraceColumns.Data createTraceColumnsData() {
         return new TraceColumns.Data();
@@ -561,7 +561,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventColumn }
-     * 
+     *
      */
     public EventColumn createEventColumn() {
         return new EventColumn();
@@ -569,7 +569,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventColumn.EventColumnSubclassList }
-     * 
+     *
      */
     public EventColumn.EventColumnSubclassList createEventColumnEventColumnSubclassList() {
         return new EventColumn.EventColumnSubclassList();
@@ -577,7 +577,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceEvent }
-     * 
+     *
      */
     public TraceEvent createTraceEvent() {
         return new TraceEvent();
@@ -585,7 +585,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceEventCategories }
-     * 
+     *
      */
     public TraceEventCategories createTraceEventCategories() {
         return new TraceEventCategories();
@@ -593,7 +593,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceEventCategories.Data }
-     * 
+     *
      */
     public TraceEventCategories.Data createTraceEventCategoriesData() {
         return new TraceEventCategories.Data();
@@ -601,7 +601,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceEventCategories.Data.EventCategory }
-     * 
+     *
      */
     public TraceEventCategories.Data.EventCategory createTraceEventCategoriesDataEventCategory() {
         return new TraceEventCategories.Data.EventCategory();
@@ -609,7 +609,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceDefinitionProviderInfo }
-     * 
+     *
      */
     public TraceDefinitionProviderInfo createTraceDefinitionProviderInfo() {
         return new TraceDefinitionProviderInfo();
@@ -617,7 +617,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceDefinitionProviderInfo.Data }
-     * 
+     *
      */
     public TraceDefinitionProviderInfo.Data createTraceDefinitionProviderInfoData() {
         return new TraceDefinitionProviderInfo.Data();
@@ -625,7 +625,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Role }
-     * 
+     *
      */
     public Role createRole() {
         return new Role();
@@ -633,7 +633,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Permission }
-     * 
+     *
      */
     public Permission createPermission() {
         return new Permission();
@@ -641,7 +641,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubePermission }
-     * 
+     *
      */
     public CubePermission createCubePermission() {
         return new CubePermission();
@@ -649,7 +649,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionPermission }
-     * 
+     *
      */
     public DimensionPermission createDimensionPermission() {
         return new DimensionPermission();
@@ -657,7 +657,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellPermission }
-     * 
+     *
      */
     public CellPermission createCellPermission() {
         return new CellPermission();
@@ -665,7 +665,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributePermission }
-     * 
+     *
      */
     public AttributePermission createAttributePermission() {
         return new AttributePermission();
@@ -673,7 +673,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimensionPermission }
-     * 
+     *
      */
     public CubeDimensionPermission createCubeDimensionPermission() {
         return new CubeDimensionPermission();
@@ -681,7 +681,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProactiveCachingIncrementalProcessingBinding }
-     * 
+     *
      */
     public ProactiveCachingIncrementalProcessingBinding createProactiveCachingIncrementalProcessingBinding() {
         return new ProactiveCachingIncrementalProcessingBinding();
@@ -689,7 +689,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProactiveCachingQueryBinding }
-     * 
+     *
      */
     public ProactiveCachingQueryBinding createProactiveCachingQueryBinding() {
         return new ProactiveCachingQueryBinding();
@@ -697,7 +697,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProactiveCachingTablesBinding }
-     * 
+     *
      */
     public ProactiveCachingTablesBinding createProactiveCachingTablesBinding() {
         return new ProactiveCachingTablesBinding();
@@ -705,7 +705,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeAttributeBinding }
-     * 
+     *
      */
     public CubeAttributeBinding createCubeAttributeBinding() {
         return new CubeAttributeBinding();
@@ -713,7 +713,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Group }
-     * 
+     *
      */
     public Group createGroup() {
         return new Group();
@@ -721,7 +721,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UserDefinedGroupBinding }
-     * 
+     *
      */
     public UserDefinedGroupBinding createUserDefinedGroupBinding() {
         return new UserDefinedGroupBinding();
@@ -729,7 +729,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding }
-     * 
+     *
      */
     public OutOfLineBinding createOutOfLineBinding() {
         return new OutOfLineBinding();
@@ -737,7 +737,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.Translations }
-     * 
+     *
      */
     public OutOfLineBinding.Translations createOutOfLineBindingTranslations() {
         return new OutOfLineBinding.Translations();
@@ -745,7 +745,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.ForeignKeyColumns }
-     * 
+     *
      */
     public OutOfLineBinding.ForeignKeyColumns createOutOfLineBindingForeignKeyColumns() {
         return new OutOfLineBinding.ForeignKeyColumns();
@@ -753,7 +753,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.KeyColumns }
-     * 
+     *
      */
     public OutOfLineBinding.KeyColumns createOutOfLineBindingKeyColumns() {
         return new OutOfLineBinding.KeyColumns();
@@ -761,7 +761,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CloneDatabase }
-     * 
+     *
      */
     public CloneDatabase createCloneDatabase() {
         return new CloneDatabase();
@@ -769,7 +769,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ImageLoad }
-     * 
+     *
      */
     public ImageLoad createImageLoad() {
         return new ImageLoad();
@@ -777,7 +777,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Batch }
-     * 
+     *
      */
     public Batch createBatch() {
         return new Batch();
@@ -785,7 +785,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NotifyTableChange }
-     * 
+     *
      */
     public NotifyTableChange createNotifyTableChange() {
         return new NotifyTableChange();
@@ -793,7 +793,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WhereAttribute }
-     * 
+     *
      */
     public WhereAttribute createWhereAttribute() {
         return new WhereAttribute();
@@ -801,7 +801,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Update }
-     * 
+     *
      */
     public Update createUpdate() {
         return new Update();
@@ -809,7 +809,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeInsertUpdate }
-     * 
+     *
      */
     public AttributeInsertUpdate createAttributeInsertUpdate() {
         return new AttributeInsertUpdate();
@@ -817,7 +817,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Insert }
-     * 
+     *
      */
     public Insert createInsert() {
         return new Insert();
@@ -825,7 +825,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Synchronize }
-     * 
+     *
      */
     public Synchronize createSynchronize() {
         return new Synchronize();
@@ -833,7 +833,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Location }
-     * 
+     *
      */
     public Location createLocation() {
         return new Location();
@@ -841,7 +841,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Restore }
-     * 
+     *
      */
     public Restore createRestore() {
         return new Restore();
@@ -849,7 +849,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Backup }
-     * 
+     *
      */
     public Backup createBackup() {
         return new Backup();
@@ -857,7 +857,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DesignAggregations }
-     * 
+     *
      */
     public DesignAggregations createDesignAggregations() {
         return new DesignAggregations();
@@ -865,7 +865,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MergePartitions }
-     * 
+     *
      */
     public MergePartitions createMergePartitions() {
         return new MergePartitions();
@@ -873,7 +873,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataSourceView }
-     * 
+     *
      */
     public DataSourceView createDataSourceView() {
         return new DataSourceView();
@@ -881,7 +881,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Discover.Restrictions }
-     * 
+     *
      */
     public Restrictions createDiscoverRestrictions() {
         return new Restrictions();
@@ -889,7 +889,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link KeepResult }
-     * 
+     *
      */
     public KeepResult createKeepResult() {
         return new KeepResult();
@@ -897,7 +897,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClearResult }
-     * 
+     *
      */
     public ClearResult createClearResult() {
         return new ClearResult();
@@ -905,7 +905,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Result }
-     * 
+     *
      */
     public Result createResult() {
         return new Result();
@@ -913,7 +913,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ExecuteResponse }
-     * 
+     *
      */
     public ExecuteResponse createExecuteResponse() {
         return new ExecuteResponse();
@@ -922,7 +922,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return }
-     * 
+     *
      */
     public Return createReturn() {
         return new Return();
@@ -930,7 +930,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventType.Events }
-     * 
+     *
      */
     public EventType.Events createEventTypeEvents() {
         return new EventType.Events();
@@ -938,7 +938,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventSession }
-     * 
+     *
      */
     public EventSession createEventSession() {
         return new EventSession();
@@ -946,7 +946,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Event2 }
-     * 
+     *
      */
     public Event2 createEvent2() {
         return new Event2();
@@ -954,7 +954,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Action2 }
-     * 
+     *
      */
     public Action2 createAction2() {
         return new Action2();
@@ -963,7 +963,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Target }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Target createTarget() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Target();
@@ -971,7 +971,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Parameter }
-     * 
+     *
      */
     public Parameter createParameter() {
         return new Parameter();
@@ -979,7 +979,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Command }
-     * 
+     *
      */
     public Command createCommand() {
         return new Command();
@@ -987,7 +987,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Execute.Properties }
-     * 
+     *
      */
     public Execute.Properties createExecuteProperties() {
         return new Execute.Properties();
@@ -995,7 +995,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Execute.Parameters }
-     * 
+     *
      */
     public Execute.Parameters createExecuteParameters() {
         return new Execute.Parameters();
@@ -1004,7 +1004,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Properties }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Properties createProperties() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Properties();
@@ -1012,7 +1012,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BeginSession }
-     * 
+     *
      */
     public BeginSession createBeginSession() {
         return new BeginSession();
@@ -1020,7 +1020,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EndSession }
-     * 
+     *
      */
     public EndSession createEndSession() {
         return new EndSession();
@@ -1028,7 +1028,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Session }
-     * 
+     *
      */
     public Session createSession() {
         return new Session();
@@ -1039,7 +1039,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Parameters }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Parameters createParameters() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Parameters();
@@ -1047,7 +1047,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PropertyList }
-     * 
+     *
      */
     public PropertyList createPropertyList() {
         return new PropertyList();
@@ -1055,7 +1055,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ObjectReference }
-     * 
+     *
      */
     public ObjectReference createObjectReference() {
         return new ObjectReference();
@@ -1063,7 +1063,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Statement }
-     * 
+     *
      */
     public Statement createStatement() {
         return new Statement();
@@ -1071,7 +1071,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Create }
-     * 
+     *
      */
     public Create createCreate() {
         return new Create();
@@ -1079,7 +1079,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Alter }
-     * 
+     *
      */
     public Alter createAlter() {
         return new Alter();
@@ -1087,7 +1087,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Delete }
-     * 
+     *
      */
     public Delete createDelete() {
         return new Delete();
@@ -1095,7 +1095,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Process }
-     * 
+     *
      */
     public Process createProcess() {
         return new Process();
@@ -1103,7 +1103,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Bindings }
-     * 
+     *
      */
     public Bindings createBindings() {
         return new Bindings();
@@ -1111,7 +1111,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClearCache }
-     * 
+     *
      */
     public ClearCache createClearCache() {
         return new ClearCache();
@@ -1119,7 +1119,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Subscribe }
-     * 
+     *
      */
     public Subscribe createSubscribe() {
         return new Subscribe();
@@ -1127,7 +1127,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Unsubscribe }
-     * 
+     *
      */
     public Unsubscribe createUnsubscribe() {
         return new Unsubscribe();
@@ -1135,7 +1135,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cancel }
-     * 
+     *
      */
     public Cancel createCancel() {
         return new Cancel();
@@ -1143,7 +1143,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BeginTransaction }
-     * 
+     *
      */
     public BeginTransaction createBeginTransaction() {
         return new BeginTransaction();
@@ -1151,7 +1151,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CommitTransaction }
-     * 
+     *
      */
     public CommitTransaction createCommitTransaction() {
         return new CommitTransaction();
@@ -1159,7 +1159,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RollbackTransaction }
-     * 
+     *
      */
     public RollbackTransaction createRollbackTransaction() {
         return new RollbackTransaction();
@@ -1167,7 +1167,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Lock }
-     * 
+     *
      */
     public Lock createLock() {
         return new Lock();
@@ -1175,7 +1175,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Unlock }
-     * 
+     *
      */
     public Unlock createUnlock() {
         return new Unlock();
@@ -1183,7 +1183,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LocationBackup }
-     * 
+     *
      */
     public LocationBackup createLocationBackup() {
         return new LocationBackup();
@@ -1191,7 +1191,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MajorObject }
-     * 
+     *
      */
     public MajorObject createMajorObject() {
         return new MajorObject();
@@ -1199,7 +1199,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Folder }
-     * 
+     *
      */
     public Folder createFolder() {
         return new Folder();
@@ -1207,7 +1207,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Source }
-     * 
+     *
      */
     public Source createSource() {
         return new Source();
@@ -1215,7 +1215,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Attach }
-     * 
+     *
      */
     public Attach createAttach() {
         return new Attach();
@@ -1223,7 +1223,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Detach }
-     * 
+     *
      */
     public Detach createDetach() {
         return new Detach();
@@ -1232,7 +1232,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object createObject() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object();
@@ -1240,7 +1240,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TranslationInsertUpdate }
-     * 
+     *
      */
     public TranslationInsertUpdate createTranslationInsertUpdate() {
         return new TranslationInsertUpdate();
@@ -1248,7 +1248,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Where }
-     * 
+     *
      */
     public Where createWhere() {
         return new Where();
@@ -1256,7 +1256,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Drop }
-     * 
+     *
      */
     public Drop createDrop() {
         return new Drop();
@@ -1264,7 +1264,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UpdateCells }
-     * 
+     *
      */
     public UpdateCells createUpdateCells() {
         return new UpdateCells();
@@ -1272,7 +1272,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cell }
-     * 
+     *
      */
     public Cell createCell() {
         return new Cell();
@@ -1280,7 +1280,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ImageSave }
-     * 
+     *
      */
     public ImageSave createImageSave() {
         return new ImageSave();
@@ -1288,7 +1288,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SetAuthContext }
-     * 
+     *
      */
     public SetAuthContext createSetAuthContext() {
         return new SetAuthContext();
@@ -1296,7 +1296,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DBCC }
-     * 
+     *
      */
     public DBCC createDBCC() {
         return new DBCC();
@@ -1304,7 +1304,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ExecuteParameter }
-     * 
+     *
      */
     public ExecuteParameter createExecuteParameter() {
         return new ExecuteParameter();
@@ -1312,7 +1312,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ColumnBinding }
-     * 
+     *
      */
     public ColumnBinding createColumnBinding() {
         return new ColumnBinding();
@@ -1320,7 +1320,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RowBinding }
-     * 
+     *
      */
     public RowBinding createRowBinding() {
         return new RowBinding();
@@ -1328,7 +1328,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataSourceViewBinding }
-     * 
+     *
      */
     public DataSourceViewBinding createDataSourceViewBinding() {
         return new DataSourceViewBinding();
@@ -1336,7 +1336,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeBinding }
-     * 
+     *
      */
     public AttributeBinding createAttributeBinding() {
         return new AttributeBinding();
@@ -1344,7 +1344,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureBinding }
-     * 
+     *
      */
     public MeasureBinding createMeasureBinding() {
         return new MeasureBinding();
@@ -1352,7 +1352,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionBinding }
-     * 
+     *
      */
     public DimensionBinding createDimensionBinding() {
         return new DimensionBinding();
@@ -1360,7 +1360,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimensionBinding }
-     * 
+     *
      */
     public CubeDimensionBinding createCubeDimensionBinding() {
         return new CubeDimensionBinding();
@@ -1368,7 +1368,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroupBinding }
-     * 
+     *
      */
     public MeasureGroupBinding createMeasureGroupBinding() {
         return new MeasureGroupBinding();
@@ -1376,7 +1376,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroupDimensionBinding }
-     * 
+     *
      */
     public MeasureGroupDimensionBinding createMeasureGroupDimensionBinding() {
         return new MeasureGroupDimensionBinding();
@@ -1384,7 +1384,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TimeBinding }
-     * 
+     *
      */
     public TimeBinding createTimeBinding() {
         return new TimeBinding();
@@ -1392,7 +1392,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TimeAttributeBinding }
-     * 
+     *
      */
     public TimeAttributeBinding createTimeAttributeBinding() {
         return new TimeAttributeBinding();
@@ -1400,7 +1400,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link InheritedBinding }
-     * 
+     *
      */
     public InheritedBinding createInheritedBinding() {
         return new InheritedBinding();
@@ -1408,7 +1408,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableBinding }
-     * 
+     *
      */
     public TableBinding createTableBinding() {
         return new TableBinding();
@@ -1416,7 +1416,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link QueryBinding }
-     * 
+     *
      */
     public QueryBinding createQueryBinding() {
         return new QueryBinding();
@@ -1424,7 +1424,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DSVTableBinding }
-     * 
+     *
      */
     public DSVTableBinding createDSVTableBinding() {
         return new DSVTableBinding();
@@ -1432,7 +1432,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProactiveCachingInheritedBinding }
-     * 
+     *
      */
     public ProactiveCachingInheritedBinding createProactiveCachingInheritedBinding() {
         return new ProactiveCachingInheritedBinding();
@@ -1440,7 +1440,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link QueryNotification }
-     * 
+     *
      */
     public QueryNotification createQueryNotification() {
         return new QueryNotification();
@@ -1448,7 +1448,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link IncrementalProcessingNotification }
-     * 
+     *
      */
     public IncrementalProcessingNotification createIncrementalProcessingNotification() {
         return new IncrementalProcessingNotification();
@@ -1456,7 +1456,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableNotification }
-     * 
+     *
      */
     public TableNotification createTableNotification() {
         return new TableNotification();
@@ -1464,7 +1464,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CalculatedMeasureBinding }
-     * 
+     *
      */
     public CalculatedMeasureBinding createCalculatedMeasureBinding() {
         return new CalculatedMeasureBinding();
@@ -1472,7 +1472,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DatabasePermission }
-     * 
+     *
      */
     public DatabasePermission createDatabasePermission() {
         return new DatabasePermission();
@@ -1480,7 +1480,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataSourcePermission }
-     * 
+     *
      */
     public DataSourcePermission createDataSourcePermission() {
         return new DataSourcePermission();
@@ -1488,7 +1488,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructurePermission }
-     * 
+     *
      */
     public MiningStructurePermission createMiningStructurePermission() {
         return new MiningStructurePermission();
@@ -1496,7 +1496,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelPermission }
-     * 
+     *
      */
     public MiningModelPermission createMiningModelPermission() {
         return new MiningModelPermission();
@@ -1504,7 +1504,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Member }
-     * 
+     *
      */
     public Member createMember() {
         return new Member();
@@ -1512,7 +1512,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProactiveCaching }
-     * 
+     *
      */
     public ProactiveCaching createProactiveCaching() {
         return new ProactiveCaching();
@@ -1520,7 +1520,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ErrorConfiguration }
-     * 
+     *
      */
     public ErrorConfiguration createErrorConfiguration() {
         return new ErrorConfiguration();
@@ -1528,7 +1528,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Annotation }
-     * 
+     *
      */
     public Annotation createAnnotation() {
         return new Annotation();
@@ -1536,7 +1536,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RelationalDataSource }
-     * 
+     *
      */
     public RelationalDataSource createRelationalDataSource() {
         return new RelationalDataSource();
@@ -1544,7 +1544,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OlapDataSource }
-     * 
+     *
      */
     public OlapDataSource createOlapDataSource() {
         return new OlapDataSource();
@@ -1552,7 +1552,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ServerProperty }
-     * 
+     *
      */
     public ServerProperty createServerProperty() {
         return new ServerProperty();
@@ -1560,7 +1560,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ComAssembly }
-     * 
+     *
      */
     public ComAssembly createComAssembly() {
         return new ComAssembly();
@@ -1568,7 +1568,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClrAssemblyFile }
-     * 
+     *
      */
     public ClrAssemblyFile createClrAssemblyFile() {
         return new ClrAssemblyFile();
@@ -1576,7 +1576,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataBlock }
-     * 
+     *
      */
     public DataBlock createDataBlock() {
         return new DataBlock();
@@ -1585,7 +1585,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Event }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Event createEvent() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Event();
@@ -1593,7 +1593,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventColumnID }
-     * 
+     *
      */
     public EventColumnID createEventColumnID() {
         return new EventColumnID();
@@ -1601,7 +1601,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceFilter }
-     * 
+     *
      */
     public TraceFilter createTraceFilter() {
         return new TraceFilter();
@@ -1609,7 +1609,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NotType }
-     * 
+     *
      */
     public NotType createNotType() {
         return new NotType();
@@ -1617,7 +1617,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AndOrType }
-     * 
+     *
      */
     public AndOrType createAndOrType() {
         return new AndOrType();
@@ -1625,7 +1625,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BoolBinop }
-     * 
+     *
      */
     public BoolBinop createBoolBinop() {
         return new BoolBinop();
@@ -1633,7 +1633,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UnaryExpr }
-     * 
+     *
      */
     public UnaryExpr createUnaryExpr() {
         return new UnaryExpr();
@@ -1641,7 +1641,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BooleanExpr }
-     * 
+     *
      */
     public BooleanExpr createBooleanExpr() {
         return new BooleanExpr();
@@ -1649,7 +1649,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelingFlag }
-     * 
+     *
      */
     public MiningModelingFlag createMiningModelingFlag() {
         return new MiningModelingFlag();
@@ -1657,7 +1657,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AlgorithmParameter }
-     * 
+     *
      */
     public AlgorithmParameter createAlgorithmParameter() {
         return new AlgorithmParameter();
@@ -1665,7 +1665,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FoldingParameters }
-     * 
+     *
      */
     public FoldingParameters createFoldingParameters() {
         return new FoldingParameters();
@@ -1673,7 +1673,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportParameter }
-     * 
+     *
      */
     public ReportParameter createReportParameter() {
         return new ReportParameter();
@@ -1681,7 +1681,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportFormatParameter }
-     * 
+     *
      */
     public ReportFormatParameter createReportFormatParameter() {
         return new ReportFormatParameter();
@@ -1689,7 +1689,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesignAttribute }
-     * 
+     *
      */
     public AggregationDesignAttribute createAggregationDesignAttribute() {
         return new AggregationDesignAttribute();
@@ -1697,7 +1697,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstanceMeasure }
-     * 
+     *
      */
     public AggregationInstanceMeasure createAggregationInstanceMeasure() {
         return new AggregationInstanceMeasure();
@@ -1705,7 +1705,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Account.Aliases }
-     * 
+     *
      */
     public Account.Aliases createAccountAliases() {
         return new Account.Aliases();
@@ -1713,7 +1713,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Account.Annotations }
-     * 
+     *
      */
     public Account.Annotations createAccountAnnotations() {
         return new Account.Annotations();
@@ -1721,7 +1721,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstanceAttribute.KeyColumns }
-     * 
+     *
      */
     public AggregationInstanceAttribute.KeyColumns createAggregationInstanceAttributeKeyColumns() {
         return new AggregationInstanceAttribute.KeyColumns();
@@ -1729,7 +1729,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstanceDimension.Attributes }
-     * 
+     *
      */
     public AggregationInstanceDimension.Attributes createAggregationInstanceDimensionAttributes() {
         return new AggregationInstanceDimension.Attributes();
@@ -1737,7 +1737,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstance.Dimensions }
-     * 
+     *
      */
     public AggregationInstance.Dimensions createAggregationInstanceDimensions() {
         return new AggregationInstance.Dimensions();
@@ -1745,7 +1745,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstance.Measures }
-     * 
+     *
      */
     public AggregationInstance.Measures createAggregationInstanceMeasures() {
         return new AggregationInstance.Measures();
@@ -1753,7 +1753,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationInstance.Annotations }
-     * 
+     *
      */
     public AggregationInstance.Annotations createAggregationInstanceAnnotations() {
         return new AggregationInstance.Annotations();
@@ -1761,7 +1761,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Partition.Annotations }
-     * 
+     *
      */
     public Partition.Annotations createPartitionAnnotations() {
         return new Partition.Annotations();
@@ -1769,7 +1769,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Partition.StorageMode }
-     * 
+     *
      */
     public Partition.StorageMode createPartitionStorageMode() {
         return new Partition.StorageMode();
@@ -1777,7 +1777,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Partition.CurrentStorageMode }
-     * 
+     *
      */
     public Partition.CurrentStorageMode createPartitionCurrentStorageMode() {
         return new Partition.CurrentStorageMode();
@@ -1785,7 +1785,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Partition.AggregationInstances }
-     * 
+     *
      */
     public Partition.AggregationInstances createPartitionAggregationInstances() {
         return new Partition.AggregationInstances();
@@ -1793,7 +1793,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationAttribute.Annotations }
-     * 
+     *
      */
     public AggregationAttribute.Annotations createAggregationAttributeAnnotations() {
         return new AggregationAttribute.Annotations();
@@ -1801,7 +1801,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDimension.Attributes }
-     * 
+     *
      */
     public AggregationDimension.Attributes createAggregationDimensionAttributes() {
         return new AggregationDimension.Attributes();
@@ -1809,7 +1809,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDimension.Annotations }
-     * 
+     *
      */
     public AggregationDimension.Annotations createAggregationDimensionAnnotations() {
         return new AggregationDimension.Annotations();
@@ -1817,7 +1817,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Aggregation.Dimensions }
-     * 
+     *
      */
     public Aggregation.Dimensions createAggregationDimensions() {
         return new Aggregation.Dimensions();
@@ -1825,7 +1825,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Aggregation.Annotations }
-     * 
+     *
      */
     public Aggregation.Annotations createAggregationAnnotations() {
         return new Aggregation.Annotations();
@@ -1833,7 +1833,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesignDimension.Attributes }
-     * 
+     *
      */
     public AggregationDesignDimension.Attributes createAggregationDesignDimensionAttributes() {
         return new AggregationDesignDimension.Attributes();
@@ -1841,7 +1841,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesignDimension.Annotations }
-     * 
+     *
      */
     public AggregationDesignDimension.Annotations createAggregationDesignDimensionAnnotations() {
         return new AggregationDesignDimension.Annotations();
@@ -1849,7 +1849,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesign.Annotations }
-     * 
+     *
      */
     public AggregationDesign.Annotations createAggregationDesignAnnotations() {
         return new AggregationDesign.Annotations();
@@ -1857,7 +1857,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesign.Dimensions }
-     * 
+     *
      */
     public AggregationDesign.Dimensions createAggregationDesignDimensions() {
         return new AggregationDesign.Dimensions();
@@ -1865,7 +1865,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AggregationDesign.Aggregations }
-     * 
+     *
      */
     public AggregationDesign.Aggregations createAggregationDesignAggregations() {
         return new AggregationDesign.Aggregations();
@@ -1873,7 +1873,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Measure.Translations }
-     * 
+     *
      */
     public Measure.Translations createMeasureTranslations() {
         return new Measure.Translations();
@@ -1881,7 +1881,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Measure.Annotations }
-     * 
+     *
      */
     public Measure.Annotations createMeasureAnnotations() {
         return new Measure.Annotations();
@@ -1889,7 +1889,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroupAttribute.KeyColumns }
-     * 
+     *
      */
     public MeasureGroupAttribute.KeyColumns createMeasureGroupAttributeKeyColumns() {
         return new MeasureGroupAttribute.KeyColumns();
@@ -1897,7 +1897,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroupAttribute.Annotations }
-     * 
+     *
      */
     public MeasureGroupAttribute.Annotations createMeasureGroupAttributeAnnotations() {
         return new MeasureGroupAttribute.Annotations();
@@ -1905,7 +1905,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataMiningMeasureGroupDimension.Annotations }
-     * 
+     *
      */
     public DataMiningMeasureGroupDimension.Annotations createDataMiningMeasureGroupDimensionAnnotations() {
         return new DataMiningMeasureGroupDimension.Annotations();
@@ -1913,7 +1913,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DegenerateMeasureGroupDimension.Annotations }
-     * 
+     *
      */
     public DegenerateMeasureGroupDimension.Annotations createDegenerateMeasureGroupDimensionAnnotations() {
         return new DegenerateMeasureGroupDimension.Annotations();
@@ -1921,7 +1921,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReferenceMeasureGroupDimension.Annotations }
-     * 
+     *
      */
     public ReferenceMeasureGroupDimension.Annotations createReferenceMeasureGroupDimensionAnnotations() {
         return new ReferenceMeasureGroupDimension.Annotations();
@@ -1929,7 +1929,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RegularMeasureGroupDimension.Annotations }
-     * 
+     *
      */
     public RegularMeasureGroupDimension.Annotations createRegularMeasureGroupDimensionAnnotations() {
         return new RegularMeasureGroupDimension.Annotations();
@@ -1937,7 +1937,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RegularMeasureGroupDimension.Attributes }
-     * 
+     *
      */
     public RegularMeasureGroupDimension.Attributes createRegularMeasureGroupDimensionAttributes() {
         return new RegularMeasureGroupDimension.Attributes();
@@ -1945,7 +1945,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ManyToManyMeasureGroupDimension.Annotations }
-     * 
+     *
      */
     public ManyToManyMeasureGroupDimension.Annotations createManyToManyMeasureGroupDimensionAnnotations() {
         return new ManyToManyMeasureGroupDimension.Annotations();
@@ -1953,7 +1953,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.Annotations }
-     * 
+     *
      */
     public MeasureGroup.Annotations createMeasureGroupAnnotations() {
         return new MeasureGroup.Annotations();
@@ -1961,7 +1961,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.Translations }
-     * 
+     *
      */
     public MeasureGroup.Translations createMeasureGroupTranslations() {
         return new MeasureGroup.Translations();
@@ -1969,7 +1969,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.Measures }
-     * 
+     *
      */
     public MeasureGroup.Measures createMeasureGroupMeasures() {
         return new MeasureGroup.Measures();
@@ -1977,7 +1977,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.StorageMode }
-     * 
+     *
      */
     public MeasureGroup.StorageMode createMeasureGroupStorageMode() {
         return new MeasureGroup.StorageMode();
@@ -1985,7 +1985,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.Dimensions }
-     * 
+     *
      */
     public MeasureGroup.Dimensions createMeasureGroupDimensions() {
         return new MeasureGroup.Dimensions();
@@ -1993,7 +1993,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.Partitions }
-     * 
+     *
      */
     public MeasureGroup.Partitions createMeasureGroupPartitions() {
         return new MeasureGroup.Partitions();
@@ -2001,7 +2001,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MeasureGroup.AggregationDesigns }
-     * 
+     *
      */
     public MeasureGroup.AggregationDesigns createMeasureGroupAggregationDesigns() {
         return new MeasureGroup.AggregationDesigns();
@@ -2009,7 +2009,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveAction.Annotations }
-     * 
+     *
      */
     public PerspectiveAction.Annotations createPerspectiveActionAnnotations() {
         return new PerspectiveAction.Annotations();
@@ -2017,7 +2017,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveKpi.Annotations }
-     * 
+     *
      */
     public PerspectiveKpi.Annotations createPerspectiveKpiAnnotations() {
         return new PerspectiveKpi.Annotations();
@@ -2025,7 +2025,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveCalculation.Annotations }
-     * 
+     *
      */
     public PerspectiveCalculation.Annotations createPerspectiveCalculationAnnotations() {
         return new PerspectiveCalculation.Annotations();
@@ -2033,7 +2033,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveMeasure.Annotations }
-     * 
+     *
      */
     public PerspectiveMeasure.Annotations createPerspectiveMeasureAnnotations() {
         return new PerspectiveMeasure.Annotations();
@@ -2041,7 +2041,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveMeasureGroup.Measures }
-     * 
+     *
      */
     public PerspectiveMeasureGroup.Measures createPerspectiveMeasureGroupMeasures() {
         return new PerspectiveMeasureGroup.Measures();
@@ -2049,7 +2049,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveMeasureGroup.Annotations }
-     * 
+     *
      */
     public PerspectiveMeasureGroup.Annotations createPerspectiveMeasureGroupAnnotations() {
         return new PerspectiveMeasureGroup.Annotations();
@@ -2057,7 +2057,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveHierarchy.Annotations }
-     * 
+     *
      */
     public PerspectiveHierarchy.Annotations createPerspectiveHierarchyAnnotations() {
         return new PerspectiveHierarchy.Annotations();
@@ -2065,7 +2065,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveAttribute.Annotations }
-     * 
+     *
      */
     public PerspectiveAttribute.Annotations createPerspectiveAttributeAnnotations() {
         return new PerspectiveAttribute.Annotations();
@@ -2073,7 +2073,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveDimension.Attributes }
-     * 
+     *
      */
     public PerspectiveDimension.Attributes createPerspectiveDimensionAttributes() {
         return new PerspectiveDimension.Attributes();
@@ -2081,7 +2081,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveDimension.Hierarchies }
-     * 
+     *
      */
     public PerspectiveDimension.Hierarchies createPerspectiveDimensionHierarchies() {
         return new PerspectiveDimension.Hierarchies();
@@ -2089,7 +2089,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerspectiveDimension.Annotations }
-     * 
+     *
      */
     public PerspectiveDimension.Annotations createPerspectiveDimensionAnnotations() {
         return new PerspectiveDimension.Annotations();
@@ -2097,7 +2097,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Annotations }
-     * 
+     *
      */
     public Perspective.Annotations createPerspectiveAnnotations() {
         return new Perspective.Annotations();
@@ -2105,7 +2105,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Translations }
-     * 
+     *
      */
     public Perspective.Translations createPerspectiveTranslations() {
         return new Perspective.Translations();
@@ -2113,7 +2113,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Dimensions }
-     * 
+     *
      */
     public Perspective.Dimensions createPerspectiveDimensions() {
         return new Perspective.Dimensions();
@@ -2121,7 +2121,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.MeasureGroups }
-     * 
+     *
      */
     public Perspective.MeasureGroups createPerspectiveMeasureGroups() {
         return new Perspective.MeasureGroups();
@@ -2129,7 +2129,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Calculations }
-     * 
+     *
      */
     public Perspective.Calculations createPerspectiveCalculations() {
         return new Perspective.Calculations();
@@ -2137,7 +2137,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Kpis }
-     * 
+     *
      */
     public Perspective.Kpis createPerspectiveKpis() {
         return new Perspective.Kpis();
@@ -2145,7 +2145,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Perspective.Actions }
-     * 
+     *
      */
     public Perspective.Actions createPerspectiveActions() {
         return new Perspective.Actions();
@@ -2153,7 +2153,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CalculationProperty.Translations }
-     * 
+     *
      */
     public CalculationProperty.Translations createCalculationPropertyTranslations() {
         return new CalculationProperty.Translations();
@@ -2161,7 +2161,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MdxScript.Annotations }
-     * 
+     *
      */
     public MdxScript.Annotations createMdxScriptAnnotations() {
         return new MdxScript.Annotations();
@@ -2169,7 +2169,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MdxScript.Commands }
-     * 
+     *
      */
     public MdxScript.Commands createMdxScriptCommands() {
         return new MdxScript.Commands();
@@ -2177,7 +2177,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MdxScript.CalculationProperties }
-     * 
+     *
      */
     public MdxScript.CalculationProperties createMdxScriptCalculationProperties() {
         return new MdxScript.CalculationProperties();
@@ -2185,7 +2185,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DrillThroughAction.Translations }
-     * 
+     *
      */
     public DrillThroughAction.Translations createDrillThroughActionTranslations() {
         return new DrillThroughAction.Translations();
@@ -2193,7 +2193,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DrillThroughAction.Annotations }
-     * 
+     *
      */
     public DrillThroughAction.Annotations createDrillThroughActionAnnotations() {
         return new DrillThroughAction.Annotations();
@@ -2201,7 +2201,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DrillThroughAction.Columns }
-     * 
+     *
      */
     public DrillThroughAction.Columns createDrillThroughActionColumns() {
         return new DrillThroughAction.Columns();
@@ -2209,7 +2209,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportAction.Translations }
-     * 
+     *
      */
     public ReportAction.Translations createReportActionTranslations() {
         return new ReportAction.Translations();
@@ -2217,7 +2217,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportAction.Annotations }
-     * 
+     *
      */
     public ReportAction.Annotations createReportActionAnnotations() {
         return new ReportAction.Annotations();
@@ -2225,7 +2225,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportAction.ReportParameters }
-     * 
+     *
      */
     public ReportAction.ReportParameters createReportActionReportParameters() {
         return new ReportAction.ReportParameters();
@@ -2233,7 +2233,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ReportAction.ReportFormatParameters }
-     * 
+     *
      */
     public ReportAction.ReportFormatParameters createReportActionReportFormatParameters() {
         return new ReportAction.ReportFormatParameters();
@@ -2241,7 +2241,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link StandardAction.Translations }
-     * 
+     *
      */
     public StandardAction.Translations createStandardActionTranslations() {
         return new StandardAction.Translations();
@@ -2249,7 +2249,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link StandardAction.Annotations }
-     * 
+     *
      */
     public StandardAction.Annotations createStandardActionAnnotations() {
         return new StandardAction.Annotations();
@@ -2257,7 +2257,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Kpi.Translations }
-     * 
+     *
      */
     public Kpi.Translations createKpiTranslations() {
         return new Kpi.Translations();
@@ -2265,7 +2265,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Kpi.Annotations }
-     * 
+     *
      */
     public Kpi.Annotations createKpiAnnotations() {
         return new Kpi.Annotations();
@@ -2273,7 +2273,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeHierarchy.Annotations }
-     * 
+     *
      */
     public CubeHierarchy.Annotations createCubeHierarchyAnnotations() {
         return new CubeHierarchy.Annotations();
@@ -2281,7 +2281,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeAttribute.Annotations }
-     * 
+     *
      */
     public CubeAttribute.Annotations createCubeAttributeAnnotations() {
         return new CubeAttribute.Annotations();
@@ -2289,7 +2289,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimension.Translations }
-     * 
+     *
      */
     public CubeDimension.Translations createCubeDimensionTranslations() {
         return new CubeDimension.Translations();
@@ -2297,7 +2297,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimension.Attributes }
-     * 
+     *
      */
     public CubeDimension.Attributes createCubeDimensionAttributes() {
         return new CubeDimension.Attributes();
@@ -2305,7 +2305,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimension.Hierarchies }
-     * 
+     *
      */
     public CubeDimension.Hierarchies createCubeDimensionHierarchies() {
         return new CubeDimension.Hierarchies();
@@ -2313,7 +2313,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimension.Annotations }
-     * 
+     *
      */
     public CubeDimension.Annotations createCubeDimensionAnnotations() {
         return new CubeDimension.Annotations();
@@ -2321,7 +2321,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Annotations }
-     * 
+     *
      */
     public Cube.Annotations createCubeAnnotations() {
         return new Cube.Annotations();
@@ -2329,7 +2329,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Translations }
-     * 
+     *
      */
     public Cube.Translations createCubeTranslations() {
         return new Cube.Translations();
@@ -2337,7 +2337,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Dimensions }
-     * 
+     *
      */
     public Cube.Dimensions createCubeDimensions() {
         return new Cube.Dimensions();
@@ -2345,7 +2345,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.CubePermissions }
-     * 
+     *
      */
     public Cube.CubePermissions createCubeCubePermissions() {
         return new Cube.CubePermissions();
@@ -2353,7 +2353,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.MdxScripts }
-     * 
+     *
      */
     public Cube.MdxScripts createCubeMdxScripts() {
         return new Cube.MdxScripts();
@@ -2361,7 +2361,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Perspectives }
-     * 
+     *
      */
     public Cube.Perspectives createCubePerspectives() {
         return new Cube.Perspectives();
@@ -2369,7 +2369,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.MeasureGroups }
-     * 
+     *
      */
     public Cube.MeasureGroups createCubeMeasureGroups() {
         return new Cube.MeasureGroups();
@@ -2377,7 +2377,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.StorageMode }
-     * 
+     *
      */
     public Cube.StorageMode createCubeStorageMode() {
         return new Cube.StorageMode();
@@ -2385,7 +2385,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Kpis }
-     * 
+     *
      */
     public Cube.Kpis createCubeKpis() {
         return new Cube.Kpis();
@@ -2393,7 +2393,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Cube.Actions }
-     * 
+     *
      */
     public Cube.Actions createCubeActions() {
         return new Cube.Actions();
@@ -2401,7 +2401,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelColumn.Translations }
-     * 
+     *
      */
     public MiningModelColumn.Translations createMiningModelColumnTranslations() {
         return new MiningModelColumn.Translations();
@@ -2409,7 +2409,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelColumn.Columns }
-     * 
+     *
      */
     public MiningModelColumn.Columns createMiningModelColumnColumns() {
         return new MiningModelColumn.Columns();
@@ -2417,7 +2417,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelColumn.ModelingFlags }
-     * 
+     *
      */
     public MiningModelColumn.ModelingFlags createMiningModelColumnModelingFlags() {
         return new MiningModelColumn.ModelingFlags();
@@ -2425,7 +2425,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModelColumn.Annotations }
-     * 
+     *
      */
     public MiningModelColumn.Annotations createMiningModelColumnAnnotations() {
         return new MiningModelColumn.Annotations();
@@ -2433,7 +2433,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel.Annotations }
-     * 
+     *
      */
     public MiningModel.Annotations createMiningModelAnnotations() {
         return new MiningModel.Annotations();
@@ -2441,7 +2441,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel.AlgorithmParameters }
-     * 
+     *
      */
     public MiningModel.AlgorithmParameters createMiningModelAlgorithmParameters() {
         return new MiningModel.AlgorithmParameters();
@@ -2449,7 +2449,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel.Translations }
-     * 
+     *
      */
     public MiningModel.Translations createMiningModelTranslations() {
         return new MiningModel.Translations();
@@ -2457,7 +2457,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel.Columns }
-     * 
+     *
      */
     public MiningModel.Columns createMiningModelColumns() {
         return new MiningModel.Columns();
@@ -2465,7 +2465,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningModel.MiningModelPermissions }
-     * 
+     *
      */
     public MiningModel.MiningModelPermissions createMiningModelMiningModelPermissions() {
         return new MiningModel.MiningModelPermissions();
@@ -2473,7 +2473,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableMiningStructureColumn.ForeignKeyColumns }
-     * 
+     *
      */
     public TableMiningStructureColumn.ForeignKeyColumns createTableMiningStructureColumnForeignKeyColumns() {
         return new TableMiningStructureColumn.ForeignKeyColumns();
@@ -2481,7 +2481,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableMiningStructureColumn.Columns }
-     * 
+     *
      */
     public TableMiningStructureColumn.Columns createTableMiningStructureColumnColumns() {
         return new TableMiningStructureColumn.Columns();
@@ -2489,7 +2489,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TableMiningStructureColumn.Translations }
-     * 
+     *
      */
     public TableMiningStructureColumn.Translations createTableMiningStructureColumnTranslations() {
         return new TableMiningStructureColumn.Translations();
@@ -2497,7 +2497,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.Annotations }
-     * 
+     *
      */
     public ScalarMiningStructureColumn.Annotations createScalarMiningStructureColumnAnnotations() {
         return new ScalarMiningStructureColumn.Annotations();
@@ -2505,7 +2505,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.ModelingFlags }
-     * 
+     *
      */
     public ScalarMiningStructureColumn.ModelingFlags createScalarMiningStructureColumnModelingFlags() {
         return new ScalarMiningStructureColumn.ModelingFlags();
@@ -2513,7 +2513,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.ClassifiedColumns }
-     * 
+     *
      */
     public ScalarMiningStructureColumn.ClassifiedColumns createScalarMiningStructureColumnClassifiedColumns() {
         return new ScalarMiningStructureColumn.ClassifiedColumns();
@@ -2521,7 +2521,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.KeyColumns }
-     * 
+     *
      */
     public ScalarMiningStructureColumn.KeyColumns createScalarMiningStructureColumnKeyColumns() {
         return new ScalarMiningStructureColumn.KeyColumns();
@@ -2529,7 +2529,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.Translations }
-     * 
+     *
      */
     public ScalarMiningStructureColumn.Translations createScalarMiningStructureColumnTranslations() {
         return new ScalarMiningStructureColumn.Translations();
@@ -2537,7 +2537,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure.Annotations }
-     * 
+     *
      */
     public MiningStructure.Annotations createMiningStructureAnnotations() {
         return new MiningStructure.Annotations();
@@ -2545,7 +2545,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure.Translations }
-     * 
+     *
      */
     public MiningStructure.Translations createMiningStructureTranslations() {
         return new MiningStructure.Translations();
@@ -2553,7 +2553,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure.Columns }
-     * 
+     *
      */
     public MiningStructure.Columns createMiningStructureColumns() {
         return new MiningStructure.Columns();
@@ -2561,7 +2561,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure.MiningStructurePermissions }
-     * 
+     *
      */
     public MiningStructure.MiningStructurePermissions createMiningStructureMiningStructurePermissions() {
         return new MiningStructure.MiningStructurePermissions();
@@ -2569,7 +2569,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MiningStructure.MiningModels }
-     * 
+     *
      */
     public MiningStructure.MiningModels createMiningStructureMiningModels() {
         return new MiningStructure.MiningModels();
@@ -2577,7 +2577,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Annotations }
-     * 
+     *
      */
     public Database.Annotations createDatabaseAnnotations() {
         return new Database.Annotations();
@@ -2585,7 +2585,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Accounts }
-     * 
+     *
      */
     public Database.Accounts createDatabaseAccounts() {
         return new Database.Accounts();
@@ -2593,7 +2593,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.DataSources }
-     * 
+     *
      */
     public Database.DataSources createDatabaseDataSources() {
         return new Database.DataSources();
@@ -2601,7 +2601,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.DataSourceViews }
-     * 
+     *
      */
     public Database.DataSourceViews createDatabaseDataSourceViews() {
         return new Database.DataSourceViews();
@@ -2609,7 +2609,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Dimensions }
-     * 
+     *
      */
     public Database.Dimensions createDatabaseDimensions() {
         return new Database.Dimensions();
@@ -2617,7 +2617,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Cubes }
-     * 
+     *
      */
     public Database.Cubes createDatabaseCubes() {
         return new Database.Cubes();
@@ -2625,7 +2625,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.MiningStructures }
-     * 
+     *
      */
     public Database.MiningStructures createDatabaseMiningStructures() {
         return new Database.MiningStructures();
@@ -2633,7 +2633,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Roles }
-     * 
+     *
      */
     public Database.Roles createDatabaseRoles() {
         return new Database.Roles();
@@ -2641,7 +2641,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Assemblies }
-     * 
+     *
      */
     public Database.Assemblies createDatabaseAssemblies() {
         return new Database.Assemblies();
@@ -2649,7 +2649,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.DatabasePermissions }
-     * 
+     *
      */
     public Database.DatabasePermissions createDatabaseDatabasePermissions() {
         return new Database.DatabasePermissions();
@@ -2657,7 +2657,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Database.Translations }
-     * 
+     *
      */
     public Database.Translations createDatabaseTranslations() {
         return new Database.Translations();
@@ -2665,7 +2665,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PredLeaf.Comparator }
-     * 
+     *
      */
     public PredLeaf.Comparator createPredLeafComparator() {
         return new PredLeaf.Comparator();
@@ -2673,7 +2673,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PredLeaf.Event }
-     * 
+     *
      */
     public PredLeaf.Event createPredLeafEvent() {
         return new PredLeaf.Event();
@@ -2681,7 +2681,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PredLeaf.Global }
-     * 
+     *
      */
     public PredLeaf.Global createPredLeafGlobal() {
         return new PredLeaf.Global();
@@ -2689,7 +2689,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Trace.Annotations }
-     * 
+     *
      */
     public Trace.Annotations createTraceAnnotations() {
         return new Trace.Annotations();
@@ -2698,7 +2698,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations createAssemblyAnnotations() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations();
@@ -2706,7 +2706,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClrAssembly.Files }
-     * 
+     *
      */
     public ClrAssembly.Files createClrAssemblyFiles() {
         return new ClrAssembly.Files();
@@ -2714,7 +2714,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.Annotations }
-     * 
+     *
      */
     public Server.Annotations createServerAnnotations() {
         return new Server.Annotations();
@@ -2722,7 +2722,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.Databases }
-     * 
+     *
      */
     public Server.Databases createServerDatabases() {
         return new Server.Databases();
@@ -2730,7 +2730,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.Assemblies }
-     * 
+     *
      */
     public Server.Assemblies createServerAssemblies() {
         return new Server.Assemblies();
@@ -2738,7 +2738,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.Traces }
-     * 
+     *
      */
     public Server.Traces createServerTraces() {
         return new Server.Traces();
@@ -2746,7 +2746,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.Roles }
-     * 
+     *
      */
     public Server.Roles createServerRoles() {
         return new Server.Roles();
@@ -2754,7 +2754,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Server.ServerProperties }
-     * 
+     *
      */
     public Server.ServerProperties createServerServerProperties() {
         return new Server.ServerProperties();
@@ -2762,7 +2762,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Level.Translations }
-     * 
+     *
      */
     public Level.Translations createLevelTranslations() {
         return new Level.Translations();
@@ -2770,7 +2770,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Level.Annotations }
-     * 
+     *
      */
     public Level.Annotations createLevelAnnotations() {
         return new Level.Annotations();
@@ -2778,7 +2778,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Hierarchy.Translations }
-     * 
+     *
      */
     public Hierarchy.Translations createHierarchyTranslations() {
         return new Hierarchy.Translations();
@@ -2786,7 +2786,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Hierarchy.AllMemberTranslations }
-     * 
+     *
      */
     public Hierarchy.AllMemberTranslations createHierarchyAllMemberTranslations() {
         return new Hierarchy.AllMemberTranslations();
@@ -2794,7 +2794,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Hierarchy.Levels }
-     * 
+     *
      */
     public Hierarchy.Levels createHierarchyLevels() {
         return new Hierarchy.Levels();
@@ -2802,7 +2802,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Hierarchy.Annotations }
-     * 
+     *
      */
     public Hierarchy.Annotations createHierarchyAnnotations() {
         return new Hierarchy.Annotations();
@@ -2810,7 +2810,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeRelationship.Annotations }
-     * 
+     *
      */
     public AttributeRelationship.Annotations createAttributeRelationshipAnnotations() {
         return new AttributeRelationship.Annotations();
@@ -2818,7 +2818,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeRelationship.Translations }
-     * 
+     *
      */
     public AttributeRelationship.Translations createAttributeRelationshipTranslations() {
         return new AttributeRelationship.Translations();
@@ -2826,7 +2826,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeTranslation.Annotations }
-     * 
+     *
      */
     public AttributeTranslation.Annotations createAttributeTranslationAnnotations() {
         return new AttributeTranslation.Annotations();
@@ -2835,7 +2835,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation.Annotations }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation.Annotations createTranslationAnnotations() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation.Annotations();
@@ -2843,7 +2843,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataItem.Annotations }
-     * 
+     *
      */
     public DataItem.Annotations createDataItemAnnotations() {
         return new DataItem.Annotations();
@@ -2851,7 +2851,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.Type }
-     * 
+     *
      */
     public DimensionAttribute.Type createDimensionAttributeType() {
         return new DimensionAttribute.Type();
@@ -2859,7 +2859,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.KeyColumns }
-     * 
+     *
      */
     public DimensionAttribute.KeyColumns createDimensionAttributeKeyColumns() {
         return new DimensionAttribute.KeyColumns();
@@ -2867,7 +2867,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.Translations }
-     * 
+     *
      */
     public DimensionAttribute.Translations createDimensionAttributeTranslations() {
         return new DimensionAttribute.Translations();
@@ -2875,7 +2875,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.AttributeRelationships }
-     * 
+     *
      */
     public DimensionAttribute.AttributeRelationships createDimensionAttributeAttributeRelationships() {
         return new DimensionAttribute.AttributeRelationships();
@@ -2883,7 +2883,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.NamingTemplateTranslations }
-     * 
+     *
      */
     public DimensionAttribute.NamingTemplateTranslations createDimensionAttributeNamingTemplateTranslations() {
         return new DimensionAttribute.NamingTemplateTranslations();
@@ -2891,7 +2891,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionAttribute.Annotations }
-     * 
+     *
      */
     public DimensionAttribute.Annotations createDimensionAttributeAnnotations() {
         return new DimensionAttribute.Annotations();
@@ -2899,7 +2899,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.Annotations }
-     * 
+     *
      */
     public Dimension.Annotations createDimensionAnnotations() {
         return new Dimension.Annotations();
@@ -2907,7 +2907,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.UnknownMember }
-     * 
+     *
      */
     public Dimension.UnknownMember createDimensionUnknownMember() {
         return new Dimension.UnknownMember();
@@ -2915,7 +2915,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.DimensionPermissions }
-     * 
+     *
      */
     public Dimension.DimensionPermissions createDimensionDimensionPermissions() {
         return new Dimension.DimensionPermissions();
@@ -2923,7 +2923,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.UnknownMemberTranslations }
-     * 
+     *
      */
     public Dimension.UnknownMemberTranslations createDimensionUnknownMemberTranslations() {
         return new Dimension.UnknownMemberTranslations();
@@ -2931,7 +2931,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.CurrentStorageMode }
-     * 
+     *
      */
     public Dimension.CurrentStorageMode createDimensionCurrentStorageMode() {
         return new Dimension.CurrentStorageMode();
@@ -2939,7 +2939,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.Translations }
-     * 
+     *
      */
     public Dimension.Translations createDimensionTranslations() {
         return new Dimension.Translations();
@@ -2947,7 +2947,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.Attributes }
-     * 
+     *
      */
     public Dimension.Attributes createDimensionAttributes() {
         return new Dimension.Attributes();
@@ -2955,7 +2955,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.AttributeAllMemberTranslations }
-     * 
+     *
      */
     public Dimension.AttributeAllMemberTranslations createDimensionAttributeAllMemberTranslations() {
         return new Dimension.AttributeAllMemberTranslations();
@@ -2963,7 +2963,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Dimension.Hierarchies }
-     * 
+     *
      */
     public Dimension.Hierarchies createDimensionHierarchies() {
         return new Dimension.Hierarchies();
@@ -2971,7 +2971,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PushedDataSource.Root }
-     * 
+     *
      */
     public PushedDataSource.Root createPushedDataSourceRoot() {
         return new PushedDataSource.Root();
@@ -2979,7 +2979,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PushedDataSource.EndOfData }
-     * 
+     *
      */
     public PushedDataSource.EndOfData createPushedDataSourceEndOfData() {
         return new PushedDataSource.EndOfData();
@@ -2988,7 +2988,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations createDataSourceAnnotations() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations();
@@ -2997,7 +2997,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions }
-     * 
+     *
      */
     public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions createDataSourceDataSourcePermissions() {
         return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions();
@@ -3005,7 +3005,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceColumns.Data.Column }
-     * 
+     *
      */
     public TraceColumns.Data.Column createTraceColumnsDataColumn() {
         return new TraceColumns.Data.Column();
@@ -3014,7 +3014,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link EventColumn.EventColumnSubclassList.EventColumnSubclass }
-     * 
+     *
      */
     public EventColumn.EventColumnSubclassList.EventColumnSubclass createEventColumnEventColumnSubclassListEventColumnSubclass() {
         return new EventColumn.EventColumnSubclassList.EventColumnSubclass();
@@ -3022,7 +3022,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceEvent.EventColumnList }
-     * 
+     *
      */
     public TraceEvent.EventColumnList createTraceEventEventColumnList() {
         return new TraceEvent.EventColumnList();
@@ -3031,7 +3031,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link TraceEventCategories.Data.EventCategory.EventList }
-     * 
+     *
      */
     public TraceEventCategories.Data.EventCategory.EventList createTraceEventCategoriesDataEventCategoryEventList() {
         return new TraceEventCategories.Data.EventCategory.EventList();
@@ -3039,7 +3039,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TraceDefinitionProviderInfo.Data.Version }
-     * 
+     *
      */
     public TraceDefinitionProviderInfo.Data.Version createTraceDefinitionProviderInfoDataVersion() {
         return new TraceDefinitionProviderInfo.Data.Version();
@@ -3047,7 +3047,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Role.Annotations }
-     * 
+     *
      */
     public Role.Annotations createRoleAnnotations() {
         return new Role.Annotations();
@@ -3055,7 +3055,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Role.Members }
-     * 
+     *
      */
     public Role.Members createRoleMembers() {
         return new Role.Members();
@@ -3063,7 +3063,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Permission.Annotations }
-     * 
+     *
      */
     public Permission.Annotations createPermissionAnnotations() {
         return new Permission.Annotations();
@@ -3071,7 +3071,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubePermission.DimensionPermissions }
-     * 
+     *
      */
     public CubePermission.DimensionPermissions createCubePermissionDimensionPermissions() {
         return new CubePermission.DimensionPermissions();
@@ -3079,7 +3079,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubePermission.CellPermissions }
-     * 
+     *
      */
     public CubePermission.CellPermissions createCubePermissionCellPermissions() {
         return new CubePermission.CellPermissions();
@@ -3087,7 +3087,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DimensionPermission.AttributePermissions }
-     * 
+     *
      */
     public DimensionPermission.AttributePermissions createDimensionPermissionAttributePermissions() {
         return new DimensionPermission.AttributePermissions();
@@ -3095,7 +3095,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellPermission.Annotations }
-     * 
+     *
      */
     public CellPermission.Annotations createCellPermissionAnnotations() {
         return new CellPermission.Annotations();
@@ -3103,7 +3103,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributePermission.Annotations }
-     * 
+     *
      */
     public AttributePermission.Annotations createAttributePermissionAnnotations() {
         return new AttributePermission.Annotations();
@@ -3111,7 +3111,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimensionPermission.AttributePermissions }
-     * 
+     *
      */
     public CubeDimensionPermission.AttributePermissions createCubeDimensionPermissionAttributePermissions() {
         return new CubeDimensionPermission.AttributePermissions();
@@ -3119,7 +3119,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeDimensionPermission.Annotations }
-     * 
+     *
      */
     public CubeDimensionPermission.Annotations createCubeDimensionPermissionAnnotations() {
         return new CubeDimensionPermission.Annotations();
@@ -3128,7 +3128,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications }
-     * 
+     *
      */
     public ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications createProactiveCachingIncrementalProcessingBindingIncrementalProcessingNotifications() {
         return new ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications();
@@ -3137,7 +3137,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link ProactiveCachingQueryBinding.QueryNotifications }
-     * 
+     *
      */
     public ProactiveCachingQueryBinding.QueryNotifications createProactiveCachingQueryBindingQueryNotifications() {
         return new ProactiveCachingQueryBinding.QueryNotifications();
@@ -3146,7 +3146,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link ProactiveCachingTablesBinding.TableNotifications }
-     * 
+     *
      */
     public ProactiveCachingTablesBinding.TableNotifications createProactiveCachingTablesBindingTableNotifications() {
         return new ProactiveCachingTablesBinding.TableNotifications();
@@ -3154,7 +3154,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeAttributeBinding.Ordinal }
-     * 
+     *
      */
     public CubeAttributeBinding.Ordinal createCubeAttributeBindingOrdinal() {
         return new CubeAttributeBinding.Ordinal();
@@ -3162,7 +3162,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Group.Members }
-     * 
+     *
      */
     public Group.Members createGroupMembers() {
         return new Group.Members();
@@ -3170,7 +3170,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UserDefinedGroupBinding.Groups }
-     * 
+     *
      */
     public UserDefinedGroupBinding.Groups createUserDefinedGroupBindingGroups() {
         return new UserDefinedGroupBinding.Groups();
@@ -3178,7 +3178,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.NameColumn }
-     * 
+     *
      */
     public OutOfLineBinding.NameColumn createOutOfLineBindingNameColumn() {
         return new OutOfLineBinding.NameColumn();
@@ -3186,7 +3186,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.SkippedLevelsColumn }
-     * 
+     *
      */
     public OutOfLineBinding.SkippedLevelsColumn createOutOfLineBindingSkippedLevelsColumn() {
         return new OutOfLineBinding.SkippedLevelsColumn();
@@ -3194,7 +3194,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.CustomRollupColumn }
-     * 
+     *
      */
     public OutOfLineBinding.CustomRollupColumn createOutOfLineBindingCustomRollupColumn() {
         return new OutOfLineBinding.CustomRollupColumn();
@@ -3202,7 +3202,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.CustomRollupPropertiesColumn }
-     * 
+     *
      */
     public OutOfLineBinding.CustomRollupPropertiesColumn createOutOfLineBindingCustomRollupPropertiesColumn() {
         return new OutOfLineBinding.CustomRollupPropertiesColumn();
@@ -3210,7 +3210,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.ValueColumn }
-     * 
+     *
      */
     public OutOfLineBinding.ValueColumn createOutOfLineBindingValueColumn() {
         return new OutOfLineBinding.ValueColumn();
@@ -3218,7 +3218,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.UnaryOperatorColumn }
-     * 
+     *
      */
     public OutOfLineBinding.UnaryOperatorColumn createOutOfLineBindingUnaryOperatorColumn() {
         return new OutOfLineBinding.UnaryOperatorColumn();
@@ -3226,7 +3226,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.Translations.Translation }
-     * 
+     *
      */
     public OutOfLineBinding.Translations.Translation createOutOfLineBindingTranslationsTranslation() {
         return new OutOfLineBinding.Translations.Translation();
@@ -3235,7 +3235,7 @@ public class ObjectFactory {
     /**
      * Create an instance of
      * {@link OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn }
-     * 
+     *
      */
     public OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn createOutOfLineBindingForeignKeyColumnsForeignKeyColumn() {
         return new OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn();
@@ -3243,7 +3243,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OutOfLineBinding.KeyColumns.KeyColumn }
-     * 
+     *
      */
     public OutOfLineBinding.KeyColumns.KeyColumn createOutOfLineBindingKeyColumnsKeyColumn() {
         return new OutOfLineBinding.KeyColumns.KeyColumn();
@@ -3251,7 +3251,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CloneDatabase.Object }
-     * 
+     *
      */
     public CloneDatabase.Object createCloneDatabaseObject() {
         return new CloneDatabase.Object();
@@ -3259,7 +3259,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CloneDatabase.Target }
-     * 
+     *
      */
     public CloneDatabase.Target createCloneDatabaseTarget() {
         return new CloneDatabase.Target();
@@ -3267,7 +3267,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ImageLoad.Data }
-     * 
+     *
      */
     public ImageLoad.Data createImageLoadData() {
         return new ImageLoad.Data();
@@ -3275,7 +3275,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Batch.Parallel }
-     * 
+     *
      */
     public Batch.Parallel createBatchParallel() {
         return new Batch.Parallel();
@@ -3283,7 +3283,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NotifyTableChange.TableNotifications }
-     * 
+     *
      */
     public NotifyTableChange.TableNotifications createNotifyTableChangeTableNotifications() {
         return new NotifyTableChange.TableNotifications();
@@ -3291,7 +3291,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WhereAttribute.Keys }
-     * 
+     *
      */
     public WhereAttribute.Keys createWhereAttributeKeys() {
         return new WhereAttribute.Keys();
@@ -3299,7 +3299,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Update.Attributes }
-     * 
+     *
      */
     public Update.Attributes createUpdateAttributes() {
         return new Update.Attributes();
@@ -3307,7 +3307,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeInsertUpdate.Keys }
-     * 
+     *
      */
     public AttributeInsertUpdate.Keys createAttributeInsertUpdateKeys() {
         return new AttributeInsertUpdate.Keys();
@@ -3315,7 +3315,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeInsertUpdate.Translations }
-     * 
+     *
      */
     public AttributeInsertUpdate.Translations createAttributeInsertUpdateTranslations() {
         return new AttributeInsertUpdate.Translations();
@@ -3323,7 +3323,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Insert.Attributes }
-     * 
+     *
      */
     public Insert.Attributes createInsertAttributes() {
         return new Insert.Attributes();
@@ -3331,7 +3331,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Synchronize.Locations }
-     * 
+     *
      */
     public Synchronize.Locations createSynchronizeLocations() {
         return new Synchronize.Locations();
@@ -3339,7 +3339,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Location.Folders }
-     * 
+     *
      */
     public Location.Folders createLocationFolders() {
         return new Location.Folders();
@@ -3347,7 +3347,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Restore.Locations }
-     * 
+     *
      */
     public Restore.Locations createRestoreLocations() {
         return new Restore.Locations();
@@ -3355,7 +3355,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Backup.Locations }
-     * 
+     *
      */
     public Backup.Locations createBackupLocations() {
         return new Backup.Locations();
@@ -3363,7 +3363,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DesignAggregations.Queries }
-     * 
+     *
      */
     public DesignAggregations.Queries createDesignAggregationsQueries() {
         return new DesignAggregations.Queries();
@@ -3371,7 +3371,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MergePartitions.Sources }
-     * 
+     *
      */
     public MergePartitions.Sources createMergePartitionsSources() {
         return new MergePartitions.Sources();
@@ -3379,7 +3379,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DataSourceView.Annotations }
-     * 
+     *
      */
     public DataSourceView.Annotations createDataSourceViewAnnotations() {
         return new DataSourceView.Annotations();
@@ -3387,7 +3387,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link String
      *         }{@code >}
@@ -3399,7 +3399,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link String
      *         }{@code >}
@@ -3412,7 +3412,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BooleanExpr
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BooleanExpr
      *         }{@code >}
@@ -3425,7 +3425,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BooleanExpr
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BooleanExpr
      *         }{@code >}
@@ -3438,7 +3438,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link UnaryExpr
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link UnaryExpr
      *         }{@code >}
@@ -3450,7 +3450,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PredLeaf }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link PredLeaf
      *         }{@code >}
@@ -3462,7 +3462,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link NotType }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link NotType
      *         }{@code >}
@@ -3475,7 +3475,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AndOrType
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link AndOrType
      *         }{@code >}
@@ -3488,7 +3488,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AndOrType
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link AndOrType
      *         }{@code >}
@@ -3501,7 +3501,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3514,7 +3514,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3527,7 +3527,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3540,7 +3540,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3553,7 +3553,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3566,7 +3566,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3579,7 +3579,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}
@@ -3592,7 +3592,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link BoolBinop
      * }{@code >}
-     * 
+     *
      * @param value Java instance representing xml element's value.
      * @return the new instance of {@link JAXBElement }{@code <}{@link BoolBinop
      *         }{@code >}

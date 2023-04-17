@@ -41,7 +41,7 @@ public enum InvocationEnum {
     }
 
     public static InvocationEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (InvocationEnum c : InvocationEnum.values()) {
             if (c.value == vi) {
                 return c;

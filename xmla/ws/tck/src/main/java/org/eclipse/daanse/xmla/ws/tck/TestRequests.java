@@ -160,4 +160,8 @@ public class TestRequests {
           </Properties>
         </Execute>
           """;
+
+    private TestRequests() {
+        //constructor
+    }
 }

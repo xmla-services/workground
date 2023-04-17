@@ -22,18 +22,28 @@ package org.eclipse.daanse.xmla.api.xmla;
  */
 public enum AccessEnum {
 
-    Read,
+    READ("Read"),
 
-    ReadContingent,
+    READ_CONTINGENT("ReadContingent"),
 
-    ReadWrite;
+    READ_WRITE("ReadWrite");
+
+    private final String value;
+
+    AccessEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static AccessEnum fromValue(String v) {
         if (v == null) {
-            return Read;
+            return READ;
         }
         for (AccessEnum e : AccessEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.value.equals(v)) {
                 return e;
             }
         }

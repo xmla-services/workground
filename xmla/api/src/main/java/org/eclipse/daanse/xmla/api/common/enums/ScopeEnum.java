@@ -22,9 +22,9 @@ package org.eclipse.daanse.xmla.api.common.enums;
  */
 public enum ScopeEnum {
 
-    Global(1),
+    GLOBAL(1),
 
-    Session(2);
+    SESSION(2);
 
     private final int value;
 
@@ -40,7 +40,7 @@ public enum ScopeEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (ScopeEnum c : ScopeEnum.values()) {
             if (c.value == vi) {
                 return c;

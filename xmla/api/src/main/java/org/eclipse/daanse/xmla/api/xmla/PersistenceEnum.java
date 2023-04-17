@@ -19,20 +19,30 @@ public enum PersistenceEnum {
      * Source metadata, members, and data are all
      * dynamic.
      */
-    NotPersisted,
+    NOT_PERSISTED("NotPersisted"),
 
     /**
      * Source metadata is static, but members and data
      * are dynamic.
      */
-    Metadata;
+    METADATA("Metadata");
+
+    private final String value;
+
+    PersistenceEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static PersistenceEnum fromValue(String v) {
         if (v == null) {
-            return NotPersisted;
+            return NOT_PERSISTED;
         }
         for (PersistenceEnum e : PersistenceEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }
