@@ -6,26 +6,36 @@ public enum InvalidXmlCharacterEnum {
      * Specifies that invalid XML characters are
      * preserved in the character stream.
      */
-    Preserve,
+    PRESERVE("Preserve"),
 
     /**
      * Specifies that invalid XML characters are
      * removed.
      */
-    Remove,
+    REMOVE("Remove"),
 
     /**
      * Specifies that invalid XML characters are
      * replaced with a question mark (?) character.
      */
-    Replace;
+    REPLACE("Replace");
+
+    private final String value;
+
+    InvalidXmlCharacterEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static InvalidXmlCharacterEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (InvalidXmlCharacterEnum e : InvalidXmlCharacterEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

@@ -14,7 +14,36 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 public enum Content {
-    None, Schema, Data, SchemaData, DataOmitDefaultSlicer, DataIncludeDefaultSlicer;
 
-    public static final Content DEFAULT = SchemaData;
+    NONE("None"),
+    SCHEMA("Schema"),
+    DATA("Data"),
+    SCHEMA_DATA("SchemaData"),
+    DATA_OMIT_DEFAULT_SLICER("DataOmitDefaultSlicer"),
+    DATA_INCLUDE_DEFAULT_SLICER("DataIncludeDefaultSlicer");
+
+    private final String value;
+
+    Content(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static Content fromValue(String v) {
+        if (v == null) {
+            return SCHEMA_DATA;
+        }
+        for (Content e : Content.values()) {
+            if (e.getValue().equals(v)) {
+                return e;
+            }
+        }
+        throw new IllegalArgumentException(new StringBuilder("Content enum Illegal argument ")
+            .append(v).toString());
+    }
+
+    public static final Content DEFAULT = SCHEMA_DATA;
 }

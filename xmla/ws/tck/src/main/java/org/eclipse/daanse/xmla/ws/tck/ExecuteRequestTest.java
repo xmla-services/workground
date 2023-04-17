@@ -14,8 +14,8 @@
 package org.eclipse.daanse.xmla.ws.tck;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TupleFormat;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
+import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TUPLE_FORMAT;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
 import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
 import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
 import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
@@ -101,9 +101,9 @@ class ExecuteRequestTest {
                         assertThat(p.catalog()).isNotNull()
                             .isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                            .isPresent().contains(Tabular);
+                            .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
-                            .isPresent().contains(TupleFormat);
+                            .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
                     .satisfies(r -> {
@@ -134,9 +134,9 @@ class ExecuteRequestTest {
                         assertThat(p.catalog()).isNotNull()
                             .isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                            .isPresent().contains(Tabular);
+                            .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
-                            .isPresent().contains(TupleFormat);
+                            .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
                     .satisfies(r -> {
@@ -188,9 +188,9 @@ class ExecuteRequestTest {
                         assertThat(p.catalog()).isNotNull()
                             .isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                            .isPresent().contains(Tabular);
+                            .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
-                            .isPresent().contains(TupleFormat);
+                            .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
                     .satisfies(c -> {
@@ -223,9 +223,9 @@ class ExecuteRequestTest {
                         assertThat(p.catalog()).isNotNull()
                             .isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                            .isPresent().contains(Tabular);
+                            .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
-                            .isPresent().contains(TupleFormat);
+                            .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
                     .satisfies(r -> {

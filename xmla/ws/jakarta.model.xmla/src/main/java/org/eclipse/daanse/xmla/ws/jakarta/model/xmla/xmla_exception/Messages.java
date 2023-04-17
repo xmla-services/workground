@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "Messages", propOrder = {"warningOrError"})
 public class Messages implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElements({@XmlElement(name = "Warning", type = WarningType.class),
         @XmlElement(name = "Error", type = ErrorType.class)})
     protected List<Serializable> warningOrError;

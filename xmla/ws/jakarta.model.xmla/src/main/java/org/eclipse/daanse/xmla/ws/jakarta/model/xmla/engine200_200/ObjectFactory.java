@@ -29,41 +29,41 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _StorageEngineUsed_QNAME = new QName(
+  private static final QName _StorageEngineUsed_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "StorageEngineUsed");
-  private final static QName _ImagePath_QNAME = new QName(
+  private static final QName _ImagePath_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImagePath");
-  private final static QName _ImageUrl_QNAME = new QName(
+  private static final QName _ImageUrl_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageUrl");
-  private final static QName _ImageUniqueID_QNAME = new QName(
+  private static final QName _ImageUniqueID_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageUniqueID");
-  private final static QName _ImageVersion_QNAME = new QName(
+  private static final QName _ImageVersion_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageVersion");
-  private final static QName _Token_QNAME = new QName(
+  private static final QName _Token_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "Token");
-  private final static QName _ProcessingRecommendation_QNAME = new QName(
+  private static final QName _ProcessingRecommendation_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ProcessingRecommendation");
-  private final static QName _ProcessingState_QNAME = new QName(
+  private static final QName _ProcessingState_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ProcessingState");
-  private final static QName _ShareDimensionStorage_QNAME = new QName(
+  private static final QName _ShareDimensionStorage_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ShareDimensionStorage");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.eng200_200
-   * 
+   *
    */
   public ObjectFactory() {
   }
 
   /**
    * Create an instance of {@link RowNumberBinding }
-   * 
+   *
    */
   public RowNumberBinding createRowNumberBinding() {
     return new RowNumberBinding();
@@ -71,7 +71,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ExpressionBinding }
-   * 
+   *
    */
   public ExpressionBinding createExpressionBinding() {
     return new ExpressionBinding();
@@ -79,7 +79,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -91,7 +91,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -103,7 +103,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -115,7 +115,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -127,7 +127,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -139,7 +139,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -151,7 +151,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -163,7 +163,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -175,7 +175,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}

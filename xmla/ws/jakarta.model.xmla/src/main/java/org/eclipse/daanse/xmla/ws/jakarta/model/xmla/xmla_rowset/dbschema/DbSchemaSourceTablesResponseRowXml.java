@@ -32,7 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DbSchemaSourceTablesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 4980356365829213910L;
+    private static final long serialVersionUID = 4980356365829213910L;
 
     /**
      * @return Catalog name. NULL if the provider does not support

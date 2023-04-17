@@ -32,7 +32,7 @@ public enum PropertyOriginEnum {
      *  hierarchy.
      */
     @XmlEnumValue("1")
-    user_defined(1),
+    USER_DEFINED(1),
 
     /**
      *  Indicates the property
@@ -40,7 +40,7 @@ public enum PropertyOriginEnum {
      *  hierarchy.
      */
     @XmlEnumValue("2")
-    attribute_hierarchy(2),
+    ATTRIBUTE_HIERARCHY(2),
 
     /**
      * Indicates the property
@@ -48,7 +48,7 @@ public enum PropertyOriginEnum {
      * hierarchy.
      */
     @XmlEnumValue("4")
-    key_attribute_hierarchy(4),
+    KEY_ATTRIBUTE_HIERARCHY(4),
 
     /**
      * Indicates the property
@@ -56,7 +56,7 @@ public enum PropertyOriginEnum {
      * that is not enabled.
      */
     @XmlEnumValue("8")
-    attribute_hierarchy_not_enabled(8);
+    ATTRIBUTE_HIERARCHY_NOT_ENABLED(8);
 
     private final int value;
 

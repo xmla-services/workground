@@ -19,16 +19,26 @@ package org.eclipse.daanse.xmla.api.xmla;
  */
 public enum ReportingWeekToMonthPatternEnum {
 
-    Weeks445,
-    Weeks454,
-    Weeks544;
+    WEEKS_445("Weeks445"),
+    WEEKS_454("Weeks454"),
+    WEEKS_544("Weeks544");
+
+    private final String value;
+
+    ReportingWeekToMonthPatternEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static ReportingWeekToMonthPatternEnum fromValue(String v) {
         if (v == null) {
-            return Weeks445;
+            return WEEKS_445;
         }
         for (ReportingWeekToMonthPatternEnum e : ReportingWeekToMonthPatternEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

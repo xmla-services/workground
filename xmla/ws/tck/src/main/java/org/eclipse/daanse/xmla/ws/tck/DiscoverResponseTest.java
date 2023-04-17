@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.tck;
 
-import static org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum.Unauthenticated;
+import static org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum.UNAUTHENTICATED;
 import static org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum.MDP;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -160,7 +160,7 @@ class DiscoverResponseTest {
         DiscoverDataSourcesResponseRowR row = new DiscoverDataSourcesResponseRowR("dataSourceName",
             Optional.of("dataSourceDescription"), Optional.of("url"),
             Optional.of("dataSourceInfo"), "providerName",
-            Optional.of(MDP), Optional.of(Unauthenticated));
+            Optional.of(MDP), Optional.of(UNAUTHENTICATED));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.dataSources(Mockito.any())).thenReturn(List.of(row));
@@ -357,10 +357,10 @@ class DiscoverResponseTest {
             Optional.of("description"),
             Optional.of("roles"),
             Optional.of(LocalDateTime.of(2023, 2, 16, 10, 10)),
-            Optional.of(1), Optional.of(TypeEnum.Multidimensional), Optional.of(2), Optional.of("databaseId"),
+            Optional.of(1), Optional.of(TypeEnum.MULTIDIMENSIONAL), Optional.of(2), Optional.of("databaseId"),
             Optional.of(LocalDateTime.of(2023, 2, 16, 10, 10)),
             Optional.of(true), Optional.of(1.1d), Optional.of(1.2d),
-            Optional.of(ClientCacheRefreshPolicyEnum.refresh_newer_data));
+            Optional.of(ClientCacheRefreshPolicyEnum.REFRESH_NEWER_DATA));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.dbSchemaCatalogs(Mockito.any())).thenReturn(List.of(row));
@@ -906,7 +906,7 @@ class DiscoverResponseTest {
             Optional.of("hierarchyDisplayFolder"),
             Optional.of(InstanceSelectionEnum.DROPDOWN),
             Optional.of(GroupingBehaviorEnum.ENCOURAGED),
-            Optional.of(StructureTypeEnum.Natural));
+            Optional.of(StructureTypeEnum.NATURAL));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.mdSchemaHierarchies(Mockito.any())).thenReturn(List.of(row));
@@ -976,7 +976,7 @@ class DiscoverResponseTest {
             Optional.of("kpiCurrentTimeMember"),
             Optional.of("kpiParentKpiName"),
             Optional.of("annotation"),
-            Optional.of(ScopeEnum.Global));
+            Optional.of(ScopeEnum.GLOBAL));
 
         DiscoverService discoverService = xmlaService.discover();
         when(discoverService.mdSchemaKpis(Mockito.any())).thenReturn(List.of(row));
@@ -1029,7 +1029,7 @@ class DiscoverResponseTest {
             Optional.of("levelCaption"),
             Optional.of(2),
             Optional.of(3),
-            Optional.of(LevelTypeEnum.All),
+            Optional.of(LevelTypeEnum.ALL),
             Optional.of("description"),
             Optional.of(CustomRollupSettingEnum.CUSTOM_ROLLUP_EXPRESSION_EXIST),
             Optional.of(LevelUniqueSettingsEnum.KEY_COLUMNS),
@@ -1242,7 +1242,7 @@ class DiscoverResponseTest {
             Optional.of(2),
             Optional.of("memberName"),
             Optional.of("memberUniqueName"),
-            Optional.of(MemberTypeEnum.Unknown),
+            Optional.of(MemberTypeEnum.UNKNOWN),
             Optional.of(3),
             Optional.of("measureCaption"),
             Optional.of(4),
@@ -1254,7 +1254,7 @@ class DiscoverResponseTest {
             Optional.of(9),
             Optional.of(true),
             Optional.of(false),
-            Optional.of(ScopeEnum.Global)
+            Optional.of(ScopeEnum.GLOBAL)
         );
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1307,7 +1307,7 @@ class DiscoverResponseTest {
             Optional.of("hierarchyUniqueName"),
             Optional.of("levelUniqueName"),
             Optional.of("memberUniqueName"),
-            Optional.of(PropertyTypeEnum.property_member),
+            Optional.of(PropertyTypeEnum.PROPERTY_MEMBER),
             Optional.of("propertyName"),
             Optional.of("propertyCaption"),
             Optional.of(LevelDbTypeEnum.DBTYPE_EMPTY),
@@ -1316,10 +1316,10 @@ class DiscoverResponseTest {
             Optional.of(3),
             Optional.of(4),
             Optional.of("description"),
-            Optional.of(PropertyContentTypeEnum.Regular),
+            Optional.of(PropertyContentTypeEnum.REGULAR),
             Optional.of("sqlColumnName"),
             Optional.of(5),
-            Optional.of(PropertyOriginEnum.user_defined),
+            Optional.of(PropertyOriginEnum.USER_DEFINED),
             Optional.of("propertyAttributeHierarchyName"),
             Optional.of(PropertyCardinalityEnum.ONE),
             Optional.of("mimeType"),
@@ -1374,7 +1374,7 @@ class DiscoverResponseTest {
             Optional.of("schemaName"),
             Optional.of("cubeName"),
             Optional.of("setName"),
-            Optional.of(ScopeEnum.Global),
+            Optional.of(ScopeEnum.GLOBAL),
             Optional.of("description"),
             Optional.of("expression"),
             Optional.of("dimension"),

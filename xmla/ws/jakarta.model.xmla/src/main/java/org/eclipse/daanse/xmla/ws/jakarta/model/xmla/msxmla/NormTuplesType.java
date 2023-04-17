@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "NormTuplesType", propOrder = {"normTuple"})
 public class NormTuplesType implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "NormTuple")
     protected List<NormTuplesType.NormTuple> normTuple;
 
@@ -41,7 +41,7 @@ public class NormTuplesType implements Serializable {
     @XmlType(name = "", propOrder = {"memberRef"})
     public static class NormTuple implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "MemberRef")
         protected List<NormTuplesType.NormTuple.MemberRef> memberRef;
 
@@ -57,7 +57,7 @@ public class NormTuplesType implements Serializable {
         @XmlType(name = "", propOrder = {"memberOrdinal", "memberDispInfo"})
         public static class MemberRef implements Serializable {
 
-            private final static long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
             @XmlElement(name = "MemberOrdinal")
             protected int memberOrdinal;
             @XmlElement(name = "MemberDispInfo")

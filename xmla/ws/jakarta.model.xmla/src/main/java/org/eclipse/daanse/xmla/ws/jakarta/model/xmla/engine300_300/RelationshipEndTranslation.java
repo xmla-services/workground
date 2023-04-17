@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class RelationshipEndTranslation implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "Language")
     @XmlSchemaType(name = "unsignedInt")
     protected long language;
@@ -97,7 +97,7 @@ public class RelationshipEndTranslation implements Serializable {
     @XmlType(name = "", propOrder = {"annotation"})
     public static class Annotations implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Annotation")
         protected List<Annotation> annotation;
 

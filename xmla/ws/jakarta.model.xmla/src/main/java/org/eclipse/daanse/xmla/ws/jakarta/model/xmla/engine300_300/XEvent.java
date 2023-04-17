@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "XEvent")
 public class XEvent implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "event_session", namespace = "urn:schemas-microsoft-com:xml-analysis", required = true)
   protected EventSession eventSession;
 

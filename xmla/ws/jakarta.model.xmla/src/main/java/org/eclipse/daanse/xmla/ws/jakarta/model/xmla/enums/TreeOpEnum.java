@@ -28,37 +28,37 @@ public enum TreeOpEnum {
      * Returns all of the ancestors.
      */
     @XmlEnumValue("0x20")
-    all(0x20),
+    ALL(0x20),
 
     /**
      *  Returns only the immediate children.
      */
     @XmlEnumValue("0x01")
-    children(0x01),
+    CHILDREN(0x01),
 
     /**
      * Returns members on the same level.
      */
     @XmlEnumValue("0x02")
-    level(0x02),
+    LEVEL(0x02),
 
     /**
      * Returns only the immediate parent.
      */
     @XmlEnumValue("0x04")
-    parent(0x04),
+    PARENT(0x04),
 
     /**
      * Returns only itself.
      */
     @XmlEnumValue("0x08")
-    itself(0x08),
+    ITSELF(0x08),
 
     /**
      * Returns all of the descendants.
      */
     @XmlEnumValue("0x10")
-    all_descendants(0x10);
+    ALL_DESCENDANTS(0x10);
 
     private final int value;
 

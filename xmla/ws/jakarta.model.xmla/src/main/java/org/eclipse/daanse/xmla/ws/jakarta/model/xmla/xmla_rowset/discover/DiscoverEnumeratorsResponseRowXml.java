@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverEnumeratorsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 200492007073962307L;
+    private static final long serialVersionUID = 200492007073962307L;
 
     @XmlElement(name = "EnumName", required = true)
     private String enumName;

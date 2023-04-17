@@ -30,199 +30,199 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum PropertyContentTypeEnum {
 
     @XmlEnumValue("0x00")
-    Regular(0x00),
+    REGULAR(0x00),
 
     @XmlEnumValue("0x001")
-    Id(0x01),
+    ID(0x01),
 
     @XmlEnumValue("0x02")
-    Relation_to_parent(0x02),
+    RELATION_TO_PARENT(0x02),
 
     @XmlEnumValue("0x03")
-    Rollup_operator(0x03),
+    ROLLUP_OPERATOR(0x03),
 
     @XmlEnumValue("0x11")
-    Organization_title(0x11),
+    ORGANIZATION_TITLE(0x11),
 
     @XmlEnumValue("0x21")
-    Caption(0x21),
+    CAPTION(0x21),
 
     @XmlEnumValue("0x22")
-    Caption_short(0x22),
+    CAPTION_SHORT(0x22),
 
     @XmlEnumValue("0x23")
-    Caption_description(0x23),
+    CAPTION_DESCRIPTION(0x23),
 
     @XmlEnumValue("0x24")
-    Caption_abbreviation(0x24),
+    CAPTION_ABBREVIATION(0x24),
 
     @XmlEnumValue("0x31")
-    Web_URL(0x31),
+    WEB_URL(0x31),
 
     @XmlEnumValue("0x32")
-    Web_HTML(0x32),
+    WEB_HTML(0x32),
 
     @XmlEnumValue("0x33")
-    Web_XML_or_XSL(0x33),
+    WEB_XML_OR_XSL(0x33),
 
     @XmlEnumValue("0x34")
-    Web_mail_alias(0x34),
+    WEB_MAIL_ALIAS(0x34),
 
     @XmlEnumValue("0x41")
-    Address(0x41),
+    ADDRESS(0x41),
 
     @XmlEnumValue("0x42")
-    Address_street(0x42),
+    ADDRESS_STREET(0x42),
 
     @XmlEnumValue("0x43")
-    Address_house(0x43),
+    ADDRESS_HOUSE(0x43),
 
     @XmlEnumValue("0x44")
-    Address_city(0x44),
+    ADDRESS_CITY(0x44),
 
     @XmlEnumValue("0x45")
-    Address_state_or_province(0x45),
+    ADDRESS_STATE_OR_PROVINCE(0x45),
 
     @XmlEnumValue("0x46")
-    Address_zip(0x46),
+    ADDRESS_ZIP(0x46),
 
     @XmlEnumValue("0x47")
-    Address_quarter(0x47),
+    ADDRESS_QUARTER(0x47),
 
     @XmlEnumValue("0x48")
-    Address_country(0x48),
+    ADDRESS_COUNTRY(0x48),
 
     @XmlEnumValue("0x49")
-    Address_building(0x49),
+    ADDRESS_BUILDING(0x49),
 
     @XmlEnumValue("0x4A")
-    Address_room(0x4A),
+    ADDRESS_ROOM(0x4A),
 
     @XmlEnumValue("0x4B")
-    Address_floor(0x4B),
+    ADDRESS_FLOOR(0x4B),
 
     @XmlEnumValue("0x4C")
-    Address_fax(0x4C),
+    ADDRESS_FAX(0x4C),
 
     @XmlEnumValue("0x4D")
-    Address_phone(0x4D),
+    ADDRESS_PHONE(0x4D),
 
     @XmlEnumValue("0x61")
-    Geography_centroidx(0x61),
+    GEOGRAPHY_CENTROIDX(0x61),
 
     @XmlEnumValue("0x62")
-    Geography_centroidy(0x62),
+    GEOGRAPHY_CENTROIDY(0x62),
 
     @XmlEnumValue("0x63")
-    Geography_centroidz(0x63),
+    GEOGRAPHY_CENTROIDZ(0x63),
 
     @XmlEnumValue("0x64")
-    Geography_boundary_top(0x64),
+    GEOGRAPHY_BOUNDARY_TOP(0x64),
 
     @XmlEnumValue("0x65")
-    Geography_boundary_left(0x65),
+    GEOGRAPHY_BOUNDARY_LEFT(0x65),
 
     @XmlEnumValue("0x66")
-    Geography_boundary_bottom(0x66),
+    GEOGRAPHY_BOUNDARY_BOTTOM(0x66),
 
     @XmlEnumValue("0x67")
-    Geography_boundary_right(0x67),
+    GEOGRAPHY_BOUNDARY_RIGHT(0x67),
 
     @XmlEnumValue("0x68")
-    Geography_boundary_front(0x68),
+    GEOGRAPHY_BOUNDARY_FRONT(0x68),
 
     @XmlEnumValue("0x69")
-    Geography_boundary_rear(0x69),
+    GEOGRAPHY_BOUNDARY_REAR(0x69),
 
     @XmlEnumValue("0x6A")
-    Geography_boundary_polygon(0x6A),
+    GEOGRAPHY_BOUNDARY_POLYGON(0x6A),
 
     @XmlEnumValue("0x71")
-    Physical_size(0x71),
+    PHYSICAL_SIZE(0x71),
 
     @XmlEnumValue("0x72")
-    Physical_color(0x72),
+    PHYSICAL_COLOR(0x72),
 
     @XmlEnumValue("0x73")
-    Physical_weight(0x73),
+    PHYSICAL_WEIGHT(0x73),
 
     @XmlEnumValue("0x74")
-    Physical_height(0x74),
+    PHYSICAL_HEIGHT(0x74),
 
     @XmlEnumValue("0x75")
-    Physical_width(0x75),
+    PHYSICAL_WIDTH(0x75),
 
     @XmlEnumValue("0x76")
-    Physical_depth(0x76),
+    PHYSICAL_DEPTH(0x76),
 
     @XmlEnumValue("0x77")
-    Physical_volume(0x77),
+    PHYSICAL_VOLUME(0x77),
 
     @XmlEnumValue("0x78")
-    Physical_density(0x78),
+    PHYSICAL_DENSITY(0x78),
 
     @XmlEnumValue("0x82")
-    Person_full_name(0x82),
+    PERSON_FULL_NAME(0x82),
 
     @XmlEnumValue("0x83")
-    Person_first_name(0x83),
+    PERSON_FIRST_NAME(0x83),
 
     @XmlEnumValue("0x84")
-    Person_last_name(0x84),
+    PERSON_LAST_NAME(0x84),
 
     @XmlEnumValue("0x85")
-    Person_middle_name(0x85),
+    PERSON_MIDDLE_NAME(0x85),
 
     @XmlEnumValue("0x86")
-    Person_demographic(0x86),
+    PERSON_DEMOGRAPHIC(0x86),
 
     @XmlEnumValue("0x87")
-    Person_contact(0x87),
+    PERSON_CONTACT(0x87),
 
     @XmlEnumValue("0x91")
-    Quantity_range_low(0x91),
+    QUANTITY_RANGE_LOW(0x91),
 
     @XmlEnumValue("0x92")
-    Quantity_range_high(0x92),
+    QUANTITY_RANGE_HIGH(0x92),
 
     @XmlEnumValue("0xA1")
-    Formatting_color(0xA1),
+    FORMATTING_COLOR(0xA1),
 
     @XmlEnumValue("0xA2")
-    Formatting_order(0xA2),
+    FORMATTING_ORDER(0xA2),
 
     @XmlEnumValue("0xA3")
-    Formatting_font(0xA3),
+    FORMATTING_FONT(0xA3),
 
     @XmlEnumValue("0xA4")
-    Formatting_font_effects(0xA4),
+    FORMATTING_FONT_EFFECTS(0xA4),
 
     @XmlEnumValue("0xA5")
-    Formatting_font_size(0xA5),
+    FORMATTING_FONT_SIZE(0xA5),
 
     @XmlEnumValue("0xA6")
-    Formatting_sub_total(0xA6),
+    FORMATTING_SUB_TOTAL(0xA6),
 
     @XmlEnumValue("0xB1")
-    Date(0xB1),
+    DATE(0xB1),
 
     @XmlEnumValue("0xB2")
-    Date_start(0xB2),
+    DATE_START(0xB2),
 
     @XmlEnumValue("0xB3")
-    Date_ended(0xB3),
+    DATE_ENDED(0xB3),
 
     @XmlEnumValue("0xB4")
-    Date_canceled(0xB4),
+    DATE_CANCELED(0xB4),
 
     @XmlEnumValue("0xB5")
-    Date_modified(0xB5),
+    DATE_MODIFIED(0xB5),
 
     @XmlEnumValue("0xB6")
-    Date_duration(0xB6),
+    DATE_DURATION(0xB6),
 
     @XmlEnumValue("0xC1")
-    Version(0xC1);
+    VERSION(0xC1);
 
     private final int value;
 

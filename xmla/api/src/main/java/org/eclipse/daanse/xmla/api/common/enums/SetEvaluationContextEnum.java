@@ -37,7 +37,7 @@ public enum SetEvaluationContextEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (SetEvaluationContextEnum c : SetEvaluationContextEnum.values()) {
             if (c.value == vi) {
                 return c;

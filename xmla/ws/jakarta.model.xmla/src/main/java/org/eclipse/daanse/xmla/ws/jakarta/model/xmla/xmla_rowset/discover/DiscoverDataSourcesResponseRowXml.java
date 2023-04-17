@@ -34,7 +34,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverDataSourcesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 5049193502349862159L;
+    private static final long serialVersionUID = 5049193502349862159L;
 
     @XmlElement(name = "DataSourceName", required = true)
     private String dataSourceName;

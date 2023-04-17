@@ -24,26 +24,26 @@ public enum PropertyTypeEnum {
      * Identifies a property of
      * a member.
      */
-    property_member(1),
+    PROPERTY_MEMBER(1),
 
     /**
      * Identifies a property of
      * a cell.
      */
-    property_cell(2),
+    PROPERTY_CELL(2),
 
     /**
      *  - Identifies an internal
      * property.
      */
-    internal_property(4),
+    INTERNAL_PROPERTY(4),
 
     /**
      * Identifies a property
      * which contains a binary
      * large object (BLOB).
      */
-    BLOB_property(8);
+    BLOB_PROPERTY(8);
 
     private final int value;
 
@@ -59,7 +59,7 @@ public enum PropertyTypeEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (PropertyTypeEnum c : PropertyTypeEnum.values()) {
             if (c.value == vi) {
                 return c;

@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class MessageLocation implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "Start", required = true)
     protected MessageLocation.Start start;
     @XmlElement(name = "End", required = true)
@@ -106,7 +106,7 @@ public class MessageLocation implements Serializable {
     })
     public static class End implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Line")
         protected int line;
         @XmlElement(name = "Column")
@@ -136,7 +136,7 @@ public class MessageLocation implements Serializable {
     })
     public static class Start implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Line")
         protected int line;
         @XmlElement(name = "Column")

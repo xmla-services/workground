@@ -27,7 +27,7 @@ public class Action2 {
   @XmlAttribute(name = "module")
   protected String module;
   @XmlAttribute(name = "package", required = true)
-  protected String _package;
+  protected String ppackage;
   @XmlAttribute(name = "name", required = true)
   protected String name;
 
@@ -40,11 +40,11 @@ public class Action2 {
   }
 
   public String getPackage() {
-    return _package;
+    return ppackage;
   }
 
   public void setPackage(String value) {
-    this._package = value;
+    this.ppackage = value;
   }
 
   public String getName() {

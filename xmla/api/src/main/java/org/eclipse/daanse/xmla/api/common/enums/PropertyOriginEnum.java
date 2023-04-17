@@ -25,28 +25,28 @@ public enum PropertyOriginEnum {
      *  is on a user defined
      *  hierarchy.
      */
-    user_defined(1),
+    USER_DEFINED(1),
 
     /**
      *  Indicates the property
      *  is on an attribute
      *  hierarchy.
      */
-    attribute_hierarchy(2),
+    ATTRIBUTE_HIERARCHY(2),
 
     /**
      * Indicates the property
      * is on a key attribute
      * hierarchy.
      */
-    key_attribute_hierarchy(4),
+    KEY_ATTRIBUTE_HIERARCHY(4),
 
     /**
      * Indicates the property
      * is on an attribute hierarchy
      * that is not enabled.
      */
-    attribute_hierarchy_not_enabled(8);
+    ATTRIBUTE_HIERARCHY_NOT_ENABLED(8);
 
     private final int value;
 
@@ -62,7 +62,7 @@ public enum PropertyOriginEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (PropertyOriginEnum c : PropertyOriginEnum.values()) {
             if (c.value == vi) {
                 return c;

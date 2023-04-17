@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
     "defaultDetailsPosition", "sortPropertiesPosition", "isSimpleMeasure"})
 public class CalculationPropertiesVisualizationProperties implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "FolderPosition", defaultValue = "-1")
     protected BigInteger folderPosition;
     @XmlElement(name = "ContextualNameRule", defaultValue = "None")

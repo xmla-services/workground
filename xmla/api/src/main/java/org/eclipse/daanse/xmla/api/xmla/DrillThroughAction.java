@@ -26,7 +26,7 @@ public interface DrillThroughAction extends Action {
      * @return A Boolean, which, when set to true, sets this DrillThroughAction as the
      * default DrillThroughAction; otherwise, false.
      */
-    Optional<Boolean> _default();
+    Optional<Boolean> defaultAction();
 
     /**
      * @return A collection of Column objects that define the results to be returned in

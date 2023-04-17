@@ -18,30 +18,39 @@ public enum ObjectExpansionEnum {
     /**
      * Returns only the name/ID/timestamp/state requested for the requested objects and all descendant major objects recursively.
      */
-    ReferenceOnly,
+    REFERENCE_ONLY("ReferenceOnly"),
 
     /**
      *  Expands the requested object with no references to contained objects (includes expanded minor contained objects).
      */
-    ObjectProperties,
+    OBJECT_PROPERTIES("ObjectProperties"),
 
     /**
      * Same as ObjectProperties, but also returns the name, ID, and timestamp for contained major objects.
      */
-    ExpandObject,
+    EXPAND_OBJECT("ExpandObject"),
 
     /**
      * Fully expands the requested object recursively to the bottom of every contained object.
      */
-    ExpandFull;
+    EXPAND_FULL("ExpandFull");
 
+    private final String value;
+
+    ObjectExpansionEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static ObjectExpansionEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (ObjectExpansionEnum e : ObjectExpansionEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.value.equals(v)) {
                 return e;
             }
         }

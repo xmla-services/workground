@@ -42,58 +42,68 @@ public enum TypeEnum {
     /**
      * Opens a URL string in an Internet browser.
      */
-    Url,
+    URL("Url"),
 
     /**
      * Renders an HTML script in an Internet browser.
      */
-    Html,
+    HTML("Html"),
 
     /**
      * Executes a statement that is understood by the client
      * application.
      */
-    Statement,
+    STATEMENT("Statement"),
 
     /**
      * See DrillThroughAction.
      */
-    DrillThrough,
+    DRILL_THROUGH("DrillThrough"),
 
     /**
      * Executes an MDX statement whose results are returned
      * as a dataset.
      */
-    Dataset,
+    DATASET("Dataset"),
 
     /**
      * Executes an MDX statement whose results are returned
      * as a rowset.
      */
-    Rowset,
+    ROWSET("Rowset"),
 
     /**
      * Executes a command.
      */
-    CommandLine,
+    COMMAND_LINE("CommandLine"),
 
     /**
      * Executes an action whose structure is understood by
      * a particular proprietary client application.
      */
-    Proprietary,
+    PROPRIETARY("Proprietary"),
 
     /**
      * See ReportAction.
      */
-    Report;
+    REPORT("Report");
+
+    private final String value;
+
+    TypeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static TypeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (TypeEnum e : TypeEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

@@ -28,25 +28,25 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _MemberKeysUnique_QNAME = new QName(
+  private static final QName _MemberKeysUnique_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2003/engine/2", "MemberKeysUnique");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.eng2
-   * 
+   *
    */
   public ObjectFactory() {
   }
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}

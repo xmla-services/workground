@@ -34,7 +34,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class MdSchemaActionsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 8909756522012364431L;
+    private static final long serialVersionUID = 8909756522012364431L;
 
     /**
      *  The name of the database.

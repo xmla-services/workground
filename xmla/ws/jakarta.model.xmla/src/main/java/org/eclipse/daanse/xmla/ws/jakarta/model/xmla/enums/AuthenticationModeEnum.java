@@ -12,26 +12,36 @@ public enum AuthenticationModeEnum {
      * No user ID or password has to be sent.
      */
     @XmlEnumValue("Unauthenticated")
-    Unauthenticated,
+    UNAUTHENTICATED("Unauthenticated"),
 
     /**
      * User ID and password MUST be included in the information required to connect to the data source.
      */
     @XmlEnumValue("Authenticated")
-    Authenticated,
+    AUTHENTICATED("Authenticated"),
 
     /**
      * The data source uses the underlying security to determine authorization.
      */
     @XmlEnumValue("Integrated")
-    Integrated;
+    INTEGRATED("Integrated");
+
+    private final String value;
+
+    AuthenticationModeEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static AuthenticationModeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (AuthenticationModeEnum e : AuthenticationModeEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.value.equals(v)) {
                 return e;
             }
         }

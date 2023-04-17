@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
     "defaultAggregateFunction"})
 public class DimensionAttributeVisualizationProperties implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "FolderPosition", defaultValue = "-1")
     protected BigInteger folderPosition;
     @XmlElement(name = "ContextualNameRule", defaultValue = "None")

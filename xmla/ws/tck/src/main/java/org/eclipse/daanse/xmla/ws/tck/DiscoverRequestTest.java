@@ -16,8 +16,8 @@ package org.eclipse.daanse.xmla.ws.tck;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum.CUBE;
 import static org.eclipse.daanse.xmla.api.common.enums.InvocationEnum.NORMAL_OPERATION;
-import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
+import static org.eclipse.daanse.xmla.api.common.properties.Content.SCHEMA_DATA;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -199,10 +199,10 @@ class DiscoverRequestTest {
                                         .contains("FoodMart");
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                                 assertThat(p.format()).isNotNull()
                                         .isPresent()
-                                        .contains(Tabular);
+                                        .contains(TABULAR);
                             });
                     assertThat(d.restrictions()).isNotNull()
                             .satisfies(r -> {
@@ -262,7 +262,7 @@ class DiscoverRequestTest {
                                         .contains("FoodMart");
                                 assertThat(p.format()).isNotNull()
                                         .isPresent()
-                                        .contains(Tabular);
+                                        .contains(TABULAR);
                                 assertThat(p.catalog()).isNotNull()
                                         .isPresent()
                                         .contains("FoodMart");
@@ -318,7 +318,7 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -369,7 +369,7 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -421,7 +421,7 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -485,7 +485,7 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -567,10 +567,10 @@ class DiscoverRequestTest {
                                 assertThat(p.catalog()).isNotNull()
                                         .contains("FoodMart");
                                 assertThat(p.format()).isNotNull()
-                                        .contains(Tabular);
+                                        .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -637,10 +637,10 @@ class DiscoverRequestTest {
                                 assertThat(p.catalog()).isNotNull()
                                         .contains("FoodMart");
                                 assertThat(p.format()).isNotNull()
-                                        .contains(Tabular);
+                                        .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -719,10 +719,10 @@ class DiscoverRequestTest {
                                 assertThat(p.catalog()).isNotNull()
                                         .contains("FoodMart");
                                 assertThat(p.format()).isNotNull()
-                                        .contains(Tabular);
+                                        .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -778,7 +778,7 @@ class DiscoverRequestTest {
                                 .isNotPresent();
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(SCHEMA_DATA);
                             });
                 });
     }
@@ -858,7 +858,7 @@ class DiscoverRequestTest {
                             .isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -918,7 +918,7 @@ class DiscoverRequestTest {
                         assertThat(r.providerType()).isNotNull()
                             .isPresent().contains(ProviderTypeEnum.DMP);
                         assertThat(r.authenticationMode()).isNotNull()
-                            .isPresent().contains(AuthenticationModeEnum.Authenticated);
+                            .isPresent().contains(AuthenticationModeEnum.AUTHENTICATED);
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
@@ -933,7 +933,7 @@ class DiscoverRequestTest {
                             .isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1037,7 +1037,7 @@ class DiscoverRequestTest {
                         assertThat(r.dataSourcePermissionId()).isNotNull()
                             .isPresent().contains("dataSourcePermissionId");
                         assertThat(r.objectExpansion()).isNotNull()
-                            .isPresent().contains(ObjectExpansionEnum.ReferenceOnly);
+                            .isPresent().contains(ObjectExpansionEnum.REFERENCE_ONLY);
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
@@ -1052,7 +1052,7 @@ class DiscoverRequestTest {
                             .isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1120,7 +1120,7 @@ class DiscoverRequestTest {
                             .isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1179,7 +1179,7 @@ class DiscoverRequestTest {
                             .isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1257,10 +1257,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1329,10 +1329,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1407,10 +1407,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1482,13 +1482,13 @@ class DiscoverRequestTest {
                         assertThat(r.memberUniqueName()).isNotNull()
                             .isPresent().contains("memberUniqueName");
                         assertThat(r.memberType()).isNotNull()
-                            .isPresent().contains(MemberTypeEnum.Regular_member);
+                            .isPresent().contains(MemberTypeEnum.REGULAR_MEMBER);
                         assertThat(r.measureCaption()).isNotNull()
                             .isPresent().contains("memberCaption");
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.treeOp()).isNotNull()
-                            .isPresent().contains(TreeOpEnum.all);
+                            .isPresent().contains(TreeOpEnum.ALL);
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
@@ -1500,10 +1500,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1570,11 +1570,11 @@ class DiscoverRequestTest {
                         assertThat(r.memberUniqueName()).isNotNull()
                             .isPresent().contains("memberUniqueName");
                         assertThat(r.propertyType()).isNotNull()
-                            .isPresent().contains(PropertyTypeEnum.property_member);
+                            .isPresent().contains(PropertyTypeEnum.PROPERTY_MEMBER);
                         assertThat(r.propertyName()).isNotNull()
                             .isPresent().contains("propertyName");
                         assertThat(r.propertyOrigin()).isNotNull()
-                            .isPresent().contains(PropertyOriginEnum.user_defined);
+                            .isPresent().contains(PropertyOriginEnum.USER_DEFINED);
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.propertyVisibility()).isNotNull()
@@ -1590,10 +1590,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1649,7 +1649,7 @@ class DiscoverRequestTest {
                         assertThat(r.setName()).isNotNull()
                             .isPresent().contains("setName");
                         assertThat(r.scope()).isNotNull()
-                            .isPresent().contains(ScopeEnum.Global);
+                            .isPresent().contains(ScopeEnum.GLOBAL);
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.hierarchyUniqueName()).isNotNull()
@@ -1665,10 +1665,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1734,10 +1734,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1800,10 +1800,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1864,10 +1864,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1928,10 +1928,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                         	.isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }
@@ -1988,10 +1988,10 @@ class DiscoverRequestTest {
                         assertThat(p.catalog()).isNotNull()
                             .isPresent().contains("FoodMart");
                         assertThat(p.format()).isNotNull()
-                        	.contains(Tabular);
+                        	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
                             .isPresent()
-                            .contains(SchemaData);
+                            .contains(SCHEMA_DATA);
                     });
             });
     }

@@ -57,7 +57,7 @@ public class DiscoverLiteralsResponseRowXml extends Row implements Serializable 
      * value is -1.
      */
     @XmlElement(name = "LiteralMaxLength", required = true)
-    private Integer LiteralMaxLength;
+    private Integer literalMaxLength;
 
     /**
      * The value is one of the following:
@@ -118,11 +118,11 @@ public class DiscoverLiteralsResponseRowXml extends Row implements Serializable 
     }
 
     public Integer getLiteralMaxLength() {
-        return LiteralMaxLength;
+        return literalMaxLength;
     }
 
     public void setLiteralMaxLength(Integer literalMaxLength) {
-        LiteralMaxLength = literalMaxLength;
+        this.literalMaxLength = literalMaxLength;
     }
 
     public LiteralNameEnumValueEnum getLiteralNameValue() {

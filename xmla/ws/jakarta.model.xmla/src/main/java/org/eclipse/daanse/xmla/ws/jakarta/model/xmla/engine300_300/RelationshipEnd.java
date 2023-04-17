@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
     "visualizationProperties"})
 public class RelationshipEnd implements Serializable {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @XmlElement(name = "Role", required = true)
     protected String role;
     @XmlElement(name = "Multiplicity", required = true)
@@ -94,7 +94,7 @@ public class RelationshipEnd implements Serializable {
     @XmlType(name = "", propOrder = {"attribute"})
     public static class Attributes implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Attribute")
         protected List<RelationshipEnd.Attributes.Attribute> attribute;
 
@@ -110,7 +110,7 @@ public class RelationshipEnd implements Serializable {
         @XmlType(name = "", propOrder = {"attributeID"})
         public static class Attribute implements Serializable {
 
-            private final static long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
             @XmlElement(name = "AttributeID", required = true)
             protected String attributeID;
 
@@ -130,7 +130,7 @@ public class RelationshipEnd implements Serializable {
     @XmlType(name = "", propOrder = {"translation"})
     public static class Translations implements Serializable {
 
-        private final static long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Translation")
         protected List<RelationshipEndTranslation> translation;
 

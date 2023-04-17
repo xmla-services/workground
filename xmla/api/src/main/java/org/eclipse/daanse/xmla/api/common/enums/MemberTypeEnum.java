@@ -21,27 +21,27 @@ public enum MemberTypeEnum {
     /**
      *  Is a regular member.
      */
-    Regular_member(1),
+    REGULAR_MEMBER(1),
 
     /**
      * Is the All member.
      */
-    All_member(2),
+    ALL_MEMBER(2),
 
     /**
      *  Is a measure.
      */
-    Measure(3),
+    MEASURE(3),
 
     /**
      * Is a formula.
      */
-    Formula(4),
+    FORMULA(4),
 
     /**
      *  Is of unknown type.
      */
-    Unknown(0);
+    UNKNOWN(0);
 
     private final int value;
 
@@ -57,7 +57,7 @@ public enum MemberTypeEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.valueOf(v);
+        int vi = Integer.parseInt(v);
         for (MemberTypeEnum c : MemberTypeEnum.values()) {
             if (c.value == vi) {
                 return c;

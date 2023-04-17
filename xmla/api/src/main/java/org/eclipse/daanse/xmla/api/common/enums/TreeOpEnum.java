@@ -21,32 +21,32 @@ public enum TreeOpEnum {
     /**
      * Returns all of the ancestors.
      */
-    all(0x20),
+    ALL(0x20),
 
     /**
      *  Returns only the immediate children.
      */
-    children(0x01),
+    CHILDREN(0x01),
 
     /**
      * Returns members on the same level.
      */
-    level(0x02),
+    LEVEL(0x02),
 
     /**
      * Returns only the immediate parent.
      */
-    parent(0x04),
+    PARENT(0x04),
 
     /**
      * Returns only itself.
      */
-    itself(0x08),
+    ITSELF(0x08),
 
     /**
      * Returns all of the descendants.
      */
-    all_descendants(0x10);
+    ALL_DESCENDANTS(0x10);
 
     private final int value;
 

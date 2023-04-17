@@ -11,26 +11,36 @@ public enum DataItemFormatEnum {
     /**
      * The value is trimmed on the right.
      */
-    TrimRight,
+    TRIM_RIGHT("TrimRight"),
     /**
      * The value is trimmed on the left.
      */
-    TrimLeft,
+    TRIM_LEFT("TrimLeft"),
     /**
      * The value is trimmed on the left and the right.
      */
-    TrimAll,
+    TRIM_ALL("TrimAll"),
     /**
      * The value is not trimmed.
      */
-    TrimNone;
+    TRIM_NONE("TrimNone");
+
+    private final String value;
+
+    DataItemFormatEnum(String v) {
+        this.value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
     public static DataItemFormatEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
         for (DataItemFormatEnum e : DataItemFormatEnum.values()) {
-            if (e.name().equals(v)) {
+            if (e.getValue().equals(v)) {
                 return e;
             }
         }

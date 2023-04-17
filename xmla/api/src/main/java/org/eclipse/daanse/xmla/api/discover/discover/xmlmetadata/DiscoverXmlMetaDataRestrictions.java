@@ -84,7 +84,7 @@ public interface DiscoverXmlMetaDataRestrictions {
     /**
      * @return The database permission ID.
      */
-    Optional<String> DatabasePermissionId();
+    Optional<String> databasePermissionId();
 
     /**
      * @return The mining model ID.

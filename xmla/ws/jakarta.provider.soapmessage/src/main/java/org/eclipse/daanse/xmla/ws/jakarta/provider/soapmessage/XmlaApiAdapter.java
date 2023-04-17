@@ -29,10 +29,13 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XmlaApiAdapter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlaApiAdapter.class);
 
-    public XmlaService xmlaService;
+    private XmlaService xmlaService;
 
     public XmlaApiAdapter(XmlaService xmlaService) {
         this.xmlaService = xmlaService;
@@ -59,19 +62,21 @@ public class XmlaApiAdapter {
         Iterator<Node> nodeIterator = body.getChildElements();
         while (nodeIterator.hasNext()) {
             Node nodeN = nodeIterator.next();
-            if (nodeN instanceof SOAPElement) {
-                node = (SOAPElement) nodeN;
+            if (nodeN instanceof SOAPElement soapElement) {
+                node = soapElement;
                 break;
             }
         }
-        printNode(node);
+        if (node != null) {
+            printNode(node);
+        }
 
-        if (Constants.QNAME_MSXMLA_DISCOVER.equals(node.getElementQName())) {
+        if (node != null && Constants.QNAME_MSXMLA_DISCOVER.equals(node.getElementQName())) {
 
             return discover(node);
 
         }
-        if (Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
+        if (node != null && Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
 
         }
 
@@ -99,7 +104,6 @@ public class XmlaApiAdapter {
                 }
                 if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
                     properties = Convert.propertiestoProperties(element);
-                    continue;
                 }
             }
         }
@@ -108,21 +112,20 @@ public class XmlaApiAdapter {
     }
 
     private void printNode(SOAPElement node) {
-        System.out.println(node.getNamespaceURI());
-        System.out.println(node.getBaseURI());
-        System.out.println(node.getPrefix());
-        System.out.println(node.getNodeName());
-        System.out.println(node.getLocalName());
-        System.out.println(node.getNodeValue());
-        System.out.println(node.getTextContent());
-        System.out.println(node.getValue());
+        LOGGER.debug(node.getNamespaceURI());
+        LOGGER.debug(node.getBaseURI());
+        LOGGER.debug(node.getPrefix());
+        LOGGER.debug(node.getNodeName());
+        LOGGER.debug(node.getLocalName());
+        LOGGER.debug(node.getNodeValue());
+        LOGGER.debug(node.getTextContent());
+        LOGGER.debug(node.getValue());
 
-        System.out.println(node.getElementQName());
+        LOGGER.debug(node.getElementQName().toString());
     }
 
     private PropertiesR properties(SOAPElement propertiesElement) {
-        PropertiesR properties = new PropertiesR();
-        return properties;
+        return new PropertiesR();
     }
 
     private SOAPBody discover(String requestType, PropertiesR properties, SOAPElement restrictionElement) {
@@ -143,9 +146,8 @@ public class XmlaApiAdapter {
         DiscoverPropertiesRequest request = new DiscoverPropertiesRequestR(propertiesR, restrictionsR);
         List<DiscoverPropertiesResponseRow> rows = xmlaService.discover()
                 .discoverProperties(request);
-        SOAPBody responseWs = Convert.toDiscoverProperties(rows);
 
-        return responseWs;
+        return Convert.toDiscoverProperties(rows);
     }
 
 }

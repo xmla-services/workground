@@ -38,7 +38,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 108353317479541549L;
+    private static final long serialVersionUID = 108353317479541549L;
 
     /**
      * The catalog name.

@@ -36,7 +36,7 @@ public record DrillThroughActionR(String name,
                                   Optional<String> application,
                                   Optional<String> description,
                                   Optional<List<Annotation>> annotations,
-                                  Optional<Boolean> _default,
+                                  Optional<Boolean> defaultAction,
                                   Optional<List<Binding>> columns,
                                   Optional<Integer> maximumRows) implements DrillThroughAction {
 

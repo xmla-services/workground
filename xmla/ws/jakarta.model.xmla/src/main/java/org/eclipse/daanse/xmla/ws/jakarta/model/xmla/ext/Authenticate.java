@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "Authenticate")
 public class Authenticate implements Serializable {
 
-  private final static long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @XmlElement(name = "SspiHandshake", required = true)
   protected byte[] sspiHandshake;
 

@@ -14,5 +14,5 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 public enum Access {
-    Read, Write, ReadWrite;
+    READ, WRITE, READ_WRITE;
 }

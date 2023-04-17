@@ -21,7 +21,7 @@ public interface NotType {
 
     AndOrType and();
 
-    BoolBinop equal();
+    BoolBinop isEqual();
 
     BoolBinop notEqual();
 

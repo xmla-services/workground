@@ -30,39 +30,39 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _DataEmbeddingStyle_QNAME = new QName(
+  private static final QName _DataEmbeddingStyle_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "DataEmbeddingStyle");
-  private final static QName _QueryImpersonationInfo_QNAME = new QName(
+  private static final QName _QueryImpersonationInfo_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "QueryImpersonationInfo");
-  private final static QName _QueryHints_QNAME = new QName(
+  private static final QName _QueryHints_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "QueryHints");
-  private final static QName _StringStoresCompatibilityLevel_QNAME = new QName(
+  private static final QName _StringStoresCompatibilityLevel_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "StringStoresCompatibilityLevel");
-  private final static QName _CurrentStringStoresCompatibilityLevel_QNAME = new QName(
+  private static final QName _CurrentStringStoresCompatibilityLevel_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "CurrentStringStoresCompatibilityLevel");
-  private final static QName _ProcessingState_QNAME = new QName(
+  private static final QName _ProcessingState_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "ProcessingState");
-  private final static QName _StructureType_QNAME = new QName(
+  private static final QName _StructureType_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "StructureType");
-  private final static QName _ServerMode_QNAME = new QName(
+  private static final QName _ServerMode_QNAME = new QName(
       "http://schemas.microsoft.com/analysisservices/2011/engine/300", "ServerMode");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.eng300
-   * 
+   *
    */
   public ObjectFactory() {
   }
 
   /**
    * Create an instance of {@link RelationshipEndVisualizationProperties }
-   * 
+   *
    */
   public RelationshipEndVisualizationProperties createRelationshipEndVisualizationProperties() {
     return new RelationshipEndVisualizationProperties();
@@ -70,7 +70,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link DimensionAttributeVisualizationProperties }
-   * 
+   *
    */
   public DimensionAttributeVisualizationProperties createDimensionAttributeVisualizationProperties() {
     return new DimensionAttributeVisualizationProperties();
@@ -78,7 +78,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link HierarchyVisualizationProperties }
-   * 
+   *
    */
   public HierarchyVisualizationProperties createHierarchyVisualizationProperties() {
     return new HierarchyVisualizationProperties();
@@ -86,7 +86,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link CalculationPropertiesVisualizationProperties }
-   * 
+   *
    */
   public CalculationPropertiesVisualizationProperties createCalculationPropertiesVisualizationProperties() {
     return new CalculationPropertiesVisualizationProperties();
@@ -94,7 +94,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -107,7 +107,7 @@ public class ObjectFactory {
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link ImpersonationInfo
    * }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement
    *         }{@code <}{@link ImpersonationInfo }{@code >}
@@ -119,7 +119,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -131,7 +131,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}
@@ -143,7 +143,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link Integer }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link Integer
    *         }{@code >}
@@ -155,7 +155,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -167,7 +167,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}
@@ -179,7 +179,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
-   * 
+   *
    * @param value Java instance representing xml element's value.
    * @return the new instance of {@link JAXBElement }{@code <}{@link String
    *         }{@code >}

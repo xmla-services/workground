@@ -32,7 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DiscoverXmlMetaDataResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
-    private final static long serialVersionUID = 5024203686449768474L;
+    private static final long serialVersionUID = 5024203686449768474L;
 
     @XmlElement(name = "MetaData", required = true)
     private String metaData;

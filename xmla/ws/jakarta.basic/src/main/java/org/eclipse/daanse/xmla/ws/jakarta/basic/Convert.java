@@ -252,7 +252,7 @@ public class Convert {
     private static Optional<Content> content(PropertyList propertyList) {
         String content = propertyList.getContent();
         if (content != null) {
-            return Optional.ofNullable(Content.valueOf(content));
+            return Optional.ofNullable(Content.fromValue(content));
         }
         return Optional.empty();
     }
@@ -268,7 +268,7 @@ public class Convert {
     private static Optional<Format> format(PropertyList propertyList) {
         String format = propertyList.getFormat();
         if (format != null) {
-            return Optional.ofNullable(Format.valueOf(format));
+            return Optional.ofNullable(Format.fromValue(format));
         }
         return Optional.empty();
     }
@@ -276,7 +276,7 @@ public class Convert {
     private static Optional<AxisFormat> axisFormat(PropertyList propertyList) {
         String format = propertyList.getAxisFormat();
         if (format != null) {
-            return Optional.ofNullable(AxisFormat.valueOf(format));
+            return Optional.ofNullable(AxisFormat.fromValue(format));
         }
         return Optional.empty();
     }
@@ -943,7 +943,7 @@ public class Convert {
             .ifPresent(row::setObject);
         apiRow.caption()
             .ifPresent(row::setCaption);
-        
+
 		apiRow.parameterInfo().ifPresent(parameterInfos -> row.setParameterInfo(parameterInfos.stream().map(i -> {
 			ParameterInfoXml result = new ParameterInfoXml();
 			result.setName(i.name());
@@ -953,7 +953,7 @@ public class Convert {
 			result.setRepeatGroup(i.repeatGroup());
 			return result;
 		}).toList()));
- 
+
         apiRow.directQueryPushable()
             .ifPresent(i -> row.setDirectQueryPushable(
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DirectQueryPushableEnum.fromValue(i.getValue())));
@@ -1609,7 +1609,7 @@ public class Convert {
             .ifPresent(row::setDimensionIsFactDimension);
         apiRow.dimensionGranularity()
             .ifPresent(row::setDimensionGranularity);
-        
+
 		apiRow.dimensionPath().ifPresent(mgDimensions -> row.setDimensionPath(mgDimensions.stream().map(i -> {
 			MeasureGroupDimensionXml result = new MeasureGroupDimensionXml();
 			result.setMeasureGroupDimension(i.measureGroupDimension());
