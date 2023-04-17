@@ -1068,7 +1068,7 @@ public class Convert {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.GroupingBehaviorEnum.fromValue(i.getValue())));
         apiRow.structureType()
             .ifPresent(i -> row.setStructureType(
-                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureTypeEnum.fromValue(i.name())));
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureTypeEnum.fromValue(i.getValue())));
 
         return row;
     }
@@ -1131,7 +1131,7 @@ public class Convert {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum.fromValue(i.name())));
         apiRow.authenticationMode()
             .ifPresent(i -> row.setAuthenticationMode(
-                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum.fromValue(i.name())));
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum.fromValue(i.getValue())));
 
         return row;
     }
