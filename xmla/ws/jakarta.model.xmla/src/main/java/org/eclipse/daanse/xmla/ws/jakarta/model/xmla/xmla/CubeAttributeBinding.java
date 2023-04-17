@@ -77,7 +77,7 @@ public class CubeAttributeBinding extends Binding {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"ordinal"})
+    @XmlType(name = "", propOrder = {"ordinalField"})
     public static class Ordinal {
 
         @XmlElement(name = "Ordinal")
