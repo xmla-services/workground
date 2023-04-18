@@ -29,6 +29,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xmlunit.assertj3.XmlAssert;
@@ -36,14 +38,19 @@ import org.xmlunit.assertj3.XmlAssert;
 import jakarta.xml.soap.SOAPMessage;
 
 public class XMLUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(XMLUtil.class);
+    private XMLUtil() {
+        //constructor
+    }
 
     public static XmlAssert createAssert(SOAPMessage response) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         response.writeTo(baos);
         String result = new String(baos.toByteArray());
         XmlAssert xmlAssert = XmlAssert.assertThat(result);
-        System.out.println(result);
-        System.out.println(XMLUtil.pretty(result));
+        LOGGER.debug(result);
+        String prettyResult = XMLUtil.pretty(result);
+        LOGGER.debug(prettyResult);
         HashMap<String, String> nsMap = new HashMap<>();
         nsMap.put("SOAP", "http://schemas.xmlsoap.org/soap/envelope/");
         nsMap.put("msxmla", "urn:schemas-microsoft-com:xml-analysis");
@@ -75,9 +82,8 @@ public class XMLUtil {
         Source xmlInput = new StreamSource(new StringReader(xmlData));
         transformer.transform(xmlInput, xmlOutput);
 
-        String out = xmlOutput.getWriter()
-                .toString();
-        return out;
+        return xmlOutput.getWriter()
+            .toString();
     }
 
     public static Document stringToDocument(String xmlStr) {
@@ -87,8 +93,7 @@ public class XMLUtil {
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
-            return doc;
+            return builder.parse(new InputSource(new StringReader(xmlStr)));
         } catch (Exception e) {
             fail(e);
         }

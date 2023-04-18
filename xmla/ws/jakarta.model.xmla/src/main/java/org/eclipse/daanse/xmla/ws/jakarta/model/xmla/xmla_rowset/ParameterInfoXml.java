@@ -15,11 +15,16 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PARAMETERINFO")
-public class ParameterInfoXml {
+public class ParameterInfoXml implements Serializable {
+    @XmlTransient
+    private static final long serialVersionUID = -2141241183459860742L;
 
     private String name;
 

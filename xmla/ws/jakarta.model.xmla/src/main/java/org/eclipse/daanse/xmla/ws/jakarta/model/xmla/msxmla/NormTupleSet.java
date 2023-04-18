@@ -57,7 +57,7 @@ public class NormTupleSet implements Serializable {
 
         private static final long serialVersionUID = 1L;
         @XmlElement(name = "Members", required = true)
-        protected List<TupleType> members;
+        private List<TupleType> members;
 
         public List<TupleType> getMembers() {
             return this.members;

@@ -34,16 +34,18 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private static final QName _DbStorageLocation_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "DbStorageLocation");
+    public static final String HTTP_SCHEMAS_2008_ENGINE_100_100 =
+        "http://schemas.microsoft.com/analysisservices/2008/engine/100/100";
+    private static final QName _DbStorageLocation_QNAME = new QName(
+        HTTP_SCHEMAS_2008_ENGINE_100_100, "DbStorageLocation");
   private static final QName _HoldoutMaxPercent_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutMaxPercent");
+      HTTP_SCHEMAS_2008_ENGINE_100_100, "HoldoutMaxPercent");
   private static final QName _HoldoutMaxCases_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutMaxCases");
+      HTTP_SCHEMAS_2008_ENGINE_100_100, "HoldoutMaxCases");
   private static final QName _HoldoutSeed_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutSeed");
+      HTTP_SCHEMAS_2008_ENGINE_100_100, "HoldoutSeed");
   private static final QName _HoldoutActualSize_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", "HoldoutActualSize");
+      HTTP_SCHEMAS_2008_ENGINE_100_100, "HoldoutActualSize");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -51,6 +53,7 @@ public class ObjectFactory {
    *
    */
   public ObjectFactory() {
+      //constructor
   }
 
   /**

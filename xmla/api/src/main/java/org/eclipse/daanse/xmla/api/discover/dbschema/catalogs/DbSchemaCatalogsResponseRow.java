@@ -75,15 +75,17 @@ public interface DbSchemaCatalogsResponseRow {
     Optional<String> databaseId();
 
     /**
+     * @deprecated
      * @return Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<LocalDateTime> dateQueried();
 
     /**
+     * @deprecated
      * @return Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<Boolean> currentlyUsed();
 
     /**

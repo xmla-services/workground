@@ -29,7 +29,7 @@ public class Messages implements Serializable {
     private static final long serialVersionUID = 1L;
     @XmlElements({@XmlElement(name = "Warning", type = WarningType.class),
         @XmlElement(name = "Error", type = ErrorType.class)})
-    protected List<Serializable> warningOrError;
+    private List<Serializable> warningOrError;
 
     public List<Serializable> getWarningOrError() {
         return this.warningOrError;

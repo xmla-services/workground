@@ -38,7 +38,7 @@ public class Restrictions {
     protected List<Entry<String, String>> restrictionList;
 
     public Restrictions() {
-
+        // constructor
     }
 
     public List<Entry<String, String>> getRestrictionList() {

@@ -96,17 +96,19 @@ public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable
     String databaseId;
 
     /**
+     * @deprecated
      * Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     @XmlElement(name = "DATE_QUERIED", required = false)
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     LocalDateTime dateQueried;
 
     /**
+     * @deprecated
      * Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     @XmlElement(name = "CURRENTLY_USED", required = false)
     Boolean currentlyUsed;
 
@@ -207,22 +209,38 @@ public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable
         this.databaseId = databaseId;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public LocalDateTime getDateQueried() {
         return dateQueried;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setDateQueried(LocalDateTime dateQueried) {
         this.dateQueried = dateQueried;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public Boolean getCurrentlyUsed() {
         return currentlyUsed;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setCurrentlyUsed(Boolean currentlyUsed) {
         this.currentlyUsed = currentlyUsed;
     }

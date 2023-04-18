@@ -134,6 +134,9 @@ import org.eclipse.daanse.xmla.model.record.xmla.ReportFormatParameterR;
 import org.eclipse.daanse.xmla.model.record.xmla.ReportParameterR;
 import org.eclipse.daanse.xmla.model.record.xmla.StandardActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DrillThroughAction;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportAction;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.StandardAction;
 
 public class CubeConvertor {
 
@@ -810,70 +813,82 @@ public class CubeConvertor {
 		if (action != null) {
 			if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.StandardAction standardAction) {
 
-				return new StandardActionR(standardAction.getName(), Optional.ofNullable(standardAction.getID()),
-						Optional.ofNullable(standardAction.getCaption()),
-						Optional.ofNullable(standardAction.isCaptionIsMdx()),
-						Optional.ofNullable(convertTranslationList(standardAction.getTranslations() == null ? null
-								: standardAction.getTranslations().getTranslation())),
-						TargetTypeEnum.fromValue(standardAction.getTargetType()),
-						Optional.ofNullable(standardAction.getTarget()),
-						Optional.ofNullable(standardAction.getCondition()),
-						TypeEnum.fromValue(standardAction.getType()),
-						Optional.ofNullable(standardAction.getInvocation()),
-						Optional.ofNullable(standardAction.getApplication()),
-						Optional.ofNullable(standardAction.getDescription()),
-						Optional.ofNullable(convertAnnotationList(standardAction.getAnnotations() == null ? null
-								: standardAction.getAnnotations().getAnnotation())),
-						standardAction.getExpression());
+			    return convertStandardAction(standardAction);
 			}
 			if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportAction reportAction) {
 
-				return new ReportActionR(reportAction.getName(), Optional.ofNullable(reportAction.getID()),
-						Optional.ofNullable(reportAction.getCaption()),
-						Optional.ofNullable(reportAction.isCaptionIsMdx()),
-						Optional.ofNullable(convertTranslationList(reportAction.getTranslations() == null ? null
-								: reportAction.getTranslations().getTranslation())),
-						TargetTypeEnum.fromValue(reportAction.getTargetType()),
-						Optional.ofNullable(reportAction.getTarget()), Optional.ofNullable(reportAction.getCondition()),
-						TypeEnum.fromValue(reportAction.getType()), Optional.ofNullable(reportAction.getInvocation()),
-						Optional.ofNullable(reportAction.getApplication()),
-						Optional.ofNullable(reportAction.getDescription()),
-						Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations() == null ? null
-								: reportAction.getAnnotations().getAnnotation())),
-						reportAction.getReportServer(), Optional.ofNullable(reportAction.getPath()),
-						Optional.ofNullable(
-								convertReportParametersList(reportAction.getReportParameters() == null ? null
-										: reportAction.getReportParameters().getReportParameter())),
-						Optional.ofNullable(
-								convertReportFormatParameterList(reportAction.getReportFormatParameters() == null ? null
-										: reportAction.getReportFormatParameters().getReportFormatParameter())));
+                return convertReportAction(reportAction);
 			}
 			if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DrillThroughAction drillThroughAction) {
 
-				return new DrillThroughActionR(drillThroughAction.getName(),
-						Optional.ofNullable(drillThroughAction.getID()),
-						Optional.ofNullable(drillThroughAction.getCaption()),
-						Optional.ofNullable(drillThroughAction.isCaptionIsMdx()),
-						Optional.ofNullable(convertTranslationList(drillThroughAction.getTranslations() == null ? null
-								: drillThroughAction.getTranslations().getTranslation())),
-						TargetTypeEnum.fromValue(drillThroughAction.getTargetType()),
-						Optional.ofNullable(drillThroughAction.getTarget()),
-						Optional.ofNullable(drillThroughAction.getCondition()),
-						TypeEnum.fromValue(drillThroughAction.getType()),
-						Optional.ofNullable(drillThroughAction.getInvocation()),
-						Optional.ofNullable(drillThroughAction.getApplication()),
-						Optional.ofNullable(drillThroughAction.getDescription()),
-						Optional.ofNullable(convertAnnotationList(drillThroughAction.getAnnotations() == null ? null
-								: drillThroughAction.getAnnotations().getAnnotation())),
-						Optional.ofNullable(drillThroughAction.isDefault()),
-						Optional.ofNullable(convertBindingList(drillThroughAction.getColumns().getColumn())),
-						Optional.ofNullable(drillThroughAction.getMaximumRows()));
+                return convertDrillThroughAction(drillThroughAction);
 			}
 		}
 		return null;
 	}
 
-	private static List<ReportFormatParameter> convertReportFormatParameterList(
+    private static Action convertDrillThroughAction(DrillThroughAction drillThroughAction) {
+        return new DrillThroughActionR(drillThroughAction.getName(),
+            Optional.ofNullable(drillThroughAction.getID()),
+            Optional.ofNullable(drillThroughAction.getCaption()),
+            Optional.ofNullable(drillThroughAction.isCaptionIsMdx()),
+            Optional.ofNullable(convertTranslationList(drillThroughAction.getTranslations() == null ? null
+                : drillThroughAction.getTranslations().getTranslation())),
+            TargetTypeEnum.fromValue(drillThroughAction.getTargetType()),
+            Optional.ofNullable(drillThroughAction.getTarget()),
+            Optional.ofNullable(drillThroughAction.getCondition()),
+            TypeEnum.fromValue(drillThroughAction.getType()),
+            Optional.ofNullable(drillThroughAction.getInvocation()),
+            Optional.ofNullable(drillThroughAction.getApplication()),
+            Optional.ofNullable(drillThroughAction.getDescription()),
+            Optional.ofNullable(convertAnnotationList(drillThroughAction.getAnnotations() == null ? null
+                : drillThroughAction.getAnnotations().getAnnotation())),
+            Optional.ofNullable(drillThroughAction.isDefault()),
+            Optional.ofNullable(convertBindingList(drillThroughAction.getColumns().getColumn())),
+            Optional.ofNullable(drillThroughAction.getMaximumRows()));
+    }
+
+    private static Action convertReportAction(ReportAction reportAction) {
+        return new ReportActionR(reportAction.getName(), Optional.ofNullable(reportAction.getID()),
+            Optional.ofNullable(reportAction.getCaption()),
+            Optional.ofNullable(reportAction.isCaptionIsMdx()),
+            Optional.ofNullable(convertTranslationList(reportAction.getTranslations() == null ? null
+                : reportAction.getTranslations().getTranslation())),
+            TargetTypeEnum.fromValue(reportAction.getTargetType()),
+            Optional.ofNullable(reportAction.getTarget()), Optional.ofNullable(reportAction.getCondition()),
+            TypeEnum.fromValue(reportAction.getType()), Optional.ofNullable(reportAction.getInvocation()),
+            Optional.ofNullable(reportAction.getApplication()),
+            Optional.ofNullable(reportAction.getDescription()),
+            Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations() == null ? null
+                : reportAction.getAnnotations().getAnnotation())),
+            reportAction.getReportServer(), Optional.ofNullable(reportAction.getPath()),
+            Optional.ofNullable(
+                convertReportParametersList(reportAction.getReportParameters() == null ? null
+                    : reportAction.getReportParameters().getReportParameter())),
+            Optional.ofNullable(
+                convertReportFormatParameterList(reportAction.getReportFormatParameters() == null ? null
+                    : reportAction.getReportFormatParameters().getReportFormatParameter())));
+    }
+
+    private static Action convertStandardAction(StandardAction standardAction) {
+        return new StandardActionR(standardAction.getName(), Optional.ofNullable(standardAction.getID()),
+            Optional.ofNullable(standardAction.getCaption()),
+            Optional.ofNullable(standardAction.isCaptionIsMdx()),
+            Optional.ofNullable(convertTranslationList(standardAction.getTranslations() == null ? null
+                : standardAction.getTranslations().getTranslation())),
+            TargetTypeEnum.fromValue(standardAction.getTargetType()),
+            Optional.ofNullable(standardAction.getTarget()),
+            Optional.ofNullable(standardAction.getCondition()),
+            TypeEnum.fromValue(standardAction.getType()),
+            Optional.ofNullable(standardAction.getInvocation()),
+            Optional.ofNullable(standardAction.getApplication()),
+            Optional.ofNullable(standardAction.getDescription()),
+            Optional.ofNullable(convertAnnotationList(standardAction.getAnnotations() == null ? null
+                : standardAction.getAnnotations().getAnnotation())),
+            standardAction.getExpression());
+    }
+
+    private static List<ReportFormatParameter> convertReportFormatParameterList(
 			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportFormatParameter> list) {
 		if (list != null) {
 			return list.stream().map(CubeConvertor::convertReportFormatParameter).toList();

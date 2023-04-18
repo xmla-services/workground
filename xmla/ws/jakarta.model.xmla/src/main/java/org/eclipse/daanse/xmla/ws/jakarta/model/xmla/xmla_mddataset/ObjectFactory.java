@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -34,14 +34,15 @@ public class ObjectFactory {
      * Create a new ObjectFactory that can be used to create new instances of schema
      * derived classes for package:
      * org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset
-     * 
+     *
      */
     public ObjectFactory() {
+        // constructor
     }
 
     /**
      * Create an instance of {@link CellType }
-     * 
+     *
      */
     public CellType createCellType() {
         return new CellType();
@@ -49,7 +50,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SetListType }
-     * 
+     *
      */
     public SetListType createSetListType() {
         return new SetListType();
@@ -57,7 +58,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Mddataset }
-     * 
+     *
      */
     public Mddataset createMddataset() {
         return new Mddataset();
@@ -65,7 +66,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OlapInfo }
-     * 
+     *
      */
     public OlapInfo createOlapInfo() {
         return new OlapInfo();
@@ -73,7 +74,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CubeInfo }
-     * 
+     *
      */
     public CubeInfo createCubeInfo() {
         return new CubeInfo();
@@ -81,7 +82,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TupleType }
-     * 
+     *
      */
     public TupleType createTupleType() {
         return new TupleType();
@@ -89,7 +90,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OlapInfoCube }
-     * 
+     *
      */
     public OlapInfoCube createOlapInfoCube() {
         return new OlapInfoCube();
@@ -97,7 +98,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AxesInfo }
-     * 
+     *
      */
     public AxesInfo createAxesInfo() {
         return new AxesInfo();
@@ -105,7 +106,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AxisInfo }
-     * 
+     *
      */
     public AxisInfo createAxisInfo() {
         return new AxisInfo();
@@ -113,7 +114,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link HierarchyInfo }
-     * 
+     *
      */
     public HierarchyInfo createHierarchyInfo() {
         return new HierarchyInfo();
@@ -121,7 +122,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellInfo }
-     * 
+     *
      */
     public CellInfo createCellInfo() {
         return new CellInfo();
@@ -129,7 +130,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Axes }
-     * 
+     *
      */
     public Axes createAxes() {
         return new Axes();
@@ -137,7 +138,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Axis }
-     * 
+     *
      */
     public Axis createAxis() {
         return new Axis();
@@ -145,7 +146,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MembersType }
-     * 
+     *
      */
     public MembersType createMembersType() {
         return new MembersType();
@@ -153,7 +154,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MemberType }
-     * 
+     *
      */
     public MemberType createMemberType() {
         return new MemberType();
@@ -161,7 +162,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TuplesType }
-     * 
+     *
      */
     public TuplesType createTuplesType() {
         return new TuplesType();
@@ -169,7 +170,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellData }
-     * 
+     *
      */
     public CellData createCellData() {
         return new CellData();
@@ -177,7 +178,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellTypeError }
-     * 
+     *
      */
     public CellTypeError createCellTypeError() {
         return new CellTypeError();
@@ -185,7 +186,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellSetType }
-     * 
+     *
      */
     public CellSetType createCellSetType() {
         return new CellSetType();
@@ -193,7 +194,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CellType.Value }
-     * 
+     *
      */
     public CellType.Value createCellTypeValue() {
         return new CellType.Value();
@@ -201,7 +202,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SetListType.Union }
-     * 
+     *
      */
     public Union createSetListTypeUnion() {
         return new Union();

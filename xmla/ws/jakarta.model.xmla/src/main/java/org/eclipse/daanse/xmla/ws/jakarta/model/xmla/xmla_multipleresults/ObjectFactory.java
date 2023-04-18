@@ -19,6 +19,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 public class ObjectFactory {
 
     public ObjectFactory() {
+        // constructor
     }
 
     public Results createResults() {

@@ -34,12 +34,13 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private static final QName _DirectQueryMode_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "DirectQueryMode");
+    public static final String NAMESPACE_URI = "http://schemas.microsoft.com/analysisservices/2011/engine/300/300";
+    private static final QName _DirectQueryMode_QNAME = new QName(
+        NAMESPACE_URI, "DirectQueryMode");
   private static final QName _AllowedRowsExpression_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "AllowedRowsExpression");
+      NAMESPACE_URI, "AllowedRowsExpression");
   private static final QName _DirectQueryUsage_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", "DirectQueryUsage");
+      NAMESPACE_URI, "DirectQueryUsage");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -47,6 +48,7 @@ public class ObjectFactory {
    *
    */
   public ObjectFactory() {
+      // constructor
   }
 
   /**

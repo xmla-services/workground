@@ -93,7 +93,7 @@ public class EventSession {
 
   public BigInteger getMaxMemory() {
     if (maxMemory == null) {
-      return new BigInteger("4");
+      return BigInteger.valueOf(4);
     } else {
       return maxMemory;
     }

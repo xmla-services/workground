@@ -35,22 +35,24 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private static final QName _DataEmbeddingStyle_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "DataEmbeddingStyle");
+    public static final String NAMESPACE_URI = "http://schemas.microsoft.com/analysisservices/2011/engine/300";
+
+    private static final QName _DataEmbeddingStyle_QNAME = new QName(
+        NAMESPACE_URI, "DataEmbeddingStyle");
   private static final QName _QueryImpersonationInfo_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "QueryImpersonationInfo");
+      NAMESPACE_URI, "QueryImpersonationInfo");
   private static final QName _QueryHints_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "QueryHints");
+      NAMESPACE_URI, "QueryHints");
   private static final QName _StringStoresCompatibilityLevel_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "StringStoresCompatibilityLevel");
+      NAMESPACE_URI, "StringStoresCompatibilityLevel");
   private static final QName _CurrentStringStoresCompatibilityLevel_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "CurrentStringStoresCompatibilityLevel");
+      NAMESPACE_URI, "CurrentStringStoresCompatibilityLevel");
   private static final QName _ProcessingState_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "ProcessingState");
+      NAMESPACE_URI, "ProcessingState");
   private static final QName _StructureType_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "StructureType");
+      NAMESPACE_URI, "StructureType");
   private static final QName _ServerMode_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2011/engine/300", "ServerMode");
+      NAMESPACE_URI, "ServerMode");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -58,6 +60,7 @@ public class ObjectFactory {
    *
    */
   public ObjectFactory() {
+      // constructor
   }
 
   /**
