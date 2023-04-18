@@ -140,12 +140,12 @@ public class BindingConvertor {
 					Optional.ofNullable(b.getManufacturingExtraMonthQuarter()));
 
 		}
-		if (source instanceof TimeAttributeBinding b) {
+		if (source instanceof TimeAttributeBinding) {
 			// TODO: handle b
 			return new TimeAttributeBindingR();
 
 		}
-		if (source instanceof InheritedBinding b) {
+		if (source instanceof InheritedBinding) {
 			// TODO: handle b
 			return new InheritedBindingR();
 
@@ -154,7 +154,7 @@ public class BindingConvertor {
 			return new CalculatedMeasureBindingR(b.getMeasureName());
 
 		}
-		if (source instanceof RowNumberBinding b) {
+		if (source instanceof RowNumberBinding) {
 			// TODO: handle rowNumberBinding
 			return new RowNumberBindingR();
 

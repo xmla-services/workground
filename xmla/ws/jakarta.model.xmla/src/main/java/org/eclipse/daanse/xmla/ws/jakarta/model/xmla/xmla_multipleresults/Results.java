@@ -31,7 +31,7 @@ public class Results implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @XmlElement(namespace = "urn:schemas-microsoft-com:xml-analysis:empty")
-    protected List<Emptyresult> root;
+    private List<Emptyresult> root;
 
     public List<Emptyresult> getRoot() {
         return this.root;

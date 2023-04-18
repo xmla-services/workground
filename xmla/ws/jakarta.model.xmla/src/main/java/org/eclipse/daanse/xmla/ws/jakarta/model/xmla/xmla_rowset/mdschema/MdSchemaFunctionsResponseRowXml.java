@@ -92,24 +92,27 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
     private String libraryName;
 
     /**
+     * @deprecated
      * Unused
      */
     @XmlElement(name = "DLL_NAME", required = false)
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     private String dllName;
 
     /**
+     * @deprecated
      * Unused
      */
     @XmlElement(name = "HELP_FILE", required = false)
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     private String helpFile;
 
     /**
+     * @deprecated
      * Unused
      */
     @XmlElement(name = "HELP_CONTEXT", required = false)
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     private String helpContext;
 
     /**
@@ -202,30 +205,56 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
         this.libraryName = libraryName;
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public String getDllName() {
         return dllName;
     }
 
+    /**
+     * @deprecated
+     * @param dllName
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setDllName(String dllName) {
         this.dllName = dllName;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public String getHelpFile() {
         return helpFile;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @param helpFile
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setHelpFile(String helpFile) {
         this.helpFile = helpFile;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public String getHelpContext() {
         return helpContext;
     }
 
-    @Deprecated
+    /**
+     * @deprecated
+     * @param helpContext
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setHelpContext(String helpContext) {
         this.helpContext = helpContext;
     }

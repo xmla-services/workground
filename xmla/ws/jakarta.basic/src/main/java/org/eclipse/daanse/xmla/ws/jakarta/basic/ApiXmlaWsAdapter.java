@@ -140,46 +140,43 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 		if (discover == null) {
 			return null;
 		}
-		DiscoverResponse discoverResponse = null;
 
 		try {
+			return switch (discover.getRequestType()) {
+                case DBSCHEMA_TABLES_INFO -> handleDiscoverDbSchemaTablesInfo(discover);
+                case DBSCHEMA_SOURCE_TABLES -> handleDiscoverDbSchemaSourceTables(discover);
+                case MDSCHEMA_MEASUREGROUPS -> handleDiscoverMdSchemaMeasureGroups(discover);
+                case MDSCHEMA_KPIS -> handleDiscoverMdSchemaKpis(discover);
+                case MDSCHEMA_SETS -> handleDiscoverMdSchemaSets(discover);
+                case MDSCHEMA_PROPERTIES -> handleDiscoverMdSchemaProperties(discover);
+                case MDSCHEMA_MEMBERS -> handleDiscoverMdSchemaMembers(discover);
+                case MDSCHEMA_MEASURES -> handleDiscoverMdSchemaMeasures(discover);
+                case MDSCHEMA_MEASUREGROUP_DIMENSIONS -> handleDiscoverMdSchemaMeasureGroupDimensions(discover);
+                case MDSCHEMA_LEVELS -> handleDiscoverMdSchemaLevels(discover);
+                case DBSCHEMA_SCHEMATA -> handleDiscoverDbSchemaSchemata(discover);
+                case DBSCHEMA_PROVIDER_TYPES -> handleDiscoverDbSchemaProviderTypes(discover);
+                case DBSCHEMA_COLUMNS -> handleDiscoverDbSchemaColumns(discover);
+                case DISCOVER_XML_METADATA -> handleDiscoverXmlMetaData(discover);
+                case DISCOVER_DATASOURCES -> handleDiscoverDataSources(discover);
+                case MDSCHEMA_HIERARCHIES -> handleDiscoverMdSchemaHierarchies(discover);
+                case MDSCHEMA_FUNCTIONS -> handleDiscoverMdSchemaFunctions(discover);
+                case MDSCHEMA_DIMENSIONS -> handleDiscoverMdSchemaDimensions(discover);
+                case MDSCHEMA_CUBES -> handleDiscoverMdSchemaCubes(discover);
+                case MDSCHEMA_ACTIONS -> handleDiscoverMdSchemaActions(discover);
+                case DBSCHEMA_TABLES -> handleDiscoverDbSchemaTables(discover);
+                case DISCOVER_LITERALS -> handleDiscoverLiterals(discover);
+                case DISCOVER_KEYWORDS -> handleDiscoverKeywords(discover);
+                case DISCOVER_ENUMERATORS -> handleDiscoverEnumerators(discover);
+                case DISCOVER_SCHEMA_ROWSETS -> handleDiscoverSchemaRowsets(discover);
+                case DISCOVER_PROPERTIES -> handleDiscoverProperties(discover);
+                case DBSCHEMA_CATALOGS -> handleDbSchemaCatalogs(discover);
+                default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
+            };
 
-			switch (discover.getRequestType()) {
-			case DBSCHEMA_TABLES_INFO -> discoverResponse = handleDiscoverDbSchemaTablesInfo(discover);
-			case DBSCHEMA_SOURCE_TABLES -> discoverResponse = handleDiscoverDbSchemaSourceTables(discover);
-			case MDSCHEMA_MEASUREGROUPS -> discoverResponse = handleDiscoverMdSchemaMeasureGroups(discover);
-			case MDSCHEMA_KPIS -> discoverResponse = handleDiscoverMdSchemaKpis(discover);
-			case MDSCHEMA_SETS -> discoverResponse = handleDiscoverMdSchemaSets(discover);
-			case MDSCHEMA_PROPERTIES -> discoverResponse = handleDiscoverMdSchemaProperties(discover);
-			case MDSCHEMA_MEMBERS -> discoverResponse = handleDiscoverMdSchemaMembers(discover);
-			case MDSCHEMA_MEASURES -> discoverResponse = handleDiscoverMdSchemaMeasures(discover);
-			case MDSCHEMA_MEASUREGROUP_DIMENSIONS ->
-				discoverResponse = handleDiscoverMdSchemaMeasureGroupDimensions(discover);
-			case MDSCHEMA_LEVELS -> discoverResponse = handleDiscoverMdSchemaLevels(discover);
-			case DBSCHEMA_SCHEMATA -> discoverResponse = handleDiscoverDbSchemaSchemata(discover);
-			case DBSCHEMA_PROVIDER_TYPES -> discoverResponse = handleDiscoverDbSchemaProviderTypes(discover);
-			case DBSCHEMA_COLUMNS -> discoverResponse = handleDiscoverDbSchemaColumns(discover);
-			case DISCOVER_XML_METADATA -> discoverResponse = handleDiscoverXmlMetaData(discover);
-			case DISCOVER_DATASOURCES -> discoverResponse = handleDiscoverDataSources(discover);
-			case MDSCHEMA_HIERARCHIES -> discoverResponse = handleDiscoverMdSchemaHierarchies(discover);
-			case MDSCHEMA_FUNCTIONS -> discoverResponse = handleDiscoverMdSchemaFunctions(discover);
-			case MDSCHEMA_DIMENSIONS -> discoverResponse = handleDiscoverMdSchemaDimensions(discover);
-			case MDSCHEMA_CUBES -> discoverResponse = handleDiscoverMdSchemaCubes(discover);
-			case MDSCHEMA_ACTIONS -> discoverResponse = handleDiscoverMdSchemaActions(discover);
-			case DBSCHEMA_TABLES -> discoverResponse = handleDiscoverDbSchemaTables(discover);
-			case DISCOVER_LITERALS -> discoverResponse = handleDiscoverLiterals(discover);
-			case DISCOVER_KEYWORDS -> discoverResponse = handleDiscoverKeywords(discover);
-			case DISCOVER_ENUMERATORS -> discoverResponse = handleDiscoverEnumerators(discover);
-			case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
-			case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
-			case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
-			default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
-
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return discoverResponse;
+		return null;
 	}
 
 	@Override

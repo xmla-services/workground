@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -32,14 +32,15 @@ public class ObjectFactory {
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.xmla_x
-   * 
+   *
    */
   public ObjectFactory() {
+      // constructor
   }
 
   /**
    * Create an instance of {@link MessageLocation }
-   * 
+   *
    */
   public MessageLocation createMessageLocation() {
     return new MessageLocation();
@@ -47,7 +48,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link Exception }
-   * 
+   *
    */
   public Exception createException() {
     return new Exception();
@@ -55,7 +56,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link Messages }
-   * 
+   *
    */
   public Messages createMessages() {
     return new Messages();
@@ -63,7 +64,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link WarningType }
-   * 
+   *
    */
   public WarningType createWarningType() {
     return new WarningType();
@@ -71,7 +72,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link ErrorType }
-   * 
+   *
    */
   public ErrorType createErrorType() {
     return new ErrorType();
@@ -79,7 +80,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link MessageLocation.Start }
-   * 
+   *
    */
   public MessageLocation.Start createMessageLocationStart() {
     return new MessageLocation.Start();
@@ -87,7 +88,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link MessageLocation.End }
-   * 
+   *
    */
   public MessageLocation.End createMessageLocationEnd() {
     return new MessageLocation.End();

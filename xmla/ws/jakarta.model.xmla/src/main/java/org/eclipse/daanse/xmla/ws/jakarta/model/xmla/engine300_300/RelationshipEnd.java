@@ -96,7 +96,7 @@ public class RelationshipEnd implements Serializable {
 
         private static final long serialVersionUID = 1L;
         @XmlElement(name = "Attribute")
-        protected List<RelationshipEnd.Attributes.Attribute> attribute;
+        private List<RelationshipEnd.Attributes.Attribute> attribute;
 
         public List<RelationshipEnd.Attributes.Attribute> getAttribute() {
             return this.attribute;
@@ -132,7 +132,7 @@ public class RelationshipEnd implements Serializable {
 
         private static final long serialVersionUID = 1L;
         @XmlElement(name = "Translation")
-        protected List<RelationshipEndTranslation> translation;
+        private List<RelationshipEndTranslation> translation;
 
         public List<RelationshipEndTranslation> getTranslation() {
             return this.translation;

@@ -56,12 +56,12 @@ public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
     @interface Config {
 
         @AttributeDefinition(name = "XMLA-Service Filter", required = true)
-        String xmlaService_target()
+        String xmlaserviceTarget()
 
         default "(&(must.be.configured=*)(!(must.not.configured=*)))";
 
         @AttributeDefinition(required = true)
-        String osgi_soap_endpoint_contextpath();
+        String osgiSoapEndpointContextpath();
     }
 
     private XmlaApiAdapter wsAdapter;

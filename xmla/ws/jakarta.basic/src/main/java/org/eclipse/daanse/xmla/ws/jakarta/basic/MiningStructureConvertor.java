@@ -36,6 +36,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.MiningStructurePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningStructureR;
 import org.eclipse.daanse.xmla.model.record.xmla.ScalarMiningStructureColumnR;
 import org.eclipse.daanse.xmla.model.record.xmla.TableMiningStructureColumnR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ScalarMiningStructureColumn;
 
 public class MiningStructureConvertor {
 
@@ -116,32 +117,40 @@ public class MiningStructureConvertor {
     private static MiningStructureColumn convertMiningStructureColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningStructureColumn miningStructureColumn) {
         if (miningStructureColumn != null) {
             if (miningStructureColumn instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ScalarMiningStructureColumn scalarMiningStructureColumn) {
-                return new ScalarMiningStructureColumnR(scalarMiningStructureColumn.getName(),
-                    Optional.ofNullable(scalarMiningStructureColumn.getID()),
-                    Optional.ofNullable(scalarMiningStructureColumn.getDescription()),
-                    Optional.ofNullable(scalarMiningStructureColumn.getType()),
-                    Optional.ofNullable(convertAnnotationList(scalarMiningStructureColumn.getAnnotations() == null ? null : scalarMiningStructureColumn.getAnnotations().getAnnotation())),
-                    Optional.ofNullable(scalarMiningStructureColumn.isIsKey()),
-                    Optional.ofNullable(convertBinding(scalarMiningStructureColumn.getSource())),
-                    Optional.ofNullable(scalarMiningStructureColumn.getDistribution()),
-                    Optional.ofNullable(convertMiningModelingFlagList(scalarMiningStructureColumn.getModelingFlags() == null ? null : scalarMiningStructureColumn.getModelingFlags().getModelingFlag())),
-                    scalarMiningStructureColumn.getContent(),
-                    Optional.ofNullable(scalarMiningStructureColumn.getClassifiedColumns() == null ? null : scalarMiningStructureColumn.getClassifiedColumns().getClassifiedColumnID()),
-                    Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationMethod()),
-                    Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationBucketCount()),
-                    Optional.ofNullable(convertDataItemList(scalarMiningStructureColumn.getKeyColumns() == null ? null : scalarMiningStructureColumn.getKeyColumns().getKeyColumn())),
-                    Optional.ofNullable(convertDataItem(scalarMiningStructureColumn.getNameColumn())),
-                    Optional.ofNullable(convertTranslationList(scalarMiningStructureColumn.getTranslations() == null ? null : scalarMiningStructureColumn.getTranslations().getTranslation())));
+                return convertScalarMiningStructureColumn(scalarMiningStructureColumn);
             }
             if (miningStructureColumn instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn tableMiningStructureColumn) {
-                return new TableMiningStructureColumnR(
-                    Optional.ofNullable(convertDataItemList(tableMiningStructureColumn.getForeignKeyColumns() == null ? null : tableMiningStructureColumn.getForeignKeyColumns().getForeignKeyColumn())),
-                    Optional.ofNullable(convertMeasureGroupBinding(tableMiningStructureColumn.getSourceMeasureGroup())),
-                    Optional.ofNullable(convertMiningStructureColumnList(tableMiningStructureColumn.getColumns() == null ? null : tableMiningStructureColumn.getColumns().getColumn())),
-                    Optional.ofNullable(convertTranslationList(tableMiningStructureColumn.getTranslations() == null ? null : tableMiningStructureColumn.getTranslations().getTranslation())));
+                return convertTableMiningStructureColumn(tableMiningStructureColumn);
             }
         }
         return null;
+    }
+
+    private static MiningStructureColumn convertScalarMiningStructureColumn(ScalarMiningStructureColumn scalarMiningStructureColumn) {
+        return new ScalarMiningStructureColumnR(scalarMiningStructureColumn.getName(),
+            Optional.ofNullable(scalarMiningStructureColumn.getID()),
+            Optional.ofNullable(scalarMiningStructureColumn.getDescription()),
+            Optional.ofNullable(scalarMiningStructureColumn.getType()),
+            Optional.ofNullable(convertAnnotationList(scalarMiningStructureColumn.getAnnotations() == null ? null : scalarMiningStructureColumn.getAnnotations().getAnnotation())),
+            Optional.ofNullable(scalarMiningStructureColumn.isIsKey()),
+            Optional.ofNullable(convertBinding(scalarMiningStructureColumn.getSource())),
+            Optional.ofNullable(scalarMiningStructureColumn.getDistribution()),
+            Optional.ofNullable(convertMiningModelingFlagList(scalarMiningStructureColumn.getModelingFlags() == null ? null : scalarMiningStructureColumn.getModelingFlags().getModelingFlag())),
+            scalarMiningStructureColumn.getContent(),
+            Optional.ofNullable(scalarMiningStructureColumn.getClassifiedColumns() == null ? null : scalarMiningStructureColumn.getClassifiedColumns().getClassifiedColumnID()),
+            Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationMethod()),
+            Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationBucketCount()),
+            Optional.ofNullable(convertDataItemList(scalarMiningStructureColumn.getKeyColumns() == null ? null : scalarMiningStructureColumn.getKeyColumns().getKeyColumn())),
+            Optional.ofNullable(convertDataItem(scalarMiningStructureColumn.getNameColumn())),
+            Optional.ofNullable(convertTranslationList(scalarMiningStructureColumn.getTranslations() == null ? null : scalarMiningStructureColumn.getTranslations().getTranslation())));
+    }
+
+    private static MiningStructureColumn convertTableMiningStructureColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn tableMiningStructureColumn) {
+        return new TableMiningStructureColumnR(
+            Optional.ofNullable(convertDataItemList(tableMiningStructureColumn.getForeignKeyColumns() == null ? null : tableMiningStructureColumn.getForeignKeyColumns().getForeignKeyColumn())),
+            Optional.ofNullable(convertMeasureGroupBinding(tableMiningStructureColumn.getSourceMeasureGroup())),
+            Optional.ofNullable(convertMiningStructureColumnList(tableMiningStructureColumn.getColumns() == null ? null : tableMiningStructureColumn.getColumns().getColumn())),
+            Optional.ofNullable(convertTranslationList(tableMiningStructureColumn.getTranslations() == null ? null : tableMiningStructureColumn.getTranslations().getTranslation())));
     }
 
 }

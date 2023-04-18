@@ -69,7 +69,7 @@ public class PredLeaf {
     @XmlAttribute(name = "module")
     protected String module;
     @XmlAttribute(name = "package", required = true)
-    protected String _package;
+    protected String packageValue;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
@@ -82,11 +82,11 @@ public class PredLeaf {
     }
 
     public String getPackage() {
-      return _package;
+      return packageValue;
     }
 
     public void setPackage(String value) {
-      this._package = value;
+      this.packageValue = value;
     }
 
     public String getName() {
@@ -107,7 +107,7 @@ public class PredLeaf {
     @XmlAttribute(name = "module")
     protected String module;
     @XmlAttribute(name = "package", required = true)
-    protected String _package;
+    protected String packageValue;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
@@ -129,11 +129,11 @@ public class PredLeaf {
 
 
     public String getPackage() {
-      return _package;
+      return packageValue;
     }
 
     public void setPackage(String value) {
-      this._package = value;
+      this.packageValue = value;
     }
 
     public String getName() {
@@ -154,7 +154,7 @@ public class PredLeaf {
     @XmlAttribute(name = "module")
     protected String module;
     @XmlAttribute(name = "package", required = true)
-    protected String _package;
+    protected String packageValue;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
@@ -167,11 +167,11 @@ public class PredLeaf {
     }
 
     public String getPackage() {
-      return _package;
+      return packageValue;
     }
 
     public void setPackage(String value) {
-      this._package = value;
+      this.packageValue = value;
     }
 
     public String getName() {

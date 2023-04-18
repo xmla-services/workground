@@ -74,21 +74,24 @@ public interface MdSchemaFunctionsResponseRow {
     Optional<String> libraryName();
 
     /**
+     * @deprecated
      * @return Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<String> dllName();
 
     /**
+     * @deprecated
      * @return Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<String> helpFile();
 
     /**
+     * @deprecated
      * @return Unused
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<String> helpContext();
 
     /**

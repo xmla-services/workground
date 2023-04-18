@@ -274,7 +274,7 @@ public class PropertyList {
     protected String applicationContext;
 
     public PropertyList() {
-
+        // constructor
     }
 
     public String getDataSourceInfo() {

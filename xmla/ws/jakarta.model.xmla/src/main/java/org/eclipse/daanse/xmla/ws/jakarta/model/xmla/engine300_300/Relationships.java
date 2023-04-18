@@ -27,7 +27,7 @@ public class Relationships implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @XmlElement(name = "Relationship")
-    protected List<Relationship> relationship;
+    private List<Relationship> relationship;
 
     public List<Relationship> getRelationship() {
         return this.relationship;

@@ -34,24 +34,25 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private static final QName _StorageEngineUsed_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "StorageEngineUsed");
+    public static final String NAMESPACE_URI = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200";
+    private static final QName _StorageEngineUsed_QNAME = new QName(
+        NAMESPACE_URI, "StorageEngineUsed");
   private static final QName _ImagePath_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImagePath");
+      NAMESPACE_URI, "ImagePath");
   private static final QName _ImageUrl_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageUrl");
+      NAMESPACE_URI, "ImageUrl");
   private static final QName _ImageUniqueID_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageUniqueID");
+      NAMESPACE_URI, "ImageUniqueID");
   private static final QName _ImageVersion_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ImageVersion");
+      NAMESPACE_URI, "ImageVersion");
   private static final QName _Token_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "Token");
+      NAMESPACE_URI, "Token");
   private static final QName _ProcessingRecommendation_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ProcessingRecommendation");
+      NAMESPACE_URI, "ProcessingRecommendation");
   private static final QName _ProcessingState_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ProcessingState");
+      NAMESPACE_URI, "ProcessingState");
   private static final QName _ShareDimensionStorage_QNAME = new QName(
-      "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", "ShareDimensionStorage");
+      NAMESPACE_URI, "ShareDimensionStorage");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -59,6 +60,7 @@ public class ObjectFactory {
    *
    */
   public ObjectFactory() {
+      //constructor
   }
 
   /**

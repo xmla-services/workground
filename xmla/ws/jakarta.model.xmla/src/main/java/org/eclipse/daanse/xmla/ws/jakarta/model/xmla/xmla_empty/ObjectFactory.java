@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -32,11 +32,12 @@ public class ObjectFactory {
 
 
   public ObjectFactory() {
+      // constructor
   }
 
   /**
    * Create an instance of {@link Emptyresult }
-   * 
+   *
    */
   public Emptyresult createEmptyresult() {
     return new Emptyresult();

@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
  * can consist of schema derived interfaces and classes representing the binding
  * of schema type definitions, element declarations and model groups. Factory
  * methods for each of these are provided in this class.
- * 
+ *
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -32,14 +32,15 @@ public class ObjectFactory {
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
    * derived classes for package: org.eclipse.daanse.xmla.ws.msxmla
-   * 
+   *
    */
   public ObjectFactory() {
+      // constructor
   }
 
   /**
    * Create an instance of {@link NormTupleSet }
-   * 
+   *
    */
   public NormTupleSet createNormTupleSet() {
     return new NormTupleSet();
@@ -47,7 +48,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link NormTuplesType }
-   * 
+   *
    */
   public NormTuplesType createNormTuplesType() {
     return new NormTuplesType();
@@ -55,7 +56,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link NormTuplesType.NormTuple }
-   * 
+   *
    */
   public NormTuplesType.NormTuple createNormTuplesTypeNormTuple() {
     return new NormTuplesType.NormTuple();
@@ -63,7 +64,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link NormTupleSet.MembersLookup }
-   * 
+   *
    */
   public NormTupleSet.MembersLookup createNormTupleSetMembersLookup() {
     return new NormTupleSet.MembersLookup();
@@ -71,7 +72,7 @@ public class ObjectFactory {
 
   /**
    * Create an instance of {@link NormTuplesType.NormTuple.MemberRef }
-   * 
+   *
    */
   public NormTuplesType.NormTuple.MemberRef createNormTuplesTypeNormTupleMemberRef() {
     return new NormTuplesType.NormTuple.MemberRef();

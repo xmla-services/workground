@@ -33,7 +33,7 @@ public class SoapClient {
     }
 
     private String soapEndpointUrl;
-    public static Logger logger = LoggerFactory.getLogger(SoapClient.class);
+    public static final Logger logger = LoggerFactory.getLogger(SoapClient.class);
 
     public SOAPMessage callSoapWebService(Optional<String> oSoapAction, Consumer<SOAPMessage> consumer)
             throws SOAPException {

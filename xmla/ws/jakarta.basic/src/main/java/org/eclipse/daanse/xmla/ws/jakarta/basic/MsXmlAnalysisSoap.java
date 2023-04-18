@@ -72,10 +72,10 @@ public class MsXmlAnalysisSoap {
     @interface Config {
 
         @AttributeDefinition(name = "XMLA-Service Filter", required = true)
-        String xmlaService_target() default "(&(must.be.configured=*)(!(must.not.configured=*)))";
+        String xmlaServiceTarget() default "(&(must.be.configured=*)(!(must.not.configured=*)))";
 
         @AttributeDefinition(required = true)
-        String osgi_soap_endpoint_contextpath();
+        String osgiSoapEndpointContextPath();
     }
 
     @jakarta.annotation.Resource

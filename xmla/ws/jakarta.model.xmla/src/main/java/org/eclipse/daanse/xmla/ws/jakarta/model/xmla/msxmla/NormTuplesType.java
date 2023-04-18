@@ -27,7 +27,7 @@ public class NormTuplesType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @XmlElement(name = "NormTuple")
-    protected List<NormTuplesType.NormTuple> normTuple;
+    private List<NormTuplesType.NormTuple> normTuple;
 
     public List<NormTuplesType.NormTuple> getNormTuple() {
         return this.normTuple;
@@ -43,7 +43,7 @@ public class NormTuplesType implements Serializable {
 
         private static final long serialVersionUID = 1L;
         @XmlElement(name = "MemberRef")
-        protected List<NormTuplesType.NormTuple.MemberRef> memberRef;
+        private List<NormTuplesType.NormTuple.MemberRef> memberRef;
 
         public List<NormTuplesType.NormTuple.MemberRef> getMemberRef() {
             return this.memberRef;

@@ -153,12 +153,12 @@ public class MdDataSetConvertor {
                     .newDocument();
                 Element element = document.createElement(cellInfoItem.tagName());
                 element.setAttribute(NAME, cellInfoItem.name());
-                
+
 				cellInfoItem.type().ifPresent(type -> element.setAttribute(TYPE, type));
 
                 return element;
             } catch (ParserConfigurationException e) {
-                throw new RuntimeException(e);
+                throw new ConvertorException(e);
             }
         }
 
@@ -203,7 +203,7 @@ public class MdDataSetConvertor {
         return null;
     }
 
-    private static XMLGregorianCalendar convertToXMLGregorianCalendar(Instant instant) throws RuntimeException {
+    private static XMLGregorianCalendar convertToXMLGregorianCalendar(Instant instant) {
         GregorianCalendar gregorianCalendar = GregorianCalendar
             .from(instant.atZone(ZoneId.systemDefault()));
         try {
@@ -213,7 +213,7 @@ public class MdDataSetConvertor {
                     gregorianCalendar
                 );
         } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new ConvertorException(e);
         }
     }
 

@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DrillThroughAction", propOrder = {"name", "id", "caption", "captionIsMdx", "translations",
-    "targetType", "target", "condition", "type", "invocation", "application", "description", "annotations", "_default",
+    "targetType", "target", "condition", "type", "invocation", "application", "description", "annotations", "defaultFlag",
     "columns", "maximumRows"})
 public class DrillThroughAction extends Action {
 
@@ -53,7 +53,7 @@ public class DrillThroughAction extends Action {
     @XmlElement(name = "Annotations")
     protected DrillThroughAction.Annotations annotations;
     @XmlElement(name = "Default")
-    protected Boolean _default;
+    protected Boolean defaultFlag;
     @XmlElement(name = "Columns")
     protected DrillThroughAction.Columns columns;
     @XmlElement(name = "MaximumRows")
@@ -168,11 +168,11 @@ public class DrillThroughAction extends Action {
     }
 
     public Boolean isDefault() {
-        return _default;
+        return defaultFlag;
     }
 
     public void setDefault(Boolean value) {
-        this._default = value;
+        this.defaultFlag = value;
     }
 
     public DrillThroughAction.Columns getColumns() {

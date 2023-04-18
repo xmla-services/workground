@@ -163,9 +163,10 @@ public interface MdSchemaMeasuresResponseRow {
     Optional<Boolean> measureIsVisible();
 
     /**
+     * @deprecated
      * @return Not currently in use.
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     Optional<String> levelsList();
 
     /**

@@ -27,12 +27,12 @@ import jakarta.xml.ws.Holder;
 
 public interface WsAdapter {
 
-    public AuthenticateResponse authenticate(Authenticate authenticate);
+    AuthenticateResponse authenticate(Authenticate authenticate);
 
-    public DiscoverResponse discover(Discover parameters, Holder<Session> session, BeginSession beginSession,
+    DiscoverResponse discover(Discover parameters, Holder<Session> session, BeginSession beginSession,
             EndSession endSession);
 
-    public ExecuteResponse execute(Execute parameters, Holder<Session> session, BeginSession beginSession,
+    ExecuteResponse execute(Execute parameters, Holder<Session> session, BeginSession beginSession,
             EndSession endSession);
 
 }

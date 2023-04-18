@@ -190,9 +190,10 @@ public class MdSchemaMeasuresResponseRowXml extends Row implements Serializable 
     private Boolean measureIsVisible;
 
     /**
+     * @deprecated
      * Not currently in use.
      */
-    @Deprecated
+    @Deprecated(since = "deprecated in specification")
     @XmlElement(name = "LEVELS_LIST", required = false)
     private String levelsList;
 
@@ -343,10 +344,20 @@ public class MdSchemaMeasuresResponseRowXml extends Row implements Serializable 
         this.measureIsVisible = measureIsVisible;
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated(since = "deprecated in specification")
     public String getLevelsList() {
         return levelsList;
     }
 
+    /**
+     * @deprecated
+     * @param levelsList
+     */
+    @Deprecated(since = "deprecated in specification")
     public void setLevelsList(String levelsList) {
         this.levelsList = levelsList;
     }
