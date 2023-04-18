@@ -965,7 +965,8 @@ CompoundId parseCompoundId :
 // Expressions
 Expression parseUnaliasedExpression :
 {
-  Expression x, y;
+  Expression x;
+  Expression y;
 }
   x = parseTerm5
   (
@@ -1001,7 +1002,8 @@ Expression parseUnaliasedExpression :
 
 Expression parseTerm5 :
 {
-  Expression x, y;
+  Expression x;
+  Expression y;
 }
   x = parseTerm4
   (
@@ -1039,7 +1041,8 @@ Expression parseTerm4 :
 
 Expression parseTerm3 :
 {
-  Expression x, y;
+  Expression x;
+  Expression y;
   Token op;
 }
   x = parseTerm2
@@ -1152,7 +1155,8 @@ Expression parseTerm3 :
 
 Expression parseTerm2 :
 {
-  Expression x, y;
+  Expression x;
+  Expression y;
 }
   x = parseTerm
   (
@@ -1186,7 +1190,8 @@ Expression parseTerm2 :
 
 Expression parseTerm :
 {
-  Expression x, y;
+  Expression x;
+  Expression y;
 }
   x = parseFactor
   (
