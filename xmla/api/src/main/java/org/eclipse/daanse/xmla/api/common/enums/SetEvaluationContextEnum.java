@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The context for the set. The set can be static or
  *  dynamic.
@@ -38,12 +40,12 @@ public enum SetEvaluationContextEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        for (SetEvaluationContextEnum c : SetEvaluationContextEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("SetEvaluationContextEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(SetEvaluationContextEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("SetEvaluationContextEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

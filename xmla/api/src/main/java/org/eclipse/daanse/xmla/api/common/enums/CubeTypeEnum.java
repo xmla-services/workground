@@ -14,6 +14,8 @@
 
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum CubeTypeEnum {
 
     CUBE,
@@ -24,12 +26,12 @@ public enum CubeTypeEnum {
         if (v == null) {
             return null;
         }
-        for (CubeTypeEnum e : CubeTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("CubeTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(CubeTypeEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("CubeTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

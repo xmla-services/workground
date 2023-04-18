@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * Describes the current hierarchy structure. Values are the
  * following:
@@ -40,12 +42,12 @@ public enum StructureTypeEnum {
         if (v == null) {
             return null;
         }
-        for (StructureTypeEnum e : StructureTypeEnum.values()) {
-            if (e.value.equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("StructureTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(StructureTypeEnum.values())
+            .filter(e -> (e.value.equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("StructureTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

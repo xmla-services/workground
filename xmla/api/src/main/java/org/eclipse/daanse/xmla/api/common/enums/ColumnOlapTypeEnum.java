@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum ColumnOlapTypeEnum {
 
     /**
@@ -36,12 +38,12 @@ public enum ColumnOlapTypeEnum {
         if (v == null) {
             return null;
         }
-        for (ColumnOlapTypeEnum e : ColumnOlapTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ColumnOlapTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ColumnOlapTypeEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ColumnOlapTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

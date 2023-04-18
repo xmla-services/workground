@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * A bitmask that specifies the
  * type of hierarchy to which the
@@ -63,12 +65,12 @@ public enum PropertyOriginEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        for (PropertyOriginEnum c : PropertyOriginEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PropertyOriginEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(PropertyOriginEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PropertyOriginEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

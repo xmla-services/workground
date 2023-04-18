@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "Type")
 @XmlEnum
 public enum TypeEnum {
@@ -54,12 +56,10 @@ public enum TypeEnum {
     }
 
     public static TypeEnum fromValue(int v) {
-        for (TypeEnum c : TypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("TypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(TypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("TypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

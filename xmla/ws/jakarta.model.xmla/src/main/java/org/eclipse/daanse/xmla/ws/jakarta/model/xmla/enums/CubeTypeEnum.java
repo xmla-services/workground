@@ -18,6 +18,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "ACubeType")
 @XmlEnum
 public enum CubeTypeEnum {
@@ -32,12 +34,10 @@ public enum CubeTypeEnum {
         if (v == null) {
             return null;
         }
-        for (CubeTypeEnum e : CubeTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("CubeTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(CubeTypeEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("CubeTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

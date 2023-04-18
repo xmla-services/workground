@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * The context for the set. The set can be static or
  *  dynamic.
@@ -42,12 +44,10 @@ public enum SetEvaluationContextEnum {
     }
 
     public static SetEvaluationContextEnum fromValue(int v) {
-        for (SetEvaluationContextEnum c : SetEvaluationContextEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("SetEvaluationContextEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(SetEvaluationContextEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("SetEvaluationContextEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

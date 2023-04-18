@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "ProviderTyp")
 @XmlEnum
 public enum ProviderTypeEnum {
@@ -43,12 +45,10 @@ public enum ProviderTypeEnum {
         if (v == null) {
             return null;
         }
-        for (ProviderTypeEnum e : ProviderTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ProviderTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(ProviderTypeEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ProviderTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

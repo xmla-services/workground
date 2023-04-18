@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum DimensionUniqueSettingEnum {
 
     MEMBER_KEY(0x00000001),
@@ -33,12 +35,12 @@ public enum DimensionUniqueSettingEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (DimensionUniqueSettingEnum c : DimensionUniqueSettingEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionUniqueSettingEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(DimensionUniqueSettingEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionUniqueSettingEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

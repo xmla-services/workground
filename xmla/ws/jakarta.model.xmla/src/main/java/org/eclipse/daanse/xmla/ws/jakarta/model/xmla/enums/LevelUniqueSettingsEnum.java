@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "LevelUniqueSettings")
 @XmlEnum
 public enum LevelUniqueSettingsEnum {
@@ -48,12 +50,10 @@ public enum LevelUniqueSettingsEnum {
     }
 
     public static LevelUniqueSettingsEnum fromValue(int v) {
-        for (LevelUniqueSettingsEnum c : LevelUniqueSettingsEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("LevelUniqueSettingsEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(LevelUniqueSettingsEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("LevelUniqueSettingsEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

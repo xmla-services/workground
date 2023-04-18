@@ -14,23 +14,43 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 enum Type {
-    String("xsd:string"), StringArray("xsd:string"), Array("xsd:string"), Enumeration("xsd:string"),
-    EnumerationArray("xsd:string"), EnumString("xsd:string"), Boolean("xsd:boolean"),
-    StringSometimesArray("xsd:string"), Integer("xsd:int"), UnsignedInteger("xsd:unsignedInt"), Double("xsd:double"),
-    DateTime("xsd:dateTime"), Rowset(null), Short("xsd:short"), UUID("uuid"), UnsignedShort("xsd:unsignedShort"),
-    Long("xsd:long"), UnsignedLong("xsd:unsignedLong");
+    STRING("string", Types.XSD_STRING),
+    STRING_ARRAY("StringArray", Types.XSD_STRING),
+    ARRAY("Array", Types.XSD_STRING),
+    ENUMERATION("Enumeration", Types.XSD_STRING),
+    ENUMERATION_ARRAY("EnumerationArray", Types.XSD_STRING),
+    ENUM_STRING("EnumString", Types.XSD_STRING),
+    BOOLEAN("Boolean", "xsd:boolean"),
+    STRING_SOMETIMES_ARRAY("StringSometimesArray", Types.XSD_STRING),
+    INTEGER("Integer", "xsd:int"),
+    UNSIGNED_INTEGER("UnsignedInteger", "xsd:unsignedInt"),
+    DOUBLE("Double", "xsd:double"),
+    DATE_TIME("DateTime", "xsd:dateTime"),
+    ROW_SET("Rowset", null),
+    SHORT("Short", "xsd:short"),
+    UUID("UUID", "uuid"),
+    UNSIGNED_SHORT("UnsignedShort", "xsd:unsignedShort"),
+    LONG("Long", "xsd:long"),
+    UNSIGNED_LONG("UnsignedLong", "xsd:unsignedLong");
 
     public final String columnType;
+    public final String nameValue;
 
-    Type(String columnType) {
+    Type(String nameValue, String columnType) {
+        this.nameValue = nameValue;
         this.columnType = columnType;
     }
 
     boolean isEnum() {
-        return this == Enumeration || this == EnumerationArray || this == EnumString;
+        return this == ENUMERATION || this == ENUMERATION_ARRAY || this == ENUM_STRING;
     }
 
-    String getName() {
-        return this == String ? "string" : name();
+    String getNameValue() {
+        return nameValue;
+    }
+
+    private static class Types {
+
+        public static final String XSD_STRING = "xsd:string";
     }
 }

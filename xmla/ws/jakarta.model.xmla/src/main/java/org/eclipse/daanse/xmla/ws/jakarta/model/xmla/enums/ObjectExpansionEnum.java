@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "ObjectExpansion")
 @XmlEnum
 public enum ObjectExpansionEnum {
@@ -49,12 +51,10 @@ public enum ObjectExpansionEnum {
         if (v == null) {
             return null;
         }
-        for (ObjectExpansionEnum e : ObjectExpansionEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ObjectExpansion Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(ObjectExpansionEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ObjectExpansionEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

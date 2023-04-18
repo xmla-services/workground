@@ -19,15 +19,15 @@ import java.util.Set;
 
 public enum PropertyListElementDefinition {
 
-    Content(Type.EnumString, EnumSet.allOf(Content.class), Access.WRITE,
+    CONTENT("Content", Type.ENUM_STRING, EnumSet.allOf(Content.class), Access.WRITE,
             org.eclipse.daanse.xmla.api.common.properties.Content.SCHEMA_DATA.getValue(), true, true),
 
-    DataSourceInfo(Type.String, null, Access.READ_WRITE, "Empty", true, true),
+    DATA_SOURCE_INFO("DataSourceInfo", Type.STRING, null, Access.READ_WRITE, "Empty", true, true),
 
-    Format(Type.EnumString, EnumSet.allOf(Format.class), Access.WRITE,
+    FORMAT("Format", Type.ENUM_STRING, EnumSet.allOf(Format.class), Access.WRITE,
             org.eclipse.daanse.xmla.api.common.properties.Format.NATIVE.getValue(), true, true),
 
-    LocaleIdentifier(Type.UnsignedInteger, null, Access.READ_WRITE, null, true, true);
+    LOCALE_IDENTIFIER("LocaleIdentifier", Type.UNSIGNED_INTEGER, null, Access.READ_WRITE, null, true, true);
 
     final Type type;
     final Set<? extends Enum> enumSet;
@@ -35,8 +35,9 @@ public enum PropertyListElementDefinition {
     final boolean discover;
     final boolean execute;
     final String value;
+    final String nameValue;
 
-    PropertyListElementDefinition(Type type, Set<? extends Enum> enumSet, Access access, String value, boolean discover,
+    PropertyListElementDefinition(String nameValue, Type type, Set<? extends Enum> enumSet, Access access, String value, boolean discover,
             boolean execute) {
 
         assert (enumSet != null) == type.isEnum();
@@ -46,9 +47,10 @@ public enum PropertyListElementDefinition {
         this.value = value;
         this.discover = discover;
         this.execute = execute;
+        this.nameValue = nameValue;
     }
 
-   public static Optional<PropertyListElementDefinition> byName(String name) {
-        return EnumSet.allOf(PropertyListElementDefinition.class).stream().filter(pd->pd.toString().equalsIgnoreCase(name)).findAny();
+   public static Optional<PropertyListElementDefinition> byNameValue(String name) {
+        return EnumSet.allOf(PropertyListElementDefinition.class).stream().filter(pd->pd.nameValue.equalsIgnoreCase(name)).findAny();
     }
 }

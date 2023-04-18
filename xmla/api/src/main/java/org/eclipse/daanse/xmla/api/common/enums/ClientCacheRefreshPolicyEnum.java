@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * A hint to the client applications about when
  * their data caches, if any, SHOULD<180> be
@@ -50,12 +52,12 @@ public enum ClientCacheRefreshPolicyEnum {
             return ALL_CACHE_REFRESH;
         }
         int vi = Integer.parseInt(v);
-        for (ClientCacheRefreshPolicyEnum c : ClientCacheRefreshPolicyEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("InstanceSelectionEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ClientCacheRefreshPolicyEnum.values())
+            .filter(e -> (e.getValue() == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ClientCacheRefreshPolicyEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

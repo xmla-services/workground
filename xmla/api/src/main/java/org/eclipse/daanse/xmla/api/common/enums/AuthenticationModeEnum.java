@@ -1,5 +1,7 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum AuthenticationModeEnum {
 
     /**
@@ -31,12 +33,12 @@ public enum AuthenticationModeEnum {
         if (v == null) {
             return null;
         }
-        for (AuthenticationModeEnum e : AuthenticationModeEnum.values()) {
-            if (e.value.equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("AuthenticationModeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(AuthenticationModeEnum.values())
+            .filter(e -> (e.getValue().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("AuthenticationModeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "Searchable")
 @XmlEnum
 public enum SearchableEnum {
@@ -65,12 +67,10 @@ public enum SearchableEnum {
     }
 
     public static SearchableEnum fromValue(int v) {
-        for (SearchableEnum c : SearchableEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("SearchableEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(SearchableEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("SearchableEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum InvocationEnum {
 
     /**
@@ -42,12 +44,12 @@ public enum InvocationEnum {
 
     public static InvocationEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (InvocationEnum c : InvocationEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("InvocationEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(InvocationEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("InvocationEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

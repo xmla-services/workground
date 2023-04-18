@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * The type of the member
  */
@@ -65,12 +67,10 @@ public enum MemberTypeEnum {
     }
 
     public static MemberTypeEnum fromValue(int v) {
-        for (MemberTypeEnum c : MemberTypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("MemberTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(MemberTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("MemberTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * The type of the level
  */
@@ -149,12 +151,10 @@ public enum LevelTypeEnum {
     }
 
     public static LevelTypeEnum fromValue(int v) {
-        for (LevelTypeEnum c : LevelTypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("LevelTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(LevelTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("LevelTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

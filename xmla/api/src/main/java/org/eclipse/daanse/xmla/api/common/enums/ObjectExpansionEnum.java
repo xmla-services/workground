@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum ObjectExpansionEnum {
 
     /**
@@ -49,12 +51,12 @@ public enum ObjectExpansionEnum {
         if (v == null) {
             return null;
         }
-        for (ObjectExpansionEnum e : ObjectExpansionEnum.values()) {
-            if (e.value.equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ObjectExpansion Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ObjectExpansionEnum.values())
+            .filter(e -> (e.value.equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ObjectExpansionEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

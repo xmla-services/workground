@@ -4,6 +4,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * The cardinality of the property.
  * Possible values include the
@@ -23,12 +25,10 @@ public enum PropertyCardinalityEnum {
         if (v == null) {
             return null;
         }
-        for (PropertyCardinalityEnum e : PropertyCardinalityEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PropertyCardinalityEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(PropertyCardinalityEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PropertyCardinalityEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

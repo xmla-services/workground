@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum InterfaceNameEnum {
 
     DATETIME,
@@ -23,12 +25,12 @@ public enum InterfaceNameEnum {
         if (v == null) {
             return null;
         }
-        for (InterfaceNameEnum c : InterfaceNameEnum.values()) {
-            if (c.name().equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("InterfaceNameEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(InterfaceNameEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("InterfaceNameEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

@@ -2263,7 +2263,7 @@ public class Convert {
     public static ExecuteResponse toStatement(StatementResponse responseApi) {
         Return ret = convertStatementResponse(responseApi.mdDataSet());
         ExecuteResponse responseWs = new ExecuteResponse();
-        responseWs.setReturn(ret);
+        responseWs.setReturnValue(ret);
 
         return responseWs;
     }
@@ -2279,7 +2279,7 @@ public class Convert {
     public static ExecuteResponse toAlter(AlterResponse responseApi) {
         Return ret = converReturnEmptyresult(responseApi.emptyresult());
         ExecuteResponse responseWs = new ExecuteResponse();
-        responseWs.setReturn(ret);
+        responseWs.setReturnValue(ret);
 
         return responseWs;
     }
@@ -2294,7 +2294,7 @@ public class Convert {
     public static ExecuteResponse toClearCache(ClearCacheResponse responseApi) {
         Return ret = converReturnEmptyresult(responseApi.emptyresult());
         ExecuteResponse responseWs = new ExecuteResponse();
-        responseWs.setReturn(ret);
+        responseWs.setReturnValue(ret);
 
         return responseWs;
     }
@@ -2309,7 +2309,7 @@ public class Convert {
     public static ExecuteResponse toCancel(CancelResponse responseApi) {
         Return ret = converReturnEmptyresult(responseApi.emptyresult());
         ExecuteResponse responseWs = new ExecuteResponse();
-        responseWs.setReturn(ret);
+        responseWs.setReturnValue(ret);
 
         return responseWs;
     }

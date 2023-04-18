@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.xmla.api.common.properties;
 
+import java.util.EnumSet;
+
 public enum Content {
 
     NONE("None"),
@@ -36,13 +38,11 @@ public enum Content {
         if (v == null) {
             return SCHEMA_DATA;
         }
-        for (Content e : Content.values()) {
-            if (e.getValue().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("Content enum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(Content.class).stream().filter(e -> (e.getValue().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("Content Illegal argument ").append(v)
+                    .toString())
+            );
     }
 
     public static final Content DEFAULT = SCHEMA_DATA;

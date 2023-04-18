@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The type of the member
  */
@@ -58,12 +60,12 @@ public enum MemberTypeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        for (MemberTypeEnum c : MemberTypeEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("MemberTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(MemberTypeEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("MemberTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum DimensionTypeEnum {
 
     UNKNOWN(0),
@@ -44,12 +46,12 @@ public enum DimensionTypeEnum {
     }
 
     public static DimensionTypeEnum fromValue(int v) {
-        for (DimensionTypeEnum c : DimensionTypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(DimensionTypeEnum.values())
+            .filter(e -> (e.value == v))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

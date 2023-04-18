@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum StructureEnum {
 
     /**
@@ -47,12 +49,12 @@ public enum StructureEnum {
 
     public static StructureEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (StructureEnum c : StructureEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("StructureEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(StructureEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("StructureEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

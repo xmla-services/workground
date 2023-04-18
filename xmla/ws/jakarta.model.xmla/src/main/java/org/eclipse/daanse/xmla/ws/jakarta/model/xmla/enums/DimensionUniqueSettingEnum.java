@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "DimensionUniqueSetting")
 @XmlEnum
 public enum DimensionUniqueSettingEnum {
@@ -38,12 +40,10 @@ public enum DimensionUniqueSettingEnum {
     }
 
     public static DimensionUniqueSettingEnum fromValue(int v) {
-        for (DimensionUniqueSettingEnum c : DimensionUniqueSettingEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionUniqueSettingEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(DimensionUniqueSettingEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionUniqueSettingEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

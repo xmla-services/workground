@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "StructureType")
 @XmlEnum
 public enum StructureTypeEnum {
@@ -44,12 +46,10 @@ public enum StructureTypeEnum {
         if (v == null) {
             return null;
         }
-        for (StructureTypeEnum e : StructureTypeEnum.values()) {
-            if (e.getValue().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("StructureTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(StructureTypeEnum.class).stream().filter(e -> (e.value.equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("StructureTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

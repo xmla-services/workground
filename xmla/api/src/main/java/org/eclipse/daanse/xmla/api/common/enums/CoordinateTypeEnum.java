@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum CoordinateTypeEnum {
 
     /**
@@ -57,12 +59,12 @@ public enum CoordinateTypeEnum {
 
     public static CoordinateTypeEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (CoordinateTypeEnum c : CoordinateTypeEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("CoordinateTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(CoordinateTypeEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("CoordinateTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

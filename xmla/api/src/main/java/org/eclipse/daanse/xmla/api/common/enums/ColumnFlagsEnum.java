@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum ColumnFlagsEnum {
 
     /**
@@ -108,12 +110,12 @@ public enum ColumnFlagsEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (ColumnFlagsEnum c : ColumnFlagsEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ColumnFlagsEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ColumnFlagsEnum.values())
+            .filter(e -> (e.getValue() == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ColumnFlagsEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

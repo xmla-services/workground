@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "InterfaceName")
 @XmlEnum
 public enum InterfaceNameEnum {
@@ -34,12 +36,10 @@ public enum InterfaceNameEnum {
         if (v == null) {
             return null;
         }
-        for (InterfaceNameEnum c : InterfaceNameEnum.values()) {
-            if (c.name().equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("InterfaceNameEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(InterfaceNameEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("InterfaceNameEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

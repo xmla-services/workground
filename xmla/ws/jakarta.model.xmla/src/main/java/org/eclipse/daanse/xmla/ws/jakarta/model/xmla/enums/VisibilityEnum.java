@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "Visibility")
 @XmlEnum
 public enum VisibilityEnum {
@@ -43,12 +45,10 @@ public enum VisibilityEnum {
             return VISIBLE;
         }
         int vi = Integer.decode(v);
-        for (VisibilityEnum c : VisibilityEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("VisibilityEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(VisibilityEnum.class).stream().filter(e -> (e.value == vi)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("VisibilityEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

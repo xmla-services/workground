@@ -16,6 +16,6 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.Folder;
 
 public record FolderR(String original,
-                      String newFlag) implements Folder {
+                      String newPath) implements Folder {
 
 }
