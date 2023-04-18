@@ -17,5 +17,5 @@ public interface Folder {
 
     String original();
 
-    String newFlag();
+    String newPath();
 }

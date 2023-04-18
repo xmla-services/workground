@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The content type of the
  * property.
@@ -104,12 +106,12 @@ public enum PropertyContentTypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (PropertyContentTypeEnum c : PropertyContentTypeEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PropertyContentTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(PropertyContentTypeEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PropertyContentTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

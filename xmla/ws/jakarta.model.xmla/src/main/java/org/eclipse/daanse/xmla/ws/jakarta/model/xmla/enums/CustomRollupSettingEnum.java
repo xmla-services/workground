@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "CustomRollupSetting")
 @XmlEnum
 public enum CustomRollupSettingEnum {
@@ -75,12 +77,10 @@ public enum CustomRollupSettingEnum {
     }
 
     public static CustomRollupSettingEnum fromValue(int v) {
-        for (CustomRollupSettingEnum c : CustomRollupSettingEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("CustomRollupSettingEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(CustomRollupSettingEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("CustomRollupSettingEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

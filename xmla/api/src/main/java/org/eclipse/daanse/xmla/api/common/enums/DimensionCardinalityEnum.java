@@ -1,5 +1,7 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The number of instances a dimension
  * member can have for a single instance of a
@@ -14,12 +16,12 @@ public enum DimensionCardinalityEnum {
         if (v == null) {
             return null;
         }
-        for (DimensionCardinalityEnum e : DimensionCardinalityEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionCardinalityEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(DimensionCardinalityEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionCardinalityEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

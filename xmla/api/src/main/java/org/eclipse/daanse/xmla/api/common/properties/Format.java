@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.xmla.api.common.properties;
 
+import java.util.Arrays;
+
 public enum Format {
 
     TABULAR("Tabular"),
@@ -33,12 +35,13 @@ public enum Format {
         if (v == null) {
             return null;
         }
-        for (Format e : Format.values()) {
-            if (e.getValue().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("Format enum Illegal argument ")
-            .append(v).toString());
+
+        return Arrays.stream(Format.values())
+            .filter(e -> (e.getValue().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("Format Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

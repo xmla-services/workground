@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum ProviderTypeEnum {
 
     /**
@@ -34,12 +36,12 @@ public enum ProviderTypeEnum {
         if (v == null) {
             return null;
         }
-        for (ProviderTypeEnum e : ProviderTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ProviderTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ProviderTypeEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ProviderTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

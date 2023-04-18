@@ -27,7 +27,7 @@ public class Folder {
   @XmlElement(name = "Original", required = true)
   protected String original;
   @XmlElement(name = "New", required = true)
-  protected String _new;
+  protected String newPath;
 
   public String getOriginal() {
     return original;
@@ -37,11 +37,11 @@ public class Folder {
     this.original = value;
   }
 
-  public String getNew() {
-    return _new;
+  public String getNewPath() {
+    return newPath;
   }
 
-  public void setNew(String value) {
-    this._new = value;
+  public void setNewPath(String value) {
+    this.newPath = value;
   }
 }

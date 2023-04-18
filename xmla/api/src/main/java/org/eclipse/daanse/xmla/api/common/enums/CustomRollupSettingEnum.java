@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum CustomRollupSettingEnum {
 
     /**
@@ -68,12 +70,12 @@ public enum CustomRollupSettingEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (CustomRollupSettingEnum c : CustomRollupSettingEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("CustomRollupSettingEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(CustomRollupSettingEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("CustomRollupSettingEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

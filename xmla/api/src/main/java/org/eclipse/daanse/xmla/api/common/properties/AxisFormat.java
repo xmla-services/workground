@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.properties;
 
+import java.util.EnumSet;
+
 public enum AxisFormat {
 
     /**
@@ -45,13 +47,11 @@ public enum AxisFormat {
         if (v == null) {
             return null;
         }
-        for (AxisFormat e : AxisFormat.values()) {
-            if (e.getValue().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("AxisFormat Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(AxisFormat.class).stream().filter(e -> (e.getValue().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("AxisFormat Illegal argument ").append(v)
+                    .toString())
+            );
     }
 
 }

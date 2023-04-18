@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum OriginEnum {
 
     MSOLAP(0x1),
@@ -35,12 +37,12 @@ public enum OriginEnum {
             return null;
         }
         int vi = Integer.valueOf(v);
-        for (OriginEnum c : OriginEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("OriginEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(OriginEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("OriginEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

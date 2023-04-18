@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum TypeEnum {
 
     /**
@@ -50,13 +52,12 @@ public enum TypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-
-        for (TypeEnum c : TypeEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("TypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(TypeEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("TypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

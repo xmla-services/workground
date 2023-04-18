@@ -61,7 +61,6 @@ import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
-import org.eclipse.daanse.xmla.api.xmla.Process;
 import org.eclipse.daanse.xmla.api.xmla.Properties;
 import org.eclipse.daanse.xmla.api.xmla.PropertyList;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
@@ -139,6 +138,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.WhereAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.WhereR;
 import org.eclipse.daanse.xmla.model.record.xmla.XmlaObjectR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object;
+import org.eclipse.daanse.xmla.api.xmla.Process;
 
 public class CommandConvertor {
 	private CommandConvertor() {
@@ -874,7 +874,7 @@ public class CommandConvertor {
 
 	private static Folder convertFolder(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Folder folder) {
 		if (folder != null) {
-			return new FolderR(folder.getOriginal(), folder.getNew());
+			return new FolderR(folder.getOriginal(), folder.getNewPath());
 		}
 		return null;
 	}

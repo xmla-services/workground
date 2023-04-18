@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "DimensionType")
 @XmlEnum
 public enum DimensionTypeEnum {
@@ -82,12 +84,10 @@ public enum DimensionTypeEnum {
     }
 
     public static DimensionTypeEnum fromValue(int v) {
-        for (DimensionTypeEnum c : DimensionTypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(DimensionTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

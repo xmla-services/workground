@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum LevelOriginEnum {
 
     /**
@@ -58,12 +60,12 @@ public enum LevelOriginEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (LevelOriginEnum c : LevelOriginEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("LevelOriginEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(LevelOriginEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("LevelOriginEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

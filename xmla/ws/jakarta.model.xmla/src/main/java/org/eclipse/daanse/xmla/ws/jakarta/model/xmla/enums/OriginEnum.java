@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "Origin")
 @XmlEnum
 public enum OriginEnum {
@@ -44,12 +46,10 @@ public enum OriginEnum {
     }
 
     public static OriginEnum fromValue(int v) {
-        for (OriginEnum c : OriginEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("OriginEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(OriginEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("OriginEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

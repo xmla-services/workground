@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum GroupingBehaviorEnum {
 
     /**
@@ -37,12 +39,12 @@ public enum GroupingBehaviorEnum {
 
     public static GroupingBehaviorEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (GroupingBehaviorEnum c : GroupingBehaviorEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("GroupingBehaviorEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(GroupingBehaviorEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("GroupingBehaviorEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

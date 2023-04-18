@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "ColumnOlapType")
 @XmlEnum
 public enum ColumnOlapTypeEnum {
@@ -45,12 +47,10 @@ public enum ColumnOlapTypeEnum {
         if (v == null) {
             return null;
         }
-        for (ColumnOlapTypeEnum e : ColumnOlapTypeEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ColumnOlapTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(ColumnOlapTypeEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ColumnOlapTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

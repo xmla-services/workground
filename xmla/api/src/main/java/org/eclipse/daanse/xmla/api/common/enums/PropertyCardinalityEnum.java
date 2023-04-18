@@ -1,5 +1,7 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The cardinality of the property.
  * Possible values include the
@@ -14,12 +16,12 @@ public enum PropertyCardinalityEnum {
         if (v == null) {
             return null;
         }
-        for (PropertyCardinalityEnum e : PropertyCardinalityEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PropertyCardinalityEnum Illegal argument")
-            .append(v).toString());
+        return Arrays.stream(PropertyCardinalityEnum.values())
+            .filter(e -> (e.name().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PropertyCardinalityEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

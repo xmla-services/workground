@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 @XmlType(name = "LiteralNameEnumValue")
 @XmlEnum
 public enum LiteralNameEnumValueEnum {
@@ -92,12 +94,10 @@ public enum LiteralNameEnumValueEnum {
     }
 
     public static LiteralNameEnumValueEnum fromValue(int v) {
-        for (LiteralNameEnumValueEnum c : LiteralNameEnumValueEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("LiteralNameEnumValueEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(LiteralNameEnumValueEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("LiteralNameEnumValueEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

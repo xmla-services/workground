@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * An enumeration that identifies how a measure
  * was derived. This enumeration can be one of
@@ -165,12 +167,10 @@ public enum MeasureAggregatorEnum {
     }
 
     public static MeasureAggregatorEnum fromValue(int v) {
-        for (MeasureAggregatorEnum c : MeasureAggregatorEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("MeasureAggregatorEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(MeasureAggregatorEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("MeasureAggregatorEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

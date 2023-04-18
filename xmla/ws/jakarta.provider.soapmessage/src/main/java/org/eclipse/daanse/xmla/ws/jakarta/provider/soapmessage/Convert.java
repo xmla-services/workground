@@ -59,7 +59,7 @@ public class Convert {
 
             if (n instanceof SOAPElement propertyListElement) {
                 String name = propertyListElement.getLocalName();
-                Optional<PropertyListElementDefinition> opd = PropertyListElementDefinition.byName(name);
+                Optional<PropertyListElementDefinition> opd = PropertyListElementDefinition.byNameValue(name);
                 opd.ifPresent(pd -> properties.addProperty(pd, propertyListElement.getTextContent()));
             }
         }

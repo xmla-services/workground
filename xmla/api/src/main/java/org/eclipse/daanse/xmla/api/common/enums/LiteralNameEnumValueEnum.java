@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum LiteralNameEnumValueEnum {
 
     DBLITERAL_INVALID(0),
@@ -47,12 +49,12 @@ public enum LiteralNameEnumValueEnum {
     }
 
     public static LiteralNameEnumValueEnum fromValue(int v) {
-        for (LiteralNameEnumValueEnum c : LiteralNameEnumValueEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("LiteralNameEnumValueEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(LiteralNameEnumValueEnum.values())
+            .filter(e -> (e.value == v))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("LiteralNameEnumValueEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

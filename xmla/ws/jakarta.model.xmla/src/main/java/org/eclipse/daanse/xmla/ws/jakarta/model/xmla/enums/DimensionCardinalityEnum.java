@@ -4,6 +4,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * The number of instances a dimension
  * member can have for a single instance of a
@@ -23,12 +25,10 @@ public enum DimensionCardinalityEnum {
         if (v == null) {
             return null;
         }
-        for (DimensionCardinalityEnum e : DimensionCardinalityEnum.values()) {
-            if (e.name().equals(v)) {
-                return e;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DimensionCardinalityEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(DimensionCardinalityEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DimensionCardinalityEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

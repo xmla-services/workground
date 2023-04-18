@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum DirectQueryPushableEnum {
 
     /**
@@ -40,12 +42,12 @@ public enum DirectQueryPushableEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (DirectQueryPushableEnum c : DirectQueryPushableEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("DirectQueryPushableEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(DirectQueryPushableEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("DirectQueryPushableEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

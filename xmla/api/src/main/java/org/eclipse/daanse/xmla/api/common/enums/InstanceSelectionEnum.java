@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum InstanceSelectionEnum {
 
     /**
@@ -47,12 +49,12 @@ public enum InstanceSelectionEnum {
 
     public static InstanceSelectionEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (InstanceSelectionEnum c : InstanceSelectionEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("InstanceSelectionEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(InstanceSelectionEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("InstanceSelectionEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

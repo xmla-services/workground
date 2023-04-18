@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * A bitmask that specifies the
  * type of the property, as
@@ -66,12 +68,10 @@ public enum PropertyTypeEnum {
     }
 
     public static PropertyTypeEnum fromValue(int v) {
-        for (PropertyTypeEnum c : PropertyTypeEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PropertyTypeEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(PropertyTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PropertyTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

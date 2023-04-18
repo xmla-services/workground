@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * Table type. One of the following or a provider-specific
  */
@@ -39,12 +41,12 @@ public enum TableTypeEnum {
     }
 
     public static TableTypeEnum fromValue(String v) {
-        for (TableTypeEnum c : TableTypeEnum.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("TableTypeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(TableTypeEnum.values())
+            .filter(e -> (e.value.equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("TableTypeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

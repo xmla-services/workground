@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum SearchableEnum {
 
     /**
@@ -59,12 +61,12 @@ public enum SearchableEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (SearchableEnum c : SearchableEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("SearchableEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(SearchableEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("SearchableEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

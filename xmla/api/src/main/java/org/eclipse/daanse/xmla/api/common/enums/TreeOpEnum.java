@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * Applies only to a single member:
  */
@@ -63,12 +65,12 @@ public enum TreeOpEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        for (TreeOpEnum c : TreeOpEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("TreeOpEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(TreeOpEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("TreeOpEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

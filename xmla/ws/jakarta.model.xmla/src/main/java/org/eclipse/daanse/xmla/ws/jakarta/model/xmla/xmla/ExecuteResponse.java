@@ -20,19 +20,19 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "_return" })
+@XmlType(name = "", propOrder = { "returnValue" })
 @XmlRootElement(name = "ExecuteResponse")
 public class ExecuteResponse {
 
   @XmlElement(name = "return", required = true)
-  protected Return _return;
+  protected Return returnValue;
 
-  public Return getReturn() {
-    return _return;
+  public Return getReturnValue() {
+    return returnValue;
   }
 
-  public void setReturn(Return value) {
-    this._return = value;
+  public void setReturnValue(Return returnValue) {
+    this.returnValue = returnValue;
   }
 
 }

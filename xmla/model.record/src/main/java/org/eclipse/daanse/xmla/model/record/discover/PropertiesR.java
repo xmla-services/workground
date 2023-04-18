@@ -264,19 +264,19 @@ public class PropertiesR implements Properties {
     public void addProperty(PropertyListElementDefinition property, String value) {
 
         switch (property) {
-        case Content: {
+        case CONTENT: {
             content = Optional.of(Content.valueOf(value));
         }
             break;
-        case DataSourceInfo: {
+        case DATA_SOURCE_INFO: {
             dataSourceInfo = Optional.of(value);
         }
             break;
-        case Format: {
+        case FORMAT: {
             format = Optional.of(Format.valueOf(value));
         }
             break;
-        case LocaleIdentifier: {
+        case LOCALE_IDENTIFIER: {
             localeIdentifier = Optional.of(Integer.valueOf(value));
         }
             break;

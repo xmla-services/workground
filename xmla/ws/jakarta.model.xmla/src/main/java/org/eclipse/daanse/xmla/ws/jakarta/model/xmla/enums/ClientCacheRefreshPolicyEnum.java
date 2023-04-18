@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.EnumSet;
+
 /**
  * A hint to the client applications about when
  * their data caches, if any, SHOULD<180> be
@@ -54,12 +56,10 @@ public enum ClientCacheRefreshPolicyEnum {
     }
 
     public static ClientCacheRefreshPolicyEnum fromValue(int v) {
-        for (ClientCacheRefreshPolicyEnum c : ClientCacheRefreshPolicyEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ClientCacheRefreshPolicyEnum Illegal argument ")
-            .append(v).toString());
+        return EnumSet.allOf(ClientCacheRefreshPolicyEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ClientCacheRefreshPolicyEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

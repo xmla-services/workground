@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * The scope of the member. The member can be a
  * session-calculated member or a global-calculated
@@ -41,12 +43,12 @@ public enum ScopeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        for (ScopeEnum c : ScopeEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("ScopeEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(ScopeEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("ScopeEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

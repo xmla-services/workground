@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 public enum PreferredQueryPatternsEnum {
 
     CROSS_JOIN(0x00),
@@ -29,12 +31,12 @@ public enum PreferredQueryPatternsEnum {
     }
 
     public static PreferredQueryPatternsEnum fromValue(int v) {
-        for (PreferredQueryPatternsEnum c : PreferredQueryPatternsEnum.values()) {
-            if (c.value == v) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("PreferredQueryPatternsEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(PreferredQueryPatternsEnum.values())
+            .filter(e -> (e.value == v))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("PreferredQueryPatternsEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

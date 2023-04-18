@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+import java.util.Arrays;
+
 /**
  * An enumeration that identifies how a measure
  * was derived. This enumeration can be one of
@@ -143,12 +145,12 @@ public enum MeasureAggregatorEnum {
 
     public static MeasureAggregatorEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        for (MeasureAggregatorEnum c : MeasureAggregatorEnum.values()) {
-            if (c.value == vi) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(new StringBuilder("MeasureAggregatorEnum Illegal argument ")
-            .append(v).toString());
+        return Arrays.stream(MeasureAggregatorEnum.values())
+            .filter(e -> (e.value == vi))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("MeasureAggregatorEnum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }
