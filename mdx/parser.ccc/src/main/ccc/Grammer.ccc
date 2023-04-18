@@ -471,7 +471,7 @@ ExplainStatement parseExplainStatement :
 
 List < ReturnItem > parseReturnItems :
 {
-  List < ReturnItem > returnItems = new LinkedList < ReturnItem > ();
+  List < ReturnItem > returnItems = new LinkedList<> ();
   ReturnItem item;
 }
   item = parseReturnItem
@@ -541,7 +541,7 @@ SelectWithClause parseSelectWithClause :
 //https://learn.microsoft.com/en-us/sql/mdx/mdx-data-manipulation-select?view=sql-server-ver16
 SelectStatement parseSelectStatement :
 {
-  List<SelectWithClause> selectWithClauses = new LinkedList<SelectWithClause>();
+  List<SelectWithClause> selectWithClauses = new LinkedList<>();
   SelectQueryClause selectQueryClause = null;
   SelectSubcubeClause selectSubcubeClause = null;
   Optional<SelectSlicerAxisClause> selectSlicerAxisClause = Optional.empty();
@@ -649,7 +649,7 @@ SelectQueryAsteriskClause parseSelectQueryAsteriskClause :
 
 SelectQueryAxesClause parseSelectQueryAxesClause :
 {
-  List < SelectQueryAxisClause > selectQueryAxisClauses = new LinkedList < SelectQueryAxisClause > ();
+  List < SelectQueryAxisClause > selectQueryAxisClauses = new LinkedList<>();
   SelectQueryAxisClause selectQueryAxisClause;
 }
   selectQueryAxisClause = parseSelectQueryAxisClause
@@ -685,7 +685,7 @@ Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause :
 
 SelectCellPropertyListClause parseSelectCellPropertyListClause :
 {
-  List < String > cellProperties = new LinkedList < String > ();
+  List < String > cellProperties = new LinkedList<>();
   String property=null;
   boolean cell=false;
 }
@@ -714,7 +714,7 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
 {
  CompoundId compoundId = null;
  Expression expression = null;
- List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<MemberPropertyDefinition>();
+ List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<>();
  MemberPropertyDefinition memberPropertyDefinition = null;
 }
 //  <CURRENTCUBE>
@@ -797,7 +797,7 @@ Expression parseExpressionOrEmpty :
 List < Expression > expOrEmptyList :
 {
   Expression expression;
-  List < Expression > list = new LinkedList < Expression > ();
+  List < Expression > list = new LinkedList<>();
 }
   expression = parseExpressionOrEmpty
   {
@@ -820,7 +820,7 @@ List < Expression > expOrEmptyList :
 List < Expression > expList :
 {
   Expression expression;
-  List < Expression > list = new LinkedList < Expression > ();
+  List < Expression > list = new LinkedList<>();
 }
   expression = parseExpression
   {
@@ -894,7 +894,7 @@ NameObjectIdentifier parseNameObjectIdentifier :
 // for example '&foo&[1]&bar' in '[x].&foo&[1]&bar.[y]'
 KeyObjectIdentifier parseKeyIdentifier :
 {
-  List < NameObjectIdentifier > list = new ArrayList < NameObjectIdentifier > ();
+  List < NameObjectIdentifier > list = new ArrayList <> ();
   NameObjectIdentifier key;
 }
   (
@@ -941,7 +941,7 @@ String parseKeyword :
 CompoundId parseCompoundId :
 {
   CompoundId compoundId;
-  List < ObjectIdentifier > list = new ArrayList < ObjectIdentifier > ();
+  List < ObjectIdentifier > list = new ArrayList <> ();
   ObjectIdentifier s;
 }
   s = parseIdentifier
@@ -1386,7 +1386,7 @@ Expression parseAtom :
 Expression parseCaseExpression :
 {
   Expression expression, expression2;
-  List < Expression > expressions = new ArrayList < Expression > ();
+  List < Expression > expressions = new ArrayList <> ();
   boolean match = false;
 }
   < CASE >
@@ -1431,7 +1431,7 @@ CreateSetBodyClause parseCreateSetBodyClause :
 {
  CompoundId compoundId = null;
  Expression expression = null;
- //List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<MemberPropertyDefinition>();
+ //List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<>();
  //MemberPropertyDefinition memberPropertyDefinition = null;
 }
 
@@ -1445,7 +1445,7 @@ CreateSetBodyClause parseCreateSetBodyClause :
 SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
   (< DIMENSION >)?
   {
-    List < CompoundId > cellProperties = new LinkedList < CompoundId > ();
+    List < CompoundId > cellProperties = new LinkedList<> ();
   }
   < PROPERTIES >
   {
@@ -1476,7 +1476,7 @@ RefreshStatement parseRefreshStatement :
 DMVStatement parseDMVStatement :
 {
   CompoundId c;
-  List<CompoundId> columns = new ArrayList<CompoundId>();
+  List<CompoundId> columns = new ArrayList<>();
   NameObjectIdentifier tableId = null;
   Expression expression = null;
 }
