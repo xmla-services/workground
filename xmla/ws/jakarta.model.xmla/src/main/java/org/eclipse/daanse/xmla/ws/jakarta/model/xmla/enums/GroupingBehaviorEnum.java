@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "GroupingBehavior")
 @XmlEnum
@@ -46,7 +46,7 @@ public enum GroupingBehaviorEnum {
     }
 
     public static GroupingBehaviorEnum fromValue(int v) {
-        return EnumSet.allOf(GroupingBehaviorEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(GroupingBehaviorEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("GroupingBehaviorEnum Illegal argument ").append(v)
                     .toString())

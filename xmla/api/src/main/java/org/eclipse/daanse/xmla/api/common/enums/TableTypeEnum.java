@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Table type. One of the following or a provider-specific
@@ -41,7 +41,7 @@ public enum TableTypeEnum {
     }
 
     public static TableTypeEnum fromValue(String v) {
-        return Arrays.stream(TableTypeEnum.values())
+        return Stream.of(TableTypeEnum.values())
             .filter(e -> (e.value.equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * An enumeration that identifies how a measure
@@ -145,7 +145,7 @@ public enum MeasureAggregatorEnum {
 
     public static MeasureAggregatorEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(MeasureAggregatorEnum.values())
+        return Stream.of(MeasureAggregatorEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

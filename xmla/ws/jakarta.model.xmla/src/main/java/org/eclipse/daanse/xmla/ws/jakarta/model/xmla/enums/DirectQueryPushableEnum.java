@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "DirectQueryPushable")
 @XmlEnum
@@ -46,7 +46,7 @@ public enum DirectQueryPushableEnum {
     }
 
     public static DirectQueryPushableEnum fromValue(int v) {
-        return EnumSet.allOf(DirectQueryPushableEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(DirectQueryPushableEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("DirectQueryPushableEnum Illegal argument ").append(v)
                     .toString())

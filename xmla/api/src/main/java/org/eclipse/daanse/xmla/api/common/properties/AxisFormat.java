@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.properties;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 public enum AxisFormat {
 
@@ -47,7 +47,7 @@ public enum AxisFormat {
         if (v == null) {
             return null;
         }
-        return EnumSet.allOf(AxisFormat.class).stream().filter(e -> (e.getValue().equals(v))).findFirst()
+        return Stream.of(AxisFormat.values()).filter(e -> (e.getValue().equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("AxisFormat Illegal argument ").append(v)
                     .toString())

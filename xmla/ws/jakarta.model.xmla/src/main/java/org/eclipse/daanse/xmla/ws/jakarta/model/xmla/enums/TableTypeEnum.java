@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * Table type. One of the following or a provider-specific
@@ -64,7 +64,7 @@ public enum TableTypeEnum {
     }
 
     public static TableTypeEnum fromValue(String v) {
-        return EnumSet.allOf(TableTypeEnum.class).stream().filter(e -> (e.value.equals(v))).findFirst()
+        return Stream.of(TableTypeEnum.values()).filter(e -> (e.value.equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("TableTypeEnum Illegal argument ").append(v)
                     .toString())

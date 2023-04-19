@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * A bitmask that specifies the
@@ -68,7 +68,7 @@ public enum PropertyTypeEnum {
     }
 
     public static PropertyTypeEnum fromValue(int v) {
-        return EnumSet.allOf(PropertyTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(PropertyTypeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("PropertyTypeEnum Illegal argument ").append(v)
                     .toString())

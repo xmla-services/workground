@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum StructureEnum {
 
@@ -49,7 +49,7 @@ public enum StructureEnum {
 
     public static StructureEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(StructureEnum.values())
+        return Stream.of(StructureEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

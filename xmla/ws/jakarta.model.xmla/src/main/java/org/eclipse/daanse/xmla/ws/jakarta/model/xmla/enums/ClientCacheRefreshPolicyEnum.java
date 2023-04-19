@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * A hint to the client applications about when
@@ -56,7 +56,7 @@ public enum ClientCacheRefreshPolicyEnum {
     }
 
     public static ClientCacheRefreshPolicyEnum fromValue(int v) {
-        return EnumSet.allOf(ClientCacheRefreshPolicyEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(ClientCacheRefreshPolicyEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("ClientCacheRefreshPolicyEnum Illegal argument ").append(v)
                     .toString())

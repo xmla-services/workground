@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * The scope of the member. The member can be a
@@ -47,7 +47,7 @@ public enum ScopeEnum {
     }
 
     public static ScopeEnum fromValue(int v) {
-        return EnumSet.allOf(ScopeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(ScopeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("ScopeEnum Illegal argument ").append(v)
                     .toString())

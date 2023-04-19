@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "HierarchyOrigin")
 @XmlEnum
@@ -64,7 +64,7 @@ public enum HierarchyOriginEnum {
     }
 
     public static HierarchyOriginEnum fromValue(int v) {
-        return EnumSet.allOf(HierarchyOriginEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(HierarchyOriginEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("HierarchyOriginEnum Illegal argument ").append(v)
                     .toString())

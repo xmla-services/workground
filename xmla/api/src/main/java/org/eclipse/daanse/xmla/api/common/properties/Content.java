@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.xmla.api.common.properties;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 public enum Content {
 
@@ -38,7 +38,7 @@ public enum Content {
         if (v == null) {
             return SCHEMA_DATA;
         }
-        return EnumSet.allOf(Content.class).stream().filter(e -> (e.getValue().equals(v))).findFirst()
+        return Stream.of(Content.values()).filter(e -> (e.getValue().equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("Content Illegal argument ").append(v)
                     .toString())

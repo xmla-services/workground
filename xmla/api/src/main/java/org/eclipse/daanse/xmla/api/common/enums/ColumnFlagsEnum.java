@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum ColumnFlagsEnum {
 
@@ -110,7 +110,7 @@ public enum ColumnFlagsEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(ColumnFlagsEnum.values())
+        return Stream.of(ColumnFlagsEnum.values())
             .filter(e -> (e.getValue() == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

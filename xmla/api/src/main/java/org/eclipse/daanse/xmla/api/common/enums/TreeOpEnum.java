@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Applies only to a single member:
@@ -65,7 +65,7 @@ public enum TreeOpEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(TreeOpEnum.values())
+        return Stream.of(TreeOpEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

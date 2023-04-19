@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum TypeEnum {
 
@@ -52,7 +52,7 @@ public enum TypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(TypeEnum.values())
+        return Stream.of(TypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

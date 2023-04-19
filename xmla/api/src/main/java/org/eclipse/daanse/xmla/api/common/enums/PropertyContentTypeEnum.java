@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The content type of the
@@ -106,7 +106,7 @@ public enum PropertyContentTypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(PropertyContentTypeEnum.values())
+        return Stream.of(PropertyContentTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

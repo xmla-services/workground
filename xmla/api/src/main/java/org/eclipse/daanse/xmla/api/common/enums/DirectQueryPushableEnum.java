@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum DirectQueryPushableEnum {
 
@@ -42,7 +42,7 @@ public enum DirectQueryPushableEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(DirectQueryPushableEnum.values())
+        return Stream.of(DirectQueryPushableEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

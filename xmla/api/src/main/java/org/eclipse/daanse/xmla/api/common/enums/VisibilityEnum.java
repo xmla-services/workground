@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum VisibilityEnum {
 
@@ -35,7 +35,7 @@ public enum VisibilityEnum {
             return VISIBLE;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(VisibilityEnum.values())
+        return Stream.of(VisibilityEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

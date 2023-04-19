@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum OriginEnum {
 
@@ -37,7 +37,7 @@ public enum OriginEnum {
             return null;
         }
         int vi = Integer.valueOf(v);
-        return Arrays.stream(OriginEnum.values())
+        return Stream.of(OriginEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

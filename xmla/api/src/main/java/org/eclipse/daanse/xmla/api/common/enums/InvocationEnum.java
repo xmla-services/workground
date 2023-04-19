@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum InvocationEnum {
 
@@ -44,7 +44,7 @@ public enum InvocationEnum {
 
     public static InvocationEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(InvocationEnum.values())
+        return Stream.of(InvocationEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

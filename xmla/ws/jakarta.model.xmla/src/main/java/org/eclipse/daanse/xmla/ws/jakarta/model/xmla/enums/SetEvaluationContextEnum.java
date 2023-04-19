@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * The context for the set. The set can be static or
@@ -44,7 +44,7 @@ public enum SetEvaluationContextEnum {
     }
 
     public static SetEvaluationContextEnum fromValue(int v) {
-        return EnumSet.allOf(SetEvaluationContextEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(SetEvaluationContextEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("SetEvaluationContextEnum Illegal argument ").append(v)
                     .toString())

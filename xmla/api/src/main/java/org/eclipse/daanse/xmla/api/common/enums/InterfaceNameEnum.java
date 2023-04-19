@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum InterfaceNameEnum {
 
@@ -25,7 +25,7 @@ public enum InterfaceNameEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(InterfaceNameEnum.values())
+        return Stream.of(InterfaceNameEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

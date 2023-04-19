@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.api.common.properties;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public enum PropertyListElementDefinition {
 
@@ -51,6 +52,6 @@ public enum PropertyListElementDefinition {
     }
 
    public static Optional<PropertyListElementDefinition> byNameValue(String name) {
-        return EnumSet.allOf(PropertyListElementDefinition.class).stream().filter(pd->pd.nameValue.equalsIgnoreCase(name)).findAny();
+        return Stream.of(PropertyListElementDefinition.values()).filter(pd->pd.nameValue.equalsIgnoreCase(name)).findAny();
     }
 }

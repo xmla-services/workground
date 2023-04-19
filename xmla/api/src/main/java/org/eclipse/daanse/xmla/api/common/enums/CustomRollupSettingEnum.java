@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum CustomRollupSettingEnum {
 
@@ -70,7 +70,7 @@ public enum CustomRollupSettingEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(CustomRollupSettingEnum.values())
+        return Stream.of(CustomRollupSettingEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.xmla.api.common.properties;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum Format {
 
@@ -36,7 +36,7 @@ public enum Format {
             return null;
         }
 
-        return Arrays.stream(Format.values())
+        return Stream.of(Format.values())
             .filter(e -> (e.getValue().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "CustomRollupSetting")
 @XmlEnum
@@ -77,7 +77,7 @@ public enum CustomRollupSettingEnum {
     }
 
     public static CustomRollupSettingEnum fromValue(int v) {
-        return EnumSet.allOf(CustomRollupSettingEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(CustomRollupSettingEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("CustomRollupSettingEnum Illegal argument ").append(v)
                     .toString())

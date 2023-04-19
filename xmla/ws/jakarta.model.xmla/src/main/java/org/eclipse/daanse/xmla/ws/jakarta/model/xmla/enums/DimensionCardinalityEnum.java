@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * The number of instances a dimension
@@ -25,7 +25,7 @@ public enum DimensionCardinalityEnum {
         if (v == null) {
             return null;
         }
-        return EnumSet.allOf(DimensionCardinalityEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+        return Stream.of(DimensionCardinalityEnum.values()).filter(e -> (e.name().equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("DimensionCardinalityEnum Illegal argument ").append(v)
                     .toString())

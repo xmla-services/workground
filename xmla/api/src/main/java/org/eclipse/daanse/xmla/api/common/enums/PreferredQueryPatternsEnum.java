@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum PreferredQueryPatternsEnum {
 
@@ -31,7 +31,7 @@ public enum PreferredQueryPatternsEnum {
     }
 
     public static PreferredQueryPatternsEnum fromValue(int v) {
-        return Arrays.stream(PreferredQueryPatternsEnum.values())
+        return Stream.of(PreferredQueryPatternsEnum.values())
             .filter(e -> (e.value == v))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

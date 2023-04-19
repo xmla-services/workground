@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "CoordinateType")
 @XmlEnum
@@ -70,7 +70,7 @@ public enum CoordinateTypeEnum {
     }
 
     public static CoordinateTypeEnum fromValue(int v) {
-        return EnumSet.allOf(CoordinateTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(CoordinateTypeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("CoordinateTypeEnum Illegal argument ").append(v)
                     .toString())

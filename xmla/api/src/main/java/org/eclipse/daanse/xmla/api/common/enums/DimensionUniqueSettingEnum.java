@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum DimensionUniqueSettingEnum {
 
@@ -35,7 +35,7 @@ public enum DimensionUniqueSettingEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(DimensionUniqueSettingEnum.values())
+        return Stream.of(DimensionUniqueSettingEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

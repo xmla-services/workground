@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum LiteralNameEnumValueEnum {
 
@@ -49,7 +49,7 @@ public enum LiteralNameEnumValueEnum {
     }
 
     public static LiteralNameEnumValueEnum fromValue(int v) {
-        return Arrays.stream(LiteralNameEnumValueEnum.values())
+        return Stream.of(LiteralNameEnumValueEnum.values())
             .filter(e -> (e.value == v))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

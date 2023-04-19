@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum InstanceSelectionEnum {
 
@@ -49,7 +49,7 @@ public enum InstanceSelectionEnum {
 
     public static InstanceSelectionEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(InstanceSelectionEnum.values())
+        return Stream.of(InstanceSelectionEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

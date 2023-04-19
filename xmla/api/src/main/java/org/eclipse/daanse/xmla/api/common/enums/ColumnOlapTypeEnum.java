@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum ColumnOlapTypeEnum {
 
@@ -38,7 +38,7 @@ public enum ColumnOlapTypeEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(ColumnOlapTypeEnum.values())
+        return Stream.of(ColumnOlapTypeEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

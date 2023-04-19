@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * A bitmask that specifies the
@@ -71,7 +71,7 @@ public enum PropertyOriginEnum {
     }
 
     public static PropertyOriginEnum fromValue(int v) {
-        return EnumSet.allOf(PropertyOriginEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(PropertyOriginEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("PropertyOriginEnum Illegal argument ").append(v)
                     .toString())

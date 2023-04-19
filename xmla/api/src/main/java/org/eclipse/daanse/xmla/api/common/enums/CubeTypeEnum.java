@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum CubeTypeEnum {
 
@@ -26,7 +26,7 @@ public enum CubeTypeEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(CubeTypeEnum.values())
+        return Stream.of(CubeTypeEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

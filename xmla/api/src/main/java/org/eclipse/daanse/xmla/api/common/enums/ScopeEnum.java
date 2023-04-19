@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The scope of the member. The member can be a
@@ -43,7 +43,7 @@ public enum ScopeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(ScopeEnum.values())
+        return Stream.of(ScopeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

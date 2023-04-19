@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * An enumeration that identifies how a measure
@@ -167,7 +167,7 @@ public enum MeasureAggregatorEnum {
     }
 
     public static MeasureAggregatorEnum fromValue(int v) {
-        return EnumSet.allOf(MeasureAggregatorEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(MeasureAggregatorEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("MeasureAggregatorEnum Illegal argument ").append(v)
                     .toString())
