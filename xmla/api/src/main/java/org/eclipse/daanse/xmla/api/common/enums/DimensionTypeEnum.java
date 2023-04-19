@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum DimensionTypeEnum {
 
@@ -46,7 +46,7 @@ public enum DimensionTypeEnum {
     }
 
     public static DimensionTypeEnum fromValue(int v) {
-        return Arrays.stream(DimensionTypeEnum.values())
+        return Stream.of(DimensionTypeEnum.values())
             .filter(e -> (e.value == v))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

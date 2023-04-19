@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum ObjectExpansionEnum {
 
@@ -51,7 +51,7 @@ public enum ObjectExpansionEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(ObjectExpansionEnum.values())
+        return Stream.of(ObjectExpansionEnum.values())
             .filter(e -> (e.value.equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

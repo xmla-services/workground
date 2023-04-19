@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The type of the member
@@ -60,7 +60,7 @@ public enum MemberTypeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(MemberTypeEnum.values())
+        return Stream.of(MemberTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

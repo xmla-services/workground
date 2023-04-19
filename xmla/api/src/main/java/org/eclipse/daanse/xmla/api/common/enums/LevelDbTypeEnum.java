@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum LevelDbTypeEnum {
 
@@ -238,7 +238,7 @@ public enum LevelDbTypeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(LevelDbTypeEnum.values())
+        return Stream.of(LevelDbTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

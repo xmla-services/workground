@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "Origin")
 @XmlEnum
@@ -46,7 +46,7 @@ public enum OriginEnum {
     }
 
     public static OriginEnum fromValue(int v) {
-        return EnumSet.allOf(OriginEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(OriginEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("OriginEnum Illegal argument ").append(v)
                     .toString())

@@ -18,7 +18,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "ACubeType")
 @XmlEnum
@@ -34,7 +34,7 @@ public enum CubeTypeEnum {
         if (v == null) {
             return null;
         }
-        return EnumSet.allOf(CubeTypeEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+        return Stream.of(CubeTypeEnum.values()).filter(e -> (e.name().equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("CubeTypeEnum Illegal argument ").append(v)
                     .toString())

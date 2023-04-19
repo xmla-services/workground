@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "DimensionType")
 @XmlEnum
@@ -84,7 +84,7 @@ public enum DimensionTypeEnum {
     }
 
     public static DimensionTypeEnum fromValue(int v) {
-        return EnumSet.allOf(DimensionTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(DimensionTypeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("DimensionTypeEnum Illegal argument ").append(v)
                     .toString())

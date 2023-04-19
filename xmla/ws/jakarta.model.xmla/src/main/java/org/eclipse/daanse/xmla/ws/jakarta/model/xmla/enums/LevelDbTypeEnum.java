@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "LevelDbType")
 @XmlEnum
@@ -270,7 +270,7 @@ public enum LevelDbTypeEnum {
     }
 
     public static LevelDbTypeEnum fromValue(int v) {
-        return EnumSet.allOf(LevelDbTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(LevelDbTypeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("LevelDbTypeEnum Illegal argument ").append(v)
                     .toString())

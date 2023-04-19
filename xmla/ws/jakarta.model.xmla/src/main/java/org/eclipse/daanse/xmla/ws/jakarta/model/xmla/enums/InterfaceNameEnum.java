@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "InterfaceName")
 @XmlEnum
@@ -36,7 +36,7 @@ public enum InterfaceNameEnum {
         if (v == null) {
             return null;
         }
-        return EnumSet.allOf(InterfaceNameEnum.class).stream().filter(e -> (e.name().equals(v))).findFirst()
+        return Stream.of(InterfaceNameEnum.values()).filter(e -> (e.name().equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("InterfaceNameEnum Illegal argument ").append(v)
                     .toString())

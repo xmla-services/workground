@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Describes the current hierarchy structure. Values are the
@@ -42,7 +42,7 @@ public enum StructureTypeEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(StructureTypeEnum.values())
+        return Stream.of(StructureTypeEnum.values())
             .filter(e -> (e.value.equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

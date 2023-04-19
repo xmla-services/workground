@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The context for the set. The set can be static or
@@ -40,7 +40,7 @@ public enum SetEvaluationContextEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(SetEvaluationContextEnum.values())
+        return Stream.of(SetEvaluationContextEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

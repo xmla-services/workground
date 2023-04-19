@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "ACubeSource")
 @XmlEnum
@@ -40,7 +40,7 @@ public enum CubeSourceEnum {
     }
 
     public static CubeSourceEnum fromValue(int v) {
-        return EnumSet.allOf(CubeSourceEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(CubeSourceEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("CubeSourceEnum Illegal argument ").append(v)
                     .toString())

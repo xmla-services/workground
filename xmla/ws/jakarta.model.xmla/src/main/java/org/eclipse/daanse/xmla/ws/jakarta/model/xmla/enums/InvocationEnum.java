@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "Invocation")
 @XmlEnum
@@ -52,7 +52,7 @@ public enum InvocationEnum {
     }
 
     public static InvocationEnum fromValue(int v) {
-        return EnumSet.allOf(InvocationEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(InvocationEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("InvocationEnum Illegal argument ").append(v)
                     .toString())

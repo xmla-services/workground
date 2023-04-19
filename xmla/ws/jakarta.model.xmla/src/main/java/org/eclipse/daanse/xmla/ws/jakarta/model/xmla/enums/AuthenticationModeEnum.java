@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "AuthenticationMode")
 @XmlEnum
@@ -42,7 +42,7 @@ public enum AuthenticationModeEnum {
         if (v == null) {
             return null;
         }
-        return EnumSet.allOf(AuthenticationModeEnum.class).stream().filter(e -> (e.value.equals(v))).findFirst()
+        return Stream.of(AuthenticationModeEnum.values()).filter(e -> (e.value.equals(v))).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("AuthenticationModeEnum Illegal argument ").append(v)
                     .toString())

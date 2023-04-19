@@ -1,6 +1,6 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The cardinality of the property.
@@ -16,7 +16,7 @@ public enum PropertyCardinalityEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(PropertyCardinalityEnum.values())
+        return Stream.of(PropertyCardinalityEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

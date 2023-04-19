@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * A bitmask that specifies the
@@ -62,7 +62,7 @@ public enum PropertyTypeEnum {
             return null;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(PropertyTypeEnum.values())
+        return Stream.of(PropertyTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

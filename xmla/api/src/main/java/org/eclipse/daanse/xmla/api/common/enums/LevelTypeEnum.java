@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The type of the level
@@ -74,7 +74,7 @@ public enum LevelTypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(LevelTypeEnum.values())
+        return Stream.of(LevelTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

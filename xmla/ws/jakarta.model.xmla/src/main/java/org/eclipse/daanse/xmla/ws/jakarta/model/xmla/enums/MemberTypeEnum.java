@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 /**
  * The type of the member
@@ -67,7 +67,7 @@ public enum MemberTypeEnum {
     }
 
     public static MemberTypeEnum fromValue(int v) {
-        return EnumSet.allOf(MemberTypeEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(MemberTypeEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("MemberTypeEnum Illegal argument ").append(v)
                     .toString())

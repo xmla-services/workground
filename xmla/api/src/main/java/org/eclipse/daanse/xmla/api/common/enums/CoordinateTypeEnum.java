@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum CoordinateTypeEnum {
 
@@ -59,7 +59,7 @@ public enum CoordinateTypeEnum {
 
     public static CoordinateTypeEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(CoordinateTypeEnum.values())
+        return Stream.of(CoordinateTypeEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

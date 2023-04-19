@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum ProviderTypeEnum {
 
@@ -36,7 +36,7 @@ public enum ProviderTypeEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(ProviderTypeEnum.values())
+        return Stream.of(ProviderTypeEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

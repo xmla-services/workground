@@ -17,7 +17,7 @@ import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.EnumSet;
+import java.util.stream.Stream;
 
 @XmlType(name = "LevelOrigin")
 @XmlEnum
@@ -65,7 +65,7 @@ public enum LevelOriginEnum {
     }
 
     public static LevelOriginEnum fromValue(int v) {
-        return EnumSet.allOf(LevelOriginEnum.class).stream().filter(e -> (e.value == v)).findFirst()
+        return Stream.of(LevelOriginEnum.values()).filter(e -> (e.value == v)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 new StringBuilder("LevelOriginEnum Illegal argument ").append(v)
                     .toString())

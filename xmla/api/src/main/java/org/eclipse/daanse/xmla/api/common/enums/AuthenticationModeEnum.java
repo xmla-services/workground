@@ -1,6 +1,6 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum AuthenticationModeEnum {
 
@@ -33,7 +33,7 @@ public enum AuthenticationModeEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(AuthenticationModeEnum.values())
+        return Stream.of(AuthenticationModeEnum.values())
             .filter(e -> (e.getValue().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

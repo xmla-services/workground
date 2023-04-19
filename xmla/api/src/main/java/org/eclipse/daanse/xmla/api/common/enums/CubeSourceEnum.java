@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum CubeSourceEnum {
 
@@ -36,7 +36,7 @@ public enum CubeSourceEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(CubeSourceEnum.values())
+        return Stream.of(CubeSourceEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

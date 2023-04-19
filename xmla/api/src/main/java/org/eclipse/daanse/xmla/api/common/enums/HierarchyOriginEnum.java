@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum HierarchyOriginEnum {
 
@@ -57,7 +57,7 @@ public enum HierarchyOriginEnum {
             return DEFAULT;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(HierarchyOriginEnum.values())
+        return Stream.of(HierarchyOriginEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

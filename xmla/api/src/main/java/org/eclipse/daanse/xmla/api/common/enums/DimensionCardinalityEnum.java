@@ -1,6 +1,6 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * The number of instances a dimension
@@ -16,7 +16,7 @@ public enum DimensionCardinalityEnum {
         if (v == null) {
             return null;
         }
-        return Arrays.stream(DimensionCardinalityEnum.values())
+        return Stream.of(DimensionCardinalityEnum.values())
             .filter(e -> (e.name().equals(v)))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

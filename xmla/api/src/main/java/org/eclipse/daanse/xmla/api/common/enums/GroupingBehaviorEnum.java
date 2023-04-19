@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum GroupingBehaviorEnum {
 
@@ -39,7 +39,7 @@ public enum GroupingBehaviorEnum {
 
     public static GroupingBehaviorEnum fromValue(String v) {
         int vi = Integer.parseInt(v);
-        return Arrays.stream(GroupingBehaviorEnum.values())
+        return Stream.of(GroupingBehaviorEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum ActionTypeEnum {
 
@@ -77,7 +77,7 @@ public enum ActionTypeEnum {
             return null;
         }
         int vi = Integer.decode(v);
-        return Arrays.stream(ActionTypeEnum.values())
+        return Stream.of(ActionTypeEnum.values())
             .filter(e -> (e.getValue() == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(

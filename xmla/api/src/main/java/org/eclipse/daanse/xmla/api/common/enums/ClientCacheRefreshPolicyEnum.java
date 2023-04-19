@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * A hint to the client applications about when
@@ -52,7 +52,7 @@ public enum ClientCacheRefreshPolicyEnum {
             return ALL_CACHE_REFRESH;
         }
         int vi = Integer.parseInt(v);
-        return Arrays.stream(ClientCacheRefreshPolicyEnum.values())
+        return Stream.of(ClientCacheRefreshPolicyEnum.values())
             .filter(e -> (e.getValue() == vi))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
