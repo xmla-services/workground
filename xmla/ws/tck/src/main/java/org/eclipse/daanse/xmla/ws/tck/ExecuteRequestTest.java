@@ -13,24 +13,6 @@
  */
 package org.eclipse.daanse.xmla.ws.tck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TUPLE_FORMAT;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
-import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-import java.util.Optional;
-
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.Duration;
-
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
@@ -51,8 +33,24 @@ import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.api.common.properties.AxisFormat.TUPLE_FORMAT;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.ALTER_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CANCEL_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.CLEAR_CACHE_REQUEST;
+import static org.eclipse.daanse.xmla.ws.tck.TestRequests.STATEMENT_REQUEST;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -65,13 +63,16 @@ import org.slf4j.LoggerFactory;
 @RequireServiceComponentRuntime
 class ExecuteRequestTest {
 
-    private Logger logger = LoggerFactory.getLogger(ExecuteRequestTest.class);
+    private static final String REPORT_AND_STOP = "ReportAndStop";
+
+	private static final String FOOD_MART = "FoodMart";
+
 
     @InjectBundleContext
     BundleContext bc;
 
     @BeforeEach
-    void beforaEach() throws InterruptedException {
+    void beforaEach() {
         XmlaService xmlaService = mock(XmlaService.class);
         ExecuteService executeService = mock(ExecuteService.class);
 
@@ -82,10 +83,10 @@ class ExecuteRequestTest {
     }
 
     @Test
-    void test_Statement(@InjectService XmlaService xmlaService) throws Exception {
+    void testStatement(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<StatementRequest> captor = ArgumentCaptor.forClass(StatementRequest.class);
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_EXECUTE),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_EXECUTE),
             SOAPUtil.envelop(STATEMENT_REQUEST));
 
         ExecuteService executeService = xmlaService.execute();
@@ -97,28 +98,28 @@ class ExecuteRequestTest {
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                             .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
                             .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
-                    .satisfies(r -> {
+                    .satisfies(r ->
                         assertThat(r.statement().trim()).isNotNull()
                             .isEqualTo("select [Measures].[Sales Count] on 0, non empty [Store].[Store State].members" +
-                                " on 1 from [Sales]");
-                    });
+                                " on 1 from [Sales]")
+                    );
             });
     }
 
     @Test
-    void test_ClearCache(@InjectService XmlaService xmlaService) throws Exception {
+    void testClearcache(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<ClearCacheRequest> captor = ArgumentCaptor.forClass(ClearCacheRequest.class);
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_EXECUTE),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_EXECUTE),
             SOAPUtil.envelop(CLEAR_CACHE_REQUEST));
 
         ExecuteService executeService = xmlaService.execute();
@@ -130,16 +131,16 @@ class ExecuteRequestTest {
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                             .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
                             .isPresent().contains(TUPLE_FORMAT);
                     });
                 assertThat(d.command()).isNotNull()
-                    .satisfies(r -> {
+                    .satisfies(r ->
                         assertThat(r.object()).isNotNull().satisfies(o -> {
                             assertThat(o.serverID()).isNotNull().isEqualTo("serverID");
                             assertThat(o.databaseID()).isNotNull().isEqualTo("databaseID");
@@ -163,16 +164,16 @@ class ExecuteRequestTest {
                             assertThat(o.miningModelID()).isNotNull().isEqualTo("miningModelID");
                             assertThat(o.miningModelPermissionID()).isNotNull().isEqualTo("miningModelPermissionID");
                             assertThat(o.miningStructurePermissionID()).isNotNull().isEqualTo("miningStructurePermissionID");
-                        });
-                    });
+                        })
+                    );
             });
     }
 
     @Test
-    void test_Cancel(@InjectService XmlaService xmlaService) throws Exception {
+    void testCancel(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<CancelRequest> captor = ArgumentCaptor.forClass(CancelRequest.class);
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_EXECUTE),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_EXECUTE),
             SOAPUtil.envelop(CANCEL_REQUEST));
 
         ExecuteService executeService = xmlaService.execute();
@@ -184,9 +185,9 @@ class ExecuteRequestTest {
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                             .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
@@ -203,11 +204,11 @@ class ExecuteRequestTest {
     }
 
     @Test
-    void test_Alter(@InjectService XmlaService xmlaService) throws Exception {
+    void testAlter(@InjectService XmlaService xmlaService) throws DatatypeConfigurationException {
         ArgumentCaptor<AlterRequest> captor = ArgumentCaptor.forClass(AlterRequest.class);
         Duration duration = DatatypeFactory.newInstance().newDuration("-PT1S");
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_EXECUTE),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_EXECUTE),
             SOAPUtil.envelop(ALTER_REQUEST));
 
         ExecuteService executeService = xmlaService.execute();
@@ -219,9 +220,9 @@ class ExecuteRequestTest {
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                             .isPresent().contains(TABULAR);
                         assertThat(p.axisFormat()).isNotNull()
@@ -234,47 +235,47 @@ class ExecuteRequestTest {
                         .isNotNull().isEqualTo("AdventureWorks_SSAS_Alter");
                         assertThat(r.object().dimensionID())
                         .isNotNull().isEqualTo("Dim Customer");
-                        assertThat(r.objectDefinition()).isNotNull().satisfies(od -> {
+                        assertThat(r.objectDefinition()).isNotNull().satisfies(od ->
                         	assertThat(od.dimension()).isNotNull().satisfies(dimension -> {
                         		assertThat(dimension.id()).isNotNull().isEqualTo("Dim Customer");
                         		assertThat(dimension.name()).isNotNull().isEqualTo("Customer");
                                 assertThat(dimension.language()).isNotNull().isEqualTo(1033);
                                 assertThat(dimension.collation()).isNotNull().isEqualTo("Latin1_General_CI_AS");
                                 assertThat(dimension.unknownMemberName()).isNotNull().isEqualTo("Unknown");
-                                assertThat(dimension.source()).isNotNull().satisfies(s -> {
-                                    assertThat(((DataSourceViewBinding)s).dataSourceViewID()).isNotNull().isEqualTo("dsvAdventureWorksDW2008");
-                                });
+                                assertThat(dimension.source()).isNotNull().satisfies(s ->
+                                    assertThat(((DataSourceViewBinding)s).dataSourceViewID()).isNotNull().isEqualTo("dsvAdventureWorksDW2008")
+                                );
                                 assertThat(dimension.errorConfiguration()).isNotNull().satisfies(ec -> {
-                                    assertThat(ec.keyNotFound()).isNotNull().isPresent().contains("ReportAndStop");
-                                    assertThat(ec.keyDuplicate()).isNotNull().isPresent().contains("ReportAndStop");
-                                    assertThat(ec.nullKeyNotAllowed()).isNotNull().isPresent().contains("ReportAndStop");
+                                    assertThat(ec.keyNotFound()).isNotNull().isPresent().contains(REPORT_AND_STOP);
+                                    assertThat(ec.keyDuplicate()).isNotNull().isPresent().contains(REPORT_AND_STOP);
+                                    assertThat(ec.nullKeyNotAllowed()).isNotNull().isPresent().contains(REPORT_AND_STOP);
                                 });
-                                assertThat(dimension.attributes()).isNotNull().satisfies(ats -> {
+                                assertThat(dimension.attributes()).isNotNull().satisfies(ats ->
                                     assertThat(ats.get(0)).isNotNull().satisfies(at -> {
                                         assertThat(at.id()).isNotNull().isEqualTo("Customer Key");
                                         assertThat(at.name()).isNotNull().isEqualTo("Customer Key");
                                         assertThat(at.usage()).isNotNull().isEqualTo("Key");
                                         assertThat(at.estimatedCount()).isNotNull().isEqualTo(18484);
                                         assertThat(at.orderBy()).isNotNull().isEqualTo("Key");
-                                        assertThat(at.keyColumns()).isNotNull().satisfies(kcs -> {
+                                        assertThat(at.keyColumns()).isNotNull().satisfies(kcs ->
                                             assertThat(kcs.get(0)).isNotNull().satisfies(kc -> {
                                                 assertThat(kc.dataType()).isNotNull().isEqualTo("Integer");
                                                 assertThat(kc.source()).isNotNull().isPresent().satisfies(o -> {
                                                     assertThat(((ColumnBinding)o.get()).tableID()).isNotNull().isEqualTo("dbo_DimCustomer");
                                                     assertThat(((ColumnBinding)o.get()).columnID()).isNotNull().isEqualTo("CustomerKey");
                                                 });
-                                            });
-                                        });
-                                    });
-                                });
+                                            })
+                                        );
+                                    })
+                                );
                                 assertThat(dimension.proactiveCaching()).isNotNull().satisfies(pc -> {
                                     assertThat(pc.silenceInterval()).isNotNull().isPresent().contains(duration);
                                     assertThat(pc.latency()).isNotNull().isPresent().contains(duration);
                                     assertThat(pc.silenceOverrideInterval()).isNotNull().isPresent().contains(duration);
                                     assertThat(pc.forceRebuildInterval()).isNotNull().isPresent().contains(duration);
                                 });
-                        	});
-                        });
+                        	})
+                        );
                     });
             });
     }

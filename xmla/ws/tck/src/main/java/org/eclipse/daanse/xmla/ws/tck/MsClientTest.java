@@ -13,18 +13,6 @@
 */
 package org.eclipse.daanse.xmla.ws.tck;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-
 import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
@@ -33,7 +21,6 @@ import org.eclipse.daanse.xmla.model.record.discover.discover.properties.Discove
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
@@ -44,6 +31,19 @@ import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -72,7 +72,7 @@ class MsClientTest {
     }
 
     @Test
-    void testRequest_1(@InjectService XmlaService xmlaService) throws Exception {
+    void testRequest1(@InjectService XmlaService xmlaService) throws IOException, InterruptedException {
 
         List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
         result.add(new DiscoverPropertiesResponseRowR("MyPopertyName1", Optional.of("MyPopertyDescription"),
@@ -82,31 +82,28 @@ class MsClientTest {
 
         DiscoverService discoverService = xmlaService.discover();
 
-        when(discoverService.discoverProperties(Mockito.any())).thenReturn(result);
+        when(discoverService.discoverProperties(any())).thenReturn(result);
 
         // call test
 
         Process process = callByMsClient("schema", "DISCOVER_PROPERTIES");
-//        Process process = callByMsClient("schema", "MDSCHEMA_CUBES");
 
         byte[] errors = process.getErrorStream()
                 .readAllBytes();
         byte[] info = process.getInputStream()
                 .readAllBytes();
         process.waitFor(100000, TimeUnit.SECONDS);
-
-        System.out.println(new String(info));
-
-        System.out.println(new String(errors));
-        logger.info(new String(info));
-        logger.error(new String(errors));
+        String infoStr = new String(info);
+        logger.debug(infoStr);
+        String errorsStr = new String(errors);
+        logger.error(errorsStr);
 
         Assertions.assertThat(errors)
                 .isEmpty();
         Assertions.assertThat(process.exitValue())
                 .isEqualTo(0);
 
-//		verify client 
+//		verify client
 
     }
 
@@ -119,9 +116,9 @@ class MsClientTest {
         cmds.add("Data source=http://localhost:8090/xmla;UID=Domain\\User;PWD=UserDomainPassword");
 
         Stream.of(values)
-                .forEach(v -> cmds.add(v));
+                .forEach(cmds::add);
 
-        System.out.println(cmds);
+        cmds.forEach(logger::debug);
 
         ProcessBuilder processBuilder = new ProcessBuilder(cmds);
         processBuilder.inheritIO();
@@ -129,10 +126,7 @@ class MsClientTest {
                 .toAbsolutePath()
                 .toFile());
 
-        Process p = processBuilder.start();
-
-        return p;
-
+        return processBuilder.start();
     }
 
 }

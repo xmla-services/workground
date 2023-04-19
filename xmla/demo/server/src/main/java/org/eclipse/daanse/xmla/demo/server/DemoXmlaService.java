@@ -11,7 +11,7 @@ import org.osgi.service.component.propertytypes.ServiceVendor;
 public class DemoXmlaService implements XmlaService {
 
     public DemoXmlaService() {
-        System.out.println(1);
+        // constructor
     }
 
     private DiscoverService discoverService = new DemoDiscoverService();

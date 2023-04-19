@@ -55,7 +55,7 @@ class AuthRequestTest {
     }
 
     @Test()
-    void testAUTH(@InjectService XmlaService xmlaService) throws Exception {
+    void testAUTH(@InjectService XmlaService xmlaService) {
 
 //        AuthenticateResponse ar = new AuthenticateResponse();
 //        ReturnValue rv = new ReturnValue();

@@ -13,24 +13,22 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
-import java.util.Iterator;
-import java.util.List;
-
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRestrictionsR;
-
-import jakarta.xml.soap.Node;
-import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPElement;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class XmlaApiAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlaApiAdapter.class);
@@ -45,8 +43,6 @@ public class XmlaApiAdapter {
 
     public SOAPMessage handleRequest(SOAPMessage message) {
         try {
-            SOAPEnvelope envelope = message.getSOAPPart()
-                    .getEnvelope();
             handleBody(message.getSOAPBody());
         } catch (SOAPException e) {
             e.printStackTrace();
@@ -120,8 +116,8 @@ public class XmlaApiAdapter {
         LOGGER.debug(node.getNodeValue());
         LOGGER.debug(node.getTextContent());
         LOGGER.debug(node.getValue());
-
-        LOGGER.debug(node.getElementQName().toString());
+        String elementQNameStr = node.getElementQName().toString();
+        LOGGER.debug(elementQNameStr);
     }
 
     private PropertiesR properties(SOAPElement propertiesElement) {

@@ -5,7 +5,7 @@ import javax.xml.namespace.QName;
 import jakarta.xml.soap.SOAPElement;
 
 public enum XmlaMethosObjects {
-    Discover(new QName("urn:schemas-microsoft-com:xml-analysis", "Discover"));
+    DISCOVER(new QName("urn:schemas-microsoft-com:xml-analysis", "Discover"));
 
     private QName qName;
 

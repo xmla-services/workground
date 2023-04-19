@@ -28,6 +28,10 @@ import jakarta.xml.soap.SOAPElement;
 
 public class Convert {
 
+    private Convert() {
+        // constructor
+    }
+
     public static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(SOAPElement restriction) {
         // TODO Auto-generated method stub
         return null;
@@ -38,11 +42,9 @@ public class Convert {
         Iterator<Node> nodeIterator = propertiesElement.getChildElements();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
-            if (node instanceof SOAPElement propertyList) {
-                if (Constants.QNAME_MSXMLA_PROPERTYLIST.equals(propertyList.getElementQName())) {
-
-                    return propertyListToproperties(propertyList);
-                }
+            if (node instanceof SOAPElement propertyList
+                && Constants.QNAME_MSXMLA_PROPERTYLIST.equals(propertyList.getElementQName())) {
+                return propertyListToproperties(propertyList);
             }
 
         }
