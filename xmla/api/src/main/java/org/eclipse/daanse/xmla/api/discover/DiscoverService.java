@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover;
 
 import java.util.List;
 
+import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
@@ -69,64 +70,241 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 
+/**
+ * The {@link DiscoverService} gives access to all discover methods of the
+ * {@link XmlaService}. The execute methods could be found in the
+ * {@link ExecuteService}.
+ * 
+ * @see {@link ExecuteService}
+ */
 public interface DiscoverService {
 
-    // db
-    List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest dbSchemaCatalogsRequest);
+	/**
+	 * returns the catalogs that are accessible on the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request);
 
-    List<DbSchemaTablesResponseRow> dbSchemaTables(DbSchemaTablesRequest dbSchemaTablesRequest);
+	/**
+	 * returns dimensions, measure groups, or schema rowsets exposed as tables.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaTablesResponseRow> dbSchemaTables(DbSchemaTablesRequest request);
 
-    // discover
-    List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest discoverEnumeratorsRequest);
+	/**
+	 * returns a row for each measure, each cube dimension attribute, and each
+	 * schema rowset column, exposed as a column
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	// discover
+	List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest request);
 
-    List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest discoverKeywordsRequest);
+	/**
+	 * returns information about keywords that are reserved by the XMLA server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest request);
 
-    List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest discoverLiteralsRequest);
+	/**
+	 * returns information about literals supported by the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest request);
 
-    List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest discoverPropertiesRequest);
+	/**
+	 * returns a list of information and values about the properties that are
+	 * supported by the server for the specified data source.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request);
 
-    List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(
-            DiscoverSchemaRowsetsRequest discoverSchemaRowsetsRequest);
+	/**
+	 * returns the names, restrictions, description, and other information for all
+	 * Discover requests.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request);
 
-    // md
-    List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest mdSchemaActionsRequest);
+	/**
+	 * describes the actions that can be available to the client application.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	// md
+	List<MdSchemaActionsResponseRow> mdSchemaActions(MdSchemaActionsRequest request);
 
-    List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest mdSchemaCubesRequest);
+	/**
+	 * describes the structure of cubes within a database. Perspectives are also
+	 * returned in this schema.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaCubesResponseRow> mdSchemaCubes(MdSchemaCubesRequest request);
 
-    List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest mdSchemaDimensionsRequest);
+	/**
+	 * describes the dimensions within a database.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaDimensionsResponseRow> mdSchemaDimensions(MdSchemaDimensionsRequest request);
 
-    List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest mdSchemaFunctionsRequest);
+	/**
+	 * returns information about the functions that are currently available for use
+	 * in the DAX and MDX languages.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaFunctionsResponseRow> mdSchemaFunctions(MdSchemaFunctionsRequest request);
 
-    List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest requestApi);
+	/**
+	 * describes each hierarchy within a particular dimension.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request);
 
-    List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest requestApi);
+	/**
+	 * returns a list of the data sources that are available on the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request);
 
-    List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest requestApi);
+	/**
+	 * returns a rowset with one row and one column. The single cell in the rowset
+	 * contains an XML document that contains the requested XML metadata.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request);
 
-    List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest requestApi);
+	/**
+	 * describes the structure of cubes within a database. Perspectives are also
+	 * returned in this schema.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request);
 
-    List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest requestApi);
+	/**
+	 * describes the properties of members and cell properties.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest request);
 
-    List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest requestApi);
+	/**
+	 * identifies the (base) data types supported by the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest request);
 
-    List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest requestApi);
+	/**
+	 * describes each level within a particular hierarchy.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest request);
 
-    List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(MdSchemaMeasureGroupDimensionsRequest requestApi);
+	/**
+	 * enumerates the dimensions of measure groups.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(
+			MdSchemaMeasureGroupDimensionsRequest request);
 
-    List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest requestApi);
+	/**
+	 * describes the members within a database
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest request);
 
-    List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest requestApi);
+	/**
+	 * describes the members within a database
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest request);
 
-    List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest requestApi);
+	/**
+	 * describes the properties of members and cell properties.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest request);
 
-    List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest requestApi);
+	/**
+	 * describes any sets that are currently defined in a database, including
+	 * session- scoped sets.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request);
 
-    List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest requestApi);
+	/**
+	 * describes the KPIs within a database
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request);
 
-    List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest requestApi);
+	/**
+	 * describes the MeasureGroups within a database
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request);
 
-    List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest requestApi);
+	/**
+	 *
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest request);
 
-    List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest requestApi);
+	/**
+	 * 
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest request);
 }
