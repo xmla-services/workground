@@ -13,19 +13,6 @@
 */
 package org.eclipse.daanse.xmla.ws.tck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum.CUBE;
-import static org.eclipse.daanse.xmla.api.common.enums.InvocationEnum.NORMAL_OPERATION;
-import static org.eclipse.daanse.xmla.api.common.properties.Content.SCHEMA_DATA;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-import java.util.Optional;
-
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
@@ -80,8 +67,19 @@ import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum.CUBE;
+import static org.eclipse.daanse.xmla.api.common.enums.InvocationEnum.NORMAL_OPERATION;
+import static org.eclipse.daanse.xmla.api.common.properties.Content.SCHEMA_DATA;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.TABULAR;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -92,13 +90,21 @@ import org.slf4j.LoggerFactory;
         @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
 class DiscoverRequestTest {
-    private Logger logger = LoggerFactory.getLogger(DiscoverRequestTest.class);
 
-    @InjectBundleContext
+    private static final String TABLE_NAME = "tableName";
+	private static final String SCHEMA_NAME = "schemaName";
+	private static final String MEASURE_GROUP_NAME = "measureGroupName";
+	private static final String LEVEL_UNIQUE_NAME = "levelUniqueName";
+	private static final String HIERARCHY_UNIQUE_NAME = "hierarchyUniqueName";
+	private static final String DIMENSION_UNIQUE_NAME = "dimensionUniqueName";
+	private static final String CUBE_NAME = "cubeName";
+	private static final String CATALOG_NAME = "catalogName";
+	private static final String FOOD_MART = "FoodMart";
+	@InjectBundleContext
     BundleContext bc;
 
     @BeforeEach
-    void beforaEach() throws InterruptedException {
+    void beforaEach() {
         XmlaService xmlaService = mock(XmlaService.class);
         DiscoverService discoverService = mock(DiscoverService.class);
 
@@ -110,7 +116,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverPropertiesLocaleIdentifier(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverPropertiesRequest> captor = ArgumentCaptor.forClass(DiscoverPropertiesRequest.class);
 
         final String sRequest = """
@@ -128,7 +134,7 @@ class DiscoverRequestTest {
                 </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -150,15 +156,15 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                             });
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.propertyName()).isNotNull()
-                                        .isNotPresent();
-                            });
+                                        .isNotPresent()
+                            );
                 });
-    };
+    }
 
     @Test
-    void test_DISCOVER_PROPERTIES_Restricted(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverPropertiesRestricted(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverPropertiesRequest> captor = ArgumentCaptor.forClass(DiscoverPropertiesRequest.class);
 
         final String sRequest = """
@@ -180,7 +186,7 @@ class DiscoverRequestTest {
                 </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -196,7 +202,7 @@ class DiscoverRequestTest {
                                         .contains(1033);
                                 assertThat(p.dataSourceInfo()).isNotNull()
                                         .isPresent()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
                                         .contains(SCHEMA_DATA);
@@ -205,16 +211,16 @@ class DiscoverRequestTest {
                                         .contains(TABULAR);
                             });
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.propertyName()).isNotNull()
                                         .isPresent()
-                                        .contains("ProviderVersion");
-                            });
+                                        .contains("ProviderVersion")
+                            );
                 });
-    };
+    }
 
     @Test
-    void test_DISCOVER_SCHEMA_ROWSETS(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverSchemaRowSets(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverSchemaRowsetsRequest> captor = ArgumentCaptor
                 .forClass(DiscoverSchemaRowsetsRequest.class);
         final String sRequest = """
@@ -235,7 +241,7 @@ class DiscoverRequestTest {
                   </Properties>
                 </Discover>
                 """;
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -246,11 +252,11 @@ class DiscoverRequestTest {
                 .satisfies(d -> {
                     // getRestrictions
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.schemaName()).isNotNull()
                                         .isPresent()
-                                        .contains("FoodMart");
-                            });
+                                        .contains(FOOD_MART)
+                            );
                     // getProperties
                     assertThat(d.properties()).isNotNull()
                             .satisfies(p -> {
@@ -259,20 +265,20 @@ class DiscoverRequestTest {
                                         .contains(1033);
                                 assertThat(p.dataSourceInfo()).isNotNull()
                                         .isPresent()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .isPresent()
                                         .contains(TABULAR);
                                 assertThat(p.catalog()).isNotNull()
                                         .isPresent()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                             });
 
                 });
     }
 
     @Test
-    void test_DISCOVER_ENUMERATORS(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverEnumerators(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverEnumeratorsRequest> captor = ArgumentCaptor.forClass(DiscoverEnumeratorsRequest.class);
         final String sRequest = """
                     <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
@@ -291,7 +297,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -302,10 +308,10 @@ class DiscoverRequestTest {
                 .satisfies(d -> {
                     // getRestrictions
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.enumName()).isNotNull()
-                                        .contains("FoodMart");
-                            });
+                                        .contains(FOOD_MART)
+                            );
                     // getProperties
                     assertThat(d.properties()).isNotNull()
                             .satisfies(p -> {
@@ -313,7 +319,7 @@ class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
                                         .isPresent()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
@@ -324,7 +330,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DISCOVER_KEYWORDS(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverKeywords(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverKeywordsRequest> captor = ArgumentCaptor.forClass(DiscoverKeywordsRequest.class);
         final String sRequest = """
                     <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
@@ -343,7 +349,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -354,17 +360,17 @@ class DiscoverRequestTest {
                 .satisfies(d -> {
                     // getRestrictions
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.keyword()).isNotNull()
-                                        .contains("Keyword1");
-                            });
+                                        .contains("Keyword1")
+                            );
                     // getProperties
                     assertThat(d.properties()).isNotNull()
                             .satisfies(p -> {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
@@ -375,7 +381,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DISCOVER_LITERALS(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverLiterals(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DiscoverLiteralsRequest> captor = ArgumentCaptor.forClass(DiscoverLiteralsRequest.class);
         final String sRequest = """
                     <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
@@ -394,7 +400,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -405,18 +411,18 @@ class DiscoverRequestTest {
                 .satisfies(d -> {
                     // getRestrictions
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.literalName()).isNotNull()
                                         .isPresent()
-                                        .contains("literalName");
-                            });
+                                        .contains("literalName")
+                            );
                     // getProperties
                     assertThat(d.properties()).isNotNull()
                             .satisfies(p -> {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
@@ -427,7 +433,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_TABLES(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaTables(@InjectService XmlaService xmlaService) {
         ArgumentCaptor<DbSchemaTablesRequest> captor = ArgumentCaptor
                 .forClass(DbSchemaTablesRequest.class);
         final String sRequest = """
@@ -449,7 +455,7 @@ class DiscoverRequestTest {
                 </Properties>
                 </Discover>""";
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -466,7 +472,7 @@ class DiscoverRequestTest {
                                         .contains("tableCatalog");
                                 assertThat(r.tableName()).isNotNull()
                                         .isPresent()
-                                        .contains("tableName");
+                                        .contains(TABLE_NAME);
                                 assertThat(r.tableType()).isNotNull()
                                         .isPresent()
                                         .contains("tableType");
@@ -480,7 +486,7 @@ class DiscoverRequestTest {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.content()).isNotNull()
@@ -491,7 +497,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_ACTIONS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaActions(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaActionsRequest> captor = ArgumentCaptor
                 .forClass(MdSchemaActionsRequest.class);
@@ -521,7 +527,7 @@ class DiscoverRequestTest {
                     </Properties>
                 </Discover>""";
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -535,11 +541,11 @@ class DiscoverRequestTest {
                             .satisfies(r -> {
                                 assertThat(r.catalogName()).isNotNull()
                                         .isPresent()
-                                        .contains("catalogName");
+                                        .contains(CATALOG_NAME);
                                 assertThat(r.schemaName()).isNotNull()
                                         .isPresent()
-                                        .contains("schemaName");
-                                assertThat(r.cubeName()).isEqualTo("cubeName");
+                                        .contains(SCHEMA_NAME);
+                                assertThat(r.cubeName()).isEqualTo(CUBE_NAME);
                                 assertThat(r.actionName()).isNotNull()
                                         .isPresent()
                                         .contains("actionName");
@@ -563,9 +569,9 @@ class DiscoverRequestTest {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                         .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.catalog()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
@@ -576,7 +582,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_CUBES(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaCubes(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaCubesRequest> captor = ArgumentCaptor
                 .forClass(MdSchemaCubesRequest.class);
@@ -602,7 +608,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -616,10 +622,10 @@ class DiscoverRequestTest {
                             .satisfies(r -> {
                                 assertThat(r.schemaName()).isNotNull()
                                         .isPresent()
-                                        .contains("schemaName");
+                                        .contains(SCHEMA_NAME);
                                 assertThat(r.cubeName()).isNotNull()
                                         .isPresent()
-                                        .contains("cubeName");
+                                        .contains(CUBE_NAME);
                                 assertThat(r.baseCubeName()).isNotNull()
                                         .isPresent()
                                         .contains("baseCubeName");
@@ -633,9 +639,9 @@ class DiscoverRequestTest {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                 .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.catalog()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
@@ -646,7 +652,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_DIMENSIONS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaDimensions(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaDimensionsRequest> captor = ArgumentCaptor
                 .forClass(MdSchemaDimensionsRequest.class);
@@ -675,7 +681,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -689,19 +695,19 @@ class DiscoverRequestTest {
                             .satisfies(r -> {
                                 assertThat(r.catalogName()).isNotNull()
                                         .isPresent()
-                                        .contains("catalogName");
+                                        .contains(CATALOG_NAME);
                                 assertThat(r.schemaName()).isNotNull()
                                         .isPresent()
-                                        .contains("schemaName");
+                                        .contains(SCHEMA_NAME);
                                 assertThat(r.cubeName()).isNotNull()
                                         .isPresent()
-                                        .contains("cubeName");
+                                        .contains(CUBE_NAME);
                                 assertThat(r.dimensionName()).isNotNull()
                                         .isPresent()
                                         .contains("dimensionName");
                                 assertThat(r.dimensionUniqueName()).isNotNull()
                                         .isPresent()
-                                        .contains("dimensionUniqueName");
+                                        .contains(DIMENSION_UNIQUE_NAME);
                                 assertThat(r.cubeSource()).isNotNull()
                                     .isPresent()
                                     .contains(CubeSourceEnum.CUBE);
@@ -715,9 +721,9 @@ class DiscoverRequestTest {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                 .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.catalog()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.format()).isNotNull()
                                         .contains(TABULAR);
                                 assertThat(p.content()).isNotNull()
@@ -728,7 +734,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_FUNCTIONS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaFunctions(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaFunctionsRequest> captor = ArgumentCaptor
                 .forClass(MdSchemaFunctionsRequest.class);
@@ -749,7 +755,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -761,17 +767,17 @@ class DiscoverRequestTest {
                 .satisfies(d -> {
                     // getRestrictions
                     assertThat(d.restrictions()).isNotNull()
-                            .satisfies(r -> {
+                            .satisfies(r ->
                                 assertThat(r.origin()).isNotNull()
-                                        .isNotPresent();
-                            });
+                                        .isNotPresent()
+                            );
                     // getProperties
                     assertThat(d.properties()).isNotNull()
                             .satisfies(p -> {
                                 assertThat(p.localeIdentifier()).isNotNull()
                                 .isNotPresent();
                                 assertThat(p.dataSourceInfo()).isNotNull()
-                                        .contains("FoodMart");
+                                        .contains(FOOD_MART);
                                 assertThat(p.catalog()).isNotNull()
                                 .isNotPresent();
                                 assertThat(p.format()).isNotNull()
@@ -784,7 +790,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_HIERARCHIES(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaHierarchies(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaHierarchiesRequest> captor = ArgumentCaptor
             .forClass(MdSchemaHierarchiesRequest.class);
@@ -813,7 +819,7 @@ class DiscoverRequestTest {
                 </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -827,17 +833,17 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.dimensionUniqueName()).isNotNull()
-                            .isPresent().contains("dimensionUniqueName");
+                            .isPresent().contains(DIMENSION_UNIQUE_NAME);
                         assertThat(r.hierarchyName()).isNotNull()
                             .isPresent().contains("hierarchyName");
                         assertThat(r.hierarchyUniqueName()).isNotNull()
-                            .isPresent().contains("hierarchyUniqueName");
+                            .isPresent().contains(HIERARCHY_UNIQUE_NAME);
                         assertThat(r.hierarchyOrigin()).isNotNull()
                             .isPresent().contains(1);
                         assertThat(r.cubeSource()).isNotNull()
@@ -851,7 +857,7 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
                             .isNotPresent();
                         assertThat(p.format()).isNotNull()
@@ -864,7 +870,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DISCOVER_DATASOURCES(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverDataSources(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DiscoverDataSourcesRequest> captor = ArgumentCaptor
             .forClass(DiscoverDataSourcesRequest.class);
@@ -891,7 +897,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -926,7 +932,7 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
                             .isNotPresent();
                         assertThat(p.format()).isNotNull()
@@ -939,7 +945,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DISCOVER_XML_METADATA(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverXmlMetadata(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DiscoverXmlMetaDataRequest> captor = ArgumentCaptor
             .forClass(DiscoverXmlMetaDataRequest.class);
@@ -981,7 +987,7 @@ class DiscoverRequestTest {
                     </Discover>
                 """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1045,7 +1051,7 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
                             .isNotPresent();
                         assertThat(p.format()).isNotNull()
@@ -1058,7 +1064,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_COLUMNS(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaColumns(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DbSchemaColumnsRequest> captor = ArgumentCaptor
             .forClass(DbSchemaColumnsRequest.class);
@@ -1083,7 +1089,7 @@ class DiscoverRequestTest {
                 </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1101,7 +1107,7 @@ class DiscoverRequestTest {
                         assertThat(r.tableSchema()).isNotNull()
                             .isPresent().contains("tableSchema");
                         assertThat(r.tableName()).isNotNull()
-                            .isPresent().contains("tableName");
+                            .isPresent().contains(TABLE_NAME);
                         assertThat(r.columnName()).isNotNull()
                             .isPresent().contains("columnName");
                         assertThat(r.columnOlapType()).isNotNull()
@@ -1113,7 +1119,7 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
                             .isNotPresent();
                         assertThat(p.format()).isNotNull()
@@ -1126,7 +1132,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_PROVIDER_TYPES(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaProviderTypes(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DbSchemaProviderTypesRequest> captor = ArgumentCaptor
             .forClass(DbSchemaProviderTypesRequest.class);
@@ -1148,7 +1154,7 @@ class DiscoverRequestTest {
                 </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1172,7 +1178,7 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
                             .isNotPresent();
                         assertThat(p.format()).isNotNull()
@@ -1185,7 +1191,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_LEVELS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaLevels(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaLevelsRequest> captor = ArgumentCaptor.forClass(MdSchemaLevelsRequest.class);
         final String sRequest = """
@@ -1215,7 +1221,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1229,19 +1235,19 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.dimensionUniqueName()).isNotNull()
-                            .isPresent().contains("dimensionUniqueName");
+                            .isPresent().contains(DIMENSION_UNIQUE_NAME);
                         assertThat(r.hierarchyUniqueName()).isNotNull()
-                            .isPresent().contains("hierarchyUniqueName");
+                            .isPresent().contains(HIERARCHY_UNIQUE_NAME);
                         assertThat(r.levelName()).isNotNull()
                             .isPresent().contains("levelName");
                         assertThat(r.levelUniqueName()).isNotNull()
-                            .isPresent().contains("levelUniqueName");
+                            .isPresent().contains(LEVEL_UNIQUE_NAME);
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.levelVisibility()).isNotNull()
@@ -1253,9 +1259,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1266,7 +1272,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_MEASUREGROUP_DIMENSIONS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasureGroupDimensions(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaMeasureGroupDimensionsRequest> captor = ArgumentCaptor.forClass(MdSchemaMeasureGroupDimensionsRequest.class);
         final String sRequest = """
@@ -1293,7 +1299,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1307,15 +1313,15 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.measureGroupName()).isNotNull()
-                            .isPresent().contains("measureGroupName");
+                            .isPresent().contains(MEASURE_GROUP_NAME);
                         assertThat(r.dimensionUniqueName()).isNotNull()
-                            .isPresent().contains("dimensionUniqueName");
+                            .isPresent().contains(DIMENSION_UNIQUE_NAME);
                         assertThat(r.dimensionVisibility()).isNotNull()
                             .isPresent().contains(VisibilityEnum.VISIBLE);
                     });
@@ -1325,9 +1331,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1338,7 +1344,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_MEASURES(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasures(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaMeasuresRequest> captor = ArgumentCaptor.forClass(MdSchemaMeasuresRequest.class);
         final String sRequest = """
@@ -1367,7 +1373,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1381,17 +1387,17 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.measureName()).isNotNull()
                             .isPresent().contains("measureName");
                         assertThat(r.measureUniqueName()).isNotNull()
                             .isPresent().contains("measureUniqueName");
                         assertThat(r.measureGroupName()).isNotNull()
-                            .isPresent().contains("measureGroupName");
+                            .isPresent().contains(MEASURE_GROUP_NAME);
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.measureVisibility()).isNotNull()
@@ -1403,9 +1409,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1416,7 +1422,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_MEMBERS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMembers(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaMembersRequest> captor = ArgumentCaptor.forClass(MdSchemaMembersRequest.class);
         final String sRequest = """
@@ -1450,7 +1456,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1464,17 +1470,17 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.dimensionUniqueName()).isNotNull()
-                            .isPresent().contains("dimensionUniqueName");
+                            .isPresent().contains(DIMENSION_UNIQUE_NAME);
                         assertThat(r.hierarchyUniqueName()).isNotNull()
-                            .isPresent().contains("hierarchyUniqueName");
+                            .isPresent().contains(HIERARCHY_UNIQUE_NAME);
                         assertThat(r.levelUniqueName()).isNotNull()
-                            .isPresent().contains("levelUniqueName");
+                            .isPresent().contains(LEVEL_UNIQUE_NAME);
                         assertThat(r.levelNumber()).isNotNull()
                             .isPresent().contains(1);
                         assertThat(r.memberName()).isNotNull()
@@ -1496,9 +1502,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1509,7 +1515,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_PROPERTIES(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaProperties(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaPropertiesRequest> captor = ArgumentCaptor.forClass(MdSchemaPropertiesRequest.class);
         final String sRequest = """
@@ -1542,7 +1548,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1556,17 +1562,17 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.dimensionUniqueName()).isNotNull()
-                            .isPresent().contains("dimensionUniqueName");
+                            .isPresent().contains(DIMENSION_UNIQUE_NAME);
                         assertThat(r.hierarchyUniqueName()).isNotNull()
-                            .isPresent().contains("hierarchyUniqueName");
+                            .isPresent().contains(HIERARCHY_UNIQUE_NAME);
                         assertThat(r.levelUniqueName()).isNotNull()
-                            .isPresent().contains("levelUniqueName");
+                            .isPresent().contains(LEVEL_UNIQUE_NAME);
                         assertThat(r.memberUniqueName()).isNotNull()
                             .isPresent().contains("memberUniqueName");
                         assertThat(r.propertyType()).isNotNull()
@@ -1586,9 +1592,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1599,7 +1605,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_SETS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaSets(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaSetsRequest> captor = ArgumentCaptor.forClass(MdSchemaSetsRequest.class);
         final String sRequest = """
@@ -1627,7 +1633,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1641,11 +1647,11 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.setName()).isNotNull()
                             .isPresent().contains("setName");
                         assertThat(r.scope()).isNotNull()
@@ -1653,7 +1659,7 @@ class DiscoverRequestTest {
                         assertThat(r.cubeSource()).isNotNull()
                             .isPresent().contains(CubeSourceEnum.CUBE);
                         assertThat(r.hierarchyUniqueName()).isNotNull()
-                            .isPresent().contains("hierarchyUniqueName");
+                            .isPresent().contains(HIERARCHY_UNIQUE_NAME);
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
@@ -1661,9 +1667,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1674,7 +1680,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_KPIS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaKpis(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaKpisRequest> captor = ArgumentCaptor.forClass(MdSchemaKpisRequest.class);
         final String sRequest = """
@@ -1700,7 +1706,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1714,11 +1720,11 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.kpiName()).isNotNull()
                             .isPresent().contains("kpiName");
                         assertThat(r.cubeSource()).isNotNull()
@@ -1730,9 +1736,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1743,7 +1749,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_MDSCHEMA_MEASUREGROUPS(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasureGroups(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<MdSchemaMeasureGroupsRequest> captor = ArgumentCaptor.forClass(MdSchemaMeasureGroupsRequest.class);
         final String sRequest = """
@@ -1768,7 +1774,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1782,13 +1788,13 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
+                            .isPresent().contains(SCHEMA_NAME);
                         assertThat(r.cubeName()).isNotNull()
-                            .isPresent().contains("cubeName");
+                            .isPresent().contains(CUBE_NAME);
                         assertThat(r.measureGroupName()).isNotNull()
-                            .isPresent().contains("measureGroupName");
+                            .isPresent().contains(MEASURE_GROUP_NAME);
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
@@ -1796,9 +1802,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1809,7 +1815,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_TABLES_INFO(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaTablesInfo(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DbSchemaTablesInfoRequest> captor = ArgumentCaptor.forClass(DbSchemaTablesInfoRequest.class);
         final String sRequest = """
@@ -1834,7 +1840,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1848,10 +1854,10 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
-                        assertThat(r.tableName()).isNotNull().isEqualTo("tableName");
+                            .isPresent().contains(SCHEMA_NAME);
+                        assertThat(r.tableName()).isNotNull().isEqualTo(TABLE_NAME);
                         assertThat(r.tableType()).isNotNull().isEqualTo(TableTypeEnum.TABLE);
                     });
                 // getProperties
@@ -1860,9 +1866,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1873,7 +1879,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_SOURCE_TABLES(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaSourceTables(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DbSchemaSourceTablesRequest> captor = ArgumentCaptor.forClass(DbSchemaSourceTablesRequest.class);
         final String sRequest = """
@@ -1898,7 +1904,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1912,10 +1918,10 @@ class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.catalogName()).isNotNull()
-                            .isPresent().contains("catalogName");
+                            .isPresent().contains(CATALOG_NAME);
                         assertThat(r.schemaName()).isNotNull()
-                            .isPresent().contains("schemaName");
-                        assertThat(r.tableName()).isNotNull().isEqualTo("tableName");
+                            .isPresent().contains(SCHEMA_NAME);
+                        assertThat(r.tableName()).isNotNull().isEqualTo(TABLE_NAME);
                         assertThat(r.tableType()).isNotNull().isEqualTo(TableTypeEnum.TABLE);
                     });
                 // getProperties
@@ -1924,9 +1930,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                        	.isPresent().contains("FoodMart");
+                        	.isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()
@@ -1937,7 +1943,7 @@ class DiscoverRequestTest {
     }
 
     @Test
-    void test_DBSCHEMA_SCHEMATA(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaSchemata(@InjectService XmlaService xmlaService) {
 
         ArgumentCaptor<DbSchemaSchemataRequest> captor = ArgumentCaptor.forClass(DbSchemaSchemataRequest.class);
         final String sRequest = """
@@ -1961,7 +1967,7 @@ class DiscoverRequestTest {
             </Discover>
             """;
 
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
             SOAPUtil.envelop(sRequest));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -1974,8 +1980,8 @@ class DiscoverRequestTest {
                 // getRestrictions
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
-                        assertThat(r.catalogName()).isNotNull().isEqualTo("catalogName");
-                        assertThat(r.schemaName()).isNotNull().isEqualTo("schemaName");
+                        assertThat(r.catalogName()).isNotNull().isEqualTo(CATALOG_NAME);
+                        assertThat(r.schemaName()).isNotNull().isEqualTo(SCHEMA_NAME);
                         assertThat(r.schemaOwner()).isNotNull().isEqualTo("schemaOwner");
                     });
                 // getProperties
@@ -1984,9 +1990,9 @@ class DiscoverRequestTest {
                         assertThat(p.localeIdentifier()).isNotNull()
                             .isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
-                            .contains("FoodMart");
+                            .contains(FOOD_MART);
                         assertThat(p.catalog()).isNotNull()
-                            .isPresent().contains("FoodMart");
+                            .isPresent().contains(FOOD_MART);
                         assertThat(p.format()).isNotNull()
                         	.contains(TABULAR);
                         assertThat(p.content()).isNotNull()

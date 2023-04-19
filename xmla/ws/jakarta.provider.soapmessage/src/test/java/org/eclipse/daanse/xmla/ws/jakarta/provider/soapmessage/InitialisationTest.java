@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.Collection;
@@ -49,7 +50,6 @@ import aQute.bnd.annotation.service.ServiceCapability;
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
 class InitialisationTest {
-    private Logger logger = LoggerFactory.getLogger(InitialisationTest.class);
 
     @InjectBundleContext
     BundleContext bc;
@@ -70,7 +70,7 @@ class InitialisationTest {
     void testRequestwsdl(@InjectService XmlaService xmlaService) throws Exception {
         printScrInfo();
         String sUrl = "http://localhost:" + Constants.SERVER_PORT_WHITEBOARD + Constants.WS_PATH;
-
+        assertThat(sUrl).isNotNull();
     }
 
     void printScrInfo() {

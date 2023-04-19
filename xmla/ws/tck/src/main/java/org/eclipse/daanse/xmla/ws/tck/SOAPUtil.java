@@ -35,7 +35,11 @@ import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
 
 public class SOAPUtil {
-    public static Logger logger = LoggerFactory.getLogger(SOAPUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(SOAPUtil.class);
+
+    private SOAPUtil() {
+        // constructor
+    }
 
     public static SOAPMessage callSoapWebService(String soapEndpointUrl, Optional<String> oSoapAction,
             Consumer<SOAPMessage> consumer) {
@@ -51,9 +55,9 @@ public class SOAPUtil {
             message.saveChanges();
 
             /* Print the request message, just for debugging purposes */
-            logger.error("Request SOAP Message:");
+            logger.error("Request SOAP Message:\n");
 
-            logger.error("\n" + pretty(string(message)));
+            logger.error(pretty(string(message)));
 
             // Create SOAP Connection
 
@@ -65,8 +69,8 @@ public class SOAPUtil {
 
             // Print the SOAP Response
 
-            logger.debug("Response SOAP Message:");
-            logger.debug("\n" + pretty(string(response)));
+            logger.debug("Response SOAP Message:\n");
+            logger.debug(pretty(string(response)));
 
             connection.close();
 
@@ -85,7 +89,7 @@ public class SOAPUtil {
 
     }
 
-    public static Consumer<SOAPMessage> envelop(String xmlString) throws SOAPException {
+    public static Consumer<SOAPMessage> envelop(String xmlString) {
 
         return plainSoapMessage -> {
 

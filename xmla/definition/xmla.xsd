@@ -788,8 +788,6 @@
 			</xsd:element>
 			<!--Extended elements for DataSourceView object -->
 			<xsd:element name="DataSourceID" type="xsd:string" />
-			<!-- <xsd:element name="Schema"> <xsd:complexType> <xsd:sequence> <xsd:element 
-				ref="xsd:schema" /> </xsd:sequence> </xsd:complexType> </xsd:element> -->
 		</xsd:all>
 	</xsd:complexType>
 
@@ -996,9 +994,6 @@
 			<xsd:element ref="eng100_100:DbStorageLocation"
 				minOccurs="0" />
 			<xsd:element ref="eng100:ReadWriteMode" minOccurs="0">
-				<!-- <xsd:simpleType> <xsd:restriction base="xsd:string"> <xsd:enumeration 
-					value="ReadWrite" /> <xsd:enumeration value="ReadOnlyExclusive" /> </xsd:restriction> 
-					</xsd:simpleType> -->
 			</xsd:element>
 			<xsd:element name="Locations" minOccurs="0">
 				<xsd:complexType>
@@ -1038,26 +1033,6 @@
 	<xsd:complexType name="Location">
 		<xsd:complexContent>
 			<xsd:extension base="Location_Backup">
-<!-- 				<xsd:all> -->
-<!-- 					<xsd:element name="DataSourceType" minOccurs="0"> -->
-<!-- 						<xsd:simpleType> -->
-<!-- 							<xsd:restriction base="xsd:string"> -->
-<!-- 								<xsd:enumeration value="Remote" /> -->
-<!-- 								<xsd:enumeration value="Local" /> -->
-<!-- 							</xsd:restriction> -->
-<!-- 						</xsd:simpleType> -->
-<!-- 					</xsd:element> -->
-<!-- 					<xsd:element name="ConnectionString" type="xsd:string" -->
-<!-- 						minOccurs="0" /> -->
-<!-- 					<xsd:element name="Folders" minOccurs="0"> -->
-<!-- 						<xsd:complexType> -->
-<!-- 							<xsd:sequence> -->
-<!-- 								<xsd:element name="Folder" type="Folder" -->
-<!-- 									minOccurs="0" maxOccurs="unbounded" /> -->
-<!-- 							</xsd:sequence> -->
-<!-- 						</xsd:complexType> -->
-<!-- 					</xsd:element> -->
-<!-- 				</xsd:all> -->
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -1111,9 +1086,6 @@
 			<xsd:element name="AllowOverwrite" type="xsd:boolean"
 				minOccurs="0" />
 			<xsd:element ref="eng100:ReadWriteMode" minOccurs="0">
-				<!-- <xsd:simpleType> <xsd:restriction base="xsd:string"> <xsd:enumeration 
-					value="ReadWrite" /> <xsd:enumeration value="ReadOnly" /> <xsd:enumeration 
-					value="ReadOnlyExclusive" /> </xsd:restriction> </xsd:simpleType> -->
 			</xsd:element>
 		</xsd:all>
 	</xsd:complexType>
@@ -1390,9 +1362,6 @@
 				maxOccurs="1" />
 			<xsd:element ref="eng100:ReadWriteMode" minOccurs="1"
 				maxOccurs="1">
-				<!-- <xsd:simpleType> <xsd:restriction base="xsd:string"> <xsd:enumeration 
-					value="ReadWrite" /> <xsd:enumeration value="ReadOnlyExclusive" /> </xsd:restriction> 
-					</xsd:simpleType> -->
 			</xsd:element>
 			<xsd:element ref="eng100_100:DbStorageLocation"
 				minOccurs="0" />
@@ -2157,9 +2126,6 @@
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:element>
-			<!-- <xsd:element name="Write" minOccurs="0"> <xsd:simpleType> <xsd:restriction 
-				base="xsd:string"> <xsd:enumeration value="None" /> <xsd:enumeration value="Allowed" 
-				/> </xsd:restriction> </xsd:simpleType> </xsd:element> -->
 		</xsd:sequence>
 	</xsd:complexType>
 

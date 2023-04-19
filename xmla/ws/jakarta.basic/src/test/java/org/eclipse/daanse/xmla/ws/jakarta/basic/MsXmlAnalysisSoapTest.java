@@ -83,7 +83,7 @@ class MsXmlAnalysisSoapTest {
                   </Properties>
                 </Discover>
                 """;
-        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+        SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL, Optional.of(Constants.SOAP_ACTION_DISCOVER),
                 SOAPUtil.envelop(request));
 
         verify(xmlaWs, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
@@ -150,7 +150,7 @@ class MsXmlAnalysisSoapTest {
         doReturn(discoverResponse).when(xmlaWs)
                 .discover(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 
-        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL,
                 Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(REQUEST_DISCOVER_DUMMY));
 
         XmlAssert xmlAssert = XMLUtil.createAssert(response);

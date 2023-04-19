@@ -13,7 +13,6 @@
 
 	<xsd:complexType name="rowset">
 		<xsd:sequence>
-			<!-- <xsd:element ref="xs:Schema" minOccurs="0" /> -->
 			<xsd:element name="row" minOccurs="0"
 				maxOccurs="unbounded" type="row" />
 			<xsd:element name="Exception" minOccurs="0"
