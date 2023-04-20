@@ -13,12 +13,15 @@
 */
 package org.eclipse.daanse.db.datasource.oracle11;
 
-import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
 
-    public static Properties transformConfig(Oracle11Config config) throws SQLException {
+    private Util() {
+        // constructor
+    }
+
+    public static Properties transformConfig(Oracle11Config config)  {
         Properties properties = new Properties();
 
         if (config.username() != null) {

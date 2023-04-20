@@ -468,7 +468,7 @@ public class SegmentBuilder {
             final BitSet nullValues;
             final int valueCount = bigValueCount.intValue();
             switch (datatype) {
-            case Integer:
+            case INTEGER:
                 final int[] ints = new int[valueCount];
                 nullValues = Util.bitSetBetween(0, valueCount);
                 for (Entry<CellKey, List<Object>> entry
@@ -492,7 +492,7 @@ public class SegmentBuilder {
                         ints,
                         axisList);
                   break;
-            case Numeric:
+            case NUMERIC:
                 final double[] doubles = new double[valueCount];
                 nullValues = Util.bitSetBetween(0, valueCount);
                 for (Entry<CellKey, List<Object>> entry

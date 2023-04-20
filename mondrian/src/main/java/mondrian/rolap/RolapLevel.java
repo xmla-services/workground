@@ -369,7 +369,7 @@ public class RolapLevel extends LevelBase {
             xmlLevel.closure(),
             createProperties(xmlLevel),
             (xmlLevel.uniqueMembers() ? FLAG_UNIQUE : 0),
-            org.eclipse.daanse.db.dialect.api.Datatype.valueOf(xmlLevel.type().getValue()),
+            org.eclipse.daanse.db.dialect.api.Datatype.fromValue(xmlLevel.type().getValue()),
             toInternalType(xmlLevel.internalType()),
             HideMemberCondition.valueOf(xmlLevel.hideMemberIf().getValue()),
             LevelType.valueOf(

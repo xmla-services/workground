@@ -1545,7 +1545,7 @@ public class RolapStar {
                     level,
                     level.getName(),
                     level.getNameExp(),
-                    Datatype.String,
+                    Datatype.STRING,
                     null,
                     null,
                     null,

@@ -35,7 +35,7 @@ public class DataSourceService extends AbstractDelegateDataSource<JtdsDataSource
     private JtdsDataSource ds;
 
     @Activate
-    public DataSourceService(JtdsConfig config) throws SQLException {
+    public DataSourceService(JtdsConfig config) {
         this.config = config;
         this.ds = new JtdsDataSource();
 

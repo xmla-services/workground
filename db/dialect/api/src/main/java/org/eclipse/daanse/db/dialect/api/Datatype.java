@@ -9,11 +9,13 @@
 */
 package org.eclipse.daanse.db.dialect.api;
 
+import java.util.stream.Stream;
+
 /**
  * Datatype of a column.
  */
 public enum Datatype {
-    String {
+    STRING("String") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -22,7 +24,7 @@ public enum Datatype {
         }
     },
 
-    Numeric {
+    NUMERIC("Numeric") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -36,7 +38,7 @@ public enum Datatype {
         }
     },
 
-    Integer {
+    INTEGER("Integer") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -50,7 +52,7 @@ public enum Datatype {
         }
     },
 
-    Boolean {
+    BOOLEAN("Boolean") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -59,7 +61,7 @@ public enum Datatype {
         }
     },
 
-    Date {
+    DATE("Date") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -68,7 +70,7 @@ public enum Datatype {
         }
     },
 
-    Time {
+    TIME("Time") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -77,7 +79,7 @@ public enum Datatype {
         }
     },
 
-    Timestamp {
+    TIMESTAMP("Timestamp") {
         @Override
 		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
@@ -85,6 +87,16 @@ public enum Datatype {
             dialect.quoteTimestampLiteral(buf, value);
         }
     };
+
+    private String value;
+
+    Datatype(java.lang.String value) {
+        this.value = value;
+    }
+
+    public java.lang.String getValue() {
+        return value;
+    }
 
     /**
      * Appends to a buffer a value of this type, in the appropriate format
@@ -106,5 +118,15 @@ public enum Datatype {
      */
     public boolean isNumeric() {
         return false;
+    }
+
+    public static Datatype fromValue(String v) {
+        return Stream.of(Datatype.values())
+            .filter(e -> (e.getValue().equals(v)))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                new StringBuilder("Datatype enum Illegal argument ").append(v)
+                    .toString())
+            );
     }
 }

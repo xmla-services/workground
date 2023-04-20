@@ -27,6 +27,7 @@ public enum Type {
     TIMESTAMP("TIMESTAMP"),
     TIME("TIME");
 
+    private static final String MSSQL = "MSSQL";
     /**
      * The name of this type. Immutable, and independent of the RDBMS.
      */
@@ -60,60 +61,59 @@ public enum Type {
             return value;
         }
         if (this == BOOLEAN) {
-            switch (dialect.getDialectName()) {
-                case "POSTGRES":
-                case "GREENPLUM":
-                case "LUCIDDB":
-                case "NETEZZA":
-                case "HSQLDB":
-                    return value;
-                case "MARIADB":
-                case "MYSQL":
-                case "INFOBRIGHT":
-                    return "TINYINT(1)";
-                case "MSSQL":
-                case "SYBASE":
-                    return "BIT";
-                default:
-                    return SMALLINT.value;
-            }
+            return getBooleanType(dialect);
         }
         if (this == LONG) {
-            switch (dialect.getDialectName()) {
-                case "ORACLE":
-                case "FIREBIRD":
-                    return "DECIMAL(15,0)";
-                default:
-                    return value;
+            if ("ORACLE".equals(dialect.getDialectName()) || "FIREBIRD".equals(dialect.getDialectName())) {
+                return "DECIMAL(15,0)";
+            } else {
+                return value;
             }
         }
         if (this == DATE) {
-            switch (dialect.getDialectName()) {
-                case "MSSQL":
-                    return "DATETIME";
-                case "INGRES":
-                    return "INGRESDATE";
-                default:
-                    return value;
-            }
+            return getDateType(dialect);
         }
         if (this == TIMESTAMP) {
-            switch (dialect.getDialectName()) {
-                case "MSSQL":
-                case "MARIADB":
-                case "MYSQL":
-                case "INFOBRIGHT":
-                case "SYBASE":
-                    return "DATETIME";
-                case "INGRES":
-                    return "INGRESDATE";
-                case "INFORMIX":
-                    return "DATETIME YEAR TO FRACTION(1)";
-                default:
-                    return value;
-            }
+            return getTymeStampType(dialect);
         }
         throw new AssertionError("unexpected type: " + value);
+    }
+
+    private String getBooleanType(Dialect dialect) {
+        switch (dialect.getDialectName()) {
+            case "POSTGRES", "GREENPLUM", "LUCIDDB", "NETEZZA", "HSQLDB":
+                return value;
+            case "MARIADB", "MYSQL", "INFOBRIGHT":
+                return "TINYINT(1)";
+            case MSSQL, "SYBASE":
+                return "BIT";
+            default:
+                return SMALLINT.value;
+        }
+    }
+
+    private String getDateType(Dialect dialect) {
+        switch (dialect.getDialectName()) {
+            case MSSQL:
+                return "DATETIME";
+            case "INGRES":
+                return "INGRESDATE";
+            default:
+                return value;
+        }
+    }
+
+    private String getTymeStampType(Dialect dialect) {
+        switch (dialect.getDialectName()) {
+            case MSSQL, "MARIADB", "MYSQL", "INFOBRIGHT", "SYBASE":
+                return "DATETIME";
+            case "INGRES":
+                return "INGRESDATE";
+            case "INFORMIX":
+                return "DATETIME YEAR TO FRACTION(1)";
+            default:
+                return value;
+        }
     }
 }
 

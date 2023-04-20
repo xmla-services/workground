@@ -13,12 +13,15 @@
 */
 package org.osgi.impl.service.jdbc.clickhouse.datasource;
 
-import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
 
-    public static Properties transformConfig(ClickHouseConfig config) throws SQLException {
+    private Util() {
+        // constructor
+    }
+
+    public static Properties transformConfig(ClickHouseConfig config) {
         Properties properties = new Properties();
 
         if (config.username() != null) {

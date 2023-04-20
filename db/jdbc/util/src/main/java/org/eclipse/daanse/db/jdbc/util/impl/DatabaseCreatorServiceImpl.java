@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 @Component(service = DatabaseCreatorService.class, scope = ServiceScope.SINGLETON)
 public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCreatorServiceImpl.class);
-    public static final String nl = System.getProperty("line.separator");
+    public static final String NL = System.getProperty("line.separator");
     @Reference
     private DialectResolver dialectResolver;
 
@@ -42,7 +42,7 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
         Optional<Dialect> optional = dialectResolver.resolve(dataSource);
         if (optional.isPresent()) {
             final Dialect dialect = optional.get();
-            try (Connection connection = dataSource.getConnection()) {
+            try (final Connection connection = dataSource.getConnection(); final Statement statement = connection.createStatement()) {
                 List<String> dropTableList = dbStructure.getTables().parallelStream()
                     .map(t -> dropTableSQL(t, dialect)).toList();
                 List<String> createTableList = dbStructure.getTables().parallelStream()
@@ -50,11 +50,10 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
                 List<String> createIndexList = dbStructure.getTables().parallelStream()
                     .flatMap(t -> createIndexSqls(t, dialect).stream()).toList();
 
-                final Statement statement = connection.createStatement();
-                StringBuilder sb = new StringBuilder("CREATE DATABASE IF NOT EXISTS ")
-                    .append(dbStructure.getName());
-                LOGGER.debug(sb.toString());
-                statement.execute(sb.toString());
+                String s = new StringBuilder("CREATE DATABASE IF NOT EXISTS ")
+                    .append(dbStructure.getName()).toString();
+                LOGGER.debug(s);
+                statement.execute(s);
                 connection.setAutoCommit(false);
                 for (String sql : dropTableList) {
                     LOGGER.debug(sql);
@@ -73,7 +72,7 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
 
             }
         } else {
-            throw new RuntimeException("Database dialect did not determinate");
+            throw new DatabaseCreatorException("Database dialect did not determinate");
         }
     }
 
@@ -109,24 +108,18 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
             } else {
                 buf.append(", ");
             }
-            buf.append(nl);
+            buf.append(NL);
             buf.append("    ").append(dialect.quoteIdentifier(column.getName()));
             buf.append(" ").append(column.getType().toPhysical(dialect));
-            //if (!column.getConstraint().equals("")) {
-            //    buf.append(" ").append(column.getConstraint());
-            //}
         }
 
         buf.append(")");
-        switch (dialect.getDialectName()) {
-            case "NEOVIEW":
+        if  ("NEOVIEW".equals(dialect.getDialectName())) {
                 // no unique keys defined
                 buf.append(" NO PARTITION");
         }
 
-        final String ddl = buf.toString();
-        return ddl;
-
+        return buf.toString();
     }
 
     /**
@@ -167,8 +160,7 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
             if ("TERADATA".equals(dialect.getDialectName())) {
                 buf.append(" ON ").append(dialect.quoteIdentifier(table.getSchemaName(), table.getTableName()));
             }
-            final String createDDL = buf.toString();
-            return createDDL;
+            return buf.toString();
 
         }).toList();
     }

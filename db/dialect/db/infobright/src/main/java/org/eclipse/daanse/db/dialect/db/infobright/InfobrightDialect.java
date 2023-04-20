@@ -32,7 +32,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class InfobrightDialect extends MySqlDialect {
 
-    Logger LOGGER = LoggerFactory.getLogger(InfobrightDialect.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InfobrightDialect.class);
     private static final String SUPPORTED_PRODUCT_NAME = "INFOBRIGHT";
 
     @Override

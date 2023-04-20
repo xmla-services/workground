@@ -17,6 +17,10 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class ConfigUtil {
 
+    private ConfigUtil() {
+        // constructor
+    }
+
     public static void configBase(MysqlDataSource ds, ConfigBase configuration) {
         if (configuration.username() != null) {
             ds.setUser(configuration.username());

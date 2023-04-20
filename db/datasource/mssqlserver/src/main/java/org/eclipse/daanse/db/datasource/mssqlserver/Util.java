@@ -13,12 +13,15 @@
 */
 package org.eclipse.daanse.db.datasource.mssqlserver;
 
-import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
 
-	public static Properties transformConfig(MsSqlConfig config) throws SQLException {
+    private Util() {
+        // constructor
+    }
+
+    public static Properties transformConfig(MsSqlConfig config) {
 		Properties properties = new Properties();
 
 		if (config.username() != null) {

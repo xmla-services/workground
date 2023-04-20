@@ -58,8 +58,8 @@ public abstract class JdbcDialectImpl implements Dialect {
     public static final String CASE_WHEN = "CASE WHEN ";
     public static final String DESC = " DESC";
     public static final String ASC = " ASC";
-    public static final String CASE_WHEN_ = "CASE WHEN ";
-    private static Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
+    public static final String CASE_WHEN_SPACE = "CASE WHEN ";
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
 
     /**
      * String used to quote identifiers.
@@ -69,7 +69,7 @@ public abstract class JdbcDialectImpl implements Dialect {
     /**
      * Product name per JDBC driver.
      */
-    private String productName="";;
+    private String productName="";
 
     /**
      * Product version per JDBC driver.
@@ -119,9 +119,9 @@ public abstract class JdbcDialectImpl implements Dialect {
     /**
      * The default mapping of java.sql.Types to SqlStatement.Type
      */
-    private static final Map<Types, BestFitColumnType> DEFAULT_TYPE_MAP;
+    private static final Map<Integer, BestFitColumnType> DEFAULT_TYPE_MAP;
     static {
-        Map typeMapInitial = new HashMap<Types, BestFitColumnType>();
+        Map<Integer, BestFitColumnType> typeMapInitial = new HashMap<>();
         typeMapInitial.put(Types.SMALLINT, BestFitColumnType.INT);
         typeMapInitial.put(Types.INTEGER, BestFitColumnType.INT);
         typeMapInitial.put(Types.BOOLEAN, BestFitColumnType.INT);
@@ -132,8 +132,8 @@ public abstract class JdbcDialectImpl implements Dialect {
         DEFAULT_TYPE_MAP = Collections.unmodifiableMap(typeMapInitial);
     }
 
-    private final String flagsRegexp = "^(\\(\\?([a-zA-Z]+)\\)).*$";
-    private final Pattern flagsPattern = Pattern.compile( flagsRegexp );
+    private static final String FLAGS_REGEXP = "^(\\(\\?([a-zA-Z]+)\\)).*$";
+    private static final Pattern flagsPattern = Pattern.compile(FLAGS_REGEXP);
 
 
     @Override
@@ -181,7 +181,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         try {
             return databaseMetaData.getMaxColumnNameLength();
         } catch (SQLException e) {
-            throw new RuntimeException(
+            throw new DialectException(
                 "while detecting maxColumnNameLength", e);
         }
     }
@@ -190,7 +190,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         try {
             return databaseMetaData.isReadOnly();
         } catch (SQLException e) {
-            throw new RuntimeException("while detecting isReadOnly", e);
+            throw new DialectException("while detecting isReadOnly", e);
         }
     }
 
@@ -198,7 +198,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         try {
             return databaseMetaData.getDatabaseProductName();
         } catch (SQLException e) {
-            throw new RuntimeException("while detecting database product", e);
+            throw new DialectException("while detecting database product", e);
         }
     }
 
@@ -213,7 +213,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                 ? null
                 : identifierString;
         } catch (SQLException e) {
-            throw new RuntimeException("while quoting identifier", e);
+            throw new DialectException("while quoting identifier", e);
         }
     }
 
@@ -222,7 +222,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         try {
             return databaseMetaData.getDatabaseProductVersion();
         } catch (SQLException e11) {
-            throw new RuntimeException(
+            throw new DialectException(
                 "while detecting database product version", e11);
         }
     }
@@ -261,7 +261,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                     // No harm in interpreting all such exceptions as 'this
                     // database does not support this type/concurrency
                     // combination'.
-                    throw new RuntimeException(e);
+                    throw new DialectException(e);
                 }
             }
         }
@@ -472,6 +472,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         quoteTimestampLiteral(buf, timestamp.toString(), timestamp);
     }
 
+    @SuppressWarnings("java:S1172")
     protected void quoteTimestampLiteral(
         StringBuilder buf,
         String value,
@@ -560,21 +561,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         // now.
         Integer[] maxLengths = new Integer[columnCount];
         if (cast) {
-            for (int i = 0; i < columnTypes.size(); i++) {
-                String columnType = columnTypes.get(i);
-                Datatype datatype = Datatype.valueOf(columnType);
-                if (datatype == Datatype.String) {
-                    int maxLen = -1;
-                    for (String[] strings : valueList) {
-                        if (strings[i] != null
-                            && strings[i].length() > maxLen)
-                        {
-                            maxLen = strings[i].length();
-                        }
-                    }
-                    maxLengths[i] = maxLen;
-                }
-            }
+            fillMaxLengthsArray(maxLengths, columnTypes, valueList);
         }
 
         for (int i = 0; i < valueList.size(); i++) {
@@ -583,35 +570,96 @@ public abstract class JdbcDialectImpl implements Dialect {
             }
             String[] values = valueList.get(i);
             buf.append("select ");
+            formSelectFieldsForInlineGeneric(buf, values, columnTypes, columnNames, maxLengths);
+            if (fromClause != null) {
+                buf.append(fromClause);
+            }
+        }
+        return buf;
+    }
+
+    private void formSelectFieldsForInlineGeneric(StringBuilder buf, String[] values, List<String> columnTypes, List<String> columnNames, Integer[] maxLengths) {
+        for (int j = 0; j < values.length; j++) {
+            String value = values[j];
+            if (j > 0) {
+                buf.append(", ");
+            }
+            final String columnType = columnTypes.get(j);
+            final String columnName = columnNames.get(j);
+            Datatype datatype = Datatype.fromValue(columnType);
+            final Integer maxLength = maxLengths[j];
+            if (maxLength != null) {
+                // Generate CAST for Teradata.
+                buf.append("CAST(");
+                quote(buf, value, datatype);
+                buf.append(" AS VARCHAR(").append(maxLength).append("))");
+            } else {
+                quote(buf, value, datatype);
+            }
+            if (allowsAs()) {
+                buf.append(" as ");
+            } else {
+                buf.append(' ');
+            }
+            quoteIdentifier(columnName, buf);
+        }
+
+    }
+
+    private void formSelectFieldsForInlineForAnsi(StringBuilder buf, List<String[]> valueList, List<String> columnTypes, String[] castTypes) {
+        for (int i = 0; i < valueList.size(); i++) {
+            if (i > 0) {
+                buf.append(", ");
+            }
+            String[] values = valueList.get(i);
+            buf.append("(");
             for (int j = 0; j < values.length; j++) {
                 String value = values[j];
                 if (j > 0) {
                     buf.append(", ");
                 }
                 final String columnType = columnTypes.get(j);
-                final String columnName = columnNames.get(j);
-                Datatype datatype = Datatype.valueOf(columnType);
-                final Integer maxLength = maxLengths[j];
-                if (maxLength != null) {
-                    // Generate CAST for Teradata.
+                Datatype datatype = Datatype.fromValue(columnType);
+                if (value == null) {
+                    String sqlType =
+                        guessSqlType(columnType, valueList, j);
+                    buf.append("CAST(NULL AS ")
+                        .append(sqlType)
+                        .append(")");
+                } else if (castTypes != null && castTypes[j] != null) {
                     buf.append("CAST(");
                     quote(buf, value, datatype);
-                    buf.append(" AS VARCHAR(").append(maxLength).append("))");
+                    buf.append(" AS ")
+                        .append(castTypes[j])
+                        .append(")");
                 } else {
                     quote(buf, value, datatype);
                 }
-                if (allowsAs()) {
-                    buf.append(" as ");
-                } else {
-                    buf.append(' ');
-                }
-                quoteIdentifier(columnName, buf);
             }
-            if (fromClause != null) {
-                buf.append(fromClause);
+            buf.append(")");
+        }
+    }
+
+    private void fillMaxLengthsArray(final Integer[] maxLengths, final List<String> columnTypes, final List<String[]> valueList) {
+        for (int i = 0; i < columnTypes.size(); i++) {
+            String columnType = columnTypes.get(i);
+            Datatype datatype = Datatype.fromValue(columnType);
+            if (datatype == Datatype.STRING) {
+                maxLengths[i] = getMaxLen(valueList, i);
             }
         }
-        return buf;
+    }
+
+    private Integer getMaxLen(List<String[]> valueList, int i) {
+        int maxLen = -1;
+        for (String[] strings : valueList) {
+            if (strings[i] != null
+                && strings[i].length() > maxLen)
+            {
+                maxLen = strings[i].length();
+            }
+        }
+        return maxLen;
     }
 
     /**
@@ -652,46 +700,9 @@ public abstract class JdbcDialectImpl implements Dialect {
         // column.
         String[] castTypes = null;
         if (cast) {
-            castTypes = new String[columnNames.size()];
-            for (int i = 0; i < columnNames.size(); i++) {
-                String columnType = columnTypes.get(i);
-                if (columnType.equals("String")) {
-                    castTypes[i] =
-                        guessSqlType(columnType, valueList, i);
-                }
-            }
+            castTypes = getCastTypes(columnNames, columnTypes, valueList);
         }
-        for (int i = 0; i < valueList.size(); i++) {
-            if (i > 0) {
-                buf.append(", ");
-            }
-            String[] values = valueList.get(i);
-            buf.append("(");
-            for (int j = 0; j < values.length; j++) {
-                String value = values[j];
-                if (j > 0) {
-                    buf.append(", ");
-                }
-                final String columnType = columnTypes.get(j);
-                Datatype datatype = Datatype.valueOf(columnType);
-                if (value == null) {
-                    String sqlType =
-                        guessSqlType(columnType, valueList, j);
-                    buf.append("CAST(NULL AS ")
-                        .append(sqlType)
-                        .append(")");
-                } else if (cast && castTypes[j] != null) {
-                    buf.append("CAST(");
-                    quote(buf, value, datatype);
-                    buf.append(" AS ")
-                        .append(castTypes[j])
-                        .append(")");
-                } else {
-                    quote(buf, value, datatype);
-                }
-            }
-            buf.append(")");
-        }
+        formSelectFieldsForInlineForAnsi(buf, valueList, columnTypes, castTypes);
         buf.append(") AS ");
         quoteIdentifier(alias, buf);
         buf.append(" (");
@@ -704,6 +715,19 @@ public abstract class JdbcDialectImpl implements Dialect {
         }
         buf.append(")");
         return buf;
+    }
+
+
+    private String[] getCastTypes(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        String[] castTypes = new String[columnNames.size()];
+        for (int i = 0; i < columnNames.size(); i++) {
+            String columnType = columnTypes.get(i);
+            if (columnType.equals("String")) {
+                castTypes[i] =
+                    guessSqlType(columnType, valueList, i);
+            }
+        }
+        return castTypes;
     }
 
     @Override
@@ -798,7 +822,7 @@ public abstract class JdbcDialectImpl implements Dialect {
      * {@link #generateOrderByNullsAnsi}.
      *
      * <p>This method is only called from
-     * {@link #generateOrderItem(String, boolean, boolean, boolean)}.
+     * {@link #generateOrderItem(CharSequence, boolean, boolean, boolean)}.
      * Some dialects override that method and therefore never call
      * this method.
      *
@@ -823,7 +847,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                     sb.append(DESC);
             }
         } else {
-            StringBuilder sb = new StringBuilder(CASE_WHEN_)
+            StringBuilder sb = new StringBuilder(CASE_WHEN_SPACE)
                 .append(expr).append(" IS NULL THEN 0 ELSE 1 END, ").append(expr);
             if (ascending) {
                 return
@@ -1059,7 +1083,7 @@ public abstract class JdbcDialectImpl implements Dialect {
      *
      * <p>It will first try to use
      * {@link DatabaseMetaData#getDatabaseProductName()} and match the
-     * name of {@link DatabaseProduct} passed as an argument.
+     * name of DatabaseProduct passed as an argument.
      *
      * <p>If that fails, it will try to execute <code>select version();</code>
      * and obtains some information directly from the server.
@@ -1091,13 +1115,10 @@ public abstract class JdbcDialectImpl implements Dialect {
             resultSet = statement.executeQuery("select version()");
             if (resultSet.next()) {
                 String version = resultSet.getString(1);
-                LOGGER.debug("Version=" + version);
-                if (version != null) {
-                    if (version.toLowerCase().contains(dbProduct)) {
-                        LOGGER.info(
-                            "Using {} dialect", databaseProduct);
-                        return true;
-                    }
+                LOGGER.debug("Version={}", version);
+                if (version != null && version.toLowerCase().contains(dbProduct)) {
+                    LOGGER.info("Using {} dialect", databaseProduct);
+                    return true;
                 }
             }
             LOGGER.debug("NOT Using {} dialect",  databaseProduct);
@@ -1134,7 +1155,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         try (Statement statement = connection.createStatement()){
             statement.execute(new StringBuilder("TRUNCATE TABLE ").append(quoteIdentifier(tableName, schemaName)).toString());
         } catch (SQLException e) {
-            throw new RuntimeException("clear table error", e);
+            throw new DialectException("clear table error", e);
         }
     }
 

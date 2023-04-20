@@ -38,7 +38,7 @@ public class NopStatisticsProvider implements StatisticsProvider {
 
     @Override
     public void initialize(DataSource dataSource, Dialect dialect) {
-        
+        // initializer
     }
 
     @Override

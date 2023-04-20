@@ -19,6 +19,10 @@ import org.sqlite.SQLiteConfig;
 
 public class Util {
 
+    private Util() {
+        // constructor
+    }
+
     public static SQLiteConfig transformConfig(SqliteConfig config) throws SQLException {
         SQLiteConfig c = new SQLiteConfig();
 

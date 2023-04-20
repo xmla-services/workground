@@ -909,7 +909,7 @@
             }
 
             public Datatype getDatatype() {
-                return Datatype.valueOf(type);
+                return Datatype.fromValue(type);
             }
         </Code>
     </Element>

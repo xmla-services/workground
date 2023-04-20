@@ -36,8 +36,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class OracleDialect extends JdbcDialectImpl {
 
-    private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
-    private final Pattern escapePattern = Pattern.compile(escapeRegexp);
+    private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
+    private static final Pattern escapePattern = Pattern.compile(ESCAPE_REGEXP);
     private static final String SUPPORTED_PRODUCT_NAME = "ORACLE";
 
     @Override

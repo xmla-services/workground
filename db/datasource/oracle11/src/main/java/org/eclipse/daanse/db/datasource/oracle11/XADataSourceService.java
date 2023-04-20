@@ -50,7 +50,7 @@ public class XADataSourceService extends AbstractDelegateXADataSource<OracleXADa
 
     @Override
     public XAConnectionBuilder createXAConnectionBuilder() throws SQLException {
-        return super.createXAConnectionBuilder().user(config._password()).password(config._password());
+        return super.createXAConnectionBuilder().user(config.username()).password(config._password());
     }
 
     @Override

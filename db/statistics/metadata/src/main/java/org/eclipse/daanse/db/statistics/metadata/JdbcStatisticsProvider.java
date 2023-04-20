@@ -5,7 +5,7 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-* 
+*
 * Contributors:
 *   SmartCity Jena - major API, docs, code-quality changes
 *   Stefan Bischof (bipolis.org)
@@ -38,7 +38,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     private static final int TYPE_COLUMN = 7;
     private static final int COLUMN_NAME = 9;
     private static final int CARDINALITY_COLUMN = 11;
-    Logger LOGGER = LoggerFactory.getLogger(JdbcStatisticsProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcStatisticsProvider.class);
     private DataSource dataSource;
 
     @Override
@@ -55,8 +55,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
                 final int type = resultSet.getInt(TYPE_COLUMN);
                 final int cardinality = resultSet.getInt(CARDINALITY_COLUMN);
                 final boolean unique = !resultSet.getBoolean(NONUNIQUE_COLUMN);
-                switch (type) {
-                case DatabaseMetaData.tableIndexStatistic:
+                if (type == DatabaseMetaData.tableIndexStatistic) {
                     return cardinality;
                 }
                 if (!unique) {
@@ -89,10 +88,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
 
             while (resultSet.next()) {
                 int type = resultSet.getInt(TYPE_COLUMN);
-                switch (type) {
-                case DatabaseMetaData.tableIndexStatistic:
-                    continue;
-                default:
+                if (type != DatabaseMetaData.tableIndexStatistic) {
                     String columnName = resultSet.getString(COLUMN_NAME);
                     if (columnName != null && columnName.equals(column)) {
                         return resultSet.getInt(CARDINALITY_COLUMN);

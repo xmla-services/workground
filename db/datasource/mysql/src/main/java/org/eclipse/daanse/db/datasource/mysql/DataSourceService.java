@@ -39,7 +39,7 @@ public class DataSourceService extends AbstractDelegateDataSource<MysqlDataSourc
     private MysqlDataSource ds;
 
     @Activate
-    public DataSourceService(Map<String, Object> coniguration) throws SQLException {
+    public DataSourceService(Map<String, Object> coniguration) {
         this.ds = new MysqlDataSource();
         this.config = CONVERTER.convert(coniguration)
                 .to(ConfigConnectionPooledDataSource.class);

@@ -36,7 +36,7 @@ public class ConnectionPoolDataSourceService
     private SQLServerConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(MsSqlConfig config) throws SQLException {
+    public ConnectionPoolDataSourceService(MsSqlConfig config) {
         this.ds = new SQLServerConnectionPoolDataSource();
         this.config = config;
     }

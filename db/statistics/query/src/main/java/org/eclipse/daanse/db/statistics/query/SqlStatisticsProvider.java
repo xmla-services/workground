@@ -91,7 +91,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
             }
             return CARDINALITY_UNKNOWN;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SqlStatisticsProviderException(e);
         }
     }
 

@@ -45,9 +45,9 @@ public class JdbcMetaData {
             db.productVersion = md.getDatabaseProductVersion();
             db.catalogName = conn.getCatalog();
 
-            LOGGER.debug("Catalog name = " + db.catalogName);
-            LOGGER.debug("Database Product Name: " + db.productName);
-            LOGGER.debug("Database Product Version: " + db.productVersion);
+            LOGGER.debug("Catalog name = {}", db.catalogName);
+            LOGGER.debug("Database Product Name: {}", db.productName);
+            LOGGER.debug("Database Product Version: {}", db.productVersion);
             LOGGER.debug("JdbcMetaData: initConnection - no error");
             setAllSchemas();
 
@@ -67,29 +67,24 @@ public class JdbcMetaData {
         ResultSet rs = null;
         boolean gotSchema = false;
         try {
-            try {
-                rs = md.getSchemas(db.catalogName, null);
-            } catch (SQLException | AbstractMethodError e) {
-                LOGGER.debug("Error retrieving schemas", e);
-                //teradata and jtds do not support passing a catalogName
-                rs = md.getSchemas();
-            }
+            rs = getSchemaResultSet();
             while (rs.next()) {
                 String schemaName = rs.getString("TABLE_SCHEM");
                 DbSchema dbs = new DbSchema();
                 dbs.name = schemaName;
-                LOGGER.debug("JdbcMetaData: setAllTables - " + dbs.name);
+                LOGGER.debug("JdbcMetaData: setAllTables - {}", dbs.name);
                 setAllTables(dbs);
                 db.addDbSchema(dbs);
                 gotSchema = true;
             }
         } catch (Exception e) {
             LOGGER.debug(
-                "Exception : Database does not support schemas." + e
-                    .getMessage());
+                "Exception : Database does not support schemas. {}", e.getMessage());
         } finally {
             try {
-                rs.close();
+                if (rs != null) {
+                    rs.close();
+                }
             } catch (Exception e) {
                 // ignore
             }
@@ -105,24 +100,23 @@ public class JdbcMetaData {
         }
     }
 
+    private ResultSet getSchemaResultSet() throws SQLException {
+        try {
+            return md.getSchemas(db.catalogName, null);
+        } catch (SQLException | AbstractMethodError e) {
+            LOGGER.debug("Error retrieving schemas", e);
+            //teradata and jtds do not support passing a catalogName
+            return md.getSchemas();
+        }
+    }
+
     /* set all tables in the currently connected database */
     private void setAllTables(DbSchema dbs) {
-        LOGGER.debug("JdbcMetaData: Loading schema: '" + dbs.name + "'");
+        LOGGER.debug("JdbcMetaData: Loading schema: '{}'", dbs.name);
         ResultSet rs = null;
         try {
             // Tables and views can be used
-            try {
-                rs = md.getTables(
-                    db.catalogName,
-                    dbs.name,
-                    null,
-                    new String[]{"TABLE", "VIEW"});
-            } catch (Exception e) {
-                // this is a workaround for databases that throw an exception
-                // when views are requested.
-                rs = md.getTables(
-                    db.catalogName, dbs.name, null, new String[]{"TABLE"});
-            }
+            rs = getTablesResultSet(dbs.name);
             ArrayList<String> tableNames = new ArrayList<>();
             while (rs.next()) {
                 String tableName = rs.getString("TABLE_NAME");
@@ -154,11 +148,7 @@ public class JdbcMetaData {
                                 dbt = new DbTable();
                             }
                         } finally {
-                            try {
-                                rsForeignKeys.close();
-                            } catch (Exception e) {
-                                // ignore
-                            }
+                            closeResultSet(rsForeignKeys);
                         }
                     } catch (Exception e) {
                         // this fails in some cases (Redshift)
@@ -171,7 +161,6 @@ public class JdbcMetaData {
                     dbt.name = tbname;
                     setPKey(dbt);
                     // Lazy loading
-                    // setColumns(dbt);
                     dbs.addDbTable(dbt);
                     db.addDbTable(dbt);
                 }
@@ -179,11 +168,32 @@ public class JdbcMetaData {
         } catch (Exception e) {
             LOGGER.error("setAllTables", e);
         } finally {
-            try {
+            closeResultSet(rs);
+        }
+    }
+
+    private void closeResultSet(ResultSet rs) {
+        try {
+            if (rs != null) {
                 rs.close();
-            } catch (Exception e) {
-                // ignore
             }
+        } catch (Exception e) {
+            // ignore
+        }
+    }
+
+    private ResultSet getTablesResultSet(String dbsName) throws SQLException {
+        try {
+            return md.getTables(
+                db.catalogName,
+                dbsName,
+                null,
+                new String[]{"TABLE", "VIEW"});
+        } catch (Exception e) {
+            // this is a workaround for databases that throw an exception
+            // when views are requested.
+            return md.getTables(
+                db.catalogName, dbsName, null, new String[]{"TABLE"});
         }
     }
 
@@ -196,8 +206,7 @@ public class JdbcMetaData {
         try {
             rs = md.getPrimaryKeys(db.catalogName, dbt.schemaName, dbt.name);
             if (rs.next()) {
-                //   // a column may have been given a primary key name
-                //===dbt.pk = rs.getString("PK_NAME");
+                // a column may have been given a primary key name
                 // We need the column name which is primary key for the given
                 // table.
                 dbt.pk = rs.getString("column_name");
@@ -206,7 +215,9 @@ public class JdbcMetaData {
             LOGGER.error("setPKey", e);
         } finally {
             try {
-                rs.close();
+                if (rs != null) {
+                    rs.close();
+                }
             } catch (Exception e) {
                 // ignore
             }
@@ -214,20 +225,15 @@ public class JdbcMetaData {
     }
 
     private void setColumns(String schemaName, String tableName) {
-        LOGGER.debug(
-            "setColumns: <" + tableName + "> in schema <" + schemaName + ">");
+        LOGGER.debug("setColumns: <{}> in schema <{}>", tableName, schemaName);
         DbTable dbt = db.getTable(schemaName, tableName);
         if (dbt == null) {
             LOGGER.debug(
-                "No table with name: <"
-                    + tableName
-                    + "> in schema <"
-                    + schemaName
-                    + ">");
+                "No table with name: <{}> in schema <{}>", tableName, schemaName);
             return;
         }
         setColumns(dbt);
-        LOGGER.debug("got " + dbt.colsDataType.size() + " columns");
+        LOGGER.debug("got {} columns", dbt.colsDataType.size());
     }
 
     /**
@@ -254,7 +260,9 @@ public class JdbcMetaData {
             LOGGER.error("setColumns", e);
         } finally {
             try {
-                rs.close();
+                if (rs != null) {
+                    rs.close();
+                }
             } catch (Exception e) {
                 // ignore
             }
@@ -443,29 +451,37 @@ public class JdbcMetaData {
         }
 
         private List<String> getAllTables(String sname, boolean factOnly) {
-            List<String> v = new ArrayList<>();
-
             if (sname == null || sname.equals("")) {
-                // return a list of "schemaname -> table name" string objects
-                for (TableTracker tt : tables.values()) {
-                    for (DbTable t : tt.namedTable) {
-                        if (!factOnly || (factOnly && t instanceof FactTable)) {
-                            if (t.schemaName == null) {
-                                v.add(t.name);
-                            } else {
-                                v.add(t.schemaName + LEVEL_SEPARATOR + t.name);
-                            }
-                        }
+                return getAllTablesForEmptySchemaName(factOnly);
+            } else {
+                return getAllTablesForSchemaName(sname, factOnly);
+            }
+        }
+
+        private List<String> getAllTablesForSchemaName(String sname, boolean factOnly) {
+            List<String> v = new ArrayList<>();
+            // return a list of "tablename" string objects
+            DbSchema s = getSchema(sname);
+            if (s != null) {
+                for (DbTable t : s.tables.values()) {
+                    if (!factOnly || (t instanceof FactTable)) {
+                        v.add(t.name);
                     }
                 }
-            } else {
-                // return a list of "tablename" string objects
-                DbSchema s = getSchema(sname);
+            }
+            return v;
+        }
 
-                if (s != null) {
-                    for (DbTable t : s.tables.values()) {
-                        if (!factOnly || (factOnly && t instanceof FactTable)) {
+        private List<String> getAllTablesForEmptySchemaName(boolean factOnly) {
+            List<String> v = new ArrayList<>();
+            // return a list of "schemaname -> table name" string objects
+            for (Database.TableTracker tt : tables.values()) {
+                for (DbTable t : tt.namedTable) {
+                    if (!factOnly || (t instanceof FactTable)) {
+                        if (t.schemaName == null) {
                             v.add(t.name);
+                        } else {
+                            v.add(t.schemaName + LEVEL_SEPARATOR + t.name);
                         }
                     }
                 }
@@ -516,12 +532,11 @@ public class JdbcMetaData {
 
     public class DbColumn {
 
-        public String name;
-        public int dataType;
-        public String typeName;
-        public int columnSize;
-        public int decimalDigits;
-
+        String name;
+        int dataType;
+        String typeName;
+        int columnSize;
+        int decimalDigits;
     }
 
     class DbTable {
