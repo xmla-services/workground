@@ -35,7 +35,7 @@ public class DataSourceService extends AbstractDelegateDataSource<SQLServerDataS
     private SQLServerDataSource ds;
 
     @Activate
-    public DataSourceService(MsSqlConfig config) throws SQLException {
+    public DataSourceService(MsSqlConfig config) {
         this.ds = new SQLServerDataSource();
         this.config = config;
     }

@@ -900,7 +900,7 @@ Revision is $Id$
             }
 
             public org.eclipse.daanse.db.dialect.api.Datatype getDatatype() {
-                return org.eclipse.daanse.db.dialect.api.Datatype.valueOf(type);
+                return org.eclipse.daanse.db.dialect.api.Datatype.fromValue(type);
             }
         </Code>
     </Element>

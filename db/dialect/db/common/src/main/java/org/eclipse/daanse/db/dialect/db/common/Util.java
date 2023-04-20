@@ -25,6 +25,10 @@ import java.sql.Statement;
 
 public class Util {
 
+    private Util() {
+        //constructor
+    }
+
 // TODO remove this class to common
     /**
      * Encloses a value in single-quotes, to make a SQL string value. Examples:
@@ -45,7 +49,7 @@ public class Util {
     public static void singleQuoteString(String val, StringBuilder buf) {
         buf.append('\'');
 
-        String s0 = val.replaceAll("'", "''");
+        String s0 = val.replace("'", "''");
         buf.append(s0);
 
         buf.append('\'');
@@ -74,7 +78,7 @@ public class Util {
                     statement = resultSet.getStatement();
                 }
                 resultSet.close();
-            } catch (Throwable t) {
+            } catch (SQLException t) {
                 firstException = new SQLException();
                 firstException.initCause(t);
             }
@@ -82,7 +86,7 @@ public class Util {
         if (statement != null) {
             try {
                 statement.close();
-            } catch (Throwable t) {
+            } catch (SQLException t) {
                 if (firstException == null) {
                     firstException = new SQLException();
                     firstException.initCause(t);
@@ -92,7 +96,7 @@ public class Util {
         if (connection != null) {
             try {
                 connection.close();
-            } catch (Throwable t) {
+            } catch (SQLException t) {
                 if (firstException == null) {
                     firstException = new SQLException();
                     firstException.initCause(t);

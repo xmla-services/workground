@@ -18,6 +18,13 @@
  */
 package org.eclipse.daanse.db.dialect.resolver.basic;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectResolver;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.AbstractMap;
@@ -27,16 +34,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import javax.sql.DataSource;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link DialectResolver} that:<br>
@@ -51,7 +48,6 @@ import org.slf4j.LoggerFactory;
 @Component(service = DialectResolver.class)
 public class UncachedBestCompatibleDialectResolver implements DialectResolver {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UncachedBestCompatibleDialectResolver.class);
     private List<Dialect> dialects = new ArrayList<>();
 
     @Reference(service = Dialect.class, cardinality = ReferenceCardinality.MULTIPLE )
@@ -84,7 +80,7 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     }
 
     private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(Connection c) {
-        return dialect -> new AbstractMap.SimpleEntry(dialect, dialect.initialize(c));
+        return dialect -> new AbstractMap.SimpleEntry<Dialect, Boolean>(dialect, dialect.initialize(c));
     }
 
     private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {

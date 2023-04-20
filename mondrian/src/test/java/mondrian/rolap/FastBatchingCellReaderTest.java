@@ -1585,26 +1585,26 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 3.5, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
+    assertEquals( 3.5, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
+    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
+      RolapAggregator.Sum.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 4.6, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
+    assertEquals( 4.6, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
-    assertEquals( 5, RolapAggregator.Sum.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
+    assertEquals( 5, RolapAggregator.Sum.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
+    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
+      RolapAggregator.Sum.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
+    assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }
 
   @ParameterizedTest
@@ -1624,26 +1624,26 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 0.0, RolapAggregator.Min.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
+    assertEquals( 0.0, RolapAggregator.Min.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
+    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
+      RolapAggregator.Min.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 1.9, RolapAggregator.Min.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
+    assertEquals( 1.9, RolapAggregator.Min.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
-    assertEquals( 0, RolapAggregator.Min.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
+    assertEquals( 0, RolapAggregator.Min.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
+    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
+      RolapAggregator.Min.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
+    assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }
 
   @ParameterizedTest
@@ -1664,27 +1664,27 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 2.4, RolapAggregator.Max.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
-    assertEquals( -1.2, RolapAggregator.Max.aggregate( Arrays.asList( dblSet5 ), Datatype.Numeric ) );
+    assertEquals( 2.4, RolapAggregator.Max.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
+    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
+    assertEquals( -1.2, RolapAggregator.Max.aggregate( Arrays.asList( dblSet5 ), Datatype.NUMERIC) );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
+      RolapAggregator.Max.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 2.7, RolapAggregator.Max.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
+    assertEquals( 2.7, RolapAggregator.Max.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
-    assertEquals( 4, RolapAggregator.Max.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
+    assertEquals( 4, RolapAggregator.Max.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
+    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
+      RolapAggregator.Max.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 7, RolapAggregator.Max.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
+    assertEquals( 7, RolapAggregator.Max.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }
 
   /**

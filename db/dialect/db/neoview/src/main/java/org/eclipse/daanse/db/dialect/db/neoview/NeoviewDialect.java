@@ -35,7 +35,7 @@ public class NeoviewDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    public boolean _supportsOrderByNullsLast() {
+    public boolean supportsOrderByNullsLast() {
         return true;
     }
 

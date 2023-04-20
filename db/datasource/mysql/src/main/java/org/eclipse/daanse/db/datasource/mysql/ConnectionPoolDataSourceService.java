@@ -39,7 +39,7 @@ public class ConnectionPoolDataSourceService
     private MysqlConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(Map<String, Object> coniguration) throws SQLException {
+    public ConnectionPoolDataSourceService(Map<String, Object> coniguration) {
         this.ds = new MysqlConnectionPoolDataSource();
         this.config = CONVERTER.convert(coniguration)
                 .to(ConfigConnectionPooledDataSource.class);

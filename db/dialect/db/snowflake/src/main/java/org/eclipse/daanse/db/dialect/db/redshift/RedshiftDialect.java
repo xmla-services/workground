@@ -51,7 +51,7 @@ public class RedshiftDialect extends PostgreSqlDialect {
     @Override
     public void quoteStringLiteral(StringBuilder buf, String value) {
         // '\' to '\\'
-        Util.singleQuoteString(value.replaceAll("\\\\", "\\\\\\\\"), buf);
+        Util.singleQuoteString(value.replace("\\\\", "\\\\\\\\"), buf);
     }
 
     @Override

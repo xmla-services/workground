@@ -302,26 +302,26 @@ public class JdbcSchema {
         case Types.TINYINT:
         case Types.SMALLINT:
         case Types.INTEGER:
-            return Datatype.Integer;
+            return Datatype.INTEGER;
         case Types.FLOAT:
         case Types.REAL:
         case Types.DOUBLE:
         case Types.NUMERIC:
         case Types.DECIMAL:
         case Types.BIGINT:
-            return Datatype.Numeric;
+            return Datatype.NUMERIC;
         case Types.BOOLEAN:
-            return Datatype.Boolean;
+            return Datatype.BOOLEAN;
         case Types.DATE:
-            return Datatype.Date;
+            return Datatype.DATE;
         case Types.TIME:
-            return Datatype.Time;
+            return Datatype.TIME;
         case Types.TIMESTAMP:
-            return Datatype.Timestamp;
+            return Datatype.TIMESTAMP;
         case Types.CHAR:
         case Types.VARCHAR:
         default:
-            return Datatype.String;
+            return Datatype.STRING;
         }
     }
 

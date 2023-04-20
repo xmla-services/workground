@@ -75,11 +75,7 @@ public class GreenplumDialect extends PostgreSqlDialect {
     @Override
     public boolean allowsRegularExpressionInWhereClause() {
         // Support for regexp was added in GP 3.2+
-        if (productVersion.compareTo("3.2") >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return productVersion.compareTo("3.2") >= 0;
     }
 
     @Override

@@ -102,5 +102,5 @@ public interface CsvDataLoadServiceConfig {
     @AttributeDefinition(description = "batchSize")
     default int batchSize() {
         return 1000;
-    };
+    }
 }

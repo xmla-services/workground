@@ -35,7 +35,7 @@ public class XADataSourceService extends AbstractDelegateXADataSource<SQLServerX
     private SQLServerXADataSource ds;
 
     @Activate
-    public XADataSourceService(MsSqlConfig config) throws SQLException {
+    public XADataSourceService(MsSqlConfig config) {
         this.ds = new SQLServerXADataSource();
         this.config = config;
     }
@@ -49,7 +49,7 @@ public class XADataSourceService extends AbstractDelegateXADataSource<SQLServerX
 
     @Override
     public XAConnectionBuilder createXAConnectionBuilder() throws SQLException {
-        return super.createXAConnectionBuilder().user(config._password()).password(config._password());
+        return super.createXAConnectionBuilder().user(config.username()).password(config._password());
     }
 
     @Override

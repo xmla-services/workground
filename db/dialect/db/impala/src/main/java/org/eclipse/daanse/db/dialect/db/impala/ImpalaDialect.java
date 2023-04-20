@@ -34,10 +34,13 @@ import aQute.bnd.annotation.spi.ServiceProvider;
         "database.product:String='IMPALA'" })
 @Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class ImpalaDialect extends HiveDialect {
-    private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
-    private final Pattern escapePattern = Pattern.compile(escapeRegexp);
+
+    private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
+    private static final Pattern escapePattern = Pattern.compile(ESCAPE_REGEXP);
 
     private static final String SUPPORTED_PRODUCT_NAME = "IMPALA";
+    public static final String CAST = "cast(";
+    public static final String AS_STRING = " as string)";
 
     @Override
     protected boolean isSupportedProduct(String productName, String productVersion) {
@@ -46,7 +49,6 @@ public class ImpalaDialect extends HiveDialect {
 
     @Override
     public boolean initialize(Connection connection) {
-        // TODO Auto-generated method stub
         return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
     }
 
@@ -130,10 +132,10 @@ public class ImpalaDialect extends HiveDialect {
         String s0 = value;
 
         if (s0.contains("\\")) {
-            s0.replaceAll("\\\\", "\\\\");
+            s0 = s0.replace("\\\\", "\\\\");
         }
         if (s0.contains(quote)) {
-            s0 = s0.replaceAll(quote, "\\\\" + quote);
+            s0 = s0.replace(quote, "\\\\" + quote);
         }
 
         buf.append(quote);
@@ -173,15 +175,15 @@ public class ImpalaDialect extends HiveDialect {
 
         final StringBuilder sb = new StringBuilder();
         // Now build the string.
-        sb.append("cast(");
+        sb.append(CAST);
         sb.append(source);
-        sb.append(" as string)");
+        sb.append(AS_STRING);
         sb.append(" IS NOT NULL AND ");
         if (caseSensitive) {
-            sb.append("cast(").append(source).append(" as string)");
+            sb.append(CAST).append(source).append(AS_STRING);
         } else {
             sb.append("UPPER(");
-            sb.append("cast(").append(source).append(" as string)");
+            sb.append(CAST).append(source).append(AS_STRING);
             sb.append(")");
         }
         sb.append(" REGEXP ");

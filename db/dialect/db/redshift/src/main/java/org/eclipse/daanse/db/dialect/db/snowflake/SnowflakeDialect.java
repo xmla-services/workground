@@ -49,7 +49,7 @@ public class SnowflakeDialect extends JdbcDialectImpl {
 
     @Override
     public void quoteStringLiteral(StringBuilder buf, String s) {
-        Util.singleQuoteString(s.replaceAll("\\\\", "\\\\\\\\"), buf);
+        Util.singleQuoteString(s.replace("\\\\", "\\\\\\\\"), buf);
     }
 
     @Override

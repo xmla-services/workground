@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectException;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.osgi.service.component.annotations.Component;
@@ -45,9 +46,9 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MySqlDialect extends JdbcDialectImpl {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(MySqlDialect.class);
-    private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
-    private final Pattern escapePattern = Pattern.compile(escapeRegexp);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MySqlDialect.class);
+    private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
+    private static final Pattern escapePattern = Pattern.compile(ESCAPE_REGEXP);
 
     private static final String SUPPORTED_PRODUCT_NAME = "MYSQL";
 
@@ -96,7 +97,7 @@ public class MySqlDialect extends JdbcDialectImpl {
             }
         } catch (SQLException e) {
             // throw Util.newInternal(
-            throw new RuntimeException("while running query to detect Brighthouse engine", e);
+            throw new DialectException("while running query to detect Brighthouse engine", e);
         } finally {
             if (statement != null) {
                 try {

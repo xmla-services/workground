@@ -190,11 +190,11 @@ public class RolapBaseCubeMeasure
     public Datatype getDatatype() {
         Object datatype = getPropertyValue(Property.DATATYPE.name);
         try {
-            return Datatype.valueOf((String) datatype);
+            return Datatype.fromValue((String) datatype);
         } catch (ClassCastException e) {
-            return Datatype.String;
+            return Datatype.STRING;
         } catch (IllegalArgumentException e) {
-            return Datatype.String;
+            return Datatype.STRING;
         }
     }
 }

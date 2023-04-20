@@ -40,8 +40,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     @Override
 	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
-        case Integer:
-        case Numeric:
+        case INTEGER:
+        case NUMERIC:
           return true;
         default:
           return false;
@@ -52,7 +52,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
 	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
-        case Integer:
+        case INTEGER:
           int sumInt = Integer.MIN_VALUE;
           for ( Object data : rawData ) {
             if ( data != null ) {
@@ -66,7 +66,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
             }
           }
           return sumInt == Integer.MIN_VALUE ? null : sumInt;
-        case Numeric:
+        case NUMERIC:
           double sumDouble = Double.MIN_VALUE;
           for ( Object data : rawData ) {
             if ( data != null ) {
@@ -105,8 +105,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     @Override
 	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
-        case Integer:
-        case Numeric:
+        case INTEGER:
+        case NUMERIC:
           return true;
         default:
           return false;
@@ -117,7 +117,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
 	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
-        case Integer:
+        case INTEGER:
           int minInt = Integer.MAX_VALUE;
           for ( Object data : rawData ) {
             if ( data != null ) {
@@ -125,7 +125,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
             }
           }
           return minInt == Integer.MAX_VALUE ? null : minInt;
-        case Numeric:
+        case NUMERIC:
           double minDouble = Double.MAX_VALUE;
           for ( Object data : rawData ) {
             if ( data != null ) {
@@ -149,8 +149,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     @Override
 	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
-        case Integer:
-        case Numeric:
+        case INTEGER:
+        case NUMERIC:
           return true;
         default:
           return false;
@@ -161,7 +161,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
 	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
-        case Integer:
+        case INTEGER:
           int maxInt = Integer.MIN_VALUE;
           for ( Object data : rawData ) {
             if ( data != null ) {
@@ -169,7 +169,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
             }
           }
           return maxInt == Integer.MIN_VALUE ? null : maxInt;
-        case Numeric:
+        case NUMERIC:
           double maxDouble = Double.NEGATIVE_INFINITY;
           for ( Object data : rawData ) {
             if ( data != null ) {
