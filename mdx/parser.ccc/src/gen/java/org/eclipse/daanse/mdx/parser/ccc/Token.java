@@ -55,7 +55,8 @@ public class Token implements Node.TerminalNode {
 
     private MdxLexer tokenSource;
     private TokenType type = TokenType.DUMMY;
-    private int beginOffset, endOffset;
+    private int beginOffset;
+    private int endOffset;
     private boolean unparsed;
     private Node parent;
     private String image;
