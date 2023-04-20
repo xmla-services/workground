@@ -25,14 +25,14 @@ import jakarta.xml.bind.annotation.XmlType;
 public class Statement {
 
   @XmlElement(name = "Statement")
-  protected String statement;
+  protected String statementValue;
 
-  public String getStatement() {
-    return statement;
+  public String getStatementValue() {
+    return statementValue;
   }
 
-  public void setStatement(String value) {
-    this.statement = value;
+  public void setStatementValue(String value) {
+    this.statementValue = value;
   }
 
 }

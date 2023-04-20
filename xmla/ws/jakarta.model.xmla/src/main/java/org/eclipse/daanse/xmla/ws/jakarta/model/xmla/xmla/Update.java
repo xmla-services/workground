@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class Update {
 
     @XmlElement(name = "Object", required = true)
-    protected Object object;
+    protected XmlaObject object;
     @XmlElement(name = "Attributes")
     protected Update.Attributes attributes;
     @XmlElement(name = "MoveWithDescendants")
@@ -37,11 +37,11 @@ public class Update {
     @XmlElement(name = "Where", required = true)
     protected Where where;
 
-    public Object getObject() {
+    public XmlaObject getObject() {
         return object;
     }
 
-    public void setObject(Object value) {
+    public void setObject(XmlaObject value) {
         this.object = value;
     }
 

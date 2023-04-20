@@ -27,15 +27,15 @@ import jakarta.xml.bind.annotation.XmlType;
 public class Insert {
 
     @XmlElement(name = "Object", required = true)
-    protected Object object;
+    protected XmlaObject object;
     @XmlElement(name = "Attributes")
     protected Insert.Attributes attributes;
 
-    public Object getObject() {
+    public XmlaObject getObject() {
         return object;
     }
 
-    public void setObject(Object value) {
+    public void setObject(XmlaObject value) {
         this.object = value;
     }
 

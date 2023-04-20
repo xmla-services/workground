@@ -20,11 +20,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import jakarta.xml.soap.SOAPException;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
@@ -111,6 +113,8 @@ import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
 
 import jakarta.xml.soap.SOAPMessage;
+
+import javax.xml.transform.TransformerException;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -233,7 +237,8 @@ class DiscoverResponseTest {
         """;
 
     @Test
-    void testDiscoverDataSources(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverDataSources(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
         DiscoverDataSourcesResponseRowR row = new DiscoverDataSourcesResponseRowR("dataSourceName",
             Optional.of("dataSourceDescription"), Optional.of("url"),
             Optional.of("dataSourceInfo"), "providerName",
@@ -264,7 +269,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverEnumerators(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverEnumerators(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverEnumeratorsResponseRowR row = new DiscoverEnumeratorsResponseRowR("enumName",
             Optional.of("enumDescription"), "enumType", "elementName",
@@ -295,7 +301,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverKeywords(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverKeywords(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverKeywordsResponseRowR row = new DiscoverKeywordsResponseRowR("keyword");
 
@@ -317,7 +324,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverLiterals(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverLiterals(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverLiteralsResponseRowR row = new DiscoverLiteralsResponseRowR("literalName",
             "literalValue", "literalInvalidChars", "literalInvalidStartingChars",
@@ -346,7 +354,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverProperties(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverProperties(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverPropertiesResponseRowR row = new DiscoverPropertiesResponseRowR("DbpropMsmdSubqueries",
             Optional.of("An enumeration value that determines the behavior of subqueries."), Optional.of("Integer"),
@@ -390,7 +399,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverSchemaRowSets(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverSchemaRowSets(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverSchemaRowsetsResponseRowR row = new DiscoverSchemaRowsetsResponseRowR(SCHEMA_NAME_LOW,
             Optional.of("schemaGuid"), Optional.of("restrictions"), Optional.of(DESCRIPTION_LOW), Optional.of(10l));
@@ -414,7 +424,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDiscoverXmlMetadata(@InjectService XmlaService xmlaService) throws Exception {
+    void testDiscoverXmlMetadata(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DiscoverXmlMetaDataResponseRowR row = new DiscoverXmlMetaDataResponseRowR("metaData");
 
@@ -437,7 +448,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbschemaCatalogs(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaCatalogs(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaCatalogsResponseRowR row = new DbSchemaCatalogsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -477,7 +489,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbschemaColumns(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaColumns(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaColumnsResponseRowR row = new DbSchemaColumnsResponseRowR(
             Optional.of(TABLE_CATALOG_LOW),
@@ -557,7 +570,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbschemaProviderTypes(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaProviderTypes(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaProviderTypesResponseRowR row = new DbSchemaProviderTypesResponseRowR(
             Optional.of("typeName"),
@@ -620,7 +634,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbschemaSchemata(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaSchemata(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaSchemataResponseRowR row = new DbSchemaSchemataResponseRowR(
             CATALOG_NAME_LOW,
@@ -647,7 +662,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbschemaSourceTables(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbschemaSourceTables(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaSourceTablesResponseRowR row = new DbSchemaSourceTablesResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -677,7 +693,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbSchemaTables(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaTables(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaTablesResponseRowR row = new DbSchemaTablesResponseRowR(
             Optional.of(TABLE_CATALOG_LOW),
@@ -716,7 +733,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testDbSchemaTablesInfo(@InjectService XmlaService xmlaService) throws Exception {
+    void testDbSchemaTablesInfo(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         DbSchemaTablesInfoResponseRowR row = new DbSchemaTablesInfoResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -766,7 +784,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaActions(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaActions(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaActionsResponseRowR row = new MdSchemaActionsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -811,7 +830,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaCubes(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaCubes(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaCubesResponseRowR row = new MdSchemaCubesResponseRowR(
             CATALOG_NAME_LOW,
@@ -871,7 +891,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaDimensions(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaDimensions(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaDimensionsResponseRowR row = new MdSchemaDimensionsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -928,7 +949,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaFunctions(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaFunctions(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         List<ParameterInfo> parameterInfoList = List.of(new ParameterInfoR(
             "name",
@@ -985,7 +1007,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaHierarchies(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaHierarchies(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaHierarchiesResponseRowR row = new MdSchemaHierarchiesResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1064,7 +1087,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaKpis(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaKpis(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaKpisResponseRowR row = new MdSchemaKpisResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1125,7 +1149,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaLevels(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaLevels(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaLevelsResponseRowR row = new MdSchemaLevelsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1198,7 +1223,7 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaMeasuregroupDimensions(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasuregroupDimensions(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
 
         List<MeasureGroupDimension> list = List.of(new MeasureGroupDimensionR("measureGroupDimension"));
         MdSchemaMeasureGroupDimensionsResponseRowR row = new MdSchemaMeasureGroupDimensionsResponseRowR(
@@ -1244,7 +1269,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaMeasuregroups(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasuregroups(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaMeasureGroupsResponseRowR row = new MdSchemaMeasureGroupsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1282,7 +1308,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaMeasures(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMeasures(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaMeasuresResponseRowR row = new MdSchemaMeasuresResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1346,7 +1373,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaMembers(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaMembers(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaMembersResponseRowR row = new MdSchemaMembersResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1416,7 +1444,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaProperties(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaProperties(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaPropertiesResponseRowR row = new MdSchemaPropertiesResponseRowR(
             Optional.of(CATALOG_NAME_LOW),
@@ -1488,7 +1517,8 @@ class DiscoverResponseTest {
     }
 
     @Test
-    void testMdSchemaSets(@InjectService XmlaService xmlaService) throws Exception {
+    void testMdSchemaSets(@InjectService XmlaService xmlaService) throws SOAPException, IOException,
+        TransformerException {
 
         MdSchemaSetsResponseRowR row = new MdSchemaSetsResponseRowR(
             Optional.of(CATALOG_NAME_LOW),

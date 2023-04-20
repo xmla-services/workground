@@ -56,8 +56,8 @@ public class SOAPUtil {
 
             /* Print the request message, just for debugging purposes */
             logger.error("Request SOAP Message:\n");
-
-            logger.error(pretty(string(message)));
+            String errorStr = pretty(string(message));
+            logger.error(errorStr);
 
             // Create SOAP Connection
 
@@ -70,7 +70,8 @@ public class SOAPUtil {
             // Print the SOAP Response
 
             logger.debug("Response SOAP Message:\n");
-            logger.debug(pretty(string(response)));
+            String str = pretty(string(response));
+            logger.debug(str);
 
             connection.close();
 

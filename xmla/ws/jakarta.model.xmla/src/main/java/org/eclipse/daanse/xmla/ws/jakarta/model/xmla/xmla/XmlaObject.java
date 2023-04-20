@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "Object", propOrder = {
 
 })
-public class Object {
+public class XmlaObject {
 
   @XmlElement(name = "Database", required = true)
   protected String database;

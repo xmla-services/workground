@@ -82,7 +82,6 @@ import org.eclipse.daanse.xmla.api.xmla.UpdateCells;
 import org.eclipse.daanse.xmla.api.xmla.Where;
 import org.eclipse.daanse.xmla.api.xmla.WhereAttribute;
 import org.eclipse.daanse.xmla.api.xmla.WriteBackTableCreation;
-import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
 import org.eclipse.daanse.xmla.model.record.engine.ImpersonationInfoR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttachR;
@@ -137,7 +136,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.UpdateR;
 import org.eclipse.daanse.xmla.model.record.xmla.WhereAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.WhereR;
 import org.eclipse.daanse.xmla.model.record.xmla.XmlaObjectR;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.XmlaObject;
 import org.eclipse.daanse.xmla.api.xmla.Process;
 
 public class CommandConvertor {
@@ -720,7 +719,7 @@ public class CommandConvertor {
 
 	}
 
-	private static XmlaObject convertObject(Object object) {
+	private static org.eclipse.daanse.xmla.api.xmla.XmlaObject convertObject(XmlaObject object) {
 		if (object != null) {
 			return new XmlaObjectR(object.getDatabase(), object.getCube(), object.getDimension());
 		}
