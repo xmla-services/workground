@@ -16,19 +16,23 @@ package org.eclipse.daanse.xmla.ws.tck;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import jakarta.xml.soap.SOAPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -43,7 +47,7 @@ public class XMLUtil {
         //constructor
     }
 
-    public static XmlAssert createAssert(SOAPMessage response) throws Exception {
+    public static XmlAssert createAssert(SOAPMessage response) throws SOAPException, IOException, TransformerException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         response.writeTo(baos);
         String result = new String(baos.toByteArray());
@@ -65,12 +69,14 @@ public class XMLUtil {
         return xmlAssert;
     }
 
-    public static String pretty(String xmlData) throws Exception {
+    public static String pretty(String xmlData) throws TransformerException {
         return pretty(xmlData, 2);
     }
 
-    public static String pretty(String xmlData, int indent) throws Exception {
+    public static String pretty(String xmlData, int indent) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
         transformerFactory.setAttribute("indent-number", indent);
 
         Transformer transformer = transformerFactory.newTransformer();
@@ -88,6 +94,8 @@ public class XMLUtil {
 
     public static Document stringToDocument(String xmlStr) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         factory.setNamespaceAware(true);
 
         DocumentBuilder builder;

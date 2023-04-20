@@ -1232,11 +1232,11 @@ public class ObjectFactory {
 
     /**
      * Create an instance of
-     * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object }
+     * {@link XmlaObject }
      *
      */
-    public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object createObject() {
-        return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object();
+    public XmlaObject createObject() {
+        return new XmlaObject();
     }
 
     /**

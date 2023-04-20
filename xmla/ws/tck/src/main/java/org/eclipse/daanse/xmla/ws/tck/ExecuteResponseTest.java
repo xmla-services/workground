@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.tck;
 
+import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.exception.Messages;
@@ -74,6 +75,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
 
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -134,7 +137,7 @@ class ExecuteResponseTest {
     }
 
     @Test
-    void testStatement(@InjectService XmlaService xmlaService) throws Exception {
+    void testStatement(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
         CellInfoItem any = new CellInfoItemR("tagName",
             "name", Optional.of(VALUE2));
 
@@ -203,7 +206,7 @@ class ExecuteResponseTest {
     }
 
     @Test
-    void testAlter(@InjectService XmlaService xmlaService) throws Exception {
+    void testAlter(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
 
         ExceptionR exception = new ExceptionR();
         Messages messages = new MessagesR(List.of(getErrorType()));
@@ -224,7 +227,7 @@ class ExecuteResponseTest {
     }
 
     @Test
-    void testClearCache(@InjectService XmlaService xmlaService) throws Exception {
+    void testClearCache(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
 
         ExceptionR exception = new ExceptionR();
         Messages messages = new MessagesR(List.of(getErrorType()));
@@ -245,7 +248,7 @@ class ExecuteResponseTest {
     }
 
     @Test
-    void testCancel(@InjectService XmlaService xmlaService) throws Exception {
+    void testCancel(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
 
         ExceptionR exception = new ExceptionR();
         Messages messages = new MessagesR(List.of(getErrorType()));

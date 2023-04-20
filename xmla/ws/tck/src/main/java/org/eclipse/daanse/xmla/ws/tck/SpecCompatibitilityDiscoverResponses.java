@@ -15,47 +15,53 @@ public class SpecCompatibitilityDiscoverResponses {
     
    // For all RequestTypes
 
-    DiscoverPropertiesResponseRowR rowCatalog = new DiscoverPropertiesResponseRowR("Catalog", Optional.of("Catalog"),
-            Optional.of("string"), "ReadWrite", Optional.of(false), Optional.of("AdventureWorks_SSAS"));
+    private static final String WRITE = "Write";
+
+	private static final String READ_WRITE = "ReadWrite";
+
+	private static final String STRING = "string";
+
+	DiscoverPropertiesResponseRowR rowCatalog = new DiscoverPropertiesResponseRowR("Catalog", Optional.of("Catalog"),
+            Optional.of(STRING), READ_WRITE, Optional.of(false), Optional.of("AdventureWorks_SSAS"));
 
     DiscoverPropertiesResponseRowR rowTimeout = new DiscoverPropertiesResponseRowR("Timeout", Optional.of("Timeout"),
-            Optional.of("int"), "ReadWrite", Optional.of(false), Optional.empty());
+            Optional.of("int"), READ_WRITE, Optional.of(false), Optional.empty());
 
     DiscoverPropertiesResponseRowR rowContent = new DiscoverPropertiesResponseRowR("Content", Optional.of("Content"),
-            Optional.of("string"), "Write", Optional.of(false), Optional.of("SchemaData"));
+            Optional.of(STRING), WRITE, Optional.of(false), Optional.of("SchemaData"));
 
     DiscoverPropertiesResponseRowR rowFormat = new DiscoverPropertiesResponseRowR("Format", Optional.of("Format"),
-            Optional.of("string"), "Write", Optional.of(false), Optional.of("Native"));
+            Optional.of(STRING), WRITE, Optional.of(false), Optional.of("Native"));
 
     DiscoverPropertiesResponseRowR rowAxisFormat = new DiscoverPropertiesResponseRowR("AxisFormat",
-            Optional.of("AxisFormat"), Optional.of("string"), "Write", Optional.of(false), Optional.of("TupleFormat"));
+            Optional.of("AxisFormat"), Optional.of(STRING), WRITE, Optional.of(false), Optional.of("TupleFormat"));
 
     DiscoverPropertiesResponseRowR rowBeginRange = new DiscoverPropertiesResponseRowR("BeginRange",
-            Optional.of("BeginRange"), Optional.of("int"), "Write", Optional.of(false), Optional.of("-1"));
+            Optional.of("BeginRange"), Optional.of("int"), WRITE, Optional.of(false), Optional.of("-1"));
 
     DiscoverPropertiesResponseRowR rowEndRange = new DiscoverPropertiesResponseRowR("EndRange", Optional.of("EndRange"),
-            Optional.of("int"), "Write", Optional.of(false), Optional.of("-1"));
+            Optional.of("int"), WRITE, Optional.of(false), Optional.of("-1"));
 
     DiscoverPropertiesResponseRowR rowShowHiddenCubes = new DiscoverPropertiesResponseRowR("ShowHiddenCubes",
-            Optional.of("ShowHiddenCubes"), Optional.of("boolean"), "ReadWrite", Optional.of(false),
+            Optional.of("ShowHiddenCubes"), Optional.of("boolean"), READ_WRITE, Optional.of(false),
             Optional.of("false"));
 
     DiscoverPropertiesResponseRowR rowMaximumRows = new DiscoverPropertiesResponseRowR("MaximumRows",
-            Optional.of("MaximumRows"), Optional.of("int"), "Write", Optional.of(false), Optional.empty());
+            Optional.of("MaximumRows"), Optional.of("int"), WRITE, Optional.of(false), Optional.empty());
 
     DiscoverPropertiesResponseRowR rowVisualMode = new DiscoverPropertiesResponseRowR("VisualMode",
-            Optional.of("VisualMode"), Optional.of("int"), "Write", Optional.of(false), Optional.of("0"));
+            Optional.of("VisualMode"), Optional.of("int"), WRITE, Optional.of(false), Optional.of("0"));
 
     DiscoverPropertiesResponseRowR rowDbpropMsmdCachePolicy = new DiscoverPropertiesResponseRowR(
-            "DbpropMsmdCachePolicy", Optional.of("DbpropMsmdCachePolicy"), Optional.of("int"), "ReadWrite",
+            "DbpropMsmdCachePolicy", Optional.of("DbpropMsmdCachePolicy"), Optional.of("int"), READ_WRITE,
             Optional.of(false), Optional.empty());
 
     DiscoverPropertiesResponseRowR rowDbpropMsmdCacheRatio = new DiscoverPropertiesResponseRowR("DbpropMsmdCacheRatio",
-            Optional.of("DbpropMsmdCacheRatio"), Optional.of("double"), "ReadWrite", Optional.of(false),
+            Optional.of("DbpropMsmdCacheRatio"), Optional.of("double"), READ_WRITE, Optional.of(false),
             Optional.empty());
 
     DiscoverPropertiesResponseRowR rowDbpropMsmdCacheMode = new DiscoverPropertiesResponseRowR("DbpropMsmdCacheMode",
-            Optional.of("DbpropMsmdCacheMode"), Optional.of("int"), "ReadWrite", Optional.of(false), Optional.empty());
+            Optional.of("DbpropMsmdCacheMode"), Optional.of("int"), READ_WRITE, Optional.of(false), Optional.empty());
 
     List<DiscoverPropertiesResponseRow> resultSpec = List.of(rowCatalog, rowTimeout, rowContent, rowFormat,
             rowAxisFormat, rowBeginRange, rowEndRange, rowShowHiddenCubes, rowMaximumRows, rowVisualMode,
