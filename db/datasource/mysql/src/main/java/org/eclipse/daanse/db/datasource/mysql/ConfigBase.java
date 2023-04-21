@@ -22,6 +22,16 @@ public interface ConfigBase {
         return null;
     }
 
+    /**
+     * OSGi Service Component Spec.:
+     *
+     * Component properties whose names start with full stop are available to the component instance but are not
+     * available as service properties of the registered service.
+     *
+     * A single low line ('_' \u005F) is converted into a full stop ('.' \u002E)
+     * @return
+     */
+    @SuppressWarnings("java:S100")
     @AttributeDefinition(name = "%password.name", description = "%password.description", type = AttributeType.PASSWORD)
     default String _password() {
         return null;

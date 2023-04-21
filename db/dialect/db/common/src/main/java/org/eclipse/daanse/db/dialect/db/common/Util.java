@@ -79,29 +79,30 @@ public class Util {
                 }
                 resultSet.close();
             } catch (SQLException t) {
-                firstException = new SQLException();
-                firstException.initCause(t);
+                firstException = getfirstException(firstException, t);
             }
         }
         if (statement != null) {
             try {
                 statement.close();
             } catch (SQLException t) {
-                if (firstException == null) {
-                    firstException = new SQLException();
-                    firstException.initCause(t);
-                }
+                firstException = getfirstException(firstException, t);
             }
         }
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException t) {
-                if (firstException == null) {
-                    firstException = new SQLException();
-                    firstException.initCause(t);
-                }
+                firstException = getfirstException(firstException, t);
             }
+        }
+        return firstException;
+    }
+
+    private static SQLException getfirstException(SQLException firstException, SQLException t) {
+        if (firstException == null) {
+            firstException = new SQLException();
+            firstException.initCause(t);
         }
         return firstException;
     }
