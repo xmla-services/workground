@@ -1529,7 +1529,7 @@ public enum RowsetDefinition {
         SHORT("Short","xsd:short"),
         UUID("UUID","uuid"),
         UNSIGNED_SHORT("UnsignedShort","xsd:unsignedShort"),
-        Long("Long","xsd:long"),
+        LONG("Long","xsd:long"),
         UNSIGNED_LONG("UnsignedLong","xsd:unsignedLong");
 
         public final String columnType;
@@ -3775,7 +3775,7 @@ TODO: see above
         private static final Column TableVersion =
             new Column(
                 "TABLE_VERSION",
-                Type.Long,
+                Type.LONG,
                 null,
                 Column.RESTRICTION_FALSE,
                 Column.OPTIONAL,

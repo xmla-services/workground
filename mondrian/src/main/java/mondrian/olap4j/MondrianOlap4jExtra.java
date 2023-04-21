@@ -420,7 +420,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
 	public String getLevelDataType( Level level ) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
         if ( olap4jLevel.level instanceof RolapLevel ) {
-            return ( (RolapLevel) olap4jLevel.level ).getDatatype().name();
+            return ( (RolapLevel) olap4jLevel.level ).getDatatype().getValue();
 
         }
         return null;

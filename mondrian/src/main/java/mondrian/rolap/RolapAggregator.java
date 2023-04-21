@@ -79,7 +79,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
           return sumDouble == Double.MIN_VALUE ? null : sumDouble;
         default:
           throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
-              .append(" does not support datatype").append(datatype.name()).toString() );
+              .append(" does not support datatype").append(datatype.getValue()).toString() );
       }
     }
   };
@@ -135,7 +135,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
           return minDouble == Double.MAX_VALUE ? null : minDouble;
         default:
           throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
-              .append(" does not support datatype").append(datatype.name()).toString() );
+              .append(" does not support datatype").append(datatype.getValue()).toString() );
       }
     }
   };
@@ -180,7 +180,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
           return maxDouble == Double.NEGATIVE_INFINITY ? null : maxDouble;
         default:
           throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
-              .append(" does not support datatype").append(datatype.name()).toString() );
+              .append(" does not support datatype").append(datatype.getValue()).toString() );
       }
     }
   };
