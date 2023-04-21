@@ -97,9 +97,9 @@ abstract class Rowset implements XmlaConstants {
             {
                 final RowsetDefinition.Type type = column.type;
                 switch (type) {
-                case StringArray:
-                case EnumerationArray:
-                case StringSometimesArray:
+                case STRING_ARRAY:
+                case ENUMERATION_ARRAY:
+                case STRING_SOMETIMES_ARRAY:
                     break; // OK
                 default:
                     throw Util.newError(

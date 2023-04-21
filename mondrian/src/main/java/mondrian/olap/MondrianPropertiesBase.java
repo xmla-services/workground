@@ -58,13 +58,13 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class MondrianPropertiesBase extends TriggerableProperties {
 
-    private final PropertySource propertySource;
+    private final transient PropertySource propertySource;
     private int populateCount;
 
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(MondrianProperties.class);
+        LoggerFactory.getLogger(MondrianPropertiesBase.class);
 
-    protected static final String mondrianDotProperties = "mondrian.properties";
+    protected static final String MONDRIAN_DOT_PROPERTIES = "mondrian.properties";
 
     protected MondrianPropertiesBase(PropertySource propertySource) {
         this.propertySource = propertySource;
@@ -181,8 +181,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
 
         @Override
 		public boolean isStale() {
-            final long lastModified = getConnection().getLastModified();
-            return lastModified > this.lastModified;
+            final long lastModifiedValue = getConnection().getLastModified();
+            return lastModifiedValue > this.lastModified;
         }
 
         @Override
@@ -202,7 +202,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
         loadIfStale(propertySource);
 
         URL url = null;
-        File file = new File(mondrianDotProperties);
+        File file = new File(MONDRIAN_DOT_PROPERTIES);
         if (file.exists() && file.isFile()) {
             // Read properties file "mondrian.properties" from PWD, if it
             // exists.
@@ -218,7 +218,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             // Then try load it from classloader
             url =
                 MondrianPropertiesBase.class.getClassLoader().getResource(
-                    mondrianDotProperties);
+                    MONDRIAN_DOT_PROPERTIES);
         }
 
         if (url != null) {
@@ -260,7 +260,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
     private void loadIfStale(PropertySource source) {
         if (source.isStale()) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Mondrian: loading " + source.getDescription());
+                LOGGER.debug("Mondrian: loading {}", source.getDescription());
             }
             load(source);
         }
@@ -273,8 +273,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
      * @param source Source to read properties from
      */
     private void load(final PropertySource source) {
-        try {
-            load(source.openStream());
+        try(InputStream inputStream = source.openStream()) {
+            load(inputStream);
             if (populateCount == 0) {
                 LOGGER.info(
                     "Mondrian: properties loaded from '{}'", source.getDescription());

@@ -250,7 +250,7 @@ public class PropertyUtil {
                     "    private MondrianProperties() {",
                     "        super(",
                     "            new FilePropertySource(",
-                    "                new File(mondrianDotProperties)));",
+                    "                new File(MONDRIAN_DOT_PROPERTIES)));",
                     "        populate();",
                     "    }",
                     "",

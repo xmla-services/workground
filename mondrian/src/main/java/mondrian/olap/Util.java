@@ -765,9 +765,11 @@ public class Util extends XOMUtil {
             }
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-                "Util.lookupCompound: found child.name={}, child.class={}",
-                parent.getName(), parent.getClass().getName());
+            if (parent != null) {
+                LOGGER.debug(
+                    "Util.lookupCompound: found child.name={}, child.class={}",
+                    parent.getName(), parent.getClass().getName());
+            }
         }
 
         switch (category) {
@@ -2242,7 +2244,7 @@ public class Util extends XOMUtil {
         if (connection != null) {
             try {
                 connection.close();
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 if (firstException == null) {
                     firstException = new SQLException();
                     firstException.initCause(t);

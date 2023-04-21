@@ -12,6 +12,7 @@
 package mondrian.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Time;
@@ -59,7 +60,8 @@ class ScheduleTest {
 
     static void assertEqualsDate(Date expected, Calendar actual) {
         if (expected == null || actual == null) {
-            assertEquals(expected, actual);
+            assertNull(expected);
+            assertNull(actual);
         } else {
             assertEquals(expected, actual.getTime());
         }
@@ -74,7 +76,8 @@ class ScheduleTest {
 
     static void assertEqualsCalDate(Calendar expected, Date actual) {
         if (expected == null || actual == null) {
-            assertEquals(expected, actual);
+            assertNull(expected);
+            assertNull(actual);
         } else {
             assertEquals(expected.getTime(), actual);
         }

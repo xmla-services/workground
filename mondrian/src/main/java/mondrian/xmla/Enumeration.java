@@ -37,7 +37,7 @@ public class Enumeration {
             "TREE_OP",
             "Bitmap which controls which relatives of a member are "
             + "returned",
-            RowsetDefinition.Type.Integer,
+            RowsetDefinition.Type.INTEGER,
             org.olap4j.metadata.Member.TreeOp.getDictionary());
 
     public static final Enumeration VISUAL_MODE =
@@ -45,21 +45,21 @@ public class Enumeration {
             "VisualMode",
             "This property determines the default behavior for visual "
             + "totals.",
-            RowsetDefinition.Type.Integer,
+            RowsetDefinition.Type.INTEGER,
             org.olap4j.metadata.XmlaConstants.VisualMode.getDictionary());
 
     public static final Enumeration METHODS =
         new Enumeration(
             "Methods",
             "Set of methods for which a property is applicable",
-            RowsetDefinition.Type.Enumeration,
+            RowsetDefinition.Type.ENUMERATION,
             XmlaConstants.Method.getDictionary());
 
     public static final Enumeration ACCESS =
         new Enumeration(
             "Access",
             "The read/write behavior of a property",
-            RowsetDefinition.Type.Enumeration,
+            RowsetDefinition.Type.ENUMERATION,
             XmlaConstants.Access.getDictionary());
 
     public static final Enumeration AUTHENTICATION_MODE =
@@ -67,14 +67,14 @@ public class Enumeration {
             "AuthenticationMode",
             "Specification of what type of security mode the data source "
             + "uses.",
-            RowsetDefinition.Type.EnumString,
+            RowsetDefinition.Type.ENUM_STRING,
             XmlaConstants.AuthenticationMode.getDictionary());
 
     public static final Enumeration PROVIDER_TYPE =
         new Enumeration(
             "ProviderType",
             "The types of data supported by the provider.",
-            RowsetDefinition.Type.Array,
+            RowsetDefinition.Type.ARRAY,
             XmlaConstants.ProviderType.getDictionary());
 
     public Enumeration(
