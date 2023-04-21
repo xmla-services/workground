@@ -422,7 +422,7 @@ way too noisy
         for (RowsetDefinition.Column columnDefinition
             : rowsetDefinition.columnDefinitions)
         {
-            if (columnDefinition.type == RowsetDefinition.Type.Rowset) {
+            if (columnDefinition.type == RowsetDefinition.Type.ROW_SET) {
                 // olap4j does not support the extended columns, e.g.
                 // Cube.Dimensions
                 continue;

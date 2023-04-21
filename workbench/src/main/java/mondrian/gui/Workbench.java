@@ -111,10 +111,10 @@ public class Workbench extends javax.swing.JFrame {
     private static final String LAST_USED3_URL = "lastUsedUrl3";
     private static final String LAST_USED4 = "lastUsed4";
     private static final String LAST_USED4_URL = "lastUsedUrl4";
-    private static final String WorkbenchInfoResourceName =
+    private static final String WORKBENCH_INFO_RESOURCE_NAME =
         "mondrian.gui.resources.workbenchInfo";
-    private static final String GUIResourceName = "mondrian.gui.resources.gui";
-    private static final String TextResourceName =
+    private static final String GUI_RESOURCE_NAME = "mondrian.gui.resources.gui";
+    private static final String TEXT_RESOURCE_NAME =
         "mondrian.gui.resources.text";
     private static final String FILTER_SCHEMA_LIST = "FILTER_SCHEMA_LIST";
 
@@ -197,9 +197,9 @@ public class Workbench extends javax.swing.JFrame {
             currentClassLoader = Workbench.class.getClassLoader();
 
             localGuiResourceBundle = ResourceBundle.getBundle(
-                GUIResourceName, Locale.getDefault(), currentClassLoader);
+                GUI_RESOURCE_NAME, Locale.getDefault(), currentClassLoader);
             localTextResourceBundle = ResourceBundle.getBundle(
-                TextResourceName, Locale.getDefault(), currentClassLoader);
+                TEXT_RESOURCE_NAME, Locale.getDefault(), currentClassLoader);
 
             resourceConverter = new I18n(
                 localGuiResourceBundle, localTextResourceBundle);
@@ -212,19 +212,19 @@ public class Workbench extends javax.swing.JFrame {
      */
     private void loadWorkbenchProperties() {
         workbenchProperties = new WorkbenchProperties();
-        try {
-            workbenchResourceBundle = ResourceBundle.getBundle(
-                WorkbenchInfoResourceName, Locale.getDefault(),
+        workbenchResourceBundle = ResourceBundle.getBundle(
+            WORKBENCH_INFO_RESOURCE_NAME, Locale.getDefault(),
                     myClassLoader);
-            File f = new File(WORKBENCH_CONFIG_FILE);
-            if (f.exists()) {
-                workbenchProperties.load(new FileInputStream(f));
-            } else {
-                LOGGER.debug(WORKBENCH_CONFIG_FILE + " does not exist");
+        File f = new File(WORKBENCH_CONFIG_FILE);
+        if (f.exists()) {
+            try(FileInputStream inputStream = new FileInputStream(f)) {
+                workbenchProperties.load(inputStream);
+            } catch (Exception e) {
+                // TODO deal with exception
+                //  LOGGER.error("loadWorkbenchProperties", e);
             }
-        } catch (Exception e) {
-            // TODO deal with exception
-            LOGGER.error("loadWorkbenchProperties", e);
+        } else {
+            LOGGER.debug(WORKBENCH_CONFIG_FILE + " does not exist");
         }
     }
 
@@ -1162,10 +1162,10 @@ public class Workbench extends javax.swing.JFrame {
     }
 
     private void aboutMenuItemActionPerformed(ActionEvent evt) {
-        try {
+
             URL versionUrl = myClassLoader.getResource(
                 getResourceConverter().getGUIReference("version"));
-            InputStream versionIn = versionUrl.openStream();
+        try (InputStream versionIn = versionUrl.openStream()) {
             String ver = new String(versionIn.readAllBytes());
             ver = ver.replace(
                 "PRODUCT_VERSION",
@@ -1200,6 +1200,7 @@ public class Workbench extends javax.swing.JFrame {
         } catch (Exception ex) {
             LOGGER.error("aboutMenuItemActionPerformed", ex);
         }
+
     }
 
     private void newJDBCExplorerMenuItemActionPerformed(
@@ -2245,7 +2246,7 @@ public class Workbench extends javax.swing.JFrame {
                 }
             }
             w.setVisible(true);
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             if (w != null) {
             JOptionPane.showMessageDialog(
                 w,

@@ -2531,17 +2531,17 @@ public class XmlaHandler {
             Datatype datatype = property.getDatatype();
             switch (datatype) {
             case UNSIGNED_INTEGER:
-                return RowsetDefinition.Type.UnsignedInteger.columnType;
+                return RowsetDefinition.Type.UNSIGNED_INTEGER.columnType;
             case DOUBLE:
-                return RowsetDefinition.Type.Double.columnType;
+                return RowsetDefinition.Type.DOUBLE.columnType;
             case LARGE_INTEGER:
                 return RowsetDefinition.Type.Long.columnType;
             case INTEGER:
-                return RowsetDefinition.Type.Integer.columnType;
+                return RowsetDefinition.Type.INTEGER.columnType;
             case BOOLEAN:
-                return RowsetDefinition.Type.Boolean.columnType;
+                return RowsetDefinition.Type.BOOLEAN.columnType;
             default:
-                return RowsetDefinition.Type.String.columnType;
+                return RowsetDefinition.Type.STRING.columnType;
             }
         }
 
