@@ -2535,7 +2535,7 @@ public class XmlaHandler {
             case DOUBLE:
                 return RowsetDefinition.Type.DOUBLE.columnType;
             case LARGE_INTEGER:
-                return RowsetDefinition.Type.Long.columnType;
+                return RowsetDefinition.Type.LONG.columnType;
             case INTEGER:
                 return RowsetDefinition.Type.INTEGER.columnType;
             case BOOLEAN:
