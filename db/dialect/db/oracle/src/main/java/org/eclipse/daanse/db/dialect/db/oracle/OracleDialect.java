@@ -130,38 +130,41 @@ public class OracleDialect extends JdbcDialectImpl {
         BestFitColumnType type;
 
         if (columnType == Types.NUMERIC || columnType == Types.DECIMAL) {
-            if (scale == -127 && precision != 0) {
-                // non zero precision w/ -127 scale means float in Oracle.
-                type = BestFitColumnType.DOUBLE;
-            } else if (columnType == Types.NUMERIC && (scale == 0 || scale == -127) && precision == 0
-                    && columnName.startsWith("m")) {
-                // In GROUPING SETS queries, Oracle
-                // loosens the type of columns compared to mere GROUP BY
-                // queries. We need integer GROUP BY columns to remain integers,
-                // otherwise the segments won't be found; but if we convert
-                // measure (whose column names are like "m0", "m1") to integers,
-                // data loss will occur.
-                type = BestFitColumnType.OBJECT;
-            } else if (scale == -127 && precision == 0) {
-                type = BestFitColumnType.INT;
-            } else if (scale == 0 && (precision == 38 || precision == 0)) {
-                // NUMBER(38, 0) is conventionally used in
-                // Oracle for integers of unspecified precision, so let's be
-                // bold and assume that they can fit into an int.
-                type = BestFitColumnType.INT;
-            } else if (scale == 0 && precision <= 9) {
-                // An int (up to 2^31 = 2.1B) can hold any NUMBER(10, 0) value
-                // (up to 10^9 = 1B).
-                type = BestFitColumnType.INT;
-            } else {
-                type = BestFitColumnType.DOUBLE;
-            }
-
+            type = getNumericDecimalType(columnType, precision, scale, columnName);
         } else {
             type = super.getType(metaData, columnIndex);
         }
         logTypeInfo(metaData, columnIndex, type);
         return type;
+    }
+
+    private BestFitColumnType getNumericDecimalType(final int columnType, final int precision, final int scale, final String columnName) {
+        if (scale == -127 && precision != 0) {
+            // non zero precision w/ -127 scale means float in Oracle.
+            return BestFitColumnType.DOUBLE;
+        } else if (columnType == Types.NUMERIC && (scale == 0 || scale == -127) && precision == 0
+            && columnName.startsWith("m")) {
+            // In GROUPING SETS queries, Oracle
+            // loosens the type of columns compared to mere GROUP BY
+            // queries. We need integer GROUP BY columns to remain integers,
+            // otherwise the segments won't be found; but if we convert
+            // measure (whose column names are like "m0", "m1") to integers,
+            // data loss will occur.
+            return BestFitColumnType.OBJECT;
+        } else if (scale == -127 && precision == 0) {
+            return BestFitColumnType.INT;
+        } else if (scale == 0 && (precision == 38 || precision == 0)) {
+            // NUMBER(38, 0) is conventionally used in
+            // Oracle for integers of unspecified precision, so let's be
+            // bold and assume that they can fit into an int.
+            return BestFitColumnType.INT;
+        } else if (scale == 0 && precision <= 9) {
+            // An int (up to 2^31 = 2.1B) can hold any NUMBER(10, 0) value
+            // (up to 10^9 = 1B).
+            return BestFitColumnType.INT;
+        } else {
+            return BestFitColumnType.DOUBLE;
+        }
     }
 
     @Override
