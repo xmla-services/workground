@@ -33,10 +33,7 @@ public class DynamicDatasourceXmlaServlet extends MondrianXmlaServlet {
 
     @Override
     protected RepositoryContentFinder makeContentFinder(String dataSources) {
-        if (!finders.containsKey(dataSources)) {
-            finders.put(dataSources, new DynamicContentFinder(dataSources));
-        }
-        return finders.get(dataSources);
+        return finders.computeIfAbsent(dataSources, DynamicContentFinder::new);
     }
     @Override
     public void destroy() {

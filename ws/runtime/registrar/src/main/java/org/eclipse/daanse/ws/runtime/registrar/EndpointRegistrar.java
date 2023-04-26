@@ -71,22 +71,21 @@ public class EndpointRegistrar {
 	@Reference(service = AnyService.class, target = "(" + SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR
 			+ "=true)", cardinality = ReferenceCardinality.AT_LEAST_ONE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
 	public void bindEndpointImplementor(Object endpointImplementor, Map<String, ?> properties)
-			throws InterruptedException {
+			{
 		Map<String, Object> filteredProperties = properties.entrySet().stream()//
 				.filter(e -> !e.getKey().startsWith("."))// secret properties should not be propagated
 				.filter(e -> !SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR.equals(e.getKey()))// don't propagate
 																									// the implementor
 																									// property
 				.collect(Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue));
-		System.out.println(">> BINDING implementor=" + endpointImplementor + " properties=" + properties + ", filtered="
-				+ filteredProperties);
+		logger.debug(">> BINDING implementor={} properties={}, filtered={}", endpointImplementor, properties, filteredProperties);
 		EndpointRegistration registration = new EndpointRegistration(endpointImplementor, filteredProperties);
 		endpointRegistrations.put(endpointImplementor, registration);
 		registration.register();
 	}
 
-	public void unbindEndpointImplementor(Object endpointImplementor, Map<String, Object> properties) {
-		System.out.println("UNBINDING implementor=" + endpointImplementor);
+	public void unbindEndpointImplementor(Object endpointImplementor) {
+	    logger.debug("UNBINDING implementor={}", endpointImplementor);
 		EndpointRegistration registration = endpointRegistrations.remove(endpointImplementor);
 		if (registration != null) {
 			registration.unregister();
@@ -97,7 +96,7 @@ public class EndpointRegistrar {
 	public void addHandler(Handler<? extends MessageContext> handler, Map<String, ?> properties)
 			throws InvalidSyntaxException {
 		Object epSelect = properties.get(SoapWhiteboardConstants.SOAP_ENDPOINT_SELECT);
-		System.out.println("ADD handler=" + handler + ", epSelect = " + epSelect + ", properties=" + properties);
+		logger.debug("ADD handler={}, epSelect = {}, properties={}", handler, epSelect, properties);
 		if (epSelect instanceof String fs) {
 			try {
 				Filter filter = FrameworkUtil.createFilter(fs);
@@ -111,32 +110,15 @@ public class EndpointRegistrar {
 	}
 
 	public void removeHandler(Handler<? extends MessageContext> handler) {
-		System.out.println("REMOVE handler=" + handler);
+        logger.debug("REMOVE handler={}", handler);
 		if (handlerMap.remove(handler) != null) {
 			updateAll();
 		}
 	}
 
 	private void updateAll() {
-		System.out.println("Update all handlers...");
-		endpointRegistrations.values().stream().forEach(reg -> {
-			reg.refresh();
-		});
-	}
-
-	@SuppressWarnings("rawtypes"/* required by API */)
-	private Stream<Handler> handlers(Dictionary<String, ?> properties) {
-		return handlerMap.entrySet().stream().filter(e -> handlerMatches(properties, e.getKey(), e.getValue()))
-				.sorted(HandlerInfo.SORT_BY_PRIORITY).map(Entry::getKey);
-	}
-
-	private boolean handlerMatches(Dictionary<String, ?> properties, Handler<?> handler, HandlerInfo handlerInfo) {
-		if (handlerInfo.filter().match(properties)) {
-			System.out.println("Handler " + handler + " filter " + handlerInfo.filter() + " matches " + properties);
-			return true;
-		}
-		System.out.println("Handler " + handler + " filter " + handlerInfo.filter() + " NOT matches " + properties);
-		return false;
+	    logger.debug("Update all handlers...");
+		endpointRegistrations.values().stream().forEach(EndpointRegistration::refresh);
 	}
 
 	private final class EndpointRegistration implements ServiceFactory<Endpoint> {
@@ -171,9 +153,9 @@ public class EndpointRegistrar {
 		}
 
 		public void register() {
-			Dictionary<String, Object> properties = getServiceProperties();
-			handlerChain = handlers(properties).toList();
-			registration = bundleContext.registerService(Endpoint.class, this, properties);
+			Dictionary<String, Object> dictionaryProperties = getServiceProperties();
+			handlerChain = handlers(dictionaryProperties).toList();
+			registration = bundleContext.registerService(Endpoint.class, this, dictionaryProperties);
 		}
 
 		@Override
@@ -207,14 +189,28 @@ public class EndpointRegistrar {
 				BundleEndpointContext context = contextMap.get(bundle);
 				if (context != null) {
 					context.removeEndpoint(endpoint);
-				}
-				if (context.getEndpoints().isEmpty()) {
-					contextMap.remove(bundle);
-				}
+				    if (context.getEndpoints().isEmpty()) {
+					    contextMap.remove(bundle);
+				    }
+                }
 			}
 			endpoint.stop();
 		}
 
-	}
+        @SuppressWarnings("rawtypes"/* required by API */)
+        private Stream<Handler> handlers(Dictionary<String, ?> properties) {
+            return handlerMap.entrySet().stream().filter(e -> handlerMatches(properties, e.getKey(), e.getValue()))
+                .sorted(HandlerInfo.SORT_BY_PRIORITY).map(Entry::getKey);
+        }
+
+        private boolean handlerMatches(Dictionary<String, ?> properties, Handler<?> handler, HandlerInfo handlerInfo) {
+            if (handlerInfo.filter().match(properties)) {
+                logger.debug("Handler {} filter {} matches {}", handler, handlerInfo.filter(), properties);
+                return true;
+            }
+            logger.debug("Handler {} filter {} NOT matches {}", handler,  handlerInfo.filter(), properties);
+            return false;
+        }
+    }
 
 }

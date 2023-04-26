@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
-import mondrian.parser.MdxParserValidatorImpl;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
 
@@ -91,10 +90,8 @@ public abstract class ConnectionBase implements Connection {
         }
 
         if (getLogger().isDebugEnabled()) {
-            //debug = true;
-            getLogger().debug(
-                Util.nl
-                + query);
+            String s = new StringBuilder().append(Util.nl).append(query).toString();
+            getLogger().debug(s);
         }
 
         try {
@@ -107,8 +104,6 @@ public abstract class ConnectionBase implements Connection {
     }
 
     protected MdxParserValidator createParser() {
-        return true
-            ? new JavaccParserValidatorImpl()
-            : new MdxParserValidatorImpl();
+        return new JavaccParserValidatorImpl();
     }
 }

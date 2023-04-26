@@ -896,7 +896,7 @@ class SqlQueryTest  extends BatchTestCase {
                 && getDialect(connection).supportsGroupingSets();
     }
 
-    class JdbcDialectImplForTest extends JdbcDialectImpl{
+    public class JdbcDialectImplForTest extends JdbcDialectImpl{
 
         @Override
         protected boolean isSupportedProduct(String productName, String productVersion) {

@@ -32,6 +32,11 @@ import org.xml.sax.SAXNotSupportedException;
 public class XmlParserFactoryProducer {
     private static final Logger logger =
         LoggerFactory.getLogger(XmlParserFactoryProducer.class);
+
+    private XmlParserFactoryProducer() {
+        // constructor
+    }
+
     /**
      * Creates an instance of {@link DocumentBuilderFactory} class
      * with enabled {@link XMLConstants#FEATURE_SECURE_PROCESSING} property.
@@ -80,20 +85,21 @@ public class XmlParserFactoryProducer {
     }
 
     public static SAXReader getSAXReader(final EntityResolver resolver) {
-        SAXReader reader = new SAXReader();
-        if (resolver != null) {
-            reader.setEntityResolver(resolver);
-        }
         try {
+            SAXReader reader = new SAXReader();
             reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            if (resolver != null) {
+                reader.setEntityResolver(resolver);
+            }
             reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
             reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            reader.setIncludeExternalDTDDeclarations(false);
+            reader.setIncludeInternalDTDDeclarations(false);
+            return reader;
         } catch (SAXException e) {
             logger.error("Some parser properties are not supported.");
+            return null;
         }
-        reader.setIncludeExternalDTDDeclarations(false);
-        reader.setIncludeInternalDTDDeclarations(false);
-        return reader;
     }
 }
