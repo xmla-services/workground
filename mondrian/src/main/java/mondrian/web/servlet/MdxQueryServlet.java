@@ -11,22 +11,6 @@
 
 package mondrian.web.servlet;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.result.Cell;
-import org.eclipse.daanse.olap.api.result.Position;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.eigenbase.xom.StringEscaper;
-
 import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
@@ -34,6 +18,24 @@ import mondrian.olap.Util;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 import mondrian.web.taglib.ResultCache;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
+import org.eigenbase.xom.StringEscaper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.List;
+
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 /**
  * <code>MdxQueryServlet</code> is a servlet which receives MDX queries,
@@ -43,6 +45,11 @@ import mondrian.web.taglib.ResultCache;
  * @since 13 February, 2002
  */
 public class MdxQueryServlet extends HttpServlet {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MdxQueryServlet.class);
+    public static final String TD = "</td>";
+    public static final String TR = "</tr>";
+    public static final String QUERY = "query";
     private String connectString;
     private CatalogLocator locator;
 
@@ -53,9 +60,9 @@ public class MdxQueryServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
         super.init(config);
         connectString = config.getInitParameter("connectString");
-        Enumeration initParameterNames = config.getInitParameterNames();
+        Enumeration<String> initParameterNames = config.getInitParameterNames();
         while (initParameterNames.hasMoreElements()) {
-            String name = (String) initParameterNames.nextElement();
+            String name = initParameterNames.nextElement();
             String value = config.getInitParameter(name);
             MondrianProperties.instance().setProperty(name, value);
         }
@@ -67,6 +74,7 @@ public class MdxQueryServlet extends HttpServlet {
      */
     @Override
 	public void destroy() {
+        // destroy
     }
 
     /**
@@ -80,8 +88,8 @@ public class MdxQueryServlet extends HttpServlet {
         HttpServletRequest request, HttpServletResponse response)
         throws ServletException, java.io.IOException
     {
-        String queryName = request.getParameter("query");
-        request.setAttribute("query", queryName);
+        String queryName = request.getParameter(QUERY);
+        request.setAttribute(QUERY, queryName);
         if (queryName != null) {
             processTransform(request, response);
             return;
@@ -137,7 +145,6 @@ public class MdxQueryServlet extends HttpServlet {
                 // Print the column headings.
                 for (int i = 0; i < columns.size(); i++) {
                     Position position = columns.get(i);
-                    //Member member = columns[i].getMember(j);
                     Member member = position.get(j);
                     int width = 1;
                     while ((i + 1) < columns.size()
@@ -148,9 +155,9 @@ public class MdxQueryServlet extends HttpServlet {
                     }
                     html.append("<td nowrap class='columnheading' colspan='")
                         .append(width).append("'>")
-                        .append(member.getUniqueName()).append("</td>");
+                        .append(member.getUniqueName()).append(TD);
                 }
-                html.append("</tr>").append(Util.nl);
+                html.append(TR).append(Util.nl);
             }
             //if is two axes, show
             if (result.getAxes().length > 1) {
@@ -160,22 +167,22 @@ public class MdxQueryServlet extends HttpServlet {
                     for (Member member : row) {
                         html.append("<td nowrap class='rowheading'>")
                             .append(member.getUniqueName())
-                            .append("</td>");
+                            .append(TD);
                     }
                     for (int j = 0; j < columns.size(); j++) {
                         showCell(html, result.getCell(new int[] {j, i}));
                     }
-                    html.append("</tr>");
+                    html.append(TR);
                 }
             } else {
                 html.append("<tr>");
                 for (int i = 0; i < columns.size(); i++) {
                     showCell(html, result.getCell(new int[] {i}));
                 }
-                html.append("</tr>");
+                html.append(TR);
             }
             html.append("</table>");
-        } catch (Throwable e) {
+        } catch (Exception e) {
             final String[] strings = Util.convertStackToString(e);
             html.append("Error:<pre><blockquote>");
             for (String string : strings) {
@@ -197,14 +204,14 @@ public class MdxQueryServlet extends HttpServlet {
     private void showCell(StringBuilder out, Cell cell) {
         out.append("<td class='cell'>")
             .append(cell.getFormattedValue())
-            .append("</td>");
+            .append(TD);
     }
 
     private void processTransform(
         HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        String queryName = request.getParameter("query");
+        String queryName = request.getParameter(QUERY);
         ResultCache rc =
             ResultCache.getInstance(
                 request.getSession(), getServletContext(), queryName);
@@ -215,7 +222,7 @@ public class MdxQueryServlet extends HttpServlet {
         if (operation.equals("expand")) {
             String memberName = request.getParameter("member");
             boolean fail = true;
-            Member member = query.getSchemaReader(true).getMemberByUniqueName(
+            query.getSchemaReader(true).getMemberByUniqueName(
                 Util.parseIdentifier(memberName), fail);
             if (true) {
                 throw new UnsupportedOperationException(
@@ -243,9 +250,15 @@ public class MdxQueryServlet extends HttpServlet {
     @Override
 	protected void doGet(
         HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, java.io.IOException
+        throws java.io.IOException
     {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ServletException | IOException e) {
+            LOGGER.debug("Internal server error {}", e.getMessage());
+            getServletContext().log("Internal server error", e);
+            response.sendError(SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -256,10 +269,15 @@ public class MdxQueryServlet extends HttpServlet {
      */
     @Override
 	protected void doPost(
-        HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, java.io.IOException
-    {
-        processRequest(request, response);
+        HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        try {
+            processRequest(request, response);
+        } catch (ServletException | IOException e) {
+            LOGGER.debug("Internal server error {}", e.getMessage());
+            getServletContext().log("Internal server error", e);
+            response.sendError(SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

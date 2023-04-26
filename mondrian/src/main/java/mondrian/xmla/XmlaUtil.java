@@ -10,6 +10,28 @@
 */
 package mondrian.xmla;
 
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
+import mondrian.util.XmlParserFactoryProducer;
+import mondrian.xmla.impl.DefaultXmlaResponse;
+import org.olap4j.OlapConnection;
+import org.olap4j.impl.LcidLocale;
+import org.olap4j.metadata.XmlaConstants.Format;
+import org.olap4j.metadata.XmlaConstants.Method;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -25,30 +47,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapException;
-import org.olap4j.impl.LcidLocale;
-import org.olap4j.metadata.XmlaConstants.Format;
-import org.olap4j.metadata.XmlaConstants.Method;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
-
-import mondrian.olap.MondrianException;
-import mondrian.olap.Util;
-import mondrian.util.XmlParserFactoryProducer;
-import mondrian.xmla.impl.DefaultXmlaResponse;
 
 /**
  * Utility methods for XML/A implementation.
@@ -76,14 +74,18 @@ public class XmlaUtil implements XmlaConstants {
     private static final Pattern LOWERCASE_PATTERN =
         Pattern.compile(".*[a-z].*");
 
-    private static final String validCharactersExp = "^[:A-Z_a-z\u00C0\u00D6\u00D8-\u00F6\u00F8-\u02ff\u0370-\u037d"
+    private static final String VALID_CHARACTERS_EXP = "^[:A-Z_a-z\u00C0\u00D6\u00D8-\u00F6\u00F8-\u02ff\u0370-\u037d"
             + "\u037f-\u1fff\u200c\u200d\u2070-\u218f\u2c00-\u2fef\u3001-\ud7ff"
             + "\uf900-\ufdcf\ufdf0-\ufffd]"
             + "[:A-Z_a-z\u00C0\u00D6\u00D8-\u00F6"
             + "\u00F8-\u02ff\u0370-\u037d\u037f-\u1fff\u200c\u200d\u2070-\u218f"
             + "\u2c00-\u2fef\u3001-\udfff\uf900-\ufdcf\ufdf0-\ufffd\\-\\.0-9"
             + "\u00b7\u0300-\u036f\u203f-\u2040]*\\Z";
-    private static Pattern validCharactersPatern = Pattern.compile(validCharactersExp);
+    private static Pattern validCharactersPatern = Pattern.compile(VALID_CHARACTERS_EXP);
+
+    private XmlaUtil() {
+        // constructor
+    }
 
     private static String encodeChar(char c) {
         StringBuilder buf = new StringBuilder();
@@ -140,6 +142,8 @@ public class XmlaUtil implements XmlaConstants {
     {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
             Transformer transformer = factory.newTransformer();
             transformer.transform(
                 new DOMSource(elem),
@@ -156,16 +160,16 @@ public class XmlaUtil implements XmlaConstants {
     public static Element text2Element(String text)
         throws XmlaException
     {
-        return _2Element(new InputSource(new StringReader(text)));
+        return toElement(new InputSource(new StringReader(text)));
     }
 
     public static Element stream2Element(InputStream stream)
         throws XmlaException
     {
-        return _2Element(new InputSource(stream));
+        return toElement(new InputSource(stream));
     }
 
-    private static Element _2Element(InputSource source)
+    private static Element toElement(InputSource source)
         throws XmlaException
     {
         try {
@@ -192,30 +196,15 @@ public class XmlaUtil implements XmlaConstants {
         String ns,
         String lname)
     {
-/*
-way too noisy
-        if (LOGGER.isDebugEnabled()) {
-            StringBuilder buf = new StringBuilder(100);
-            buf.append("XmlaUtil.filterChildElements: ");
-            buf.append(" ns=\"");
-            buf.append(ns);
-            buf.append("\", lname=\"");
-            buf.append(lname);
-            buf.append("\"");
-            LOGGER.debug(buf.toString());
-        }
-*/
 
         List<Element> elems = new ArrayList<>();
         NodeList nlst = parent.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
             Node n = nlst.item(i);
-            if (n instanceof Element e) {
-                if ((ns == null || ns.equals(e.getNamespaceURI()))
+            if (n instanceof Element e && (ns == null || ns.equals(e.getNamespaceURI()))
                     && (lname == null || lname.equals(e.getLocalName())))
-                {
-                    elems.add(e);
-                }
+            {
+                elems.add(e);
             }
         }
         return elems.toArray(new Element[elems.size()]);
@@ -227,8 +216,8 @@ way too noisy
         NodeList nlst = elem.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen ; i++) {
             Node n = nlst.item(i);
-            if (n instanceof Text) {
-                final String data = ((Text) n).getData();
+            if (n instanceof Text text) {
+                final String data = text.getData();
                 buf.append(data);
             }
         }
@@ -244,8 +233,7 @@ way too noisy
      */
     public static Throwable rootThrowable(Throwable throwable) {
         Throwable rootThrowable = throwable.getCause();
-        if (rootThrowable != null
-            && rootThrowable instanceof MondrianException)
+        if (rootThrowable instanceof MondrianException)
         {
             return rootThrowable(rootThrowable);
         }
@@ -272,9 +260,7 @@ way too noisy
             // If it uses exponential notation, 1.0E4, then it could
             // have a trailing '0' that should not be stripped of,
             // e.g., 1.0E10. This would be rather bad.
-            if (numericStr.indexOf('e') != -1) {
-                return numericStr;
-            } else if (numericStr.indexOf('E') != -1) {
+            if ((numericStr.indexOf('e') != -1) || (numericStr.indexOf('E') != -1)) {
                 return numericStr;
             }
 
@@ -311,7 +297,6 @@ way too noisy
         final OlapConnection connection,
         String methodName,
         final Map<String, Object> restrictionMap)
-        throws OlapException
     {
         RowsetDefinition rowsetDefinition =
             RowsetDefinition.valueOf(methodName);
@@ -334,7 +319,7 @@ way too noisy
                     // This method should not be used by the olap4j xmla
                     // servlet. For the mondrian xmla servlet we don't provide
                     // the "pre configured discover datasources" feature.
-                    return null;
+                    return Map.of();
                 }
             };
         final XmlaRequest request = new XmlaRequest() {
@@ -436,8 +421,8 @@ way too noisy
                 Object o = row.get(colDef.name);
                 if (o instanceof List) {
                     o = toString((List<String>) o);
-                } else if (o instanceof String[]) {
-                    o = toString(Arrays.asList((String []) o));
+                } else if (o instanceof String[] arr) {
+                    o = toString(Arrays.asList(arr));
                 }
                 values[++k] = o;
             }
@@ -541,7 +526,7 @@ way too noisy
             try {
                 // First check for a numeric locale id (LCID) as used by
                 // Windows.
-                final short lcid = Short.valueOf(value);
+                final short lcid = Short.parseShort(value);
                 return LcidLocale.lcidToLocale(lcid);
             } catch (NumberFormatException nfe) {
                 // Since value is not a valid LCID, now see whether it is a
@@ -566,12 +551,7 @@ way too noisy
             new ElementNameEncoder();
 
         public String encode(String name) {
-            String encoded = map.get(name);
-            if (encoded == null) {
-                encoded = encodeElementName(name);
-                map.put(name, encoded);
-            }
-            return encoded;
+            return map.computeIfAbsent(name, XmlaUtil::encodeElementName);
         }
     }
 }

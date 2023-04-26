@@ -11,23 +11,21 @@
 
 package mondrian.xmla;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Base XML/A servlet.
@@ -39,6 +37,7 @@ public abstract class XmlaServlet
     extends HttpServlet
     implements XmlaConstants
 {
+
     protected static final Logger LOGGER = LoggerFactory.getLogger(XmlaServlet.class);
 
     public static final String PARAM_DATASOURCES_CONFIG = "DataSourcesConfig";
@@ -46,6 +45,7 @@ public abstract class XmlaServlet
         "OptionalDataSourceConfig";
     public static final String PARAM_CHAR_ENCODING = "CharacterEncoding";
     public static final String PARAM_CALLBACKS = "Callbacks";
+    private static final String ERRORS_WHEN_HANDLING_XML_A_MESSAGE = "Errors when handling XML/A message";
 
     protected XmlaHandler xmlaHandler = null;
     protected String charEncoding = null;
@@ -84,7 +84,7 @@ public abstract class XmlaServlet
         return paramValue != null && Boolean.valueOf(paramValue);
     }
 
-    public XmlaServlet() {
+    protected XmlaServlet() {
         LOGGER.info("Application working directory: \"{}\"",
             new java.io.File(".").getAbsolutePath());
     }
@@ -152,7 +152,6 @@ public abstract class XmlaServlet
 	protected void doPost(
         HttpServletRequest request,
         HttpServletResponse response)
-        throws ServletException, IOException
     {
         // Request Soap Header and Body
         // header [0] and body [1]
@@ -169,223 +168,41 @@ public abstract class XmlaServlet
             Enumeration.ResponseMimeType.SOAP;
 
         try {
-            if (charEncoding != null) {
-                try {
-                    request.setCharacterEncoding(charEncoding);
-                    response.setCharacterEncoding(charEncoding);
-                } catch (UnsupportedEncodingException uee) {
-                    charEncoding = null;
-                    LOGGER.warn(
-                        "Unsupported character encoding '{}': Use default character encoding from HTTP client for now",
-                        charEncoding);
-                }
-            }
+
+            encodeRequestResponse(request, response);
 
             response.setContentType(mimeType.getMimeType());
 
             Map<String, Object> context = new HashMap<>();
 
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Invoking validate http header callbacks");
-                }
-                for (XmlaRequestCallback callback : getCallbacks()) {
-                    if (!callback.processHttpHeader(
-                            request,
-                            response,
-                            context))
-                    {
-                        return;
-                    }
-                }
-            } catch (XmlaException xex) {
-                LOGGER.error(
-                    "Errors when invoking callbacks validateHttpHeader", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            } catch (Exception ex) {
-                LOGGER.error(
-                    "Errors when invoking callbacks validateHttpHeader", ex);
-                handleFault(
-                    response, responseSoapParts,
-                    phase,
-                    new XmlaException(
-                        SERVER_FAULT_FC,
-                        CHH_CODE,
-                        CHH_FAULT_FS,
-                        ex));
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
+            validateHttpHeaderCallbacks(request, response, context, responseSoapParts, phase, mimeType);
 
 
             phase = Phase.INITIAL_PARSE;
 
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Unmarshalling SOAP message");
-                }
-
-                // check request's content type
-                String contentType = request.getContentType();
-                if (contentType == null
-                    || !contentType.contains("text/xml"))
-                {
-                    throw new IllegalArgumentException(
-                        new StringBuilder("Only accepts content type 'text/xml', not '")
-                        .append(contentType).append("'").toString());
-                }
-
-                // are they asking for a JSON response?
-                String accept = request.getHeader("Accept");
-                if (accept != null) {
-                    mimeType = XmlaUtil.chooseResponseMimeType(accept);
-                    if (mimeType == null) {
-                        throw new IllegalArgumentException(
-                            new StringBuilder("Accept header '").append(accept).append("' is not a supported")
-                            .append(" response content type. Allowed values:")
-                            .append(" text/xml, application/xml, application/json.").toString());
-                    }
-                    if (mimeType != Enumeration.ResponseMimeType.SOAP) {
-                        response.setContentType(mimeType.getMimeType());
-                    }
-                }
-                context.put(CONTEXT_MIME_TYPE, mimeType);
-
-                unmarshallSoapMessage(request, requestSoapParts);
-            } catch (XmlaException xex) {
-                LOGGER.error("Unable to unmarshall SOAP message", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
+            unmarshallingSoapMessage(request,  response,  context, responseSoapParts, phase, mimeType, requestSoapParts);
 
             phase = Phase.PROCESS_HEADER;
-
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Handling XML/A message header");
-                }
-
-                // process application specified SOAP header here
-                handleSoapHeader(
-                    response,
-                    requestSoapParts,
-                    responseSoapParts,
-                    context);
-            } catch (XmlaException xex) {
-                LOGGER.error("Errors when handling XML/A message", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
+            handlingXmlaMessageHeader(response, requestSoapParts, responseSoapParts, context, phase, mimeType);
 
             phase = Phase.CALLBACK_PRE_ACTION;
 
+            callbacksPreAction(request, response, requestSoapParts, responseSoapParts, context, phase, mimeType);
 
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Invoking callbacks preAction");
-                }
-
-                for (XmlaRequestCallback callback : getCallbacks()) {
-                    callback.preAction(request, requestSoapParts, context);
-                }
-            } catch (XmlaException xex) {
-                LOGGER.error("Errors when invoking callbacks preaction", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            } catch (Exception ex) {
-                LOGGER.error("Errors when invoking callbacks preaction", ex);
-                handleFault(
-                    response, responseSoapParts,
-                    phase,
-                    new XmlaException(
-                        SERVER_FAULT_FC,
-                        CPREA_CODE,
-                        CPREA_FAULT_FS,
-                        ex));
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
 
             phase = Phase.PROCESS_BODY;
-
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Handling XML/A message body");
-                }
-
-                // process XML/A request
-                handleSoapBody(
-                    response,
-                    requestSoapParts,
-                    responseSoapParts,
-                    context);
-            } catch (XmlaException xex) {
-                LOGGER.error("Errors when handling XML/A message", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
+            handlingXmlaMessageBody(response, requestSoapParts, responseSoapParts, context, phase, mimeType);
 
             mimeType =
                 (Enumeration.ResponseMimeType) context.get(CONTEXT_MIME_TYPE);
 
             phase = Phase.CALLBACK_POST_ACTION;
+            invokingCallbacksPostAction(request, response, responseSoapParts, context, phase, mimeType);
 
-            try {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Invoking callbacks postAction");
-                }
-
-                for (XmlaRequestCallback callback : getCallbacks()) {
-                    callback.postAction(
-                        request, response,
-                        responseSoapParts, context);
-                }
-            } catch (XmlaException xex) {
-                LOGGER.error("Errors when invoking callbacks postaction", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            } catch (Exception ex) {
-                LOGGER.error("Errors when invoking callbacks postaction", ex);
-                handleFault(
-                    response,
-                    responseSoapParts,
-                    phase,
-                    new XmlaException(
-                        SERVER_FAULT_FC,
-                        CPOSTA_CODE,
-                        CPOSTA_FAULT_FS,
-                        ex));
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-                return;
-            }
 
             phase = Phase.SEND_RESPONSE;
 
-            try {
-                response.setStatus(HttpServletResponse.SC_OK);
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-            } catch (XmlaException xex) {
-                LOGGER.error("Errors when handling XML/A message", xex);
-                handleFault(response, responseSoapParts, phase, xex);
-                phase = Phase.SEND_ERROR;
-                marshallSoapMessage(response, responseSoapParts, mimeType);
-            }
+            invokingSendResponseAction(response, responseSoapParts, phase, mimeType);
 
             String sessionId = (String)context.get(CONTEXT_XMLA_SESSION_ID);
             if(sessionId != null) {
@@ -396,10 +213,230 @@ public abstract class XmlaServlet
                     mondrian.server.Session.checkIn(sessionId);
                 }
             }
-        } catch (Throwable t) {
+        } catch (XmlaServletException t) {
+            LOGGER.error("Unknown Error when handling XML/A message");
+        } catch (Exception t) {
             LOGGER.error("Unknown Error when handling XML/A message", t);
             handleFault(response, responseSoapParts, phase, t);
             marshallSoapMessage(response, responseSoapParts, mimeType);
+        }
+    }
+
+    private void invokingSendResponseAction(HttpServletResponse response,
+                                            byte[][] responseSoapParts,
+                                            Phase phase, Enumeration.ResponseMimeType mimeType) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+        } catch (XmlaException xex) {
+            LOGGER.error(ERRORS_WHEN_HANDLING_XML_A_MESSAGE, xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+        }
+
+    }
+
+    private void invokingCallbacksPostAction(HttpServletRequest request, HttpServletResponse response,
+                                             byte[][] responseSoapParts, Map<String, Object> context,
+                                             Phase phase, Enumeration.ResponseMimeType mimeType) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Invoking callbacks postAction");
+            }
+
+            for (XmlaRequestCallback callback : getCallbacks()) {
+                callback.postAction(
+                    request, response,
+                    responseSoapParts, context);
+            }
+        } catch (XmlaException xex) {
+            LOGGER.error("Errors when invoking callbacks postaction", xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        } catch (Exception ex) {
+            LOGGER.error("Errors when invoking callbacks postaction", ex);
+            handleFault(
+                response,
+                responseSoapParts,
+                phase,
+                new XmlaException(
+                    SERVER_FAULT_FC,
+                    CPOSTA_CODE,
+                    CPOSTA_FAULT_FS,
+                    ex));
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void handlingXmlaMessageBody(HttpServletResponse response,
+                                         Element[] requestSoapParts, byte[][] responseSoapParts,
+                                         Map<String, Object> context, Phase phase, Enumeration.ResponseMimeType mimeType){
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Handling XML/A message body");
+            }
+
+            // process XML/A request
+            handleSoapBody(
+                response,
+                requestSoapParts,
+                responseSoapParts,
+                context);
+        } catch (XmlaException xex) {
+            LOGGER.error(ERRORS_WHEN_HANDLING_XML_A_MESSAGE, xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void callbacksPreAction(HttpServletRequest request, HttpServletResponse response,
+                                    Element[] requestSoapParts, byte[][] responseSoapParts,
+                                    Map<String, Object> context, Phase phase, Enumeration.ResponseMimeType mimeType) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Invoking callbacks preAction");
+            }
+
+            for (XmlaRequestCallback callback : getCallbacks()) {
+                callback.preAction(request, requestSoapParts, context);
+            }
+        } catch (XmlaException xex) {
+            LOGGER.error("Errors when invoking callbacks preaction", xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        } catch (Exception ex) {
+            LOGGER.error("Errors when invoking callbacks preaction", ex);
+            handleFault(
+                response, responseSoapParts,
+                phase,
+                new XmlaException(
+                    SERVER_FAULT_FC,
+                    CPREA_CODE,
+                    CPREA_FAULT_FS,
+                    ex));
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void handlingXmlaMessageHeader(HttpServletResponse response, Element[] requestSoapParts,
+                                           byte[][] responseSoapParts, Map<String, Object> context,
+                                           Phase phase, Enumeration.ResponseMimeType mimeType) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Handling XML/A message header");
+            }
+
+            // process application specified SOAP header here
+            handleSoapHeader(
+                response,
+                requestSoapParts,
+                responseSoapParts,
+                context);
+        } catch (XmlaException xex) {
+            LOGGER.error(ERRORS_WHEN_HANDLING_XML_A_MESSAGE, xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void unmarshallingSoapMessage(
+        HttpServletRequest request, HttpServletResponse response,
+        Map<String, Object> context, byte[][] responseSoapParts,
+        Phase phase, Enumeration.ResponseMimeType mimeType, Element[] requestSoapParts) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Unmarshalling SOAP message");
+            }
+
+            // check request's content type
+            String contentType = request.getContentType();
+            if (contentType == null
+                || !contentType.contains("text/xml"))
+            {
+                throw new IllegalArgumentException(
+                    new StringBuilder("Only accepts content type 'text/xml', not '")
+                        .append(contentType).append("'").toString());
+            }
+
+            // are they asking for a JSON response?
+            String accept = request.getHeader("Accept");
+            if (accept != null) {
+                mimeType = XmlaUtil.chooseResponseMimeType(accept);
+                if (mimeType == null) {
+                    throw new IllegalArgumentException(
+                        new StringBuilder("Accept header '").append(accept).append("' is not a supported")
+                            .append(" response content type. Allowed values:")
+                            .append(" text/xml, application/xml, application/json.").toString());
+                }
+                if (mimeType != Enumeration.ResponseMimeType.SOAP) {
+                    response.setContentType(mimeType.getMimeType());
+                }
+            }
+            context.put(CONTEXT_MIME_TYPE, mimeType);
+
+            unmarshallSoapMessage(request, requestSoapParts);
+        } catch (XmlaException xex) {
+            LOGGER.error("Unable to unmarshall SOAP message", xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void validateHttpHeaderCallbacks(
+        HttpServletRequest request, HttpServletResponse response, Map<String, Object> context, byte[][] responseSoapParts, Phase phase, Enumeration.ResponseMimeType mimeType) {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Invoking validate http header callbacks");
+            }
+            for (XmlaRequestCallback callback : getCallbacks()) {
+                if (!callback.processHttpHeader(
+                    request,
+                    response,
+                    context))
+                {
+                    throw new XmlaServletException();
+                }
+            }
+        } catch (XmlaException xex) {
+            LOGGER.error(
+                "Errors when invoking callbacks validateHttpHeader", xex);
+            handleFault(response, responseSoapParts, phase, xex);
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        } catch (Exception ex) {
+            LOGGER.error(
+                "Errors when invoking callbacks validateHttpHeader", ex);
+            handleFault(
+                response, responseSoapParts,
+                phase,
+                new XmlaException(
+                    SERVER_FAULT_FC,
+                    CHH_CODE,
+                    CHH_FAULT_FS,
+                    ex));
+            marshallSoapMessage(response, responseSoapParts, mimeType);
+            throw new XmlaServletException();
+        }
+    }
+
+    private void encodeRequestResponse(HttpServletRequest request, HttpServletResponse response) {
+        if (charEncoding != null) {
+            try {
+                request.setCharacterEncoding(charEncoding);
+                response.setCharacterEncoding(charEncoding);
+            } catch (UnsupportedEncodingException uee) {
+                charEncoding = null;
+                LOGGER.warn(
+                    "Unsupported character encoding '{}': Use default character encoding from HTTP client for now",
+                    charEncoding);
+            }
         }
     }
 
@@ -471,55 +508,57 @@ public abstract class XmlaServlet
         if (callbacksValue != null) {
             String[] classNames = callbacksValue.split(";");
 
-            int count = 0;
-            nextCallback:
-            for (String className1 : classNames) {
-                String className = className1.trim();
+            Integer count = 0;
 
-                try {
-                    Class<?> cls = Class.forName(className);
-                    if (XmlaRequestCallback.class.isAssignableFrom(cls)) {
-                        XmlaRequestCallback callback =
-                            (XmlaRequestCallback) cls.newInstance();
+            initCallbacks(classNames, servletConfig, count);
+            LOGGER.debug("Registered {} callback{}", count, (count > 1 ? "s" : ""));
+        }
+    }
 
-                        try {
-                            callback.init(servletConfig);
-                        } catch (Exception e) {
-                            LOGGER.warn(
-                                new StringBuilder("Failed to initialize callback '")
-                                .append(className).append("'").toString(),
-                                e);
-                            continue nextCallback;
-                        }
+    private void initCallbacks(String[] classNames, ServletConfig servletConfig, Integer count) {
+        for (String className1 : classNames) {
+            String className = className1.trim();
 
-                        addCallback(callback);
-                        count++;
+            try {
+                Class<?> cls = Class.forName(className);
+                if (XmlaRequestCallback.class.isAssignableFrom(cls)) {
+                    XmlaRequestCallback callback =
+                        (XmlaRequestCallback) cls.newInstance();
 
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug(
-                                "Register callback '{}'", className);
-                        }
-                    } else {
+                    try {
+                        callback.init(servletConfig);
+                    } catch (Exception e) {
                         LOGGER.warn(
-                            "'{}' is not an implementation of '{}'", className, XmlaRequestCallback.class);
+                            new StringBuilder("Failed to initialize callback '")
+                                .append(className).append("'").toString(),
+                            e);
+                        continue;
                     }
-                } catch (ClassNotFoundException cnfe) {
+
+                    addCallback(callback);
+                    count++;
+
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(
+                            "Register callback '{}'", className);
+                    }
+                } else {
                     LOGGER.warn(
-                        new StringBuilder("Callback class '").append(className).append("' not found").toString(),
-                        cnfe);
-                } catch (InstantiationException ie) {
-                    LOGGER.warn(
-                        new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
-                        ie);
-                } catch (IllegalAccessException iae) {
-                    LOGGER.warn(
-                        new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
-                        iae);
+                        "'{}' is not an implementation of '{}'", className, XmlaRequestCallback.class);
                 }
+            } catch (ClassNotFoundException cnfe) {
+                LOGGER.warn(
+                    new StringBuilder("Callback class '").append(className).append("' not found").toString(),
+                    cnfe);
+            } catch (InstantiationException ie) {
+                LOGGER.warn(
+                    new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
+                    ie);
+            } catch (IllegalAccessException iae) {
+                LOGGER.warn(
+                    new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
+                    iae);
             }
-            LOGGER.debug(
-                new StringBuilder("Registered ").append(count).append(" callback")
-                    .append((count > 1 ? "s" : "")).toString());
         }
     }
 }
