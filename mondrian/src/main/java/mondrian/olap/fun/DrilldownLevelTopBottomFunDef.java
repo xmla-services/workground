@@ -98,7 +98,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       compiler.compileInteger( call.getArg( 1 ) );
     final LevelCalc levelCalc =
       call.getArgCount() > 2
-        && call.getArg( 2 ).getCategory() != Category.Empty
+        && call.getArg( 2 ).getCategory() != Category.EMPTY
         ? compiler.compileLevel( call.getArg( 2 ) )
         : null;
     final Calc orderCalc =

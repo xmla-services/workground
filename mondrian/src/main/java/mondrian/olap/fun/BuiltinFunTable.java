@@ -101,7 +101,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 "",
                 "Dummy function representing the empty expression",
                 Syntax.Empty,
-                Category.Empty,
+                Category.EMPTY,
                 new int[0])
             {
             }
@@ -275,7 +275,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         cube,
                         Util.parseIdentifier(s),
                         false,
-                        Category.Level)
+                        Category.LEVEL)
                     // lookupCompound barfs if "s" doesn't have matching
                     // brackets, so don't even try
                     : null;

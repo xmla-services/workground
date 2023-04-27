@@ -125,14 +125,14 @@ public class ParameterExpr extends ExpBase {
         if (def) {
             pw.print(new StringBuilder("Parameter(").append(Util.quoteForMdx(name)).append(", ").toString());
             switch (category) {
-            case Category.String:
-            case Category.Numeric:
+            case Category.STRING:
+            case Category.NUMERIC:
                 pw.print(Category.instance.getName(category).toUpperCase());
                 break;
-            case Category.Member:
+            case Category.MEMBER:
                 pw.print(uniqueName(type));
                 break;
-            case Category.Set:
+            case Category.SET:
                 Type elementType = ((SetType) type).getElementType();
                 pw.print(uniqueName(elementType));
                 break;

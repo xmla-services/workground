@@ -68,7 +68,7 @@ public class DimensionExpr extends ExpBase implements Exp {
 
     @Override
 	public int getCategory() {
-        return Category.Dimension;
+        return Category.DIMENSION;
     }
 
     @Override

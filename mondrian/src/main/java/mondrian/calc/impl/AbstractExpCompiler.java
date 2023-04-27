@@ -297,8 +297,8 @@ public class AbstractExpCompiler implements ExpCompiler {
     public IntegerCalc compileInteger(Exp exp) {
         final Calc calc = compileScalar(exp, false);
         final Type type = calc.getType();
-        if (type instanceof DecimalType
-                && ((DecimalType) type).getScale() == 0)
+        if (type instanceof DecimalType decimalType
+                && decimalType.getScale() == 0)
         {
             return (IntegerCalc) calc;
         }
@@ -344,15 +344,15 @@ public class AbstractExpCompiler implements ExpCompiler {
             resultStyleList = ResultStyle.LIST_ONLY;
         }
         Calc calc = compileAs(exp, null, resultStyleList);
-        if (calc instanceof ListCalc) {
-            return (ListCalc) calc;
+        if (calc instanceof ListCalc listCalc) {
+            return listCalc;
         }
         if (calc == null) {
             calc = compileAs(exp, null, ResultStyle.ITERABLE_ANY);
             assert calc != null;
         }
-        if (calc instanceof ListCalc) {
-        	return (ListCalc) calc;
+        if (calc instanceof ListCalc listCalc) {
+        	return listCalc;
         }
         // If expression is an iterator, convert it to a list. Don't check
         // 'calc instanceof IterCalc' because some generic calcs implement both
@@ -388,7 +388,7 @@ public class AbstractExpCompiler implements ExpCompiler {
     @Override
     public BooleanCalc compileBoolean(Exp exp) {
         final Calc calc = compileScalar(exp, false);
-        if (calc instanceof BooleanCalc) {
+        if (calc instanceof BooleanCalc booleanCalc) {
             if (calc instanceof ConstantCalc) {
                 final Object o = calc.evaluate(null);
                 if (!(o instanceof Boolean)) {
@@ -396,7 +396,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                             CastFunDef.toBoolean(o, new BooleanType()));
                 }
             }
-            return (BooleanCalc) calc;
+            return booleanCalc;
         }
         if (calc instanceof DoubleCalc doubleCalc) {
             return new AbstractBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
@@ -420,21 +420,20 @@ public class AbstractExpCompiler implements ExpCompiler {
     @Override
     public DoubleCalc compileDouble(Exp exp) {
         final Calc calc = compileScalar(exp, false);
-        if (calc instanceof ConstantCalc
+        if (calc instanceof ConstantCalc constantCalc
                 && !(calc.evaluate(null) instanceof Double))
         {
             return ConstantCalc.constantDouble(
-                    ((ConstantCalc) calc).evaluateDouble(null));
+                constantCalc.evaluateDouble(null));
         }
-        if (calc instanceof DoubleCalc) {
-            return (DoubleCalc) calc;
+        if (calc instanceof DoubleCalc doubleCalc) {
+            return doubleCalc;
         }
         if (calc instanceof IntegerCalc integerCalc) {
             return new AbstractDoubleCalc("AbstractDoubleCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
                 public double evaluateDouble(Evaluator evaluator) {
-                    final int result = integerCalc.evaluateInteger(evaluator);
-                    return result;
+                    return integerCalc.evaluateInteger(evaluator);
                 }
             };
         }

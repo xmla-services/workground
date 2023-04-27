@@ -61,9 +61,7 @@ public abstract class DelegatingInvocationHandler
                 clazz.getMethod(
                     method.getName(),
                     method.getParameterTypes());
-        } catch (NoSuchMethodException e) {
-            matchingMethod = null;
-        } catch (SecurityException e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             matchingMethod = null;
         }
         try {

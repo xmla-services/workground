@@ -61,8 +61,8 @@ implements ListCalc, IterCalc
     @Override
     public TupleList evaluateList(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
-        if (o instanceof TupleList) {
-            return (TupleList) o;
+        if (o instanceof TupleList tupleList) {
+            return tupleList;
         }
         // Iterable
         final TupleIterable iterable = (TupleIterable) o;

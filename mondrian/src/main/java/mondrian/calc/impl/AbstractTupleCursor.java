@@ -24,7 +24,7 @@ import mondrian.olap.Evaluator;
 public abstract class AbstractTupleCursor implements TupleCursor {
     protected final int arity;
 
-    public AbstractTupleCursor(int arity) {
+    protected AbstractTupleCursor(int arity) {
         this.arity = arity;
     }
 

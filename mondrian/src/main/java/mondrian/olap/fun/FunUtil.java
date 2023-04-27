@@ -190,7 +190,7 @@ public class FunUtil extends Util {
     }
     Exp arg = call.getArg( i );
     if ( !( arg instanceof Literal )
-      || arg.getCategory() != Category.Symbol ) {
+      || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
@@ -232,7 +232,7 @@ public class FunUtil extends Util {
     }
     Exp arg = call.getArg( i );
     if ( !( arg instanceof Literal )
-      || arg.getCategory() != Category.Symbol ) {
+      || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
@@ -560,7 +560,7 @@ public class FunUtil extends Util {
    * Decodes the signature of a function into a category code which describes the return type of the operator.
    *
    * <p>For example, <code>decodeReturnType("fnx")</code> returns
-   * <code>{@link Category#Numeric}</code>, indicating this function has a
+   * <code>{@link Category#NUMERIC}</code>, indicating this function has a
    * numeric return value.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
@@ -569,7 +569,7 @@ public class FunUtil extends Util {
    */
   public static int decodeReturnCategory( String flags ) {
     final int returnCategory = FunUtil.decodeCategory( flags, 1 );
-    if ( ( returnCategory & Category.Mask ) != returnCategory ) {
+    if ( ( returnCategory & Category.MASK) != returnCategory ) {
       throw Util.newInternal( new StringBuilder("bad return code flag in flags '")
           .append(flags).append("'").toString() );
     }
@@ -582,33 +582,33 @@ public class FunUtil extends Util {
    * <p>The codes are:
    * <table border="1">
    *
-   * <tr><td>a</td><td>{@link Category#Array}</td></tr>
+   * <tr><td>a</td><td>{@link Category#ARRAY}</td></tr>
    *
-   * <tr><td>d</td><td>{@link Category#Dimension}</td></tr>
+   * <tr><td>d</td><td>{@link Category#DIMENSION}</td></tr>
    *
-   * <tr><td>h</td><td>{@link Category#Hierarchy}</td></tr>
+   * <tr><td>h</td><td>{@link Category#HIERARCHY}</td></tr>
    *
-   * <tr><td>l</td><td>{@link Category#Level}</td></tr>
+   * <tr><td>l</td><td>{@link Category#LEVEL}</td></tr>
    *
-   * <tr><td>b</td><td>{@link Category#Logical}</td></tr>
+   * <tr><td>b</td><td>{@link Category#LOGICAL}</td></tr>
    *
-   * <tr><td>m</td><td>{@link Category#Member}</td></tr>
+   * <tr><td>m</td><td>{@link Category#MEMBER}</td></tr>
    *
-   * <tr><td>N</td><td>Constant {@link Category#Numeric}</td></tr>
+   * <tr><td>N</td><td>Constant {@link Category#NUMERIC}</td></tr>
    *
-   * <tr><td>n</td><td>{@link Category#Numeric}</td></tr>
+   * <tr><td>n</td><td>{@link Category#NUMERIC}</td></tr>
    *
-   * <tr><td>x</td><td>{@link Category#Set}</td></tr>
+   * <tr><td>x</td><td>{@link Category#SET}</td></tr>
    *
-   * <tr><td>#</td><td>Constant {@link Category#String}</td></tr>
+   * <tr><td>#</td><td>Constant {@link Category#STRING}</td></tr>
    *
-   * <tr><td>S</td><td>{@link Category#String}</td></tr>
+   * <tr><td>S</td><td>{@link Category#STRING}</td></tr>
    *
-   * <tr><td>t</td><td>{@link Category#Tuple}</td></tr>
+   * <tr><td>t</td><td>{@link Category#TUPLE}</td></tr>
    *
-   * <tr><td>v</td><td>{@link Category#Value}</td></tr>
+   * <tr><td>v</td><td>{@link Category#VALUE}</td></tr>
    *
-   * <tr><td>y</td><td>{@link Category#Symbol}</td></tr>
+   * <tr><td>y</td><td>{@link Category#SYMBOL}</td></tr>
    *
    * </table>
    *
@@ -620,43 +620,43 @@ public class FunUtil extends Util {
     char c = flags.charAt( offset );
     switch ( c ) {
       case 'a':
-        return Category.Array;
+        return Category.ARRAY;
       case 'd':
-        return Category.Dimension;
+        return Category.DIMENSION;
       case 'h':
-        return Category.Hierarchy;
+        return Category.HIERARCHY;
       case 'l':
-        return Category.Level;
+        return Category.LEVEL;
       case 'b':
-        return Category.Logical;
+        return Category.LOGICAL;
       case 'm':
-        return Category.Member;
+        return Category.MEMBER;
       case 'N':
-        return Category.Numeric | Category.Constant;
+        return Category.NUMERIC | Category.CONSTANT;
       case 'n':
-        return Category.Numeric;
+        return Category.NUMERIC;
       case 'I':
-        return Category.Numeric | Category.Integer | Category.Constant;
+        return Category.NUMERIC | Category.INTEGER | Category.CONSTANT;
       case 'i':
-        return Category.Numeric | Category.Integer;
+        return Category.NUMERIC | Category.INTEGER;
       case 'x':
-        return Category.Set;
+        return Category.SET;
       case '#':
-        return Category.String | Category.Constant;
+        return Category.STRING | Category.CONSTANT;
       case 'S':
-        return Category.String;
+        return Category.STRING;
       case 't':
-        return Category.Tuple;
+        return Category.TUPLE;
       case 'v':
-        return Category.Value;
+        return Category.VALUE;
       case 'y':
-        return Category.Symbol;
+        return Category.SYMBOL;
       case 'U':
-        return Category.Null;
+        return Category.NULL;
       case 'e':
-        return Category.Empty;
+        return Category.EMPTY;
       case 'D':
-        return Category.DateTime;
+        return Category.DATE_TIME;
       default:
         throw Util.newInternal(
           new StringBuilder("unknown type code '").append(c)
@@ -669,7 +669,7 @@ public class FunUtil extends Util {
    *
    * <p>Each character is decoded using {@link #decodeCategory(String, int)}.
    * For example, <code>decodeParameterTypes("nx")</code> returns
-   * <code>{{@link Category#Numeric}, {@link Category#Set}}</code>.
+   * <code>{{@link Category#NUMERIC}, {@link Category#SET}}</code>.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
    *              FunDefBase}.
@@ -1534,15 +1534,15 @@ public class FunUtil extends Util {
         final int cat0 = paramCategories[ 0 ];
         final Exp arg0 = args[ 0 ];
         switch ( cat0 ) {
-          case Category.Dimension:
-          case Category.Hierarchy:
+          case Category.DIMENSION:
+          case Category.HIERARCHY:
             if ( arg0 instanceof DimensionExpr
               && ( (DimensionExpr) arg0 ).getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
-          case Category.Member:
+          case Category.MEMBER:
             if ( arg0 instanceof MemberExpr
               && ( (MemberExpr) arg0 ).getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
@@ -1555,7 +1555,7 @@ public class FunUtil extends Util {
   }
 
   private static boolean isMemberOrSet( int category ) {
-    return category == Category.Member || category == Category.Set;
+    return category == Category.MEMBER || category == Category.SET;
   }
 
   static void appendTuple( StringBuilder buf, Member[] members ) {

@@ -91,7 +91,7 @@ class PropertiesFunDef extends FunDefBase {
      */
     private static class ResolverImpl extends ResolverBase {
         private static final int[] PARAMETER_TYPES = {
-            Category.Member, Category.String
+            Category.MEMBER, Category.STRING
         };
 
         private ResolverImpl() {
@@ -139,7 +139,7 @@ class PropertiesFunDef extends FunDefBase {
         /**
          * Deduces the category of a property. This is possible only if the
          * name is a string literal, and the member's hierarchy is unambigous.
-         * If the type cannot be deduced, returns {@link Category#Value}.
+         * If the type cannot be deduced, returns {@link Category#VALUE}.
          *
          * @param memberExp Expression for the member
          * @param propertyNameExp Expression for the name of the property
@@ -150,34 +150,34 @@ class PropertiesFunDef extends FunDefBase {
             Exp propertyNameExp)
         {
             if (!(propertyNameExp instanceof Literal)) {
-                return Category.Value;
+                return Category.VALUE;
             }
             String propertyName =
                 (String) ((Literal) propertyNameExp).getValue();
             Hierarchy hierarchy = memberExp.getType().getHierarchy();
             if (hierarchy == null) {
-                return Category.Value;
+                return Category.VALUE;
             }
             Level[] levels = hierarchy.getLevels();
             Property property = Util.lookupProperty(
                 levels[levels.length - 1], propertyName);
             if (property == null) {
                 // we'll likely get a runtime error
-                return Category.Value;
+                return Category.VALUE;
             } else {
                 switch (property.getType()) {
                 case TYPE_BOOLEAN:
-                    return Category.Logical;
+                    return Category.LOGICAL;
                 case TYPE_NUMERIC:
                 case TYPE_INTEGER:
                 case TYPE_LONG:
-                    return Category.Numeric;
+                    return Category.NUMERIC;
                 case TYPE_STRING:
-                    return Category.String;
+                    return Category.STRING;
                 case TYPE_DATE:
                 case TYPE_TIME:
                 case TYPE_TIMESTAMP:
-                    return Category.DateTime;
+                    return Category.DATE_TIME;
                 default:
                     throw Util.badValue(property.getType());
                 }

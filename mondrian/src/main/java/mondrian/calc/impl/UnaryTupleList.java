@@ -45,7 +45,7 @@ implements TupleList
      * Creates an empty UnaryTupleList.
      */
     public UnaryTupleList() {
-        this(new ArrayList<Member>());
+        this(new ArrayList<>());
     }
 
     /**
@@ -59,7 +59,9 @@ implements TupleList
 
     @Override
     public Member get(int slice, int index) {
-        assert slice == 0;
+        if (slice != 0) {
+            throw new IllegalArgumentException("Invalid slice: " + slice);
+        }
         return list.get(index);
     }
 

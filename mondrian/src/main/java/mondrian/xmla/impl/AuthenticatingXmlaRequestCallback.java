@@ -55,7 +55,7 @@ public abstract class AuthenticatingXmlaRequestCallback
         Map<String, Object> context)
         throws Exception
     {
-        return;
+        // empty postAction
     }
 
     @Override

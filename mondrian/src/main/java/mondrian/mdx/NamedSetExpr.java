@@ -68,7 +68,7 @@ public class NamedSetExpr extends ExpBase implements Exp {
 
     @Override
 	public int getCategory() {
-        return Category.Set;
+        return Category.SET;
     }
 
     @Override

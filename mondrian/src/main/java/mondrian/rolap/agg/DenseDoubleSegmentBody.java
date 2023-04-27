@@ -91,13 +91,11 @@ class DenseDoubleSegmentBody extends AbstractSegmentBody {
         sb.append(Arrays.toString(getAxisValueSets()));
         sb.append(", nullAxisFlags=");
         sb.append(Arrays.toString(getNullAxisFlags()));
-        if (getAxisValueSets().length > 0) {
-            if (getAxisValueSets()[0].iterator().hasNext()) {
-                sb.append(", aVS[0]=");
-                sb.append(getAxisValueSets()[0].getClass());
-                sb.append(", aVS[0][0]=");
-                sb.append(getAxisValueSets()[0].iterator().next().getClass());
-            }
+        if (getAxisValueSets().length > 0 && getAxisValueSets()[0].iterator().hasNext()) {
+            sb.append(", aVS[0]=");
+            sb.append(getAxisValueSets()[0].getClass());
+            sb.append(", aVS[0][0]=");
+            sb.append(getAxisValueSets()[0].iterator().next().getClass());
         }
         sb.append(")");
         return sb.toString();

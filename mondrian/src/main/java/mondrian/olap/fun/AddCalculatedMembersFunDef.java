@@ -49,8 +49,6 @@ import mondrian.olap.type.Type;
  * @since Mar 23, 2006
  */
 class AddCalculatedMembersFunDef extends FunDefBase {
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(AddCalculatedMembersFunDef.class);
 
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();
@@ -114,7 +112,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
                 schemaReader.getCalculatedMembers(level);
             for (Member calcMember : calcMemberList) {
                 Member parentMember = calcMember.getParentMember();
-                if (parentMember == null || memberList.stream().filter(m -> m.getParentMember() != null && m.getParentMember().getUniqueName().equals(parentMember.getUniqueName())).findFirst().isPresent()) {
+                if (parentMember == null || memberList.stream().anyMatch(m -> m.getParentMember() != null && m.getParentMember().getUniqueName().equals(parentMember.getUniqueName()))) {
                     workingList.add(calcMember);
                 }
             }

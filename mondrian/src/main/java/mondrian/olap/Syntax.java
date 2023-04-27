@@ -78,7 +78,7 @@ public enum Syntax {
 		public String getSignature(String name, int returnType, int[] argTypes)
         {
             // e.g. "<Member>.Lead(<Numeric Expression>)"
-            return new StringBuilder(returnType == Category.Unknown
+            return new StringBuilder(returnType == Category.UNKNOWN
                     ? ""
                     : new StringBuilder(getTypeDescription(returnType)).append(" ").toString())
                 .append(getTypeDescription(argTypes[0])).append(".")
@@ -238,7 +238,7 @@ public enum Syntax {
 		public String getSignature(String name, int returnType, int[] argTypes)
         {
             String s = getTypeDescription(argTypes[0]);
-            if (argTypes[0] == Category.Logical) {
+            if (argTypes[0] == Category.LOGICAL) {
                 return new StringBuilder("CASE WHEN ").append(s).append(" THEN <Expression> ... END").toString();
             } else {
                 return new StringBuilder("CASE ").append(s).append(" WHEN ").append(s)
@@ -329,7 +329,7 @@ public enum Syntax {
      */
     public String getSignature(String name, int returnType, int[] argTypes) {
         // e.g. "StripCalculatedMembers(<Set>)"
-        return new StringBuilder((returnType == Category.Unknown
+        return new StringBuilder((returnType == Category.UNKNOWN
                 ? ""
                 : new StringBuilder(getTypeDescription(returnType)).append(" ").toString()))
             .append(name).append("(").append(getTypeDescriptionCommaList(argTypes, 0))
@@ -343,7 +343,7 @@ public enum Syntax {
     }
 
     private static String getTypeDescription(int type) {
-        return new StringBuilder("<").append(Category.instance.getDescription(type & Category.Mask))
+        return new StringBuilder("<").append(Category.instance.getDescription(type & Category.MASK))
             .append(">").toString();
     }
 
@@ -357,7 +357,7 @@ public enum Syntax {
             }
             sb.append("<")
                 .append(
-                    Category.instance.getDescription(types[i] & Category.Mask))
+                    Category.instance.getDescription(types[i] & Category.MASK))
                 .append(">");
         }
         return sb.toString();

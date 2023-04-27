@@ -11,6 +11,7 @@
 
 package mondrian.rolap.aggmatcher;
 
+import static java.util.Collections.EMPTY_LIST;
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 
@@ -41,7 +42,6 @@ import mondrian.olap.Aggregator;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapAggregator;
@@ -94,7 +94,6 @@ public class AggStar {
     public static AggStar makeAggStar(
         final RolapStar star,
         final JdbcSchema.Table dbTable,
-        final MessageRecorder msgRecorder,
         final long approxRowCount)
     {
         AggStar aggStar = new AggStar(star, dbTable, approxRowCount);
@@ -151,12 +150,12 @@ public class AggStar {
         //    which it is OK to roll up
         for (FactTable.Measure measure : aggStarFactTable.measures) {
             if (measure.aggregator.isDistinct()
-                && measure.argument instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column)
+                && measure.argument instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column column)
             {
                 setLevelBits(
                     measure.rollableLevelBitKey,
                     aggStarFactTable,
-                    (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) measure.argument,
+                    column,
                     star.getFactTable());
             }
         }
@@ -249,7 +248,7 @@ public class AggStar {
     /**
      * A map of bit positions to columns which need to
      * be joined and are not collapsed. If the aggregate table
-     * includes an {@link AggLevel} element which is not
+     * includes an {AggLevel} element which is not
      * collapsed, it will appear in that list. We use this
      * list later on to create the join paths in AggQuerySpec.
      */
@@ -344,15 +343,10 @@ public class AggStar {
         }
         if (getLevelBitKey().equals(levelBitKey)) {
             return true;
-        } else if (getLevelBitKey().isSuperSetOf(levelBitKey)
-            && getLevelBitKey().andNot(coreLevelBitKey).equals(
-                levelBitKey.andNot(coreLevelBitKey)))
-        {
-            // It's OK to roll up levels which are orthogonal to the distinct
-            // measure.
-            return true;
         } else {
-            return false;
+            return  (getLevelBitKey().isSuperSetOf(levelBitKey)
+                && getLevelBitKey().andNot(coreLevelBitKey).equals(
+                levelBitKey.andNot(coreLevelBitKey)));
         }
     }
 
@@ -429,8 +423,8 @@ public class AggStar {
      */
     public AggStar.FactTable.Measure lookupMeasure(final int bitPos) {
         AggStar.Table.Column column = lookupColumn(bitPos);
-        return (column instanceof AggStar.FactTable.Measure)
-            ?  (AggStar.FactTable.Measure) column
+        return (column instanceof AggStar.FactTable.Measure measure)
+            ?  measure
             : null;
     }
     /**
@@ -443,8 +437,8 @@ public class AggStar {
      */
     public AggStar.Table.Level lookupLevel(final int bitPos) {
         AggStar.Table.Column column = lookupColumn(bitPos);
-        return (column instanceof AggStar.FactTable.Level)
-            ?  (AggStar.FactTable.Level) column
+        return (column instanceof AggStar.FactTable.Level level)
+            ?  level
             : null;
     }
 
@@ -484,7 +478,7 @@ public class AggStar {
     }
 
     private static final Logger JOIN_CONDITION_LOGGER =
-            LoggerFactory.getLogger(AggStar.Table.JoinCondition.class);
+            LoggerFactory.getLogger(AggStar.class);
 
     public boolean hasIgnoredColumns() {
         return hasIgnoredColumns;
@@ -510,9 +504,8 @@ public class AggStar {
                 final Expression right)
             {
                 if (!(left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column)) {
-                    JOIN_CONDITION_LOGGER.debug(
-                        "JoinCondition.left NOT Column: "
-                        + left.getClass().getName());
+                    JOIN_CONDITION_LOGGER.debug("JoinCondition.left NOT Column: {}",
+                        left.getClass().getName());
                 }
                 this.left = left;
                 this.right = right;
@@ -546,6 +539,7 @@ public class AggStar {
                 return this.right;
             }
 
+
             /**
              * This is used to create part of a SQL where clause.
              */
@@ -569,7 +563,7 @@ public class AggStar {
              * Prints this table and its children.
              */
             public void print(final PrintWriter pw, final String prefix) {
-                SqlQuery sqlQueuy = getTable().getSqlQuery();
+                SqlQuery sqlQueuy = getSqlQuery();
                 pw.print(prefix);
                 pw.println("JoinCondition:");
                 String subprefix = new StringBuilder(prefix).append("  ").toString();
@@ -592,6 +586,14 @@ public class AggStar {
                 pw.print("right=");
                 pw.println(getExpression(right, sqlQueuy));
             }
+
+            /**
+             * Get a SqlQuery object.
+             */
+            protected SqlQuery getSqlQuery() {
+                return getAggStar().getSqlQuery();
+            }
+
         }
 
 
@@ -681,10 +683,10 @@ public class AggStar {
                 if (usagePrefix == null) {
                     exprString = ExpressionUtil.getExpression(getExpression(), query);
                 } else {
-                    Expression expression = getExpression();
-                    assert expression instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+                    Expression expressionInner = getExpression();
+                    assert expressionInner instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
                     org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr =
-                        (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column)expression;
+                        (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column)expressionInner;
                     String prefixedName = usagePrefix
                         + columnExpr.name();
                     String tableName = getTableAlias(columnExpr);
@@ -858,12 +860,6 @@ public class AggStar {
             return AggStar.this;
         }
 
-        /**
-         * Get a SqlQuery object.
-         */
-        protected SqlQuery getSqlQuery() {
-            return getAggStar().getSqlQuery();
-        }
 
         /**
          * Add a Level column.
@@ -890,7 +886,7 @@ public class AggStar {
          * Add a child DimTable table.
          */
         protected void addTable(final DimTable child) {
-            if (children == Collections.EMPTY_LIST) {
+            if (children == EMPTY_LIST) {
                 children = new ArrayList<>();
             }
             children.add(child);
@@ -943,7 +939,7 @@ public class AggStar {
             final Usage usage)
         {
             String tableName = rTable.getAlias();
-            Relation relation = rTable.getRelation();
+            Relation relationInner = rTable.getRelation();
             RolapStar.Condition rjoinCondition = rTable.getJoinCondition();
             Expression rleft = rjoinCondition.getLeft();
             final Expression rright;
@@ -987,7 +983,7 @@ public class AggStar {
             }
             JoinCondition joinCondition = new JoinCondition(left, rright);
             DimTable dimTable =
-                new DimTable(this, tableName, relation, joinCondition);
+                new DimTable(this, tableName, relationInner, joinCondition);
 
             if (usage == null
                 || usage.getUsageType() != UsageType.LEVEL
@@ -1012,12 +1008,12 @@ public class AggStar {
         protected void convertColumns(final RolapStar.Table rTable) {
             // add level columns
             for (RolapStar.Column column : rTable.getColumns()) {
-                String name = column.getName();
+                String nameInner = column.getName();
                 Expression expression = column.getExpression();
                 int bitPosition = column.getBitPosition();
 
                 Level level = new Level(
-                    name,
+                    nameInner,
                     expression,
                     bitPosition,
                     column,
@@ -1167,10 +1163,8 @@ public class AggStar {
             public String generateExprString(SqlQuery query) {
                 String exprString = super.generateExprString(query);
                 RolapAggregator rollupAggregator = getRollupAggregator();
-                if (rollupAggregator instanceof BaseAggor agg) {
-                    if (agg.alwaysRequiresFactColumn()) {
-                        return agg.getScalarExpression(exprString);
-                    }
+                if (rollupAggregator instanceof BaseAggor agg && agg.alwaysRequiresFactColumn()) {
+                    return agg.getScalarExpression(exprString);
                 }
                 return exprString;
             }
@@ -1308,10 +1302,7 @@ public class AggStar {
                 Datatype datatype = column.getDatatype();
                 RolapStar.Column rColumn = usage.rColumn;
                 if (rColumn == null) {
-                    getLogger().warn(
-                        new StringBuilder("loadForeignKey: for column ")
-                        .append(name)
-                        .append(", rColumn == null").toString());
+                    getLogger().warn("loadForeignKey: for column {}, rColumn == null", name);
                 } else {
                     int bitPosition = rColumn.getBitPosition();
                     ForeignKey c =
@@ -1479,7 +1470,7 @@ public class AggStar {
                     // Make sure to return the last child table, since
                     // AggQuerySpec will take care of going up the
                     // parent-child hierarchy and do all the work for us.
-                    while (columnTable.getChildTables().size() > 0) {
+                    while (!columnTable.getChildTables().isEmpty()) {
                         columnTable = columnTable.getChildTables().get(0);
                     }
                     final DimTable finalColumnTable = columnTable;
@@ -1574,10 +1565,10 @@ public class AggStar {
                     ++stmt.rowCount;
                     numberOfRows = resultSet.getInt(1);
                 } else {
-                    getLogger().warn(
-                        mres.SqlQueryFailed.str(
-                            "AggStar.FactTable.makeNumberOfRows",
-                            query.toString()));
+                    String logMsg = mres.SqlQueryFailed.str(
+                        "AggStar.FactTable.makeNumberOfRows",
+                        query.toString());
+                    getLogger().warn(logMsg);
 
                     // set to large number so that this table is never used
                     numberOfRows = Integer.MAX_VALUE / getTotalColumnSize();

@@ -78,11 +78,11 @@ public class CastFunDef extends FunDefBase {
         if (o == null) {
             return FunUtil.IntegerNull;
         }
-        if (o instanceof String) {
-            return Integer.parseInt((String) o);
+        if (o instanceof String str) {
+            return Integer.parseInt(str);
         }
-        if (o instanceof Number) {
-            return ((Number) o).intValue();
+        if (o instanceof Number number) {
+            return number.intValue();
         }
         throw CastFunDef.cannotConvert(o, targetType);
     }
@@ -91,11 +91,11 @@ public class CastFunDef extends FunDefBase {
         if (o == null) {
             return FunUtil.DoubleNull;
         }
-        if (o instanceof String) {
-            return Double.valueOf((String) o);
+        if (o instanceof String str) {
+            return Double.valueOf(str);
         }
-        if (o instanceof Number) {
-            return ((Number) o).doubleValue();
+        if (o instanceof Number number) {
+            return number.doubleValue();
         }
         throw CastFunDef.cannotConvert(o, targetType);
     }
@@ -104,14 +104,14 @@ public class CastFunDef extends FunDefBase {
         if (o == null) {
             return FunUtil.BooleanNull;
         }
-        if (o instanceof Boolean) {
-            return (Boolean) o;
+        if (o instanceof Boolean bool) {
+            return bool;
         }
-        if (o instanceof String) {
-            return Boolean.valueOf((String) o);
+        if (o instanceof String str) {
+            return Boolean.valueOf(str);
         }
-        if (o instanceof Number) {
-            return ((Number) o).doubleValue() > 0;
+        if (o instanceof Number number) {
+            return number.doubleValue() > 0;
         }
         throw CastFunDef.cannotConvert(o, targetType);
     }
@@ -140,13 +140,13 @@ public class CastFunDef extends FunDefBase {
             String typeName = (String) literal.getValue();
             int returnCategory;
             if (typeName.equalsIgnoreCase("String")) {
-                returnCategory = Category.String;
+                returnCategory = Category.STRING;
             } else if (typeName.equalsIgnoreCase("Numeric")) {
-                returnCategory = Category.Numeric;
+                returnCategory = Category.NUMERIC;
             } else if (typeName.equalsIgnoreCase("Boolean")) {
-                returnCategory = Category.Logical;
+                returnCategory = Category.LOGICAL;
             } else if (typeName.equalsIgnoreCase("Integer")) {
-                returnCategory = Category.Integer;
+                returnCategory = Category.INTEGER;
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
@@ -176,15 +176,15 @@ public class CastFunDef extends FunDefBase {
         @Override
 		public Object evaluate(Evaluator evaluator) {
             switch (targetCategory) {
-            case Category.String:
+            case Category.STRING:
                 return evaluateString(evaluator);
-            case Category.Integer:
+            case Category.INTEGER:
                 return FunUtil.box(evaluateInteger(evaluator));
-            case Category.Numeric:
+            case Category.NUMERIC:
                 return FunUtil.box(evaluateDouble(evaluator));
-            case Category.DateTime:
+            case Category.DATE_TIME:
                 return evaluateDateTime(evaluator);
-            case Category.Logical:
+            case Category.LOGICAL:
                 return evaluateBoolean(evaluator);
             default:
                 throw Util.newInternal("category " + targetCategory);

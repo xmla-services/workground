@@ -82,7 +82,7 @@ class SetItemFunDef extends FunDefBase {
             // All args must be strings.
             for (int i = 1; i < args.length; i++) {
                 if (!validator.canConvert(
-                        i, args[i], Category.String, conversions))
+                        i, args[i], Category.STRING, conversions))
                 {
                     return null;
                 }
@@ -91,7 +91,7 @@ class SetItemFunDef extends FunDefBase {
                 throw Util.newError(
                     "Argument count does not match set's cardinality " + arity);
             }
-            final int category = arity == 1 ? Category.Member : Category.Tuple;
+            final int category = arity == 1 ? Category.MEMBER : Category.TUPLE;
             FunDef dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }

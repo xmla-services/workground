@@ -337,7 +337,7 @@ public class CmdRunner {
         Expr.Type type = expr.type;
         // found the parameter with the given name in the query
         switch (category) {
-        case Category.Numeric:
+        case Category.NUMERIC:
             if (type != Expr.Type.NUMERIC) {
                 String msg =
                     new StringBuilder("For parameter named \"")
@@ -349,7 +349,7 @@ public class CmdRunner {
                 throw new IllegalArgumentException(msg);
             }
             break;
-        case Category.String:
+        case Category.STRING:
             if (type != Expr.Type.STRING) {
                 String msg =
                     new StringBuilder("For parameter named \"")
@@ -362,7 +362,7 @@ public class CmdRunner {
             }
             break;
 
-        case Category.Member:
+        case Category.MEMBER:
             if (type != Expr.Type.MEMBER) {
                 String msg = new StringBuilder("For parameter named \"")
                     .append(name)
@@ -1852,7 +1852,7 @@ public class CmdRunner {
                 }
             }
 
-            if (matches.size() == 0) {
+            if (matches.isEmpty()) {
                 buf.append("Bad function name \"");
                 buf.append(funcname);
                 buf.append("\", usage:");
@@ -2136,9 +2136,8 @@ public class CmdRunner {
 
     protected String executeEcho(String mdxCmd) {
         try {
-            String resultString = (mdxCmd.length() == 4)
+            return (mdxCmd.length() == 4)
                 ? "" : mdxCmd.substring(4);
-            return resultString;
         } catch (Exception ex) {
             setError(ex);
             //return error;
@@ -2319,7 +2318,6 @@ public class CmdRunner {
             return resultString;
         } catch (Exception ex) {
             setError(ex);
-            //return error;
             return null;
         }
     }
@@ -2512,11 +2510,9 @@ public class CmdRunner {
     }
 
     private void printTotalQueryTime() {
-        if (options.timeQueries) {
+        if (options.timeQueries && totalQueryTime != queryTime) {
             // only print if different
-            if (totalQueryTime != queryTime) {
-                out.println(new StringBuilder("total[").append(totalQueryTime).append("ms]").toString());
-            }
+            out.println(new StringBuilder("total[").append(totalQueryTime).append("ms]").toString());
         }
         out.flush();
     }

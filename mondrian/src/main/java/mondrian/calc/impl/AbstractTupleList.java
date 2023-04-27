@@ -36,7 +36,7 @@ implements RandomAccess, Cloneable, TupleList
     protected final int arity;
     protected boolean mutable = true;
 
-    public AbstractTupleList(int arity) {
+    protected AbstractTupleList(int arity) {
         this.arity = arity;
     }
 

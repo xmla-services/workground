@@ -88,12 +88,10 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     @Override
 	public StarPredicate or(StarPredicate predicate) {
-        if (predicate instanceof StarColumnPredicate starColumnPredicate) {
-            if (starColumnPredicate.getConstrainedColumn()
-                == getConstrainedColumn())
-            {
-                return orColumn(starColumnPredicate);
-            }
+        if (predicate instanceof StarColumnPredicate starColumnPredicate &&
+            starColumnPredicate.getConstrainedColumn()
+                == getConstrainedColumn()) {
+            return orColumn(starColumnPredicate);
         }
         final List<StarPredicate> list = new ArrayList<>(2);
         list.add(this);
@@ -153,6 +151,11 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
      * {@link mondrian.rolap.StarColumnPredicate}s.
      */
     public static class Factory {
+
+        private Factory() {
+            // constructor
+        }
+
         /**
          * Returns a predicate which tests whether the column's
          * value is equal to a given constant.

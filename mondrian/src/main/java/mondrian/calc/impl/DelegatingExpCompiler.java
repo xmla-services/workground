@@ -253,8 +253,8 @@ public class DelegatingExpCompiler implements ExpCompiler {
 
         @Override
 		public void explain(PrintWriter pw) {
-            if (e instanceof QueryPart) {
-                ((QueryPart) e).explain(pw);
+            if (e instanceof QueryPart queryPart) {
+                queryPart.explain(pw);
             } else {
                 super.explain(pw);
             }

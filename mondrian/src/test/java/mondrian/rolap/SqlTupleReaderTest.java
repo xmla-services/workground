@@ -68,7 +68,7 @@ class SqlTupleReaderTest {
     when( dbTable.getColumnUsages( any() ) ).thenReturn( mock( Iterator.class ) );
     RolapStar star = mock( RolapStar.class );
     when( star.getColumnCount() ).thenReturn( 1 );
-    AggStar aggStar = spy( AggStar.makeAggStar( star, dbTable, mock( MessageRecorder.class ), 10 ) );
+    AggStar aggStar = spy( AggStar.makeAggStar( star, dbTable,  10 ) );
     AggStar.Table.Column column = mock( AggStar.Table.Column.class, Answers.RETURNS_MOCKS );
     doReturn( column ).when( aggStar ).lookupColumn( 0 );
     RolapStar.Column starColumn = mock( RolapStar.Column.class, Answers.RETURNS_MOCKS );

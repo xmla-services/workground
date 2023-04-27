@@ -475,7 +475,7 @@ public class RolapHierarchy extends HierarchyBase {
                 this,
                 uniqueNameParts,
                 false,
-                Category.Member,
+                Category.MEMBER,
                 MatchType.EXACT);
 
             // Next look up within global context. Works for qualified names,
@@ -486,7 +486,7 @@ public class RolapHierarchy extends HierarchyBase {
                     new DummyElement(),
                     uniqueNameParts,
                     false,
-                    Category.Member,
+                    Category.MEMBER,
                     MatchType.EXACT);
             }
             if (defaultMember == null) {

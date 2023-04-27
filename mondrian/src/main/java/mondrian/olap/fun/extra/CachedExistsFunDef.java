@@ -35,11 +35,11 @@ import mondrian.olap.type.Type;
 /**
  * CachedExistsFunDef is a replacement for the Exists MDX function that Analyzer uses for projecting tuples for
  * subtotals, Top10 and other calculations.
- * 
+ *
  * The MDX Analyzer generates uses Exists on the same named set many times within the same query. This can be very
  * computationally expensive because every call to Exists will scan the input set. After generating a cache, the tuples
  * that match the Exists criteria can be looked up without any scans.
- * 
+ *
  * @author Benny Chow
  *
  */
@@ -126,10 +126,10 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
   /**
    * Returns a list of hierarchies used by the input type.
-   * 
+   *
    * If an input type is a dimension instead of a hierarchy, then return the dimension's default hierarchy. See
    * MONDRIAN-2704
-   * 
+   *
    * @param t
    * @return
    */
@@ -144,8 +144,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     } else if ( t instanceof SetType setType ) {
       if ( setType.getElementType() instanceof MemberType ) {
         hiers.add( getHierarchy( setType.getElementType() ) );
-      } else if ( setType.getElementType() instanceof TupleType ) {
-        TupleType tupleTypes = (TupleType) setType.getElementType();
+      } else if ( setType.getElementType() instanceof TupleType tupleTypes) {
         for ( Type elementType : tupleTypes.elementTypes ) {
           hiers.add( getHierarchy( elementType ) );
         }
@@ -163,26 +162,26 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
   /**
    * Generates a subtotal key for the input tuple based on the type of the input subtotal tuple.
-   * 
+   *
    * For example, if the subtotal tuple contained:
-   * 
+   *
    * ([Product].[Food], [Time].[1998])
-   * 
+   *
    * then the type of this subtotal tuple is:
-   * 
+   *
    * ([Product].[Family], [Time].[Year])
-   * 
+   *
    * The subtotal key would need to contain the same types from the input tuple.
-   * 
+   *
    * So if a sample input tuple contained:
-   * 
+   *
    * ([Gender].[M], [Product].[Drink].[Dairy], [Time].[1997].[Q1])
-   * 
+   *
    * The subtotal key for this tuple would be:
-   * 
+   *
    * ([Product].[Drink], [Time].[1997])
-   * 
-   * 
+   *
+   *
    * @param subtotalToListIndex
    * @param tuple
    * @param subtotal

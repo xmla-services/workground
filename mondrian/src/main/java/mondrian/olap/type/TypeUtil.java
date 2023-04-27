@@ -194,37 +194,37 @@ public class TypeUtil {
      */
     public static int typeToCategory(Type type) {
         if (type instanceof NullType) {
-            return Category.Null;
+            return Category.NULL;
         } else if (type instanceof EmptyType) {
-            return Category.Empty;
+            return Category.EMPTY;
         } else if (type instanceof DateTimeType) {
-            return Category.DateTime;
+            return Category.DATE_TIME;
         } else if (type instanceof DecimalType
             && ((DecimalType)type).getScale() == 0)
         {
-            return Category.Integer;
+            return Category.INTEGER;
         } else if (type instanceof NumericType) {
-            return Category.Numeric;
+            return Category.NUMERIC;
         } else if (type instanceof BooleanType) {
-            return Category.Logical;
+            return Category.LOGICAL;
         } else if (type instanceof DimensionType) {
-            return Category.Dimension;
+            return Category.DIMENSION;
         } else if (type instanceof HierarchyType) {
-            return Category.Hierarchy;
+            return Category.HIERARCHY;
         } else if (type instanceof MemberType) {
-            return Category.Member;
+            return Category.MEMBER;
         } else if (type instanceof LevelType) {
-            return Category.Level;
+            return Category.LEVEL;
         } else if (type instanceof SymbolType) {
-            return Category.Symbol;
+            return Category.SYMBOL;
         } else if (type instanceof StringType) {
-            return Category.String;
+            return Category.STRING;
         } else if (type instanceof ScalarType) {
-            return Category.Value;
+            return Category.VALUE;
         } else if (type instanceof SetType) {
-            return Category.Set;
+            return Category.SET;
         } else if (type instanceof TupleType) {
-            return Category.Tuple;
+            return Category.TUPLE;
         } else {
             throw Util.newInternal("Unknown type " + type);
         }
@@ -281,9 +281,9 @@ public class TypeUtil {
         }
         RuntimeException e = null;
         switch (from) {
-        case Category.Array:
+        case Category.ARRAY:
             return false;
-        case Category.Dimension:
+        case Category.DIMENSION:
             // We can go from Dimension to Hierarchy if the dimension has a
             // default hierarchy. From there, we can go to Member or Tuple.
             // Even if the dimension does not have a default hierarchy, we claim
@@ -291,14 +291,14 @@ public class TypeUtil {
             // from being chosen; we will hit an error either at compile time or
             // at run time.
             switch (to) {
-            case Category.Member:
-            case Category.Tuple:
-            case Category.Hierarchy:
+            case Category.MEMBER:
+            case Category.TUPLE:
+            case Category.HIERARCHY:
                 // It is more difficult to convert dimension->hierarchy than
                 // hierarchy->dimension
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, e));
                 return true;
-            case Category.Level:
+            case Category.LEVEL:
                 // It is more difficult to convert dimension->level than
                 // dimension->member or dimension->hierarchy->member.
                 conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
@@ -306,59 +306,59 @@ public class TypeUtil {
             default:
                 return false;
             }
-        case Category.Hierarchy:
+        case Category.HIERARCHY:
             // Seems funny that you can 'downcast' from a hierarchy, doesn't
             // it? But we add an implicit 'CurrentMember', for example,
             // '[Product].PrevMember' actually means
             // '[Product].CurrentMember.PrevMember'.
             switch (to) {
-            case Category.Dimension:
-            case Category.Member:
-            case Category.Tuple:
+            case Category.DIMENSION:
+            case Category.MEMBER:
+            case Category.TUPLE:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             default:
                 return false;
             }
-        case Category.Level:
+        case Category.LEVEL:
             switch (to) {
-            case Category.Dimension:
+            case Category.DIMENSION:
                 // It's more difficult to convert to a dimension than a
                 // hierarchy. For example, we want '[Store City].CurrentMember'
                 // to resolve to <Hierarchy>.CurrentMember rather than
                 // <Dimension>.CurrentMember.
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.Hierarchy:
-            case Category.Set:
+            case Category.HIERARCHY:
+            case Category.SET:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             default:
                 return false;
             }
-        case Category.Logical:
+        case Category.LOGICAL:
             switch (to) {
-            case Category.Value:
+            case Category.VALUE:
                 return true;
             default:
                 return false;
             }
-        case Category.Member:
+        case Category.MEMBER:
             switch (to) {
-            case Category.Dimension:
-            case Category.Hierarchy:
-            case Category.Level:
-            case Category.Tuple:
+            case Category.DIMENSION:
+            case Category.HIERARCHY:
+            case Category.LEVEL:
+            case Category.TUPLE:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
-            case Category.Set:
+            case Category.SET:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.Numeric:
+            case Category.NUMERIC:
                 conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
                 return true;
-            case Category.Value:
-            case Category.String:
+            case Category.VALUE:
+            case Category.STRING:
                 // We assume that measures are numeric, so a cast to a string or
                 // general value expression is more expensive (cost=4) than a
                 // conversion to a numeric expression (cost=3).
@@ -367,81 +367,81 @@ public class TypeUtil {
             default:
                 return false;
             }
-        case Category.Numeric | Category.Constant:
+        case Category.NUMERIC | Category.CONSTANT:
             switch (to) {
-            case Category.Value:
-            case Category.Numeric:
+            case Category.VALUE:
+            case Category.NUMERIC:
                 return true;
             default:
                 return false;
             }
-        case Category.Numeric:
+        case Category.NUMERIC:
             switch (to) {
-            case Category.Logical:
+            case Category.LOGICAL:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.Value:
-            case Category.Integer:
-            case (Category.Integer | Category.Constant):
-            case (Category.Numeric | Category.Constant):
+            case Category.VALUE:
+            case Category.INTEGER:
+            case (Category.INTEGER | Category.CONSTANT):
+            case (Category.NUMERIC | Category.CONSTANT):
                 return true;
             default:
                 return false;
             }
-        case Category.Integer:
+        case Category.INTEGER:
             switch (to) {
-            case Category.Value:
-            case (Category.Integer | Category.Constant):
-            case Category.Numeric:
-            case (Category.Numeric | Category.Constant):
+            case Category.VALUE:
+            case (Category.INTEGER | Category.CONSTANT):
+            case Category.NUMERIC:
+            case (Category.NUMERIC | Category.CONSTANT):
                 return true;
             default:
                 return false;
             }
-        case Category.Set:
+        case Category.SET:
             return false;
-        case Category.String | Category.Constant:
+        case Category.STRING | Category.CONSTANT:
             switch (to) {
-            case Category.Value:
-            case Category.String:
+            case Category.VALUE:
+            case Category.STRING:
                 return true;
             default:
                 return false;
             }
-        case Category.String:
+        case Category.STRING:
             switch (to) {
-            case Category.Value:
-            case (Category.String | Category.Constant):
+            case Category.VALUE:
+            case (Category.STRING | Category.CONSTANT):
                 return true;
             default:
                 return false;
             }
-        case Category.DateTime | Category.Constant:
+        case Category.DATE_TIME | Category.CONSTANT:
             switch (to) {
-            case Category.Value:
-            case Category.DateTime:
+            case Category.VALUE:
+            case Category.DATE_TIME:
                 return true;
             default:
                 return false;
             }
-        case Category.DateTime:
+        case Category.DATE_TIME:
             switch (to) {
-            case Category.Value:
-            case (Category.DateTime | Category.Constant):
+            case Category.VALUE:
+            case (Category.DATE_TIME | Category.CONSTANT):
                 return true;
             default:
                 return false;
             }
-        case Category.Tuple:
+        case Category.TUPLE:
             switch (to) {
-            case Category.Numeric:
+            case Category.NUMERIC:
                 conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
                 return true;
-            case Category.Set:
+            case Category.SET:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.String:
-            case Category.Value:
+            case Category.STRING:
+            case Category.VALUE:
                 // We assume that measures are numeric, so a cast to a string or
                 // general value expression is more expensive (cost=4) than a
                 // conversion to a numeric expression (cost=3).
@@ -450,32 +450,32 @@ public class TypeUtil {
             default:
                 return false;
             }
-        case Category.Value:
+        case Category.VALUE:
             // We can implicitly cast from value to a more specific scalar type,
             // but the cost is significant.
             switch (to) {
-            case Category.String:
-            case Category.Numeric:
-            case Category.Logical:
+            case Category.STRING:
+            case Category.NUMERIC:
+            case Category.LOGICAL:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
             default:
                 return false;
             }
-        case Category.Symbol:
+        case Category.SYMBOL:
             return false;
-        case Category.Null:
+        case Category.NULL:
             // now null supports members as well as scalars; but scalar is
             // preferred
             if (Category.isScalar(to)) {
                 return true;
-            } else if (to == Category.Member) {
+            } else if (to == Category.MEMBER) {
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
             } else {
                 return false;
             }
-        case Category.Empty:
+        case Category.EMPTY:
             return false;
         default:
             throw Util.newInternal(
@@ -574,10 +574,10 @@ public class TypeUtil {
 		public void apply(Validator validator, List<Exp> args) {
             final Exp arg = args.get(ordinal);
             switch (from) {
-            case Category.Member:
-            case Category.Tuple:
+            case Category.MEMBER:
+            case Category.TUPLE:
                 switch (to) {
-                case Category.Set:
+                case Category.SET:
                     final Exp newArg =
                         validator.validate(
                             new UnresolvedFunCall(

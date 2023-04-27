@@ -46,18 +46,18 @@ public class Literal extends ExpBase {
 
     // Constants for commonly used literals.
 
-    public static final Literal nullValue = new Literal(Category.Null, null);
+    public static final Literal nullValue = new Literal(Category.NULL, null);
 
-    public static final Literal emptyString = new Literal(Category.String, "");
+    public static final Literal emptyString = new Literal(Category.STRING, "");
 
     public static final Literal zero =
-        new Literal(Category.Numeric, BigDecimal.ZERO);
+        new Literal(Category.NUMERIC, BigDecimal.ZERO);
 
     public static final Literal one =
-        new Literal(Category.Numeric, BigDecimal.ONE);
+        new Literal(Category.NUMERIC, BigDecimal.ONE);
 
     public static final Literal negativeOne =
-        new Literal(Category.Numeric, BigDecimal.ONE.negate());
+        new Literal(Category.NUMERIC, BigDecimal.ONE.negate());
 
     public static final Literal doubleZero = zero;
 
@@ -88,7 +88,7 @@ public class Literal extends ExpBase {
     public static Literal createString(String s) {
         return (s.equals(""))
             ? emptyString
-            : new Literal(Category.String, s);
+            : new Literal(Category.STRING, s);
     }
 
     /**
@@ -97,7 +97,7 @@ public class Literal extends ExpBase {
      * @see #createString
      */
     public static Literal createSymbol(String s) {
-        return new Literal(Category.Symbol, s);
+        return new Literal(Category.SYMBOL, s);
     }
 
     /**
@@ -107,7 +107,7 @@ public class Literal extends ExpBase {
      */
     @Deprecated
 	public static Literal create(Double d) {
-        return new Literal(Category.Numeric, new BigDecimal(d));
+        return new Literal(Category.NUMERIC, new BigDecimal(d));
     }
 
     /**
@@ -117,7 +117,7 @@ public class Literal extends ExpBase {
      */
     @Deprecated
 	public static Literal create(Integer i) {
-        return new Literal(Category.Numeric, new BigDecimal(i));
+        return new Literal(Category.NUMERIC, new BigDecimal(i));
     }
 
     /**
@@ -133,7 +133,7 @@ public class Literal extends ExpBase {
         if (literal != null) {
             return literal;
         }
-        return new Literal(Category.Numeric, d);
+        return new Literal(Category.NUMERIC, d);
     }
 
     @Override
@@ -144,14 +144,14 @@ public class Literal extends ExpBase {
     @Override
 	public void unparse(PrintWriter pw) {
         switch (category) {
-        case Category.Symbol:
-        case Category.Numeric:
+        case Category.SYMBOL:
+        case Category.NUMERIC:
             pw.print(o);
             break;
-        case Category.String:
+        case Category.STRING:
             pw.print(Util.quoteForMdx((String) o));
             break;
-        case Category.Null:
+        case Category.NULL:
             pw.print("NULL");
             break;
         default:
@@ -167,13 +167,13 @@ public class Literal extends ExpBase {
     @Override
 	public Type getType() {
         switch (category) {
-        case Category.Symbol:
+        case Category.SYMBOL:
             return new SymbolType();
-        case Category.Numeric:
+        case Category.NUMERIC:
             return new NumericType();
-        case Category.String:
+        case Category.STRING:
             return new StringType();
-        case Category.Null:
+        case Category.NULL:
             return new NullType();
         default:
             throw Category.instance.badValue(category);

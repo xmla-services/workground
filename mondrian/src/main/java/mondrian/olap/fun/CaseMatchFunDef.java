@@ -125,13 +125,12 @@ class CaseMatchFunDef extends FunDefBase {
                     mismatchingArgs++;
                 }
             }
-            if (j < args.length) {
-                if (!validator.canConvert(
-                        j, args[j++], returnType, conversions))
-                {
+
+            if (j < args.length && !validator.canConvert(
+                        j, args[j++], returnType, conversions)) {
                     mismatchingArgs++;
-                }
             }
+
             Util.assertTrue(j == args.length);
             if (mismatchingArgs != 0) {
                 return null;

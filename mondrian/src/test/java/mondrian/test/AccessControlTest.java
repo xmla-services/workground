@@ -118,7 +118,7 @@ class AccessControlTest {
         Dimension genderDimension =
             (Dimension) schemaReader.lookupCompound(
                 salesCube, Id.Segment.toList("Gender"), true,
-                Category.Dimension);
+                Category.DIMENSION);
         role.grant(genderDimension, Access.NONE);
         role.makeImmutable();
         connection.setRole(role);
@@ -508,7 +508,7 @@ class AccessControlTest {
         final Hierarchy hierarchy =
             (Hierarchy) schemaReader.lookupCompound(
                 cube, Util.parseIdentifier(hierarchyName), fail,
-                Category.Hierarchy);
+                Category.HIERARCHY);
 
         final Access actualAccess = role.getAccess(hierarchy);
         assertEquals(expectedAccess, actualAccess, cubeName);
@@ -528,7 +528,7 @@ class AccessControlTest {
         final Hierarchy hierarchy =
             (Hierarchy) schemaReader.lookupCompound(
                 cube, Util.parseIdentifier(hierarchyName), fail,
-                Category.Hierarchy);
+                Category.HIERARCHY);
 
         return role.getAccessDetails(hierarchy);
     }

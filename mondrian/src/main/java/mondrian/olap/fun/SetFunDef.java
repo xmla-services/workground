@@ -66,7 +66,7 @@ public class SetFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
     SetFunDef(Resolver resolver, int[] argTypes) {
-        super(resolver, Category.Set, argTypes);
+        super(resolver, Category.SET, argTypes);
     }
 
     @Override
@@ -497,21 +497,21 @@ public class SetFunDef extends FunDefBase {
             int[] parameterTypes = new int[args.length];
             for (int i = 0; i < args.length; i++) {
                 if (validator.canConvert(
-                        i, args[i], Category.Member, conversions))
+                        i, args[i], Category.MEMBER, conversions))
                 {
-                    parameterTypes[i] = Category.Member;
+                    parameterTypes[i] = Category.MEMBER;
                     continue;
                 }
                 if (validator.canConvert(
-                        i, args[i], Category.Tuple, conversions))
+                        i, args[i], Category.TUPLE, conversions))
                 {
-                    parameterTypes[i] = Category.Tuple;
+                    parameterTypes[i] = Category.TUPLE;
                     continue;
                 }
                 if (validator.canConvert(
-                        i, args[i], Category.Set, conversions))
+                        i, args[i], Category.SET, conversions))
                 {
-                    parameterTypes[i] = Category.Set;
+                    parameterTypes[i] = Category.SET;
                     continue;
                 }
                 return null;

@@ -51,19 +51,19 @@ public class JavaFunDef extends FunDefBase {
     private static final String className = JavaFunDef.class.getName();
 
     static {
-        JavaFunDef.mapClazzToCategory.put(String.class, Category.String);
-        JavaFunDef.mapClazzToCategory.put(Double.class, Category.Numeric);
-        JavaFunDef.mapClazzToCategory.put(double.class, Category.Numeric);
-        JavaFunDef.mapClazzToCategory.put(Integer.class, Category.Integer);
-        JavaFunDef.mapClazzToCategory.put(int.class, Category.Integer);
-        JavaFunDef.mapClazzToCategory.put(boolean.class, Category.Logical);
-        JavaFunDef.mapClazzToCategory.put(Object.class, Category.Value);
-        JavaFunDef.mapClazzToCategory.put(Date.class, Category.DateTime);
-        JavaFunDef.mapClazzToCategory.put(float.class, Category.Numeric);
-        JavaFunDef.mapClazzToCategory.put(long.class, Category.Numeric);
-        JavaFunDef.mapClazzToCategory.put(double[].class, Category.Array);
-        JavaFunDef.mapClazzToCategory.put(char.class, Category.String);
-        JavaFunDef.mapClazzToCategory.put(byte.class, Category.Integer);
+        JavaFunDef.mapClazzToCategory.put(String.class, Category.STRING);
+        JavaFunDef.mapClazzToCategory.put(Double.class, Category.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(double.class, Category.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(Integer.class, Category.INTEGER);
+        JavaFunDef.mapClazzToCategory.put(int.class, Category.INTEGER);
+        JavaFunDef.mapClazzToCategory.put(boolean.class, Category.LOGICAL);
+        JavaFunDef.mapClazzToCategory.put(Object.class, Category.VALUE);
+        JavaFunDef.mapClazzToCategory.put(Date.class, Category.DATE_TIME);
+        JavaFunDef.mapClazzToCategory.put(float.class, Category.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(long.class, Category.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(double[].class, Category.ARRAY);
+        JavaFunDef.mapClazzToCategory.put(char.class, Category.STRING);
+        JavaFunDef.mapClazzToCategory.put(byte.class, Category.INTEGER);
     }
 
     private final Method method;

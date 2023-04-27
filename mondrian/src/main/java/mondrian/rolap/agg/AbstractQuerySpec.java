@@ -165,6 +165,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
      * Allows subclasses to specify if a given column must
      * be returned as part of the result set, in the select clause.
      */
+    @SuppressWarnings("java:S1172")
     protected boolean isPartOfSelect(RolapStar.Column col) {
         return true;
     }
@@ -173,6 +174,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
      * Allows subclasses to specify if a given column must
      * be returned as part of the result set, in the select clause.
      */
+    @SuppressWarnings("java:S1172")
     protected boolean isPartOfSelect(RolapStar.Measure measure) {
         return true;
     }

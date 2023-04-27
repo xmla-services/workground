@@ -84,7 +84,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             if (args.length < 1) {
                 return null;
             }
-            final int[] types = {Category.Numeric, Category.String};
+            final int[] types = {Category.NUMERIC, Category.STRING};
             final int[] argTypes = new int[args.length];
             for (int type : types) {
                 int matchingArgs = 0;

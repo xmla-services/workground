@@ -1045,12 +1045,12 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       } else {
         for (int i = 0; i < args.length; i++) {
           if (!validator.canConvert(
-                  i, args[i], mondrian.olap.Category.Set, conversions)) {
+                  i, args[i], mondrian.olap.Category.SET, conversions)) {
             return null;
           }
         }
 
-        FunDef dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.Set, args);
+        FunDef dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.SET, args);
         return new CrossJoinFunDef(dummy);
       }
     }

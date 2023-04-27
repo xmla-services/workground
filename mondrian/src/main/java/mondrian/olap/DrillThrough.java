@@ -103,7 +103,7 @@ public class DrillThrough extends QueryPart {
                     query.getCube(),
                     Util.parseIdentifier(exp.toString()),
                     true,
-                    Category.Unknown);
+                    Category.UNKNOWN);
             if (olapElement instanceof OlapElement) {
                 returnClauseElements.add(olapElement);
             }

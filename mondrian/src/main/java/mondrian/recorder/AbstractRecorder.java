@@ -38,21 +38,20 @@ public abstract class AbstractRecorder implements MessageRecorder {
         buf.append(context);
         buf.append(": ");
         buf.append(msg);
-
+        String logMsg = buf.toString();
         switch (msgType) {
         case INFO:
-            logger.info(buf.toString());
+            logger.info(logMsg);
             break;
         case WARN:
-            logger.warn(buf.toString());
+            logger.warn(logMsg);
             break;
         case ERROR:
-            logger.error(buf.toString());
+            logger.error(logMsg);
             break;
         default:
             logger.warn(
-                new StringBuilder("Unknown message type enum \"")
-                .append(msgType).append("\" for message: ").append(buf.toString()).toString());
+                "Unknown message type enum \"{}\" for message: {}", msgType, logMsg);
         }
     }
 

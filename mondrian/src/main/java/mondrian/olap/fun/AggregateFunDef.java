@@ -80,17 +80,18 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
     }
 
     private Member getMember(Exp exp) {
-        if (exp instanceof MemberExpr) {
-            Member m = ((MemberExpr)exp).getMember();
+        if (exp instanceof MemberExpr memberExpr) {
+            Member m = memberExpr.getMember();
             if (m.isMeasure() && !m.isCalculated()) {
                 return m;
             }
         }
         // Since the expression is not a base measure, we won't
         // attempt to determine the aggregator and will simply sum.
+        String expStr = exp.toString();
         AggregateFunDef.LOGGER.warn(
             "Unable to determine aggregator for non-base measures in 2nd parameter of Aggregate(), summing: {}",
-            exp.toString());
+            expStr);
         return null;
     }
 
@@ -178,10 +179,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final Object o =
-                        rollup.aggregate(
-                            evaluator, tupleList, calc);
-                    return o;
+                    return rollup.aggregate(
+                        evaluator, tupleList, calc);
                 } finally {
                     evaluator.restore(savepoint);
                 }
@@ -189,7 +188,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
 
             // All that follows is logic for distinct count. It's not like the
             // other aggregators.
-            if (tupleList.size() == 0) {
+            if (tupleList.isEmpty()) {
                 return FunUtil.DoubleNull;
             }
 
@@ -253,7 +252,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // enforces a rollup policy of partial, we cannot safely
             // optimize the tuples list as it might end up rolling up to
             // the parent while not all children are actually accessible.
-            if (tupleList.size() > 0) {
+            if (!tupleList.isEmpty()) {
                 for (Member member : tupleList.get(0)) {
                     final RollupPolicy policy =
                         evaluator.getSchemaReader().getRole()
@@ -288,8 +287,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 AggregateCalc.optimizeChildren(
                     tupleList,
                     evaluator.getSchemaReader(),
-                    evaluator.getMeasureCube(),
-                    evaluator);
+                    evaluator.getMeasureCube());
             if (checkSize) {
                 AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList);
             }
@@ -419,8 +417,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         public static TupleList optimizeChildren(
             TupleList tuples,
             SchemaReader reader,
-            Cube baseCubeForMeasure,
-            Evaluator evaluator)
+            Cube baseCubeForMeasure)
         {
             Map<Member, Integer>[] membersOccurencesInTuple =
                 AggregateCalc.membersVersusOccurencesInTuple(tuples);
@@ -437,8 +434,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                         AggregateCalc.optimizeMemberSet(
                             new LinkedHashSet<>(members),
                             reader,
-                            baseCubeForMeasure,
-                            evaluator);
+                            baseCubeForMeasure);
                     if (sets[i].size() != originalSize) {
                         optimized = true;
                     }
@@ -488,13 +484,12 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         private static Set<Member> optimizeMemberSet(
             Set<Member> members,
             SchemaReader reader,
-            Cube baseCubeForMeasure,
-            Evaluator evaluator)
+            Cube baseCubeForMeasure)
         {
             boolean didOptimize;
             Set<Member> membersToBeOptimized = new LinkedHashSet<>();
             Set<Member> optimizedMembers = new LinkedHashSet<>();
-            while (members.size() > 0) {
+            while (!members.isEmpty()) {
                 Iterator<Member> iterator = members.iterator();
                 Member first = iterator.next();
                 if (first.isAll()) {
@@ -528,7 +523,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 int childCountOfParent = -1;
                 if (firstParentMember != null) {
                     childCountOfParent =
-                        AggregateCalc.getChildCount(firstParentMember, reader, evaluator);
+                        AggregateCalc.getChildCount(firstParentMember, reader);
                 }
                 if (childCountOfParent != -1
                     && membersToBeOptimized.size() == childCountOfParent
@@ -542,8 +537,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 }
                 membersToBeOptimized.clear();
 
-                if (members.size() == 0 && didOptimize) {
-                    Set temp = members;
+                if (members.isEmpty() && didOptimize) {
+                    Set<Member> temp = members;
                     members = optimizedMembers;
                     optimizedMembers = temp;
                 }
@@ -597,13 +592,12 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         {
             HashSet<Dimension> dimensions = new HashSet<>();
             dimensions.add(dimension);
-            return baseCube.nonJoiningDimensions(dimensions).size() == 0;
+            return baseCube.nonJoiningDimensions(dimensions).isEmpty();
         }
 
         private static int getChildCount(
             Member parentMember,
-            SchemaReader reader,
-            Evaluator evaluator)
+            SchemaReader reader)
         {
             int childrenCountFromCache =
                 reader.getChildrenCountFromCache(parentMember);

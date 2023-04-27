@@ -87,10 +87,10 @@ abstract class AbstractEndToEndTupleList extends AbstractTupleList {
     @Override
     public boolean addAll(int i, Collection<? extends List<Member>> c) {
         assert mutable;
-        if (c instanceof AbstractEndToEndTupleList) {
+        if (c instanceof AbstractEndToEndTupleList abstractEndToEndTupleList) {
             return backingList().addAll(
                     i * arity,
-                    ((AbstractEndToEndTupleList) c).backingList());
+                abstractEndToEndTupleList.backingList());
         }
         return super.addAll(i, c);
     }

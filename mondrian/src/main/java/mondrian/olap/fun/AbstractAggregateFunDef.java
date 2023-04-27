@@ -53,17 +53,15 @@ public class AbstractAggregateFunDef extends FunDefBase {
     {
         // If expression cache is enabled, wrap first expression (the set)
         // in a function which will use the expression cache.
-        if (i == 0) {
-            if (MondrianProperties.instance().EnableExpCache.get()) {
-                Exp arg = args[0];
-                if (FunUtil.worthCaching(arg)) {
-                    final Exp cacheCall =
-                        new UnresolvedFunCall(
-                            CacheFunDef.NAME,
-                            Syntax.Function,
-                            new Exp[] {arg});
-                    return validator.validate(cacheCall, false);
-                }
+        if (i == 0 && MondrianProperties.instance().EnableExpCache.get()) {
+            Exp arg = args[0];
+            if (FunUtil.worthCaching(arg)) {
+                final Exp cacheCall =
+                    new UnresolvedFunCall(
+                        CacheFunDef.NAME,
+                        Syntax.Function,
+                        new Exp[] {arg});
+                return validator.validate(cacheCall, false);
             }
         }
         return super.validateArg(validator, args, i, category);
@@ -129,11 +127,9 @@ public class AbstractAggregateFunDef extends FunDefBase {
         long iterationLimit =
             MondrianProperties.instance().IterationLimit.get();
         final int productLen = currLen * evaluator.getIterationLength();
-        if (iterationLimit > 0) {
-            if (productLen > iterationLimit) {
+        if (iterationLimit > 0 && productLen > iterationLimit) {
                 throw MondrianResource.instance()
                     .IterationLimitExceeded.ex(iterationLimit);
-            }
         }
         evaluator.setIterationLength(currLen);
     }
@@ -157,7 +153,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         TupleList tuplesForAggregation,
         Evaluator evaluator)
     {
-        if (tuplesForAggregation.size() == 0) {
+        if (tuplesForAggregation.isEmpty()) {
             return tuplesForAggregation;
         }
 
@@ -204,7 +200,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
     {
         RolapMember measure = (RolapMember)evaluator.getMembers()[0];
         if (tuplesForAggregation != null
-            && tuplesForAggregation.size() > 0)
+            && !tuplesForAggregation.isEmpty())
         {
             // this looks for the measure in the first tuple, with the
             // assumption that there is a single measure in all tuples.
@@ -235,7 +231,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
     {
         Set<Dimension> nonJoiningDimensions =
             AbstractAggregateFunDef.nonJoiningDimensions(baseCube, tuplesForAggregation);
-        if (nonJoiningDimensions.size() > 0) {
+        if (!nonJoiningDimensions.isEmpty()) {
             return TupleCollections.emptyList(tuplesForAggregation.getArity());
         }
         return tuplesForAggregation;

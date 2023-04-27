@@ -508,7 +508,7 @@ public class RolapCube extends CubeBase {
                         drillThroughAction.name(),
                         drillThroughAction.caption(),
                         drillThroughAction.description(),
-                        drillThroughAction.defaultt() != null && drillThroughAction.defaultt().equals("true"),
+                        drillThroughAction.defaultt() != null && drillThroughAction.defaultt(),
                         columns
                 );
                 this.actionList.add(rolapDrillThroughAction);
@@ -1386,7 +1386,7 @@ public class RolapCube extends CubeBase {
                     this,
                     Util.parseIdentifier(dimName),
                     false,
-                    Category.Hierarchy);
+                    Category.HIERARCHY);
         }
         if (hierarchy == null) {
             throw MondrianResource.instance().CalcMemberHasBadDimension.ex(
@@ -1409,7 +1409,7 @@ public class RolapCube extends CubeBase {
                     this,
                     Util.parseIdentifier(parentFqName),
                     false,
-                    Category.Unknown);
+                    Category.UNKNOWN);
 
             if (parent == null) {
                 throw MondrianResource.instance()
@@ -3317,7 +3317,7 @@ public class RolapCube extends CubeBase {
                     RolapCube.this,
                     uniqueNameParts,
                     failIfNotFound,
-                    Category.Member,
+                    Category.MEMBER,
                     matchType);
             if (member == null) {
                 assert !failIfNotFound;
@@ -3328,7 +3328,7 @@ public class RolapCube extends CubeBase {
             } else {
                 if (failIfNotFound) {
                     throw Util.newElementNotFoundException(
-                        Category.Member,
+                        Category.MEMBER,
                         new IdentifierNode(
                             Util.toOlap4j(uniqueNameParts)));
                 }
@@ -3476,7 +3476,6 @@ public class RolapCube extends CubeBase {
                     new ArrayList<Formula>(),
                     virtualCube,
                     false);
-                return null;
 
             } else if (member instanceof RolapBaseCubeMeasure baseMeasure) {
                 RolapVirtualCubeMeasure virtualCubeMeasure =

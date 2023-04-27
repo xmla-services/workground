@@ -31,6 +31,11 @@ public class BooleanType extends ScalarType {
     }
 
     @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
 	public boolean isInstance(Object value) {
         return value instanceof Boolean;
     }

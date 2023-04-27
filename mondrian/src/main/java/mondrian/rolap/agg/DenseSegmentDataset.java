@@ -15,6 +15,7 @@ package mondrian.rolap.agg;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import mondrian.rolap.CellKey;
 
@@ -44,14 +45,14 @@ abstract class DenseSegmentDataset implements SegmentDataset {
     }
 
     private int[] computeAxisMultipliers() {
-        final int[] axisMultipliers = new int[axes.length];
+        final int[] axisMultipliersInner = new int[axes.length];
         int multiplier = 1;
         for (int i = axes.length - 1; i >= 0; --i) {
             final SegmentAxis axis = axes[i];
-            axisMultipliers[i] = multiplier;
+            axisMultipliersInner[i] = multiplier;
             multiplier *= axis.getKeys().length;
         }
-        return axisMultipliers;
+        return axisMultipliersInner;
     }
 
     @Override
@@ -136,6 +137,9 @@ outer:
 
         @Override
 		public Map.Entry<CellKey, Object> next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             ++i;
             int k = ordinals.length - 1;
             while (k >= 0) {

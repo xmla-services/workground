@@ -185,7 +185,7 @@ abstract class ValidatorImpl implements Validator {
         // Compute signature first. It makes debugging easier.
         final String signature =
             syntax.getSignature(
-                funName, Category.Unknown, ExpBase.getTypes(args));
+                funName, Category.UNKNOWN, ExpBase.getTypes(args));
 
         // Resolve function by its upper-case name first.  If there is only one
         // function with that name, stop immediately.  If there is more than
@@ -299,7 +299,7 @@ abstract class ValidatorImpl implements Validator {
                 }
                 final FunDef funDef = funCall.getFunDef();
                 final int[] parameterTypes = funDef.getParameterCategories();
-                return parameterTypes[k] != Category.Set;
+                return parameterTypes[k] != Category.SET;
             }
         } else if (parent instanceof UnresolvedFunCall funCall) {
             if (funCall.getSyntax() == Syntax.Parentheses

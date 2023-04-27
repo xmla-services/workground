@@ -1626,7 +1626,7 @@ class AggregationOnDistinctCountMeasuresTest {
         TupleList optimized =
             optimizeChildren(tl);
         assertEquals(
-            optimized.toString(), "[[[Store].[USA], [Gender].[All Gender]], [[Store].[USA], [Gender].[F]]]");
+            "[[[Store].[USA], [Gender].[All Gender]], [[Store].[USA], [Gender].[F]]]", optimized.toString());
     }
 
     private boolean tuppleListContains(
@@ -1653,7 +1653,7 @@ class AggregationOnDistinctCountMeasuresTest {
                 @Override
 				public TupleList execute() {
                     return AggregateFunDef.AggregateCalc.optimizeChildren(
-                        memberList, schemaReader, salesCube, null);
+                        memberList, schemaReader, salesCube);
                 }
             }
         );
