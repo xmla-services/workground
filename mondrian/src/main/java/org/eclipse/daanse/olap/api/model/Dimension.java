@@ -8,7 +8,7 @@
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * Copyright (C) 2021 Sergei Semenkov
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *  SmartCity Jena - refactor, clean API
  */
@@ -23,8 +23,8 @@ import mondrian.olap.DimensionType;
  * @author jhyde, 1 March, 1999
  */
 public interface Dimension extends OlapElement, MetaElement {
-    final public static String MEASURES_UNIQUE_NAME = "[Measures]";
-    final public static String MEASURES_NAME = "Measures";
+    public static final String MEASURES_UNIQUE_NAME = "[Measures]";
+    public static final String MEASURES_NAME = "Measures";
 
     /**
      * Returns an array of the hierarchies which belong to this dimension.

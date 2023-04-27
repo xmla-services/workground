@@ -10,6 +10,7 @@
 package mondrian.calc.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -30,7 +31,7 @@ implements TupleIterator
 {
     protected boolean hasNext;
 
-    public AbstractTupleIterator(int arity) {
+    protected AbstractTupleIterator(int arity) {
         super(arity);
     }
 
@@ -41,6 +42,9 @@ implements TupleIterator
 
     @Override
     public List<Member> next() {
+        if(!hasNext()){
+            throw new NoSuchElementException();
+        }
         final List<Member> o = current();
         hasNext = forward();
         return o;

@@ -87,7 +87,7 @@ public class ArraySortedSet<E extends Comparable<E>>
         if (to < 0) {
             to = - (to + 1);
         }
-        return subset(from, to);
+        return subSet(from, to);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class ArraySortedSet<E extends Comparable<E>>
         if (to < 0) {
             to = - (to + 1);
         }
-        return subset(start, to);
+        return subSet(start, to);
     }
 
     @Override
@@ -105,10 +105,10 @@ public class ArraySortedSet<E extends Comparable<E>>
         if (from < 0) {
             from = - (from + 1);
         }
-        return subset(from, end);
+        return subSet(from, end);
     }
 
-    private SortedSet<E> subset(int from, int to) {
+    private SortedSet<E> subSet(int from, int to) {
         if (from == start && to == end) {
             return this;
         }
@@ -197,7 +197,10 @@ public class ArraySortedSet<E extends Comparable<E>>
             return this;
         }
 
-        int p1 = 0, p2 = 0, m = 0, k = this.size() + arrayToMerge.size();
+        int p1 = 0;
+        int p2 = 0;
+        int m = 0;
+        int k = this.size() + arrayToMerge.size();
 
         final E[] data1 = this.values;
         final E[] data2 = arrayToMerge.values;

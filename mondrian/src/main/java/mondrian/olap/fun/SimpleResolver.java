@@ -86,6 +86,6 @@ class SimpleResolver implements Resolver {
 	public boolean requiresExpression(int k) {
         int[] parameterTypes = funDef.getParameterCategories();
         return (k >= parameterTypes.length)
-            || (parameterTypes[k] != Category.Set);
+            || (parameterTypes[k] != Category.SET);
     }
 }

@@ -57,7 +57,7 @@ public class Id
 
     @Override
 	public int getCategory() {
-        return Category.Unknown;
+        return Category.UNKNOWN;
     }
 
     @Override

@@ -53,7 +53,7 @@ class StrToSetFunDef extends FunDefBase {
             "StrToSet",
             "<Set> StrToSet(<String>[, <Hierarchy>...])",
             "Constructs a set from a string expression.",
-            Syntax.Function, Category.Set, parameterTypes);
+            Syntax.Function, Category.SET, parameterTypes);
     }
 
     @Override
@@ -187,16 +187,16 @@ class StrToSetFunDef extends FunDefBase {
                 }
             }
             int[] argTypes = new int[args.length];
-            argTypes[0] = Category.String;
+            argTypes[0] = Category.STRING;
             for (int i = 1; i < argTypes.length; i++) {
-                argTypes[i] = Category.Hierarchy;
+                argTypes[i] = Category.HIERARCHY;
             }
             return new StrToSetFunDef(argTypes);
         }
 
         @Override
 		public FunDef getRepresentativeFunDef() {
-            return new StrToSetFunDef(new int[] {Category.String});
+            return new StrToSetFunDef(new int[] {Category.STRING});
         }
     }
 }

@@ -477,8 +477,7 @@ public abstract class XmlaServlet
     protected abstract void marshallSoapMessage(
         HttpServletResponse response,
         byte[][] responseSoapParts,
-        Enumeration.ResponseMimeType responseMimeType)
-        throws XmlaException;
+        Enumeration.ResponseMimeType responseMimeType);
 
     /**
      * Implement to application specified handler of SOAP fualt.

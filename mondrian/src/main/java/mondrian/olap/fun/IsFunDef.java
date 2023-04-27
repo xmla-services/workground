@@ -44,7 +44,7 @@ class IsFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final int category = call.getArg(0).getCategory();
         switch (category) {
-        case Category.Tuple:
+        case Category.TUPLE:
             final TupleCalc tupleCalc0 = compiler.compileTuple(call.getArg(0));
             final TupleCalc tupleCalc1 = compiler.compileTuple(call.getArg(1));
             return new AbstractBooleanCalc(

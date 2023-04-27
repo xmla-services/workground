@@ -46,7 +46,7 @@ public class BlockingHashMap<K, V> {
      * @param v value
      */
     public void put(K k, V v) {
-        map.putIfAbsent(k, new SlotFuture<V>());
+        map.putIfAbsent(k, new SlotFuture<>());
         map.get(k).put(v);
     }
 
@@ -59,7 +59,7 @@ public class BlockingHashMap<K, V> {
      * @throws InterruptedException if interrupted while waiting
      */
     public V get(K k) throws InterruptedException {
-        map.putIfAbsent(k, new SlotFuture<V>());
+        map.putIfAbsent(k, new SlotFuture<>());
         V v = Util.safeGet(
             map.get(k),
             "Waiting to retrieve a value from BlockingHashMap.");

@@ -1011,7 +1011,7 @@ public class Query extends QueryPart {
     {
         int category = TypeUtil.typeToCategory(type);
         switch (category) {
-        case Category.Numeric:
+        case Category.NUMERIC:
             if (value instanceof Number || value == null) {
                 return value;
             }
@@ -1025,12 +1025,12 @@ public class Query extends QueryPart {
             throw Util.newInternal(
                 new StringBuilder("Invalid value '").append(value).append("' for parameter '").append(parameterName)
                     .append("', type ").append(type).toString());
-        case Category.String:
+        case Category.STRING:
             if (value == null) {
                 return null;
             }
             return value.toString();
-        case Category.Set:
+        case Category.SET:
             if (value instanceof String) {
                 value = IdentifierParser.parseIdentifierList((String) value);
             }
@@ -1054,7 +1054,7 @@ public class Query extends QueryPart {
                 expList.add(member);
             }
             return expList;
-        case Category.Member:
+        case Category.MEMBER:
             if (value == null) {
                 // Setting a member parameter to null is the same as setting to
                 // the null member of the hierarchy. May not be equivalent to
@@ -1905,8 +1905,8 @@ public class Query extends QueryPart {
             }
             // First look to ourselves.
             switch (category) {
-            case Category.Unknown:
-            case Category.Member:
+            case Category.UNKNOWN:
+            case Category.MEMBER:
                 if (parent == query.cube) {
                     final Member calculatedMember = getCalculatedMember(names);
                     if (calculatedMember != null) {
@@ -1915,8 +1915,8 @@ public class Query extends QueryPart {
                 }
             }
             switch (category) {
-            case Category.Unknown:
-            case Category.Set:
+            case Category.UNKNOWN:
+            case Category.SET:
                 if (parent == query.cube) {
                     final NamedSet namedSet = getNamedSet(names);
                     if (namedSet != null) {
@@ -2168,8 +2168,8 @@ public class Query extends QueryPart {
             MatchType matchType)
         {
             switch (category) {
-            case Category.Set:
-            case Category.Unknown:
+            case Category.SET:
+            case Category.UNKNOWN:
                 final ScopedNamedSet namedSet =
                     queryValidator.getQuery().lookupScopedNamedSet(
                         names, queryValidator.getScopeStack());

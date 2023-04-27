@@ -41,7 +41,7 @@ public final class NameResolver {
      * @param failIfNotFound If the element is not found, determines whether
      *   to return null or throw an error
      * @param category Type of returned element, a {@link Category} value;
-     *   {@link Category#Unknown} if it doesn't matter.
+     *   {@link Category#UNKNOWN} if it doesn't matter.
      * @param matchType Match type
      * @param namespaces Namespaces wherein to find child element at each step
      * @return OLAP element with given name, or null if not found
@@ -152,13 +152,13 @@ public final class NameResolver {
      */
     private OlapElement nullify(int category, OlapElement element) {
         switch (category) {
-        case Category.Unknown:
+        case Category.UNKNOWN:
             return element;
-        case Category.Member:
+        case Category.MEMBER:
             return element instanceof Member ? element : null;
-        case Category.Level:
+        case Category.LEVEL:
             return element instanceof Level ? element : null;
-        case Category.Hierarchy:
+        case Category.HIERARCHY:
             if (element instanceof Hierarchy) {
                 return element;
             } else if (element instanceof Dimension dimension) {
@@ -170,9 +170,9 @@ public final class NameResolver {
             } else {
                 return null;
             }
-        case Category.Dimension:
+        case Category.DIMENSION:
             return element instanceof Dimension ? element : null;
-        case Category.Set:
+        case Category.SET:
             return element instanceof NamedSet ? element : null;
         default:
             throw Util.newInternal("unexpected: " + category);

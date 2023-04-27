@@ -68,7 +68,7 @@ public class LevelExpr extends ExpBase implements Exp {
 
     @Override
 	public int getCategory() {
-        return Category.Level;
+        return Category.LEVEL;
     }
 
     @Override

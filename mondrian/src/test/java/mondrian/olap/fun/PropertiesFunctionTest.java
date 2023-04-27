@@ -47,56 +47,56 @@ class PropertiesFunctionTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberCaptionPropertyOnTimeDimension(TestingContext context) {
-    verifyMemberCaptionPropertyFunction(context, "[Time].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction(context, "[Time].Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberCaptionPropertyOnTimeDimension(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberCaptionPropertyOnTimeHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Time].[Time].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Time].[Time].Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberCaptionPropertyOnTimeHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Time].[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Time].[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testGenerateWithMemberCaptionPropertyOnTimeDimension(TestingContext context) {
-    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time].CurrentMember, [Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time].CurrentMember, [Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testGenerateWithMemberCaptionPropertyOnTimeHierarchy(TestingContext context) {
-    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time].CurrentMember, [Time].[Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
+    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time].CurrentMember, [Time].[Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   // Below the tests for the "Time.Weekly" hierarchy.
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberCaptionPropertyOnWeeklyHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Time.Weekly].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Time.Weekly].Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberCaptionPropertyOnWeeklyHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testGenerateWithMemberCaptionPropertyOnWeeklyHierarchy(TestingContext context) {
-    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time.Weekly].CurrentMember, [Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
+    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Time.Weekly].CurrentMember, [Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
   // The "Store" dimention in foodmart schema contains only one hierarchy that has no name. So its name is "Store".
@@ -104,37 +104,37 @@ class PropertiesFunctionTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberCaptionPropertyOnStoreDimension(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Store].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Store].Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberCaptionPropertyOnStoreDimension(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testMemberCaptionPropertyOnStoreHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Store].[Store].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Store].[Store].Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testCurrentMemberCaptionPropertyOnStoreHierarchy(TestingContext context) {
-    verifyMemberCaptionPropertyFunction( context, "[Store].[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyMemberCaptionPropertyFunction( context, "[Store].[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testGenerateWithMemberCaptionPropertyOnStoreDimension(TestingContext context) {
-    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Store].CurrentMember, [Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Store].CurrentMember, [Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testGenerateWithMemberCaptionPropertyOnStoreHierarchy(TestingContext context) {
-    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Store].CurrentMember, [Store].[Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
+    verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Store].CurrentMember, [Store].[Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
   private void verifyMemberCaptionPropertyFunction(TestingContext context, String propertyQuery, int expectedCategory, Type expectedReturnType, String expectedResult ) {

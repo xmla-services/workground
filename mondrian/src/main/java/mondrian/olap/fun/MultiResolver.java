@@ -134,7 +134,7 @@ outer:
         for (String signature : signatures) {
             int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)
-                && parameterTypes[k] == Category.Set)
+                && parameterTypes[k] == Category.SET)
             {
                 return false;
             }

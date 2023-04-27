@@ -38,8 +38,8 @@ public abstract class AbstractCalc implements Calc {
     /**
      * Creates an AbstractCalc.
      *
-     * @param exp
-     *          Source expression
+     * @param name
+     *
      * @param calcs
      *          Child compiled expressions
      */
@@ -88,7 +88,7 @@ public abstract class AbstractCalc implements Calc {
         return name;
     }
 
-  
+
 
     /**
      * Returns this expression's child expressions.

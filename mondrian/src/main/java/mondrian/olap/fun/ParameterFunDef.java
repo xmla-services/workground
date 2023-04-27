@@ -120,7 +120,7 @@ public class ParameterFunDef extends FunDefBase {
 
     public static String getParameterName(Exp[] args) {
         if (args[0] instanceof Literal
-            && args[0].getCategory() == Category.String)
+            && args[0].getCategory() == Category.STRING)
         {
             return (String) ((Literal) args[0]).getValue();
         } else {
@@ -194,9 +194,9 @@ public class ParameterFunDef extends FunDefBase {
             int category;
             Type type = typeArg.getType();
             switch (typeArg.getCategory()) {
-            case Category.Dimension:
-            case Category.Hierarchy:
-            case Category.Level:
+            case Category.DIMENSION:
+            case Category.HIERARCHY:
+            case Category.LEVEL:
                 Dimension dimension = type.getDimension();
                 if (!ParameterFunDef.isConstant(typeArg)) {
                     throw FunUtil.newEvalException(
@@ -217,17 +217,17 @@ public class ParameterFunDef extends FunDefBase {
                         type.getHierarchy(),
                         type.getLevel(),
                         null);
-                category = Category.Member;
+                category = Category.MEMBER;
                 break;
 
-            case Category.Symbol:
+            case Category.SYMBOL:
                 String s = (String) ((Literal) typeArg).getValue();
                 if (s.equalsIgnoreCase("NUMERIC")) {
-                    category = Category.Numeric;
+                    category = Category.NUMERIC;
                     type = new NumericType();
                     break;
                 } else if (s.equalsIgnoreCase("STRING")) {
-                    category = Category.String;
+                    category = Category.STRING;
                     type = new StringType();
                     break;
                 }
@@ -253,14 +253,14 @@ public class ParameterFunDef extends FunDefBase {
                     new StringBuilder("Default value of parameter '").append(parameterName)
                     .append("' is inconsistent with its type, ").append(typeName).toString());
             }
-            if (exp.getCategory() == Category.Set
-                && category == Category.Member)
+            if (exp.getCategory() == Category.SET
+                && category == Category.MEMBER)
             {
                 // Default value is a set; take this an indication that
                 // the type is 'set of <member type>'.
                 type = new SetType(type);
             }
-            if (category == Category.Member) {
+            if (category == Category.MEMBER) {
                 Type expType = exp.getType();
                 if (expType instanceof SetType) {
                     expType = ((SetType) expType).getElementType();
@@ -280,7 +280,7 @@ public class ParameterFunDef extends FunDefBase {
             String parameterDescription = null;
             if (args.length > 3) {
                 if (args[3] instanceof Literal
-                    && args[3].getCategory() == Category.String)
+                    && args[3].getCategory() == Category.STRING)
                 {
                     parameterDescription =
                         (String) ((Literal) args[3]).getValue();
@@ -320,7 +320,7 @@ public class ParameterFunDef extends FunDefBase {
 		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
-                dummyFunDef, parameterName, null, Category.Unknown, null,
+                dummyFunDef, parameterName, null, Category.UNKNOWN, null,
                 null);
         }
     }

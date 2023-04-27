@@ -42,7 +42,6 @@ public class CalculatedFormula extends QueryPart {
         if(e != null) {
             pw.print(e.getIdentifier());
             pw.print(" AS ");
-            //pw.print(e,getExpression());
         }
         pw.println();
     }

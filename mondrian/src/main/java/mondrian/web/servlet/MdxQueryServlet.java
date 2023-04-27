@@ -257,7 +257,7 @@ public class MdxQueryServlet extends HttpServlet {
         } catch (ServletException | IOException e) {
             LOGGER.debug("Internal server error {}", e.getMessage());
             getServletContext().log("Internal server error", e);
-            response.sendError(SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -276,7 +276,7 @@ public class MdxQueryServlet extends HttpServlet {
         } catch (ServletException | IOException e) {
             LOGGER.debug("Internal server error {}", e.getMessage());
             getServletContext().log("Internal server error", e);
-            response.sendError(SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(SC_INTERNAL_SERVER_ERROR);
         }
     }
 

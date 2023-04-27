@@ -67,11 +67,11 @@ public class IifFunDef extends FunDefBase {
         // FIXME: We should pass more info into this method, such as the list
         // of conversions computed while resolving overloadings.
         switch (returnCategory) {
-        case Category.Numeric:
+        case Category.NUMERIC:
             return new NumericType();
-        case Category.String:
+        case Category.STRING:
             return new StringType();
-        case Category.Logical:
+        case Category.LOGICAL:
             return new BooleanType();
         default:
             return TypeUtil.computeCommonType(

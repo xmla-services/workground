@@ -634,7 +634,7 @@ public class Util extends XOMUtil {
      * @param failIfNotFound If the element is not found, determines whether
      *   to return null or throw an error
      * @param category Type of returned element, a {@link Category} value;
-     *   {@link Category#Unknown} if it doesn't matter.
+     *   {@link Category#UNKNOWN} if it doesn't matter.
      *
      * @pre parent != null
      * @post !(failIfNotFound && return == null)
@@ -666,8 +666,8 @@ public class Util extends XOMUtil {
         // First look up a member from the cache of calculated members
         // (cubes and queries both have them).
         switch (category) {
-        case Category.Member:
-        case Category.Unknown:
+        case Category.MEMBER:
+        case Category.UNKNOWN:
             Member member = schemaReader.getCalculatedMember(names);
             if (member != null) {
                 return member;
@@ -675,8 +675,8 @@ public class Util extends XOMUtil {
         }
         // Likewise named set.
         switch (category) {
-        case Category.Set:
-        case Category.Unknown:
+        case Category.SET:
+        case Category.UNKNOWN:
             NamedSet namedSet = schemaReader.getNamedSet(names);
             if (namedSet != null) {
                 return namedSet;
@@ -751,7 +751,7 @@ public class Util extends XOMUtil {
 
                 if (!failIfNotFound) {
                     return null;
-                } else if (category == Category.Member) {
+                } else if (category == Category.MEMBER) {
                     throw MondrianResource.instance().MemberNotFound.ex(
                         quoteMdxIdentifier(names));
                 } else {
@@ -773,7 +773,7 @@ public class Util extends XOMUtil {
         }
 
         switch (category) {
-        case Category.Dimension:
+        case Category.DIMENSION:
             if (parent instanceof Dimension) {
                 return parent;
             } else if (parent instanceof Hierarchy) {
@@ -784,7 +784,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.Hierarchy:
+        case Category.HIERARCHY:
             if (parent instanceof Hierarchy) {
                 return parent;
             } else if (parent instanceof Dimension) {
@@ -795,7 +795,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.Level:
+        case Category.LEVEL:
             if (parent instanceof Level) {
                 return parent;
             } else if (failIfNotFound) {
@@ -804,7 +804,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.Member:
+        case Category.MEMBER:
             if (parent instanceof Member) {
                 return parent;
             } else if (failIfNotFound) {
@@ -813,7 +813,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.Unknown:
+        case Category.UNKNOWN:
             assertPostcondition(parent != null, "return != null");
             return parent;
         default:
@@ -898,7 +898,7 @@ public class Util extends XOMUtil {
                             : null;
             final Member member =
                     (Member) schemaReaderSansAc.lookupCompound(
-                            cube, segmentsButOne, false, Category.Member);
+                            cube, segmentsButOne, false, Category.MEMBER);
             if (member != null
                     && propertyName != null
                     && isValidProperty(propertyName, member.getLevel()))
@@ -909,7 +909,7 @@ public class Util extends XOMUtil {
             }
             final Level level =
                     (Level) schemaReaderSansAc.lookupCompound(
-                            cube, segmentsButOne, false, Category.Level);
+                            cube, segmentsButOne, false, Category.LEVEL);
             if (level != null
                     && propertyName != null
                     && isValidProperty(propertyName, level))
@@ -923,7 +923,7 @@ public class Util extends XOMUtil {
         // dimension) in the cube. Use a schema reader without restrictions.
         OlapElement olapElement =
                 schemaReaderSansAc.lookupCompound(
-                        cube, segments, false, Category.Unknown);
+                        cube, segments, false, Category.UNKNOWN);
 
         if(olapElement == null) {
             // if we're in the middle of loading the schema, the property has
@@ -938,7 +938,7 @@ public class Util extends XOMUtil {
                     List<Id.Segment> partialName =
                             segments.subList(0, nameLen);
                     olapElement = schemaReaderSansAc.lookupCompound(
-                            cube, partialName, false, Category.Unknown);
+                            cube, partialName, false, Category.UNKNOWN);
                     nameLen--;
                 }
                 if (olapElement != null) {
@@ -2002,10 +2002,10 @@ public class Util extends XOMUtil {
     {
         String type;
         switch (category) {
-        case Category.Member:
+        case Category.MEMBER:
             return MondrianResource.instance().MemberNotFound.ex(
                 identifierNode.toString());
-        case Category.Unknown:
+        case Category.UNKNOWN:
             type = "Element";
             break;
         default:

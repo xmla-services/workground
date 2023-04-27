@@ -134,11 +134,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       flag = FunUtil.getLiteralArg( call, 2, Flag.SELF, Flag.class );
     }
 
-    if ( call.getArgCount() >= 2 && depthEmpty ) {
-      if ( flag != Flag.LEAVES ) {
+    if ( call.getArgCount() >= 2 && depthEmpty && flag != Flag.LEAVES) {
         throw Util.newError(
           "depth must be specified unless DESC_FLAG is LEAVES" );
-      }
     }
     if ( ( depthSpecified || depthEmpty ) && flag.leaves ) {
       final IntegerCalc depthCalc =
@@ -161,7 +159,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           DescendantsFunDef.descendantsLeavesByDepth(
-            member, result, schemaReader, depth , evaluator);
+            member, result, schemaReader, depth );
           Sorter.hierarchizeMemberList( result, false );
           return new UnaryTupleList( result );
         }
@@ -254,7 +252,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       } else {
         children = schemaReader.getMemberChildren( children );
       }
-      if ( children.size() == 0 ) {
+      if ( children.isEmpty() ) {
         break;
       }
     }
@@ -268,8 +266,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Member member,
     final List<Member> result,
     final SchemaReader schemaReader,
-    final int depthLimit,
-    final Evaluator evaluator) {
+    final int depthLimit) {
     if ( !schemaReader.isDrillable( member ) ) {
       if ( depthLimit >= 0 ) {
         result.add( member );
@@ -280,7 +277,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     children.add( member );
     for ( int depth = 0; depthLimit == -1 || depth <= depthLimit; ++depth ) {
       children = schemaReader.getMemberChildren( children );
-      if ( children.size() == 0 ) {
+      if ( children.isEmpty() ) {
         throw Util.newInternal( "drillable member must have children" );
       }
       List<Member> nextChildren = new ArrayList<>();
@@ -359,7 +356,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           else  {
             List<Member> childMembers =
                     schemaReader.getMemberChildren( member, context );
-            if ( childMembers.size() == 0 ) {
+            if ( childMembers.isEmpty() ) {
               // this member is a leaf -- add it
               if ( currentDepth <= levelDepth ) {
                 result.add( member );
@@ -403,7 +400,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
         members =
           schemaReader.getMemberChildren( fertileMembers, context );
-      } while ( members.size() > 0 );
+      } while ( !members.isEmpty() );
     }
   }
 

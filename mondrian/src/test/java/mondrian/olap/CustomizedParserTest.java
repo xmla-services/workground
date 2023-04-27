@@ -52,7 +52,7 @@ class CustomizedParserTest {
 
     CustomizedFunctionTable getCustomizedFunctionTable(Set<String> funNameSet) {
         Set<FunDef> specialFunctions = new HashSet<>();
-        specialFunctions.add(new ParenthesesFunDef(Category.Numeric));
+        specialFunctions.add(new ParenthesesFunDef(Category.NUMERIC));
 
         CustomizedFunctionTable cftab =
             new CustomizedFunctionTable(funNameSet, specialFunctions);

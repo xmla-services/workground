@@ -66,12 +66,12 @@ class ExtractFunDef extends FunDefBase {
             if (args.length < 2) {
                 return null;
             }
-            if (!validator.canConvert(0, args[0], Category.Set, conversions)) {
+            if (!validator.canConvert(0, args[0], Category.SET, conversions)) {
                 return null;
             }
             for (int i = 1; i < args.length; ++i) {
                 if (!validator.canConvert(
-                        0, args[i], Category.Hierarchy, conversions))
+                        0, args[i], Category.HIERARCHY, conversions))
                 {
                     return null;
                 }
@@ -93,10 +93,10 @@ class ExtractFunDef extends FunDefBase {
             ExtractFunDef.findExtractedHierarchies(
                 args, extractedHierarchies, extractedOrdinals);
             int[] parameterTypes = new int[args.length];
-            parameterTypes[0] = Category.Set;
+            parameterTypes[0] = Category.SET;
             Arrays.fill(
-                parameterTypes, 1, parameterTypes.length, Category.Hierarchy);
-            return new ExtractFunDef(this, Category.Set, parameterTypes);
+                parameterTypes, 1, parameterTypes.length, Category.HIERARCHY);
+            return new ExtractFunDef(this, Category.SET, parameterTypes);
         }
     };
 

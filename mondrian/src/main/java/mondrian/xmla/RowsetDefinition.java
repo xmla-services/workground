@@ -4789,33 +4789,33 @@ TODO: see above
 
             public static VarType forCategory(int category) {
                 switch (category) {
-                case Category.Unknown:
+                case Category.UNKNOWN:
                     // expression == unknown ???
                     // case Category.Expression:
                     return Empty;
-                case Category.Array:
+                case Category.ARRAY:
                     return Array;
-                case Category.Dimension:
-                case Category.Hierarchy:
-                case Category.Level:
-                case Category.Member:
-                case Category.Set:
-                case Category.Tuple:
-                case Category.Cube:
-                case Category.Value:
+                case Category.DIMENSION:
+                case Category.HIERARCHY:
+                case Category.LEVEL:
+                case Category.MEMBER:
+                case Category.SET:
+                case Category.TUPLE:
+                case Category.CUBE:
+                case Category.VALUE:
                     return Variant;
-                case Category.Logical:
+                case Category.LOGICAL:
                     return Boolean;
-                case Category.Numeric:
+                case Category.NUMERIC:
                     return Double;
-                case Category.String:
-                case Category.Symbol:
-                case Category.Constant:
+                case Category.STRING:
+                case Category.SYMBOL:
+                case Category.CONSTANT:
                     return String;
-                case Category.DateTime:
+                case Category.DATE_TIME:
                     return Date;
-                case Category.Integer:
-                case Category.Mask:
+                case Category.INTEGER:
+                case Category.MASK:
                     return Integer;
                 }
                 // NOTE: this should never happen

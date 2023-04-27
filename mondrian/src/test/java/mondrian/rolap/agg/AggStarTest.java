@@ -46,7 +46,7 @@ class AggStarTest {
     Mockito.when(table.getTotalColumnSize()).thenReturn(1);
     Mockito.when(table.getNumberOfRows()).thenReturn(BIG_NUMBER);
 
-    aggStar = AggStar.makeAggStar(star, table, messageRecorder, 0L);
+    aggStar = AggStar.makeAggStar(star, table, 0L);
     aggStar = Mockito.spy(aggStar);
 
     propSaver.set(propSaver.properties.ChooseAggregateByVolume, false);

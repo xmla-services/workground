@@ -10,6 +10,8 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.EMPTY_MAP;
 import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.io.PrintWriter;
@@ -139,14 +141,15 @@ public class ExplicitRules {
                     }
                 }
             } else {
-                LOGGER.warn(
-                    mres.CubeRelationNotTable.str(
-                        cube.getName(),
-                        relation.getClass().getName()));
+                String msg = mres.CubeRelationNotTable.str(
+                    cube.getName(),
+                    relation.getClass().getName());
+                LOGGER.warn(msg);
             }
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(Util.nl + group);
+                String msg = Util.nl + group;
+                LOGGER.debug(msg);
             }
             return group;
         }
@@ -187,15 +190,15 @@ public class ExplicitRules {
          */
         public boolean hasRules() {
             return
-                (excludes != Collections.EMPTY_LIST)
-                || (tableDefs != Collections.EMPTY_LIST);
+                (excludes != EMPTY_LIST)
+                || (tableDefs != EMPTY_LIST);
         }
 
         /**
          * Add an exclude rule.
          */
         public void addExclude(final ExplicitRules.Exclude exclude) {
-            if (excludes == Collections.EMPTY_LIST) {
+            if (excludes == EMPTY_LIST) {
                 excludes = new ArrayList<>();
             }
             excludes.add(exclude);
@@ -205,7 +208,7 @@ public class ExplicitRules {
          * Add a name or pattern (table) rule.
          */
         public void addTableDef(final ExplicitRules.TableDef tableDef) {
-            if (tableDefs == Collections.EMPTY_LIST) {
+            if (tableDefs == EMPTY_LIST) {
                 tableDefs = new ArrayList<>();
             }
             tableDefs.add(tableDef);
@@ -234,17 +237,13 @@ public class ExplicitRules {
             // fuzzy match on a PatternTableDef, so
             // first look throught NameTableDef then PatternTableDef
             for (ExplicitRules.TableDef tableDef : tableDefs) {
-                if (tableDef instanceof NameTableDef) {
-                    if (tableDef.matches(tableName)) {
-                        return tableDef;
-                    }
+                if (tableDef instanceof NameTableDef && tableDef.matches(tableName)) {
+                    return tableDef;
                 }
             }
             for (ExplicitRules.TableDef tableDef : tableDefs) {
-                if (tableDef instanceof PatternTableDef) {
-                    if (tableDef.matches(tableName)) {
-                        return tableDef;
-                    }
+                if (tableDef instanceof PatternTableDef && tableDef.matches(tableName)) {
+                    return tableDef;
                 }
             }
             return null;
@@ -525,9 +524,8 @@ public class ExplicitRules {
             final AggTable aggTable,
             final ExplicitRules.Group group)
         {
-            return (aggTable instanceof AggName)
-                ? ExplicitRules.NameTableDef.make(
-                    (AggName) aggTable, group)
+            return (aggTable instanceof AggName aggName)
+                ? ExplicitRules.NameTableDef.make(aggName, group)
                 : (ExplicitRules.TableDef)
                 ExplicitRules.PatternTableDef.make(
                     (AggPattern) aggTable, group);
@@ -544,13 +542,13 @@ public class ExplicitRules {
             final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable aggTable)
         {
 
-            if (aggTable instanceof AggName) {
+            if (aggTable instanceof AggName aggName) {
                 tableDef.setFactCountName(
-                    ((AggName)aggTable).aggFactCount().column());
+                    aggName.aggFactCount().column());
             }
-            if (aggTable instanceof AggPattern) {
+            if (aggTable instanceof AggPattern aggPattern) {
                 tableDef.setFactCountName(
-                    ((AggPattern)aggTable).aggFactCount().column());
+                    aggPattern.aggFactCount().column());
             }
 
 
@@ -767,14 +765,14 @@ public class ExplicitRules {
                                 cube,
                                 names,
                                 false,
-                                Category.Level);
+                                Category.LEVEL);
                         if (level == null) {
                             Hierarchy hierarchy = (Hierarchy)
                                 schemaReader.lookupCompound(
                                     cube,
                                     names.subList(0, 1),
                                     false,
-                                    Category.Hierarchy);
+                                    Category.HIERARCHY);
                             if (hierarchy == null) {
                                 msgRecorder.reportError(
                                     mres.UnknownHierarchyName.str(
@@ -967,10 +965,10 @@ public class ExplicitRules {
                             cube,
                             names,
                             false,
-                            Category.Member);
+                            Category.MEMBER);
                         if (member == null) {
-                            if (!(names.get(0) instanceof Id.NameSegment
-                                    && ((Id.NameSegment) names.get(0)).name
+                            if (!(names.get(0) instanceof Id.NameSegment nameSegment
+                                    && nameSegment.name
                                         .equals("Measures")))
                             {
                                 msgRecorder.reportError(
@@ -986,10 +984,9 @@ public class ExplicitRules {
                         }
                         RolapStar star = cube.getStar();
                         rolapMeasure =
-                            names.get(1) instanceof Id.NameSegment
+                            names.get(1) instanceof Id.NameSegment nameSegment
                                 ? star.getFactTable().lookupMeasureByName(
-                                    cube.getName(),
-                                    ((Id.NameSegment) names.get(1)).name)
+                                    cube.getName(), nameSegment.name)
                                 : null;
                         if (rolapMeasure == null) {
                             msgRecorder.reportError(
@@ -1210,7 +1207,7 @@ public class ExplicitRules {
          * Adds the name of an aggregate table column that is to be ignored.
          */
         protected void addIgnoreColumnName(final String ignoreName) {
-            if (this.ignoreColumnNames == Collections.EMPTY_LIST) {
+            if (this.ignoreColumnNames == EMPTY_LIST) {
                 this.ignoreColumnNames = new ArrayList<>();
             }
             this.ignoreColumnNames.add(ignoreName);
@@ -1221,7 +1218,7 @@ public class ExplicitRules {
          * column name to aggregate table foreign key column name).
          */
         protected void addFK(final AggForeignKey fk) {
-            if (this.foreignKeyMap == Collections.EMPTY_MAP) {
+            if (this.foreignKeyMap == EMPTY_MAP) {
                 this.foreignKeyMap = new HashMap<>();
             }
             this.foreignKeyMap.put(
@@ -1241,7 +1238,7 @@ public class ExplicitRules {
          * Adds a Level.
          */
         protected void add(final Level level) {
-            if (this.levels == Collections.EMPTY_LIST) {
+            if (this.levels == EMPTY_LIST) {
                 this.levels = new ArrayList<>();
             }
             this.levels.add(level);
@@ -1251,7 +1248,7 @@ public class ExplicitRules {
          * Adds a Measure.
          */
         protected void add(final Measure measure) {
-            if (this.measures == Collections.EMPTY_LIST) {
+            if (this.measures == EMPTY_LIST) {
                 this.measures = new ArrayList<>();
             }
             this.measures.add(measure);
@@ -1579,7 +1576,7 @@ public class ExplicitRules {
          * Add an Exclude.
          */
         private void add(final Exclude exclude) {
-            if (this.excludes == Collections.EMPTY_LIST) {
+            if (this.excludes == EMPTY_LIST) {
                 this.excludes = new ArrayList<>();
             }
             this.excludes.add(exclude);

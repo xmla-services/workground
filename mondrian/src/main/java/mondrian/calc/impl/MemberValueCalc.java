@@ -52,7 +52,9 @@ public class MemberValueCalc extends GenericCalc {
     public MemberValueCalc(Type type, MemberCalc memberCalc, boolean nullCheck) {
         super( "MemberValueCalc",  type);
         this.nullCheck = nullCheck;
-        assert type instanceof ScalarType ;
+        if (!(type instanceof ScalarType)) {
+            throw new IllegalArgumentException("Invalid type in MemberValueCalc");
+        }
         this.memberCalc = memberCalc;
     }
 

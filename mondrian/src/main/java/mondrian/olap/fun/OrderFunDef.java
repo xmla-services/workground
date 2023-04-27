@@ -125,7 +125,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       arg = call.getArg( j );
       key = compiler.compileScalar( arg, true );
       j++;
-      if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != Category.Symbol ) ) {
+      if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != Category.SYMBOL) ) {
         dir = Flag.ASC;
       } else {
         dir = FunUtil.getLiteralArg( call, j, Flag.ASC, Flag.class );
@@ -351,32 +351,32 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         return null;
       }
       // first arg must be a set
-      if ( !validator.canConvert( 0, args[0], Category.Set, conversions ) ) {
+      if ( !validator.canConvert( 0, args[0], Category.SET, conversions ) ) {
         return null;
       }
-      ResolverImpl.argTypes[0] = Category.Set;
+      ResolverImpl.argTypes[0] = Category.SET;
       // after fist args, should be: value [, symbol]
       int i = 1;
       while ( i < args.length ) {
-        if ( !validator.canConvert( i, args[i], Category.Value, conversions ) ) {
+        if ( !validator.canConvert( i, args[i], Category.VALUE, conversions ) ) {
           return null;
         } else {
-          ResolverImpl.argTypes[i] = Category.Value;
+          ResolverImpl.argTypes[i] = Category.VALUE;
           i++;
         }
         // if symbol is not specified, skip to the next
         if ( ( i == args.length ) ) {
           // done, will default last arg to ASC
         } else {
-          if ( !validator.canConvert( i, args[i], Category.Symbol, conversions ) ) {
+          if ( !validator.canConvert( i, args[i], Category.SYMBOL, conversions ) ) {
             // continue, will default sort flag for prev arg to ASC
           } else {
-            ResolverImpl.argTypes[i] = Category.Symbol;
+            ResolverImpl.argTypes[i] = Category.SYMBOL;
             i++;
           }
         }
       }
-      return new OrderFunDef( this, Category.Set, ResolverImpl.argTypes );
+      return new OrderFunDef( this, Category.SET, ResolverImpl.argTypes );
     }
 
     @Override

@@ -262,7 +262,7 @@ public interface SchemaReader {
      * @param failIfNotFound If the element is not found, determines whether
      *      to return null or throw an error
      * @param category Type of returned element, a {@link Category} value;
-     *      {@link Category#Unknown} if it doesn't matter.
+     *      {@link Category#UNKNOWN} if it doesn't matter.
      * @param matchType indicates the match mode; if not specified, EXACT
      *
      * @pre parent != null
@@ -288,7 +288,7 @@ public interface SchemaReader {
      * @param failIfNotFound If the element is not found, determines whether
      *      to return null or throw an error
      * @param category Type of returned element, a {@link Category} value;
-     *      {@link Category#Unknown} if it doesn't matter.
+     *      {@link Category#UNKNOWN} if it doesn't matter.
      *
      * @pre parent != null
      * @post !(failIfNotFound && return == null)
@@ -309,7 +309,7 @@ public interface SchemaReader {
      * @param failIfNotFound If the element is not found, determines whether
      *      to return null or throw an error
      * @param category Type of returned element, a {@link Category} value;
-     *      {@link Category#Unknown} if it doesn't matter.
+     *      {@link Category#UNKNOWN} if it doesn't matter.
      * @param matchType indicates the match mode; if not specified, EXACT
      * @return Found element
 
@@ -560,6 +560,6 @@ public interface SchemaReader {
      */
     Map<? extends Member, Access>
         getMemberChildrenWithDetails(Member member, Evaluator evaluator);
-    
+
     Context getContext();
 }

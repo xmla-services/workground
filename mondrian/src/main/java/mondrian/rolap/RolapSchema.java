@@ -789,7 +789,7 @@ public class RolapSchema implements Schema {
             : cubeGrant.dimensionGrants())
         {
             Dimension dimension =
-                lookup(cube, reader, Category.Dimension, grant.dimension());
+                lookup(cube, reader, Category.DIMENSION, grant.dimension());
             role.grant(
                 dimension,
                 getAccess(grant.access().name(), dimensionAllowed));
@@ -810,7 +810,7 @@ public class RolapSchema implements Schema {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant grant)
     {
         Hierarchy hierarchy =
-            lookup(cube, reader, Category.Hierarchy, grant.hierarchy());
+            lookup(cube, reader, Category.HIERARCHY, grant.hierarchy());
         final Access hierarchyAccess =
             getAccess(grant.access().getValue(), hierarchyAllowed);
         Level topLevel = findLevelForHierarchyGrant(
@@ -909,7 +909,7 @@ public class RolapSchema implements Schema {
             throw Util.newError(
                 new StringBuilder("You may only specify '").append(desc).append("' if access='custom'").toString());
         }
-        return lookup(cube, schemaReader, Category.Level, name);
+        return lookup(cube, schemaReader, Category.LEVEL, name);
     }
 
     private Access getAccess(String accessString, Set<Access> allowed) {

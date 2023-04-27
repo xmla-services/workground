@@ -52,14 +52,14 @@ public class TupleFunDef extends FunDefBase {
             "(<Member> [, <Member>]...)",
             "Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
             Syntax.Parentheses,
-            Category.Tuple,
+            Category.TUPLE,
             argTypes);
         this.argTypes = argTypes;
     }
 
     @Override
 	public int getReturnCategory() {
-        return Category.Tuple;
+        return Category.TUPLE;
     }
 
     @Override
@@ -158,19 +158,19 @@ public class TupleFunDef extends FunDefBase {
                     // Not OK:
                     //  ([Gender].[S], [Store].[Store City]) (member, level)
                     if (validator.canConvert(
-                            i, args[i], Category.Member, conversions)) {
-                        argTypes[i] = Category.Member;
+                            i, args[i], Category.MEMBER, conversions)) {
+                        argTypes[i] = Category.MEMBER;
                     } else if(validator.canConvert(
-                            i, args[i], Category.Set, conversions)){
+                            i, args[i], Category.SET, conversions)){
                         hasSet = true;
-                        argTypes[i] = Category.Set;
+                        argTypes[i] = Category.SET;
                     }
                     else {
                         return null;
                     }
                 }
                 if(hasSet){
-                    FunDef dummy = FunUtil.createDummyFunDef(this, Category.Set, args);
+                    FunDef dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
                     return new CrossJoinFunDef(dummy);
                 }
                 else {

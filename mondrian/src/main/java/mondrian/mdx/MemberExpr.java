@@ -72,7 +72,7 @@ public class MemberExpr extends ExpBase implements Exp {
 
     @Override
 	public int getCategory() {
-        return Category.Member;
+        return Category.MEMBER;
     }
 
     @Override

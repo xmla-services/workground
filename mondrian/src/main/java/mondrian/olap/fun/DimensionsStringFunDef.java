@@ -81,9 +81,9 @@ class DimensionsStringFunDef extends FunDefBase {
             evaluator.getCube(),
             Util.parseIdentifier(name),
             false,
-            Category.Hierarchy);
-        if (o instanceof Hierarchy) {
-            return (Hierarchy) o;
+            Category.HIERARCHY);
+        if (o instanceof Hierarchy hierarchy) {
+            return hierarchy;
         } else if (o == null) {
             throw FunUtil.newEvalException(
                 this, new StringBuilder("Hierarchy '").append(name).append("' not found").toString());

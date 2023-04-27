@@ -61,7 +61,7 @@ import mondrian.xmla.XmlaUtil;
  */
 public abstract class DefaultXmlaServlet extends XmlaServlet {
 
-    protected static final String nl = System.getProperty("line.separator");
+    protected static final String NL = System.getProperty("line.separator");
 
     /**
      * Servlet config parameter that determines whether the xmla servlet
@@ -233,7 +233,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     protected void logXmlaRequest(Element envElem) {
         final StringWriter writer = new StringWriter();
         writer.write("XML/A request content");
-        writer.write(nl);
+        writer.write(NL);
         XmlaUtil.element2Text(envElem, writer);
         LOGGER.debug(writer.toString());
     }
@@ -354,7 +354,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         Session.create(sessionIdStr);
 
                     } else if (localName.equals(XMLA_SESSION)) {
-                        sessionIdStr = getSessionIdFromRequest(e, context);
+                        sessionIdStr = getSessionIdFromRequest(e);
 
                         Session.get(sessionIdStr);
                         Session.checkIn(sessionIdStr);
@@ -378,7 +378,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
 
                     } else if (localName.equals(XMLA_END_SESSION)) {
-                        sessionIdStr = getSessionIdFromRequest(e, context);
+                        sessionIdStr = getSessionIdFromRequest(e);
                         context.put(CONTEXT_XMLA_SESSION_ID, sessionIdStr);
                         context.put(
                                 CONTEXT_XMLA_SESSION_STATE,
@@ -480,8 +480,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
 
     private static String getSessionIdFromRequest(
-        Element e,
-        Map<String, Object> context)
+        Element e)
         throws Exception
     {
         // extract the SessionId attrs value and put into context
@@ -596,7 +595,6 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         HttpServletResponse response,
         byte[][] responseSoapParts,
         Enumeration.ResponseMimeType responseMimeType)
-        throws XmlaException
     {
         try {
             // If CharacterEncoding was set in web.xml, use this value
@@ -674,7 +672,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
             if (LOGGER.isDebugEnabled()) {
                 StringBuilder buf = new StringBuilder(100);
-                buf.append("XML/A response content").append(nl);
+                buf.append("XML/A response content").append(NL);
                 try {
                     for (Object byteChunk : byteChunks) {
                         byte[] chunk = (byte[]) byteChunk;
@@ -692,7 +690,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
             if (LOGGER.isDebugEnabled()) {
                 StringBuilder buf = new StringBuilder();
-                buf.append("XML/A response content").append(nl);
+                buf.append("XML/A response content").append(NL);
             }
             try {
                 int bufferSize = 4096;

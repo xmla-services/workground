@@ -51,8 +51,8 @@ public abstract class AbstractMemoryMonitor
         }
         @Override
 		public boolean equals(final Object other) {
-            return (other instanceof Entry)
-                && (listener == ((Entry) other).listener);
+            return (other instanceof Entry entry)
+                && (listener == entry.listener);
         }
         @Override
 		public int hashCode() {
@@ -354,7 +354,7 @@ public abstract class AbstractMemoryMonitor
 
     @Override
 	public void resetFromTest() {
-        long lowThreshold = generateLowThreshold();
-        notifyNewLowThreshold(lowThreshold);
+        long lThreshold = generateLowThreshold();
+        notifyNewLowThreshold(lThreshold);
     }
 }

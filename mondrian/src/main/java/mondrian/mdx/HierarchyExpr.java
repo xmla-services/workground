@@ -68,7 +68,7 @@ public class HierarchyExpr extends ExpBase implements Exp {
 
     @Override
 	public int getCategory() {
-        return Category.Hierarchy;
+        return Category.HIERARCHY;
     }
 
     @Override

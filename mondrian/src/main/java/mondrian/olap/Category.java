@@ -45,10 +45,10 @@ public class Category extends EnumeratedValues {
                 "null", "empty", "datetime",
             },
             new int[] {
-                Unknown, Array, Dimension, Hierarchy, Level,
-                Logical, Member, Numeric, Set,
-                String, Tuple, Symbol, Cube, Value, Integer,
-                Null, Empty, DateTime,
+                UNKNOWN, ARRAY, DIMENSION, HIERARCHY, LEVEL,
+                LOGICAL, MEMBER, NUMERIC, SET,
+                STRING, TUPLE, SYMBOL, CUBE, VALUE, INTEGER,
+                NULL, EMPTY, DATE_TIME,
             },
             new String[] {
                 "Unknown", "Array", "Dimension", "Hierarchy", "Level",
@@ -71,110 +71,110 @@ public class Category extends EnumeratedValues {
     /**
      * <code>Unknown</code> is an expression whose type is as yet unknown.
      */
-    public static final int Unknown   = 0;
+    public static final int UNKNOWN = 0;
 
     /**
      * <code>Array</code> is an expression of array type.
      */
-    public static final int Array     = 1;
+    public static final int ARRAY = 1;
 
     /**
      * <code>Dimension</code> is a dimension expression.
      * @see Dimension
      */
-    public static final int Dimension = 2;
+    public static final int DIMENSION = 2;
 
     /**
      * <code>Hierarchy</code> is a hierarchy expression.
      * @see Hierarchy
      */
-    public static final int Hierarchy = 3;
+    public static final int HIERARCHY = 3;
 
     /**
      * <code>Level</code> is a level expression.
      * @see Level
      */
-    public static final int Level     = 4;
+    public static final int LEVEL = 4;
 
     /**
      * <code>Logical</code> is a boolean expression.
      */
-    public static final int Logical   = 5;
+    public static final int LOGICAL = 5;
 
     /**
      * <code>Member</code> is a member expression.
      * @see Member
      */
-    public static final int Member    = 6;
+    public static final int MEMBER = 6;
 
     /**
      * <code>Numeric</code> is a numeric expression.
      */
-    public static final int Numeric   = 7;
+    public static final int NUMERIC = 7;
 
     /**
      * <code>Set</code> is a set of members or tuples.
      */
-    public static final int Set       = 8;
+    public static final int SET = 8;
 
     /**
      * <code>String</code> is a string expression.
      */
-    public static final int String    = 9;
+    public static final int STRING = 9;
 
     /**
      * <code>Tuple</code> is a tuple expression.
      */
-    public static final int Tuple     = 10;
+    public static final int TUPLE = 10;
 
     /**
      * <code>Symbol</code> is a symbol, for example the <code>BASC</code>
      * keyword to the <code>Order()</code> function.
      */
-    public static final int Symbol    = 11;
+    public static final int SYMBOL = 11;
 
     /**
      * <code>Cube</code> is a cube expression.
      * @see Cube
      */
-    public static final int Cube      = 12;
+    public static final int CUBE = 12;
 
     /**
      * <code>Value</code> is any expression yielding a string or numeric value.
      */
-    public static final int Value     = 13;
+    public static final int VALUE = 13;
 
     /**
      * <code>Integer</code> is an integer expression. This is a subtype of
-     * {@link #Numeric}.
+     * {@link #NUMERIC}.
      */
-    public static final int Integer   = 15;
+    public static final int INTEGER = 15;
 
     /**
      * Represents a <code>Null</code> value
      */
-    public static final int Null      = 16;
+    public static final int NULL = 16;
 
     /**
      * Represents an empty expression.
      */
-    public static final int Empty     = 17;
+    public static final int EMPTY = 17;
 
     /**
      * Represents a DataTime expression.
      */
-    public static final int DateTime  = 18;
+    public static final int DATE_TIME = 18;
 
     /**
      * <code>Expression</code> is a flag which, when bitwise-OR-ed with a
      * category value, indicates an expression (as opposed to a constant).
      */
-    public static final int Expression = 0;
+    public static final int EXPRESSION = 0;
     /** <code>Constant</code> is a flag which, when bitwise-OR-ed with a
      * category value, indicates a constant (as opposed to an expression). */
-    public static final int Constant = 64;
+    public static final int CONSTANT = 64;
     /** <code>Mask</code> is a mask to remove flags. */
-    public static final int Mask = 31;
+    public static final int MASK = 31;
 
     /**
      * Returns whether a category represents a scalar type.
@@ -183,13 +183,13 @@ public class Category extends EnumeratedValues {
      * @return Whether is scalar
      */
     public static boolean isScalar(int category) {
-        switch (category & Mask) {
-        case Value:
-        case Logical:
-        case Numeric:
-        case Integer:
-        case String:
-        case DateTime:
+        switch (category & MASK) {
+        case VALUE:
+        case LOGICAL:
+        case NUMERIC:
+        case INTEGER:
+        case STRING:
+        case DATE_TIME:
             return true;
         default:
             return false;

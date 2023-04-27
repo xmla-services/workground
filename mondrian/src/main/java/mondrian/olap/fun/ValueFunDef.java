@@ -36,14 +36,14 @@ class ValueFunDef extends FunDefBase {
             "_Value([<Member>, ...])",
             "Pseudo-function which evaluates a tuple.",
             Syntax.Parentheses,
-            Category.Numeric,
+            Category.NUMERIC,
             argTypes);
         this.argTypes = argTypes;
     }
 
     @Override
 	public int getReturnCategory() {
-        return Category.Tuple;
+        return Category.TUPLE;
     }
 
     @Override

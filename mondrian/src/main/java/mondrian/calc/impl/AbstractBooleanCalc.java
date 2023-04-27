@@ -31,14 +31,11 @@ implements BooleanCalc
     /**
      * Creates an AbstractBooleanCalc.
      *
-     * @param exp Source expression
+     * @param name
      * @param calcs Child compiled expressions
      */
-    public AbstractBooleanCalc(String name, Type type,Calc[] calcs) {
+    protected AbstractBooleanCalc(String name, Type type,Calc[] calcs) {
         super(name,type, calcs);
-        // now supports int and double conversion (see
-        // AbstractExpCompiler.compileBoolean():
-        // assert getType() instanceof BooleanType;
     }
 
     @Override

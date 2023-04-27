@@ -212,7 +212,6 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
         assert mutable;
         final int n = index * arity;
         // Strict compliance with List API:
-        // List<Member> previous = get(index);
         System.arraycopy( objectData, n + arity, objectData, n, arity );
         --size;
         return null; // previous

@@ -1129,7 +1129,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
             if (exp instanceof Literal literal) {
                 final Object value = literal.getValue();
-                if (literal.getCategory() == Category.Symbol) {
+                if (literal.getCategory() == Category.SYMBOL) {
                     return LiteralNode.createSymbol(
                         null, (String) literal.getValue());
                 } else if (value instanceof Number number) {

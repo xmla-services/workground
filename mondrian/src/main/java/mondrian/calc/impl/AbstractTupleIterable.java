@@ -40,7 +40,7 @@ implements TupleIterable
      *
      * @param arity Arity (number of members per tuple)
      */
-    public AbstractTupleIterable(int arity) {
+    protected AbstractTupleIterable(int arity) {
         this.arity = arity;
     }
 

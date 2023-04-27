@@ -315,41 +315,41 @@ public abstract class FunDefBase implements FunDef {
      */
     static Type castType(Type type, int category) {
         switch (category) {
-        case Category.Logical:
+        case Category.LOGICAL:
             return new BooleanType();
-        case Category.Numeric:
+        case Category.NUMERIC:
             return new NumericType();
-        case Category.Numeric | Category.Integer:
+        case Category.NUMERIC | Category.INTEGER:
             return new DecimalType(Integer.MAX_VALUE, 0);
-        case Category.String:
+        case Category.STRING:
             return new StringType();
-        case Category.DateTime:
+        case Category.DATE_TIME:
             return new DateTimeType();
-        case Category.Symbol:
+        case Category.SYMBOL:
             return new SymbolType();
-        case Category.Value:
+        case Category.VALUE:
             return new ScalarType();
-        case Category.Cube:
+        case Category.CUBE:
             if (type instanceof Cube) {
                 return new CubeType((Cube) type);
             }
             return null;
-        case Category.Dimension:
+        case Category.DIMENSION:
             if (type != null) {
                 return DimensionType.forType(type);
             }
             return null;
-        case Category.Hierarchy:
+        case Category.HIERARCHY:
             if (type != null) {
                 return HierarchyType.forType(type);
             }
             return null;
-        case Category.Level:
+        case Category.LEVEL:
             if (type != null) {
                 return LevelType.forType(type);
             }
             return null;
-        case Category.Member:
+        case Category.MEMBER:
             if (type != null) {
                 final MemberType memberType = TypeUtil.toMemberType(type);
                 if (memberType != null) {
@@ -358,7 +358,7 @@ public abstract class FunDefBase implements FunDef {
             }
             // Take a wild guess.
             return MemberType.Unknown;
-        case Category.Tuple:
+        case Category.TUPLE:
             if (type != null) {
                 final Type memberType = TypeUtil.toMemberOrTupleType(type);
                 if (memberType != null) {
@@ -366,7 +366,7 @@ public abstract class FunDefBase implements FunDef {
                 }
             }
             return null;
-        case Category.Set:
+        case Category.SET:
             if (type != null) {
                 final Type memberType = TypeUtil.toMemberOrTupleType(type);
                 if (memberType != null) {
@@ -374,7 +374,7 @@ public abstract class FunDefBase implements FunDef {
                 }
             }
             return null;
-        case Category.Empty:
+        case Category.EMPTY:
             return new EmptyType();
         default:
             throw Category.instance.badValue(category);

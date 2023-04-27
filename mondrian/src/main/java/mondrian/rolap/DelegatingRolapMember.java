@@ -100,9 +100,9 @@ public class DelegatingRolapMember extends RolapMemberBase {
 
     @Override
 	public boolean isChildOrEqualTo(Member member2) {
-        if (member2 instanceof DelegatingRolapMember) {
+        if (member2 instanceof DelegatingRolapMember delegatingRolapMember) {
             return member
-                    .isChildOrEqualTo(((DelegatingRolapMember) member2).member);
+                    .isChildOrEqualTo(delegatingRolapMember.member);
         } else {
             return member.isChildOrEqualTo(member2);
         }

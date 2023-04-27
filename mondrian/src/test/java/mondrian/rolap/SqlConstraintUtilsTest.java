@@ -252,7 +252,7 @@ class SqlConstraintUtilsTest {
 
         Exp parenthesesArg = new MemberExpr(parenthesesInnerMember);
 
-        FunDef funDef = new ParenthesesFunDef(Category.Member);
+        FunDef funDef = new ParenthesesFunDef(Category.MEMBER);
         Exp[] args = new Exp[]{parenthesesArg};
         Type returnType = new DecimalType(1, 1);
         Exp memberExp = new ResolvedFunCall(funDef, args, returnType);
@@ -305,7 +305,7 @@ class SqlConstraintUtilsTest {
         final Exp[] args2Different = new Exp[]{argUnsupported, argSupported};
 
         final ParenthesesFunDef parenthesesFunDef =
-            new ParenthesesFunDef(Category.Member);
+            new ParenthesesFunDef(Category.MEMBER);
         Type parenthesesReturnType = new DecimalType(1, 1);
         Exp parenthesesExpr = new ResolvedFunCall(
             parenthesesFunDef, noArgs, parenthesesReturnType);

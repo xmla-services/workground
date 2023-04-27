@@ -158,7 +158,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                         }
                         buf.append(
                             Category.instance.getDescription(
-                                v & Category.Mask));
+                                v & Category.MASK));
                     }
 
                     RowsetDefinition.MdschemaFunctionsRowset.VarType varType =

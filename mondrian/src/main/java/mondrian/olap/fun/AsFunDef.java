@@ -84,9 +84,8 @@ class AsFunDef extends FunDefBase {
             Validator validator,
             List<Conversion> conversions)
         {
-            final Exp exp = args[0];
             if (!validator.canConvert(
-                    0, args[0], Category.Set, conversions))
+                    0, args[0], Category.SET, conversions))
             {
                 return null;
             }
@@ -96,13 +95,9 @@ class AsFunDef extends FunDefBase {
             // We'd rather it stayed as an id, and we'd rather that a named set
             // was not visible in the scope that defines it. But we can work
             // with this.
-            final String name =
-                ((NamedSetExpr) args[1]).getNamedSet().getName();
 
             final Query.ScopedNamedSet scopedNamedSet =
                 (Query.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
-//                validator.getQuery().createScopedNamedSet(
-//                    name, (QueryPart) exp, exp);
             return new AsFunDef(scopedNamedSet);
         }
     }

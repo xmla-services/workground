@@ -52,7 +52,7 @@ class StrToTupleFunDef extends FunDefBase {
             "StrToTuple",
             null,
             "Constructs a tuple from a string.",
-            Syntax.Function, Category.Tuple, parameterTypes);
+            Syntax.Function, Category.TUPLE, parameterTypes);
     }
 
     @Override
@@ -180,16 +180,16 @@ class StrToTupleFunDef extends FunDefBase {
                 }
             }
             int[] argTypes = new int[args.length];
-            argTypes[0] = Category.String;
+            argTypes[0] = Category.STRING;
             for (int i = 1; i < argTypes.length; i++) {
-                argTypes[i] = Category.Hierarchy;
+                argTypes[i] = Category.HIERARCHY;
             }
             return new StrToTupleFunDef(argTypes);
         }
 
         @Override
 		public FunDef getRepresentativeFunDef() {
-            return new StrToTupleFunDef(new int[] {Category.String});
+            return new StrToTupleFunDef(new int[] {Category.STRING});
         }
     }
 }

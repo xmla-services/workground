@@ -291,7 +291,6 @@ public class AggTableManager {
                             AggStar aggStar = AggStar.makeAggStar(
                                 star,
                                 dbTable,
-                                msgRecorder,
                                 approxRowCount);
                             if (aggStar.getSize() > 0) {
                                 star.addAggStar(aggStar);

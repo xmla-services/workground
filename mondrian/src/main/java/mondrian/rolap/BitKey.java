@@ -181,6 +181,10 @@ public interface BitKey
 
     public abstract class Factory {
 
+        private Factory() {
+            // constructor
+        }
+
         /**
          * Creates a {@link BitKey} with a capacity for a given number of bits.
          * @param size Number of bits in key
@@ -236,15 +240,15 @@ public interface BitKey
     abstract class AbstractBitKey implements BitKey {
         private static final long serialVersionUID = -2942302671676103450L;
         // chunk is a long, which has 64 bits
-        protected static final int ChunkBitCount = 6;
-        protected static final int Mask = 63;
+        protected static final int CHUNK_BIT_COUNT = 6;
+        protected static final int MASK = 63;
         protected static final long WORD_MASK = 0xffffffffffffffffL;
 
         /**
          * Creates a chunk containing a single bit.
          */
         protected static long bit(int pos) {
-            return (1L << (pos & Mask));
+            return (1L << (pos & MASK));
         }
 
         /**
@@ -252,7 +256,7 @@ public interface BitKey
          * Bits 0 to 63 fall in chunk 0, bits 64 to 127 fall into chunk 1.
          */
         protected static int chunkPos(int size) {
-            return (size >> ChunkBitCount);
+            return (size >> CHUNK_BIT_COUNT);
         }
 
         /**
@@ -261,7 +265,7 @@ public interface BitKey
          * <p>0 bits requires 0 chunks; 1 - 64 bits requires 1 chunk; etc.
          */
         protected static int chunkCount(int size) {
-            return (size + 63) >> ChunkBitCount;
+            return (size + 63) >> CHUNK_BIT_COUNT;
         }
 
         /**
@@ -751,9 +755,11 @@ public interface BitKey
         @Override
 		public int compareTo(BitKey bitKey) {
             if (bitKey instanceof Small that) {
-                return this.bits == that.bits ? 0
-                    : this.bits < that.bits ? -1
-                    : 1;
+                if (this.bits == that.bits) {
+                    return  0;
+                } else {
+                    return this.bits < that.bits ? -1 : 1;
+                }
             } else if (bitKey instanceof Mid128 that) {
                 if (that.bits1 != 0) {
                     return -1;
@@ -1709,7 +1715,7 @@ public interface BitKey
 
         @Override
 		public BitKey emptyCopy() {
-            return new Big(bits.length << ChunkBitCount);
+            return new Big(bits.length << CHUNK_BIT_COUNT);
         }
 
         @Override

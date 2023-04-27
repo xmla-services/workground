@@ -72,7 +72,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             Member member =
                 (Member) Util.lookupCompound(
                     schemaReader, cube, mondrianSegmentList, !ignoreInvalid,
-                    Category.Member);
+                    Category.MEMBER);
             if (member == null) {
                 assert ignoreInvalid;
                 if (expectedHierarchy != null) {
@@ -85,7 +85,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
                             mondrianSegmentList.subList(0, i);
                         OlapElement olapElement =
                             schemaReader.lookupCompound(
-                                cube, partialName, false, Category.Unknown);
+                                cube, partialName, false, Category.UNKNOWN);
                         if (olapElement != null) {
                             return olapElement.getHierarchy().getNullMember();
                         }

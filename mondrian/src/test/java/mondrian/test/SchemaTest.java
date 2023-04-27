@@ -4945,7 +4945,7 @@ class SchemaTest {
                 Util.parseIdentifier(
                     "[Store Size in SQFT].[Store Sqft]"),
                 true,
-                Category.Level),
+                Category.LEVEL),
             true);
         assertEquals(
             "[[Store Size in SQFT].[#null], "

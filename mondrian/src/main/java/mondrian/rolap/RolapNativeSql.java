@@ -147,7 +147,7 @@ public class RolapNativeSql {
             if (!(exp instanceof Literal)) {
                 return null;
             }
-            if ((exp.getCategory() & Category.Numeric) == 0) {
+            if ((exp.getCategory() & Category.NUMERIC) == 0) {
                 return null;
             }
             Literal literal = (Literal) exp;
@@ -245,7 +245,7 @@ public class RolapNativeSql {
 
         protected MatchingSqlCompiler()
         {
-            super(Category.Logical, "MATCHES", 2);
+            super(Category.LOGICAL, "MATCHES", 2);
         }
 
         @Override
@@ -663,59 +663,59 @@ public class RolapNativeSql {
         numericCompiler.add(new StoredMeasureSqlCompiler());
         numericCompiler.add(new CalculatedMemberSqlCompiler(numericCompiler));
         numericCompiler.add(
-            new ParenthesisSqlCompiler(Category.Numeric, numericCompiler));
+            new ParenthesisSqlCompiler(Category.NUMERIC, numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Numeric, "+", "+", numericCompiler));
+                Category.NUMERIC, "+", "+", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Numeric, "-", "-", numericCompiler));
+                Category.NUMERIC, "-", "-", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Numeric, "/", "/", numericCompiler));
+                Category.NUMERIC, "/", "/", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Numeric, "*", "*", numericCompiler));
+                Category.NUMERIC, "*", "*", numericCompiler));
         numericCompiler.add(
-            new IifSqlCompiler(Category.Numeric, numericCompiler));
+            new IifSqlCompiler(Category.NUMERIC, numericCompiler));
 
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "<", "<", numericCompiler));
+                Category.LOGICAL, "<", "<", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "<=", "<=", numericCompiler));
+                Category.LOGICAL, "<=", "<=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, ">", ">", numericCompiler));
+                Category.LOGICAL, ">", ">", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, ">=", ">=", numericCompiler));
+                Category.LOGICAL, ">=", ">=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "=", "=", numericCompiler));
+                Category.LOGICAL, "=", "=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "<>", "<>", numericCompiler));
+                Category.LOGICAL, "<>", "<>", numericCompiler));
         booleanCompiler.add(
             new IsEmptySqlCompiler(
-                Category.Logical, "IsEmpty", numericCompiler));
+                Category.LOGICAL, "IsEmpty", numericCompiler));
 
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "and", "AND", booleanCompiler));
+                Category.LOGICAL, "and", "AND", booleanCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.Logical, "or", "OR", booleanCompiler));
+                Category.LOGICAL, "or", "OR", booleanCompiler));
         booleanCompiler.add(
             new UnaryOpSqlCompiler(
-                Category.Logical, "not", "NOT", booleanCompiler));
+                Category.LOGICAL, "not", "NOT", booleanCompiler));
         booleanCompiler.add(
             new MatchingSqlCompiler());
         booleanCompiler.add(
-            new ParenthesisSqlCompiler(Category.Logical, booleanCompiler));
+            new ParenthesisSqlCompiler(Category.LOGICAL, booleanCompiler));
         booleanCompiler.add(
-            new IifSqlCompiler(Category.Logical, booleanCompiler));
+            new IifSqlCompiler(Category.LOGICAL, booleanCompiler));
     }
 
     /**

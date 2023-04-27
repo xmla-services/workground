@@ -16,7 +16,11 @@ public class DialectUtil {
   private static final Pattern UNICODE_CASE_FLAG_IN_JAVA_REG_EXP_PATTERN = Pattern.compile( "\\|\\(\\?u\\)" );
   private static final String EMPTY = "";
 
-  /**
+    private DialectUtil() {
+        // constructor
+    }
+
+    /**
    * Cleans up the reqular expression from the unicode-aware case folding embedded flag expression (?u)
    *
    * @param javaRegExp

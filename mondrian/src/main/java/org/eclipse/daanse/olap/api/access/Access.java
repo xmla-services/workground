@@ -7,7 +7,7 @@
  * Copyright (C) 2003-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *   SmartCity Jena - refactor, clean API
  */
@@ -40,5 +40,5 @@ public enum Access {
     @Override
 	public String toString() {
         return this.name();
-    };
+    }
 }

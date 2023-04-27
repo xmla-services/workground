@@ -215,7 +215,7 @@ class RolapSchemaTest {
                 any(HierarchyGrant.class));
 
         final Dimension dimension = mock(Dimension.class);
-        SchemaReader reader = mockSchemaReader(mondrian.olap.Category.Dimension, dimension);
+        SchemaReader reader = mockSchemaReader(mondrian.olap.Category.DIMENSION, dimension);
 
         RolapCube cube = mockCube(schema);
         when(cube.getSchemaReader(any())).thenReturn(reader);
@@ -407,7 +407,7 @@ class RolapSchemaTest {
         Dimension dimension = mock(Dimension.class);
         when(hierarchy.getDimension()).thenReturn(dimension);
 
-        SchemaReader reader = mockSchemaReader(Category.Hierarchy, hierarchy);
+        SchemaReader reader = mockSchemaReader(Category.HIERARCHY, hierarchy);
 
         Member member = mock(Member.class);
         when(member.getHierarchy()).thenReturn(hierarchy);
