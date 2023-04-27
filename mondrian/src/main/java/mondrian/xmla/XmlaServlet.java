@@ -175,7 +175,9 @@ public abstract class XmlaServlet
 
             Map<String, Object> context = new HashMap<>();
 
-            validateHttpHeaderCallbacks(request, response, context, responseSoapParts, phase, mimeType);
+            if (validateHttpHeaderCallbacks(request, response, context, responseSoapParts, phase, mimeType)) {
+                return;
+            }
 
 
             phase = Phase.INITIAL_PARSE;
@@ -389,7 +391,7 @@ public abstract class XmlaServlet
         }
     }
 
-    private void validateHttpHeaderCallbacks(
+    private boolean validateHttpHeaderCallbacks(
         HttpServletRequest request, HttpServletResponse response, Map<String, Object> context, byte[][] responseSoapParts, Phase phase, Enumeration.ResponseMimeType mimeType) {
         try {
             if (LOGGER.isDebugEnabled()) {
@@ -401,9 +403,10 @@ public abstract class XmlaServlet
                     response,
                     context))
                 {
-                    throw new XmlaServletException();
+                    return true;
                 }
             }
+            return false;
         } catch (XmlaException xex) {
             LOGGER.error(
                 "Errors when invoking callbacks validateHttpHeader", xex);
