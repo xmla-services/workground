@@ -30,8 +30,8 @@ public class Token implements Node.TerminalNode {
         NON, NOT, NULL, ON, OR, PAGES, PLAN, PROPERTIES, REFRESH, RETURN, ROLLBACK,
         ROWS, SECTIONS, SELECT, SESSION, SET, THEN, TRAN, TRANSACTION, UPDATE, USE_EQUAL_ALLOCATION,
         USE_EQUAL_INCREMENT, USE_WEIGHTED_ALLOCATION, USE_WEIGHTED_INCREMENT, WHEN,
-        WHERE, XOR, WITH, EXISTING, $SYSTEM, _TOKEN_61, _TOKEN_62, _TOKEN_63, _TOKEN_64,
-        _TOKEN_65, _TOKEN_66, _TOKEN_67, _TOKEN_68, _TOKEN_69, SINGLE_LINE_COMMENT,
+        WHERE, XOR, WITH, EXISTING, SYSTEM_CUBE, _TOKEN_61, _TOKEN_62, _TOKEN_63,
+        _TOKEN_64, _TOKEN_65, _TOKEN_66, _TOKEN_67, _TOKEN_68, _TOKEN_69, SINGLE_LINE_COMMENT,
         FORMAL_COMMENT, MULTI_LINE_COMMENT, _TOKEN_73, LPAREN, RPAREN, LBRACE, RBRACE,
         LBRACKET, RBRACKET, COMMA, SEMICOLON, DOT, ASTERISK, BANG, COLON, CONCAT,
         EQ, GE, GT, LE, LT, MINUS, NE, PLUS, SOLIDUS, ATSIGN, ID, QUOTED_ID, AMP_QUOTED_ID,
@@ -379,8 +379,6 @@ public class Token implements Node.TerminalNode {
                 return new ASTBY(TokenType.BY, tokenSource, beginOffset, endOffset);
             case UPDATE : 
                 return new ASTUPDATE(TokenType.UPDATE, tokenSource, beginOffset, endOffset);
-            case $SYSTEM : 
-                return new AST$SYSTEM(TokenType.$SYSTEM, tokenSource, beginOffset, endOffset);
             case COMMA : 
                 return new ASTCOMMA(TokenType.COMMA, tokenSource, beginOffset, endOffset);
             case MULTI_LINE_COMMENT : 
@@ -455,6 +453,8 @@ public class Token implements Node.TerminalNode {
                 return new ASTREFRESH(TokenType.REFRESH, tokenSource, beginOffset, endOffset);
             case CONCAT : 
                 return new ASTCONCAT(TokenType.CONCAT, tokenSource, beginOffset, endOffset);
+            case SYSTEM_CUBE : 
+                return new ASTSYSTEM_CUBE(TokenType.SYSTEM_CUBE, tokenSource, beginOffset, endOffset);
             case ROLLBACK : 
                 return new ASTROLLBACK(TokenType.ROLLBACK, tokenSource, beginOffset, endOffset);
             case MEMBER : 
