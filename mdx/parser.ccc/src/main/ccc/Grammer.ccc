@@ -169,7 +169,7 @@ TOKEN :
 | < XOR : "XOR" >
 | < WITH : "WITH" >
 | < EXISTING : "EXISTING" >
-| < $SYSTEM : "$SYSTEM" >
+| < SYSTEM_CUBE : "$SYSTEM" >
 ;
 
 
@@ -1495,7 +1495,7 @@ DMVStatement parseDMVStatement :
     )*
 
 )?
-< FROM > < $SYSTEM >< DOT > tableId = parseNameObjectIdentifier()
+< FROM > < SYSTEM_CUBE >< DOT > tableId = parseNameObjectIdentifier()
 (
           < WHERE > expression = parseExpression()
 )?
