@@ -106,7 +106,7 @@ public class MdxQueryServlet extends HttpServlet {
             Result result = mdxConnection.execute(q);
             List<Position> slicers = result.getSlicerAxis().getPositions();
             html.append("<table class='resulttable' cellspacing=1 border=0>");
-            html.append(Util.nl);
+            html.append(Util.NL);
 
             List<Position> columns = result.getAxes()[0].getPositions();
             List<Position> rows = null;
@@ -139,7 +139,7 @@ public class MdxQueryServlet extends HttpServlet {
                             k++;
                         }
                     }
-                    html.append("&nbsp;</td>").append(Util.nl);
+                    html.append("&nbsp;</td>").append(Util.NL);
                 }
 
                 // Print the column headings.
@@ -157,7 +157,7 @@ public class MdxQueryServlet extends HttpServlet {
                         .append(width).append("'>")
                         .append(member.getUniqueName()).append(TD);
                 }
-                html.append(TR).append(Util.nl);
+                html.append(TR).append(Util.NL);
             }
             //if is two axes, show
             if (result.getAxes().length > 1) {

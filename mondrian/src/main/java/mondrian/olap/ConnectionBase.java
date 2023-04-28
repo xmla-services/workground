@@ -90,7 +90,7 @@ public abstract class ConnectionBase implements Connection {
         }
 
         if (getLogger().isDebugEnabled()) {
-            String s = new StringBuilder().append(Util.nl).append(query).toString();
+            String s = new StringBuilder().append(Util.NL).append(query.replaceAll("[\n\r]", "_")).toString();
             getLogger().debug(s);
         }
 

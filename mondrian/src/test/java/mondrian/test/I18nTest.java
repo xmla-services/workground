@@ -48,7 +48,7 @@ class I18nTest {
     void testFormat() {
         // Make sure Util is loaded, so that the LocaleFormatFactory gets
         // registered.
-        Util.discard(Util.nl);
+        Util.discard(Util.NL);
 
         Locale spanish = new Locale("es", "ES");
         Locale german = new Locale("de", "DE");

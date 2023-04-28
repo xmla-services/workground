@@ -522,8 +522,8 @@ public class DiffRepository
             // insensitivity, it can report on the line
             // at which the first diff occurs, which is useful
             // for largish snippets
-            String expectedCanonical = expected2.replace(Util.nl, "\n");
-            String actualCanonical = actual.replace( Util.nl, "\n");
+            String expectedCanonical = expected2.replace(Util.NL, "\n");
+            String actualCanonical = actual.replace( Util.NL, "\n");
 
             if ( !expectedCanonical.startsWith( "<?xml" ) && expectedCanonical.contains( "*Segment Header" ) ) {
 
@@ -670,7 +670,7 @@ public class DiffRepository
         final NodeList childNodes;
         switch (node.getNodeType()) {
         case Node.DOCUMENT_NODE:
-            out.print("<?xml version=\"1.0\" ?>" + Util.nl);
+            out.print("<?xml version=\"1.0\" ?>" + Util.NL);
             childNodes = node.getChildNodes();
             for (int i = 0; i < childNodes.getLength(); i++) {
                 Node child = childNodes.item(i);
@@ -721,7 +721,7 @@ public class DiffRepository
 
         case Node.COMMENT_NODE:
             Comment comment = (Comment) node;
-            out.print("<!--" + comment.getNodeValue() + "-->" + Util.nl);
+            out.print("<!--" + comment.getNodeValue() + "-->" + Util.NL);
             break;
 
         default:

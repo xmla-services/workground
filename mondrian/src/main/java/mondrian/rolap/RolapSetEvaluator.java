@@ -137,7 +137,7 @@ class RolapSetEvaluator
         buf.append("Set expression ");
         buf.append(getExpression());
         buf.append(" evaluated to:");
-        buf.append(Util.nl);
+        buf.append(Util.NL);
         int arity = calc.getType().getArity();
         int rowCount = 0;
         final int maxRowCount = 100;
@@ -145,17 +145,17 @@ class RolapSetEvaluator
             for (Member t : rawList.slice(0)) {
                 if (rowCount++ > maxRowCount) {
                     buf.append("...");
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     break;
                 }
                 buf.append(t);
-                buf.append(Util.nl);
+                buf.append(Util.NL);
             }
         } else {
             for (List<Member> t : rawList) {
                 if (rowCount++ > maxRowCount) {
                     buf.append("...");
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     break;
                 }
                 int k = 0;
@@ -165,7 +165,7 @@ class RolapSetEvaluator
                     }
                     buf.append(member);
                 }
-                buf.append(Util.nl);
+                buf.append(Util.NL);
             }
         }
         return buf.toString();

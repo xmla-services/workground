@@ -1625,9 +1625,9 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 String.format(
                     "%s created with %,d rows.", heading, list.size()));
-            StringBuilder buf = new StringBuilder(Util.nl);
+            StringBuilder buf = new StringBuilder(Util.NL);
             for (List<Member> element : list) {
-                buf.append(Util.nl);
+                buf.append(Util.NL);
                 buf.append(element);
             }
             NativizeSetFunDef.LOGGER.debug(buf.toString());

@@ -136,6 +136,8 @@ import mondrian.util.Pair;
 import mondrian.util.UtilCompatible;
 import mondrian.util.UtilCompatibleJdk16;
 
+import static mondrian.olap.fun.FunUtil.DoubleNull;
+
 /**
  * Utility functions used throughout mondrian. All methods are static.
  *
@@ -144,14 +146,14 @@ import mondrian.util.UtilCompatibleJdk16;
  */
 public class Util extends XOMUtil {
 
-    public static final String nl = System.getProperty("line.separator");
+    public static final String NL = System.getProperty("line.separator");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
 
     /**
      * Placeholder which indicates a value NULL.
      */
-    public static final Object nullValue = Double.valueOf(FunUtil.DoubleNull);
+    public static final Object nullValue = Double.valueOf(DoubleNull);
 
     /**
      * Placeholder which indicates an EMPTY value.
@@ -191,7 +193,7 @@ public class Util extends XOMUtil {
      *     <li>0x0300 otherwise</li>
      * </ul>
      */
-    public static final int JdbcVersion =
+    public static final int JDBC_VERSION =
         System.getProperty("java.version").compareTo("1.7") >= 0
             ? 0x0401
             : System.getProperty("java.version").compareTo("1.6") >= 0
@@ -204,7 +206,7 @@ public class Util extends XOMUtil {
      * things are available via {@link mondrian.util.UtilCompatible}.
      * Retroweaver has some problems involving {@link java.util.EnumSet}.
      */
-    public static final boolean Retrowoven =
+    public static final boolean RETROWOVEN =
         Access.class.getSuperclass().getName().equals(
             "net.sourceforge.retroweaver.runtime.java.lang.Enum");
 
@@ -3033,18 +3035,22 @@ public class Util extends XOMUtil {
 
             @Override
 			public void validate(ParameterExpr parameterExpr) {
+                //empty
             }
 
             @Override
 			public void validate(MemberProperty memberProperty) {
+                //empty
             }
 
             @Override
 			public void validate(QueryAxis axis) {
+                //empty
             }
 
             @Override
 			public void validate(Formula formula) {
+                //empty
             }
 
             @Override
@@ -3456,7 +3462,7 @@ public class Util extends XOMUtil {
     public static <T> Iterable<T> castToIterable(
         final Object iterable)
     {
-        if (Util.Retrowoven
+        if (Util.RETROWOVEN
             && !(iterable instanceof Iterable))
         {
             return new Iterable<>() {

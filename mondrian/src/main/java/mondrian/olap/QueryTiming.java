@@ -82,9 +82,9 @@ public class QueryTiming {
 
   /**
    * Marks the duration of a Query component's execution.
-   * 
+   *
    * markFull is synchronized because it may be called from either Actor's spawn thread or RolapResultShepherd thread
-   * 
+   *
    * @param name
    *          Name of the component
    * @param duration
@@ -125,7 +125,7 @@ public class QueryTiming {
       dc.duration += ( finished.endTime - finished.startTime );
     }
     currentTimingDepth.put( name, depth - 1 );
-    
+
   }
 
   private void markFullInternal( String name, long duration ) {
@@ -143,20 +143,20 @@ public synchronized String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append( "Query Timing (Cumulative):" );
     for ( Map.Entry<String, DurationCount> entry : timings.entrySet() ) {
-      sb.append( Util.nl );
+      sb.append( Util.NL);
       sb.append( entry.getKey() ).append( " invoked " ).append( entry.getValue().count ).append(
           " times for total of " ).append( entry.getValue().duration ).append( "ms.  (Avg. " ).append( entry
               .getValue().duration / entry.getValue().count ).append( "ms/invocation)" );
     }
     for ( Map.Entry<String, DurationCount> entry : fullTimings.entrySet() ) {
       if ( sb.length() > 0 ) {
-        sb.append( Util.nl );
+        sb.append( Util.NL);
       }
       sb.append( entry.getKey() ).append( " invoked " ).append( entry.getValue().count ).append(
           " times for total of " ).append( entry.getValue().duration ).append( "ms.  (Avg. " ).append( entry
               .getValue().duration / entry.getValue().count ).append( "ms/invocation)" );
     }
-    sb.append( Util.nl );
+    sb.append( Util.NL);
     return sb.toString();
   }
 

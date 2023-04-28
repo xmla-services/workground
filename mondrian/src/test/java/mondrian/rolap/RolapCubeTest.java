@@ -93,7 +93,7 @@ class RolapCubeTest {
         xmlCalcMember.setFormatString(format);
         cube.processFormatStringAttribute(xmlCalcMember, builder);
         assertEquals(
-            "," + Util.nl + "FORMAT_STRING = \"" + format + "\"",
+            "," + Util.NL + "FORMAT_STRING = \"" + format + "\"",
             builder.toString());
     }
 

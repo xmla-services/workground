@@ -180,9 +180,9 @@ public class XmlaTests {
         isDecimal = false;
         doXmlaHandlerValueInfo(
             dataType, inputValue, valueType, value, isDecimal);
-        valueType = (Util.Retrowoven)
+        valueType = (Util.RETROWOVEN)
             ? XmlaHandler.XSD_DOUBLE : XmlaHandler.XSD_DECIMAL;
-        value = (Util.Retrowoven)
+        value = (Util.RETROWOVEN)
             ? Double.valueOf("-9.223372036854776E18")
             : inputValue;
         isDecimal = true;
@@ -218,7 +218,7 @@ public class XmlaTests {
 
         // MAX_VALUE = 1.7976931348623157e+308
         // one less decimal point than max value
-        if (! Util.Retrowoven) {
+        if (! Util.RETROWOVEN) {
             dataType = "Numeric";
             inputValue = new BigDecimal("1.797693134862315e+308");
             valueType = XmlaHandler.XSD_DOUBLE;

@@ -635,7 +635,7 @@ public class UtilTestCase{
         }
         assertEquals("x;y;a;b;c;", total);
 
-        if (Util.Retrowoven) {
+        if (Util.RETROWOVEN) {
             // Retrowoven code gives 'ArrayStoreException' when it encounters
             // 'Util.union()' applied to java.util.Iterator objects.
             return;

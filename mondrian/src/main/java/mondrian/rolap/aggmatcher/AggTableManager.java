@@ -138,10 +138,10 @@ public class AggTableManager {
             // print everything, Star, subTables, AggStar and subTables
             // could be a lot
             StringBuilder buf = new StringBuilder(4096);
-            buf.append(Util.nl);
+            buf.append(Util.NL);
             for (RolapStar star : getStars()) {
                 buf.append(star.toString());
-                buf.append(Util.nl);
+                buf.append(Util.NL);
             }
             getLogger().debug(buf.toString());
         }

@@ -189,11 +189,11 @@ public class AggGen {
             getLogger().debug(
                 new StringBuilder("Init: ")
                     .append("RolapStar:")
-                    .append(Util.nl)
+                    .append(Util.NL)
                     .append(getFactTable())
-                    .append(Util.nl)
+                    .append(Util.NL)
                     .append("FactTable:")
-                    .append(Util.nl)
+                    .append(Util.NL)
                     .append(factTable).toString());
         }
 
@@ -229,7 +229,7 @@ public class AggGen {
                             new StringBuilder("Init: ")
                                 .append("FactTable:")
                                 .append(getFactTableName())
-                                .append(Util.nl)
+                                .append(Util.NL)
                                 .append("No Column with name \"")
                                 .append(name)
                                 .append("\"").toString());
@@ -262,7 +262,7 @@ public class AggGen {
                             new StringBuilder("Init: ")
                                 .append("FactTable:")
                                 .append(getFactTableName())
-                                .append(Util.nl)
+                                .append(Util.NL)
                                 .append("No Column with name \"")
                                 .append(name)
                                 .append("\"").toString());

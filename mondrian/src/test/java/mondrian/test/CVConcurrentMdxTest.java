@@ -226,8 +226,8 @@ class CVConcurrentMdxTest {
                         == null)
                     {
                         // trim the starting newline char only
-                        if (result.startsWith(Util.nl)) {
-                            result = result.replaceFirst(Util.nl, "");
+                        if (result.startsWith(Util.NL)) {
+                            result = result.replaceFirst(Util.NL, "");
                         }
                         QueryAndResult queryResult =
                             new QueryAndResult(query, result);

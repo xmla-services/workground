@@ -46,7 +46,7 @@ import mondrian.olap.Util;
 
 public class DataLoaderUtil {
 
-	public static final String nl = Util.nl;
+	public static final String nl = Util.NL;
 
 	/**
 	 * Creates an index.

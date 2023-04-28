@@ -148,7 +148,7 @@ public class ExplicitRules {
             }
 
             if (LOGGER.isDebugEnabled()) {
-                String msg = Util.nl + group;
+                String msg = Util.NL + group;
                 LOGGER.debug(msg);
             }
             return group;

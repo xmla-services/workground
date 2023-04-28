@@ -176,7 +176,7 @@ class Olap4jTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testAnnotation(TestingContext context) throws SQLException {
-      
+
       final OlapConnection connection =
               context.createOlap4jConnection();
         final CellSet cellSet =
@@ -197,15 +197,15 @@ class Olap4jTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testLevelDataType(TestingContext context) throws SQLException {
-  
+
         final OlapConnection connection = context.createOlap4jConnection();
         Cube cube = connection.getOlapSchema().getCubes().get( "Sales" );
         Hierarchy hier = cube.getHierarchies().get( "Customers" );
-        
+
         Level level = hier.getLevels().get( 4 );
         assertEquals( "Name", level.getName());
         assertEquals( "Numeric", XmlaHandler.getExtra(connection).getLevelDataType( level ));
-        
+
         level = hier.getLevels().get( 3 );
         assertEquals( "City", level.getName());
         assertEquals( "String", XmlaHandler.getExtra(connection).getLevelDataType( level ));
@@ -352,7 +352,7 @@ class Olap4jTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCloseOnCompletion(TestingContext context) throws Exception {
-        if (Util.JdbcVersion < 0x0401) {
+        if (Util.JDBC_VERSION < 0x0401) {
             // Statement.closeOnCompletion added in JDBC 4.1 / JDK 1.7.
             return;
         }

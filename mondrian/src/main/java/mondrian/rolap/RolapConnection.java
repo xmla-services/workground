@@ -250,10 +250,8 @@ public class RolapConnection extends ConnectionBase {
       // We are creating an internal connection. Now is a great time to
       // make sure that the JDBC credentials are valid, for this
       // connection and for external connections built on top of this.
-      Connection conn = null;
       java.sql.Statement statement = null;
-      try {
-        conn = this.context.getDataSource().getConnection();
+      try(Connection conn = this.context.getDataSource().getConnection()) {
         Dialect dialect =context.getDialect();
           if ( dialect.getDialectName().equals("derby")) {
           // TODO replace that crutch
@@ -278,9 +276,6 @@ public class RolapConnection extends ConnectionBase {
         try {
           if ( statement != null ) {
             statement.close();
-          }
-          if ( conn != null ) {
-            conn.close();
           }
         } catch ( SQLException e ) {
           // ignore
@@ -477,7 +472,7 @@ public CacheControl getCacheControl( PrintWriter pw ) {
    * @deprecated Use {@link #execute(mondrian.server.Execution)}; this method
    * will be removed in mondrian-4.0
    */
-  @Deprecated
+  @Deprecated(since = "this method will be removed in mondrian-4.0")
 @Override
 public Result execute( Query query ) {
     final Statement statement = query.getStatement();
@@ -653,8 +648,8 @@ public QueryPart parseStatement( String query ) {
     try {
       QueryPart queryPart =
         parseStatement( statement, query, null, false );
-      if ( queryPart instanceof Query ) {
-        ( (Query) queryPart ).setOwnStatement( true );
+      if ( queryPart instanceof Query q) {
+          q.setOwnStatement( true );
         statement = null;
       }
       return queryPart;
@@ -672,7 +667,7 @@ public Exp parseExpression( String expr ) {
     if ( getLogger().isDebugEnabled() ) {
       //debug = true;
       getLogger().debug(
-        Util.nl
+        Util.NL
           + expr );
     }
     final Statement statement = getInternalStatement();
@@ -958,7 +953,7 @@ public Context getContext() {
   /**
    * Data source that delegates all methods to an underlying data source.
    */
-  private static abstract class DelegatingDataSource implements DataSource {
+  private abstract static class DelegatingDataSource implements DataSource {
     protected final DataSource dataSource;
 
     public DelegatingDataSource( DataSource dataSource ) {
@@ -1001,7 +996,7 @@ public Context getContext() {
     // JDBC 4.0 support (JDK 1.6 and higher)
     @Override
 	public <T> T unwrap( Class<T> iface ) throws SQLException {
-      if ( Util.JdbcVersion >= 0x0400 ) {
+      if ( Util.JDBC_VERSION >= 0x0400 ) {
         // Do
         //              return dataSource.unwrap(iface);
         // via reflection.
@@ -1009,11 +1004,7 @@ public Context getContext() {
           Method method =
             DataSource.class.getMethod( "unwrap", Class.class );
           return iface.cast( method.invoke( dataSource, iface ) );
-        } catch ( IllegalAccessException e ) {
-          throw Util.newInternal( e, "While invoking unwrap" );
-        } catch ( InvocationTargetException e ) {
-          throw Util.newInternal( e, "While invoking unwrap" );
-        } catch ( NoSuchMethodException e ) {
+        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
           throw Util.newInternal( e, "While invoking unwrap" );
         }
       } else {
@@ -1028,7 +1019,7 @@ public Context getContext() {
     // JDBC 4.0 support (JDK 1.6 and higher)
     @Override
 	public boolean isWrapperFor( Class<?> iface ) throws SQLException {
-      if ( Util.JdbcVersion >= 0x0400 ) {
+      if ( Util.JDBC_VERSION >= 0x0400 ) {
         // Do
         //              return dataSource.isWrapperFor(iface);
         // via reflection.
@@ -1037,11 +1028,7 @@ public Context getContext() {
             DataSource.class.getMethod(
               "isWrapperFor", boolean.class );
           return (Boolean) method.invoke( dataSource, iface );
-        } catch ( IllegalAccessException e ) {
-          throw Util.newInternal( e, "While invoking isWrapperFor" );
-        } catch ( InvocationTargetException e ) {
-          throw Util.newInternal( e, "While invoking isWrapperFor" );
-        } catch ( NoSuchMethodException e ) {
+        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
           throw Util.newInternal( e, "While invoking isWrapperFor" );
         }
       } else {
@@ -1052,19 +1039,14 @@ public Context getContext() {
     // JDBC 4.1 support (JDK 1.7 and higher)
     @Override
 	public java.util.logging.Logger getParentLogger() {
-      if ( Util.JdbcVersion >= 0x0401 ) {
+      if ( Util.JDBC_VERSION >= 0x0401 ) {
         // Do
-        //              return dataSource.getParentLogger();
         // via reflection.
         try {
           Method method =
             DataSource.class.getMethod( "getParentLogger" );
           return (java.util.logging.Logger) method.invoke( dataSource );
-        } catch ( IllegalAccessException e ) {
-          throw Util.newInternal( e, "While invoking getParentLogger" );
-        } catch ( InvocationTargetException e ) {
-          throw Util.newInternal( e, "While invoking getParentLogger" );
-        } catch ( NoSuchMethodException e ) {
+        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
           throw Util.newInternal( e, "While invoking getParentLogger" );
         }
       } else {
@@ -1151,7 +1133,7 @@ public Context getContext() {
    * operations; several of these operations might be active at one time. We
    * don't want to create a new statement for each, but just one internal
    * statement for each connection. The statement shouldn't have a unique
-   * execution. For this reason, we don't use the inherited {@link #execution}
+   * execution. For this reason, we don't use the inherited {execution}
    * field.</p>
    *
    * <p>But there is a drawback. If we can't find the unique execution, the

@@ -403,7 +403,7 @@ public List<SqlStatementInfo> getSqlStatements() {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ConnectionInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.nl)
+                    .append(") evicted. Stack is:").append(Util.NL)
                     .append(e.getValue().stack).toString()
                 );
               }
@@ -424,7 +424,7 @@ public List<SqlStatementInfo> getSqlStatements() {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
+                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -443,7 +443,7 @@ public List<SqlStatementInfo> getSqlStatements() {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
+                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -462,7 +462,7 @@ public List<SqlStatementInfo> getSqlStatements() {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ExecutionInfo(").append(e.getKey())
-                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
+                    .append(") evicted. Stack is:").append(Util.NL).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -486,7 +486,7 @@ public List<SqlStatementInfo> getSqlStatements() {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Retired ExecutionInfo(").append(e.getKey())
                     .append(") evicted. Stack is:")
-                    .append(Util.nl).append(e.getValue().stack).toString() );
+                    .append(Util.NL).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -514,7 +514,7 @@ public List<SqlStatementInfo> getSqlStatements() {
       foo( server.aggConn, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
         RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Connection(").append(event.connectionId)
-            .append(") created. stack is:").append(Util.nl)
+            .append(") created. stack is:").append(Util.NL)
             .append(event.stack).toString() );
       }
       return null;
@@ -556,7 +556,7 @@ public List<SqlStatementInfo> getSqlStatements() {
       foo( server.aggStmt, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
         RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Statement(").append(event.statementId)
-            .append(") created. stack is:").append(Util.nl).append(event.stack).toString() );
+            .append(") created. stack is:").append(Util.NL).append(event.stack).toString() );
       }
       return null;
     }
@@ -600,7 +600,7 @@ public List<SqlStatementInfo> getSqlStatements() {
       foo( server.aggExec, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
         RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Execution(").append(event.executionId)
-            .append(") created. stack is:").append(Util.nl)
+            .append(") created. stack is:").append(Util.NL)
             .append(event.stack).toString() );
       }
       return null;
@@ -746,7 +746,7 @@ public List<SqlStatementInfo> getSqlStatements() {
       foo( server.aggSql, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
         RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("SqlStatement(").append(event.sqlStatementId)
-            .append(") created. stack is:").append(Util.nl)
+            .append(") created. stack is:").append(Util.NL)
             .append(event.stack).toString() );
       }
       return null;

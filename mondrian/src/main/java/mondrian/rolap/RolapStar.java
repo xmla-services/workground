@@ -1600,9 +1600,9 @@ public class RolapStar {
                             .append(this)
                             .append("' is invalid: table '").append(tableName)
                             .append("' is not found in current scope")
-                            .append(Util.nl)
+                            .append(Util.NL)
                             .append(", star:")
-                            .append(Util.nl)
+                            .append(Util.NL)
                             .append(getStar()).toString());
                 }
                 RolapStar.AliasReplacer aliasReplacer =

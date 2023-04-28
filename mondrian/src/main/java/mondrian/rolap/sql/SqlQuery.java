@@ -707,7 +707,7 @@ public class SqlQuery {
         for (String groupingFunction : groupingFunctions) {
             if (generateFormattedSql) {
                 buf.append(",")
-                    .append(Util.nl)
+                    .append(Util.NL)
                     .append(INDENT)
                     .append(prefix);
             } else {
@@ -956,16 +956,16 @@ public class SqlQuery {
             if (generateFormattedSql) {
                 if (s.startsWith(" ")) {
                     // E.g. " and "
-                    s = Util.nl + prefix + s.substring(1);
+                    s = Util.NL + prefix + s.substring(1);
                 }
                 if (s.endsWith(" ")) {
                     // E.g. ", "
                     s =
-                        s.substring(0, s.length() - 1) + Util.nl + prefix
+                        s.substring(0, s.length() - 1) + Util.NL + prefix
                         +  INDENT;
                 } else if (s.endsWith("(")) {
                     // E.g. "("
-                    s = s + Util.nl + prefix + INDENT;
+                    s = s + Util.NL + prefix + INDENT;
                 }
             }
             return s;

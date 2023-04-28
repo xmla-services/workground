@@ -97,7 +97,7 @@ import mondrian.util.DelegatingInvocationHandler;
 
 public class TestUtil {
 
-	protected static final String nl = Util.nl;
+	protected static final String nl = Util.NL;
 	private static final String lineBreak = "\"," + nl + "\"";
 	  /**
 	   * Executes the expression in the context of the cube indicated by

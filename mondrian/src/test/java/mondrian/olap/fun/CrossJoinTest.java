@@ -109,7 +109,7 @@ private PropertySaver5 propSaver;
     propSaver=new PropertySaver5();
     crossJoinFunDef = new CrossJoinFunDef( new NullFunDef() );
   }
-  
+
   @AfterEach
   protected void afterEach() throws Exception {
 	  propSaver.reset();
@@ -121,7 +121,7 @@ private PropertySaver5 propSaver;
 
   @Test
   void testListTupleListTupleIterCalc() {
-    if ( !Util.Retrowoven ) {
+    if ( !Util.RETROWOVEN) {
       propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 0 );
       CrossJoinFunDef.CrossJoinIterCalc calc =
         crossJoinFunDef.new CrossJoinIterCalc( getResolvedFunCall(), null );
@@ -368,7 +368,7 @@ private PropertySaver5 propSaver;
 void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 	}
 
-  
+
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testResultLimitWithinCrossjoin(TestingContext foodMartContext) {

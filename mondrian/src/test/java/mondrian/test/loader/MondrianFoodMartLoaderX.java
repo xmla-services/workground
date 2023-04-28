@@ -121,7 +121,7 @@ public class MondrianFoodMartLoaderX {
 
     private static final Logger LOGGER =
 	 LoggerFactory.getLogger(MondrianFoodMartLoaderX.class);
-    private static final String nl = Util.nl;
+    private static final String nl = Util.NL;
 
     // Fields
 

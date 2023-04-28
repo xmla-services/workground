@@ -235,7 +235,7 @@ public class AggregationManager extends RolapAggregationManager {
             getLogger().debug(
                 "DrillThroughSQL: "
                 + pair.left
-                + Util.nl);
+                + Util.NL);
         }
 
         return pair.left;
@@ -275,25 +275,25 @@ public class AggregationManager extends RolapAggregationManager {
                     StringBuilder buf = new StringBuilder(256);
                     buf.append("MATCH: ");
                     buf.append(star.getFactTable().getAlias());
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     buf.append("   foreign=");
                     buf.append(levelBitKey);
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     buf.append("   measure=");
                     buf.append(measureBitKey);
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     buf.append("   aggstar=");
                     buf.append(aggStar.getBitKey());
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     buf.append("AggStar=");
                     buf.append(aggStar.getFactTable().getName());
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                     for (AggStar.Table.Column column
                         : aggStar.getFactTable().getColumns())
                     {
                         buf.append("   ");
                         buf.append(column);
-                        buf.append(Util.nl);
+                        buf.append(Util.NL);
                     }
                     LOGGER.debug(buf.toString());
                 }
@@ -319,19 +319,19 @@ public class AggregationManager extends RolapAggregationManager {
             StringBuilder sb = new StringBuilder();
             sb.append("NO MATCH : ");
             sb.append(star.getFactTable().getAlias());
-            sb.append(Util.nl);
+            sb.append(Util.NL);
             sb.append("Foreign columns bit key=");
             sb.append(levelBitKey);
-            sb.append(Util.nl);
+            sb.append(Util.NL);
             sb.append("Measure bit key=        ");
             sb.append(measureBitKey);
-            sb.append(Util.nl);
+            sb.append(Util.NL);
             sb.append("Agg Stars=[");
-            sb.append(Util.nl);
+            sb.append(Util.NL);
             for (AggStar aggStar : star.getAggStars()) {
                 sb.append(aggStar.toString());
             }
-            sb.append(Util.nl);
+            sb.append(Util.NL);
             sb.append("]");
             LOGGER.debug(sb.toString());
         }

@@ -875,14 +875,14 @@ class BatchLoader {
                 StringBuilder buf = new StringBuilder(100);
                 buf.append("FastBatchingCellReader: bitkey=");
                 buf.append(request.getConstrainedColumnsBitKey());
-                buf.append(Util.nl);
+                buf.append(Util.NL);
 
                 for (RolapStar.Column column
                     : request.getConstrainedColumns())
                 {
                     buf.append("  ");
                     buf.append(column);
-                    buf.append(Util.nl);
+                    buf.append(Util.NL);
                 }
                 LOGGER.debug(buf.toString());
             }
@@ -1445,14 +1445,14 @@ class BatchLoader {
                 if (aggGen.isReady()) {
                     // PRINT TO STDOUT - DO NOT USE BATCH_LOGGER
                     System.out.println(
-                        "createLost:" + Util.nl + aggGen.createLost());
+                        "createLost:" + Util.NL + aggGen.createLost());
                     System.out.println(
-                        "insertIntoLost:" + Util.nl + aggGen.insertIntoLost());
+                        "insertIntoLost:" + Util.NL + aggGen.insertIntoLost());
                     System.out.println(
-                        "createCollapsed:" + Util.nl
+                        "createCollapsed:" + Util.NL
                         + aggGen.createCollapsed());
                     System.out.println(
-                        "insertIntoCollapsed:" + Util.nl
+                        "insertIntoCollapsed:" + Util.NL
                         + aggGen.insertIntoCollapsed());
                 } else {
                     BATCH_LOGGER.error("AggGen failed");
