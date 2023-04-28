@@ -38,7 +38,7 @@ import mondrian.olap.type.Type;
  */
 public class CacheFunDef extends FunDefBase {
     static final String NAME = "Cache";
-    private static final String SIGNATURE = "Cache(<<Exp>>)";
+    private static final String SIGNATURE_VALUE = "Cache(<<Exp>>)";
     private static final String DESCRIPTION =
         "Evaluates and returns its sole argument, applying statement-level caching";
     private static final Syntax SYNTAX = Syntax.Function;
@@ -108,7 +108,7 @@ public class CacheFunDef extends FunDefBase {
 
     public static class CacheFunResolver extends ResolverBase {
         CacheFunResolver() {
-            super(CacheFunDef.NAME, CacheFunDef.SIGNATURE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX);
+            super(CacheFunDef.NAME, CacheFunDef.SIGNATURE_VALUE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX);
         }
 
         @Override
@@ -124,7 +124,7 @@ public class CacheFunDef extends FunDefBase {
             final int category = exp.getCategory();
             final Type type = exp.getType();
             return new CacheFunDef(
-                CacheFunDef.NAME, CacheFunDef.SIGNATURE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX,
+                CacheFunDef.NAME, CacheFunDef.SIGNATURE_VALUE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX,
                 category, type);
         }
 

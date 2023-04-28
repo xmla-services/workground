@@ -2459,7 +2459,7 @@ class FunctionTest {//extends FoodMartTestCase {
   void testNamedSetCurrentOrdinalWithOrder(TestingContext context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
-    if ( Util.Retrowoven ) {
+    if ( Util.RETROWOVEN) {
       return;
     }
     assertQueryReturns(context.createConnection(),
@@ -2549,7 +2549,7 @@ class FunctionTest {//extends FoodMartTestCase {
   void testNamedSetCurrentOrdinalWithGenerate(TestingContext context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
-    if ( Util.Retrowoven ) {
+    if ( Util.RETROWOVEN) {
       return;
     }
     assertQueryReturns(context.createConnection(),
@@ -2605,7 +2605,7 @@ class FunctionTest {//extends FoodMartTestCase {
   void testNamedSetCurrentOrdinalWithFilter(TestingContext context) {
     // The <Named Set>.CurrentOrdinal only works correctly when named sets
     // are evaluated as iterables, and JDK 1.4 only supports lists.
-    if ( Util.Retrowoven ) {
+    if ( Util.RETROWOVEN) {
       return;
     }
     assertQueryReturns(context.createConnection(),
@@ -8474,7 +8474,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testOrderCalc(TestingContext context) {
-    if ( Util.Retrowoven ) {
+    if ( Util.RETROWOVEN) {
       // If retrowoven, we don't use Iterable, so plans are different.
       return;
     }
@@ -8544,7 +8544,7 @@ class FunctionTest {//extends FoodMartTestCase {
     assertAxisCompilesTo(connection,
       "order(filter([Product].children, [Measures].[Unit Sales] > 1000), "
         + "([Gender].[M], [Measures].[Store Sales]))",
-      Util.Retrowoven
+      Util.RETROWOVEN
         ? ""
         + "ContextCalc(name=ContextCalc, class=class mondrian.olap.fun.OrderFunDef$ContextCalc, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST)\n"

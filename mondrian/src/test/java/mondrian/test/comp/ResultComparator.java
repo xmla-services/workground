@@ -169,10 +169,10 @@ class ResultComparator {
                    + expected
                    + "; actual="
                    + actual
-                   + Util.nl
+                   + Util.NL
                    + "Query: "
                    + Util.unparse(result.getQuery())
-                   + Util.nl;
+                   + Util.NL;
         assertEqualsVerbose(
             TestUtil.fold(
                 XmlUtility.toString(xmlRoot)),

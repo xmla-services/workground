@@ -61,7 +61,7 @@ import mondrian.xmla.impl.DefaultXmlaResponse;
  * @author Gang Chen
  */
 class XmlaTest{
-	
+
     protected static final String SCHEMA_TEST_DATE =
             "xxxx-xx-xxTxx:xx:xx";
 
@@ -79,7 +79,7 @@ class XmlaTest{
     // implement TestCase
 
     protected void setUp(TestingContext context) throws Exception {
-  
+
         server = MondrianServer.createWithRepository(
             new StringRepositoryContentFinder(
             		XmlaTestContext.getDataSourcesString(context)),
@@ -87,11 +87,11 @@ class XmlaTest{
         handler = new XmlaHandler(
             (XmlaHandler.ConnectionFactory) server,
             "xmla");
-      
+
     }
 
     // implement TestCase
-    
+
     protected void tearDown() throws Exception {
         server.shutdown();
         server = null;
@@ -109,7 +109,7 @@ class XmlaTest{
 		String name = testCase.getName();
 		String request = testCase.getValue("request");
 		String expectedResponse = testCase.getValue("response");
-    	
+
     	setUp(context);
 
         Properties props = new Properties();
@@ -134,22 +134,22 @@ class XmlaTest{
         StringWriter bufWriter = new StringWriter();
         transformer.transform(
             new DOMSource(responseElem), new StreamResult(bufWriter));
-        bufWriter.write(Util.nl);
+        bufWriter.write(Util.NL);
         String actualResponse = bufWriter.getBuffer().toString();// removes upgrade
         actualResponse = ignoreLastUpdateDate(actualResponse);
         try {
 			actualResponse = actualResponse.trim();
 			expectedResponse = expectedResponse.trim();
-			
+
 			CompareMatcher compareMatcher = CompareMatcher.isIdenticalTo(expectedResponse);
-        	
+
 			MatcherAssert.assertThat(actualResponse, compareMatcher);
         } catch (AssertionFailedError e) {
             // In case of failure, re-diff using DiffRepository's comparison
             // method. It may have noise due to physical vs logical structure,
             // but it will maintain the expected/actual, and some IDEs can even
             // display visual diffs.
-        	
+
         	Assertions.fail("what????");
             //diffRepos.assertEquals("response", "${response}", actualResponse);
         }finally {
@@ -169,7 +169,7 @@ class XmlaTest{
                 ">" + SCHEMA_TEST_DATE + "</LastDataUpdate>");
         document = document.replaceAll(
                 ">....-..-..T..:..:..</LAST_DATA_UPDATE>",
-                ">" + SCHEMA_TEST_DATE + "</LAST_DATA_UPDATE>"); 
+                ">" + SCHEMA_TEST_DATE + "</LAST_DATA_UPDATE>");
         return document;
     }
 

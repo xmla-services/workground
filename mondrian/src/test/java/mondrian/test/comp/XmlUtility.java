@@ -100,7 +100,7 @@ class XmlUtility {
 
         outputFormat.setLineWidth(Integer.MAX_VALUE);
 
-        outputFormat.setLineSeparator(Util.nl);
+        outputFormat.setLineSeparator(Util.NL);
 
         try {
             XMLSerializer serializer = new XMLSerializer(writer, outputFormat);

@@ -146,7 +146,7 @@ class SchemaTest {
                 return;
             }
             if (buf.length() > 0) {
-                buf.append(Util.nl);
+                buf.append(Util.NL);
             }
             buf.append(exception.getMessage());
         }

@@ -213,7 +213,7 @@ public class XmlaSupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlaSupport.class);
 
-    public static final String nl = Util.nl;
+    public static final String nl = Util.NL;
     public static final String SOAP_PREFIX = XmlaConstants.SOAP_PREFIX;
 
     private static final ByteMatcher UTF8_BOM_MATCHER =

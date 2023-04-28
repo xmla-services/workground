@@ -219,7 +219,7 @@ public class VisualTotalsFunDef extends FunDefBase {
     public static class VisualTotalMember extends RolapMemberBase {
         private final Member member;
         private Exp exp;
-        private String caption;
+
 
         VisualTotalMember(
             Member member,

@@ -177,7 +177,7 @@ public class Query extends QueryPart {
      * For java4, use LIST
      */
     private ResultStyle resultStyle =
-        Util.Retrowoven ? ResultStyle.LIST : ResultStyle.ITERABLE;
+        Util.RETROWOVEN ? ResultStyle.LIST : ResultStyle.ITERABLE;
 
     private Map<String, Object> evalCache = new HashMap<>();
 
@@ -601,7 +601,7 @@ public class Query extends QueryPart {
         switch (resultStyle) {
         case ITERABLE:
             // For java4, use LIST
-            this.resultStyle = (Util.Retrowoven)
+            this.resultStyle = (Util.RETROWOVEN)
                 ? ResultStyle.LIST : ResultStyle.ITERABLE;
             break;
         case LIST:

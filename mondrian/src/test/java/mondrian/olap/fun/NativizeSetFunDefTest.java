@@ -615,7 +615,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testCalculatedCurrentMonth(TestingContext context) {
+    void disabled_testCalculatedCurrentMonth(TestingContext context) {
         checkNative(context,
             "WITH "
             + "SET [Current Month] AS 'tail([Time].[month].members, 1)'"
@@ -628,7 +628,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testCalculatedRelativeMonth(TestingContext context) {
+    void disabled_testCalculatedRelativeMonth(TestingContext context) {
         checkNative(context,
             "with "
             + "member [gender].[cog_oqp_int_t2] as '1', solve_order = 65535 "
@@ -1248,7 +1248,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void DISABLED_testTransformsWithSeveralDimensionsNestedOnRows(TestingContext context) {
+    void DISABLED_testTransformsWithSeveralDimensionsNestedOnRows(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1326,7 +1326,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void DISABLED_testParallelCrossjoins(TestingContext context) {
+    void DISABLED_testParallelCrossjoins(TestingContext context) {
         checkNative(context,
             // DE2185
             "select NativizeSet( {"
@@ -1567,7 +1567,7 @@ class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testAggregatesInSparseResultsGetSortedCorrectly(TestingContext context) {
+    void disabled_testAggregatesInSparseResultsGetSortedCorrectly(TestingContext context) {
         propSaver.set(MondrianProperties.instance().NativizeMinThreshold, 0);
         checkNative(context,
             "select non empty NativizeSet("
@@ -1729,8 +1729,8 @@ class NativizeSetFunDefTest extends BatchTestCase {
                     }
                 }
             );
-        if (!Util.nl.equals("\n")) {
-            actualOutput = actualOutput.replace(Util.nl, "\n");
+        if (!Util.NL.equals("\n")) {
+            actualOutput = actualOutput.replace(Util.NL, "\n");
         }
         assertEquals(expectedQuery, actualOutput);
     }

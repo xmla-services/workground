@@ -99,7 +99,7 @@ class AggGenTest {
             String log = writer.toString();
             Pattern p = Pattern.compile(
                 "DEBUG - Init: Column: [^:]+: `(\\w+)`.`(\\w+)`"
-                + Util.nl
+                + Util.NL
                 + "WARN - Can not find column: \\2");
             Matcher m = p.matcher(log);
 

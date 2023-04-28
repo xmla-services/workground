@@ -141,9 +141,11 @@ public class AbstractExpCompiler implements ExpCompiler {
             Type resultType,
             List<ResultStyle> preferredResultTypes)
     {
-        assert preferredResultTypes != null;
+        if (preferredResultTypes == null) {
+            throw new IllegalArgumentException("preferredResultTypes should not be null");
+        }
         int substitutions = 0;
-        if (Util.Retrowoven) {
+        if (Util.RETROWOVEN) {
             // Copy and replace ITERABLE
             // A number of functions declare that they can accept
             // ITERABLEs so here is where that those are converted to innocent

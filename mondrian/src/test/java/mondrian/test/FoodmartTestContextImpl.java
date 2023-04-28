@@ -104,7 +104,7 @@ public class FoodmartTestContextImpl implements TestContext {
 
   private Dialect dialect;
 
-  protected static final String nl = Util.nl;
+  protected static final String nl = Util.NL;
   private static final String indent = "                ";
   private static final String lineBreak = "\"," + nl + "\"";
   private static final String lineBreak2 = "\\\\n\"" + nl + indent + "+ \"";

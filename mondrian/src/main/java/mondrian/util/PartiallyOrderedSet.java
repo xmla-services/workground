@@ -525,7 +525,7 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
         buf.append("PartiallyOrderedSet size: ");
         buf.append(size());
         buf.append(" elements: {");
-        buf.append(Util.nl);
+        buf.append(Util.NL);
 
         // breadth-first search, to iterate over every element once, printing
         // those nearest the top element first
@@ -542,7 +542,7 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
             buf.append(" children: ");
             final List<E> children = getChildren(e);
             buf.append(children);
-            buf.append(Util.nl);
+            buf.append(Util.NL);
 
             for (E child : children) {
                 if (seen.add(child)) {

@@ -283,7 +283,7 @@ System.out.println("Got CONTINUE");
         }
 
         if (doSessionId) {
-        	String sessionId = getSessionId(Action.CREATE); 
+        	String sessionId = getSessionId(Action.CREATE);
             Util.discard(sessionId);
             try {
             	Session session = Session.getWithoutCheck(sessionId);
@@ -719,7 +719,7 @@ System.out.println("Got CONTINUE");
             if (!response.startsWith("<?xml version=\"1.0\"?>")) {
                 response =
                     "<?xml version=\"1.0\"?>"
-                    + Util.nl
+                    + Util.NL
                     + response;
             }
             if (XmlaSupport.validateXmlaUsingXpath(response.getBytes())) {

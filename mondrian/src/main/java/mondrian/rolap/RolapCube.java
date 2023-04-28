@@ -1203,7 +1203,7 @@ public class RolapCube extends CubeBase {
         }
 
         StringBuilder buf = new StringBuilder(256);
-        buf.append("WITH").append(Util.nl);
+        buf.append("WITH").append(Util.NL);
 
         // Check the members individually, and generate SQL.
         final Set<String> fqNames = new LinkedHashSet<>();
@@ -1292,10 +1292,10 @@ public class RolapCube extends CubeBase {
 
         buf.append("SET ")
             .append(Util.makeFqName(xmlNamedSet.name()))
-            .append(Util.nl)
+            .append(Util.NL)
             .append(" AS ");
         Util.singleQuoteString(NamedSetUtil.getFormula(xmlNamedSet), buf);
-        buf.append(Util.nl);
+        buf.append(Util.NL);
     }
 
     private void postCalcMember(
@@ -1469,7 +1469,7 @@ public class RolapCube extends CubeBase {
         assert fqName.startsWith("[");
         buf.append("MEMBER ")
             .append(fqName)
-            .append(Util.nl)
+            .append(Util.NL)
             .append("  AS ");
         Util.singleQuoteString(getFormula(xmlCalcMember), buf);
 
@@ -1498,26 +1498,26 @@ public class RolapCube extends CubeBase {
         for (int i = 0; i < propNames.size(); i++) {
             String name = propNames.get(i);
             String expr = propExprs.get(i);
-            buf.append(",").append(Util.nl);
+            buf.append(",").append(Util.NL);
             expr = removeSurroundingQuotesIfNumericProperty(name, expr);
             buf.append(name).append(" = ").append(expr);
         }
         // Flag that the calc members are defined against a cube; will
         // determine the value of Member.isCalculatedInQuery
         buf.append(",")
-            .append(Util.nl);
+            .append(Util.NL);
         Util.quoteMdxIdentifier(Property.MEMBER_SCOPE.name, buf);
         buf.append(" = 'CUBE'");
 
         // Assign the member an ordinal higher than all of the stored measures.
         if (!propNames.contains(Property.MEMBER_ORDINAL.getName())) {
             buf.append(",")
-                .append(Util.nl)
+                .append(Util.NL)
                 .append(Property.MEMBER_ORDINAL)
                 .append(" = ")
                 .append(measureCount + j);
         }
-        buf.append(Util.nl);
+        buf.append(Util.NL);
     }
 
     private String removeSurroundingQuotesIfNumericProperty(
@@ -1545,7 +1545,7 @@ public class RolapCube extends CubeBase {
     {
         if (getFormatString(xmlCalcMember) != null) {
             buf.append(",")
-                .append(Util.nl)
+                .append(Util.NL)
                 .append(Property.FORMAT_STRING.name)
                 .append(" = ")
                 .append(Util.quoteForMdx(getFormatString(xmlCalcMember)));
@@ -2258,7 +2258,7 @@ public class RolapCube extends CubeBase {
                 buf.append(table.alias());
                 buf.append(')');
             }
-            buf.append(Util.nl);
+            buf.append(Util.NL);
         } else {
             Join join = (Join) relation;
             String subindent = new StringBuilder(indent).append("  ").toString();
@@ -2273,7 +2273,7 @@ public class RolapCube extends CubeBase {
             //buf.append(join.rightAlias);
             buf.append('.');
             buf.append(join.rightKey());
-            buf.append(Util.nl);
+            buf.append(Util.NL);
             format(left(join), buf, subindent);
             format(right(join), buf, indent);
         }

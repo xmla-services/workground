@@ -516,7 +516,6 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     {
         try {
             String encoding = response.getCharacterEncoding();
-            Element hdrElem = requestSoapParts[0]; // not used
             Element bodyElem = requestSoapParts[1];
             Element[] dreqs =
                 XmlaUtil.filterChildElements(bodyElem, NS_XMLA, "Discover");
@@ -692,29 +691,26 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                 StringBuilder buf = new StringBuilder();
                 buf.append("XML/A response content").append(NL);
             }
-            try {
-                int bufferSize = 4096;
-                ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
-                WritableByteChannel wch = Channels.newChannel(outputStream);
-                ReadableByteChannel rch;
+            int bufferSize = 4096;
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            try(WritableByteChannel wch = Channels.newChannel(outputStream)) {
                 for (Object byteChunk : byteChunks) {
                     if (byteChunk == null || ((byte[]) byteChunk).length == 0) {
                         continue;
                     }
-                    rch = Channels.newChannel(
-                        new ByteArrayInputStream((byte[]) byteChunk));
+                    try(ReadableByteChannel rch = Channels.newChannel(new ByteArrayInputStream((byte[]) byteChunk))){
 
-                    int readSize;
-                    do {
-                        buffer.clear();
-                        readSize = rch.read(buffer);
-                        buffer.flip();
+                        int readSize;
+                        do {
+                            buffer.clear();
+                            readSize = rch.read(buffer);
+                            buffer.flip();
 
-                        int writeSize = 0;
-                        while ((writeSize += wch.write(buffer)) < readSize) {
-                        }
-                    } while (readSize == bufferSize);
-                    rch.close();
+                            int writeSize = 0;
+                            while ((writeSize += wch.write(buffer)) < readSize) {
+                            }
+                        } while (readSize == bufferSize);
+                    }
                 }
                 outputStream.flush();
             } catch (IOException ioe) {
@@ -750,7 +746,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         // For example these
         // Access-Control-Allow-Origin
         // Access-Control-Allow-Credentials
-        //response.reset();
+
 
         // NOTE: if you can think of better/other status codes to use
         // for the various phases, please make changes.
@@ -759,12 +755,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         case VALIDATE_HTTP_HEAD:
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             break;
-        case INITIAL_PARSE:
-        case CALLBACK_PRE_ACTION:
-        case PROCESS_HEADER:
-        case PROCESS_BODY:
-        case CALLBACK_POST_ACTION:
-        case SEND_RESPONSE:
+        case INITIAL_PARSE, CALLBACK_PRE_ACTION, PROCESS_HEADER, PROCESS_BODY, CALLBACK_POST_ACTION, SEND_RESPONSE:
             response.setStatus(HttpServletResponse.SC_OK);
             break;
         }
@@ -844,42 +835,6 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     "Description", detail);
             writer.endElement(); // error
             writer.endElement(); // detail
-
-//            if (phase != Phase.PROCESS_HEADER) {
-//                boolean  canConvertUnsignedInt;
-//                try {
-//                    Integer.parseUnsignedInt(code);
-//                    canConvertUnsignedInt = true;
-//                }
-//                catch(Exception ex) {
-//                    canConvertUnsignedInt = false;
-//                }
-//                if(canConvertUnsignedInt) {
-//                    //code must be unsigned type
-//                    //code = "3238658121";
-//                    writer.startElement("detail");
-//                    writer.startElement("Error",
-//                            "ErrorCode", code,
-//                            "Description", detail);
-//                    writer.endElement(); // error
-//                    writer.endElement(); // detail
-//                }
-//                else {
-//                    writer.startElement("detail");
-//                    writer.startElement(
-//                            FAULT_NS_PREFIX + ":error",
-//                            "xmlns:" + FAULT_NS_PREFIX, MONDRIAN_NAMESPACE);
-//                    writer.startElement("code");
-//                    writer.characters(code);
-//                    writer.endElement(); // code
-//                    writer.startElement("desc");
-//                    writer.characters(detail);
-//                    writer.endElement(); // desc
-//                    writer.endElement(); // error
-//                    writer.endElement(); // detail
-//                }
-//            }
-
             writer.endElement();   // </Fault>
             writer.endDocument();
         } catch (UnsupportedEncodingException uee) {
