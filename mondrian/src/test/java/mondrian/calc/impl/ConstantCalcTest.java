@@ -24,16 +24,16 @@ import mondrian.olap.type.NullType;
  * @author stbischof
  */
 class ConstantCalcTest{
-	
+
 	@Test
     void testNullEvaluatesToConstantDoubleNull() {
         ConstantCalc constantCalc = new ConstantCalc(new NullType(), null);
-        assertEquals(FunUtil.DoubleNull, constantCalc.evaluateDouble(null));
+        assertEquals(FunUtil.DOUBLE_NULL, constantCalc.evaluateDouble(null));
     }
-	
+
 	@Test
     void testNullEvaluatesToConstantIntegerNull() {
         ConstantCalc constantCalc = new ConstantCalc(new NullType(), null);
-        assertEquals(FunUtil.IntegerNull, constantCalc.evaluateInteger(null));
+        assertEquals(FunUtil.INTEGER_NULL, constantCalc.evaluateInteger(null));
     }
 }

@@ -44,7 +44,7 @@ implements IntegerCalc
     @Override
     public Object evaluate(Evaluator evaluator) {
         final int i = evaluateInteger(evaluator);
-        if (i == FunUtil.IntegerNull) {
+        if (i == FunUtil.INTEGER_NULL) {
             return null;
         }
         return i;

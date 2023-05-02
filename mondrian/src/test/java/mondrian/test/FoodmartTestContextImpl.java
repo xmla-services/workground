@@ -613,13 +613,13 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
       assertNotSame( value, Util.nullValue );
       assertFalse(
         value instanceof Number
-          && ( (Number) value ).doubleValue() == FunUtil.DoubleNull );
+          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_NULL);
 
       // Similarly empty values.
       assertNotSame( value, Util.EmptyValue );
       assertFalse(
         value instanceof Number
-          && ( (Number) value ).doubleValue() == FunUtil.DoubleEmpty );
+          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_EMPTY);
 
       // Cells should be null if and only if they are null or empty.
       if ( cell.getValue() == null ) {
@@ -653,13 +653,13 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
       assertNotSame( value, Util.nullValue );
       assertFalse(
         value instanceof Number
-          && ( (Number) value ).doubleValue() == FunUtil.DoubleNull );
+          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_NULL);
 
       // Similarly empty values.
       assertNotSame( value, Util.EmptyValue );
       assertFalse(
         value instanceof Number
-          && ( (Number) value ).doubleValue() == FunUtil.DoubleEmpty );
+          && ( (Number) value ).doubleValue() == FunUtil.DOUBLE_EMPTY);
 
       // Cells should be null if and only if they are null or empty.
       if ( cell.getValue() == null ) {

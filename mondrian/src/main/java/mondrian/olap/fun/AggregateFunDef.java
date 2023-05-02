@@ -189,7 +189,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // All that follows is logic for distinct count. It's not like the
             // other aggregators.
             if (tupleList.isEmpty()) {
-                return FunUtil.DoubleNull;
+                return FunUtil.DOUBLE_NULL;
             }
 
             // Optimize the list

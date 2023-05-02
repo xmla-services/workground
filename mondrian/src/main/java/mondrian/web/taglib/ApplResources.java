@@ -37,6 +37,7 @@ public class ApplResources implements Listener.ApplicationContext {
      * you should probably call {@link #getInstance}.
      */
     public ApplResources() {
+        // constructor
     }
 
     /**
@@ -47,12 +48,12 @@ public class ApplResources implements Listener.ApplicationContext {
         return (ApplResources)context.getAttribute(ATTRNAME);
     }
 
-    private HashMap templatesCache = new HashMap();
+    private HashMap<String, Templates> templatesCache = new HashMap<>();
     public Transformer getTransformer(String xsltURI, boolean useCache) {
         try {
             Templates templates = null;
             if (useCache) {
-                templates = (Templates)templatesCache.get(xsltURI);
+                templates = templatesCache.get(xsltURI);
             }
             if (templates == null) {
                 TransformerFactory tf = TransformerFactory.newInstance();
@@ -78,6 +79,7 @@ public class ApplResources implements Listener.ApplicationContext {
 
     @Override
 	public void destroy(ServletContextEvent ev) {
+        //destroy empty
     }
 
 

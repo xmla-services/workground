@@ -72,8 +72,8 @@ public class AggTableManager {
 
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
-                "AggTableManager.finalCleanUp: schema="
-                    + schema.getName());
+                "AggTableManager.finalCleanUp: schema={}",
+                    schema.getName());
         }
     }
 
@@ -364,16 +364,16 @@ public class AggTableManager {
 
             RelationOrJoin relation =
                 star.getFactTable().getRelation();
-            String schema = null;
+            String schemaInner = null;
             List<Hint> tableHints = null;
-            if (relation instanceof Table) {
-                schema = ((Table) relation).schema();
-                tableHints = ((Table) relation).hints();
+            if (relation instanceof Table table) {
+                schemaInner = table.schema();
+                tableHints = table.hints();
             }
             String tableName = dbFactTable.getName();
             String alias = null;
             dbFactTable.table = new TableR(
-                schema,
+                schemaInner,
                 tableName,
                 alias,
                 tableHints);

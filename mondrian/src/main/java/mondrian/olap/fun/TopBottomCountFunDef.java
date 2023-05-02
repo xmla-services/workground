@@ -105,7 +105,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         }
 
         int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == 0 || n == mondrian.olap.fun.FunUtil.IntegerNull ) {
+        if ( n == 0 || n == mondrian.olap.fun.FunUtil.INTEGER_NULL) {
           return TupleCollections.emptyList( arity );
         }
 

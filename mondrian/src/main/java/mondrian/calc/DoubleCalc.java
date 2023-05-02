@@ -24,7 +24,7 @@ public interface DoubleCalc extends Calc {
     /**
      * Evaluates this expression to yield a <code>double</code> value.
      * If the result is null, returns the special
-     * {@link mondrian.olap.fun.FunUtil#DoubleNull} value.
+     * {@link mondrian.olap.fun.FunUtil#DOUBLE_NULL} value.
      *
      * @param evaluator Evaluation context
      * @return evaluation result

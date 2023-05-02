@@ -44,7 +44,7 @@ implements DoubleCalc
     @Override
     public Object evaluate(Evaluator evaluator) {
         final double d = evaluateDouble(evaluator);
-        if (d == FunUtil.DoubleNull) {
+        if (d == FunUtil.DOUBLE_NULL) {
             return null;
         }
         return Double.valueOf(d);

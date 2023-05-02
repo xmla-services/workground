@@ -223,8 +223,8 @@ public class Aggregation {
         List<Member> potentialParents = new ArrayList<>();
         for (final StarColumnPredicate predicate : predicates) {
             Member m;
-            if (predicate instanceof MemberColumnPredicate) {
-                m = ((MemberColumnPredicate) predicate).getMember();
+            if (predicate instanceof MemberColumnPredicate memberColumnPredicate) {
+                m = memberColumnPredicate.getMember();
                 potentialParents.add(m);
             }
         }
@@ -255,7 +255,7 @@ public class Aggregation {
             }
 
             // more than one - check for children of same parent
-            double constraintLength = (double) valueCount;
+            double constraintLength = valueCount;
             Member parent = null;
             Level level = null;
             for (int j = 0; j < valueCount; j++) {
@@ -288,30 +288,28 @@ public class Aggregation {
                 }
             }
             boolean done = false;
-            if (parent != null) {
+            if (parent != null && (parent.isAll() || potentialParents.contains(parent))) {
                 // common parent exists
-                if (parent.isAll() || potentialParents.contains(parent)) {
-                    // common parent is there as constraint
-                    //  if the children are complete, this constraint set is
-                    //  unneccessary try to get the children directly from
-                    //  cache for the drilldown case, the children will be
-                    //  in the cache
-                    // - if not, forget this optimization.
-                    SchemaReader scr = star.getSchema().getSchemaReader();
-                    int childCount = scr.getChildrenCountFromCache(parent);
-                    if (childCount == -1) {
-                        // nothing gotten from cache
-                        if (!parent.isAll()) {
-                            // parent is in constraints
-                            // no information about children cardinality
-                            //  constraints must not be optimized away
-                            bloats[i] = 0.0;
-                            done = true;
-                        }
-                    } else {
-                        bloats[i] = constraintLength / childCount;
-                        done = true;
-                    }
+                // common parent is there as constraint
+                //  if the children are complete, this constraint set is
+                //  unneccessary try to get the children directly from
+                //  cache for the drilldown case, the children will be
+                //  in the cache
+                // - if not, forget this optimization.
+                SchemaReader scr = star.getSchema().getSchemaReader();
+                int childCount = scr.getChildrenCountFromCache(parent);
+                if (childCount == -1) {
+                   // nothing gotten from cache
+                   if (!parent.isAll()) {
+                       // parent is in constraints
+                       // no information about children cardinality
+                       //  constraints must not be optimized away
+                       bloats[i] = 0.0;
+                       done = true;
+                   }
+                } else {
+                    bloats[i] = constraintLength / childCount;
+                    done = true;
                 }
             }
 
@@ -564,13 +562,11 @@ public class Aggregation {
                 // * Important when there is sparsity. Consider the cell
                 // {year=1997, quarter=Q1, month=12}. This cell would never have
                 // data, so there's no point keeping it.
-                if (!flushPredicate.evaluate(valueList)) {
+                if (!flushPredicate.evaluate(valueList) && data.getObject(cellKey) != null) {
                     // REVIEW: getObject forces an int or double dataset to
                     // create a boxed object; use exists() instead?
-                    if (data.getObject(cellKey) != null) {
-                        for (int k = 0; k < arity; k++) {
-                            keepBitSets[k].set(ordinals[k]);
-                        }
+                    for (int k = 0; k < arity; k++) {
+                        keepBitSets[k].set(ordinals[k]);
                     }
                 }
             } else {
@@ -609,11 +605,11 @@ public class Aggregation {
 		public int compare(Integer o0, Integer o1) {
             double bloat0 = bloats[o0];
             double bloat1 = bloats[o1];
-            return (bloat0 == bloat1)
-                ? 0
-                : (bloat0 < bloat1)
-                    ? 1
-                    : -1;
+            if (bloat0 == bloat1) {
+                return 0;
+            } else {
+                return (bloat0 < bloat1) ? 1 : -1;
+            }
         }
     }
 

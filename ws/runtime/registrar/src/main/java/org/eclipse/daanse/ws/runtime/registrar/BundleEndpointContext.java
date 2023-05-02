@@ -35,6 +35,7 @@ public class BundleEndpointContext extends EndpointContext {
 	}
 
 	@Override
+    @SuppressWarnings("java:S4275") // we should return unmodifiable set here
 	public Set<Endpoint> getEndpoints() {
 		return endpointsView;
 	}
@@ -54,5 +55,5 @@ public class BundleEndpointContext extends EndpointContext {
 	public void removeEndpoint(Endpoint endpoint) {
 		endpoints.remove(endpoint);
 	}
-	
+
 }

@@ -17,8 +17,6 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
