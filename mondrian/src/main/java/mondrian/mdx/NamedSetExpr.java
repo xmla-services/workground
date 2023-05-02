@@ -62,7 +62,7 @@ public class NamedSetExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public NamedSetExpr clone() {
+	public NamedSetExpr cloneExp() {
         return new NamedSetExpr(namedSet);
     }
 

@@ -62,7 +62,7 @@ public class LevelExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public LevelExpr clone() {
+	public LevelExpr cloneExp() {
         return new LevelExpr(level);
     }
 

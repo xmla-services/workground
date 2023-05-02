@@ -42,7 +42,7 @@ public class BaseTestContext implements TestingContext {
 	@Override
 	public void init(Entry<PropertyList, Context> contextEntry) {
 		this.context = contextEntry.getValue();
-		this.properties = contextEntry.getKey().clone();
+		this.properties = Util.PropertyList.newInstance(contextEntry.getKey());
 		init();
 
 	}

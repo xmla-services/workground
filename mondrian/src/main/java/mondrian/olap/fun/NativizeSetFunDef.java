@@ -164,7 +164,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
         if (isFirstCompileCall) {
             isFirstCompileCall = false;
-            originalExp = funArg.clone();
+            originalExp = funArg.cloneExp();
             Query query = compiler.getEvaluator().getQuery();
             call.accept(
                 new AddFormulasVisitor(query, substitutionMap, dimensions));

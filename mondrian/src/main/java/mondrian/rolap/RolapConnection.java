@@ -418,7 +418,7 @@ public RolapSchema getSchema() {
 
   @Override
 public String getConnectString() {
-    final Util.PropertyList connectInfoClone = connectInfo.clone();
+    final Util.PropertyList connectInfoClone = Util.PropertyList.newInstance(connectInfo);
     connectInfoClone.remove( RolapConnectionProperties.JdbcPassword.name() );
     return connectInfoClone.toString();
   }

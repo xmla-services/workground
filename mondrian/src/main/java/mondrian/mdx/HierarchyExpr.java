@@ -62,7 +62,7 @@ public class HierarchyExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public HierarchyExpr clone() {
+	public HierarchyExpr cloneExp() {
         return new HierarchyExpr(hierarchy);
     }
 

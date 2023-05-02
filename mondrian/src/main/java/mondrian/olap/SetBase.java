@@ -90,7 +90,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     @Override
 	public Object clone() {
         return new SetBase(
-            name, caption, description, exp.clone(), validated, metaMap);
+            name, caption, description, exp.cloneExp(), validated, metaMap);
     }
 
     @Override

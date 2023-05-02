@@ -29,7 +29,7 @@ public abstract class ExpBase
     protected static Exp[] cloneArray(Exp[] a) {
         Exp[] a2 = new Exp[a.length];
         for (int i = 0; i < a.length; i++) {
-            a2[i] = a[i].clone();
+            a2[i] = a[i].cloneExp();
         }
         return a2;
     }
@@ -38,7 +38,7 @@ public abstract class ExpBase
     }
 
     @Override
-	public abstract Exp clone();
+	public abstract Exp cloneExp();
 
     public static void unparseList(
         PrintWriter pw,

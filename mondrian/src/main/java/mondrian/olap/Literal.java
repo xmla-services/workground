@@ -137,7 +137,7 @@ public class Literal extends ExpBase {
     }
 
     @Override
-	public Literal clone() {
+	public Literal cloneExp() {
         return this;
     }
 

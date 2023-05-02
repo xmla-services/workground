@@ -66,7 +66,7 @@ public class MemberExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public MemberExpr clone() {
+	public MemberExpr cloneExp() {
         return new MemberExpr(member);
     }
 

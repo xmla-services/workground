@@ -97,7 +97,7 @@ public class QueryAxis extends QueryPart {
     @Override
 	public Object clone() {
         return new QueryAxis(
-            nonEmpty, exp.clone(), axisOrdinal,
+            nonEmpty, exp.cloneExp(), axisOrdinal,
             subtotalVisibility, dimensionProperties.clone());
     }
 

@@ -99,7 +99,7 @@ public class Formula extends QueryPart {
         return new Formula(
             isMember,
             id,
-            exp.clone(),
+            exp.cloneExp(),
             MemberProperty.cloneArray(memberProperties),
             mdxMember,
             mdxSet);

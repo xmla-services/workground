@@ -148,7 +148,7 @@ class RolapSchemaPoolTest {
                 context.getContext(),
                 connectInfo);
 
-        PropertyList connectInfoDyn = connectInfo.clone();
+        PropertyList connectInfoDyn = Util.PropertyList.newInstance(connectInfo);
         connectInfoDyn.put(
             RolapConnectionProperties.DynamicSchemaProcessor.name(),
             NotReallyDynamicSchemaProcessor.class.getName());
@@ -164,7 +164,7 @@ class RolapSchemaPoolTest {
         assertTrue(schema == schemaDyn);
 
         String catalogContent = Util.readVirtualFileAsString(catalogUrl);
-        PropertyList connectInfoCont = connectInfo.clone();
+        PropertyList connectInfoCont = Util.PropertyList.newInstance(connectInfo);
         connectInfoCont.remove(RolapConnectionProperties.Catalog.name());
         connectInfoCont.put(
             RolapConnectionProperties.CatalogContent.name(),
@@ -175,7 +175,7 @@ class RolapSchemaPoolTest {
 
         assertTrue(schema == schemaCont);
 
-        PropertyList connectInfoDS = connectInfo.clone();
+        PropertyList connectInfoDS = Util.PropertyList.newInstance(connectInfo);
         //final StringBuilder buf = new StringBuilder();
         //DataSource dataSource =
         //    RolapConnection.createDataSource(null, connectInfoDS, buf);

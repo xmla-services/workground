@@ -50,7 +50,7 @@ public class Id
     }
 
     @Override
-	public Id clone() {
+	public Id cloneExp() {
         // This is immutable, so no need to clone.
         return this;
     }

@@ -217,7 +217,7 @@ public class DelegatingExpCompiler implements ExpCompiler {
         }
 
         @Override
-        public Exp clone() {
+        public Exp cloneExp() {
             throw new UnsupportedOperationException();
         }
 

@@ -266,7 +266,7 @@ public synchronized Connection getConnection() {
    */
   public TestContext withSchemaProcessor(
     Class<? extends DynamicSchemaProcessor> dynProcClass ) {
-    final Util.PropertyList properties = getConnectionProperties().clone();
+    final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.DynamicSchemaProcessor.name(),
       dynProcClass.getName() );
@@ -288,7 +288,7 @@ public synchronized Connection getConnection() {
   }
 
   public TestContext withSchemaPool( boolean usePool ) {
-    final Util.PropertyList properties = getConnectionProperties().clone();
+    final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.UseSchemaPool.name(),
       Boolean.toString( usePool ) );
@@ -1793,7 +1793,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @return TestContext which contains the given schema
    */
   public final TestContext withSchema( final String schema ) {
-    final Util.PropertyList properties = getConnectionProperties().clone();
+    final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.CatalogContent.name(),
       schema );
@@ -1896,7 +1896,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
    * @return Test context with the given role
    */
   public final TestContext withRole( final String roleName ) {
-    final Util.PropertyList properties = getConnectionProperties().clone();
+    final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
     properties.put(
       RolapConnectionProperties.Role.name(),
       roleName );
@@ -1989,7 +1989,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
   @Override
 public List<Exception> getSchemaWarnings() {
     final Util.PropertyList propertyList =
-      getConnectionProperties().clone();
+        Util.PropertyList.newInstance(getConnectionProperties());
     propertyList.put(
       RolapConnectionProperties.Ignore.name(),
       "true" );
