@@ -65,9 +65,9 @@ public class RolapCalculatedMember extends RolapMemberBase {
 
     @Override
 	public Object getPropertyValue(String propertyName, boolean matchCase) {
-        if (Util.equal(propertyName, Property.FORMULA.name, matchCase)) {
+        if (Util.equalWithMatchCaseOption(propertyName, Property.FORMULA.name, matchCase)) {
             return formula;
-        } else if (Util.equal(
+        } else if (Util.equalWithMatchCaseOption(
                 propertyName, Property.CHILDREN_CARDINALITY.name, matchCase))
         {
             // Looking up children is unnecessary for calculated member.

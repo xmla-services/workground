@@ -47,7 +47,7 @@ public class SteelWheelsTestCase {
         final String schema)
     {
         final Util.PropertyList properties =
-            getConnectionProperties(context.createConnection()).clone();
+            Util.PropertyList.newInstance(getConnectionProperties(context.createConnection()));
         //final String jdbc = properties.get(
         //   RolapConnectionProperties.Jdbc.name());
         //context.setProperty(

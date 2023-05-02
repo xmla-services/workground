@@ -92,7 +92,7 @@ public class ParameterExpr extends ExpBase {
     }
 
     @Override
-	public ParameterExpr clone() {
+	public ParameterExpr cloneExp() {
         return new ParameterExpr(parameter);
     }
 

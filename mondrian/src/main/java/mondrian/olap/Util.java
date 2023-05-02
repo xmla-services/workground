@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
@@ -136,6 +137,7 @@ import mondrian.util.Pair;
 import mondrian.util.UtilCompatible;
 import mondrian.util.UtilCompatibleJdk16;
 
+import static mondrian.olap.fun.FunUtil.DoubleEmpty;
 import static mondrian.olap.fun.FunUtil.DoubleNull;
 
 /**
@@ -158,7 +160,7 @@ public class Util extends XOMUtil {
     /**
      * Placeholder which indicates an EMPTY value.
      */
-    public static final Object EmptyValue = Double.valueOf(FunUtil.DoubleEmpty);
+    public static final Object EmptyValue = Double.valueOf(DoubleEmpty);
 
     /**
      * Cumulative time spent accessing the database.
@@ -218,6 +220,8 @@ public class Util extends XOMUtil {
      * enabled.)
      */
     public static final boolean DEBUG = false;
+
+    private static final Random random = new Random();
 
     static {
         compatible = new UtilCompatibleJdk16();
@@ -311,7 +315,7 @@ public class Util extends XOMUtil {
                 // TODO Write a non-blocking queue which implements
                 // the blocking queue API so we can pass that to the
                 // executor.
-                new LinkedBlockingQueue<Runnable>(),
+                new LinkedBlockingQueue<>(),
                 factory);
 
         // Set the rejection policy if required.
@@ -357,7 +361,7 @@ public class Util extends XOMUtil {
      *
      * @deprecated Will be removed in 4.0
      */
-    @Deprecated
+    @Deprecated(since = "Will be removed in 4.0")
 	public static String mdxEncodeString(String st) {
         StringBuilder retString = new StringBuilder(st.length() + 20);
         for (int i = 0; i < st.length(); i++) {
@@ -438,6 +442,7 @@ public class Util extends XOMUtil {
      * @param s Unquoted literal
      * @return Quoted string literal
      */
+    @SuppressWarnings("java:S5361") // need use replaceAll
     public static String quoteJavaString(String s) {
         return s == null
             ? "null"
@@ -488,7 +493,7 @@ public class Util extends XOMUtil {
      * @param matchCase Whether to perform case-sensitive match
      * @return Whether strings are equal
      */
-    public static boolean equal(String s, String t, boolean matchCase) {
+    public static boolean equalWithMatchCaseOption(String s, String t, boolean matchCase) {
         if (s == null) {
             return t == null;
         }
@@ -575,8 +580,7 @@ public class Util extends XOMUtil {
             //   names.get(i).toString(sb);
             // but that causes some tests to fail
             Id.Segment segment = names.get(i);
-            switch (segment.getQuoting()) {
-            case UNQUOTED:
+            if (Id.Quoting.UNQUOTED.equals(segment.getQuoting())) {
                 segment = new Id.NameSegment(((Id.NameSegment) segment).name);
             }
             segment.toString(sb);
@@ -667,18 +671,14 @@ public class Util extends XOMUtil {
 
         // First look up a member from the cache of calculated members
         // (cubes and queries both have them).
-        switch (category) {
-        case Category.MEMBER:
-        case Category.UNKNOWN:
+        if (category == Category.MEMBER || category == Category.UNKNOWN) {
             Member member = schemaReader.getCalculatedMember(names);
             if (member != null) {
                 return member;
             }
         }
         // Likewise named set.
-        switch (category) {
-        case Category.SET:
-        case Category.UNKNOWN:
+        if (category == Category.SET || category == Category.UNKNOWN) {
             NamedSet namedSet = schemaReader.getNamedSet(names);
             if (namedSet != null) {
                 return namedSet;
@@ -689,8 +689,8 @@ public class Util extends XOMUtil {
         for (int i = 0; i < names.size(); i++) {
             OlapElement child;
             Id.NameSegment name;
-            if (names.get(i) instanceof Id.NameSegment) {
-                name = (Id.NameSegment) names.get(i);
+            if (names.get(i) instanceof Id.NameSegment nameSegment) {
+                name = nameSegment;
                 child = schemaReader.getElementChild(parent, name, matchType);
             } else if (parent instanceof RolapLevel
                        && names.get(i) instanceof Id.KeySegment
@@ -766,12 +766,10 @@ public class Util extends XOMUtil {
                 matchType = MatchType.EXACT;
             }
         }
-        if (LOGGER.isDebugEnabled()) {
-            if (parent != null) {
-                LOGGER.debug(
-                    "Util.lookupCompound: found child.name={}, child.class={}",
-                    parent.getName(), parent.getClass().getName());
-            }
+        if (LOGGER.isDebugEnabled() && parent != null) {
+            LOGGER.debug(
+                "Util.lookupCompound: found child.name={}, child.class={}",
+                parent.getName(), parent.getClass().getName());
         }
 
         switch (category) {
@@ -895,8 +893,8 @@ public class Util extends XOMUtil {
                     segments.subList(0, segments.size() - 1);
             final Id.Segment lastSegment = last(segments);
             final String propertyName =
-                    lastSegment instanceof Id.NameSegment
-                            ? ((Id.NameSegment) lastSegment).getName()
+                    lastSegment instanceof Id.NameSegment nameSegment
+                            ? nameSegment.getName()
                             : null;
             final Member member =
                     (Member) schemaReaderSansAc.lookupCompound(
@@ -960,9 +958,9 @@ public class Util extends XOMUtil {
             throw MondrianResource.instance().MdxChildObjectNotFound.ex(
                     fullName, cube.getQualifiedName());
         }
-        if (olapElement instanceof Member) {
+        if (olapElement instanceof Member member) {
             olapElement =
-                    schemaReader.substitute((Member) olapElement);
+                    schemaReader.substitute(member);
         }
 
         // keep track of any measure members referenced; these will be used
@@ -1084,15 +1082,14 @@ public class Util extends XOMUtil {
                     {
                         bestMatch = k;
                     }
-                } else if (matchType == MatchType.AFTER) {
-                    if (rc > 0
-                        && (bestMatch == -1
+                } else if (matchType == MatchType.AFTER &&
+                     (rc > 0
+                         && (bestMatch == -1
                             || FunUtil.compareSiblingMembers(
                                 rootMember,
-                                rootMembers.get(bestMatch)) < 0))
-                    {
+                                rootMembers.get(bestMatch)) < 0))) {
                         bestMatch = k;
-                    }
+
                 }
             }
         }
@@ -1107,7 +1104,7 @@ public class Util extends XOMUtil {
         // If the first level is 'all', lookup member at second level. For
         // example, they could say '[USA]' instead of '[(All
         // Customers)].[USA]'.
-        return (rootMembers.size() > 0 && rootMembers.get(0).isAll())
+        return (!rootMembers.isEmpty() && rootMembers.get(0).isAll())
             ? reader.lookupMemberChildByName(
                 rootMembers.get(0),
                 memberName,
@@ -1217,7 +1214,7 @@ public class Util extends XOMUtil {
      */
     public static Random createRandom(long seed) {
         if (seed == 0) {
-            seed = new Random().nextLong();
+            seed = random.nextLong();
             System.out.println("random: seed=" + seed);
         } else if (seed == -1 && metaRandom != null) {
             seed = metaRandom.nextLong();
@@ -1602,7 +1599,7 @@ public class Util extends XOMUtil {
      * @return List containing the given members
      */
     public static <T> List<T> flatList(T... t) {
-        return _flatList(t, false);
+        return flatListWithCopyOption(t, false);
     }
 
     /**
@@ -1614,7 +1611,7 @@ public class Util extends XOMUtil {
      * @return List containing the given members
      */
     public static <T> List<T> flatListCopy(T... t) {
-        return _flatList(t, true);
+        return flatListWithCopyOption(t, true);
     }
 
     /**
@@ -1625,7 +1622,7 @@ public class Util extends XOMUtil {
      * @param t Array of members of list
      * @return List containing the given members
      */
-    private static <T> List<T> _flatList(T[] t, boolean copy) {
+    private static <T> List<T> flatListWithCopyOption(T[] t, boolean copy) {
         switch (t.length) {
         case 0:
             return Collections.emptyList();
@@ -1780,8 +1777,8 @@ public class Util extends XOMUtil {
      * @return mondrian segment
      */
     public static Id.Segment convert(IdentifierSegment olap4jSegment) {
-        if (olap4jSegment instanceof NameSegment) {
-            return convert((NameSegment) olap4jSegment);
+        if (olap4jSegment instanceof NameSegment nameSegment) {
+            return convert(nameSegment);
         } else {
             return convert((KeySegment) olap4jSegment);
         }
@@ -1868,6 +1865,9 @@ public class Util extends XOMUtil {
 
                     @Override
 					public T next() {
+                        if(!hasNext()) {
+                            throw new NoSuchElementException();
+                        }
                         T t = next;
                         hasNext = moveToNext();
                         return t;
@@ -1918,10 +1918,9 @@ public class Util extends XOMUtil {
     }
 
     public static IdentifierSegment toOlap4j(Id.Segment segment) {
-        switch (segment.quoting) {
-        case KEY:
+        if (mondrian.olap.Id.Quoting.KEY.equals(segment.quoting)) {
             return toOlap4j((Id.KeySegment) segment);
-        default:
+        } else {
             return toOlap4j((Id.NameSegment) segment);
         }
     }
@@ -2032,10 +2031,10 @@ public class Util extends XOMUtil {
             throw newError(e, message);
         } catch (ExecutionException e) {
             final Throwable cause = e.getCause();
-            if (cause instanceof RuntimeException) {
-                throw (RuntimeException) cause;
-            } else if (cause instanceof Error) {
-                throw (Error) cause;
+            if (cause instanceof RuntimeException runtimeException) {
+                throw runtimeException;
+            } else if (cause instanceof Error error) {
+                throw error;
             } else {
                 throw newError(cause, message);
             }
@@ -2528,8 +2527,7 @@ public class Util extends XOMUtil {
     public static class PropertyList
         implements Iterable<Pair<String, String>>, Serializable
     {
-        List<Pair<String, String>> list =
-            new ArrayList<>();
+        List<Pair<String, String>> list;
 
         public PropertyList() {
             this.list = new ArrayList<>();
@@ -2539,10 +2537,12 @@ public class Util extends XOMUtil {
             this.list = list;
         }
 
-        @SuppressWarnings({"CloneDoesntCallSuperClone"})
-        @Override
-        public PropertyList clone() {
-            return new PropertyList(new ArrayList<>(list));
+        private PropertyList(PropertyList propertyList) {
+            this(new ArrayList<>(propertyList.list));
+        }
+
+        public static PropertyList newInstance(PropertyList propertyList) {
+            return new PropertyList(propertyList);
         }
 
         public String get(String key) {
@@ -3653,21 +3653,11 @@ public class Util extends XOMUtil {
         // Instantiate class.
         try {
             udf = (UserDefinedFunction) constructor.newInstance(args);
-        } catch (InstantiationException e) {
+        } catch (InstantiationException | ClassCastException e) {
             throw MondrianResource.instance().UdfClassWrongIface.ex(
                 functionNameOrEmpty,
                 className, UserDefinedFunction.class.getName());
-        } catch (IllegalAccessException e) {
-            throw MondrianResource.instance().UdfClassWrongIface.ex(
-                functionName,
-                className,
-                UserDefinedFunction.class.getName());
-        } catch (ClassCastException e) {
-            throw MondrianResource.instance().UdfClassWrongIface.ex(
-                functionNameOrEmpty,
-                className,
-                UserDefinedFunction.class.getName());
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw MondrianResource.instance().UdfClassWrongIface.ex(
                 functionName,
                 className,
@@ -3804,8 +3794,8 @@ public class Util extends XOMUtil {
                 }
                 // Last thing is to allow for equality correspondences
                 // to work with virtual cubes.
-                if (cube instanceof RolapCube
-                    && ((RolapCube)cube).isVirtual()
+                if (cube instanceof RolapCube rolapCube
+                    && rolapCube.isVirtual()
                     && dimension.equals(dimension1))
                 {
                     return cube;
@@ -3841,12 +3831,12 @@ public class Util extends XOMUtil {
         } catch (IOException ioe) {
             // ignore exception - it's OK if file is not found
             // just keep getResource contract and return null
-            Util.discard(ioe);
+            discard(ioe);
         }
         return resource;
     }
 
-    public static abstract class AbstractFlatList<T>
+    public abstract static class AbstractFlatList<T>
         implements List<T>, RandomAccess
     {
         protected final List<T> asArrayList() {
@@ -4217,6 +4207,9 @@ public class Util extends XOMUtil {
 
         @Override
 		public T next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             final T next1 = next;
             moveToNext();
             return next1;
@@ -4359,6 +4352,9 @@ public class Util extends XOMUtil {
                         @Override
 						@SuppressWarnings("unchecked")
                         public Entry<K, V> next() {
+                            if(!hasNext()){
+                                throw new NoSuchElementException();
+                            }
                             return new AbstractMapEntry(
                                 list.get(pt++), null) {};
                         }
@@ -4374,12 +4370,7 @@ public class Util extends XOMUtil {
                 }
                 @Override
 				public boolean contains(Object o) {
-                    if (o instanceof Entry) {
-                        if (list.contains(((Entry) o).getKey())) {
-                            return true;
-                        }
-                    }
-                    return false;
+                    return  (o instanceof Entry entry && list.contains(entry.getKey()));
                 }
             };
         }
@@ -4396,6 +4387,9 @@ public class Util extends XOMUtil {
                         }
                         @Override
 						public K next() {
+                            if(!hasNext()){
+                                throw new NoSuchElementException();
+                            }
                             return list.get(++pt);
                         }
                         @Override
@@ -4427,11 +4421,7 @@ public class Util extends XOMUtil {
                 }
                 @Override
 				public boolean contains(Object o) {
-                    if (o == null && size() > 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return (o == null && size() > 0);
                 }
             };
         }
@@ -4445,11 +4435,7 @@ public class Util extends XOMUtil {
         }
         @Override
 		public boolean containsValue(Object o) {
-            if (o == null && size() > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return  (o == null && size() > 0);
         }
     }
 

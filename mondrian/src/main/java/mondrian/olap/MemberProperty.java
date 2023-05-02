@@ -30,7 +30,7 @@ public class MemberProperty extends QueryPart {
 
     @Override
 	protected Object clone() {
-        return new MemberProperty(name, exp.clone());
+        return new MemberProperty(name, exp.cloneExp());
     }
 
     static MemberProperty[] cloneArray(MemberProperty[] x) {

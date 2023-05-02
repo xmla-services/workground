@@ -514,7 +514,7 @@ public class TestUtil {
 	 */
 	public static void withSchemaProcessor(TestingContext context,
 			Class<? extends DynamicSchemaProcessor> dynProcClass ) {
-		final Util.PropertyList properties = getConnectionProperties().clone();
+		final Util.PropertyList properties = Util.PropertyList.newInstance(getConnectionProperties());
 		context.setProperty(RolapConnectionProperties.DynamicSchemaProcessor.name(), dynProcClass.getName());
 		context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), "false");
 	}

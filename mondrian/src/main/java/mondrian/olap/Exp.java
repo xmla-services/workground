@@ -26,7 +26,7 @@ import mondrian.olap.type.Type;
  */
 public interface Exp {
 
-    Exp clone();
+    Exp cloneExp();
 
     /**
      * Returns the {@link Category} of the expression.

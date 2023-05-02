@@ -77,7 +77,7 @@ public class UnresolvedFunCall extends ExpBase implements FunCall {
 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
-    public UnresolvedFunCall clone() {
+    public UnresolvedFunCall cloneExp() {
         return new UnresolvedFunCall(name, syntax, ExpBase.cloneArray(args));
     }
 

@@ -62,7 +62,7 @@ public class DimensionExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public DimensionExpr clone() {
+	public DimensionExpr cloneExp() {
         return new DimensionExpr(dimension);
     }
 

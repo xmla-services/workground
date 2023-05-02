@@ -32,7 +32,7 @@ public class TypeWrapperExp implements Exp {
     }
 
     @Override
-    public TypeWrapperExp clone() {
+    public TypeWrapperExp cloneExp() {
         throw new UnsupportedOperationException();
     }
 
