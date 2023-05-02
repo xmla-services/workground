@@ -87,7 +87,7 @@ class AggQuerySpec {
 
         // this should never happen
         if (column == null) {
-            LOGGER.error("column null for bitPos=" + bitPos);
+            LOGGER.error("column null for bitPos={}", bitPos);
         }
         return column;
     }

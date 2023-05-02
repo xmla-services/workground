@@ -114,11 +114,11 @@ public abstract class LinReg extends FunDefBase {
     /** Code for the specific function. */
     final int regType;
 
-    public static final int Point = 0;
+    public static final int POINT = 0;
     public static final int R2 = 1;
-    public static final int Intercept = 2;
-    public static final int Slope = 3;
-    public static final int Variance = 4;
+    public static final int INTERCEPT = 2;
+    public static final int SLOPE = 3;
+    public static final int VARIANCE = 4;
 
     static final Resolver InterceptResolver =
         new ReflectiveMultiResolver(
@@ -258,7 +258,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class InterceptFunDef extends LinReg {
         public InterceptFunDef(FunDef funDef) {
-            super(funDef, LinReg.Intercept);
+            super(funDef, LinReg.INTERCEPT);
         }
     }
 
@@ -273,7 +273,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class PointFunDef extends LinReg {
         public PointFunDef(FunDef funDef) {
-            super(funDef, LinReg.Point);
+            super(funDef, LinReg.POINT);
         }
 
         @Override
@@ -316,7 +316,7 @@ public abstract class LinReg extends FunDefBase {
             double xPoint = xPointCalc.evaluateDouble(evaluator);
             Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
-                return FunUtil.DoubleNull;
+                return FunUtil.DOUBLE_NULL;
             }
             // use first arg to generate y position
             double yPoint =
@@ -337,7 +337,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class SlopeFunDef extends LinReg {
         public SlopeFunDef(FunDef funDef) {
-            super(funDef, LinReg.Slope);
+            super(funDef, LinReg.SLOPE);
         }
     }
 
@@ -367,14 +367,13 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class VarianceFunDef extends LinReg {
         public VarianceFunDef(FunDef funDef) {
-            super(funDef, LinReg.Variance);
+            super(funDef, LinReg.VARIANCE);
         }
     }
 
     protected static void debug(String type, String msg) {
         // comment out for no output
-// RME
-        //System.out.println(type + ": " +msg);
+        // RME
     }
 
 
@@ -617,19 +616,19 @@ public abstract class LinReg extends FunDefBase {
 		public double evaluateDouble(Evaluator evaluator) {
             Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
-                return FunUtil.DoubleNull;
+                return FunUtil.DOUBLE_NULL;
             }
             switch (regType) {
-            case Intercept:
+            case INTERCEPT:
                 return value.getIntercept();
-            case Slope:
+            case SLOPE:
                 return value.getSlope();
-            case Variance:
+            case VARIANCE:
                 return value.getVariance();
             case R2:
                 return value.getRSquared();
             default:
-            case Point:
+            case POINT:
                 throw Util.newInternal("unexpected value " + regType);
             }
         }

@@ -87,24 +87,24 @@ public class FunUtil extends Util {
    * Special value which indicates that a {@code double} computation has returned the MDX null value. See {@link
    * DoubleCalc}.
    */
-  public static final double DoubleNull = 0.000000012345;
+  public static final double DOUBLE_NULL = 0.000000012345;
 
   /**
    * Special value which indicates that a {@code double} computation has returned the MDX EMPTY value. See {@link
    * DoubleCalc}.
    */
-  public static final double DoubleEmpty = -0.000000012345;
+  public static final double DOUBLE_EMPTY = -0.000000012345;
 
   /**
    * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
    * mondrian.calc.IntegerCalc}.
    */
-  public static final int IntegerNull = Integer.MIN_VALUE + 1;
+  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
 
   /**
    * Null value in three-valued boolean logic. Actually, a placeholder until we actually implement 3VL.
    */
-  public static final boolean BooleanNull = false;
+  public static final boolean BOOLEAN_NULL = false;
 
   /**
    * Creates an exception which indicates that an error has occurred while executing a given function.
@@ -319,11 +319,10 @@ public class FunUtil extends Util {
   static List<Member> addMembers(
     final SchemaReader schemaReader,
     final List<Member> members,
-    final Hierarchy hierarchy,
-    final Evaluator evaluator ) {
+    final Hierarchy hierarchy) {
     // only add accessible levels
     for ( Level level : schemaReader.getHierarchyLevels( hierarchy ) ) {
-      FunUtil.addMembers( schemaReader, members, level, evaluator );
+      FunUtil.addMembers( schemaReader, members, level );
     }
     return members;
   }
@@ -331,8 +330,7 @@ public class FunUtil extends Util {
   static List<Member> addMembers(
     SchemaReader schemaReader,
     List<Member> members,
-    Level level,
-    Evaluator evaluator) {
+    Level level) {
     List<Member> levelMembers = schemaReader.getLevelMembers( level, true );
     members.addAll( levelMembers );
     return members;
@@ -430,13 +428,13 @@ public class FunUtil extends Util {
       }
     } else if ( d1 == d2 ) {
       return 0;
-    } else if ( d1 == FunUtil.DoubleNull ) {
+    } else if ( d1 == FunUtil.DOUBLE_NULL) {
       if ( d2 == Double.NEGATIVE_INFINITY ) {
         return 1;
       } else {
         return -1;
       }
-    } else if ( d2 == FunUtil.DoubleNull ) {
+    } else if ( d2 == FunUtil.DOUBLE_NULL) {
       if ( d1 == Double.NEGATIVE_INFINITY ) {
         return -1;
       } else {
@@ -519,7 +517,7 @@ public class FunUtil extends Util {
         double d = ( (Number) o ).doubleValue();
         mapMemberToValue.put(
           key,
-          d / total * (double) 100 );
+            total == 0 ? 0 :d / total * (double) 100 );
       }
     }
   }
@@ -684,19 +682,19 @@ public class FunUtil extends Util {
   }
 
   /**
-   * Converts a double (primitive) value to a Double. {@link #DoubleNull} becomes null.
+   * Converts a double (primitive) value to a Double. {@link #DOUBLE_NULL} becomes null.
    */
   public static Double box( double d ) {
-    return d == FunUtil.DoubleNull
+    return d == FunUtil.DOUBLE_NULL
       ? null
       : d;
   }
 
   /**
-   * Converts an int (primitive) value to an Integer. {@link #IntegerNull} becomes null.
+   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
    */
   public static Integer box( int n ) {
-    return n == FunUtil.IntegerNull
+    return n == FunUtil.INTEGER_NULL
       ? null
       : n;
   }
@@ -710,7 +708,7 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return FunUtil.DoubleNull;
+      return FunUtil.DOUBLE_NULL;
     }
     double[] asArray = new double[ sw.v.size() ];
     for ( int i = 0; i < asArray.length; i++ ) {
@@ -781,7 +779,7 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return FunUtil.DoubleNull;
+      return FunUtil.DOUBLE_NULL;
     }
 
     double[] asArray = new double[ sw.v.size() ];
@@ -980,7 +978,7 @@ public class FunUtil extends Util {
     TupleList members,
     Calc exp ) {
     double d = FunUtil.sumDouble( evaluator, members, exp );
-    return d == FunUtil.DoubleNull ? Util.nullValue : new Double( d );
+    return d == FunUtil.DOUBLE_NULL ? Util.nullValue : new Double( d );
   }
 
   public static double sumDouble(
@@ -991,7 +989,7 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return FunUtil.DoubleNull;
+      return FunUtil.DOUBLE_NULL;
     } else {
       double sum = 0.0;
       for ( int i = 0; i < sw.v.size(); i++ ) {
@@ -1009,7 +1007,7 @@ public class FunUtil extends Util {
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return FunUtil.DoubleNull;
+      return FunUtil.DOUBLE_NULL;
     } else {
       double sum = 0.0;
       for ( int i = 0; i < sw.v.size(); i++ ) {
@@ -1124,7 +1122,7 @@ public class FunUtil extends Util {
         DoubleCalc calc = calcs[ i ];
         SetWrapper retval = retvals[ i ];
         double o = calc.evaluateDouble( evaluator );
-        if ( o == FunUtil.DoubleNull ) {
+        if ( o == FunUtil.DOUBLE_NULL) {
           retval.nullCount++;
           retval.v.add( null );
         } else {
@@ -1693,8 +1691,7 @@ public class FunUtil extends Util {
       final List<Member> memberList1 = FunUtil.addMembers(
         evaluator.getSchemaReader(),
         new ConcatenableList<>(),
-        hierarchy,
-        evaluator );
+        hierarchy);
       if ( includeCalcMembers ) {
         memberList.addAll( memberList1 );
       } else {

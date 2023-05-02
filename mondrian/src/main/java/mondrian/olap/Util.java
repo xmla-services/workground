@@ -137,8 +137,8 @@ import mondrian.util.Pair;
 import mondrian.util.UtilCompatible;
 import mondrian.util.UtilCompatibleJdk16;
 
-import static mondrian.olap.fun.FunUtil.DoubleEmpty;
-import static mondrian.olap.fun.FunUtil.DoubleNull;
+import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
+import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
 
 /**
  * Utility functions used throughout mondrian. All methods are static.
@@ -155,12 +155,12 @@ public class Util extends XOMUtil {
     /**
      * Placeholder which indicates a value NULL.
      */
-    public static final Object nullValue = Double.valueOf(DoubleNull);
+    public static final Object nullValue = Double.valueOf(DOUBLE_NULL);
 
     /**
      * Placeholder which indicates an EMPTY value.
      */
-    public static final Object EmptyValue = Double.valueOf(DoubleEmpty);
+    public static final Object EmptyValue = Double.valueOf(DOUBLE_EMPTY);
 
     /**
      * Cumulative time spent accessing the database.

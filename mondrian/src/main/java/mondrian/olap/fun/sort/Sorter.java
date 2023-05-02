@@ -12,8 +12,8 @@
 package mondrian.olap.fun.sort;
 
 import static mondrian.olap.Util.newInternal;
-import static mondrian.olap.fun.FunUtil.DoubleNull;
-import static mondrian.olap.fun.FunUtil.IntegerNull;
+import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
+import static mondrian.olap.fun.FunUtil.INTEGER_NULL;
 import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.util.AbstractList;
@@ -570,13 +570,13 @@ public class Sorter {
       }
     } else if ( d1 == d2 ) {
       return 0;
-    } else if ( d1 == DoubleNull ) {
+    } else if ( d1 == DOUBLE_NULL) {
       if ( d2 == Double.NEGATIVE_INFINITY ) {
         return 1;
       } else {
         return -1;
       }
-    } else if ( d2 == DoubleNull ) {
+    } else if ( d2 == DOUBLE_NULL) {
       if ( d1 == Double.NEGATIVE_INFINITY ) {
         return -1;
       } else {
@@ -641,7 +641,7 @@ public class Sorter {
    * Converts a double (primitive) value to a Double. DoubleNull becomes null.
    */
   public static Double box( double d ) {
-    return d == DoubleNull
+    return d == DOUBLE_NULL
       ? null
       : d;
   }
@@ -650,7 +650,7 @@ public class Sorter {
    * Converts an int (primitive) value to an Integer. IntegerNull becomes null.
    */
   public static Integer box( int n ) {
-    return n == IntegerNull
+    return n == INTEGER_NULL
       ? null
       : n;
   }

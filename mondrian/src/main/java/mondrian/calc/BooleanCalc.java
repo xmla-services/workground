@@ -24,7 +24,7 @@ public interface BooleanCalc extends Calc {
     /**
      * Evaluates this expression to yield a <code>boolean</code> value.
      * If the result is null, returns the special
-     * {@link mondrian.olap.fun.FunUtil#BooleanNull} value.
+     * {@link mondrian.olap.fun.FunUtil#BOOLEAN_NULL} value.
      *
      * @param evaluator Evaluation context
      * @return evaluation result

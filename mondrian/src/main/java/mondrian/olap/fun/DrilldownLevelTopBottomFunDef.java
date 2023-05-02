@@ -124,7 +124,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 
         TupleList list = listCalc.evaluateList( evaluator );
         int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == FunUtil.IntegerNull || n <= 0 ) {
+        if ( n == FunUtil.INTEGER_NULL || n <= 0 ) {
           return list;
         }
         Level level;

@@ -11,6 +11,8 @@ package mondrian.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;
@@ -49,7 +51,7 @@ class MondrianServerTest {
         final MondrianServer server =
             MondrianServer.forConnection(context.createConnection());
         final int id = server.getId();
-        assertNotNull(id);
+        assertNotSame(0, id);
         server.shutdown();
     }
 
@@ -63,7 +65,7 @@ class MondrianServerTest {
                 new StringRepositoryContentFinder("foo bar"),
                 null);
         final int id = server.getId();
-        assertNotNull(id);
+        assertNotSame(0, id);
         server.shutdown();
     }
 
@@ -81,7 +83,7 @@ class MondrianServerTest {
                     "inline:" + xmlaTestContext.getDataSourcesString(context)),
                 null);
         final int id = server.getId();
-        assertNotNull(id);
+        assertNotSame(0, id);
         java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));
         OlapConnection connection =
             server.getConnection("FoodMart", "FoodMart", null);
@@ -120,7 +122,7 @@ class MondrianServerTest {
                     "inline:" + xmlaTestContext.getDataSourcesString(context)),
                 null);
         final int id = server.getId();
-        assertNotNull(id);
+        assertNotSame(0, id);
         java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));
         OlapConnection connection =
             server.getConnection("FoodMart", "FoodMart", null);

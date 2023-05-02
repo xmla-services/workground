@@ -76,7 +76,7 @@ public class CastFunDef extends FunDefBase {
         final Type targetType)
     {
         if (o == null) {
-            return FunUtil.IntegerNull;
+            return FunUtil.INTEGER_NULL;
         }
         if (o instanceof String str) {
             return Integer.parseInt(str);
@@ -89,7 +89,7 @@ public class CastFunDef extends FunDefBase {
 
     private static double toDouble(Object o, final Type targetType) {
         if (o == null) {
-            return FunUtil.DoubleNull;
+            return FunUtil.DOUBLE_NULL;
         }
         if (o instanceof String str) {
             return Double.valueOf(str);
@@ -102,7 +102,7 @@ public class CastFunDef extends FunDefBase {
 
     public static boolean toBoolean(Object o, final Type targetType) {
         if (o == null) {
-            return FunUtil.BooleanNull;
+            return FunUtil.BOOLEAN_NULL;
         }
         if (o instanceof Boolean bool) {
             return bool;

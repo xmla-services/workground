@@ -68,7 +68,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         super(name,type, calcs);
     }
 
-  
+
 
 	@Override
     public Member[] evaluateTuple(Evaluator evaluator) {
@@ -122,7 +122,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         try {
             final Number number = (Number) o;
             return number == null
-                    ? FunUtil.IntegerNull
+                    ? FunUtil.INTEGER_NULL
                             : number.intValue();
         } catch (final ClassCastException e) {
             throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
@@ -142,7 +142,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 
     public static double numberToDouble(Number number) {
         return number == null
-                ? FunUtil.DoubleNull
+                ? FunUtil.DOUBLE_NULL
                         : number.doubleValue();
     }
 

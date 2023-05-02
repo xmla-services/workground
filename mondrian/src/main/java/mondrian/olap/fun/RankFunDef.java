@@ -127,7 +127,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // the result is null (even if the list is null).
         final Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -172,7 +172,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // the result is null (even if the list is null).
         final Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
         // Get the set of members/tuples.
         // If the list is empty, MSAS cannot figure out the type of the
@@ -213,7 +213,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       try {
         Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -227,7 +227,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
 
         // First try to find the member in the cached SortResult
@@ -299,7 +299,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       try {
         Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
 
         // Evaluate the list (or retrieve from cache).
@@ -311,7 +311,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.IntegerNull;
+          return FunUtil.INTEGER_NULL;
         }
 
         // First try to find the member in the cached SortResult

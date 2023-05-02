@@ -24,7 +24,7 @@ public interface IntegerCalc extends Calc {
     /**
      * Evaluates this expression to yield an <code>int</code> value.
      * If the result is null, returns the special
-     * {@link mondrian.olap.fun.FunUtil#IntegerNull} value.
+     * {@link mondrian.olap.fun.FunUtil#INTEGER_NULL} value.
      *
      * @param evaluator Evaluation context
      * @return evaluation result

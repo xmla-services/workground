@@ -104,7 +104,7 @@ public class Property extends EnumeratedValues.BasicValue {
      * Map of upper-case names to property definitions, for case-insensitive
      * match. Also contains synonyms.
      */
-    public static final Map<String, Property> mapUpperNameToProperties =
+    protected static final Map<String, Property> mapUpperNameToProperties =
         new HashMap<>();
 
     public static final int FORMAT_EXP_PARSED_ORDINAL = 0;
@@ -160,7 +160,7 @@ public class Property extends EnumeratedValues.BasicValue {
      * @deprecated Property is not used and will be removed in mondrian-4.0;
      * use {@link mondrian.olap.SchemaReader#getParentChildContributingChildren}
      */
-    @Deprecated
+    @Deprecated(since = "Property is not used and will be removed in mondrian-4.0")
 	public static final Property CONTRIBUTING_CHILDREN =
         new Property(
             "$contributingChildren", Datatype.TYPE_OTHER,

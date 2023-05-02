@@ -908,7 +908,7 @@ public class Vba {
             }
         }
 
-        double ratio =
+        double ratio = (fiNPV * (1 + financeRate)) == 0 ? 0 :
             (- reNPV * Math.pow(1 + reinvestRate, valueArray.length))
             / (fiNPV * (1 + financeRate));
 
@@ -2002,7 +2002,8 @@ public class Vba {
         "Returns a Variant (String) containing a copy of a specified string "
         + "without leading spaces.")
     public static String lTrim(String string) {
-        int i = 0, n = string.length();
+        int i = 0;
+        int n = string.length();
         while (i < n) {
             if (string.charAt(i) > ' ') {
                 break;

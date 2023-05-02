@@ -51,7 +51,7 @@ class SortTest {
     // equal to NaN; and less than Double.POSITIVE_INFINITY.
     double[] values = {
       Double.NEGATIVE_INFINITY,
-      FunUtil.DoubleNull,
+      FunUtil.DOUBLE_NULL,
       -34.5,
       -0.001,
       0,

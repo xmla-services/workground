@@ -14,6 +14,7 @@ import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -32,7 +33,7 @@ abstract class AbstractSegmentBody implements SegmentBody {
     protected final SortedSet<Comparable>[] axisValueSets;
     private final boolean[] nullAxisFlags;
 
-    public AbstractSegmentBody(
+    protected AbstractSegmentBody(
         List<Pair<SortedSet<Comparable>, Boolean>> axes)
     {
         super();
@@ -133,6 +134,9 @@ abstract class AbstractSegmentBody implements SegmentBody {
 
         @Override
 		public Map.Entry<CellKey, Object> next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             Pair<CellKey, Object> o =
                 Pair.of(CellKey.Generator.newCellKey(ordinals), next);
             moveToNext();

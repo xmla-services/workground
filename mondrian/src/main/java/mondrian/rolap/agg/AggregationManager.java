@@ -258,7 +258,7 @@ public class AggregationManager extends RolapAggregationManager {
 
         // Check if using aggregates is enabled.
         boolean hasCompoundPredicates = false;
-        if (compoundPredicateList != null && compoundPredicateList.size() > 0) {
+        if (compoundPredicateList != null && !compoundPredicateList.isEmpty()) {
             // Do not use Aggregate tables if compound predicates are present.
             hasCompoundPredicates = true;
         }
