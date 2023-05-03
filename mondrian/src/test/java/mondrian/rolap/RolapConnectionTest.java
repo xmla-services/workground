@@ -99,10 +99,9 @@ class RolapConnectionTest {
         final String desc = buf.toString();
         assertTrue(desc.startsWith("Jdbc="));
 
-        Connection connection;
+        Connection connection = null;
         try {
             connection = dataSource.getConnection();
-            connection.close();
             fail("Expected exception");
         } catch (SQLException e) {
             if (e.getClass().getName().equals(
@@ -122,6 +121,9 @@ class RolapConnectionTest {
         } catch (IllegalArgumentException e) {
             handleIllegalArgumentException(properties, e);
         } finally {
+            if (connection != null) {
+                connection.close();
+            }
             RolapConnectionPool.instance().clearPool();
         }
     }

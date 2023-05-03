@@ -551,8 +551,8 @@ public abstract class LinReg extends FunDefBase {
             sumXY += x * y;
         }
 
-        double xMean = sumX / n;
-        double yMean = sumY / n;
+        double xMean = n == 0 ? 0 : sumX / n;
+        double yMean = n == 0 ? 0 : sumY / n;
 
         LinReg.debug("LinReg.linearReg", "yMean=" + yMean);
         LinReg.debug(

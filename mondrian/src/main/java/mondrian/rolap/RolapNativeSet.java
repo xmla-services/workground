@@ -136,8 +136,8 @@ public abstract class RolapNativeSet extends RolapNative {
      * produce that set through the native sql and instead will simply enumerate through the members in the set
      */
     protected boolean canApplyCrossJoinArgConstraint( CrossJoinArg arg ) {
-      return !( arg instanceof MemberListCrossJoinArg )
-        || !( (MemberListCrossJoinArg) arg ).hasCalcMembers();
+      return !( arg instanceof MemberListCrossJoinArg memberListCrossJoinArg)
+        || !memberListCrossJoinArg.hasCalcMembers();
     }
 
     private boolean levelIsOnBaseCube(
@@ -186,9 +186,9 @@ public abstract class RolapNativeSet extends RolapNative {
       SchemaReader schemaReader,
       TupleConstraint constraint ) {
       this.args = args;
-      if ( schemaReader instanceof SchemaReaderWithMemberReaderAvailable ) {
+      if ( schemaReader instanceof SchemaReaderWithMemberReaderAvailable schemaReaderWithMemberReaderAvailable ) {
         this.schemaReader =
-          (SchemaReaderWithMemberReaderAvailable) schemaReader;
+            schemaReaderWithMemberReaderAvailable;
       } else {
         this.schemaReader =
           new SchemaReaderWithMemberReaderCache( schemaReader );
@@ -215,8 +215,7 @@ public abstract class RolapNativeSet extends RolapNative {
             return executeList(
               new SqlTupleReader( constraint ) );
           }
-        case MUTABLE_LIST:
-        case LIST:
+        case MUTABLE_LIST, LIST:
           return executeList( new SqlTupleReader( constraint ) );
         default:
           throw ResultStyleException.generate(
@@ -303,8 +302,8 @@ public abstract class RolapNativeSet extends RolapNative {
         SqlTupleReader str = new SqlTupleReader(
           new MemberExcludeConstraint(
             list, l,
-            constraint instanceof SetConstraint
-              ? (SetConstraint) constraint : null ) );
+            constraint instanceof SetConstraint setConstraint
+              ? setConstraint : null ) );
         str.setAllowHints( false );
         for ( CrossJoinArg arg : args ) {
           addLevel( str, arg );
@@ -313,7 +312,7 @@ public abstract class RolapNativeSet extends RolapNative {
         str.setMaxRows( maxRows - result.size() );
         result.addAll(
           str.readMembers(
-            context, null, new ArrayList<List<RolapMember>>() ) );
+            context, null, new ArrayList<>() ) );
       }
 
       if ( !MondrianProperties.instance().DisableCaching.get() ) {
@@ -346,7 +345,7 @@ public abstract class RolapNativeSet extends RolapNative {
     }
 
     private boolean needsFiltering( TupleList tupleList ) {
-      return tupleList.size() > 0
+      return !tupleList.isEmpty()
         && exists( tupleList.get( 0 ), needsFilterPredicate() );
     }
 
@@ -362,8 +361,8 @@ public abstract class RolapNativeSet extends RolapNative {
     }
 
     private boolean isRaggedLevel( Level level ) {
-      if ( level instanceof RolapLevel ) {
-        return ( (RolapLevel) level ).getHideMemberCondition()
+      if ( level instanceof RolapLevel rolapLevel) {
+        return rolapLevel.getHideMemberCondition()
           != RolapLevel.HideMemberCondition.Never;
       }
       // don't know if it's ragged, so assume it is.
@@ -433,8 +432,8 @@ public abstract class RolapNativeSet extends RolapNative {
       MemberBuilder mb = mr.getMemberBuilder();
       Util.assertTrue( mb != null, "MemberBuilder not found" );
 
-      if ( arg instanceof MemberListCrossJoinArg
-        && ( (MemberListCrossJoinArg) arg ).hasCalcMembers() ) {
+      if ( arg instanceof MemberListCrossJoinArg memberListCrossJoinArg
+        && memberListCrossJoinArg.hasCalcMembers() ) {
         // only need to keep track of the members in the case
         // where there are calculated members since in that case,
         // we produce the values by enumerating through the list
@@ -555,14 +554,8 @@ public abstract class RolapNativeSet extends RolapNative {
 
     @Override
 	public synchronized MemberReader getMemberReader( Hierarchy hierarchy ) {
-      MemberReader memberReader = hierarchyReaders.get( hierarchy );
-      if ( memberReader == null ) {
-        memberReader =
-          ( (RolapHierarchy) hierarchy ).createMemberReader(
-            schemaReader.getRole() );
-        hierarchyReaders.put( hierarchy, memberReader );
-      }
-      return memberReader;
+      return hierarchyReaders.computeIfAbsent(hierarchy,
+          k -> ( (RolapHierarchy) hierarchy ).createMemberReader(schemaReader.getRole() ));
     }
 
     @Override

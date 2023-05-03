@@ -90,10 +90,8 @@ public class SqlContextConstraint
             return false;
         }
         RolapCube cube = (RolapCube) context.getCube();
-        if (disallowVirtualCube) {
-            if (cube.isVirtual()) {
-                return false;
-            }
+        if (disallowVirtualCube && cube.isVirtual()) {
+            return false;
         }
         if (cube.isVirtual()) {
             Query query = context.getQuery();
@@ -102,7 +100,9 @@ public class SqlContextConstraint
             if (!findVirtualCubeBaseCubes(query, baseCubes, baseCubeList)) {
                 return false;
             }
-            assert levels != null;
+            if (levels == null) {
+                throw new IllegalArgumentException("levels should not be null");
+            }
             query.setBaseCubes(baseCubeList);
         }
 
@@ -159,17 +159,15 @@ public class SqlContextConstraint
                 dimension.getHierarchy().getDefaultMember());
         }
         for (Member member : query.getMeasuresMembers()) {
-            if (member instanceof RolapStoredMeasure) {
+            if (member instanceof RolapStoredMeasure rolapStoredMeasure) {
                 addMeasure(
-                    (RolapStoredMeasure) member, baseCubes, baseCubeList);
+                    rolapStoredMeasure, baseCubes, baseCubeList);
             } else if (member instanceof RolapCalculatedMember) {
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
         }
-        if (baseCubes.isEmpty()) {
-            return false;
-        }
-        return true;
+
+        return !baseCubes.isEmpty();
     }
 
     /**
@@ -202,9 +200,9 @@ public class SqlContextConstraint
     {
         if (exp instanceof MemberExpr memberExpr) {
             Member member = memberExpr.getMember();
-            if (member instanceof RolapStoredMeasure) {
+            if (member instanceof RolapStoredMeasure rolapStoredMeasure) {
                 addMeasure(
-                    (RolapStoredMeasure) member, baseCubes, baseCubeList);
+                    rolapStoredMeasure, baseCubes, baseCubeList);
             } else if (member instanceof RolapCalculatedMember) {
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
@@ -359,7 +357,7 @@ public class SqlContextConstraint
             return;
         }
         SqlConstraintUtils.joinLevelTableToFactTable(
-            sqlQuery, baseCube, aggStar, evaluator, (RolapCubeLevel)level);
+            sqlQuery, baseCube, aggStar, (RolapCubeLevel)level);
     }
 
     @Override

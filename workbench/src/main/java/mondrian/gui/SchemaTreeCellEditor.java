@@ -58,7 +58,7 @@ public class SchemaTreeCellEditor
     {
         if (value instanceof MondrianGuiDef.RelationOrJoin) {
             String valueClass = value.getClass().getName();
-            String simpleName[] = valueClass.split("[$.]", 0);
+            String[] simpleName = valueClass.split("[$.]", 0);
 
             return super.getTreeCellEditorComponent(
                 tree,
@@ -118,21 +118,18 @@ public class SchemaTreeCellEditor
             TreePath parentpath = tpath.getParentPath();
             if (parentpath != null) {
                 Object parent = parentpath.getLastPathComponent();
-                if (parent instanceof MondrianGuiDef.Hierarchy) {
-                    ((MondrianGuiDef.Hierarchy) parent).relation = relationObj;
-                } else if (parent instanceof MondrianGuiDef.Closure) {
-                    ((MondrianGuiDef.Closure) parent).table =
+                if (parent instanceof MondrianGuiDef.Hierarchy hierarchy) {
+                    hierarchy.relation = relationObj;
+                } else if (parent instanceof MondrianGuiDef.Closure closure) {
+                    closure.table =
                         (MondrianGuiDef.Table)relationObj;
-                } else if (parent instanceof MondrianGuiDef.Join) {
+                } else if (parent instanceof MondrianGuiDef.Join join) {
                     int indexOfChild =
                         tree.getModel().getIndexOfChild(parent, value);
-                    switch (indexOfChild) {
-                    case 0:
-                        ((MondrianGuiDef.Join) parent).left = relationObj;
-                        break;
-                    case 1:
-                        ((MondrianGuiDef.Join) parent).right = relationObj;
-                        break;
+                    if (indexOfChild == 0) {
+                        join.left = relationObj;
+                    } else if (indexOfChild == 1) {
+                        join.right = relationObj;
                     }
                 }
                 tree.setSelectionPath(
