@@ -79,6 +79,8 @@ import mondrian.olap.type.Type;
  */
 public class BuiltinFunTable extends FunTableImpl {
 
+    public static final String LEVELS = "Levels";
+    public static final String MEMBERS = "Members";
     /** the singleton */
     private static BuiltinFunTable instance;
 
@@ -157,7 +159,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // "<Hierarchy>.Levels(<Numeric Expression>)"
         builder.define(
             new FunDefBase(
-                "Levels",
+                LEVELS,
                 "Returns the level whose position in a hierarchy is specified by a numeric expression.",
                 "mlhn")
         {
@@ -201,7 +203,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // "<Hierarchy>.Levels(<String Expression>)"
         builder.define(
             new FunDefBase(
-                "Levels",
+                LEVELS,
                 "Returns the level whose name is specified by a string expression.",
                 "mlhS")
         {
@@ -243,7 +245,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // "Levels(<String Expression>)"
         builder.define(
             new FunDefBase(
-                "Levels",
+                LEVELS,
                 "Returns the level whose name is specified by a string expression.",
                 "flS")
         {
@@ -280,8 +282,8 @@ public class BuiltinFunTable extends FunTableImpl {
                     // brackets, so don't even try
                     : null;
 
-                if (o instanceof Level) {
-                    return (Level) o;
+                if (o instanceof Level level) {
+                    return level;
                 } else if (o == null) {
                     throw FunUtil.newEvalException(this, new StringBuilder("Level '").append(s).append("' not found").toString());
                 } else {
@@ -420,7 +422,7 @@ public class BuiltinFunTable extends FunTableImpl {
             Member firstChild(Evaluator evaluator, Member member) {
                 List<Member> children = evaluator.getSchemaReader()
                         .getMemberChildren(member);
-                return (children.size() == 0)
+                return (children.isEmpty())
                         ? member.getHierarchy().getNullMember()
                         : children.get(0);
             }
@@ -490,7 +492,7 @@ public class BuiltinFunTable extends FunTableImpl {
             Member lastChild(Evaluator evaluator, Member member) {
                 List<Member> children =
                         evaluator.getSchemaReader().getMemberChildren(member);
-                return (children.size() == 0)
+                return (children.isEmpty())
                         ? member.getHierarchy().getNullMember()
                         : children.get(children.size() - 1);
             }
@@ -539,7 +541,7 @@ public class BuiltinFunTable extends FunTableImpl {
         // Members(<String Expression>)
         builder.define(
             new FunDefBase(
-                "Members",
+                MEMBERS,
                 "Returns the member whose name is specified by a string expression.",
                 "fmS")
         {
@@ -713,11 +715,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         }
                         final int savepoint = evaluator.savepoint();
                         try {
-                            final Object o = rollup.aggregate(
+                            return rollup.aggregate(
                                 evaluator,
                                 new UnaryTupleList(members),
                                 valueFunCall);
-                            return o;
                         } finally {
                             evaluator.restore(savepoint);
                         }
@@ -832,8 +833,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final int savepoint = evaluator.savepoint();
                         evaluator.setContext(member);
                         try {
-                            Object value = evaluator.evaluateCurrent();
-                            return value;
+                            return evaluator.evaluateCurrent();
                         } finally {
                             evaluator.restore(savepoint);
                         }
@@ -844,12 +844,8 @@ public class BuiltinFunTable extends FunTableImpl {
                         if (super.dependsOn(hierarchy)) {
                             return true;
                         }
-                        if (memberCalc.getType().usesHierarchy(
-                                hierarchy, true))
-                        {
-                            return false;
-                        }
-                        return true;
+                        return (!(memberCalc.getType().usesHierarchy(
+                                hierarchy, true)));
                     }
                     @Override
 					public Calc[] getCalcs() {
@@ -1030,14 +1026,14 @@ public class BuiltinFunTable extends FunTableImpl {
         // <Dimension>.Members is really just shorthand for <Hierarchy>.Members
         builder.define(
             new FunInfo(
-                "Members",
+                MEMBERS,
                 "Returns the set of members in a dimension.",
                 "pxd"));
 
         // <Hierarchy>.Members
         builder.define(
             new FunDefBase(
-                "Members",
+                MEMBERS,
                 "Returns the set of members in a hierarchy.",
                 "pxh")
         {

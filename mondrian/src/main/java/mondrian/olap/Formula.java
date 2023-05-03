@@ -122,7 +122,7 @@ public class Formula extends QueryPart {
     void accept(Validator validator) {
         final boolean scalar = isMember;
         exp = validator.validate(exp, scalar);
-        String id = this.id.toString();
+        String idInner = this.id.toString();
         final Type type = exp.getType();
         if (isMember) {
             if (!TypeUtil.canEvaluate(type)) {
@@ -131,7 +131,7 @@ public class Formula extends QueryPart {
             }
         } else {
             if (!TypeUtil.isSet(type)) {
-                throw MondrianResource.instance().MdxSetExpNotSet.ex(id);
+                throw MondrianResource.instance().MdxSetExpNotSet.ex(idInner);
             }
         }
         for (MemberProperty memberProperty : memberProperties) {
@@ -171,9 +171,9 @@ public class Formula extends QueryPart {
                 {
                     continue; // we already dealt with format_string props
                 }
-                final Exp exp = memberProperty.getExp();
-                if (exp instanceof Literal) {
-                    String value = String.valueOf(((Literal) exp).getValue());
+                final Exp expInner = memberProperty.getExp();
+                if (expInner instanceof Literal literal) {
+                    String value = String.valueOf(literal.getValue());
                     mdxMember.setProperty(memberProperty.getName(), value);
                 }
             }
@@ -217,8 +217,8 @@ public class Formula extends QueryPart {
                     // this part of the name was not found... define it
                     Level level;
                     Member parentMember = null;
-                    if (parent instanceof Member) {
-                        parentMember = (Member) parent;
+                    if (parent instanceof Member member) {
+                        parentMember = member;
                         level = parentMember.getLevel().getChildLevel();
                         if (level == null) {
                             throw Util.newError(
@@ -259,11 +259,11 @@ public class Formula extends QueryPart {
                                 .append("' calculated member cannot be used as a parent")
                                 .append(" of another calculated member.").toString());
                     }
-                    Member mdxMember =
+                    Member mdxMemberInner =
                         level.getHierarchy().createMember(
                             parentMember, level, segment.getName(), this);
-                    assert mdxMember != null;
-                    mdxElement = mdxMember;
+                    assert mdxMemberInner != null;
+                    mdxElement = mdxMemberInner;
                 }
             }
             this.mdxMember = (Member) mdxElement;
@@ -438,9 +438,9 @@ public class Formula extends QueryPart {
      *   value is not an integer, or its value is not a constant.
      */
     private Number getIntegerMemberProperty(String name) {
-        Exp exp = getMemberProperty(name);
-        if (exp != null && exp.getType() instanceof NumericType) {
-            return quickEval(exp);
+        Exp expInner = getMemberProperty(name);
+        if (expInner != null && expInner.getType() instanceof NumericType) {
+            return quickEval(expInner);
         }
         return null;
     }
@@ -454,16 +454,15 @@ public class Formula extends QueryPart {
     private static Number quickEval(Exp exp) {
         if (exp instanceof Literal literal) {
             final Object value = literal.getValue();
-            if (value instanceof Number) {
-                return (Number) value;
+            if (value instanceof Number number) {
+                return number;
             } else {
                 return null;
             }
         }
-        if (exp instanceof FunCall call) {
-            if (call.getFunName().equals("-")
-                && call.getSyntax() == Syntax.Prefix)
-            {
+
+        if (exp instanceof FunCall call && call.getFunName().equals("-")
+                && call.getSyntax() == Syntax.Prefix) {
                 final Number number = quickEval(call.getArg(0));
                 if (number == null) {
                     return null;
@@ -472,7 +471,6 @@ public class Formula extends QueryPart {
                 } else {
                     return - number.doubleValue();
                 }
-            }
         }
         return null;
     }
@@ -497,8 +495,8 @@ public class Formula extends QueryPart {
         // Choose a format appropriate to the expression.
         // For now, only do it for decimals.
         final Type type = exp.getType();
-        if (type instanceof DecimalType) {
-            int scale = ((DecimalType) type).getScale();
+        if (type instanceof DecimalType decimalType) {
+            int scale = decimalType.getScale();
             String formatString = "#,##0";
             if (scale > 0) {
                 formatString = new StringBuilder(formatString).append(".").toString();
@@ -576,10 +574,10 @@ public class Formula extends QueryPart {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()
-                    && member instanceof RolapCalculatedMember
+                    && member instanceof RolapCalculatedMember rolapCalculatedMember
                     && !hasCyclicReference(memberExpr))
             {
-                Formula formula = ((RolapCalculatedMember) member).getFormula();
+                Formula formula = rolapCalculatedMember.getFormula();
                 formula.accept(validator);
                 returnFormula(member);
             }
@@ -625,8 +623,7 @@ public class Formula extends QueryPart {
         }
 
         private List<MemberExpr> cloneForEachBranch(List<MemberExpr> expList) {
-            ArrayList<MemberExpr> list = new ArrayList<>(expList);
-            return list;
+            return new ArrayList<>(expList);
         }
 
         private void returnFormula(Member member) {

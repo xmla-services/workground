@@ -67,15 +67,15 @@ public class ExpCacheDescriptor {
         this.exp = exp;
 
         // Compile expression.
-        Calc calc = compiler.compile(exp);
-        if (calc == null) {
+        Calc calcInner = compiler.compile(exp);
+        if (calcInner == null) {
             // now allow conversions
-            calc = compiler.compileAs(exp, null, ResultStyle.ANY_ONLY);
+            calcInner = compiler.compileAs(exp, null, ResultStyle.ANY_ONLY);
         }
-        this.calc = calc;
+        this.calc = calcInner;
 
         // Compute list of dependent dimensions.
-        computeDepends(calc, compiler.getEvaluator());
+        computeDepends(calcInner, compiler.getEvaluator());
     }
 
     private void computeDepends(Calc calc, Evaluator evaluator) {

@@ -37,9 +37,6 @@ public abstract class ExpBase
     protected ExpBase() {
     }
 
-    @Override
-	public abstract Exp cloneExp();
-
     public static void unparseList(
         PrintWriter pw,
         Exp[] exps,

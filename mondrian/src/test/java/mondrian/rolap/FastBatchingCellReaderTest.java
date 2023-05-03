@@ -11,6 +11,8 @@ package mondrian.rolap;
 import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
@@ -1587,22 +1589,26 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     // Test with double
     assertEquals( 3.5, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
     assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
+    List list  = Arrays.asList( dblSet3 );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
-      fail();
+      RolapAggregator.Sum.aggregate( list, Datatype.NUMERIC);
+      fail("Expected an AssertionError!");
     } catch ( AssertionError e ) {
-      // ok.
+      assertNotNull(e);
+      assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 4.6, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
     assertEquals( 5, RolapAggregator.Sum.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
     assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
+    List list1 = Arrays.asList( intSet3 );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
+      RolapAggregator.Sum.aggregate( list1, Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
-      // ok.
+        assertNotNull(e);
+        assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }
@@ -1626,22 +1632,26 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     // Test with double
     assertEquals( 0.0, RolapAggregator.Min.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
     assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
+    List list = Arrays.asList( dblSet3 );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
+      RolapAggregator.Min.aggregate( list, Datatype.NUMERIC);
       fail();
     } catch ( AssertionError e ) {
-      // ok.
+        assertNotNull(e);
+        assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 1.9, RolapAggregator.Min.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
     assertEquals( 0, RolapAggregator.Min.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
     assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
+    List list1 = Arrays.asList( intSet3 );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
+      RolapAggregator.Min.aggregate( list1, Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
-      // ok.
+        assertNotNull(e);
+        assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }
@@ -1667,22 +1677,26 @@ class FastBatchingCellReaderTest extends BatchTestCase{
     assertEquals( 2.4, RolapAggregator.Max.aggregate( Arrays.asList( dblSet1 ), Datatype.NUMERIC) );
     assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( dblSet2 ), Datatype.NUMERIC) );
     assertEquals( -1.2, RolapAggregator.Max.aggregate( Arrays.asList( dblSet5 ), Datatype.NUMERIC) );
+    List list = Arrays.asList( dblSet3 );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( dblSet3 ), Datatype.NUMERIC);
+      RolapAggregator.Max.aggregate( list, Datatype.NUMERIC);
       fail();
     } catch ( AssertionError e ) {
-      // ok.
+        assertNotNull(e);
+        assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 2.7, RolapAggregator.Max.aggregate( Arrays.asList( dblSet4 ), Datatype.NUMERIC) );
 
     // test with int
     assertEquals( 4, RolapAggregator.Max.aggregate( Arrays.asList( intSet1 ), Datatype.INTEGER) );
     assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( intSet2 ), Datatype.INTEGER) );
+    List list1 = Arrays.asList( intSet3 );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( intSet3 ), Datatype.INTEGER);
+      RolapAggregator.Max.aggregate( list1, Datatype.INTEGER);
       fail();
     } catch ( AssertionError e ) {
-      // ok.
+        assertNotNull(e);
+        assertInstanceOf(AssertionError.class, e);
     }
     assertEquals( 7, RolapAggregator.Max.aggregate( Arrays.asList( intSet4 ), Datatype.INTEGER) );
   }

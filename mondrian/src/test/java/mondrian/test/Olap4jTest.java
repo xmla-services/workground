@@ -339,10 +339,10 @@ class Olap4jTest {
 
         final OlapConnection connection =
                 context.createOlap4jConnection();
-
+        OlapStatement olapStatement = connection.createStatement();
         try {
             final CellSet cellSet =
-                connection.createStatement().executeOlapQuery(queryString);
+                olapStatement.executeOlapQuery(queryString);
             fail("expected exception, got " + cellSet);
         } catch (OlapException e) {
             assertEquals("ResourceLimitExceeded", e.getSQLState());
@@ -590,8 +590,8 @@ class Olap4jTest {
                     cellSet.close();
                 } catch (OlapException e) {
                     assertEquals(
-                        Arrays.toString(Util.convertStackToString(e)),
                         "Query canceled",
+                        Arrays.toString(Util.convertStackToString(e)),
                         e.getMessage());
                     cancelCount.incrementAndGet();
                 }

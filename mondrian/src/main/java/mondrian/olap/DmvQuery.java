@@ -37,15 +37,6 @@ public class DmvQuery extends QueryPart {
         this.whereExpression = whereExpression;
     }
 
-//    @Override
-//    public void unparse(PrintWriter pw) {
-//    }
-
-//    @Override
-//    public Object[] getChildren() {
-//        return new Object[] {};
-//    }
-
     public String getTableName() {
         return this.tableName;
     }

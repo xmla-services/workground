@@ -71,11 +71,13 @@ public class DimensionType implements Type {
 
     @Override
 	public Hierarchy getHierarchy() {
-        return dimension == null
-            ? null
-            : dimension.getHierarchies().length > 1
-            ? getHierarchyWithDefaultName()
-            : dimension.getHierarchies()[0];
+        if (dimension == null) {
+            return null;
+        } else {
+            return dimension.getHierarchies().length > 1
+                ? getHierarchyWithDefaultName()
+                : dimension.getHierarchies()[0];
+        }
     }
 
     private Hierarchy getHierarchyWithDefaultName() {

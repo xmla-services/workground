@@ -47,9 +47,9 @@ public class UnresolvedFunCall extends ExpBase implements FunCall {
      * Creates a function call.
      */
     public UnresolvedFunCall(String name, Syntax syntax, Exp[] args) {
-        assert name != null;
-        assert syntax != null;
-        assert args != null;
+        if (name == null || syntax == null || args == null) {
+            throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
+        }
         this.name = name;
         this.syntax = syntax;
         this.args = args;
@@ -178,6 +178,7 @@ public class UnresolvedFunCall extends ExpBase implements FunCall {
         return args.length;
     }
 
+    @SuppressWarnings("java:S4144") //we have getArgs method
     @Override
 	public Object[] getChildren() {
         return args;

@@ -131,8 +131,8 @@ public Type getResultType( Validator validator, Exp[] args ) {
       for ( Type elementType : tupleType.elementTypes ) {
         CrossJoinFunDef.addTypes( elementType, list );
       }
-    } else if ( type instanceof MemberType ) {
-      list.add( (MemberType) type );
+    } else if ( type instanceof MemberType memberType) {
+      list.add( memberType );
     } else {
       throw Util.newInternal( "Unexpected type: " + type );
     }
@@ -143,8 +143,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // What is the desired return type?
     for ( ResultStyle r : compiler.getAcceptableResultStyles() ) {
       switch ( r ) {
-        case ITERABLE:
-        case ANY:
+        case ITERABLE, ANY:
           // Consumer wants ITERABLE or ANY
           return compileCallIterable( call, compiler );
         case LIST:
@@ -546,11 +545,12 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
     try {
       final Object o = list.get( 0 );
-      if ( o instanceof Member ) {
+      if ( o instanceof Member member) {
         // Cannot optimize high cardinality dimensions
-        Dimension dimension = ( (Member) o ).getDimension();
+        Dimension dimension = member.getDimension();
         if ( dimension.isHighCardinality() ) {
-          CrossJoinFunDef.LOGGER.warn( MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() ) );
+          String msg = MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() );
+          CrossJoinFunDef.LOGGER.warn(msg);
           return list;
         }
       }
@@ -595,7 +595,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     long size = 1;
     int arity = 0;
     for ( TupleList list : lists ) {
-      size *= (long) list.size();
+      size *= list.size();
       arity += list.getArity();
     }
     if ( size == 0L ) {

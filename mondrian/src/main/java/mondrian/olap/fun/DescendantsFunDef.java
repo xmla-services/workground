@@ -55,9 +55,10 @@ import mondrian.resource.MondrianResource;
  */
 class DescendantsFunDef extends FunDefBase {
 
-  static final ReflectiveMultiResolver Resolver =
+    public static final String DESCENDANTS = "Descendants";
+    static final ReflectiveMultiResolver Resolver =
     new ReflectiveMultiResolver(
-      "Descendants",
+        DESCENDANTS,
       "Descendants(<Member>[, <Level>[, <Desc_flag>]])",
       "Returns the set of descendants of a member at a specified level, optionally including or excluding descendants"
         + " in other levels.",
@@ -67,7 +68,7 @@ class DescendantsFunDef extends FunDefBase {
 
   static final ReflectiveMultiResolver Resolver2 =
     new ReflectiveMultiResolver(
-      "Descendants",
+      DESCENDANTS,
       "Descendants(<Set>[, <Level>[, <Desc_flag>]])",
       "Returns the set of descendants of a set of members at a specified level, optionally including or excluding "
         + "descendants in other levels.",
@@ -112,7 +113,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
             new Exp[] {
               call.getArg( 0 ),
               new UnresolvedFunCall(
-                "Descendants",
+                DESCENDANTS,
                 descendantsArgs )
             } ),
           false );
@@ -371,7 +372,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           }
         }
         members = nextMembers;
-      } while ( members.size() > 0 );
+      } while ( !members.isEmpty() );
     } else {
       List<Member> fertileMembers = new ArrayList<>();
       do {
