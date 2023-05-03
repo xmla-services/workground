@@ -59,9 +59,9 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
      * @param returnType Return type
      */
     public ResolvedFunCall(FunDef funDef, Exp[] args, Type returnType) {
-        assert funDef != null;
-        assert args != null;
-        assert returnType != null;
+        if (funDef == null || args == null || returnType == null) {
+            throw new IllegalArgumentException("ResolvedFunCall params be not null");
+        }
         this.funDef = funDef;
         this.args = args;
         this.returnType = returnType;
@@ -125,6 +125,7 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
         return funDef.getSyntax();
     }
 
+    @SuppressWarnings("java:S4144")
     @Override
 	public Object[] getChildren() {
         return args;

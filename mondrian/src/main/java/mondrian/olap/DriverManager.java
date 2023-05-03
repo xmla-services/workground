@@ -26,7 +26,8 @@ import mondrian.spi.CatalogLocator;
  */
 public class DriverManager {
 
-    public DriverManager() {
+    private DriverManager() {
+        //constructor
     }
 
     /**
@@ -111,8 +112,6 @@ public class DriverManager {
                 RolapConnectionProperties.Catalog.name(),
                 locator.locate(catalog));
         }
-        final RolapConnection connection =
-            new RolapConnection(server, properties, context);
-        return connection;
+        return new RolapConnection(server, properties, context);
     }
 }

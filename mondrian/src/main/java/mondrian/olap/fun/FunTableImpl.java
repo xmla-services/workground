@@ -154,8 +154,8 @@ public abstract class FunTableImpl implements FunTable {
                 propertyWords.add(resolver.getName().toUpperCase());
             }
             resolverList.add(resolver);
-            final String[] reservedWords = resolver.getReservedWords();
-            for (String reservedWord : reservedWords) {
+            final String[] reservedWordsInner = resolver.getReservedWords();
+            for (String reservedWord : reservedWordsInner) {
                 defineReserved(reservedWord);
             }
         }
@@ -184,11 +184,7 @@ public abstract class FunTableImpl implements FunTable {
                     FunTableImpl.makeResolverKey(
                         resolver.getName(),
                         resolver.getSyntax());
-                List<Resolver> list = mapNameToResolvers.get(key);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    mapNameToResolvers.put(key, list);
-                }
+                List<Resolver> list = mapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
                 list.add(resolver);
                 if (list.size() == 2) {
                     nonSingletonResolverLists.add(list);
@@ -203,8 +199,8 @@ public abstract class FunTableImpl implements FunTable {
                         return o1.getSignature().compareTo(o2.getSignature());
                     }
                 };
-            for (List<Resolver> resolverList : nonSingletonResolverLists) {
-                Collections.sort(resolverList, comparator);
+            for (List<Resolver> resolverListInner : nonSingletonResolverLists) {
+                Collections.sort(resolverListInner, comparator);
             }
         }
     }

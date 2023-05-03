@@ -139,11 +139,11 @@ public class CubeAccess {
      * members. It has to be called  after all 'addSlicer()' calls.
      */
     public void normalizeCubeAccess() {
-        if (memberList.size() > 0) {
+        if (!memberList.isEmpty()) {
             limitedMembers = memberList.toArray(new Member[memberList.size()]);
             hasRestrictions = true;
         }
-        if (hierarchyList.size() > 0) {
+        if (!hierarchyList.isEmpty()) {
             noAccessHierarchies =
                 hierarchyList.toArray(
                     new Hierarchy[hierarchyList.size()]);
@@ -156,15 +156,15 @@ public class CubeAccess {
         if (!(object instanceof CubeAccess cubeAccess)) {
             return false;
         }
-        List<Hierarchy> hierarchyList = cubeAccess.getNoAccessHierarchyList();
+        List<Hierarchy> hierarchyListInner = cubeAccess.getNoAccessHierarchyList();
         List<Member> limitedMemberList = cubeAccess.getLimitedMemberList();
 
-        if ((this.hierarchyList.size() != hierarchyList.size())
+        if ((this.hierarchyList.size() != hierarchyListInner.size())
             || (this.memberList.size() != limitedMemberList.size()))
         {
             return false;
         }
-        for (Hierarchy o : hierarchyList) {
+        for (Hierarchy o : hierarchyListInner) {
             if (!this.hierarchyList.contains(o)) {
                 return false;
             }

@@ -46,8 +46,8 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
     public static final int MEMBER_UNIQUE_NAME = 8;
     public static final int MEMBER_CAPTION = 9;
     public static final int MEMBER_TYPE = 10;
-    public static final int Tree_Operator = 11;
-    public static final int maxNofConstraintsForAdSchemaMember = 12;
+    public static final int TREE_OPERATOR = 11;
+    public static final int MAX_NOF_CONSTRAINTS_FOR_AD_SCHEMA_MEMBER = 12;
     public static final int MDTREEOP_SELF = 0;
     public static final int MDTREEOP_CHILDREN = 1;
     public static final int MDPROP_USERDEFINED0 = 19;
@@ -122,9 +122,9 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
         for (Dimension dimension : dimensions) {
             Hierarchy[] hierarchies = dimension.getHierarchies();
             for (Hierarchy hierarchy : hierarchies) {
-                String name = unique
+                String nameInner = unique
                     ? hierarchy.getUniqueName() : hierarchy.getName();
-                if (name.equals(s.getName())) {
+                if (nameInner.equals(s.getName())) {
                     return hierarchy;
                 }
             }
@@ -143,18 +143,18 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
             return mdxDimension;
         }
 
-        final List<Dimension> dimensions = schemaReader.getCubeDimensions(this);
+        final List<Dimension> dimensionsInner = schemaReader.getCubeDimensions(this);
 
         // Look for hierarchies named '[dimension.hierarchy]'.
-        if (s instanceof Id.NameSegment) {
-            Hierarchy hierarchy = lookupHierarchy((Id.NameSegment)s, false);
+        if (s instanceof Id.NameSegment nameSegment) {
+            Hierarchy hierarchy = lookupHierarchy(nameSegment, false);
             if (hierarchy != null) {
                 return hierarchy;
             }
         }
 
         // Try hierarchies, levels and members.
-        for (Dimension dimension : dimensions) {
+        for (Dimension dimension : dimensionsInner) {
             OlapElement mdxElement = dimension.lookupChild(
                 schemaReader, s, matchType);
             if (mdxElement != null) {

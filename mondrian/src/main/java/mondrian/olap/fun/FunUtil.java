@@ -71,6 +71,7 @@ import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
+import org.olap4j.impl.IdentifierParser.Builder;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.
@@ -148,9 +149,7 @@ public class FunUtil extends Util {
 
   public static void checkIterListResultStyles( Calc calc ) {
     switch ( calc.getResultStyle() ) {
-      case ITERABLE:
-      case LIST:
-      case MUTABLE_LIST:
+      case ITERABLE, LIST, MUTABLE_LIST:
         break;
       default:
         throw ResultStyleException.generateBadType(
@@ -161,8 +160,7 @@ public class FunUtil extends Util {
 
   public static void checkListResultStyles( Calc calc ) {
     switch ( calc.getResultStyle() ) {
-      case LIST:
-      case MUTABLE_LIST:
+      case LIST, MUTABLE_LIST:
         break;
       default:
         throw ResultStyleException.generateBadType(
@@ -479,16 +477,16 @@ public class FunUtil extends Util {
       return -1; // null == -infinity
     } else if ( value1 == Util.nullValue ) {
       return 1; // null == -infinity
-    } else if ( value0 instanceof String ) {
-      return ( (String) value0 ).compareToIgnoreCase( (String) value1 );
-    } else if ( value0 instanceof Number ) {
+    } else if ( value0 instanceof String str) {
+      return str.compareToIgnoreCase( (String) value1 );
+    } else if ( value0 instanceof Number numberValue0) {
       return FunUtil.compareValues(
-        ( (Number) value0 ).doubleValue(),
+          numberValue0.doubleValue(),
         ( (Number) value1 ).doubleValue() );
-    } else if ( value0 instanceof Date ) {
-      return ( (Date) value0 ).compareTo( (Date) value1 );
-    } else if ( value0 instanceof OrderKey ) {
-      return ( (OrderKey) value0 ).compareTo( value1 );
+    } else if ( value0 instanceof Date date) {
+      return date.compareTo( (Date) value1 );
+    } else if ( value0 instanceof OrderKey orderKey) {
+      return orderKey.compareTo( value1 );
     } else {
       throw Util.newInternal( "cannot compare " + value0 );
     }
@@ -506,18 +504,18 @@ public class FunUtil extends Util {
     for ( int i = 0; i < memberCount; i++ ) {
       final List<Member> key = members.get( i );
       final Object o = mapMemberToValue.get( key );
-      if ( o instanceof Number ) {
-        total += ( (Number) o ).doubleValue();
+      if ( o instanceof Number number) {
+        total += number.doubleValue();
       }
     }
     for ( int i = 0; i < memberCount; i++ ) {
       final List<Member> key = members.get( i );
       final Object o = mapMemberToValue.get( key );
-      if ( o instanceof Number ) {
-        double d = ( (Number) o ).doubleValue();
+      if ( o instanceof Number number) {
+        double d = number.doubleValue();
         mapMemberToValue.put(
           key,
-            total == 0 ? 0 :d / total * (double) 100 );
+            total == 0 ? 0 :d / total * 100 );
       }
     }
   }
@@ -707,7 +705,7 @@ public class FunUtil extends Util {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
-    } else if ( sw.v.size() == 0 ) {
+    } else if ( sw.v.isEmpty() ) {
       return FunUtil.DOUBLE_NULL;
     }
     double[] asArray = new double[ sw.v.size() ];
@@ -752,10 +750,9 @@ public class FunUtil extends Util {
       assert decimalPart >= 0;
       assert decimalPart <= 1;
       int indexForFormula = integerPart - 1;
-      double percentile = asArray[ indexForFormula ]
+      return asArray[ indexForFormula ]
         + ( ( asArray[ indexForFormula + 1 ] - asArray[ indexForFormula ] )
         * decimalPart );
-      return percentile;
     }
   }
 
@@ -778,7 +775,7 @@ public class FunUtil extends Util {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
-    } else if ( sw.v.size() == 0 ) {
+    } else if ( sw.v.isEmpty() ) {
       return FunUtil.DOUBLE_NULL;
     }
 
@@ -850,17 +847,17 @@ public class FunUtil extends Util {
     Calc exp,
     boolean biased ) {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
-    return FunUtil._var( sw, biased );
+    return FunUtil.var( sw, biased );
   }
 
-  private static Object _var( SetWrapper sw, boolean biased ) {
+  private static Object var(SetWrapper sw, boolean biased ) {
     if ( sw.errorCount > 0 ) {
-      return new Double( Double.NaN );
-    } else if ( sw.v.size() == 0 ) {
+      return Double.NaN;
+    } else if ( sw.v.isEmpty() ) {
       return Util.nullValue;
     } else {
       double stdev = 0.0;
-      double avg = FunUtil._avg( sw );
+      double avg = FunUtil.avg( sw );
       for ( int i = 0; i < sw.v.size(); i++ ) {
         stdev +=
           Math.pow( ( ( (Number) sw.v.get( i ) ).doubleValue() - avg ), 2 );
@@ -869,7 +866,7 @@ public class FunUtil extends Util {
       if ( !biased ) {
         n--;
       }
-      return new Double( stdev / (double) n );
+      return Double.valueOf( stdev / n );
     }
   }
 
@@ -880,9 +877,9 @@ public class FunUtil extends Util {
     Calc exp2 ) {
     SetWrapper sw1 = FunUtil.evaluateSet( evaluator, memberList, exp1 );
     SetWrapper sw2 = FunUtil.evaluateSet( evaluator, memberList, exp2 );
-    Object covar = FunUtil._covariance( sw1, sw2, false );
-    Object var1 = FunUtil._var( sw1, false ); // this should be false, yes?
-    Object var2 = FunUtil._var( sw2, false );
+    Object covar = FunUtil.covariance( sw1, sw2, false );
+    Object var1 = FunUtil.var( sw1, false ); // this should be false, yes?
+    Object var2 = FunUtil.var( sw2, false );
 
     return ( (Number) covar ).doubleValue()
       / Math.sqrt(
@@ -911,19 +908,19 @@ public class FunUtil extends Util {
     }
     // todo: because evaluateSet does not add nulls to the SetWrapper, this
     // solution may lead to mismatched lists and is therefore not robust
-    return FunUtil._covariance( sw1, sw2, biased );
+    return FunUtil.covariance( sw1, sw2, biased );
   }
 
 
-  private static Object _covariance(
+  private static Object covariance(
     SetWrapper sw1,
     SetWrapper sw2,
     boolean biased ) {
     if ( sw1.v.size() != sw2.v.size() ) {
       return Util.nullValue;
     }
-    double avg1 = FunUtil._avg( sw1 );
-    double avg2 = FunUtil._avg( sw2 );
+    double avg1 = FunUtil.avg( sw1 );
+    double avg2 = FunUtil.avg( sw2 );
     double covar = 0.0;
     for ( int i = 0; i < sw1.v.size(); i++ ) {
       // all of this casting seems inefficient - can we make SetWrapper
@@ -936,7 +933,7 @@ public class FunUtil extends Util {
     if ( !biased ) {
       n--;
     }
-    return new Double( covar / (double) n );
+    return Double.valueOf( covar / n );
   }
 
   static Object stdev(
@@ -946,7 +943,7 @@ public class FunUtil extends Util {
     boolean biased ) {
     Object o = FunUtil.var( evaluator, members, exp, biased );
     return ( o instanceof Double )
-      ? new Double( Math.sqrt( ( (Number) o ).doubleValue() ) )
+      ? Double.valueOf( Math.sqrt( ( (Number) o ).doubleValue() ) )
       : o;
   }
 
@@ -955,22 +952,24 @@ public class FunUtil extends Util {
     TupleList members,
     Calc calc ) {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, members, calc );
-    return ( sw.errorCount > 0 )
-      ? new Double( Double.NaN )
-      : ( sw.v.size() == 0 )
-      ? Util.nullValue
-      : new Double( FunUtil._avg( sw ) );
+    if ( sw.errorCount > 0 ) {
+      return Double.NaN;
+    } else {
+        return (sw.v.isEmpty())
+            ? Util.nullValue
+            : Double.valueOf(FunUtil.avg(sw));
+    }
   }
 
   // TODO: parameterize inclusion of nulls; also, maybe make _avg a method of
   // setwrapper, so we can cache the result (i.e. for correl)
-  private static double _avg( SetWrapper sw ) {
+  private static double avg(SetWrapper sw ) {
     double sum = 0.0;
     for ( int i = 0; i < sw.v.size(); i++ ) {
       sum += ( (Number) sw.v.get( i ) ).doubleValue();
     }
     // TODO: should look at context and optionally include nulls
-    return sum / (double) sw.v.size();
+    return sum / sw.v.size();
   }
 
   public static Object sum(
@@ -978,7 +977,7 @@ public class FunUtil extends Util {
     TupleList members,
     Calc exp ) {
     double d = FunUtil.sumDouble( evaluator, members, exp );
-    return d == FunUtil.DOUBLE_NULL ? Util.nullValue : new Double( d );
+    return d == FunUtil.DOUBLE_NULL ? Util.nullValue : Double.valueOf( d );
   }
 
   public static double sumDouble(
@@ -988,7 +987,7 @@ public class FunUtil extends Util {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
-    } else if ( sw.v.size() == 0 ) {
+    } else if ( sw.v.isEmpty() ) {
       return FunUtil.DOUBLE_NULL;
     } else {
       double sum = 0.0;
@@ -1006,7 +1005,7 @@ public class FunUtil extends Util {
     SetWrapper sw = FunUtil.evaluateSet( evaluator, iterable, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
-    } else if ( sw.v.size() == 0 ) {
+    } else if ( sw.v.isEmpty() ) {
       return FunUtil.DOUBLE_NULL;
     } else {
       double sum = 0.0;
@@ -1025,8 +1024,8 @@ public class FunUtil extends Util {
       return 0;
     }
     if ( includeEmpty ) {
-      if ( iterable instanceof TupleList ) {
-        return ( (TupleList) iterable ).size();
+      if ( iterable instanceof TupleList tupleList) {
+        return tupleList.size();
       } else {
         int retval = 0;
         TupleCursor cursor = iterable.tupleCursor();
@@ -1081,8 +1080,8 @@ public class FunUtil extends Util {
         // BatchingCellReader, we find out all the dependent cells we
         // need
         retval.errorCount++;
-      } else if ( o instanceof Number ) {
-        retval.v.add( ( (Number) o ).doubleValue() );
+      } else if ( o instanceof Number number) {
+        retval.v.add( number.doubleValue() );
       } else {
         retval.v.add( o );
       }
@@ -1377,8 +1376,8 @@ public class FunUtil extends Util {
   }
 
   private static Member unwrapLimitedRollupMember( Member m ) {
-    if ( m instanceof RolapHierarchy.LimitedRollupMember ) {
-      return ( (RolapHierarchy.LimitedRollupMember) m ).member;
+    if ( m instanceof RolapHierarchy.LimitedRollupMember limitedRollupMember) {
+      return limitedRollupMember.member;
     }
     return m;
   }
@@ -1416,11 +1415,11 @@ public class FunUtil extends Util {
     } else {
       final int ordinal1 = m1.getOrdinal();
       final int ordinal2 = m2.getOrdinal();
-      return ( ordinal1 == ordinal2 )
-        ? m1.compareTo( m2 )
-        : ( ordinal1 < ordinal2 )
-        ? -1
-        : 1;
+      if ( ordinal1 == ordinal2 ) {
+        return m1.compareTo(m2);
+      } else {
+        return (ordinal1 < ordinal2) ? -1 : 1;
+      }
     }
   }
 
@@ -1532,17 +1531,16 @@ public class FunUtil extends Util {
         final int cat0 = paramCategories[ 0 ];
         final Exp arg0 = args[ 0 ];
         switch ( cat0 ) {
-          case Category.DIMENSION:
-          case Category.HIERARCHY:
-            if ( arg0 instanceof DimensionExpr
-              && ( (DimensionExpr) arg0 ).getDimension().isMeasures()
+          case Category.DIMENSION, Category.HIERARCHY:
+            if ( arg0 instanceof DimensionExpr dimensionExpr
+              && dimensionExpr.getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
           case Category.MEMBER:
-            if ( arg0 instanceof MemberExpr
-              && ( (MemberExpr) arg0 ).getMember().isMeasure()
+            if ( arg0 instanceof MemberExpr memberExpr
+              && memberExpr.getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
@@ -1738,7 +1736,7 @@ public class FunUtil extends Util {
     int i,
     final Member[] members,
     List<Hierarchy> hierarchies ) {
-    final IdentifierParser.Builder builder =
+    final Builder builder =
       new IdentifierParser.TupleBuilder(
         evaluator.getSchemaReader(),
         evaluator.getCube(),
@@ -1765,7 +1763,7 @@ public class FunUtil extends Util {
     String string,
     List<Hierarchy> hierarchies ) {
     final Member[] members = new Member[ hierarchies.size() ];
-    int i = FunUtil.parseTuple( evaluator, string, 0, members, hierarchies );
+    FunUtil.parseTuple( evaluator, string, 0, members, hierarchies );
     // todo: check for garbage at end of string
     if ( FunUtil.tupleContainsNullMember( members ) ) {
       return null;
@@ -1807,7 +1805,7 @@ public class FunUtil extends Util {
   static Member parseMember(
     Evaluator evaluator, String string, Hierarchy hierarchy ) {
     Member[] members = { null };
-    int i = FunUtil.parseMember( evaluator, string, 0, members, hierarchy );
+    FunUtil.parseMember( evaluator, string, 0, members, hierarchy );
     // todo: check for garbage at end of string
     final Member member = members[ 0 ];
     if ( member == null ) {
@@ -1836,16 +1834,14 @@ public class FunUtil extends Util {
       || exp instanceof DimensionExpr ) {
       return false;
     }
-    if ( exp instanceof ResolvedFunCall call ) {
+    if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
       // A set of literals is not worth caching.
-      if ( call.getFunDef() instanceof SetFunDef ) {
-        for ( Exp setArg : call.getArgs() ) {
+      for ( Exp setArg : call.getArgs() ) {
           if ( FunUtil.worthCaching( setArg ) ) {
             return true;
           }
-        }
-        return false;
       }
+      return false;
     }
     return true;
   }
@@ -1927,7 +1923,8 @@ public class FunUtil extends Util {
 
   static class SetWrapper {
     List v = new ArrayList();
-    public int errorCount = 0, nullCount = 0;
+    public int errorCount = 0;
+    public int nullCount = 0;
 
     // private double avg = Double.NaN;
     // TODO: parameterize inclusion of nulls

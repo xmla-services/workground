@@ -112,10 +112,10 @@ public class ParameterExpr extends ExpBase {
         // we will generate a call to the Parameter() function, to define
         // the parameter.
         final boolean def;
-        if (pw instanceof QueryPrintWriter
+        if (pw instanceof QueryPrintWriter queryPrintWriter
             && parameter.getScope() == Parameter.Scope.Statement)
         {
-            def = ((QueryPrintWriter) pw).parameters.add(parameter);
+            def = queryPrintWriter.parameters.add(parameter);
         } else {
             def = false;
         }
@@ -125,8 +125,7 @@ public class ParameterExpr extends ExpBase {
         if (def) {
             pw.print(new StringBuilder("Parameter(").append(Util.quoteForMdx(name)).append(", ").toString());
             switch (category) {
-            case Category.STRING:
-            case Category.NUMERIC:
+            case Category.STRING, Category.NUMERIC:
                 pw.print(Category.instance.getName(category).toUpperCase());
                 break;
             case Category.MEMBER:

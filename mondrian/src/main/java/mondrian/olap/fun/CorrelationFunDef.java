@@ -60,10 +60,9 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
                 try {
                     evaluator.setNonEmpty(false);
                     TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
-                    final double correlation =
-                        FunUtil.correlation(
+
+                    return FunUtil.correlation(
                             evaluator, list, calc1, calc2);
-                    return correlation;
                 } finally {
                     evaluator.restore(savepoint);
                 }

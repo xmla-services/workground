@@ -136,8 +136,8 @@ class ExtractFunDef extends FunDefBase {
     {
         SetType type = (SetType) args[0].getType();
         final List<Hierarchy> hierarchies;
-        if (type.getElementType() instanceof TupleType) {
-            hierarchies = ((TupleType) type.getElementType()).getHierarchies();
+        if (type.getElementType() instanceof TupleType tupleType) {
+            hierarchies = tupleType.getHierarchies();
         } else {
             hierarchies = Collections.singletonList(type.getHierarchy());
         }

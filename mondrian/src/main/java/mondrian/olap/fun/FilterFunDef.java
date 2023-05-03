@@ -68,8 +68,8 @@ class FilterFunDef extends FunDefBase {
         // Ignore the caller's priority. We prefer to return iterable, because
         // it makes NamedSet.CurrentOrdinal work.
         List<ResultStyle> styles = compiler.getAcceptableResultStyles();
-        if (call.getArg(0) instanceof ResolvedFunCall
-            && ((ResolvedFunCall) call.getArg(0)).getFunName().equals("AS"))
+        if (call.getArg(0) instanceof ResolvedFunCall resolvedFunCall
+            && resolvedFunCall.getFunName().equals("AS"))
         {
             styles = ResultStyle.ITERABLE_ONLY;
         }
@@ -122,7 +122,7 @@ class FilterFunDef extends FunDefBase {
         }
     }
 
-    private static abstract class BaseIterCalc extends AbstractIterCalc {
+    private abstract static class BaseIterCalc extends AbstractIterCalc {
         private ResolvedFunCall call;
 
 		protected BaseIterCalc(String name,ResolvedFunCall call, Calc[] calcs) {
@@ -309,10 +309,9 @@ class FilterFunDef extends FunDefBase {
         Calc[] calcs = new Calc[] {ilcalc, bcalc};
 
         // Note that all of the ListCalc's return will be mutable
-        switch (ilcalc.getResultStyle()) {
-        case LIST:
+        if (ResultStyle.LIST.equals(ilcalc.getResultStyle())) {
             return new ImmutableListCalc(call, calcs);
-        case MUTABLE_LIST:
+        } else if (ResultStyle.MUTABLE_LIST.equals(ilcalc.getResultStyle())) {
             return new MutableListCalc(call, calcs);
         }
         throw ResultStyleException.generateBadType(
@@ -320,7 +319,7 @@ class FilterFunDef extends FunDefBase {
             ilcalc.getResultStyle());
     }
 
-    private static abstract class BaseListCalc extends AbstractListCalc {
+    private abstract static class BaseListCalc extends AbstractListCalc {
         private ResolvedFunCall call;
 
 		protected BaseListCalc(ResolvedFunCall call, Calc[] calcs) {

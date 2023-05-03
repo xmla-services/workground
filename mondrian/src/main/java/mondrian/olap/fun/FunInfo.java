@@ -37,8 +37,8 @@ public class FunInfo implements Comparable<FunInfo> {
         FunDef funDef = resolver.getRepresentativeFunDef();
         if (funDef != null) {
             return new FunInfo(funDef);
-        } else if (resolver instanceof MultiResolver) {
-            return new FunInfo((MultiResolver) resolver);
+        } else if (resolver instanceof MultiResolver multiResolver) {
+            return new FunInfo(multiResolver);
         } else {
             return new FunInfo(resolver);
         }
@@ -53,9 +53,9 @@ public class FunInfo implements Comparable<FunInfo> {
         this.parameterTypes = new int[][] { funDef.getParameterCategories() };
 
         // use explicit signature if it has one, otherwise generate a set
-        this.sigs = funDef instanceof FunDefBase
-            && ((FunDefBase) funDef).signature != null
-            ? new String[] {((FunDefBase) funDef).signature}
+        this.sigs = funDef instanceof FunDefBase funDefBase
+            && funDefBase.signature != null
+            ? new String[] {funDefBase.signature}
             : FunInfo.makeSigs(syntax, name, returnTypes, parameterTypes);
         this.description = funDef.getDescription();
     }

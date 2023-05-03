@@ -49,7 +49,7 @@ import mondrian.olap.SchemaReader;
  * @since Mar 23, 2006
  */
 class DrilldownLevelFunDef extends FunDefBase {
-    public static String INCLUDE_CALC_MEMBERS = "INCLUDE_CALC_MEMBERS";
+    private static final String INCLUDE_CALC_MEMBERS = "INCLUDE_CALC_MEMBERS";
 
     static final ReflectiveMultiResolver Resolver =
             new ReflectiveMultiResolver(
@@ -84,15 +84,15 @@ class DrilldownLevelFunDef extends FunDefBase {
         final boolean includeCalcMembers =
             call.getArgCount() == 4
                 && call.getArg(3) != null
-                && call.getArg(3) instanceof Literal
-                && DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS.equals(((Literal)call.getArg(3)).getValue());
+                && call.getArg(3) instanceof Literal literal
+                && DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS.equals(literal.getValue());
         if (indexCalc == null) {
             return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, levelCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     TupleList list = listCalc.evaluateList(evaluator);
-                    if (list.size() == 0) {
+                    if (list.isEmpty()) {
                         return list;
                     }
                     int searchDepth = -1;

@@ -112,7 +112,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         } catch (CloneNotSupportedException ex) {
             throw Util.newInternal(ex, "error while cloning " + this);
         }
-        clone.valuesByName = new HashMap<String, Value>(valuesByName);
+        clone.valuesByName = new HashMap<>(valuesByName);
         clone.ordinalToValueMap = null;
         return clone;
     }
@@ -133,7 +133,9 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
      * @pre value.getName() != null
      */
     public void register(V value) {
-        assert value != null : "pre: value != null";
+        if (value == null) {
+            throw new IllegalArgumentException("pre: value != null");
+        }
         Util.assertPrecondition(!isImmutable(), "isImmutable()");
         final String name = value.getName();
         Util.assertPrecondition(name != null, "value.getName() != null");
@@ -198,10 +200,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         if ((ordinal < min) || (ordinal > max)) {
             return false;
         }
-        if (getName(ordinal) == null) {
-            return false;
-        }
-        return true;
+        return !(getName(ordinal) == null);
     }
 
     /**

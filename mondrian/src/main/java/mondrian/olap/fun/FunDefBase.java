@@ -239,7 +239,7 @@ public abstract class FunDefBase implements FunDef {
 
     @Override
     public void init(Context context) {
-        this.context=context;
+        this.context = context;
     }
     @Override
 	public String getName() {
@@ -330,8 +330,8 @@ public abstract class FunDefBase implements FunDef {
         case Category.VALUE:
             return new ScalarType();
         case Category.CUBE:
-            if (type instanceof Cube) {
-                return new CubeType((Cube) type);
+            if (type instanceof Cube cube) {
+                return new CubeType(cube);
             }
             return null;
         case Category.DIMENSION:

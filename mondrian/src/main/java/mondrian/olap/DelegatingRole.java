@@ -40,7 +40,9 @@ public class DelegatingRole implements Role {
      * @param role Underlying role.
      */
     public DelegatingRole(Role role) {
-        assert role != null;
+        if (role == null) {
+            throw new IllegalArgumentException("DelegatingRole: role should be not null");
+        }
         this.role = role;
     }
 

@@ -23,6 +23,10 @@ import mondrian.olap.fun.JavaFunDef.FunctionName;
  * @since Dec 31, 2007
  */
 public abstract class Excel {
+
+    private Excel() {
+        // constructor
+    }
     // There follows a list of all functions defined in Excel. Functions are
     // marked 'todo:' if they still need to be implemented; 'skip:' if they
     // are implemented elsewhere, such as in Vba or there there is an explicit
@@ -664,22 +668,22 @@ public abstract class Excel {
         Object second)
     {
         double iFirst;
-        if (!(first instanceof Number)) {
+        if (!(first instanceof Number numberFirst)) {
             throw new InvalidArgumentException(
                 new StringBuilder("Invalid parameter. ")
                 .append("first parameter ").append(first)
                 .append(" of Mod function must be of type number").toString());
         } else {
-            iFirst = ((Number) first).doubleValue();
+            iFirst = numberFirst.doubleValue();
         }
         double iSecond;
-        if (!(second instanceof Number)) {
+        if (!(second instanceof Number numberSecond)) {
             throw new InvalidArgumentException(
                 new StringBuilder("Invalid parameter. ")
                 .append("second parameter ").append(second)
                 .append(" of Mod function must be of type number").toString());
         } else {
-            iSecond = ((Number) second).doubleValue();
+            iSecond = numberSecond.doubleValue();
         }
         // Use formula "mod(n, d) = n - d * int(n / d)".
         if (iSecond == 0) {
