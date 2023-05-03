@@ -74,6 +74,11 @@ import mondrian.util.ClassResolver;
  * @since 22 December, 2001
  */
 public class RolapUtil {
+
+    private RolapUtil() {
+        // constructor
+    }
+
     public static final Logger MDX_LOGGER = LoggerFactory.getLogger("mondrian.mdx");
     public static final Logger SQL_LOGGER = LoggerFactory.getLogger("mondrian.sql");
     public static final Logger MONITOR_LOGGER =
@@ -86,7 +91,7 @@ public class RolapUtil {
     /**
      * Special cell value indicates that the value is not in cache yet.
      */
-    public static final Object valueNotReadyException = new Double(0);
+    public static final Object valueNotReadyException = Double.valueOf(0);
 
     /**
      * Hook to run when a query is executed. This should not be
@@ -220,7 +225,7 @@ public class RolapUtil {
      * consideration
      */
     private static String mdxNullLiteral = null;
-    public static final String sqlNullLiteral = "null";
+    public static final String SQL_NULL_LITERAL = "null";
 
     public static String mdxNullLiteral() {
         if (mdxNullLiteral == null) {
@@ -498,13 +503,11 @@ public class RolapUtil {
         for (Member member : members) {
             int rc;
             if (searchName.quoting == Id.Quoting.KEY
-                && member instanceof RolapMember)
+                && member instanceof RolapMember rolapMember
+                && rolapMember.getKey().toString().equals(
+                nameSegment.name))
             {
-                if (((RolapMember) member).getKey().toString().equals(
-                        nameSegment.name))
-                {
-                    return member;
-                }
+                return member;
             }
             if (matchType.isExact()) {
                 rc = Util.compareName(member.getName(), nameSegment.name);
@@ -525,14 +528,11 @@ public class RolapUtil {
                 {
                     bestMatch = member;
                 }
-            } else if (matchType == MatchType.AFTER) {
-                if (rc > 0
+            } else if (matchType == MatchType.AFTER && rc > 0
                     && (bestMatch == null
                         || FunUtil.compareSiblingMembers(member, bestMatch)
-                        < 0))
-                {
-                    bestMatch = member;
-                }
+                        < 0)) {
+                bestMatch = member;
             }
         }
         if (matchType.isExact()) {
@@ -578,8 +578,8 @@ public class RolapUtil {
     }
 
     public static RolapMember strip(RolapMember member) {
-        if (member instanceof RolapCubeMember) {
-            return ((RolapCubeMember) member).getRolapMember();
+        if (member instanceof RolapCubeMember rolapCubeMember) {
+            return rolapCubeMember.getRolapMember();
         }
         return member;
     }
@@ -620,13 +620,13 @@ public class RolapUtil {
         }
 
         @Override
-		public void write(char cbuf[]) throws IOException {
+		public void write(char[] cbuf) throws IOException {
             super.write(cbuf);
             buf.write(cbuf);
         }
 
         @Override
-		public void write(char cbuf[], int off, int len) throws IOException {
+		public void write(char[] cbuf, int off, int len) throws IOException {
             super.write(cbuf, off, len);
             buf.write(cbuf, off, len);
         }
@@ -649,15 +649,18 @@ public class RolapUtil {
      */
     private static class NullWriter extends Writer {
         @Override
-		public void write(char cbuf[], int off, int len) throws IOException {
+		public void write(char[] cbuf, int off, int len) throws IOException {
+            //empty
         }
 
         @Override
 		public void flush() throws IOException {
+            //empty
         }
 
         @Override
 		public void close() throws IOException {
+            //empty
         }
     }
 
@@ -690,7 +693,7 @@ public class RolapUtil {
         // Limited Rollup Members have to be included in the bitkey
         // so that we can pick the correct agg table.
         for (Member curMember : members) {
-            if (curMember instanceof LimitedRollupMember) {
+            if (curMember instanceof LimitedRollupMember limitedRollupMember) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     // set NonEmpty to false to avoid the possibility of
@@ -702,13 +705,13 @@ public class RolapUtil {
                         ((RolapHierarchy)curMember.getHierarchy())
                             .getLowestMembersForAccess(
                                 evaluator,
-                                ((LimitedRollupMember)curMember)
+                                limitedRollupMember
                                     .hierarchyAccess,
                                 FunUtil.getNonEmptyMemberChildrenWithDetails(
                                     evaluator,
                                     curMember));
 
-                    assert lowestMembers.size() > 0;
+                    assert !lowestMembers.isEmpty();
 
                     Member lowMember = lowestMembers.get(0);
 
@@ -754,11 +757,11 @@ public class RolapUtil {
       List<String> rlStarKey = new ArrayList<>();
       Table table = null;
       rlStarKey.add(getAlias(fact));
-      if (fact instanceof Table) {
-        table = (Table) fact;
+      if (fact instanceof Table t) {
+        table = t;
       }
       // Add SQL filter to the key
-      if (!Util.isNull(table) && !Util.isNull(table.sql())
+      if (!Util.isNull(table) && table != null && !Util.isNull(table.sql())
           && !Util.isBlank(table.sql().content()))
       {
         rlStarKey.add(table.sql().dialect());

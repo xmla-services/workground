@@ -17,6 +17,8 @@ import static mondrian.rolap.util.JoinUtil.getLeftAlias;
 import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
+import static org.apache.commons.collections.ReferenceMap.WEAK;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -148,7 +150,7 @@ public class RolapStar {
 
         // phase out and replace with Table, Column network
         this.factNode =
-            new StarNetworkNode(null, factTable.alias, null, null, null);
+            new StarNetworkNode(null, null, null, null);
 
         this.changeListener = schema.getDataSourceChangeListener();
         this.statisticsCache = new RolapStatisticsCache(this);
@@ -242,9 +244,9 @@ public class RolapStar {
             return query.getDialect().quoteIdentifier(expression.table(),
                 expression.name());
         }
-        if(expression instanceof ExpressionView) {
+        if(expression instanceof ExpressionView expressionView) {
             SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
-            ((ExpressionView) expression).sqls().forEach(e ->codeSet.put(e.dialect(), e.content()));
+            expressionView.sqls().forEach(e ->codeSet.put(e.dialect(), e.content()));
             return codeSet.chooseQuery(query.getDialect());
         }
         return null;
@@ -260,19 +262,13 @@ public class RolapStar {
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
         private final Map<AggregationKey, Aggregation> aggregations =
-            new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.WEAK);
+            new ReferenceMap(WEAK, WEAK);
 
         private final List<SoftReference<SegmentWithData>> segmentRefs =
             new ArrayList<>();
     }
 
-    private final ThreadLocal<Bar> localBars =
-        new ThreadLocal<>() {
-            @Override
-			protected Bar initialValue() {
-                return new Bar();
-            }
-        };
+    private final ThreadLocal<Bar> localBars = ThreadLocal.withInitial(Bar::new);
 
     private static class StarNetworkNode {
         private StarNetworkNode parent;
@@ -282,7 +278,6 @@ public class RolapStar {
 
         private StarNetworkNode(
             StarNetworkNode parent,
-            String alias,
             Relation origRel,
             String foreignKey,
             String joinKey)
@@ -315,12 +310,9 @@ public class RolapStar {
                 tbl,
                 possibleName);
         } else if (rel instanceof View view) {
-            ViewR newView = new ViewR(view, possibleName);
-            return newView;
+            return new ViewR(view, possibleName);
         } else if (rel instanceof InlineTable inlineTable) {
-            InlineTableR newInlineTable =
-                new InlineTableR(inlineTable, possibleName);
-            return newInlineTable;
+            return new InlineTableR(inlineTable, possibleName);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -359,10 +351,8 @@ public class RolapStar {
     {
         if (relOrJoin == null) {
             return null;
-        } else if (relOrJoin instanceof Relation) {
+        } else if (relOrJoin instanceof Relation rel) {
             int val = 0;
-            Relation rel =
-                (Relation) relOrJoin;
             String newAlias =
                 joinKeyTable != null ? joinKeyTable : RelationUtil.getAlias(rel);
             while (true) {
@@ -374,7 +364,7 @@ public class RolapStar {
                     }
                     node =
                         new StarNetworkNode(
-                            parent, newAlias, rel, foreignKey, joinKey);
+                            parent, rel, foreignKey, joinKey);
                     nodeLookup.put(newAlias, node);
                     return rel;
                 } else if (node.isCompatible(
@@ -423,12 +413,12 @@ public class RolapStar {
                 join =
                     new JoinR(
                         List.of(left, right),
-                        left instanceof Relation
-                            ? RelationUtil.getAlias(((Relation) left))
+                        left instanceof Relation relation
+                            ? RelationUtil.getAlias(relation)
                             : null,
                         join.leftKey(),
-                        right instanceof Relation
-                            ? RelationUtil.getAlias(((Relation) right))
+                        right instanceof Relation relation
+                            ? RelationUtil.getAlias(relation)
                             : null,
                         join.rightKey());
             }
@@ -451,14 +441,6 @@ public class RolapStar {
      */
     private int nextColumnCount() {
         return columnCount++;
-    }
-
-    /**
-     * Decrements the column counter; used if a newly
-     * created column is found to already exist.
-     */
-    private int decrementColumnCount() {
-        return columnCount--;
     }
 
     /**
@@ -628,7 +610,7 @@ public class RolapStar {
             && !isCacheDisabled()
             && changeListener != null)
         {
-            Util.discard(
+            discard(
                 changeListener.isAggregationChanged(aggregationKey));
         }
         return aggregation;
@@ -741,32 +723,6 @@ public class RolapStar {
                 || child.getJoinCondition().left.equals(joinColumn))
             {
                 collectColumns(columnList, child, null);
-            }
-        }
-    }
-
-    private boolean containsColumn(String tableName, String columnName) {
-        Connection jdbcConnection;
-        try {
-            jdbcConnection = context.getDataSource().getConnection();
-        } catch (SQLException e1) {
-            throw Util.newInternal(
-                e1, "Error while creating connection from data source");
-        }
-        try {
-            final DatabaseMetaData metaData = jdbcConnection.getMetaData();
-            final ResultSet columns =
-                metaData.getColumns(null, null, tableName, columnName);
-            return columns.next();
-        } catch (SQLException e) {
-            throw Util.newInternal(
-                new StringBuilder("Error while retrieving metadata for table '").append(tableName)
-                .append("', column '").append(columnName).append("'").toString());
-        } finally {
-            try {
-                jdbcConnection.close();
-            } catch (SQLException e) {
-                // ignore
             }
         }
     }
@@ -1276,7 +1232,7 @@ public class RolapStar {
 
         @Override
 		public void print(PrintWriter pw, String prefix) {
-            SqlQuery sqlQuery = getSqlQuery();
+            SqlQuery sqlQuery = super.getSqlQuery();
             pw.print(prefix);
             pw.print(getName());
             pw.print(" (");
@@ -1286,7 +1242,7 @@ public class RolapStar {
                 aggregator.getExpression(
                     getExpression() == null
                         ? null
-                        : generateExprString(sqlQuery)));
+                        : super.generateExprString(sqlQuery)));
         }
 
         public String getCubeName() {
@@ -1381,20 +1337,14 @@ public class RolapStar {
         public Column[] lookupColumns(String columnName) {
             List<Column> l = new ArrayList<>();
             for (Column column : getColumns()) {
-                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
-                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr =
-                        (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) column.getExpression();
+                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr) {
                     if (columnExpr.name().equals(columnName)) {
                         l.add(column);
                     }
                 } else if (column.getExpression()
-                        instanceof ExpressionView)
+                        instanceof ExpressionView columnExpr && columnExpr.toString().equals(columnName))
                 {
-                    ExpressionView columnExpr =
-                        (ExpressionView) column.getExpression();
-                    if (columnExpr.toString().equals(columnName)) {
-                        l.add(column);
-                    }
+                    l.add(column);
                 }
             }
             return l.toArray(new Column[l.size()]);
@@ -1402,17 +1352,13 @@ public class RolapStar {
 
         public Column lookupColumn(String columnName) {
             for (Column column : getColumns()) {
-                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
-                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr =
-                        (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) column.getExpression();
+                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr) {
                     if (columnExpr.name().equals(columnName)) {
                         return column;
                     }
                 } else if (column.getExpression()
-                        instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView)
+                        instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView columnExpr)
                 {
-                    ExpressionView columnExpr =
-                        (ExpressionView) column.getExpression();
                     if (columnExpr.toString().equals(columnName)) {
                         return column;
                     }
@@ -1449,12 +1395,9 @@ public class RolapStar {
          */
         public Measure lookupMeasureByName(String cubeName, String name) {
             for (Column column : getColumns()) {
-                if (column instanceof Measure measure) {
-                    if (measure.getName().equals(name)
-                        && measure.getCubeName().equals(cubeName))
-                    {
+                if (column instanceof Measure measure && measure.getName().equals(name)
+                        && measure.getCubeName().equals(cubeName)) {
                         return measure;
-                    }
                 }
             }
             return null;
@@ -1502,8 +1445,6 @@ public class RolapStar {
 
         synchronized void makeMeasure(RolapBaseCubeMeasure measure) {
             // Remove assertion to allow cube to be recreated
-            // assert lookupMeasureByName(
-            //    measure.getCube().getName(), measure.getName()) == null;
             RolapStar.Measure starMeasure = new RolapStar.Measure(
                 measure.getName(),
                 measure.getCube().getName(),
@@ -1515,10 +1456,18 @@ public class RolapStar {
             measure.setStarMeasure(starMeasure); // reverse mapping
 
             if (containsColumn(starMeasure)) {
-                star.decrementColumnCount();
+                decrementColumnCount();
             } else {
                 addColumn(starMeasure);
             }
+        }
+
+        /**
+         * Decrements the column counter; used if a newly
+         * created column is found to already exist.
+         */
+        private int decrementColumnCount() {
+            return star.columnCount--;
         }
 
         /**
@@ -1541,7 +1490,6 @@ public class RolapStar {
             if (level.getNameExp() != null) {
                 // make a column for the name expression
                 nameColumn = makeColumnForLevelExpr(
-                    cube,
                     level,
                     level.getName(),
                     level.getNameExp(),
@@ -1561,7 +1509,6 @@ public class RolapStar {
             // If the nameColumn is not null, then it is associated with this
             // column.
             Column column = makeColumnForLevelExpr(
-                cube,
                 level,
                 name,
                 level.getKeyExp(),
@@ -1579,7 +1526,6 @@ public class RolapStar {
         }
 
         private Column makeColumnForLevelExpr(
-            RolapCube cube,
             RolapLevel level,
             String name,
             Expression xmlExpr,
@@ -1653,12 +1599,12 @@ public class RolapStar {
             RelationOrJoin relationOrJoin,
             RolapStar.Condition joinCondition)
         {
-            if (relationOrJoin instanceof Relation relation) {
+            if (relationOrJoin instanceof Relation relationInner) {
                 RolapStar.Table starTable =
-                    findChild(relation, joinCondition);
+                    findChild(relationInner, joinCondition);
                 if (starTable == null) {
                     starTable = new RolapStar.Table(
-                        star, relation, this, joinCondition);
+                        star, relationInner, this, joinCondition);
                     if (this.children.isEmpty()) {
                         this.children = new ArrayList<>();
                     }
@@ -1686,9 +1632,7 @@ public class RolapStar {
                     // the right relation of a join may be a join
                     // if so, we need to use the right relation join's
                     // left relation's alias.
-                    if (right(join) instanceof Join) {
-                        Join joinright =
-                            (Join) right(join);
+                    if (right(join) instanceof Join joinright) {
                         // REVIEW: is cast to Relation valid?
                         rightAlias =
                             RelationUtil.getAlias(((Relation) left(joinright)));
@@ -1705,9 +1649,8 @@ public class RolapStar {
                 joinCondition = new RolapStar.Condition(
                     new ColumnR(leftAlias, join.leftKey()),
                     new ColumnR(rightAlias, join.rightKey()));
-                RolapStar.Table rightTable = leftTable.addJoin(
+                return leftTable.addJoin(
                     cube, right(join), joinCondition);
-                return rightTable;
 
             } else {
                 throw Util.newInternal("bad relation type " + relationOrJoin);
@@ -1770,12 +1713,7 @@ public class RolapStar {
         }
 
         public boolean equalsTableName(String tableName) {
-            if (this.relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table mt) {
-                if (mt.name().equals(tableName)) {
-                    return true;
-                }
-            }
-            return false;
+            return (this.relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table mt && mt.name().equals(tableName));
         }
 
         /**
@@ -1829,12 +1767,8 @@ public class RolapStar {
         {
             for (Table child : getChildren()) {
                 Condition condition = child.joinCondition;
-                if (condition != null) {
-                    if (condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column mcolumn) {
-                        if (mcolumn.name().equals(columnName)) {
-                            return child;
-                        }
-                    }
+                if (condition != null && condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column mcolumn && mcolumn.name().equals(columnName)) {
+                    return child;
                 }
             }
             return null;
@@ -1850,12 +1784,8 @@ public class RolapStar {
         {
             for (Table child : getChildren()) {
                 Condition condition = child.joinCondition;
-                if (condition != null) {
-                    if (condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column mcolumn) {
-                    	if (mcolumn.equals(left)) {
-                            return child;
-                        }
-                    }
+                if (condition != null && condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column mcolumn && mcolumn.equals(left)) {
+                    return child;
                 }
             }
             return null;
@@ -1929,7 +1859,7 @@ public class RolapStar {
          */
         public boolean containsColumn(String columnName) {
             if (relation instanceof Relation) {
-                return star.containsColumn(
+                return containsColumn(
                     RelationUtil.getAlias((relation)),
                     columnName);
             } else {
@@ -1937,6 +1867,33 @@ public class RolapStar {
                 return false;
             }
         }
+
+        private boolean containsColumn(String tableName, String columnName) {
+            Connection jdbcConnection;
+            try {
+                jdbcConnection = star.context.getDataSource().getConnection();
+            } catch (SQLException e1) {
+                throw Util.newInternal(
+                    e1, "Error while creating connection from data source");
+            }
+            try {
+                final DatabaseMetaData metaData = jdbcConnection.getMetaData();
+                final ResultSet columns =
+                    metaData.getColumns(null, null, tableName, columnName);
+                return columns.next();
+            } catch (SQLException e) {
+                throw Util.newInternal(
+                    new StringBuilder("Error while retrieving metadata for table '").append(tableName)
+                        .append("', column '").append(columnName).append("'").toString());
+            } finally {
+                try {
+                    jdbcConnection.close();
+                } catch (SQLException e) {
+                    // ignore
+                }
+            }
+        }
+
     }
 
     public static class Condition {
@@ -1957,9 +1914,7 @@ public class RolapStar {
             if (!(left instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column)) {
                 // TODO: Will this ever print?? if not then left should be
                 // of type Column.
-                LOGGER.debug(
-                    "Condition.left NOT Column: "
-                    + left.getClass().getName());
+                LOGGER.debug("Condition.left NOT Column: {}", left.getClass().getName());
             }
             this.left = left;
             this.right = right;
@@ -2082,7 +2037,7 @@ public class RolapStar {
      */
     public static class ColumnComparator implements Comparator<Column> {
 
-        public static ColumnComparator instance = new ColumnComparator();
+        public static final ColumnComparator instance = new ColumnComparator();
 
         private ColumnComparator() {
         }

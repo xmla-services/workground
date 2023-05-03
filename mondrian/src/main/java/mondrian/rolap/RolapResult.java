@@ -84,6 +84,8 @@ import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
 
+import static org.eigenbase.xom.XOMUtil.discard;
+
 /**
  * A <code>RolapResult</code> is the result of running a query.
  *
@@ -92,7 +94,8 @@ import mondrian.util.ObjectPool;
  */
 public class RolapResult extends ResultBase {
 
-  static final Logger LOGGER = LoggerFactory.getLogger( ResultBase.class );
+    static final Logger LOGGER = LoggerFactory.getLogger( RolapResult.class );
+    public static final String MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE = "Mondrian: exception in executeStripe.";
 
   private RolapEvaluator evaluator;
   RolapEvaluator slicerEvaluator;
@@ -317,8 +320,6 @@ public class RolapResult extends ResultBase {
 						public Calc compileCall(
                                   ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
                           {
-                            //for debug
-                            //return new mondrian.calc.impl.ConstantCalc(returnType, null);
                             return partialCalc;
                           }
 
@@ -345,9 +346,9 @@ public class RolapResult extends ResultBase {
           Member member = cursor.member(0);
           //must be not isLeaf()
           if(member.getLevel().getDepth() < lastLevel.getDepth()) {
-            if(member instanceof mondrian.rolap.RolapHierarchy.LimitedRollupMember){
+            if(member instanceof mondrian.rolap.RolapHierarchy.LimitedRollupMember limitedRollupMember){
               //it could happen if there is Roles
-              member = ((mondrian.rolap.RolapHierarchy.LimitedRollupMember)member).getSourceMember();
+              member = limitedRollupMember.getSourceMember();
             }
             member = new mondrian.rolap.RolapHierarchy.LimitedRollupMember(
                     (RolapCubeMember)member,
@@ -677,7 +678,7 @@ public class RolapResult extends ResultBase {
         execution.setExpCacheCounts( evaluator.root.expResultCacheHitCount, evaluator.root.expResultCacheMissCount );
       }
       if ( LOGGER.isDebugEnabled() ) {
-        LOGGER.debug( "RolapResult<init>: " + Util.printMemory() );
+        LOGGER.debug( "RolapResult<init>: {}", Util.printMemory());
       }
     }
   }
@@ -747,7 +748,7 @@ public class RolapResult extends ResultBase {
 
     // First, determine if there are any unary members within the tuples.
     List<Member> first = null;
-    boolean unary[] = null;
+    boolean[] unary = null;
     for ( List<Member> tuple : tupleList ) {
       if ( first == null ) {
         first = tuple;
@@ -773,7 +774,7 @@ public class RolapResult extends ResultBase {
 
     // remove the unnecessary members from the compound slicer
     if ( toRemove > 0 ) {
-      TupleList newList = new ListTupleList( tupleList.getArity() - toRemove, new ArrayList<Member>() );
+      TupleList newList = new ListTupleList( tupleList.getArity() - toRemove, new ArrayList<>() );
       for ( List<Member> tuple : tupleList ) {
         List<Member> ntuple = new ArrayList<>();
         for ( int i = 0; i < tuple.size(); i++ ) {
@@ -786,11 +787,6 @@ public class RolapResult extends ResultBase {
       tupleList = newList;
     }
     return tupleList;
-  }
-
-  @Override
-  public void close() {
-    super.close();
   }
 
   protected boolean removeDimension( Dimension dimension, List<List<Member>> memberLists ) {
@@ -912,8 +908,7 @@ public final Execution getExecution() {
     final int arity = calc == null ? 0 : calc.getType().getArity();
     if ( cnt < 0 ) {
       try {
-        final TupleIterable axis = executeAxis( evaluator, queryAxis, calc, true, null );
-        return axis;
+        return executeAxis( evaluator, queryAxis, calc, true, null );
       } finally {
         evaluator.restore( savepoint );
       }
@@ -1055,15 +1050,13 @@ public Cell getCell( int[] pos ) {
         queryAxis.setOrdered( true );
       }
       if ( iterable instanceof TupleList list ) {
-        if ( construct ) {
-        } else if ( axisMembers != null ) {
+        if (!construct && axisMembers != null ) {
           axisMembers.mergeTupleList( list );
         }
       } else {
         // Iterable
         TupleCursor cursor = iterable.tupleCursor();
-        if ( construct ) {
-        } else if ( axisMembers != null ) {
+        if (!construct && axisMembers != null ) {
           axisMembers.mergeTupleIter( cursor );
         }
       }
@@ -1143,19 +1136,19 @@ public Cell getCell( int[] pos ) {
   Object evaluateExp( Calc calc, RolapEvaluator slicerEvaluator, Evaluator contextEvaluator ) {
     int attempt = 0;
 
-    RolapEvaluator evaluator = slicerEvaluator.push();
+    RolapEvaluator evaluatorInner = slicerEvaluator.push();
     if ( contextEvaluator != null && contextEvaluator.isEvalAxes() ) {
-      evaluator.setEvalAxes( true );
+      evaluatorInner.setEvalAxes( true );
     }
 
-    final int savepoint = evaluator.savepoint();
+    final int savepoint = evaluatorInner.savepoint();
     boolean dirty = batchingReader.isDirty();
     try {
       while ( true ) {
-        evaluator.restore( savepoint );
+        evaluatorInner.restore( savepoint );
 
-        evaluator.setCellReader( batchingReader );
-        Object preliminaryValue = calc.evaluate( evaluator );
+        evaluatorInner.setCellReader( batchingReader );
+        Object preliminaryValue = calc.evaluate( evaluatorInner );
 
         if ( preliminaryValue instanceof TupleIterable iterable ) {
           final TupleCursor cursor = iterable.tupleCursor();
@@ -1169,7 +1162,7 @@ public Cell getCell( int[] pos ) {
         } else {
           // Clear invalid expression result so that the next
           // evaluation will pick up the newly loaded aggregates.
-          evaluator.clearExpResultCache( false );
+          evaluatorInner.clearExpResultCache( false );
         }
 
         if ( attempt++ > maxEvalDepth ) {
@@ -1187,12 +1180,11 @@ public Cell getCell( int[] pos ) {
         batchingReader.setDirty( true );
       }
 
-      evaluator.restore( savepoint );
-      evaluator.setCellReader( aggregatingReader );
-      final Object o = calc.evaluate( evaluator );
-      return o;
+      evaluatorInner.restore( savepoint );
+      evaluatorInner.setCellReader( aggregatingReader );
+      return calc.evaluate( evaluatorInner );
     } finally {
-      evaluator.restore( savepoint );
+      evaluatorInner.restore( savepoint );
     }
   }
 
@@ -1210,7 +1202,7 @@ public Cell getCell( int[] pos ) {
         try {
           o = revaluator.evaluateCurrent();
         } catch ( MondrianEvaluationException e ) {
-          LOGGER.warn( "Mondrian: exception in executeStripe.", e );
+          LOGGER.warn(MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
           o = e;
         } finally {
           revaluator.restore( savepoint );
@@ -1253,31 +1245,27 @@ public Cell getCell( int[] pos ) {
 
           ci.formatString = cachedFormatString;
           ci.valueFormatter = valueFormatter;
-        } catch ( ResultLimitExceededException e ) {
+        } catch ( ResultLimitExceededException | CellRequestQuantumExceededException | Error e ) {
           // Do NOT ignore a ResultLimitExceededException!!!
-          throw e;
-        } catch ( CellRequestQuantumExceededException e ) {
-          // We need to throw this so another phase happens.
+          // or We need to throw this so another phase happens.
+          // or Errors indicate fatal JVM problems; do not discard
           throw e;
         } catch ( MondrianEvaluationException e ) {
           // ignore but warn
-          LOGGER.warn( "Mondrian: exception in executeStripe.", e );
-        } catch ( Error e ) {
-          // Errors indicate fatal JVM problems; do not discard
-          throw e;
+          LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
         } catch ( Throwable e ) {
-          LOGGER.warn( "Mondrian: exception in executeStripe.", e );
-          Util.discard( e );
+          LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
+          discard( e );
         }
 
-        if ( o != RolapUtil.valueNotReadyException ) {
+        if (ci != null && o != RolapUtil.valueNotReadyException ) {
           ci.value = o;
         }
       }
     } else {
       RolapAxis axis = (RolapAxis) axes[axisOrdinal];
       TupleList tupleList = axis.getTupleList();
-      Util.discard( tupleList.size() ); // force materialize
+      discard( tupleList.size() ); // force materialize
       if ( isAxisHighCardinality( axisOrdinal, tupleList ) ) {
         final int limit = MondrianProperties.instance().HighCardChunkSize.get();
         if ( positionsIterators.get( axisOrdinal ) == null ) {
@@ -1326,10 +1314,9 @@ public Cell getCell( int[] pos ) {
         for ( List<Member> tuple : tupleList ) {
           List<Member> measures = new ArrayList<>( statement.getQuery().getMeasuresMembers() );
           for ( Member measure : measures ) {
-            if ( measure instanceof RolapBaseCubeMeasure baseCubeMeasure ) {
-              if ( baseCubeMeasure.getAggregator() == RolapAggregator.DistinctCount ) {
+            if ( measure instanceof RolapBaseCubeMeasure baseCubeMeasure
+                && baseCubeMeasure.getAggregator() == RolapAggregator.DistinctCount) {
                 processDistinctMeasureExpr( tuple, baseCubeMeasure );
-              }
             }
           }
         }
@@ -1364,7 +1351,8 @@ public Cell getCell( int[] pos ) {
       Dimension dimension = tuple.get( 0 ).getDimension();
       highCardinality = dimension.isHighCardinality();
       if ( highCardinality ) {
-        LOGGER.warn( MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() ) );
+        String msg = MondrianResource.instance().HighCardinalityInDimension.str(dimension.getUniqueName());
+        LOGGER.warn(msg);
       }
     }
     positionsHighCardinality.put( axisOrdinal, highCardinality );
@@ -1452,8 +1440,8 @@ public Cell getCell( int[] pos ) {
   }
 
   private static void processMemberExpr( Object o, List<Member> exprMembers ) {
-    if ( o instanceof Member && o instanceof RolapCubeMember ) {
-      exprMembers.add( (Member) o );
+    if ( o instanceof Member member && o instanceof RolapCubeMember ) {
+      exprMembers.add( member );
     } else if ( o instanceof VisualTotalMember member ) {
       Exp exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
@@ -1662,13 +1650,7 @@ public Cell getCell( int[] pos ) {
             addMember( member );
           }
         } else {
-          if ( member.isNull() ) {
-            return;
-          } else if ( member.isMeasure() ) {
-            return;
-          } else if ( member.isCalculated() ) {
-            return;
-          } else if ( member.isAll() ) {
+          if ( member.isNull() || member.isMeasure() || member.isCalculated() || member.isAll()) {
             return;
           }
           Member topParent = getTopParent( member );
@@ -1689,10 +1671,7 @@ public Cell getCell( int[] pos ) {
     private void addMember( Member member ) {
       members.add( member );
       Hierarchy hierarchy = member.getHierarchy();
-      if ( !membersByHierarchy.containsKey( hierarchy ) ) {
-        membersByHierarchy.put( hierarchy, new HashSet<>() );
-      }
-      membersByHierarchy.get( hierarchy ).add( member );
+      membersByHierarchy.computeIfAbsent(hierarchy, k -> new HashSet<>()).add( member );
     }
 
     public List<Member> getMembers() {
@@ -1736,17 +1715,14 @@ public Cell getCell( int[] pos ) {
     @Override
 	protected Evaluator.NamedSetEvaluator evaluateNamedSet( final NamedSet namedSet, boolean create ) {
       final String name = namedSet.getNameUniqueWithinQuery();
-      RolapNamedSetEvaluator value;
       if ( namedSet.isDynamic() && !create ) {
-        value = null;
+          RolapNamedSetEvaluator value = new RolapNamedSetEvaluator( this, namedSet );
+          namedSetEvaluators.put( name, value );
+          return value;
+
       } else {
-        value = namedSetEvaluators.get( name );
+        return namedSetEvaluators.computeIfAbsent(name, k -> new RolapNamedSetEvaluator( this, namedSet ));
       }
-      if ( value == null ) {
-        value = new RolapNamedSetEvaluator( this, namedSet );
-        namedSetEvaluators.put( name, value );
-      }
-      return value;
     }
 
     @Override
@@ -1759,21 +1735,17 @@ public Cell getCell( int[] pos ) {
       // Should be acceptable to use the string representation of the
       // expression as the name
       final String name = exp.toString();
-      RolapSetEvaluator value;
 
       // pedro, 20120914 - I don't quite understand the !create, I was
       // kind'a expecting the opposite here. But I'll maintain the same
       // logic
       if ( !create ) {
-        value = null;
+          RolapSetEvaluator value = new RolapSetEvaluator( this, exp );
+          setEvaluators.put( name, value );
+          return value;
       } else {
-        value = setEvaluators.get( name );
+          return setEvaluators.computeIfAbsent(name, k -> new RolapSetEvaluator( this, exp ));
       }
-      if ( value == null ) {
-        value = new RolapSetEvaluator( this, exp );
-        setEvaluators.put( name, value );
-      }
-      return value;
     }
 
     @Override
@@ -2058,7 +2030,7 @@ public Cell getCell( int[] pos ) {
    * recursive calls to executeStripe - the <code>create</code> method relies on this fact.
    */
   static class CellInfoMap implements CellInfoContainer {
-    private final Map<CellKey, CellInfo> cellInfoMap;
+    private final Map<CellKey, CellInfo> map;
     private final CellKey point;
 
     /**
@@ -2069,12 +2041,12 @@ public Cell getCell( int[] pos ) {
      */
     CellInfoMap( CellKey point ) {
       this.point = point;
-      this.cellInfoMap = new HashMap<>();
+      this.map = new HashMap<>();
     }
 
     @Override
 	public int size() {
-      return this.cellInfoMap.size();
+      return this.map.size();
     }
 
     @Override
@@ -2084,24 +2056,19 @@ public Cell getCell( int[] pos ) {
 
     @Override
 	public void clear() {
-      this.cellInfoMap.clear();
+      this.map.clear();
     }
 
     @Override
 	public CellInfo create( int[] pos ) {
       CellKey key = this.point.copy();
-      CellInfo ci = this.cellInfoMap.get( key );
-      if ( ci == null ) {
-        ci = new CellInfo( 0 );
-        this.cellInfoMap.put( key, ci );
-      }
-      return ci;
+      return map.computeIfAbsent(key, k -> new CellInfo( 0 ));
     }
 
     @Override
 	public CellInfo lookup( int[] pos ) {
       CellKey key = CellKey.Generator.newCellKey( pos );
-      return this.cellInfoMap.get( key );
+      return this.map.get( key );
     }
   }
 
@@ -2196,7 +2163,7 @@ public Cell getCell( int[] pos ) {
       @Override
 	public long generate( int[] pos ) {
         long l = pos[0];
-        l += ( MAX_AXIS_SIZE_2 * (long) pos[1] );
+        l += ( MAX_AXIS_SIZE_2 * pos[1] );
         return l;
       }
     }
@@ -2208,8 +2175,8 @@ public Cell getCell( int[] pos ) {
       @Override
 	public long generate( int[] pos ) {
         long l = pos[0];
-        l += ( MAX_AXIS_SIZE_3 * (long) pos[1] );
-        l += ( MAX_AXIS_SIZE_3 * MAX_AXIS_SIZE_3 * (long) pos[2] );
+        l += ( MAX_AXIS_SIZE_3 * pos[1] );
+        l += ( MAX_AXIS_SIZE_3 * MAX_AXIS_SIZE_3 * pos[2] );
         return l;
       }
     }
@@ -2221,9 +2188,9 @@ public Cell getCell( int[] pos ) {
       @Override
 	public long generate( int[] pos ) {
         long l = pos[0];
-        l += ( MAX_AXIS_SIZE_4 * (long) pos[1] );
-        l += ( MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * (long) pos[2] );
-        l += ( MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * (long) pos[3] );
+        l += ( MAX_AXIS_SIZE_4 * pos[1] );
+        l += ( MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * pos[2] );
+        l += ( MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * pos[3] );
         return l;
       }
     }
@@ -2281,14 +2248,13 @@ public Cell getCell( int[] pos ) {
 
     @Override
 	public CellInfo lookup( int[] pos ) {
-      long key = this.cellKeyMaker.generate( pos );
-      return this.cellInfoPool.add( new CellInfo( key ) );
+      return create(pos);
     }
   }
 
   static TupleList mergeAxes( TupleList axis1, TupleIterable axis2, boolean ordered ) {
-    if ( axis1.isEmpty() && axis2 instanceof TupleList ) {
-      return (TupleList) axis2;
+    if ( axis1.isEmpty() && axis2 instanceof TupleList tupleList ) {
+      return tupleList;
     }
     Set<List<Member>> set = new HashSet<>();
     TupleList list = TupleCollections.createList( axis2.getArity() );

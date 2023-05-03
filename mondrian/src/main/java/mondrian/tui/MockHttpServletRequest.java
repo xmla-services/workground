@@ -36,6 +36,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static org.apache.commons.collections.MapUtils.EMPTY_MAP;
+
 /**
  * Partial implementation of the {@link HttpServletRequest} where just
  * enough is present to allow for communication between Mondrian's
@@ -47,9 +49,9 @@ import javax.servlet.http.HttpSession;
  * @author Richard M. Emberson
  */
 public class MockHttpServletRequest implements HttpServletRequest {
-    public static String AUTHORIZATION = "Authorization";
     public static final String DATE_FORMAT_HEADER =
         "EEE, d MMM yyyy HH:mm:ss Z";
+    public static final String LOCALHOST = "localhost";
 
     public static class MockRequestDispatcher implements RequestDispatcher {
         private ServletRequest forwardedRequest;
@@ -115,7 +117,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 
     private HttpSession session;
-    //private ByteArrayInputStream bin;
     private Map<String, String[]> parameters;
     private Map<String, RequestDispatcher> requestDispatchers;
     private List<Locale> locales;
@@ -134,7 +135,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
     private String localAddr;
     private String authType;
     private String protocol;
-    private String schema;
     private Principal principal;
     private List<Cookie> cookies;
     private boolean requestedSessionIdIsFromCookie;
@@ -160,7 +160,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
     public MockHttpServletRequest(String bodyContent) {
         this.bodyContent = bodyContent;
         this.attributes = Collections.emptyMap();
-        //this.bin = new ByteArrayInputStream(bytes);
         this.headers = new LinkedHashMap<>();
         this.requestDispatchers = new HashMap<>();
         this.parameters = new HashMap<>();
@@ -170,13 +169,13 @@ public class MockHttpServletRequest implements HttpServletRequest {
         this.requestedSessionIdIsFromCookie = true;
         this.method = "GET";
         this.protocol = "HTTP/1.1";
-        this.serverName = "localhost";
+        this.serverName = LOCALHOST;
         this.serverPort = 8080;
         this.scheme = "http";
-        this.remoteHost = "localhost";
+        this.remoteHost = LOCALHOST;
         this.remoteAddr = "127.0.0.1";
         this.localAddr = "127.0.0.1";
-        this.localName = "localhost";
+        this.localName = LOCALHOST;
         this.localPort = 8080;
         this.remotePort = 5000;
 
@@ -305,7 +304,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public String getScheme() {
-        return schema;
+        return scheme;
     }
 
     /**
@@ -365,7 +364,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public void setAttribute(String name, Object obj) {
-        if (attributes == Collections.EMPTY_MAP) {
+        if (attributes == EMPTY_MAP) {
             attributes = new HashMap<>();
         }
         this.attributes.put(name, obj);
@@ -387,7 +386,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public Locale getLocale() {
-        return (locales.size() < 1)
+        return (locales.isEmpty())
             ? Locale.getDefault()
             : locales.get(0);
     }
@@ -410,10 +409,10 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public boolean isSecure() {
-        String scheme = getScheme();
-        return (scheme == null)
+        String schemeInner = getScheme();
+        return (schemeInner == null)
             ? false
-            : scheme.equals("https");
+            : schemeInner.equals("https");
     }
 
     /**
@@ -438,13 +437,13 @@ public class MockHttpServletRequest implements HttpServletRequest {
      * @deprecated Method getRealPath is deprecated
      *
      */
-    @Deprecated
+    @Deprecated(since = "Version 2.1")
 	@Override
 	public String getRealPath(String path) {
-        HttpSession session = getSession();
-        return (session == null)
+        HttpSession sessionInner = getSession();
+        return (sessionInner == null)
             ? null
-            : session.getServletContext().getRealPath(path);
+            : sessionInner.getServletContext().getRealPath(path);
     }
 
     /**
@@ -533,7 +532,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 	public String getHeader(String name) {
         List<String> headerList = headers.get(name);
 
-        return ((headerList == null) || (headerList.size() == 0))
+        return ((headerList == null) || (headerList.isEmpty()))
             ? null
             : headerList.get(0);
     }
@@ -658,10 +657,10 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public String getRequestedSessionId() {
-        HttpSession session = getSession();
-        return (session == null)
+        HttpSession sessionInner = getSession();
+        return (sessionInner == null)
             ? null
-            : session.getId();
+            : sessionInner.getId();
     }
 
     /**
@@ -722,8 +721,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
      */
     @Override
 	public boolean isRequestedSessionIdValid() {
-        HttpSession session = getSession();
-        return (session != null);
+        HttpSession sessionInner = getSession();
+        return (sessionInner != null);
     }
 
     /**
@@ -751,16 +750,6 @@ public class MockHttpServletRequest implements HttpServletRequest {
         return isRequestedSessionIdFromURL();
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // implementation access
-    //
-    /////////////////////////////////////////////////////////////////////////
-/*
-    public void setBytes(byte[] bytes) {
-        this.bin = new ByteArrayInputStream(bytes);
-    }
-*/
     /**
      *
      *
@@ -818,8 +807,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
-    public void setScheme(String schema) {
-        this.schema = schema;
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
     }
 
     public void setRemotePort(int remotePort) {
@@ -836,12 +825,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
         setHeader("Content-Type", contentType);
     }
     public void setHeader(String name, String value) {
-        List<String> valueList = headers.get(name);
-        if (valueList == null) {
-            valueList = new ArrayList<>();
-            headers.put(name, valueList);
-        }
-        valueList.add(value);
+        headers.computeIfAbsent(name, k -> new ArrayList<>()).add(value);
     }
     /////////////////////////////////////////////////////////////////////////
     //
@@ -876,8 +860,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
         String path,
         RequestDispatcher dispatcher)
     {
-        if (dispatcher instanceof MockRequestDispatcher) {
-            ((MockRequestDispatcher)dispatcher).setPath(path);
+        if (dispatcher instanceof MockRequestDispatcher mockRequestDispatcher) {
+            mockRequestDispatcher.setPath(path);
         }
         requestDispatchers.put(path, dispatcher);
     }
@@ -891,12 +875,8 @@ public class MockHttpServletRequest implements HttpServletRequest {
     }
 
     public void addHeader(String key, String value) {
-        List<String> valueList = headers.get(key);
-        if (valueList == null) {
-            valueList = new ArrayList<>();
-            headers.put(key, valueList);
-        }
-        valueList.add(value);
+        headers.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
+
     }
     public void clearHeader(String key) {
         headers.remove(key);
