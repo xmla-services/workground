@@ -143,7 +143,7 @@ class ExtractFunDef extends FunDefBase {
         }
         for (Hierarchy hierarchy : hierarchies) {
             if (hierarchy == null) {
-                throw new RuntimeException(
+                throw new FunctionException(
                     "hierarchy of argument not known");
             }
         }
@@ -158,17 +158,17 @@ class ExtractFunDef extends FunDefBase {
                     dimensionExpr.getDimension().getHierarchy();
             }
             if (extractedHierarchy == null) {
-                throw new RuntimeException("not a constant hierarchy: " + arg);
+                throw new FunctionException("not a constant hierarchy: " + arg);
             }
             int ordinal = hierarchies.indexOf(extractedHierarchy);
             if (ordinal == -1) {
-                throw new RuntimeException(
+                throw new FunctionException(
                     new StringBuilder("hierarchy ")
                     .append(extractedHierarchy.getUniqueName())
                     .append(" is not a hierarchy of the expression ").append(args[0]).toString());
             }
             if (extractedOrdinals.indexOf(ordinal) >= 0) {
-                throw new RuntimeException(
+                throw new FunctionException(
                     new StringBuilder("hierarchy ")
                     .append(extractedHierarchy.getUniqueName())
                     .append(" is extracted more than once").toString());

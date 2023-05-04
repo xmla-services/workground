@@ -217,11 +217,11 @@ public class RolapMemberBase
         if (o == this) {
             return true;
         }
-        if (o instanceof RolapMemberBase && equals((RolapMemberBase) o)) {
+        if (o instanceof RolapMemberBase && equalsOlapElement((RolapMemberBase) o)) {
             return true;
         }
         if (o instanceof RolapCubeMember
-                && equals(((RolapCubeMember) o).getRolapMember()))
+                && equalsOlapElement(((RolapCubeMember) o).getRolapMember()))
         {
             // TODO: remove, RolapCubeMember should never meet RolapMember
             assert !Bug.BugSegregateRolapCubeMemberFixed;
@@ -231,12 +231,12 @@ public class RolapMemberBase
     }
 
     @Override
-	public boolean equals(OlapElement o) {
+	public boolean equalsOlapElement(OlapElement o) {
         return (o instanceof RolapMemberBase)
-            && equals((RolapMemberBase) o);
+            && equalsOlapElement((RolapMemberBase) o);
     }
 
-    private boolean equals(RolapMemberBase that) {
+    private boolean equalsOlapElement(RolapMemberBase that) {
         assert that != null; // public method should have checked
         // Do not use equalsIgnoreCase; unique names should be identical, and
         // hashCode assumes this.
@@ -277,7 +277,7 @@ public class RolapMemberBase
             final RolapLevel level = getLevel();
             if (dimension.getDimensionType() != null
                 && (dimension.getDimensionType().equals(
-                    DimensionType.MeasuresDimension)
+                    DimensionType.MEASURES_DIMENSION)
                 && hierarchy.getName().equals(dimension.getName())))
             {
                 // Kludge to ensure that calc members are called

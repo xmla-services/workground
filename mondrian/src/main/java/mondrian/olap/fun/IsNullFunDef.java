@@ -44,7 +44,10 @@ class IsNullFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        assert call.getArgCount() == 1;
+
+        if (call.getArgCount() != 1) {
+            throw new IllegalArgumentException("ArgCount should be 1 ");
+        }
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
             @Override

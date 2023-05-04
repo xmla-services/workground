@@ -269,7 +269,7 @@ public class RolapCube extends CubeBase {
                 null,
                 true,
                 null,
-                DimensionType.MeasuresDimension,
+                DimensionType.MEASURES_DIMENSION,
                 false,
                 Map.of());
 
@@ -2691,7 +2691,7 @@ public class RolapCube extends CubeBase {
     public RolapHierarchy getTimeHierarchy(String funName) {
         for (RolapHierarchy hierarchy : hierarchyList) {
             if (hierarchy.getDimension().getDimensionType()
-                == DimensionType.TimeDimension)
+                == DimensionType.TIME_DIMENSION)
             {
                 return hierarchy;
             }

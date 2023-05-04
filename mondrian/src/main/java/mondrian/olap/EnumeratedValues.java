@@ -200,7 +200,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         if ((ordinal < min) || (ordinal > max)) {
             return false;
         }
-        return !(getName(ordinal) == null);
+        return (getName(ordinal) != null);
     }
 
     /**

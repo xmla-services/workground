@@ -48,7 +48,7 @@ import mondrian.olap.Util;
 public class JavaFunDef extends FunDefBase {
     private static final Map<Class, Integer> mapClazzToCategory =
         new HashMap<>();
-    private static final String className = JavaFunDef.class.getName();
+    private static final String CLASS_NAME = JavaFunDef.class.getName();
 
     static {
         JavaFunDef.mapClazzToCategory.put(String.class, Category.STRING);
@@ -114,7 +114,7 @@ public class JavaFunDef extends FunDefBase {
     }
 
     private static int[] getParameterCategories(Method m) {
-        int arr[] = new int[m.getParameterTypes().length];
+        int[] arr = new int[m.getParameterTypes().length];
         for (int i = 0; i < m.getParameterTypes().length; i++) {
             arr[i] = JavaFunDef.getCategory(m.getParameterTypes()[i]);
         }
@@ -124,17 +124,17 @@ public class JavaFunDef extends FunDefBase {
     private static FunDef generateFunDef(final Method method) {
         String name =
             Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.className).append("$FunctionName").toString(), method.getName());
+                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$FunctionName").toString(), method.getName());
         String desc =
             Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.className).append("$Description").toString(), "");
+                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$Description").toString(), "");
         Syntax syntax =
             Util.getAnnotation(
-                method, new StringBuilder(JavaFunDef.className).append("$SyntaxDef").toString(), Syntax.Function);
+                method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$SyntaxDef").toString(), Syntax.Function);
 
         int returnCategory = JavaFunDef.getReturnCategory(method);
 
-        int paramCategories[] = JavaFunDef.getParameterCategories(method);
+        int[] paramCategories = JavaFunDef.getParameterCategories(method);
 
         return new JavaFunDef(
             name, desc, syntax, returnCategory, paramCategories, method);
@@ -332,7 +332,7 @@ public class JavaFunDef extends FunDefBase {
      * Base class for adapter calcs that convert arguments into the precise
      * type needed.
      */
-    private static abstract class AbstractCalc2 extends AbstractCalc {
+    private abstract static class AbstractCalc2 extends AbstractCalc {
         /**
          * Creates an AbstractCalc2.
          *

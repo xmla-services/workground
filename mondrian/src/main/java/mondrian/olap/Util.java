@@ -242,7 +242,7 @@ public class Util extends XOMUtil {
         try {
             algorithm = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new UtilException(e);
         }
         return algorithm.digest(value.getBytes());
     }
@@ -258,7 +258,7 @@ public class Util extends XOMUtil {
         try {
             algorithm = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new UtilException(e);
         }
         return algorithm.digest(value.getBytes());
     }
@@ -1215,7 +1215,7 @@ public class Util extends XOMUtil {
     public static Random createRandom(long seed) {
         if (seed == 0) {
             seed = random.nextLong();
-            System.out.println("random: seed=" + seed);
+            LOGGER.debug("random: seed=" + seed);
         } else if (seed == -1 && metaRandom != null) {
             seed = metaRandom.nextLong();
         }
@@ -2028,6 +2028,7 @@ public class Util extends XOMUtil {
         try {
             return future.get();
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw newError(e, message);
         } catch (ExecutionException e) {
             final Throwable cause = e.getCause();
@@ -2227,7 +2228,7 @@ public class Util extends XOMUtil {
                     statement = resultSet.getStatement();
                 }
                 resultSet.close();
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 firstException = new SQLException();
                 firstException.initCause(t);
             }
@@ -2235,7 +2236,7 @@ public class Util extends XOMUtil {
         if (statement != null) {
             try {
                 statement.close();
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 if (firstException == null) {
                     firstException = new SQLException();
                     firstException.initCause(t);
@@ -2752,7 +2753,7 @@ public class Util extends XOMUtil {
             if (c == '"' || c == '\'') {
                 String value = parseQuoted(c);
                 // skip over trailing white space
-                while (i < n && (c = s.charAt(i)) == ' ') {
+                while (i < n && (s.charAt(i)) == ' ') {
                     i++;
                 }
                 if (i >= n) {
@@ -2761,7 +2762,7 @@ public class Util extends XOMUtil {
                     i++;
                     return value;
                 } else {
-                    throw new RuntimeException(
+                    throw new UtilException(
                         new StringBuilder("quoted value ended too soon, at position ").append(i)
                             .append(" in '").append(s).append("'").toString());
                 }
@@ -2806,7 +2807,7 @@ public class Util extends XOMUtil {
                     i++;
                 }
             }
-            throw new RuntimeException(
+            throw new UtilException(
                 new StringBuilder("Connect string '").append(s)
                     .append("' contains unterminated quoted value '").append(valueBuf.toString())
                     .append("'").toString());
@@ -3788,7 +3789,7 @@ public class Util extends XOMUtil {
                     && dimension.equals(dimension1)
                     && !((RolapCubeDimension)dimension1)
                     .getCube()
-                    .equals(cube))
+                    .equalsOlapElement(cube))
                 {
                     continue;
                 }
@@ -4097,7 +4098,7 @@ public class Util extends XOMUtil {
                     && Objects.equals(this.t1, that.t1)
                     && Objects.equals(this.t2, that.t2);
             }
-            return o.equals(this);
+            return o != null && o.equals(this);
         }
 
         @Override

@@ -47,9 +47,7 @@ abstract class ValidatorImpl implements Validator {
     private final FunTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
         new HashMap<>();
-    private final QueryPart placeHolder = Literal.zero;
-    private final Map<FunCall, List<String>> scopeExprs =
-        new HashMap<>();
+    private static final QueryPart placeHolder = Literal.zero;
 
     /**
      * Creates a ValidatorImpl.
@@ -91,7 +89,7 @@ abstract class ValidatorImpl implements Validator {
                 Util.assertTrue(resolved != null);
                 resolvedNodes.put((QueryPart) exp, (QueryPart) resolved);
             } finally {
-            	if (stack.size() > 0) {
+            	if (!stack.isEmpty()) {
             		stack.pop();
             	}
             }
@@ -283,8 +281,8 @@ abstract class ValidatorImpl implements Validator {
             return false;
         }
         final Object parent = stack.get(n - 1);
-        if (parent instanceof Formula) {
-            return ((Formula) parent).isMember();
+        if (parent instanceof Formula formula) {
+            return formula.isMember();
         } else if (parent instanceof ResolvedFunCall funCall) {
             if (funCall.getFunDef().getSyntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);

@@ -302,9 +302,9 @@ public class MemberCacheHelper implements MemberCache {
                             <RolapLevel, Object>, List<RolapMember>> entry =
                             iterator.next();
                         final RolapLevel cacheLevel = entry.getKey().left;
-                        if (cacheLevel.equals(levelRef)
+                        if (cacheLevel.equalsOlapElement(levelRef)
                             || (cacheLevel.getHierarchy()
-                            .equals(levelRef.getHierarchy())
+                            .equalsOlapElement(levelRef.getHierarchy())
                             && cacheLevel.getDepth()
                             >= levelRef.getDepth()))
                         {

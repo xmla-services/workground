@@ -200,7 +200,7 @@ public class RolapHierarchy extends HierarchyBase {
                     null,
                     null,
                     RolapLevel.HideMemberCondition.Never,
-                    LevelType.Regular,
+                    LevelType.REGULAR,
                     "",
                     Map.of());
         } else {
@@ -229,7 +229,7 @@ public class RolapHierarchy extends HierarchyBase {
                 null,
                 null,
                 RolapLevel.HideMemberCondition.Never,
-                LevelType.Null,
+                LevelType.NULL,
                 "",
                 Map.of());
     }
@@ -319,7 +319,7 @@ public class RolapHierarchy extends HierarchyBase {
                 null,
                 null,
                 RolapLevel.HideMemberCondition.Never,
-                LevelType.Regular, ALL_LEVEL_CARDINALITY,
+                LevelType.REGULAR, ALL_LEVEL_CARDINALITY,
                 Map.of());
         allLevel.init(xmlCubeDimension);
         this.allMember = new RolapMemberBase(
@@ -532,7 +532,7 @@ public class RolapHierarchy extends HierarchyBase {
                 null,
                 null,
                 RolapLevel.HideMemberCondition.Never,
-                LevelType.Regular,
+                LevelType.REGULAR,
                 "",
                 Map.of());
         this.levels = Util.append(this.levels, level);
@@ -1195,7 +1195,7 @@ public class RolapHierarchy extends HierarchyBase {
             null,
             true,
             "Closure dimension for parent-child hierarchy " + getName(),
-            DimensionType.StandardDimension,
+            DimensionType.STANDARD_DIMENSION,
             dimension.isHighCardinality(),
             Map.of());
 

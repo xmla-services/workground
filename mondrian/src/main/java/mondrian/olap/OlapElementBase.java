@@ -45,11 +45,11 @@ public abstract class OlapElementBase
     @Override
 	public boolean equals(Object o) {
         return (o == this)
-           || ((o instanceof OlapElement)
-               && equals((OlapElement) o));
+           || ((o instanceof OlapElement olapElement)
+               && equalsOlapElement(olapElement));
     }
 
-    public boolean equals(OlapElement mdxElement) {
+    public boolean equalsOlapElement(OlapElement mdxElement) {
         return mdxElement != null
            && getClass() == mdxElement.getClass()
            && getUniqueName().equalsIgnoreCase(mdxElement.getUniqueName());

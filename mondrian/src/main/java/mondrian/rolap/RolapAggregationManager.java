@@ -263,7 +263,7 @@ public abstract class RolapAggregationManager {
             // slicer predicate is built once in the evaluator to
             // avoid unnecessary duplicate effort
             predicateInfo = evaluator.getSlicerPredicateInfo();
-            if (!measure.getCube().equals(predicateInfo.getCube())) {
+            if (!measure.getCube().equalsOlapElement(predicateInfo.getCube())) {
                 predicateInfo = new CompoundPredicateInfo(
                     aggregationList, measure, evaluator);
                 evaluator.slicerPredicateInfo = predicateInfo;

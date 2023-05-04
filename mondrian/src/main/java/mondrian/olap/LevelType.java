@@ -8,7 +8,6 @@
 // Copyright (C) 2005-2017 Hitachi Vantara
 // All Rights Reserved.
 */
-
 package mondrian.olap;
 
 /**
@@ -23,82 +22,102 @@ package mondrian.olap;
 public enum LevelType {
 
     /** Indicates that the level is not related to time. */
-    Regular,
+    REGULAR("Regular"),
 
     /**
      * Indicates that a level refers to years.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeYears,
+    TIME_YEARS("TimeYears"),
 
     /**
      * Indicates that a level refers to half years.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeHalfYears,
+    TIME_HALF_YEARS("TimeHalfYears"),
 
     /**
      * Indicates that a level refers to quarters.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeQuarters,
+    TIME_QUARTERS("TimeQuarters"),
 
     /**
      * Indicates that a level refers to months.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeMonths,
+    TIME_MONTHS("TimeMonths"),
 
     /**
      * Indicates that a level refers to weeks.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeWeeks,
+    TIME_WEEKS("TimeWeeks"),
 
     /**
      * Indicates that a level refers to days.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeDays,
+    TIME_DAYS("TimeDays"),
 
     /**
      * Indicates that a level refers to hours.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeHours,
+    TIME_HOURS("TimeHours"),
 
     /**
      * Indicates that a level refers to minutes.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeMinutes,
+    TIME_MINUTES("TimeMinutes"),
 
     /**
      * Indicates that a level refers to seconds.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeSeconds,
+    TIME_SECONDS("TimeSeconds"),
 
     /**
      * Indicates that a level is an unspecified time period.
      * It must be used in a dimension whose type is
-     * {@link DimensionType#TimeDimension}.
+     * {@link DimensionType#TIME_DIMENSION}.
      */
-    TimeUndefined,
+    TIME_UNDEFINED("TimeUndefined"),
 
     /**
      * Indicates that a level holds the null member.
      */
-    Null;
+    NULL("Null");
+
+
+    private final String value;
+
+    LevelType(String v) {
+        value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static LevelType fromValue(String v) {
+        for (LevelType c : LevelType.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
 
     /**
      * Returns whether this is a time level.
@@ -106,7 +125,7 @@ public enum LevelType {
      * @return Whether this is a time level.
      */
     public boolean isTime() {
-        return ordinal() >= TimeYears.ordinal()
-           && ordinal() <= TimeUndefined.ordinal();
+        return ordinal() >= TIME_YEARS.ordinal()
+           && ordinal() <= TIME_UNDEFINED.ordinal();
     }
 }

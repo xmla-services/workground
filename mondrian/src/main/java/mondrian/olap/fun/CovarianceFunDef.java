@@ -71,14 +71,12 @@ class CovarianceFunDef extends FunDefBase {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final double covariance =
-                        (Double) FunUtil.covariance(
+                    return (Double) FunUtil.covariance(
                             evaluator,
                             memberList,
                             calc1,
                             calc2,
                             biased);
-                    return covariance;
                 } finally {
                     evaluator.restore(savepoint);
                 }

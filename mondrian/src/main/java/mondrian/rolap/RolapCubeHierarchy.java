@@ -339,7 +339,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             return false;
         }
 
-        return cubeDimension.equals(that.cubeDimension)
+        return cubeDimension.equalsOlapElement(that.cubeDimension)
             && getUniqueName().equals(that.getUniqueName());
     }
 

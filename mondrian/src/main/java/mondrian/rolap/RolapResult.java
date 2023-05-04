@@ -954,7 +954,7 @@ public final Execution getExecution() {
       }
       Hierarchy h = em.getHierarchy();
       Dimension d = h.getDimension();
-      if ( d.getDimensionType() == DimensionType.TimeDimension ) {
+      if ( d.getDimensionType() == DimensionType.TIME_DIMENSION) {
         continue;
       }
       if ( !em.isAll() ) {

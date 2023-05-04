@@ -338,7 +338,9 @@ public class AbstractExpCompiler implements ExpCompiler {
 
     @Override
     public ListCalc compileList(Exp exp, boolean mutable) {
-        assert exp.getType() instanceof SetType : "must be a set: " + exp;
+        if (!(exp.getType() instanceof SetType)) {
+            throw new IllegalArgumentException("must be a set: " + exp);
+        }
         final List<ResultStyle> resultStyleList;
         if (mutable) {
             resultStyleList = ResultStyle.MUTABLELIST_ONLY;
@@ -598,8 +600,9 @@ public class AbstractExpCompiler implements ExpCompiler {
 
             // make sure caller called convert first
             assert (!(value instanceof List) || (value instanceof TupleList));
-            assert !(value instanceof MemberExpr);
-            assert !(value instanceof Literal);
+            if (value instanceof Literal || value instanceof MemberExpr) {
+                throw new IllegalArgumentException("value should not be Literal or MemberExpr");
+            }
         }
 
         @Override

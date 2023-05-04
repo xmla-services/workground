@@ -68,8 +68,9 @@ public class QueryAxis extends QueryPart {
         SubtotalVisibility subtotalVisibility,
         Id[] dimensionProperties)
     {
-        assert dimensionProperties != null;
-        assert axisOrdinal != null;
+        if (dimensionProperties == null || axisOrdinal == null) {
+            throw new IllegalArgumentException("QueryAxis: dimensionProperties and axisOrdinal should not be null");
+        }
         this.nonEmpty = nonEmpty
             || (MondrianProperties.instance().EnableNonEmptyOnAllAxis.get()
             && !axisOrdinal.isFilter());
@@ -94,17 +95,16 @@ public class QueryAxis extends QueryPart {
         this(nonEmpty, set, axisOrdinal, subtotalVisibility, new Id[0]);
     }
 
-    @Override
-	public Object clone() {
-        return new QueryAxis(
-            nonEmpty, exp.cloneExp(), axisOrdinal,
-            subtotalVisibility, dimensionProperties.clone());
+    public QueryAxis(QueryAxis queryAxis) {
+        this(
+            queryAxis.nonEmpty, queryAxis.exp.cloneExp(), queryAxis.axisOrdinal,
+            queryAxis.subtotalVisibility, queryAxis.dimensionProperties.clone());
     }
 
     static QueryAxis[] cloneArray(QueryAxis[] a) {
         QueryAxis[] a2 = new QueryAxis[a.length];
         for (int i = 0; i < a.length; i++) {
-            a2[i] = (QueryAxis) a[i].clone();
+            a2[i] = new QueryAxis(a[i]);
         }
         return a2;
     }
@@ -120,18 +120,18 @@ public class QueryAxis extends QueryPart {
     }
 
     public Calc compile(ExpCompiler compiler, ResultStyle resultStyle) {
-        Exp exp = this.exp;
+        Exp expInner = this.exp;
         if (axisOrdinal.isFilter()) {
-            exp = normalizeSlicerExpression(exp);
-            exp = exp.accept(compiler.getValidator());
+            expInner = normalizeSlicerExpression(expInner);
+            expInner = expInner.accept(compiler.getValidator());
         }
         switch (resultStyle) {
         case LIST:
-            return compiler.compileList(exp, false);
+            return compiler.compileList(expInner, false);
         case MUTABLE_LIST:
-            return compiler.compileList(exp, true);
+            return compiler.compileList(expInner, true);
         case ITERABLE:
-            return compiler.compileIter(exp);
+            return compiler.compileIter(expInner);
         default:
             throw Util.unexpected(resultStyle);
         }
@@ -147,10 +147,9 @@ public class QueryAxis extends QueryPart {
                 "DefaultMember", Syntax.Property, new Exp[] {
                     slicer});
         }
-        if (slicer == null) {
-            ;
-        } else if (slicer instanceof FunCall
-            && ((FunCall) slicer).getSyntax() == Syntax.Parentheses)
+
+        if (slicer instanceof FunCall funCall
+            && funCall.getSyntax() == Syntax.Parentheses)
         {
             slicer =
                 new UnresolvedFunCall(
@@ -302,10 +301,8 @@ public class QueryAxis extends QueryPart {
     }
 
     public void validate(Validator validator) {
-        if (axisOrdinal.isFilter()) {
-            if (exp != null) {
-                exp = validator.validate(exp, false);
-            }
+        if (axisOrdinal.isFilter() && exp != null) {
+            exp = validator.validate(exp, false);
         }
     }
 
