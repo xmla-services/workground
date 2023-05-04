@@ -9,7 +9,6 @@
 // Copyright (C) 2005-2017 Hitachi Vantara and others
 // All Rights Reserved.
 */
-
 package mondrian.olap;
 
 /**
@@ -22,15 +21,35 @@ public enum DimensionType {
     /**
      * Indicates that the dimension is not related to time.
      */
-    StandardDimension,
+    STANDARD_DIMENSION("StandardDimension"),
 
     /**
      * Indicates that a dimension is a time dimension.
      */
-    TimeDimension,
+    TIME_DIMENSION("TimeDimension"),
 
     /**
      * Indicates the a dimension is the measures dimension.
      */
-    MeasuresDimension,
+    MEASURES_DIMENSION("MeasuresDimension");
+
+
+    private final String value;
+
+    DimensionType(String v) {
+        value = v;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static DimensionType fromValue(String v) {
+        for (DimensionType c: DimensionType.values()) {
+            if (c.value.equals(v)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException(v);
+    }
 }

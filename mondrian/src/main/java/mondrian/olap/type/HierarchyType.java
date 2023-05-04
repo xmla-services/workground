@@ -130,11 +130,11 @@ public class HierarchyType implements Type {
 
     @Override
 	public boolean isInstance(Object value) {
-        return value instanceof Hierarchy
+        return value instanceof Hierarchy hValue
             && (hierarchy == null
                 || value.equals(hierarchy))
             && (dimension == null
-                || ((Hierarchy) value).getDimension().equals(dimension));
+                || hValue.getDimension().equals(dimension));
     }
 
     @Override

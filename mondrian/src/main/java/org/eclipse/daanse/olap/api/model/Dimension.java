@@ -38,8 +38,8 @@ public interface Dimension extends OlapElement, MetaElement {
 
     /**
      * Returns the type of this dimension
-     * ({@link DimensionType#StandardDimension} or
-     * {@link DimensionType#TimeDimension}
+     * ({@link DimensionType#STANDARD_DIMENSION} or
+     * {@link DimensionType#TIME_DIMENSION}
      */
     DimensionType getDimensionType();
 

@@ -1263,7 +1263,7 @@ public TupleList readTuples(
 
     if ( !level.isAll() && hierarchy instanceof RolapCubeHierarchy cubeHierarchy ) {
       if ( baseCube != null
-        && !cubeHierarchy.getCube().equals( baseCube ) ) {
+        && !cubeHierarchy.getCube().equalsOlapElement( baseCube ) ) {
         // replace the hierarchy with the underlying base cube hierarchy
         // in the case of virtual cubes
         hierarchy = baseCube.findBaseCubeHierarchy( hierarchy );

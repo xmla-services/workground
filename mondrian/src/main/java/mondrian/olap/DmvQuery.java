@@ -45,5 +45,8 @@ public class DmvQuery extends QueryPart {
         return this.whereExpression;
     }
 
+    public List<String> getColumns() {
+        return columns;
+    }
 }
 

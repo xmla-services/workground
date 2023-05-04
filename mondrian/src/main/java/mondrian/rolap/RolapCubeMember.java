@@ -122,23 +122,23 @@ public class RolapCubeMember
         if (o == this) {
             return true;
         }
-        if (o instanceof RolapCubeMember) {
-            return equals((RolapCubeMember) o);
+        if (o instanceof RolapCubeMember rolapCubeMember) {
+            return equalsOlapElement(rolapCubeMember);
         }
-        if (o instanceof Member) {
+        if (o instanceof Member member) {
             assert !Bug.BugSegregateRolapCubeMemberFixed;
-            return getUniqueName().equals(((Member) o).getUniqueName());
+            return getUniqueName().equals(member.getUniqueName());
         }
         return false;
     }
 
     @Override
-	public boolean equals(OlapElement o) {
+	public boolean equalsOlapElement(OlapElement o) {
         return o.getClass() == RolapCubeMember.class
-            && equals((RolapCubeMember) o);
+            && equalsOlapElement((RolapCubeMember) o);
     }
 
-    private boolean equals(RolapCubeMember that) {
+    private boolean equalsOlapElement(RolapCubeMember that) {
         assert that != null; // public method should have checked
         // Assume that RolapCubeLevel is canonical. (Besides, its equals method
         // is very slow.)
@@ -209,8 +209,7 @@ public class RolapCubeMember
                     ? null
                     : parentCubeMember.getUniqueName();
 
-            case Property.MEMBER_KEY_ORDINAL:
-            case Property.KEY_ORDINAL:
+            case Property.MEMBER_KEY_ORDINAL, Property.KEY_ORDINAL:
                 return this == this.getHierarchy().getAllMember() ? 0
                     : getKey();
             }
@@ -237,8 +236,7 @@ public class RolapCubeMember
         Exp exp = member.getExpression();
         if (exp instanceof ResolvedFunCall fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
-                if (fcall.getArg(i) instanceof HierarchyExpr) {
-                    HierarchyExpr expr = (HierarchyExpr)fcall.getArg(i);
+                if (fcall.getArg(i) instanceof HierarchyExpr expr) {
                     if (expr.getHierarchy().equals(
                             member.getHierarchy()))
                     {

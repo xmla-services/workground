@@ -319,10 +319,7 @@ public abstract class LinReg extends FunDefBase {
                 return FunUtil.DOUBLE_NULL;
             }
             // use first arg to generate y position
-            double yPoint =
-                xPoint * value.getSlope()
-                + value.getIntercept();
-            return yPoint;
+            return xPoint * value.getSlope() + value.getIntercept();
         }
     }
 
@@ -411,7 +408,7 @@ public abstract class LinReg extends FunDefBase {
             LinReg.debug("LinReg.process", "ERROR error(s) count ="  + swY.errorCount);
             // TODO: throw exception
             return null;
-        } else if (swY.v.size() == 0) {
+        } else if (swY.v.isEmpty()) {
             return null;
         }
 
@@ -488,10 +485,10 @@ public abstract class LinReg extends FunDefBase {
         // MSE = mean error = Sum(error)/n
         // SST = sum square y diff = Sum((y-MST)*(y-MST))
         // MST = mean y = Sum(y)/n
-        double MSE = sumErr / n;
-        double MST = sumY / n;
-        double SSE = 0.0;
-        double SST = 0.0;
+        double mse = sumErr / n;
+        double mst = sumY / n;
+        double sse = 0.0;
+        double sst = 0.0;
         ity = value.ys.iterator();
         ityf = yfs.iterator();
         while (ity.hasNext()) {
@@ -509,11 +506,11 @@ public abstract class LinReg extends FunDefBase {
             double yf = dyf.doubleValue();
 
             double error = yf - y;
-            SSE += (error - MSE) * (error - MSE);
-            SST += (y - MST) * (y - MST);
+            sse += (error - mse) * (error - mse);
+            sst += (y - mst) * (y - mst);
         }
-        if (SST != 0.0) {
-            double rSquared =  1 - (SSE / SST);
+        if (sst != 0.0) {
+            double rSquared =  1 - (sse / sst);
 
             value.setRSquared(rSquared);
         }
@@ -561,7 +558,7 @@ public abstract class LinReg extends FunDefBase {
         // The regression line is the line that minimizes the variance of the
         // errors. The mean error is zero; so, this means that it minimizes the
         // sum of the squares errors.
-        double slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        double slope = (n * sumXX - sumX * sumX) == 0 ? 0 : (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
         double intercept = yMean - slope * xMean;
 
         LinReg.Value value = new LinReg.Value(intercept, slope, xlist, ylist);
@@ -585,7 +582,7 @@ public abstract class LinReg extends FunDefBase {
             } else {
                 double x = d.doubleValue();
                 double yf = value.intercept + value.slope * x;
-                yfs.add(new Double(yf));
+                yfs.add(Double.valueOf(yf));
             }
         }
 

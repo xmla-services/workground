@@ -73,29 +73,28 @@ public abstract class HierarchyBase
         this.description = description;
         this.visible = visible;
 
-        String name = dimension.getName();
+        String nameInner = dimension.getName();
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            if(dimension.getDimensionType() == DimensionType.MeasuresDimension) {
+            if(dimension.getDimensionType() == DimensionType.MEASURES_DIMENSION) {
                 this.subName = subName;
-                this.name = name;
+                this.name = nameInner;
                 this.uniqueName = Dimension.MEASURES_UNIQUE_NAME;
             }
             else {
                 if (subName == null) {
                     // e.g. "Time"
-                    subName = name;
+                    subName = nameInner;
                 }
                 this.subName = subName;
                 this.name = subName;
-                // always "[Time].[Weekly]" for dimension "Time", hierarchy "Weekly";
                 this.uniqueName = Util.makeFqName(dimension, this.name);
             }
         } else {
             this.subName = subName;
             if (this.subName != null) {
                 // e.g. "Time.Weekly"
-                this.name = new StringBuilder(name).append(".").append(subName).toString();
-                if (this.subName.equals(name)) {
+                this.name = new StringBuilder(nameInner).append(".").append(subName).toString();
+                if (this.subName.equals(nameInner)) {
                     this.uniqueName = dimension.getUniqueName();
                 } else {
                     // e.g. "[Time.Weekly]"
@@ -103,7 +102,7 @@ public abstract class HierarchyBase
                 }
             } else {
                 // e.g. "Time"
-                this.name = name;
+                this.name = nameInner;
                 // e.g. "[Time]"
                 this.uniqueName = dimension.getUniqueName();
             }
@@ -169,7 +168,7 @@ public abstract class HierarchyBase
     }
 
     @Override
-	public boolean equals(OlapElement mdxElement) {
+	public boolean equalsOlapElement(OlapElement mdxElement) {
         // Use object identity, because a private hierarchy can have the same
         // name as a public hierarchy.
         return (this == mdxElement);

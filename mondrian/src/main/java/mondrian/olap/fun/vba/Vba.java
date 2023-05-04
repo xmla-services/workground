@@ -23,10 +23,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mondrian.olap.InvalidArgumentException;
-import mondrian.olap.Util;
 import mondrian.olap.fun.JavaFunDef.Description;
 import mondrian.olap.fun.JavaFunDef.FunctionName;
 import mondrian.olap.fun.JavaFunDef.Signature;
+
+import static org.eigenbase.xom.XOMUtil.discard;
 
 /**
  * Implementations of functions in the Visual Basic for Applications (VBA)
@@ -53,8 +54,8 @@ public class Vba {
         "Returns an expression that has been converted to a Variant of subtype "
         + "Boolean.")
     public static boolean cBool(Object expression) {
-        if (expression instanceof Boolean) {
-            return (Boolean) expression;
+        if (expression instanceof Boolean bool) {
+            return bool;
         } else {
             int i = cInt(expression);
             return i != 0;
@@ -69,8 +70,8 @@ public class Vba {
         "Returns an expression that has been converted to a Variant of subtype "
         + "Byte.")
     public static byte cByte(Object expression) {
-        if (expression instanceof Byte) {
-            return (Byte) expression;
+        if (expression instanceof Byte bt) {
+            return bt;
         } else {
             int i = cInt(expression);
             return (byte) i;
@@ -86,8 +87,8 @@ public class Vba {
         + "Date.")
     public static Date cDate(Object expression) {
         String str = String.valueOf(expression);
-        if (expression instanceof Date) {
-            return (Date) expression;
+        if (expression instanceof Date date) {
+            return date;
         } else if (expression == null) {
             return null;
         } else {
@@ -125,7 +126,7 @@ public class Vba {
             return number.doubleValue();
         } else {
             final String s = String.valueOf(expression);
-            return new Double(s);
+            return Double.valueOf(s);
         }
     }
 
@@ -158,7 +159,7 @@ public class Vba {
             try {
                 return Integer.parseInt(s);
             } catch (NumberFormatException e) {
-                return new Double(s).intValue();
+                return Double.valueOf(s).intValue();
             }
         }
     }
@@ -178,9 +179,9 @@ public class Vba {
         "Returns the integer portion of a number. If negative, returns the "
         + "negative number greater than or equal to the number.")
     public static int fix(Object number) {
-        if (number instanceof Number) {
-            int v = ((Number) number).intValue();
-            double dv = ((Number) number).doubleValue();
+        if (number instanceof Number num) {
+            int v = num.intValue();
+            double dv = num.doubleValue();
             if (v < 0 && v < dv) {
                 v++;
             }
@@ -198,8 +199,8 @@ public class Vba {
     @Description(
         "Returns a String representing the hexadecimal value of a number.")
     public static String hex(Object number) {
-        if (number instanceof Number) {
-            return Integer.toHexString(((Number) number).intValue())
+        if (number instanceof Number num) {
+            return Integer.toHexString(num.intValue())
                     .toUpperCase();
         } else {
             throw new InvalidArgumentException(
@@ -215,9 +216,9 @@ public class Vba {
         "Returns the integer portion of a number. If negative, returns the "
         + "negative number less than or equal to the number.")
     public static int int_(Object number) {
-        if (number instanceof Number) {
-            int v = ((Number) number).intValue();
-            double dv = ((Number) number).doubleValue();
+        if (number instanceof Number num) {
+            int v = num.intValue();
+            double dv = num.doubleValue();
             if (v < 0 && v > dv) {
                 v--;
             }
@@ -252,8 +253,8 @@ public class Vba {
     @Description(
         "Returns a Variant (String) representing the octal value of a number.")
     public static String oct(Object number) {
-        if (number instanceof Number) {
-            return Integer.toOctalString(((Number) number).intValue());
+        if (number instanceof Number num) {
+            return Integer.toOctalString(num.intValue());
         } else {
             throw new InvalidArgumentException(
                 new StringBuilder("Invalid parameter. ")
@@ -281,8 +282,8 @@ public class Vba {
         // decimal separator. When different decimal separators may be used
         // (for example, in international applications), use CStr to convert a
         // number to a string.
-        if (number instanceof Number) {
-            if (((Number) number).doubleValue() >= 0) {
+        if (number instanceof Number num) {
+            if (num.doubleValue() >= 0) {
                 return " " + number.toString();
             } else {
                 return number.toString();
@@ -492,13 +493,10 @@ public class Vba {
         Interval interval = Interval.valueOf(intervalName);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        switch (interval) {
-        case w:
-        case ww:
+        if (Interval.w.equals(interval) || Interval.ww.equals(interval)) {
             // firstWeekOfYear and firstDayOfWeek only matter for 'w' and 'ww'
             firstWeekOfYear.apply(calendar);
             calendar.setFirstDayOfWeek(firstDayOfWeek);
-            break;
         }
         return interval.datePart(calendar);
     }
@@ -799,8 +797,8 @@ public class Vba {
         "Returns a Double specifying the interest payment for a given period "
         + "of an annuity based on periodic, fixed payments and a fixed "
         + "interest rate.")
-    public static double iPmt(double rate, double per, double nPer, double PV) {
-        return iPmt(rate, per, nPer, PV, 0);
+    public static double iPmt(double rate, double per, double nPer, double pv) {
+        return iPmt(rate, per, nPer, pv, 0);
     }
 
 
@@ -814,10 +812,10 @@ public class Vba {
         double rate,
         double per,
         double nPer,
-        double PV,
+        double pv,
         double fv)
     {
-        return iPmt(rate, per, nPer, PV, fv, false);
+        return iPmt(rate, per, nPer, pv, fv, false);
     }
 
 
@@ -831,12 +829,12 @@ public class Vba {
         double rate,
         double per,
         double nPer,
-        double PV,
+        double pv,
         double fv,
         boolean due)
     {
-        double pmtVal = pmt(rate, nPer, PV, fv, due);
-        double pValm1 = PV - pV(rate, per - 1, pmtVal, fv, due);
+        double pmtVal = pmt(rate, nPer, pv, fv, due);
+        double pValm1 = pv - pV(rate, per - 1, pmtVal, fv, due);
         return - pValm1 * rate;
     }
 
@@ -892,7 +890,7 @@ public class Vba {
         "Returns a Double specifying the modified internal rate of return for "
         + "a series of periodic cash flows (payments and receipts).")
     public static double MIRR(
-        double valueArray[],
+        double[] valueArray,
         double financeRate,
         double reinvestRate)
     {
@@ -968,8 +966,8 @@ public class Vba {
         "Returns a Double specifying the principal payment for a given period "
         + "of an annuity based on periodic, fixed payments and a fixed "
         + "interest rate.")
-    public static double pPmt(double rate, double per, double nPer, double PV) {
-        return pPmt(rate, per, nPer, PV, 0);
+    public static double pPmt(double rate, double per, double nPer, double pv) {
+        return pPmt(rate, per, nPer, pv, 0);
     }
 
     @FunctionName("PPmt")
@@ -982,10 +980,10 @@ public class Vba {
         double rate,
         double per,
         double nPer,
-        double PV,
+        double pv,
         double fv)
     {
-        return pPmt(rate, per, nPer, PV, fv, false);
+        return pPmt(rate, per, nPer, pv, fv, false);
     }
 
     @FunctionName("PPmt")
@@ -998,12 +996,12 @@ public class Vba {
         double rate,
         double per,
         double nPer,
-        double PV,
+        double pv,
         double fv,
         boolean due)
     {
-        return pmt(rate, nPer, PV, fv, due)
-            - iPmt(rate, per, nPer, PV, fv, due);
+        return pmt(rate, nPer, pv, fv, due)
+            - iPmt(rate, per, nPer, pv, fv, due);
     }
 
     @FunctionName("Pmt")
@@ -1060,9 +1058,9 @@ public class Vba {
     public static double rate(
         double nPer,
         double pmt,
-        double PV)
+        double pv)
     {
-        return rate(nPer, pmt, PV, 0);
+        return rate(nPer, pmt, pv, 0);
     }
 
     @FunctionName("Rate")
@@ -1073,10 +1071,10 @@ public class Vba {
     public static double rate(
         double nPer,
         double pmt,
-        double PV,
+        double pv,
         double fv)
     {
-        return rate(nPer, pmt, PV, fv, false);
+        return rate(nPer, pmt, pv, fv, false);
     }
 
     @FunctionName("Rate")
@@ -1087,11 +1085,11 @@ public class Vba {
     public static double rate(
         double nPer,
         double pmt,
-        double PV,
+        double pv,
         double fv,
         boolean type)
     {
-        return rate(nPer, pmt, PV, fv, type, 0.1);
+        return rate(nPer, pmt, pv, fv, type, 0.1);
     }
 
     @FunctionName("Rate")
@@ -1102,7 +1100,7 @@ public class Vba {
     public static double rate(
         double nPer, // specifies the number of payment periods
         double pmt, // payment per period of annuity
-        double PV, // the present value of the annuity (0 if a loan)
+        double pv, // the present value of the annuity (0 if a loan)
         double fv, // the future value of the annuity ($ if savings)
         boolean due,
         double guess)
@@ -1117,7 +1115,7 @@ public class Vba {
         // converge on the correct answer should use Newton's Method
         // for now use a binary search
         int r = 1;
-        if (PV < fv) {
+        if (pv < fv) {
             r = -1;
         }
 
@@ -1125,7 +1123,7 @@ public class Vba {
         // method,
         // so i've bumped it up to 30 iterations.
         for (int n = 0; n < 30; n++) {
-            double gFV = fV(guess, nPer, pmt, PV, due);
+            double gFV = fV(guess, nPer, pmt, pv, due);
             double diff = gFV - fv;
             if ((maxGuess - minGuess) < 0.0000001) {
                 return guess;
@@ -1393,7 +1391,11 @@ public class Vba {
     @Description("Returns a Variant (Integer) indicating the sign of a number.")
     public static int sgn(double number) {
         // We could use Math.signum(double) from JDK 1.5 onwards.
-        return number < 0.0d ? -1 : number > 0.0d ? 1 : 0;
+        if (number < 0.0d) {
+            return -1;
+        } else {
+            return number > 0.0d ? 1 : 0;
+        }
     }
 
     @FunctionName("Sin")
@@ -1575,12 +1577,11 @@ public class Vba {
             // todo: implement.
             // This will require tweaking of the currency expression
         }
-        if (groupDigits != -2) {
-            if (groupDigits != 0) {
-                format.setGroupingUsed(false);
-            } else {
-                format.setGroupingUsed(true);
-            }
+
+        if (groupDigits != -2 && groupDigits != 0) {
+            format.setGroupingUsed(false);
+        } else {
+            format.setGroupingUsed(true);
         }
         return format.format(expression);
     }
@@ -1923,9 +1924,9 @@ public class Vba {
             }
         }
         if (start != -1) {
-            return lwStringCheck.indexOf(lwStringMatch, start - 1) + 1;
+            return lwStringCheck == null ? 0 : lwStringCheck.indexOf(lwStringMatch, start - 1) + 1;
         } else {
-            return lwStringCheck.indexOf(lwStringMatch) + 1;
+            return lwStringCheck == null ? 0 : lwStringCheck.indexOf(lwStringMatch) + 1;
         }
     }
 
@@ -1978,9 +1979,9 @@ public class Vba {
             }
         }
         if (start != -1) {
-            return lwStringCheck.lastIndexOf(lwStringMatch, start - 1) + 1;
+            return lwStringCheck == null ? 0 : lwStringCheck.lastIndexOf(lwStringMatch, start - 1) + 1;
         } else {
-            return lwStringCheck.lastIndexOf(lwStringMatch) + 1;
+            return lwStringCheck == null ? 0 : lwStringCheck.lastIndexOf(lwStringMatch) + 1;
         }
     }
 
@@ -2143,7 +2144,7 @@ public class Vba {
         int compare)
     {
         // compare is currently ignored
-        Util.discard(compare);
+        discard(compare);
         return _replace(expression, find, replace, start, count);
     }
 
@@ -2422,9 +2423,8 @@ public class Vba {
         int a = (14 - month) / 12;
         int y = year + 4800 - a;
         int m = month + 12 * a - 3;
-        int jdn = day + (153 * m + 2) / 5
+        return day + (153 * m + 2) / 5
           + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
-        return jdn;
     }
 
     /**
@@ -2471,18 +2471,15 @@ public class Vba {
         private final int dateField;
 
         Interval(String desc, int dateField) {
-            Util.discard(desc);
+            discard(desc);
             this.dateField = dateField;
         }
 
         void add(Calendar calendar, int amount) {
-            switch (this) {
-            case q:
+            if (Interval.q.equals(this)) {
                 calendar.add(Calendar.MONTH, amount * 3);
-                break;
-            default:
+            } else {
                 calendar.add(dateField, amount);
-                break;
             }
         }
 
@@ -2526,8 +2523,7 @@ public class Vba {
                 }
                 d.floorInplace(calendar);
                 break;
-            case y:
-            case d:
+            case y, d:
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);

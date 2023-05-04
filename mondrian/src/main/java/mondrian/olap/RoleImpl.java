@@ -63,6 +63,21 @@ public class RoleImpl implements Role {
     public RoleImpl() {
     }
 
+    protected RoleImpl(RoleImpl role) {
+        mutable = role.mutable;
+        schemaGrants.putAll(role.schemaGrants);
+        cubeGrants.putAll(role.cubeGrants);
+        dimensionGrants.putAll(role.dimensionGrants);
+        hashCache.addAll(role.hashCache);
+        for (Map.Entry<Hierarchy, HierarchyAccessImpl> entry
+            : role.hierarchyGrants.entrySet())
+        {
+            hierarchyGrants.put(
+                entry.getKey(),
+                (HierarchyAccessImpl) entry.getValue().clone());
+        }
+    }
+
     @Override
 	public int hashCode() {
         // Although this code isn't entirely thread safe, it is good enough.
@@ -94,29 +109,11 @@ public class RoleImpl implements Role {
         return r.hashCache.equals(this.hashCache);
     }
 
-    @Override
-	protected RoleImpl clone() {
-        RoleImpl role = new RoleImpl();
-        role.mutable = mutable;
-        role.schemaGrants.putAll(schemaGrants);
-        role.cubeGrants.putAll(cubeGrants);
-        role.dimensionGrants.putAll(dimensionGrants);
-        role.hashCache.addAll(hashCache);
-        for (Map.Entry<Hierarchy, HierarchyAccessImpl> entry
-            : hierarchyGrants.entrySet())
-        {
-            role.hierarchyGrants.put(
-                entry.getKey(),
-                (HierarchyAccessImpl) entry.getValue().clone());
-        }
-        return role;
-    }
-
     /**
      * Returns a copy of this <code>Role</code> which can be modified.
      */
     public RoleImpl makeMutableClone() {
-        RoleImpl role = clone();
+        RoleImpl role = new RoleImpl(this);
         role.mutable = true;
         return role;
     }
@@ -347,7 +344,8 @@ public class RoleImpl implements Role {
 
     private Access getDimensionGrant(final Dimension dimension) {
         if (dimension.isMeasures()) {
-            for (Dimension key : dimensionGrants.keySet()) {
+            for (Map.Entry<Dimension, Access> entry : dimensionGrants.entrySet()) {
+                Dimension key = entry.getKey();
                 if (key == dimension) {
                     return dimensionGrants.get(key);
                 }
@@ -366,7 +364,7 @@ public class RoleImpl implements Role {
      * argument.
      */
     private Access checkDimensionAccessByCubeInheritance(Dimension dimension) {
-        assert dimensionGrants.containsKey(dimension) == false
+        assert !dimensionGrants.containsKey(dimension)
                || dimension.isMeasures();
         for (Map.Entry<Cube, Access> cubeGrant : cubeGrants.entrySet()) {
             final Access access = toAccess(cubeGrant.getValue());
@@ -389,14 +387,14 @@ public class RoleImpl implements Role {
                     && dimension.equals(dimension1)
                     && !((RolapCubeDimension)dimension1)
                         .getCube()
-                            .equals(cubeGrant.getKey()))
+                            .equalsOlapElement(cubeGrant.getKey()))
                 {
                     continue;
                 }
                 // Last thing is to allow for equality correspondences
                 // to work with virtual cubes.
-                if (cubeGrant.getKey() instanceof RolapCube
-                    && ((RolapCube)cubeGrant.getKey()).isVirtual()
+                if (cubeGrant.getKey() instanceof RolapCube rolapCube
+                    && rolapCube.isVirtual()
                     && dimension.equals(dimension1))
                 {
                     return cubeGrant.getValue();
@@ -529,12 +527,8 @@ public class RoleImpl implements Role {
         HierarchyAccessImpl hierarchyAccess =
                 hierarchyGrants.get(level.getHierarchy());
         if (hierarchyAccess != null
-            && hierarchyAccess.access != Access.NONE)
-        {
-            if (checkLevelIsOkWithRestrictions(
-                    hierarchyAccess,
-                    level))
-            {
+            && hierarchyAccess.access != Access.NONE
+            && checkLevelIsOkWithRestrictions(hierarchyAccess, level)) {
                 // We're good. Let it through.
                 LOGGER.trace(
                     "Access level {} granted to level {} because of the grant to hierarchy {}",
@@ -542,7 +536,6 @@ public class RoleImpl implements Role {
                     level.getUniqueName(),
                     level.getHierarchy().getUniqueName());
                 return hierarchyAccess.access;
-            }
         }
         // No information could be deducted from the parent hierarchy.
         // Let's use the parent dimension.
@@ -565,10 +558,7 @@ public class RoleImpl implements Role {
         if (level.getDepth() < hierarchyAccess.topLevel.getDepth()) {
             return false;
         }
-        if (level.getDepth() > hierarchyAccess.bottomLevel.getDepth()) {
-            return false;
-        }
-        return true;
+        return  level.getDepth() <= hierarchyAccess.bottomLevel.getDepth();
     }
 
     /**
@@ -640,18 +630,18 @@ public class RoleImpl implements Role {
     @Override
 	public boolean canAccess(OlapElement olapElement) {
         Util.assertPrecondition(olapElement != null, "olapElement != null");
-        if (olapElement instanceof Member) {
-            return getAccess((Member) olapElement) != Access.NONE;
-        } else if (olapElement instanceof Level) {
-            return getAccess((Level) olapElement) != Access.NONE;
-        } else if (olapElement instanceof NamedSet) {
-            return getAccess((NamedSet) olapElement) != Access.NONE;
-        } else if (olapElement instanceof Hierarchy) {
-            return getAccess((Hierarchy) olapElement) != Access.NONE;
-        } else if (olapElement instanceof Cube) {
-            return getAccess((Cube) olapElement) != Access.NONE;
-        } else if (olapElement instanceof Dimension) {
-            return getAccess((Dimension) olapElement) != Access.NONE;
+        if (olapElement instanceof Member member) {
+            return getAccess(member) != Access.NONE;
+        } else if (olapElement instanceof Level level) {
+            return getAccess(level) != Access.NONE;
+        } else if (olapElement instanceof NamedSet namedSet) {
+            return getAccess(namedSet) != Access.NONE;
+        } else if (olapElement instanceof Hierarchy hierarchy) {
+            return getAccess(hierarchy) != Access.NONE;
+        } else if (olapElement instanceof Cube cube) {
+            return getAccess(cube) != Access.NONE;
+        } else if (olapElement instanceof Dimension dimension) {
+            return getAccess(dimension) != Access.NONE;
         } else {
             return false;
         }
@@ -676,7 +666,7 @@ public class RoleImpl implements Role {
      * @return Union role
      */
     public static Role union(final List<Role> roleList) {
-        assert roleList.size() > 0;
+        assert !roleList.isEmpty();
         return new UnionRoleImpl(roleList);
     }
 
@@ -981,9 +971,7 @@ public class RoleImpl implements Role {
         @Override
 		public boolean hasInaccessibleDescendants(Member member) {
             for (MemberAccess access : memberGrants.values()) {
-                switch (access.access) {
-                case NONE:
-                case CUSTOM:
+                if (Access.NONE.equals(access.access) || Access.CUSTOM.equals(access.access)) {
                     if (access.isSubGrant(member)) {
                         // At least one of the limited member is
                         // part of the descendants of this member.
@@ -1063,7 +1051,7 @@ public class RoleImpl implements Role {
      * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that
      * delegates all methods to an underlying hierarchy access.
      */
-    public static abstract class DelegatingHierarchyAccess
+    public abstract static class DelegatingHierarchyAccess
         implements AllHierarchyAccess
     {
         protected final HierarchyAccess hierarchyAccess;
@@ -1105,8 +1093,8 @@ public class RoleImpl implements Role {
 
         @Override
 		public Access getAccess() {
-            if (hierarchyAccess instanceof AllHierarchyAccess) {
-                return ((AllHierarchyAccess) hierarchyAccess).getAccess();
+            if (hierarchyAccess instanceof AllHierarchyAccess allHierarchyAccess) {
+                return allHierarchyAccess.getAccess();
             }
             throw Util.newInternal(
                 "Unsupported operation. Should implement AllHierarchyAccess.");

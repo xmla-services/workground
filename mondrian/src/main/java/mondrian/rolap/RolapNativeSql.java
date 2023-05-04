@@ -314,7 +314,7 @@ public class RolapNativeSql {
             }
 
             if (rolapLevel != null
-                && dimension.equals(rolapLevel.getDimension()))
+                && dimension.equalsOlapElement(rolapLevel.getDimension()))
             {
                 // We can't use the evaluator because the filter is filtering
                 // a set which is uses same dimension as the predicate.

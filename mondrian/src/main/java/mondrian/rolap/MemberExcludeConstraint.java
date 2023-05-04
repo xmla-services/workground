@@ -73,13 +73,13 @@ class MemberExcludeConstraint implements TupleConstraint {
         AggStar aggStar,
         RolapLevel level)
     {
-        if (level.equals(this.level)) {
+        if (level.equalsOlapElement(this.level)) {
             SqlConstraintUtils.addMemberConstraint(
                 query, baseCube, aggStar, excludes, true, false, true);
         }
         if (csc != null) {
             for (CrossJoinArg cja : csc.args) {
-                if (cja.getLevel().equals(level)) {
+                if (cja.getLevel().equalsOlapElement(level)) {
                     cja.addConstraint(query, baseCube, aggStar);
                 }
             }

@@ -80,11 +80,11 @@ class MondrianOlap4jDimension
 	public Type getDimensionType() throws OlapException {
         final DimensionType dimensionType = dimension.getDimensionType();
         switch (dimensionType) {
-        case StandardDimension:
+        case STANDARD_DIMENSION:
             return Type.OTHER;
-        case MeasuresDimension:
+        case MEASURES_DIMENSION:
             return Type.MEASURE;
-        case TimeDimension:
+        case TIME_DIMENSION:
             return Type.TIME;
         default:
             throw Util.unexpected(dimensionType);

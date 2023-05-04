@@ -226,7 +226,7 @@ public class RolapLevel extends LevelBase {
         this.inheritedProperties = list.toArray(new RolapProperty[list.size()]);
 
         Dimension dim = hierarchy.getDimension();
-        if (dim.getDimensionType() == DimensionType.TimeDimension) {
+        if (dim.getDimensionType() == DimensionType.TIME_DIMENSION) {
             if (!levelType.isTime() && !isAll()) {
                 throw MondrianResource.instance()
                     .NonTimeLevelInTimeHierarchy.ex(getUniqueName());
@@ -372,7 +372,7 @@ public class RolapLevel extends LevelBase {
             org.eclipse.daanse.db.dialect.api.Datatype.fromValue(xmlLevel.type().getValue()),
             toInternalType(xmlLevel.internalType()),
             HideMemberCondition.valueOf(xmlLevel.hideMemberIf().getValue()),
-            LevelType.valueOf(
+            LevelType.fromValue(
                 xmlLevel.levelType().getValue().equals("TimeHalfYear")
                     ? "TimeHalfYears"
                     : xmlLevel.levelType().getValue()),

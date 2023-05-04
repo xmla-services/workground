@@ -98,7 +98,7 @@ public class RolapCubeLevel extends RolapLevel {
 	void init(CubeDimension xmlDimension) {
         if (isAll()) {
             this.levelReader = new AllLevelReaderImpl();
-        } else if (getLevelType() == LevelType.Null) {
+        } else if (getLevelType() == LevelType.NULL) {
             this.levelReader = new NullLevelReader();
         } else if (rolapLevel.xmlClosure != null) {
             RolapDimension dimension =
@@ -303,8 +303,8 @@ public class RolapCubeLevel extends RolapLevel {
             return true;
         }
         // verify the levels are part of the same hierarchy
-        return super.equals(level)
-                && getCube().equals(level.getCube());
+        return super.equalsOlapElement(level)
+                && getCube().equalsOlapElement(level.getCube());
     }
 
     @Override

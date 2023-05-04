@@ -165,7 +165,7 @@ public final class IdBatchResolver {
         final Map<QueryPart, QueryPart> resolvedIdentifiers =
             new HashMap<>();
 
-        while (identifiers.size() > 0) {
+        while (!identifiers.isEmpty()) {
             Id parent = identifiers.first();
             identifiers.remove(parent);
 
@@ -200,7 +200,7 @@ public final class IdBatchResolver {
         final List<Id.NameSegment> childNameSegments =
             collectChildrenNameSegments(parentMember, children);
 
-        if (childNameSegments.size() > 0) {
+        if (!childNameSegments.isEmpty()) {
             List<Member> childMembers =
                 lookupChildrenByNames(parentMember, childNameSegments);
             addChildrenToResolvedMap(
@@ -332,20 +332,20 @@ public final class IdBatchResolver {
      * For all other Exp returns null.
      */
     private Member getMemberFromExp(Exp exp) {
-        if (exp instanceof DimensionExpr) {
-            Hierarchy hier = ((DimensionExpr)exp)
+        if (exp instanceof DimensionExpr dimensionExpr) {
+            Hierarchy hier = dimensionExpr
                 .getDimension().getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof HierarchyExpr) {
-            Hierarchy hier = ((HierarchyExpr)exp)
+        } else if (exp instanceof HierarchyExpr hierarchyExpr) {
+            Hierarchy hier = hierarchyExpr
                 .getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof MemberExpr) {
-            return ((MemberExpr)exp).getMember();
+        } else if (exp instanceof MemberExpr memberExpr) {
+            return memberExpr.getMember();
         }
         return null;
     }
@@ -380,7 +380,6 @@ public final class IdBatchResolver {
         int size = id.getSegments().size();
 
         if (size == 1) {
-            //Id.Segment seg = id.getSegments().get(0);
             return segListMatchInUniqueNames(
                 id.getSegments(), dimensionUniqueNames)
                 || segListMatchInUniqueNames(

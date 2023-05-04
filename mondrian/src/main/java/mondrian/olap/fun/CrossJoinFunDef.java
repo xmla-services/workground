@@ -174,7 +174,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected IterCalc compileCallIterableArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs) {
-    IterCalc iterCalc = compileCallIterableLeaf(call, compiler, calcs[0], calcs[1]);
+    IterCalc iterCalc = compileCallIterableLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
       return iterCalc;
@@ -189,7 +189,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected IterCalc compileCallIterableLeaf( final ResolvedFunCall call, ExpCompiler compiler,
+  protected IterCalc compileCallIterableLeaf( final ResolvedFunCall call,
                                                 final Calc  calc1, final Calc calc2) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -343,7 +343,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected ListCalc compileCallImmutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallImmutableListLeaf(call, compiler, calcs[0], calcs[1]);
+    ListCalc listCalc = compileCallImmutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
       return listCalc;
@@ -358,7 +358,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallImmutableListLeaf( final ResolvedFunCall call, ExpCompiler compiler,
+  protected ListCalc compileCallImmutableListLeaf( final ResolvedFunCall call,
                                                    final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -485,7 +485,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected ListCalc compileCallMutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallMutableListLeaf(call, compiler, calcs[0], calcs[1]);
+    ListCalc listCalc = compileCallMutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
       return listCalc;
@@ -500,7 +500,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallMutableListLeaf( final ResolvedFunCall call, ExpCompiler compiler,
+  protected ListCalc compileCallMutableListLeaf( final ResolvedFunCall call,
                                                  final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and

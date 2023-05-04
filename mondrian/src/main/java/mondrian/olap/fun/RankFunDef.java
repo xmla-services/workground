@@ -11,7 +11,6 @@
 
 package mondrian.olap.fun;
 
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +40,8 @@ import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
 import mondrian.rolap.RolapUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Definition of the <code>RANK</code> MDX function.
@@ -49,7 +50,8 @@ import mondrian.rolap.RolapUtil;
  * @since 17 January, 2005
  */
 public class RankFunDef extends FunDefBase {
-  static final boolean debug = false;
+  private static final Logger LOGGER = LoggerFactory.getLogger(RankFunDef.class);
+  static final boolean DEBUG = false;
   static final ReflectiveMultiResolver Resolver =
       new ReflectiveMultiResolver( "Rank", "Rank(<Tuple>, <Set> [, <Calc Expression>])",
           "Returns the one-based rank of a tuple in a set.", new String[] { "fitx", "fitxn", "fimx", "fimxn" },
@@ -221,8 +223,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // If there is an exception while calculating the
         // list, propagate it up.
         final SortResult sortResult = (SortResult) evaluator.getCachedResult( cacheDescriptor );
-        if ( RankFunDef.debug ) {
-          sortResult.print( new PrintWriter( System.out ) );
+        if ( RankFunDef.DEBUG) {
+          sortResult.log();
         }
 
         if ( sortResult.isEmpty() ) {
@@ -232,13 +234,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
         // First try to find the member in the cached SortResult
         Integer rank = null;
-        if (sortResult instanceof TupleSortResult) {
-          rank = ((TupleSortResult)sortResult).rankOf(members);
+        if (sortResult instanceof TupleSortResult tupleSortResult) {
+          rank = tupleSortResult.rankOf(members);
         }
-        if (sortResult instanceof MemberSortResult) {
-          if (members.length > 0) {
-            rank = ((MemberSortResult)sortResult).rankOf(members[0]);
-          }
+        if (sortResult instanceof MemberSortResult memberSortResult && members.length > 0) {
+            rank = memberSortResult.rankOf(members[0]);
         }
         if ( rank != null ) {
           return rank;
@@ -306,8 +306,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // If there was an exception while calculating the
         // list, propagate it up.
         final MemberSortResult sortResult = (MemberSortResult) evaluator.getCachedResult( cacheDescriptor );
-        if ( RankFunDef.debug ) {
-          sortResult.print( new PrintWriter( System.out ) );
+        if ( RankFunDef.DEBUG) {
+          sortResult.log();
         }
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
@@ -367,7 +367,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   private static boolean valueNotReady( Object value ) {
-    return value == RolapUtil.valueNotReadyException || value == new Double( Double.NaN );
+    return value == RolapUtil.valueNotReadyException || value == Double.valueOf( Double.NaN );
   }
 
   /**
@@ -433,9 +433,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           for ( Member member : list.slice( 0 ) ) {
             evaluator.setContext( member );
             final Object keyValue = keyCalc.evaluate( evaluator );
-            if ( keyValue instanceof RuntimeException ) {
+            if ( keyValue instanceof RuntimeException runtimeException ) {
               if ( exception == null ) {
-                exception = (RuntimeException) keyValue;
+                exception = runtimeException;
               }
             } else if ( Util.isNull( keyValue ) ) {
               // nothing to do
@@ -457,9 +457,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           for ( List<Member> tuple : list ) {
             evaluator.setContext( tuple );
             final Object keyValue = keyCalc.evaluate( evaluator );
-            if ( keyValue instanceof RuntimeException ) {
+            if ( keyValue instanceof RuntimeException runtimeException) {
               if ( exception == null ) {
-                exception = (RuntimeException) keyValue;
+                exception = runtimeException;
               }
             } else if ( Util.isNull( keyValue ) ) {
               // nothing to do
@@ -516,9 +516,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         return new MemberSortResult( allValuesSorted, rankMap );
       } else {
         final Map<List<Member>, Integer> rankMap = new HashMap<>();
-        for ( Map.Entry<List<Member>, Object> entry : tupleValueMap.entrySet() ) {
-          int oneBasedRank = uniqueValueRankMap.get( entry.getValue() );
-          rankMap.put( entry.getKey(), oneBasedRank );
+        if (tupleValueMap != null) {
+            for (Map.Entry<List<Member>, Object> entry : tupleValueMap.entrySet()) {
+                int oneBasedRank = uniqueValueRankMap.get(entry.getValue());
+                rankMap.put(entry.getKey(), oneBasedRank);
+            }
         }
         return new TupleSortResult( allValuesSorted, rankMap );
       }
@@ -529,7 +531,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * Holder for the result of sorting a set of values. It provides simple interface to look up the rank for a member or
    * a tuple.
    */
-  private static abstract class SortResult {
+  private abstract static class SortResult {
     /**
      * All values in sorted order; Duplicates are not removed. E.g. Set (15,15,5,0) 10 should be ranked 3.
      *
@@ -546,21 +548,24 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return values == null;
     }
 
-    public void print( PrintWriter pw ) {
+    public void log() {
       if ( values == null ) {
-        pw.println( "SortResult: empty" );
+          LOGGER.debug( "SortResult: empty" );
       } else {
-        pw.println( "SortResult {" );
+        StringBuilder sb = new StringBuilder();
+          sb.append( "SortResult {" );
         for ( int i = 0; i < values.length; i++ ) {
           if ( i > 0 ) {
-            pw.println( "," );
+              sb.append( "\n," );
           }
           Object value = values[i];
-          pw.print( value );
+            sb.append( value );
         }
-        pw.println( "}" );
+        sb.append( "}" );
+        String msg = sb.toString();
+        LOGGER.debug(msg);
       }
-      pw.flush();
+
     }
   }
 

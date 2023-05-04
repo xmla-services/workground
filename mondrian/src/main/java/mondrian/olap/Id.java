@@ -44,7 +44,7 @@ public class Id
 
     public Id(List<Segment> segments) {
         this.segments = segments;
-        if (segments.size() <= 0) {
+        if (segments.isEmpty()) {
             throw new IllegalArgumentException();
         }
     }
@@ -315,7 +315,7 @@ public class Id
          */
         public KeySegment(List<NameSegment> subSegmentList) {
             super(Quoting.KEY);
-            if (subSegmentList.size() < 1) {
+            if (subSegmentList.isEmpty()) {
                 throw new IllegalArgumentException();
             }
             this.subSegmentList =

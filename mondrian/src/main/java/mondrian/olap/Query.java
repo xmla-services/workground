@@ -448,7 +448,7 @@ public class Query extends QueryPart {
             Formula.cloneArray(formulas),
             subcube,
             QueryAxis.cloneArray(axes),
-            (slicerAxis == null) ? null : (QueryAxis) slicerAxis.clone(),
+            (slicerAxis == null) ? null : new QueryAxis(slicerAxis),
             cellProps,
             parameters.toArray(new Parameter[parameters.size()]),
             strictValidation);

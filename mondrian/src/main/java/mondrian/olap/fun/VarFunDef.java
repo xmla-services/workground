@@ -65,10 +65,8 @@ class VarFunDef extends AbstractAggregateFunDef {
                 try {
                     evaluator.setNonEmpty(false);
                     TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
-                    final double var =
-                        (Double) FunUtil.var(
-                            evaluator, list, calc, false);
-                    return var;
+                    return (Double) FunUtil.var(
+                        evaluator, list, calc, false);
                 } finally {
                     evaluator.restore(savepoint);
                 }

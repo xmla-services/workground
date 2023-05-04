@@ -1445,7 +1445,7 @@ public class CacheControlImpl implements CacheControl {
 		public MemberSetPlus filter(RolapLevel level) {
             List<RolapMember> filteredMembers = new ArrayList<>();
             for (RolapMember member : members) {
-                if (member.getLevel().equals(level)) {
+                if (member.getLevel().equalsOlapElement(level)) {
                     filteredMembers.add(member);
                 }
             }

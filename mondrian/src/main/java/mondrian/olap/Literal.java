@@ -107,7 +107,7 @@ public class Literal extends ExpBase {
      */
     @Deprecated
 	public static Literal create(Double d) {
-        return new Literal(Category.NUMERIC, new BigDecimal(d));
+        return new Literal(Category.NUMERIC, BigDecimal.valueOf(d));
     }
 
     /**
@@ -144,8 +144,7 @@ public class Literal extends ExpBase {
     @Override
 	public void unparse(PrintWriter pw) {
         switch (category) {
-        case Category.SYMBOL:
-        case Category.NUMERIC:
+        case Category.SYMBOL, Category.NUMERIC:
             pw.print(o);
             break;
         case Category.STRING:
@@ -200,8 +199,8 @@ public class Literal extends ExpBase {
     }
 
     public int getIntValue() {
-        if (o instanceof Number) {
-            return ((Number) o).intValue();
+        if (o instanceof Number number) {
+            return number.intValue();
         } else {
             throw Util.newInternal(new StringBuilder("cannot convert ").append(o).append(" to int").toString());
         }

@@ -201,7 +201,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
      */
     private Level getTimeLevel(LevelType levelType) {
         for (Dimension dimension : dimensions) {
-            if (dimension.getDimensionType() == DimensionType.TimeDimension) {
+            if (dimension.getDimensionType() == DimensionType.TIME_DIMENSION) {
                 Hierarchy[] hierarchies = dimension.getHierarchies();
                 for (Hierarchy hierarchy : hierarchies) {
                     Level[] levels = hierarchy.getLevels();
@@ -218,21 +218,21 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
 
     @Override
 	public Level getYearLevel() {
-        return getTimeLevel(LevelType.TimeYears);
+        return getTimeLevel(LevelType.TIME_YEARS);
     }
 
     @Override
 	public Level getQuarterLevel() {
-        return getTimeLevel(LevelType.TimeQuarters);
+        return getTimeLevel(LevelType.TIME_QUARTERS);
     }
 
     @Override
 	public Level getMonthLevel() {
-        return getTimeLevel(LevelType.TimeMonths);
+        return getTimeLevel(LevelType.TIME_MONTHS);
     }
 
     @Override
 	public Level getWeekLevel() {
-        return getTimeLevel(LevelType.TimeWeeks);
+        return getTimeLevel(LevelType.TIME_WEEKS);
     }
 }

@@ -105,29 +105,29 @@ class MondrianOlap4jLevel
             return Type.ALL;
         }
         switch (level.getLevelType()) {
-        case Regular:
+        case REGULAR:
             return Type.REGULAR;
-        case TimeDays:
+        case TIME_DAYS:
             return Type.TIME_DAYS;
-        case TimeHalfYears:
+        case TIME_HALF_YEARS:
             return Type.TIME_HALF_YEAR;
-        case TimeHours:
+        case TIME_HOURS:
             return Type.TIME_HOURS;
-        case TimeMinutes:
+        case TIME_MINUTES:
             return Type.TIME_MINUTES;
-        case TimeMonths:
+        case TIME_MONTHS:
             return Type.TIME_MONTHS;
-        case TimeQuarters:
+        case TIME_QUARTERS:
             return Type.TIME_QUARTERS;
-        case TimeSeconds:
+        case TIME_SECONDS:
             return Type.TIME_SECONDS;
-        case TimeUndefined:
+        case TIME_UNDEFINED:
             return Type.TIME_UNDEFINED;
-        case TimeWeeks:
+        case TIME_WEEKS:
             return Type.TIME_WEEKS;
-        case TimeYears:
+        case TIME_YEARS:
             return Type.TIME_YEARS;
-        case Null:
+        case NULL:
         default:
             throw Util.unexpected(level.getLevelType());
         }

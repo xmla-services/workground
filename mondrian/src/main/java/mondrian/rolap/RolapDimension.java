@@ -143,15 +143,15 @@ class RolapDimension extends DimensionBase {
                     if (dimensionType == null) {
                         // not set yet - set it according to current level
                         dimensionType = (lev.getLevelType().isTime())
-                            ? DimensionType.TimeDimension
+                            ? DimensionType.TIME_DIMENSION
                             : isMeasures()
-                            ? DimensionType.MeasuresDimension
-                            : DimensionType.StandardDimension;
+                            ? DimensionType.MEASURES_DIMENSION
+                            : DimensionType.STANDARD_DIMENSION;
 
                     } else {
                         // Dimension type was set according to first level.
                         // Make sure that other levels fit to definition.
-                        if (dimensionType == DimensionType.TimeDimension
+                        if (dimensionType == DimensionType.TIME_DIMENSION
                             && !lev.getLevelType().isTime()
                             && !lev.isAll())
                         {
@@ -159,7 +159,7 @@ class RolapDimension extends DimensionBase {
                                 .NonTimeLevelInTimeHierarchy.ex(
                                     getUniqueName());
                         }
-                        if (dimensionType != DimensionType.TimeDimension
+                        if (dimensionType != DimensionType.TIME_DIMENSION
                             && lev.getLevelType().isTime())
                         {
                             throw MondrianResource.instance()
@@ -256,7 +256,7 @@ class RolapDimension extends DimensionBase {
     }
 
     private boolean isMeasuresDimension() {
-      return this.getDimensionType() == DimensionType.MeasuresDimension;
+      return this.getDimensionType() == DimensionType.MEASURES_DIMENSION;
     }
 
 }

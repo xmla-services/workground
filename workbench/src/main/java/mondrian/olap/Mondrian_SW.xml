@@ -518,7 +518,7 @@
                 if (type == null) {
                     return null; //DimensionType.StandardDimension;
                 } else {
-                    return DimensionType.valueOf(type);
+                    return DimensionType.fromValue(type);
                 }
             }
         </Code>

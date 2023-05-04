@@ -152,7 +152,7 @@ public class MemberListCrossJoinArg implements CrossJoinArg {
             }
             if (level == null) {
                 level = m.getLevel();
-            } else if (!level.equals(m.getLevel())) {
+            } else if (!level.equalsOlapElement(m.getLevel())) {
                 // Members should be on the same level.
                 return null;
             }

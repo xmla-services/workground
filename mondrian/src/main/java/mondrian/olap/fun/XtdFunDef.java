@@ -47,22 +47,22 @@ class XtdFunDef extends FunDefBase {
   static final ResolverImpl MtdResolver =
       new ResolverImpl( "Mtd", "Mtd([<Member>])",
           "A shortcut function for the PeriodsToDate function that specifies the level to be Month.", new String[] {
-            "fx", "fxm" }, LevelType.TimeMonths );
+            "fx", "fxm" }, LevelType.TIME_MONTHS);
 
   static final ResolverImpl QtdResolver =
       new ResolverImpl( "Qtd", "Qtd([<Member>])",
           "A shortcut function for the PeriodsToDate function that specifies the level to be Quarter.", new String[] {
-            "fx", "fxm" }, LevelType.TimeQuarters );
+            "fx", "fxm" }, LevelType.TIME_QUARTERS);
 
   static final ResolverImpl WtdResolver =
       new ResolverImpl( "Wtd", "Wtd([<Member>])",
           "A shortcut function for the PeriodsToDate function that specifies the level to be Week.", new String[] {
-            "fx", "fxm" }, LevelType.TimeWeeks );
+            "fx", "fxm" }, LevelType.TIME_WEEKS);
 
   static final ResolverImpl YtdResolver =
       new ResolverImpl( "Ytd", "Ytd([<Member>])",
           "A shortcut function for the PeriodsToDate function that specifies the level to be Year.", new String[] {
-            "fx", "fxm" }, LevelType.TimeYears );
+            "fx", "fxm" }, LevelType.TIME_YEARS);
 
   private static final String TIMING_NAME = XtdFunDef.class.getSimpleName();
 
@@ -81,7 +81,7 @@ public Type getResultType( Validator validator, Exp[] args ) {
       return new SetType( MemberType.forHierarchy( defaultTimeHierarchy ) );
     }
     final Type type = args[0].getType();
-    if ( type.getDimension().getDimensionType() != DimensionType.TimeDimension ) {
+    if ( type.getDimension().getDimensionType() != DimensionType.TIME_DIMENSION) {
       throw MondrianResource.instance().TimeArgNeeded.ex( getName() );
     }
     return super.getResultType( validator, args );
@@ -89,15 +89,15 @@ public Type getResultType( Validator validator, Exp[] args ) {
 
   private Level getLevel( Evaluator evaluator ) {
     switch ( levelType ) {
-      case TimeYears:
+      case TIME_YEARS:
         return evaluator.getCube().getYearLevel();
-      case TimeQuarters:
+      case TIME_QUARTERS:
         return evaluator.getCube().getQuarterLevel();
-      case TimeMonths:
+      case TIME_MONTHS:
         return evaluator.getCube().getMonthLevel();
-      case TimeWeeks:
+      case TIME_WEEKS:
         return evaluator.getCube().getWeekLevel();
-      case TimeDays:
+      case TIME_DAYS:
         return evaluator.getCube().getWeekLevel();
       default:
         throw Util.badValue( levelType );
@@ -122,7 +122,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
           @Override
 		public boolean dependsOn( Hierarchy hierarchy ) {
-            return hierarchy.getDimension().getDimensionType() == mondrian.olap.DimensionType.TimeDimension;
+            return hierarchy.getDimension().getDimensionType() == mondrian.olap.DimensionType.TIME_DIMENSION;
           }
         };
       default:

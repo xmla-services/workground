@@ -129,7 +129,7 @@ public class RolapCubeDimension extends RolapDimension {
             return false;
         }
 
-        if (!cube.equals(that.cube)) {
+        if (!cube.equalsOlapElement(that.cube)) {
             return false;
         }
         return getUniqueName().equals(that.getUniqueName());
