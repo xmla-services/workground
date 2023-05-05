@@ -38,12 +38,15 @@ class Quicksorter<T> {
   // size of smallest set worth a quicksort
   public static final int TOO_SMALL = 8;
 
-  private static final Logger LOGGER =
+    private static final Logger LOGGER =
     LoggerFactory.getLogger( Quicksorter.class );
-  private final T[] vec;
-  private final Comparator<T> comp;
-  private final boolean traced;
-  private long partitions, comparisons, exchanges; // stats
+    public static final String ITEMS = "items";
+    private final T[] vec;
+    private final Comparator<T> comp;
+    private final boolean traced;
+    private long partitions;
+    private long comparisons;
+    private long exchanges; // stats
 
   public Quicksorter( T[] vec, Comparator<T> comp ) {
     this.vec = vec;
@@ -70,12 +73,6 @@ class Quicksorter<T> {
   private boolean more( T x, T y ) {
     comparisons++;
     return comp.compare( x, y ) > 0;
-  }
-
-  // equivalent to operator >
-  private boolean equal( T x, T y ) {
-    comparisons++;
-    return comp.compare( x, y ) == 0;
   }
 
   // swaps two items (identified by index in vec[])
@@ -211,7 +208,7 @@ class Quicksorter<T> {
     int n = vec.length - 1;
     sort( 0, n );
     if ( traced ) {
-      traceStats( new StringBuilder("quicksort on ").append(n).append("items").toString() );
+      traceStats( new StringBuilder("quicksort on ").append(n).append(ITEMS).toString() );
     }
   }
 
@@ -223,7 +220,7 @@ class Quicksorter<T> {
     select( limit, 0, n );
     if ( traced ) {
       traceStats( new StringBuilder("quickselect for ").append(limit)
-          .append(" from").append(n).append("items").toString() );
+          .append(" from").append(n).append(ITEMS).toString() );
     }
   }
 
@@ -233,11 +230,11 @@ class Quicksorter<T> {
     if ( traced ) {
       traceStats(
         "partial sort: quickselect phase for "
-          + limit + "from " + n + "items" );
+          + limit + "from " + n + ITEMS );
     }
     sort( 0, limit - 1 );
     if ( traced ) {
-      traceStats( "partial sort: quicksort phase on " + n + "items" );
+      traceStats( "partial sort: quicksort phase on " + n + ITEMS );
     }
   }
 }

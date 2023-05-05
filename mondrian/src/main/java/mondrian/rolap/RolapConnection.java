@@ -163,7 +163,7 @@ public class RolapConnection extends ConnectionBase {
     final String jdbcConnectString = getJdbcConnectionString( connectInfo );
     final String strDataSource =
       connectInfo.get( RolapConnectionProperties.DataSource.name() );
-    Role role = null;
+    Role roleInner = null;
 
     // Register this connection before we register its internal statement.
     server.addConnection( this );
@@ -234,13 +234,13 @@ public class RolapConnection extends ConnectionBase {
             // If they specify 'Role=;', the list of names will be
             // empty, and the effect will be as if they did specify
             // Role at all.
-            role = null;
+            roleInner = null;
             break;
           case 1:
-            role = roleList.get( 0 );
+            roleInner = roleList.get( 0 );
             break;
           default:
-            role = RoleImpl.union( roleList );
+            roleInner = RoleImpl.union( roleList );
             break;
         }
       }
@@ -283,8 +283,8 @@ public class RolapConnection extends ConnectionBase {
       }
     }
 
-    if ( role == null ) {
-      role = schema.getDefaultRole();
+    if ( roleInner == null ) {
+      roleInner = schema.getDefaultRole();
     }
 
     // Set the locale.
@@ -296,7 +296,7 @@ public class RolapConnection extends ConnectionBase {
     }
 
     this.schema = schema;
-    setRole( role );
+    setRole( roleInner );
   }
 
   @Override
@@ -665,10 +665,8 @@ public QueryPart parseStatement( String query ) {
 public Exp parseExpression( String expr ) {
     boolean debug = false;
     if ( getLogger().isDebugEnabled() ) {
-      //debug = true;
-      getLogger().debug(
-        Util.NL
-          + expr );
+        String msg  = Util.NL + expr;
+        getLogger().debug(msg);
     }
     final Statement statement = getInternalStatement();
     try {
@@ -812,9 +810,9 @@ public Context getContext() {
    * @return new Scenario
    */
   public ScenarioImpl createScenario() {
-    final ScenarioImpl scenario = new ScenarioImpl();
-    scenario.register( schema );
-    return scenario;
+    final ScenarioImpl scenarioInner = new ScenarioImpl();
+    scenarioInner.register( schema );
+    return scenarioInner;
   }
 
   /**
@@ -854,35 +852,36 @@ public Context getContext() {
       if ( !tupleList.isEmpty()
         && tupleList.get( 0 ).get( 0 ).getDimension()
         .isHighCardinality() ) {
-        LOGGER.warn(
-          MondrianResource.instance()
-            .HighCardinalityInDimension.str(
-            tupleList.get( 0 ).get( 0 ).getDimension()
-              .getUniqueName() ) );
-        filteredTupleList =
-          new DelegatingTupleList(
-            tupleList.getArity(),
-            new FilteredIterableList<>(
-              tupleList,
-              new FilteredIterableList.Filter<List<Member>>() {
-                @Override
-				public boolean accept( final List<Member> p ) {
+          String msg = MondrianResource.instance()
+              .HighCardinalityInDimension.str(
+                  tupleList.get( 0 ).get( 0 ).getDimension()
+                      .getUniqueName() );
+          LOGGER.warn(msg);
+          filteredTupleList =
+              new DelegatingTupleList(
+                  tupleList.getArity(),
+                  new FilteredIterableList<>(
+                      tupleList,
+                      new FilteredIterableList.Filter<List<Member>>() {
+                          @Override
+                          public boolean accept( final List<Member> p ) {
                   return p.get( 0 ) != null;
                 }
-              }
-            ) );
+                      }
+                      )
+              );
       } else {
-        filteredTupleList =
-          TupleCollections.createList( tupleList.getArity() );
-        int i = -1;
-        TupleCursor tupleCursor = tupleList.tupleCursor();
-        while ( tupleCursor.forward() ) {
-          ++i;
-          if ( !isEmpty( i, axis ) ) {
-            map.put( filteredTupleList.size(), i );
-            filteredTupleList.addCurrent( tupleCursor );
+          filteredTupleList =
+              TupleCollections.createList( tupleList.getArity() );
+          int i = -1;
+          TupleCursor tupleCursor = tupleList.tupleCursor();
+          while ( tupleCursor.forward() ) {
+              ++i;
+              if ( !isEmpty( i, axis ) ) {
+                  map.put( filteredTupleList.size(), i );
+                  filteredTupleList.addCurrent( tupleCursor );
+              }
           }
-        }
       }
       this.axes[ axis ] = new RolapAxis( filteredTupleList );
     }
@@ -1143,7 +1142,7 @@ public Context getContext() {
    */
   private class ReentrantInternalStatement extends InternalStatement {
     @Override
-    public void start( Execution execution ) {
+    public synchronized void start( Execution execution ) {
       // Unlike StatementImpl, there is not a unique execution. An
       // internal statement can execute several at the same time. So,
       // we don't set this.execution.
@@ -1151,7 +1150,7 @@ public Context getContext() {
     }
 
     @Override
-    public void end( Execution execution ) {
+    public synchronized void end( Execution execution ) {
       execution.end();
     }
 

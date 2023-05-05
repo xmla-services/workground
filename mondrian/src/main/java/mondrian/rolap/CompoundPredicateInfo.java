@@ -48,10 +48,12 @@ public class CompoundPredicateInfo {
   private boolean satisfiable = true;
 
   public CompoundPredicateInfo( List<List<Member>> tupleList, RolapMeasure measure, Evaluator evaluator ) {
-    this.measure = measure;
-    this.predicate = predicateFromTupleList( tupleList, measure, evaluator );
-    this.predicateString = getPredicateString( getStar( measure ), getPredicate() );
-    assert measure != null;
+      if (measure == null) {
+          throw new IllegalArgumentException("measure should not be null");
+      }
+      this.measure = measure;
+      this.predicate = predicateFromTupleList( tupleList, measure, evaluator );
+      this.predicateString = getPredicateString( getStar( measure ), getPredicate() );
   }
 
   public StarPredicate getPredicate() {
@@ -110,7 +112,8 @@ public class CompoundPredicateInfo {
     StarPredicate compoundPredicate;
     Map<BitKey, List<RolapCubeMember[]>> compoundGroupMap;
     boolean unsatisfiable;
-    int starColumnCount = getStar( measure ).getColumnCount();
+    RolapStar rolapStar = getStar( measure );
+    int starColumnCount = rolapStar != null ? rolapStar.getColumnCount() : 0;
 
     compoundBitKey = BitKey.Factory.makeBitKey( starColumnCount );
     compoundBitKey.clear();
@@ -193,7 +196,7 @@ public class CompoundPredicateInfo {
     // The special case is a tuple defined by only one member.
     int unsatisfiableTupleCount = 0;
     for ( List<Member> aggregation : aggregationList ) {
-      if ( !( aggregation.size() > 0 && ( aggregation.get( 0 ) instanceof RolapCubeMember
+      if ( !( !aggregation.isEmpty() && ( aggregation.get( 0 ) instanceof RolapCubeMember
           || aggregation.get( 0 ) instanceof VisualTotalsFunDef.VisualTotalMember ) ) ) {
         ++unsatisfiableTupleCount;
         continue;
@@ -236,12 +239,7 @@ public class CompoundPredicateInfo {
 
   private void addTupleToCompoundGroupMap( RolapCubeMember[] tuple, BitKey bitKey,
       Map<BitKey, List<RolapCubeMember[]>> compoundGroupMap ) {
-    List<RolapCubeMember[]> compoundGroup = compoundGroupMap.get( bitKey );
-    if ( compoundGroup == null ) {
-      compoundGroup = new ArrayList<>();
-      compoundGroupMap.put( bitKey, compoundGroup );
-    }
-    compoundGroup.add( tuple );
+      compoundGroupMap.computeIfAbsent(bitKey, k -> new ArrayList<>()).add( tuple );
   }
 
   private boolean makeCompoundGroupForMember( RolapCubeMember member, RolapCube baseCube, BitKey bitKey ) {
@@ -271,7 +269,7 @@ public class CompoundPredicateInfo {
       RolapCube baseCube, Evaluator evaluator ) {
     List<StarPredicate> compoundPredicateList = new ArrayList<>();
     for ( List<RolapCubeMember[]> group : compoundGroupMap.values() ) {
-      // e.g {[USA].[CA], [Canada].[BC]}
+      // e.g [USA].[CA], [Canada].[BC]
       StarPredicate compoundGroupPredicate = null;
       List<StarPredicate> tuplePredicateList = new ArrayList<>();
       for ( RolapCubeMember[] tuple : group ) {
@@ -291,8 +289,7 @@ public class CompoundPredicateInfo {
         // All tuples in the same group will constrain the same set of columns so
         // when combining the tuple predicates we can optimize to create the
         // ListColumnPredicate or OrPredicate in a single batch. See MONDRIAN-2719
-        if ( tuplePredicateList.get( 0 ) instanceof StarColumnPredicate ) {
-          StarColumnPredicate scp = (StarColumnPredicate) tuplePredicateList.get( 0 );
+        if ( tuplePredicateList.get( 0 ) instanceof StarColumnPredicate scp ) {
           compoundGroupPredicate =
               new ListColumnPredicate( scp.getConstrainedColumn(), Util.cast( tuplePredicateList ) );
         } else {

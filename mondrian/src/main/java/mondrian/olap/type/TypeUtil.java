@@ -32,6 +32,11 @@ import mondrian.olap.fun.Resolver;
  * @since Feb 17, 2005
  */
 public class TypeUtil {
+
+    private TypeUtil() {
+        //constructor
+    }
+
     /**
      * Given a set type, returns the element type. Or its element type, if it
      * is a set type. And so on.
@@ -40,8 +45,8 @@ public class TypeUtil {
      * @return underlying element type which is not a set type
      */
     public static Type stripSetType(Type type) {
-        while (type instanceof SetType) {
-            type = ((SetType) type).getElementType();
+        while (type instanceof SetType setType) {
+            type = setType.getElementType();
         }
         return type;
     }
@@ -75,14 +80,14 @@ public class TypeUtil {
      */
     public static MemberType toMemberType(Type type) {
         type = stripSetType(type);
-        if (type instanceof MemberType) {
-            return (MemberType) type;
+        if (type instanceof MemberType memberType) {
+            return memberType;
         } else if (type instanceof DimensionType
             || type instanceof HierarchyType
             || type instanceof LevelType)
         {
             return MemberType.forType(type);
-        } else if(type instanceof TupleType && ((TupleType)type).getArity() == 1) {
+        } else if(type instanceof TupleType tupleType && tupleType.getArity() == 1) {
             return MemberType.forHierarchy(((TupleType)type).getHierarchies().get(0));
         }
         else {
@@ -105,23 +110,19 @@ public class TypeUtil {
         if(memberType1 != null && memberType2 != null ) {
             final Hierarchy hierarchy1 = memberType1.getHierarchy();
             final Hierarchy hierarchy2 = memberType2.getHierarchy();
-            return equal(hierarchy1, hierarchy2);
+            return equalHierarchy(hierarchy1, hierarchy2);
         }
         if (type1 instanceof TupleType tupleType1) {
-            if (type2 instanceof TupleType tupleType2) {
-                if (tupleType1.elementTypes.length
-                        == tupleType2.elementTypes.length)
-                {
-                    for (int i = 0; i < tupleType1.elementTypes.length; i++) {
-                        if (!isUnionCompatible(
-                                tupleType1.elementTypes[i],
-                                tupleType2.elementTypes[i]))
-                        {
+            if (type2 instanceof TupleType tupleType2 && tupleType1.elementTypes.length
+                == tupleType2.elementTypes.length) {
+                for (int i = 0; i < tupleType1.elementTypes.length; i++) {
+                    if (!isUnionCompatible(
+                        tupleType1.elementTypes[i],
+                        tupleType2.elementTypes[i])) {
                             return false;
-                        }
                     }
-                    return true;
                 }
+                return true;
             }
             return false;
         }
@@ -135,7 +136,7 @@ public class TypeUtil {
      * @param hierarchy2 Second hierarchy
      * @return Whether hierarchies are equal
      */
-    private static boolean equal(
+    private static boolean equalHierarchy(
         final Hierarchy hierarchy1,
         final Hierarchy hierarchy2)
     {
@@ -199,8 +200,8 @@ public class TypeUtil {
             return Category.EMPTY;
         } else if (type instanceof DateTimeType) {
             return Category.DATE_TIME;
-        } else if (type instanceof DecimalType
-            && ((DecimalType)type).getScale() == 0)
+        } else if (type instanceof DecimalType decimalType
+            && decimalType.getScale() == 0)
         {
             return Category.INTEGER;
         } else if (type instanceof NumericType) {
@@ -291,9 +292,7 @@ public class TypeUtil {
             // from being chosen; we will hit an error either at compile time or
             // at run time.
             switch (to) {
-            case Category.MEMBER:
-            case Category.TUPLE:
-            case Category.HIERARCHY:
+            case Category.MEMBER, Category.TUPLE, Category.HIERARCHY:
                 // It is more difficult to convert dimension->hierarchy than
                 // hierarchy->dimension
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, e));
@@ -311,13 +310,10 @@ public class TypeUtil {
             // it? But we add an implicit 'CurrentMember', for example,
             // '[Product].PrevMember' actually means
             // '[Product].CurrentMember.PrevMember'.
-            switch (to) {
-            case Category.DIMENSION:
-            case Category.MEMBER:
-            case Category.TUPLE:
+            if (to == Category.DIMENSION || to == Category.MEMBER || to == Category.TUPLE) {
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
-            default:
+            } else {
                 return false;
             }
         case Category.LEVEL:
@@ -329,26 +325,17 @@ public class TypeUtil {
                 // <Dimension>.CurrentMember.
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.HIERARCHY:
-            case Category.SET:
+            case Category.HIERARCHY, Category.SET:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             default:
                 return false;
             }
         case Category.LOGICAL:
-            switch (to) {
-            case Category.VALUE:
-                return true;
-            default:
-                return false;
-            }
+            return Category.VALUE == to;
         case Category.MEMBER:
             switch (to) {
-            case Category.DIMENSION:
-            case Category.HIERARCHY:
-            case Category.LEVEL:
-            case Category.TUPLE:
+            case Category.DIMENSION, Category.HIERARCHY, Category.LEVEL, Category.TUPLE:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             case Category.SET:
@@ -357,8 +344,7 @@ public class TypeUtil {
             case Category.NUMERIC:
                 conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
                 return true;
-            case Category.VALUE:
-            case Category.STRING:
+            case Category.VALUE, Category.STRING:
                 // We assume that measures are numeric, so a cast to a string or
                 // general value expression is more expensive (cost=4) than a
                 // conversion to a numeric expression (cost=3).
@@ -368,20 +354,13 @@ public class TypeUtil {
                 return false;
             }
         case Category.NUMERIC | Category.CONSTANT:
-            switch (to) {
-            case Category.VALUE:
-            case Category.NUMERIC:
-                return true;
-            default:
-                return false;
-            }
+            return (to == Category.VALUE || to == Category.NUMERIC);
         case Category.NUMERIC:
             switch (to) {
             case Category.LOGICAL:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.VALUE:
-            case Category.INTEGER:
+            case Category.VALUE, Category.INTEGER:
             case (Category.INTEGER | Category.CONSTANT):
             case (Category.NUMERIC | Category.CONSTANT):
                 return true;
@@ -390,9 +369,8 @@ public class TypeUtil {
             }
         case Category.INTEGER:
             switch (to) {
-            case Category.VALUE:
+            case Category.VALUE, Category.NUMERIC:
             case (Category.INTEGER | Category.CONSTANT):
-            case Category.NUMERIC:
             case (Category.NUMERIC | Category.CONSTANT):
                 return true;
             default:
@@ -401,13 +379,7 @@ public class TypeUtil {
         case Category.SET:
             return false;
         case Category.STRING | Category.CONSTANT:
-            switch (to) {
-            case Category.VALUE:
-            case Category.STRING:
-                return true;
-            default:
-                return false;
-            }
+            return (to == Category.VALUE || to == Category.STRING);
         case Category.STRING:
             switch (to) {
             case Category.VALUE:
@@ -417,13 +389,7 @@ public class TypeUtil {
                 return false;
             }
         case Category.DATE_TIME | Category.CONSTANT:
-            switch (to) {
-            case Category.VALUE:
-            case Category.DATE_TIME:
-                return true;
-            default:
-                return false;
-            }
+            return to == Category.VALUE || to == Category.DATE_TIME;
         case Category.DATE_TIME:
             switch (to) {
             case Category.VALUE:
@@ -440,8 +406,7 @@ public class TypeUtil {
             case Category.SET:
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            case Category.STRING:
-            case Category.VALUE:
+            case Category.STRING, Category.VALUE:
                 // We assume that measures are numeric, so a cast to a string or
                 // general value expression is more expensive (cost=4) than a
                 // conversion to a numeric expression (cost=3).
@@ -453,13 +418,10 @@ public class TypeUtil {
         case Category.VALUE:
             // We can implicitly cast from value to a more specific scalar type,
             // but the cost is significant.
-            switch (to) {
-            case Category.STRING:
-            case Category.NUMERIC:
-            case Category.LOGICAL:
+            if (to == Category.STRING || to == Category.NUMERIC || to == Category.LOGICAL) {
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
-            default:
+            } else {
                 return false;
             }
         case Category.SYMBOL:
@@ -484,10 +446,15 @@ public class TypeUtil {
     }
 
     static <T> T neq(T t1, T t2) {
-        return t1 == null  ? t2
-            : t2 == null ? t1
-                : t1.equals(t2) ? t1
-                    : null;
+        if (t1 == null) {
+            return t2;
+        } else {
+            if (t2 == null) {
+                return t1;
+            } else {
+                return t1.equals(t2) ? t1 : null;
+            }
+        }
     }
 
     /**
@@ -497,8 +464,8 @@ public class TypeUtil {
      * @return List of hierarchies
      */
     public static List<Hierarchy> getHierarchies(Type type) {
-        if (type instanceof SetType) {
-            type = ((SetType) type).getElementType();
+        if (type instanceof SetType setType) {
+            type = setType.getElementType();
         }
         if (type instanceof TupleType tupleType) {
             List<Hierarchy> hierarchyList = new ArrayList<>();
@@ -573,22 +540,12 @@ public class TypeUtil {
         @Override
 		public void apply(Validator validator, List<Exp> args) {
             final Exp arg = args.get(ordinal);
-            switch (from) {
-            case Category.MEMBER:
-            case Category.TUPLE:
-                switch (to) {
-                case Category.SET:
-                    final Exp newArg =
-                        validator.validate(
-                            new UnresolvedFunCall(
-                                "{}", Syntax.Braces, new Exp[]{arg}), false);
-                    args.set(ordinal, newArg);
-                    break;
-                default:
-                    // do nothing
-                }
-            default:
-                // do nothing
+            if ((from == Category.MEMBER || from == Category.TUPLE) && to == Category.SET) {
+                final Exp newArg =
+                    validator.validate(
+                        new UnresolvedFunCall(
+                            "{}", Syntax.Braces, new Exp[]{arg}), false);
+                args.set(ordinal, newArg);
             }
         }
 

@@ -423,11 +423,8 @@ public abstract class LinReg extends FunDefBase {
 
         // for r2
         // data
-        double sumSquaredY = 0.0;
         double sumY = 0.0;
         // predicted
-        double sumSquaredYF = 0.0;
-        double sumYF = 0.0;
 
         // Obtain the forecast values for this model
         List yfs = LinReg.forecast(value);
@@ -458,10 +455,6 @@ public abstract class LinReg extends FunDefBase {
             sumErrSquared += error * error;
 
             sumY += y;
-            sumSquaredY += (y * y);
-
-            sumYF =+ yf;
-            sumSquaredYF =+ (yf * yf);
         }
 
 

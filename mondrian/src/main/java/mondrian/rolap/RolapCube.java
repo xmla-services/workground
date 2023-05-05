@@ -2079,7 +2079,7 @@ public class RolapCube extends CubeBase {
                 }
 
                 // cube and dimension usage are in different tables
-                if (!relation.equals(table.getRelation())) {
+                if (relation != null && !relation.equals(table.getRelation())) {
                     // HierarchyUsage should have checked this.
                     if (hierarchyUsage.getForeignKey() == null) {
                         throw MondrianResource.instance()

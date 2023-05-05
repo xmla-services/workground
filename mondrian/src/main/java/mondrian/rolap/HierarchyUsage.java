@@ -114,8 +114,6 @@ public class HierarchyUsage {
 
     // NOT USED
     private final String level;
-    //final String type;
-    //final String caption;
 
     /**
      * Dimension table which contains the primary key for the hierarchy.
@@ -153,19 +151,16 @@ public class HierarchyUsage {
         this.name = cubeDim.name();
         this.foreignKey = cubeDim.foreignKey();
 
-        if (cubeDim instanceof DimensionUsage) {
+        if (cubeDim instanceof DimensionUsage du) {
             this.kind = Kind.SHARED;
 
 
             // Shared Hierarchy attributes
             // source
             // level
-            DimensionUsage du =
-                (DimensionUsage) cubeDim;
-
             this.hierarchyName = deriveHierarchyName(hierarchy);
-            int index = this.hierarchyName.indexOf('.');
-            if (index == -1) {
+            int index = this.hierarchyName == null ? -1 : this.hierarchyName.indexOf('.');
+            if (this.hierarchyName == null || index == -1) {
                 this.fullName = this.name;
                 this.source = du.source();
             } else {
@@ -190,13 +185,13 @@ public class HierarchyUsage {
 
             init(cube, hierarchy, du);
 
-        } else if (cubeDim instanceof PrivateDimension) {
+        } else if (cubeDim instanceof PrivateDimension privateDimension) {
             this.kind = Kind.PRIVATE;
 
             // Private Hierarchy attributes
             // type
             // caption
-            PrivateDimension d = (PrivateDimension) cubeDim;
+            PrivateDimension d = privateDimension;
 
             this.hierarchyName = deriveHierarchyName(hierarchy);
             this.fullName = this.name;
@@ -210,10 +205,6 @@ public class HierarchyUsage {
         } else if (cubeDim instanceof VirtualCubeDimension) {
             this.kind = Kind.VIRTUAL;
 
-            // Virtual Hierarchy attributes
-            VirtualCubeDimension vd =
-                (VirtualCubeDimension) cubeDim;
-
             this.hierarchyName = cubeDim.name();
             this.fullName = this.name;
 
@@ -225,8 +216,8 @@ public class HierarchyUsage {
 
         } else {
             getLogger().warn(
-                "HierarchyUsage<init>: Unknown cubeDim="
-                    + cubeDim.getClass().getName());
+                "HierarchyUsage<init>: Unknown cubeDim={}",
+                    cubeDim.getClass().getName());
 
             this.kind = Kind.UNKNOWN;
 
@@ -248,18 +239,18 @@ public class HierarchyUsage {
     }
 
     private String deriveHierarchyName(RolapHierarchy hierarchy) {
-        final String name = hierarchy.getName();
+        final String nameInner = hierarchy.getName();
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            return name;
+            return nameInner;
         } else {
             final String dimensionName = hierarchy.getDimension().getName();
-            if (name == null
-                || name.equals("")
-                || name.equals(dimensionName))
+            if (nameInner == null
+                || nameInner.equals("")
+                || nameInner.equals(dimensionName))
             {
-                return name;
+                return nameInner;
             } else {
-                return dimensionName + '.' + name;
+                return dimensionName + '.' + nameInner;
             }
         }
     }

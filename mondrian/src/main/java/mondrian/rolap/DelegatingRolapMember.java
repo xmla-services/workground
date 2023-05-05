@@ -154,7 +154,7 @@ public class DelegatingRolapMember extends RolapMemberBase {
     }
 
     @Override
-	public void setProperty(String name, Object value) {
+	public synchronized void setProperty(String name, Object value) {
         member.setProperty(name, value);
     }
 
