@@ -80,13 +80,12 @@ abstract class MondrianOlap4jStatement
 
     @Override
 	public ResultSet executeQuery(String mdx) throws SQLException {
-        return executeQuery2(mdx, false, null, null);
+        return executeQuery2(mdx, false, null);
     }
 
     ResultSet executeQuery2(
         String mdx,
         boolean advanced,
-        String tabFields,
         int[] rowCountSlot) throws SQLException
     {
         if (advanced) {
@@ -113,7 +112,7 @@ abstract class MondrianOlap4jStatement
                 (MondrianOlap4jCell) cellSet.getCell(coords);
 
             List<OlapElement> fields = drillThrough.getReturnList();
-            if(fields.size() == 0) {
+            if(fields.isEmpty()) {
                 MondrianOlap4jCube mondrianOlap4jCube = (MondrianOlap4jCube)cellSet.getMetaData().getCube();
                 mondrian.rolap.RolapCube rolapCube = (mondrian.rolap.RolapCube)mondrianOlap4jCube.getOlapElement();
 
@@ -137,8 +136,8 @@ abstract class MondrianOlap4jStatement
                     "Cannot do DrillThrough operation on the cell");
             }
             return resultSet;
-        } else if (parseTree instanceof Explain) {
-            String plan = explainInternal(((Explain) parseTree).getQuery());
+        } else if (parseTree instanceof Explain explain) {
+            String plan = explainInternal(explain.getQuery());
             return olap4jConnection.factory.newFixedResultSet(
                 olap4jConnection,
                 Collections.singletonList("PLAN"),
@@ -220,7 +219,7 @@ abstract class MondrianOlap4jStatement
             throw olap4jConnection.helper.createException(
                 "illegal timeout value " + seconds);
         }
-        setQueryTimeoutMillis(seconds * 1000);
+        setQueryTimeoutMillis(seconds * 1000l);
     }
 
     @Override
@@ -340,14 +339,14 @@ abstract class MondrianOlap4jStatement
 
     @Override
 	public int executeUpdate(
-        String sql, int columnIndexes[]) throws SQLException
+        String sql, int[] columnIndexes) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
 	public int executeUpdate(
-        String sql, String columnNames[]) throws SQLException
+        String sql, String[] columnNames) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
@@ -361,14 +360,14 @@ abstract class MondrianOlap4jStatement
 
     @Override
 	public boolean execute(
-        String sql, int columnIndexes[]) throws SQLException
+        String sql, int[] columnIndexes) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
 	public boolean execute(
-        String sql, String columnNames[]) throws SQLException
+        String sql, String[] columnNames) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
@@ -498,7 +497,7 @@ abstract class MondrianOlap4jStatement
     }
 
     @Override
-    public void start(Execution execution) {
+    public synchronized void start(Execution execution) {
         super.start(openCellSet);
     }
 

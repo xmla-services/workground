@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import mondrian.olap.Syntax;
 import org.eclipse.daanse.olap.api.model.MetaElement;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -73,7 +74,6 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return ((MondrianOlap4jStatement) olapStatement).executeQuery2(
             mdx,
             advanced,
-            tabFields,
             rowCountSlot);
     }
 
@@ -111,10 +111,9 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             ((MondrianOlap4jSchema) schema).schema.getFunTable();
         StringBuilder buf = new StringBuilder(50);
         for (FunInfo fi : funTable.getFunInfoList()) {
-            switch (fi.getSyntax()) {
-            case Empty:
-            case Internal:
-            case Parentheses:
+            if (Syntax.Empty.equals(fi.getSyntax())
+                || Syntax.Internal.equals(fi.getSyntax())
+                || Syntax.Parentheses.equals(fi.getSyntax())) {
                 continue;
             }
             final Boolean passes = functionFilter.test(fi.getName());
@@ -304,8 +303,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     @Override
 	public boolean isLevelUnique(Level level) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
-        return (olap4jLevel.level instanceof RolapLevel)
-            && ((RolapLevel) olap4jLevel.level).isUnique();
+        return (olap4jLevel.level instanceof RolapLevel rolapLevel)
+            && rolapLevel.isUnique();
     }
 
     @Override
@@ -360,17 +359,14 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
 	public Map<String, Object> getAnnotationMap(MetadataElement element)
         throws SQLException
     {
-        if (element instanceof OlapWrapper wrapper) {
-            if (wrapper.isWrapperFor(MetaElement.class)) {
-                final MetaElement annotated = wrapper.unwrap(MetaElement.class);
-                final Map<String, Object> map = new HashMap<>();
-                for (Map.Entry<String, Object> entry
-                    : annotated.getMetadata().entrySet())
-                {
-                    map.put(entry.getKey(), entry.getValue());
-                }
-                return map;
+        if (element instanceof OlapWrapper wrapper && wrapper.isWrapperFor(MetaElement.class)) {
+            final MetaElement annotated = wrapper.unwrap(MetaElement.class);
+            final Map<String, Object> map = new HashMap<>();
+            for (Map.Entry<String, Object> entry
+                : annotated.getMetadata().entrySet()) {
+                map.put(entry.getKey(), entry.getValue());
             }
+            return map;
         }
         return Collections.emptyMap();
     }
@@ -419,8 +415,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     @Override
 	public String getLevelDataType( Level level ) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
-        if ( olap4jLevel.level instanceof RolapLevel ) {
-            return ( (RolapLevel) olap4jLevel.level ).getDatatype().getValue();
+        if ( olap4jLevel.level instanceof RolapLevel rolapLevel) {
+            return rolapLevel.getDatatype().getValue();
 
         }
         return null;

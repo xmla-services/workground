@@ -302,7 +302,7 @@ public interface ExpCompiler {
          * clear method should be in the finally-clause of that try-block.
          */
         public static void clearThreadLocalClassName() {
-            Factory.ClassName.set(null);
+            Factory.ClassName.remove();
         }
 
         /**
@@ -397,8 +397,8 @@ public interface ExpCompiler {
          */
         @Override
         public void restoreContext(final Object context) {
-            if (context instanceof Context) {
-                ((Context) context).restore();
+            if (context instanceof Context con) {
+                con.restore();
             }
         }
 

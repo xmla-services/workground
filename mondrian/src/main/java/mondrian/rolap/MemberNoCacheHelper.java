@@ -24,7 +24,6 @@ import mondrian.spi.DataSourceChangeListener;
  * @version 1.0
  */
 public class MemberNoCacheHelper extends MemberCacheHelper {
-    DataSourceChangeListener changeListener;
 
     public MemberNoCacheHelper() {
         super(null);
@@ -60,7 +59,8 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
     }
 
     @Override
-	public void checkCacheStatus() {
+	public synchronized void checkCacheStatus() {
+        // empty
     }
 
     @Override
@@ -69,6 +69,7 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
         TupleConstraint constraint,
         List<RolapMember> members)
     {
+        //empty
     }
 
     @Override
@@ -85,6 +86,7 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
         MemberChildrenConstraint constraint,
         List<RolapMember> children)
     {
+        //empty
     }
 
     @Override
@@ -111,7 +113,7 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
     }
 
     @Override
-	public RolapMember removeMember(Object key) {
+	public synchronized RolapMember removeMember(Object key) {
         return null;
     }
 

@@ -74,7 +74,7 @@ public class RoleImpl implements Role {
         {
             hierarchyGrants.put(
                 entry.getKey(),
-                (HierarchyAccessImpl) entry.getValue().clone());
+                new HierarchyAccessImpl(entry.getValue()));
         }
     }
 
@@ -145,7 +145,7 @@ public class RoleImpl implements Role {
      * @pre isMutable()
      */
     public void grant(Schema schema, Access access) {
-        assert schema != null;
+        checkSchema(schema);
         assert isMutable();
         schemaGrants.put(schema, access);
         hashCache.add(
@@ -157,7 +157,7 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Schema schema) {
-        assert schema != null;
+        checkSchema(schema);
         final Access schemaAccess = schemaGrants.get(schema);
         if (schemaAccess == null) {
             // No specific rules means full access.
@@ -189,9 +189,7 @@ public class RoleImpl implements Role {
      */
     public void grant(Cube cube, Access access) {
         Util.assertPrecondition(cube != null, "cube != null");
-        assert access == Access.ALL
-            || access == Access.NONE
-            || access == Access.CUSTOM;
+        checkAccess(access);
         Util.assertPrecondition(isMutable(), "isMutable()");
         LOGGER.trace(
             "Grant {} on cube {}", access, cube.getName());
@@ -215,7 +213,7 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Cube cube) {
-        assert cube != null;
+        checkCube(cube);
         // Check for explicit rules.
         // Both 'custom' and 'all' are good enough
         Access access = cubeGrants.get(cube);
@@ -253,10 +251,8 @@ public class RoleImpl implements Role {
      * @pre isMutable()
      */
     public void grant(Dimension dimension, Access access) {
-        assert dimension != null;
-        assert access == Access.ALL
-            || access == Access.NONE
-            || access == Access.CUSTOM;
+        checkDimension(dimension);
+        checkAccess(access);
         Util.assertPrecondition(isMutable(), "isMutable()");
         LOGGER.trace(
             "Grant {} on dimension {}", access,  dimension.getUniqueName());
@@ -275,7 +271,7 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Dimension dimension) {
-        assert dimension != null;
+        checkDimension(dimension);
         // Check for explicit rules.
         Access access = getDimensionGrant(dimension);
         if (access == Access.CUSTOM) {
@@ -328,11 +324,7 @@ public class RoleImpl implements Role {
         case ALL_DIMENSIONS:
             // For all_dimensions to work, the cube access must be
             // at least 'custom' level
-            if (access != Access.NONE) {
-                return Access.ALL;
-            } else {
-                return Access.NONE;
-            }
+            return Access.NONE;
         default:
             LOGGER.trace(
                 "Access denided to dimension {} because of the access level of schema {}",
@@ -467,7 +459,9 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Hierarchy hierarchy) {
-        assert hierarchy != null;
+        if (hierarchy == null) {
+            throw new IllegalArgumentException("hierarchy should not be null");
+        }
         HierarchyAccessImpl hierarchyAccess = hierarchyGrants.get(hierarchy);
         if (hierarchyAccess != null) {
             LOGGER.trace(
@@ -523,7 +517,9 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Level level) {
-        assert level != null;
+        if (level == null) {
+            throw new IllegalArgumentException("level should not be null");
+        }
         HierarchyAccessImpl hierarchyAccess =
                 hierarchyGrants.get(level.getHierarchy());
         if (hierarchyAccess != null
@@ -580,7 +576,9 @@ public class RoleImpl implements Role {
     public void grant(Member member, Access access) {
         Util.assertPrecondition(member != null, "member != null");
         assert isMutable();
-        assert getAccess(member.getHierarchy()) == Access.CUSTOM;
+        if (getAccess(member.getHierarchy()) != Access.CUSTOM) {
+            throw new IllegalArgumentException("Access should not be CUSTOM");
+        }
         HierarchyAccessImpl hierarchyAccess =
             hierarchyGrants.get(member.getHierarchy());
         assert hierarchyAccess != null;
@@ -596,7 +594,9 @@ public class RoleImpl implements Role {
 
     @Override
 	public Access getAccess(Member member) {
-        assert member != null;
+        if (member == null) {
+            throw new IllegalArgumentException("member should be not null");
+        }
         // Always allow access to calculated members.
         if (member.isCalculatedInQuery()) {
             return Access.ALL;
@@ -666,8 +666,36 @@ public class RoleImpl implements Role {
      * @return Union role
      */
     public static Role union(final List<Role> roleList) {
-        assert !roleList.isEmpty();
+        if (roleList.isEmpty()) {
+            throw new IllegalArgumentException("roleList should be not empty");
+        }
         return new UnionRoleImpl(roleList);
+    }
+
+
+    private void checkAccess(Access access) {
+        if (access != Access.ALL &&
+            access != Access.NONE
+            && access != Access.CUSTOM) {
+            throw new IllegalArgumentException("Access should be ALL or NONE or CUSTOM");
+        }
+    }
+
+    private void checkSchema(Schema schema) {
+        if (schema == null) {
+            throw new IllegalArgumentException("schema should be not null");
+        }
+    }
+
+    private void checkCube(Cube cube) {
+        if (cube == null) {
+            throw new IllegalArgumentException("cube should be not null");
+        }
+    }
+    private void checkDimension(Dimension dimension) {
+        if (dimension == null) {
+            throw new IllegalArgumentException("dimension should be not null");
+        }
     }
 
     // ~ Inner classes --------------------------------------------------------
@@ -721,14 +749,11 @@ public class RoleImpl implements Role {
                 : bottomLevel;
         }
 
-        @Override
-		public HierarchyAccess clone() {
-            HierarchyAccessImpl hierarchyAccess =
-                new HierarchyAccessImpl(
-                    role, hierarchy, access, topLevel,
-                    bottomLevel, rollupPolicy);
-            hierarchyAccess.memberGrants.putAll(memberGrants);
-            return hierarchyAccess;
+        private HierarchyAccessImpl(HierarchyAccessImpl hierarchyAccess) {
+            this(hierarchyAccess.role, hierarchyAccess.hierarchy,
+                hierarchyAccess.access, hierarchyAccess.topLevel,
+                hierarchyAccess.bottomLevel, hierarchyAccess.rollupPolicy);
+            memberGrants.putAll(hierarchyAccess.memberGrants);
         }
 
         /**
@@ -861,24 +886,24 @@ public class RoleImpl implements Role {
             }
             MemberAccess mAccess =
                 memberGrants.get(member.getUniqueName());
-            Access access = mAccess == null ? null : mAccess.access;
+            Access accessInner = mAccess == null ? null : mAccess.access;
             // Check for an explicit deny.
-            if (access == Access.NONE) {
+            if (accessInner == Access.NONE) {
                 LOGGER.trace(
                     "Access level {} granted to member {} because it is explicitly denided.",
                     Access.NONE, member.getUniqueName());
                 return Access.NONE;
             }
             // Check for explicit grant
-            if (access == Access.ALL || access == Access.CUSTOM) {
+            if (accessInner == Access.ALL || accessInner == Access.CUSTOM) {
                 LOGGER.trace(
                     "Access level {} granted to member {}",
-                    access, member.getUniqueName());
-                return access;
+                    accessInner, member.getUniqueName());
+                return accessInner;
             }
             // Restricted is ok. This means an explicit grant
             // followed by a deny of one of the children: so custom.
-            if (access == Access.RESTRICTED) {
+            if (accessInner == Access.RESTRICTED) {
                 LOGGER.trace(
                     "Access level {} granted to member {} because it was RESTRICTED. ",
                     Access.CUSTOM, member.getUniqueName());
@@ -925,8 +950,8 @@ public class RoleImpl implements Role {
             }
             // Check for inherited access from ancestors.
             // "Custom" is not good enough. We are looking for "all" access.
-            access = role.getAccess(member.getLevel());
-            if (access == Access.ALL) {
+            accessInner = role.getAccess(member.getLevel());
+            if (accessInner == Access.ALL) {
                 LOGGER.trace(
                     "Access ALL granted to member {} because its level {} is of access level ALL",
                     member.getUniqueName(), member.getLevel().getUniqueName());
@@ -970,13 +995,13 @@ public class RoleImpl implements Role {
          */
         @Override
 		public boolean hasInaccessibleDescendants(Member member) {
-            for (MemberAccess access : memberGrants.values()) {
-                if (Access.NONE.equals(access.access) || Access.CUSTOM.equals(access.access)) {
-                    if (access.isSubGrant(member)) {
-                        // At least one of the limited member is
-                        // part of the descendants of this member.
-                        return true;
-                    }
+            for (MemberAccess accessInner : memberGrants.values()) {
+                if ((Access.NONE.equals(accessInner.access)
+                    || Access.CUSTOM.equals(accessInner.access))
+                    && accessInner.isSubGrant(member)) {
+                    // At least one of the limited member is
+                    // part of the descendants of this member.
+                    return true;
                 }
             }
             // All descendants are accessible.
@@ -1061,7 +1086,7 @@ public class RoleImpl implements Role {
          *
          * @param hierarchyAccess Underlying hierarchy access
          */
-        public DelegatingHierarchyAccess(HierarchyAccess hierarchyAccess) {
+        protected DelegatingHierarchyAccess(HierarchyAccess hierarchyAccess) {
             assert hierarchyAccess != null;
             this.hierarchyAccess = hierarchyAccess;
         }
@@ -1173,12 +1198,7 @@ public class RoleImpl implements Role {
 
         @Override
         public boolean hasInaccessibleDescendants(Member member) {
-            Boolean b = inaccessibleDescendantsMap.get(member);
-            if (b == null) {
-                b = hierarchyAccess.hasInaccessibleDescendants(member);
-                inaccessibleDescendantsMap.put(member, b);
-            }
-            return b;
+            return inaccessibleDescendantsMap.computeIfAbsent(member, hierarchyAccess::hasInaccessibleDescendants);
         }
     }
 }

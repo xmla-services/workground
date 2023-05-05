@@ -291,9 +291,9 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         for (String catalogName
             : catalogFinder.getCatalogNames(mondrianConnection))
         {
-            final Map<String, RolapSchema> schemaMap;
+            final Map<String, RolapSchema> schemaMapInner;
             try {
-              schemaMap =
+              schemaMapInner =
                   catalogFinder.getRolapSchemas(
                       mondrianConnection,
                       catalogName);
@@ -310,7 +310,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     olap4jDatabaseMetaData,
                     catalogName,
                     database,
-                    schemaMap));
+                    schemaMapInner));
         }
 
         this.olap4jSchema = toOlap4j(mondrianConnection.getSchema());
@@ -380,7 +380,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
 
     @Override
 	public void close() throws SQLException {
-        if (isClosed.get() == false) {
+        if (!isClosed.get()) {
             mondrianConnection.close();
             isClosed.set(true);
         }
@@ -590,14 +590,14 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
 
     @Override
 	public PreparedStatement prepareStatement(
-        String sql, int columnIndexes[]) throws SQLException
+        String sql, int[] columnIndexes) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
 	public PreparedStatement prepareStatement(
-        String sql, String columnNames[]) throws SQLException
+        String sql, String[] columnNames) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
@@ -668,19 +668,19 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     synchronized MondrianOlap4jSchema toOlap4j(
             org.eclipse.daanse.olap.api.model.Schema schema)
     {
-        MondrianOlap4jSchema olap4jSchema = schemaMap.get(schema);
-        if (olap4jSchema == null) {
-            throw new RuntimeException("schema not registered: " + schema);
+        MondrianOlap4jSchema olap4jSchemaInner = schemaMap.get(schema);
+        if (olap4jSchemaInner == null) {
+            throw new MondrianOlap4jConnectionException("schema not registered: " + schema);
         }
-        return olap4jSchema;
+        return olap4jSchemaInner;
     }
 
     Type toOlap4j(mondrian.olap.type.Type type) {
         if (type instanceof mondrian.olap.type.BooleanType) {
             return new BooleanType();
-        } else if (type instanceof mondrian.olap.type.CubeType) {
+        } else if (type instanceof mondrian.olap.type.CubeType cubeType) {
             final org.eclipse.daanse.olap.api.model.Cube mondrianCube =
-                ((mondrian.olap.type.CubeType) type).getCube();
+                cubeType.getCube();
             return new CubeType(toOlap4j(mondrianCube));
         } else if (type instanceof mondrian.olap.type.DecimalType decimalType) {
             return new DecimalType(
@@ -841,14 +841,14 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     public void setRoleNames(List<String> roleNames) throws OlapException {
         final RolapConnection connection1 = getMondrianConnection();
         final List<Role> roleList = new ArrayList<>();
-        for (String roleName : roleNames) {
-            if (roleName == null) {
+        for (String roleNameInner : roleNames) {
+            if (roleNameInner == null) {
                 throw new NullPointerException("null role name");
             }
-            final Role role = connection1.getSchema().lookupRole(roleName);
+            final Role role = connection1.getSchema().lookupRole(roleNameInner);
             if (role == null) {
                 throw helper.createException(new StringBuilder("Unknown role '")
-                    .append(roleName).append("'").toString());
+                    .append(roleNameInner).append("'").toString());
             }
             roleList.add(role);
         }
@@ -912,12 +912,12 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
      * @return Mondrian connection
      * @throws RuntimeException if connection is closed
      */
-    RolapConnection getMondrianConnection2() throws RuntimeException {
+    RolapConnection getMondrianConnection2() {
         try {
             return getMondrianConnection();
         } catch (OlapException e) {
             // Demote from checked to unchecked exception.
-            throw new RuntimeException(e);
+            throw new MondrianOlap4jConnectionException(e);
         }
     }
 
@@ -1020,8 +1020,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
          * @return Exception as an OlapException
          */
         public OlapException toOlapException(SQLException e) {
-            if (e instanceof OlapException) {
-                return (OlapException) e;
+            if (e instanceof OlapException olapException) {
+                return olapException;
             } else {
                 return new OlapException(null, e);
             }
@@ -1135,12 +1135,12 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                 } else if (value instanceof Number number) {
                     BigDecimal bd = bigDecimalFor(number);
                     return LiteralNode.createNumeric(null, bd, false);
-                } else if (value instanceof String) {
-                    return LiteralNode.createString(null, (String) value);
+                } else if (value instanceof String string) {
+                    return LiteralNode.createString(null, string);
                 } else if (value == null) {
                     return LiteralNode.createNull(null);
                 } else {
-                    throw new RuntimeException("unknown literal " + literal);
+                    throw new MondrianOlap4jConnectionException("unknown literal " + literal);
                 }
             }
             throw Util.needToImplement(exp.getClass());
@@ -1153,24 +1153,24 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
          * @return BigDecimal
          */
         private static BigDecimal bigDecimalFor(Number number) {
-            if (number instanceof BigDecimal) {
-                return (BigDecimal) number;
-            } else if (number instanceof BigInteger) {
-                return new BigDecimal((BigInteger) number);
-            } else if (number instanceof Integer) {
-                return new BigDecimal((Integer) number);
-            } else if (number instanceof Double) {
-                return new BigDecimal((Double) number);
-            } else if (number instanceof Float) {
-                return new BigDecimal((Float) number);
-            } else if (number instanceof Long) {
-                return new BigDecimal((Long) number);
-            } else if (number instanceof Short) {
-                return new BigDecimal((Short) number);
-            } else if (number instanceof Byte) {
-                return new BigDecimal((Byte) number);
+            if (number instanceof BigDecimal bd) {
+                return bd;
+            } else if (number instanceof BigInteger bi) {
+                return new BigDecimal(bi);
+            } else if (number instanceof Integer integer) {
+                return new BigDecimal(integer);
+            } else if (number instanceof Double d) {
+                return BigDecimal.valueOf(d);
+            } else if (number instanceof Float f) {
+                return BigDecimal.valueOf(f);
+            } else if (number instanceof Long l) {
+                return new BigDecimal(l);
+            } else if (number instanceof Short sh) {
+                return new BigDecimal(sh);
+            } else if (number instanceof Byte b) {
+                return new BigDecimal(b);
             } else {
-                return new BigDecimal(number.doubleValue());
+                return BigDecimal.valueOf(number.doubleValue());
             }
         }
 
