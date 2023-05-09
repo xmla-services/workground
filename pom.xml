@@ -1000,7 +1000,6 @@
     <module>tooling</module>
     <module>engine</module>
     <module>mondrian</module>
-    <module>workbench</module>
     <module>olap</module>
     <module>lcid</module>
     <module>ws</module>
