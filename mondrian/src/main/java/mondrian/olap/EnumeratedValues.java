@@ -32,7 +32,6 @@ import org.eclipse.daanse.olap.api.access.Access;
  * {@link Access} is a simple example of this.</p>
  */
 public class EnumeratedValues<V extends EnumeratedValues.Value>
-    implements Cloneable
 {
     /** Map symbol names to values */
     private Map<String, V> valuesByName = new LinkedHashMap<>();
@@ -104,25 +103,19 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         throw new UnsupportedOperationException();
     }
 
-    @Override
-	public EnumeratedValues<V> clone() {
-        EnumeratedValues clone;
-        try {
-            clone = (EnumeratedValues) super.clone();
-        } catch (CloneNotSupportedException ex) {
-            throw Util.newInternal(ex, "error while cloning " + this);
-        }
-        clone.valuesByName = new HashMap<>(valuesByName);
-        clone.ordinalToValueMap = null;
-        return clone;
+    public EnumeratedValues(EnumeratedValues enumeratedValues) {
+
+        this.valuesByName = new HashMap<>(enumeratedValues.valuesByName);
+        this.ordinalToValueMap = null;
     }
+
 
     /**
      * Creates a mutable enumeration from an existing enumeration, which may
      * already be immutable.
      */
     public EnumeratedValues getMutableClone() {
-        return clone();
+        return new EnumeratedValues(this);
     }
 
     /**
@@ -262,7 +255,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
     public V getValue(String name, final boolean fail) {
         final V value = valuesByName.get(name);
         if (value == null && fail) {
-            throw new Error("Unknown enum name:  " + name);
+            throw new OlapRuntimeException("Unknown enum name:  " + name);
         }
         return value;
     }
@@ -370,7 +363,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
          *   <code>value.equals(s)</code>, didn't you?
          */
         @Deprecated
-		public boolean equals(String s) {
+		public boolean isEqualsBasicValue(String s) {
             return super.equals(s);
         }
 

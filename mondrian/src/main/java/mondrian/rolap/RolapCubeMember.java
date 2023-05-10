@@ -51,7 +51,9 @@ public class RolapCubeMember
         super(member);
         this.parentCubeMember = parent;
         this.cubeLevel = cubeLevel;
-        assert !member.isAll() || getClass() != RolapCubeMember.class;
+        if (member.isAll() && getClass() == RolapCubeMember.class) {
+            throw new IllegalArgumentException("RolapCubeMember wrong member argument");
+        }
     }
 
     @Override
@@ -174,7 +176,7 @@ public class RolapCubeMember
     }
 
     @Override
-	public void setProperty(String name, Object value) {
+	public synchronized void setProperty(String name, Object value) {
         synchronized (this) {
             super.setProperty(name, value);
         }
@@ -212,6 +214,8 @@ public class RolapCubeMember
             case Property.MEMBER_KEY_ORDINAL, Property.KEY_ORDINAL:
                 return this == this.getHierarchy().getAllMember() ? 0
                     : getKey();
+            default:
+                return member.getPropertyValue(propertyName, matchCase);
             }
         }
         // fall through to rolap member
@@ -236,13 +240,10 @@ public class RolapCubeMember
         Exp exp = member.getExpression();
         if (exp instanceof ResolvedFunCall fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
-                if (fcall.getArg(i) instanceof HierarchyExpr expr) {
-                    if (expr.getHierarchy().equals(
-                            member.getHierarchy()))
-                    {
-                        fcall.getArgs()[i] =
-                            new HierarchyExpr(this.getHierarchy());
-                    }
+                if (fcall.getArg(i) instanceof HierarchyExpr expr && expr.getHierarchy().equals(
+                    member.getHierarchy())) {
+                    fcall.getArgs()[i] =
+                        new HierarchyExpr(this.getHierarchy());
                 }
             }
         }

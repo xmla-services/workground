@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
@@ -28,7 +28,7 @@ public class DrillThroughAttributeImpl implements DrillThroughAttribute {
     @XmlAttribute(name = "dimension", required = true)
     protected String dimension;
     @XmlAttribute(name = "hierarchy")
-    protected Boolean hierarchy;
+    protected String hierarchy;
     @XmlAttribute(name = "level")
     protected String level;
 
@@ -42,11 +42,11 @@ public class DrillThroughAttributeImpl implements DrillThroughAttribute {
     }
 
     @Override
-    public Boolean hierarchy() {
+    public String hierarchy() {
         return hierarchy;
     }
 
-    public void setHierarchy(Boolean value) {
+    public void setHierarchy(String value) {
         this.hierarchy = value;
     }
 

@@ -260,8 +260,9 @@ public class SqlStatement {
       // Now handle this exception.
       throw handle( e );
     } finally {
-      RolapUtil.SQL_LOGGER.debug( new StringBuilder().append(id)
-          .append(": ").append(status).toString() );
+      String msg =  new StringBuilder().append(id)
+          .append(": ").append(status).toString();
+      RolapUtil.SQL_LOGGER.debug( msg );
 
       if ( RolapUtil.LOGGER.isDebugEnabled() ) {
         RolapUtil.LOGGER.debug(
@@ -317,8 +318,8 @@ public class SqlStatement {
 
     locus.execution.getQueryTiming().markFull(
       TIMING_NAME + locus.component, totalMs );
-
-    RolapUtil.SQL_LOGGER.debug( new StringBuilder().append(id).append(": ").append(status).toString() );
+    String msg  = new StringBuilder().append(id).append(": ").append(status).toString();
+    RolapUtil.SQL_LOGGER.debug( msg );
 
     Counters.SQL_STATEMENT_CLOSE_COUNT.incrementAndGet();
     boolean remove = Counters.SQL_STATEMENT_EXECUTING_IDS.remove( id );
@@ -370,7 +371,7 @@ public class SqlStatement {
       Util.newError( e, new StringBuilder(locus.message).append("; sql=[").append(sql).append("]").toString() );
     try {
       close();
-    } catch ( Throwable t ) {
+    } catch ( Exception t ) {
       // ignore
     }
     return runtimeException;
@@ -517,16 +518,16 @@ public class SqlStatement {
   }
 
   private SqlStatementEvent.Purpose getPurpose() {
-    if ( locus instanceof StatementLocus ) {
-      return ( (StatementLocus) locus ).purpose;
+    if ( locus instanceof StatementLocus statementLocus) {
+      return statementLocus.purpose;
     } else {
       return SqlStatementEvent.Purpose.OTHER;
     }
   }
 
   private int getCellRequestCount() {
-    if ( locus instanceof StatementLocus ) {
-      return ( (StatementLocus) locus ).cellRequestCount;
+    if ( locus instanceof StatementLocus statementLocus) {
+      return statementLocus.cellRequestCount;
     } else {
       return 0;
     }

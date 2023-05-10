@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
 
 public record DrillThroughAttributeR(String dimension,
                                      String level,
-                                     Boolean hierarchy)
+                                     String hierarchy)
         implements DrillThroughAttribute {
 
 }

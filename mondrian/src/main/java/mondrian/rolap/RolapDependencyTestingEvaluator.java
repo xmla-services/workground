@@ -164,7 +164,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
     }
 
     @Override
-	public RolapEvaluator _push(List<List<Member>> aggregationList) {
+	public RolapEvaluator pushClone(List<List<Member>> aggregationList) {
         return new RolapDependencyTestingEvaluator(root, this, aggregationList);
     }
 

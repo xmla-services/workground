@@ -32,6 +32,8 @@ import mondrian.rolap.util.ExpressionUtil;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.MemberFormatter;
 
+import java.util.Objects;
+
 /**
  * RolapCubeLevel wraps a RolapLevel for a specific Cube.
  *
@@ -105,7 +107,7 @@ public class RolapCubeLevel extends RolapLevel {
                 (RolapDimension)
                     rolapLevel.getClosedPeer().getHierarchy().getDimension();
 
-            RolapCubeDimension cubeDimension =
+            RolapCubeDimension cubeDimensionInner =
                 new RolapCubeDimension(
                     getCube(), dimension, xmlDimension,
                     new StringBuilder(getDimension().getName()).append("$Closure").toString(),
@@ -120,13 +122,13 @@ public class RolapCubeLevel extends RolapLevel {
             //  HierarchyUsage is phased out
             if (! getCube().isVirtual()) {
                 getCube().createUsage(
-                    (RolapCubeHierarchy) cubeDimension.getHierarchies()[0],
+                    (RolapCubeHierarchy) cubeDimensionInner.getHierarchies()[0],
                     xmlDimension);
             }
-            cubeDimension.init(xmlDimension);
-            getCube().registerDimension(cubeDimension);
+            cubeDimensionInner.init(xmlDimension);
+            getCube().registerDimension(cubeDimensionInner);
             closedPeerCubeLevel = (RolapCubeLevel)
-                cubeDimension.getHierarchies()[0].getLevels()[1];
+                cubeDimensionInner.getHierarchies()[0].getLevels()[1];
 
             if (!getCube().isVirtual()) {
                 getCube().closureColumnBitKey.set(
@@ -144,7 +146,7 @@ public class RolapCubeLevel extends RolapLevel {
         RelationOrJoin rel)
     {
         if (properties == null) {
-            return null;
+            return new RolapProperty[0];
         }
 
         RolapProperty[] convertedProperties =
@@ -182,9 +184,9 @@ public class RolapCubeLevel extends RolapLevel {
         } else if (exp == null || rel == null) {
             return null;
         } else if (exp instanceof Column col) {
-            if (rel instanceof Table) {
+            if (rel instanceof Table table) {
                 return new ColumnR(
-                    RelationUtil.getAlias(((Table) rel)),
+                    RelationUtil.getAlias(table),
                     col.name());
             } else if (rel instanceof Join
                 || rel instanceof Relation)
@@ -201,7 +203,7 @@ public class RolapCubeLevel extends RolapLevel {
             // with the new aliased name
             return exp;
         }
-        throw new RuntimeException(
+        throw new RolapRuntimeException(
             new StringBuilder("conversion of Class ").append(exp.getClass())
             .append(" unsupported at this time").toString());
     }
@@ -298,13 +300,17 @@ public class RolapCubeLevel extends RolapLevel {
         return rolapLevel;
     }
 
-    public boolean equals(RolapCubeLevel level) {
-        if (this == level) {
-            return true;
-        }
-        // verify the levels are part of the same hierarchy
-        return super.equalsOlapElement(level)
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof RolapCubeLevel level) {
+            if (this == level) {
+                return true;
+            }
+            // verify the levels are part of the same hierarchy
+            return super.equalsOlapElement(level)
                 && getCube().equalsOlapElement(level.getCube());
+        }
+        return false;
     }
 
     @Override
@@ -377,7 +383,9 @@ public class RolapCubeLevel extends RolapLevel {
             RolapCube baseCube,
             CellRequest request)
         {
-            assert member.getLevel() == cubeLevel;
+            if (member.getLevel() != cubeLevel) {
+                throw new IllegalArgumentException("getLevel should same as : cubeLevel");
+            }
             Object memberKey = member.member.getKey();
             if (memberKey == null) {
                 if (member == member.getHierarchy().getNullMember()) {
@@ -631,6 +639,7 @@ public class RolapCubeLevel extends RolapLevel {
             RolapCube baseCube,
             RolapCacheRegion cacheRegion)
         {
+            // empty
         }
     }
 
