@@ -11,6 +11,7 @@
 */
 package mondrian.rolap;
 
+import static java.util.Collections.EMPTY_LIST;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
 
@@ -177,26 +178,24 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             this.cubeLevels[i] =
                 new RolapCubeLevel(
                     (RolapLevel) rolapHierarchy.getLevels()[i], this);
-            if (i == 0) {
-                if (rolapHierarchy.getAllMember() != null) {
-                    RolapCubeLevel allLevel;
-                    if (hasAll()) {
-                        allLevel = this.cubeLevels[0];
-                    } else {
-                        // create an all level if one doesn't normally
-                        // exist in the hierarchy
-                        allLevel =
-                            new RolapCubeLevel(
-                                rolapHierarchy.getAllMember().getLevel(),
-                                this);
-                        allLevel.init(cubeDimension.xmlDimension);
-                    }
-
-                    this.currentAllMember =
-                        new RolapAllCubeMember(
-                            rolapHierarchy.getAllMember(),
-                            allLevel);
+            if (i == 0 && rolapHierarchy.getAllMember() != null) {
+                RolapCubeLevel allLevel;
+                if (hasAll()) {
+                    allLevel = this.cubeLevels[0];
+                } else {
+                    // create an all level if one doesn't normally
+                    // exist in the hierarchy
+                    allLevel =
+                        new RolapCubeLevel(
+                            rolapHierarchy.getAllMember().getLevel(),
+                            this);
+                    allLevel.init(cubeDimension.xmlDimension);
                 }
+
+                this.currentAllMember =
+                    new RolapAllCubeMember(
+                        rolapHierarchy.getAllMember(),
+                        allLevel);
             }
         }
 
@@ -314,12 +313,12 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     {
         if (oldrel == null && newrel == null) {
             return;
-        } else if (oldrel instanceof Relation
-            && newrel instanceof Relation)
+        } else if (oldrel instanceof Relation oldrelRelation
+            && newrel instanceof Relation newrelRelation)
         {
             aliases.put(
-                RelationUtil.getAlias(((Relation) oldrel)),
-                RelationUtil.getAlias(((Relation) newrel)));
+                RelationUtil.getAlias(oldrelRelation),
+                RelationUtil.getAlias(newrelRelation));
         } else if (oldrel instanceof Join oldjoin
             && newrel instanceof Join newjoin)
         {
@@ -715,7 +714,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     // ask for it. Adding it to the cache would be viable, but
                     // let's ignore it.
                     continue;
-                } else if (cacheList == Collections.EMPTY_LIST) {
+                } else if (cacheList == EMPTY_LIST) {
                     cacheList = new ArrayList<>();
                     tempMap.put(parentMember, cacheList);
                 }
@@ -763,7 +762,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                         children.addAll(list);
                     }
                 }
-                if (missed.size() > 0) {
+                if (!missed.isEmpty()) {
                     readMemberChildren(missed, children, constraint);
                 }
             }
@@ -868,10 +867,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             RolapCubeLevel level)
         {
             synchronized (cacheHelper) {
-                if (member.getKey() == RolapUtil.sqlNullValue) {
-                    if (member.isAll()) {
-                        return getAllMember();
-                    }
+                if (member.getKey() == RolapUtil.sqlNullValue && member.isAll()) {
+                    return getAllMember();
                 }
 
                 RolapCubeMember cubeMember;
@@ -901,8 +898,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             int ordinalToSet)
         {
           RolapMember rolapMember = rlCubeMemberToFix.getRolapMember();
-          if (rolapMember instanceof RolapMemberBase) {
-            ((RolapMemberBase) rolapMember).setOrdinal(ordinalToSet, true);
+          if (rolapMember instanceof RolapMemberBase rolapMemberBase) {
+              rolapMemberBase.setOrdinal(ordinalToSet, true);
           }
         }
 
@@ -921,28 +918,17 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 //   - local regular RolapMember cache, used when cube
                 //     specific joins occur
 
-                if (cacheHelper.getChangeListener() != null) {
-                    if (cacheHelper.getChangeListener().isHierarchyChanged(
-                            getHierarchy()))
+                if (cacheHelper.getChangeListener() != null &&
+                    cacheHelper.getChangeListener().isHierarchyChanged(
+                        getHierarchy())) {
+                    cacheHelper.flushCache();
+                    rolapCubeCacheHelper.flushCache();
+                    if (rolapHierarchy.getMemberReader()
+                        instanceof SmartMemberReader smartMemberReader
+                        && smartMemberReader.getMemberCache()
+                        instanceof MemberCacheHelper helper)
                     {
-                        cacheHelper.flushCache();
-                        rolapCubeCacheHelper.flushCache();
-
-                        if (rolapHierarchy.getMemberReader()
-                                instanceof SmartMemberReader)
-                        {
-                            SmartMemberReader smartMemberReader =
-                                (SmartMemberReader)
-                                    rolapHierarchy.getMemberReader();
-                            if (smartMemberReader.getMemberCache()
-                                    instanceof MemberCacheHelper)
-                            {
-                                MemberCacheHelper helper =
-                                    (MemberCacheHelper)
-                                        smartMemberReader.getMemberCache();
-                                helper.flushCache();
-                            }
-                        }
+                            helper.flushCache();
                     }
                 }
             }
@@ -1087,7 +1073,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     missed.add(parentMember);
                 }
             }
-            if (missed.size() > 0) {
+            if (!missed.isEmpty()) {
                 readMemberChildren(missed, children, constraint);
             }
             return Util.toNullValuesMap(children);
@@ -1099,7 +1085,6 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             final RolapLevel level,
             TupleConstraint constraint)
         {
-                List<RolapMember> members = null;
 
                 // if a join is required, we need to pass in the RolapCubeLevel
                 // vs. the regular level
@@ -1170,10 +1155,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             RolapMember member,
             RolapCubeLevel level)
         {
-            if (member.getKey() == RolapUtil.sqlNullValue) {
-                if (member.isAll()) {
+            if (member.getKey() == RolapUtil.sqlNullValue && member.isAll()) {
                     return getAllMember();
-                }
             }
 
             return new RolapCubeMember(parent, member, level);

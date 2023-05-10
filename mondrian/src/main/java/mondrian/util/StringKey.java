@@ -17,7 +17,7 @@ public abstract class StringKey {
     private String value;
 
     /** Creates a StringKey. */
-    public StringKey(String value) {
+    protected StringKey(String value) {
         assert value != null;
         this.value = value;
     }
@@ -39,7 +39,7 @@ public abstract class StringKey {
         }
         // Class must be identical (different subclasses of StringHolder not
         // OK).
-        return obj.getClass() == getClass()
+        return obj != null && obj.getClass() == getClass()
             && value.equals(((StringKey) obj).value);
     }
 }

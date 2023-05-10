@@ -17,7 +17,6 @@ import java.lang.management.MemoryUsage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,7 +46,7 @@ import mondrian.rolap.RolapUtil;
  * @since Feb 5, 2007
  */
 public class UtilCompatibleJdk15 implements UtilCompatible {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilCompatibleJdk15.class);
 
     /**
      * This generates a BigDecimal with a precision reflecting
@@ -58,7 +57,7 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
      */
     @Override
 	public BigDecimal makeBigDecimalFromDouble(double d) {
-        return new BigDecimal(d, MathContext.DECIMAL64);
+        return BigDecimal.valueOf(d);
     }
 
     @Override
@@ -82,13 +81,7 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
                     annotation.getClass().getMethod("value");
                 return (T) method1.invoke(annotation);
             }
-        } catch (IllegalAccessException e) {
-            return defaultValue;
-        } catch (InvocationTargetException e) {
-            return defaultValue;
-        } catch (NoSuchMethodException e) {
-            return defaultValue;
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
             return defaultValue;
         }
         return defaultValue;
@@ -117,7 +110,7 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
     @Override
 	public Util.MemoryInfo getMemoryInfo() {
         return new Util.MemoryInfo() {
-            protected final MemoryPoolMXBean TENURED_POOL =
+            protected static final MemoryPoolMXBean TENURED_POOL =
                 findTenuredGenPool();
 
             @Override
@@ -161,7 +154,7 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
 	public void cancelStatement(Statement stmt) {
         try {
             stmt.cancel();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             // We can't call stmt.isClosed(); the method doesn't exist until
             // JDK 1.6. So, mask out the error.
 

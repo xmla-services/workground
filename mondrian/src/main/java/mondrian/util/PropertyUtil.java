@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -30,6 +31,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.DoubleProperty;
 import org.eigenbase.util.property.IntegerProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -42,6 +45,7 @@ import org.w3c.dom.NodeList;
  * @author jhyde
  */
 public class PropertyUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtil.class);
     /**
      * Generates an XML file from a MondrianProperties instance.
      *
@@ -54,12 +58,12 @@ public class PropertyUtil {
         for (Field field : properties1.getClass().getFields()) {
             org.eigenbase.util.property.Property o =
                 (org.eigenbase.util.property.Property) field.get(properties1);
-            System.out.println("    <PropertyDefinition>");
-            System.out.println(new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString());
-            System.out.println(new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString());
-            System.out.println(
+            LOGGER.debug("    <PropertyDefinition>");
+            LOGGER.debug(new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString());
+            LOGGER.debug(new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString());
+            LOGGER.debug(
                 new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString());
-            System.out.println(
+            LOGGER.debug(
                 new StringBuilder("        <Type>")
                 .append((o instanceof BooleanProperty ? "boolean"
                     : o instanceof IntegerProperty ? "int"
@@ -67,13 +71,13 @@ public class PropertyUtil {
                             : "String"))
                 .append("</Type>").toString());
             if (o.getDefaultValue() != null) {
-                System.out.println(
+                LOGGER.debug(
                     new StringBuilder("        <Default>")
                     .append(o.getDefaultValue()).append("</Default").append(">").toString());
             }
-            System.out.println("    </PropertyDefinition>");
+            LOGGER.debug("    </PropertyDefinition>");
         }
-        System.out.println("</PropertyDefinitions>");
+        LOGGER.debug("</PropertyDefinitions>");
     }
 
     private static Iterable<Node> iter(final NodeList nodeList) {
@@ -90,6 +94,9 @@ public class PropertyUtil {
 
                     @Override
 					public Node next() {
+                        if(!hasNext()){
+                            throw new NoSuchElementException();
+                        }
                         return nodeList.item(pos++);
                     }
 
@@ -156,12 +163,12 @@ public class PropertyUtil {
                             path,
                             dflt,
                             category,
-                            PropertyType.valueOf(type.toUpperCase()),
+                            type == null ? PropertyType.STRING : PropertyType.valueOf(type.toUpperCase()),
                             core == null || Boolean.valueOf(core),
                             description));
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error while parsing " + xmlFile, e);
         }
         doGenerate(Generator.JAVA, propertyDefinitionMap, javaFile);
@@ -178,7 +185,7 @@ public class PropertyUtil {
         PrintWriter out = null;
         boolean success = false;
         try {
-            System.out.println("Generating " + file);
+            LOGGER.debug("Generating " + file);
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
             }
@@ -202,7 +209,9 @@ public class PropertyUtil {
                 }
             }
             if (!success) {
-                file.delete();
+                if (!file.delete()) {
+
+                }
             }
         }
     }
@@ -415,27 +424,27 @@ public class PropertyUtil {
     }
 
     private static String quoteHtml(String s) {
-        return s.replaceAll("&", "&amp;")
-            .replaceAll(">", "&gt;")
-            .replaceAll("<", "&lt;");
+        return s.replace("&", "&amp;")
+            .replace(">", "&gt;")
+            .replace("<", "&lt;");
     }
 
     private static String stripHtml(String s) {
-        s = s.replaceAll("<li>", "<li>* ");
-        s = s.replaceAll("<h3>", "<h3>### ");
-        s = s.replaceAll("</h3>", " ###</h3>");
+        s = s.replace("<li>", "<li>* ");
+        s = s.replace("<h3>", "<h3>### ");
+        s = s.replace("</h3>", " ###</h3>");
         String[] strings = {
             "p", "code", "br", "ul", "li", "blockquote", "h3", "i" };
         for (String string : strings) {
-            s = s.replaceAll("<" + string + "/>", "");
-            s = s.replaceAll("<" + string + ">", "");
-            s = s.replaceAll("</" + string + ">", "");
+            s = s.replace("<" + string + "/>", "");
+            s = s.replace("<" + string + ">", "");
+            s = s.replace("</" + string + ">", "");
         }
         s = replaceRegion(s, "{@code ", "}");
         s = replaceRegion(s, "{@link ", "}");
-        s = s.replaceAll("&amp;", "&");
-        s = s.replaceAll("&lt;", "<");
-        s = s.replaceAll("&gt;", ">");
+        s = s.replace("&amp;", "&");
+        s = s.replace("&lt;", "<");
+        s = s.replace("&gt;", ">");
         return s;
     }
 
@@ -531,8 +540,7 @@ public class PropertyUtil {
                 return "-";
             }
             switch (propertyType) {
-            case INT:
-            case DOUBLE:
+            case INT, DOUBLE:
                 return new DecimalFormat("#,###.#").format(
                     new BigDecimal(defaultValue));
             default:

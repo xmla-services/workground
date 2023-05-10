@@ -77,7 +77,9 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     @Override
 	public boolean evaluate(List<Object> valueList) {
-        assert valueList.size() == 1;
+        if (valueList.size() != 1) {
+            throw new IllegalArgumentException("valueList.size() should be 1");
+        }
         return evaluate(valueList.get(0));
     }
 
@@ -101,7 +103,10 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     @Override
 	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
-        assert predicate.getConstrainedColumn() == getConstrainedColumn();
+        if (predicate.getConstrainedColumn() != getConstrainedColumn()) {
+            throw new IllegalArgumentException("orColumn: constrainedColumn have wrong value ");
+        }
+
         if (predicate instanceof ListColumnPredicate that) {
             final List<StarColumnPredicate> list =
                 new ArrayList<>();
@@ -165,7 +170,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
          * @return Predicate which tests whether the column's value is equal
          *   to a column constraint's value
          */
-        public static StarColumnPredicate equal(
+        public static StarColumnPredicate equalColumnPredicate(
             RolapStar.Column column,
             Object value)
         {
@@ -203,10 +208,10 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
          * @return Predicate which tests whether the column's value is equal
          *   to a column predicate's value
          */
-        public static StarColumnPredicate equal(
+        public static StarColumnPredicate equalColumnPredicate(
             ValueColumnPredicate predicate)
         {
-            return equal(
+            return equalColumnPredicate(
                 predicate.getConstrainedColumn(),
                 predicate.getValue());
         }

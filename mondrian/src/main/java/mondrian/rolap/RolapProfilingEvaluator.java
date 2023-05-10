@@ -86,7 +86,7 @@ public class RolapProfilingEvaluator extends RolapEvaluator {
     }
 
     @Override
-    protected RolapEvaluator _push(List<List<Member>> aggregationList) {
+    protected RolapEvaluator pushClone(List<List<Member>> aggregationList) {
         return new RolapProfilingEvaluator(root, this, aggregationList);
     }
 

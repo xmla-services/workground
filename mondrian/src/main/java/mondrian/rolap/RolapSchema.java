@@ -625,7 +625,7 @@ public class RolapSchema implements Schema {
         // Create cubes.
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube : xmlSchema.cubes()) {
             if (xmlCube.enabled()) {
-                RolapCube cube = new RolapCube(this, xmlSchema, xmlCube, true, context);
+                RolapCube cube = new RolapCube(this, xmlSchema, xmlCube, context);
                 Util.discard(cube);
             }
         }
@@ -634,7 +634,7 @@ public class RolapSchema implements Schema {
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube xmlVirtualCube : xmlSchema.virtualCubes()) {
             if (xmlVirtualCube.enabled()) {
                 RolapCube cube =
-                    new RolapCube(this, xmlSchema, xmlVirtualCube, true, context);
+                    new RolapCube(this, xmlSchema, xmlVirtualCube, context);
                 Util.discard(cube);
             }
         }
@@ -963,14 +963,14 @@ public class RolapSchema implements Schema {
                 JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-                cube = new RolapCube(this, xmlSchema, xmlDimension, false, context);
+                cube = new RolapCube(this, xmlSchema, xmlDimension, context);
             } else if (tagName.equals("VirtualCube")) {
                 // Need the real schema here.
                 org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema = getXMLSchema();
                 JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-                cube = new RolapCube(this, xmlSchema, xmlDimension, false, context);
+                cube = new RolapCube(this, xmlSchema, xmlDimension, context);
             } else {
                 throw new XOMException(
                     new StringBuilder("Got <").append(tagName).append("> when expecting <Cube>").toString());

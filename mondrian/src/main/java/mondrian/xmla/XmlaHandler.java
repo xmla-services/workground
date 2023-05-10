@@ -46,6 +46,7 @@ import static mondrian.xmla.XmlaConstants.NS_XSD;
 import static mondrian.xmla.XmlaConstants.NS_XSI;
 import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
 import static mondrian.xmla.XmlaConstants.USM_DOM_PARSE_FAULT_FS;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -210,9 +211,9 @@ public class XmlaHandler {
             // REVIEW: Security hole?
             sessionId = "<no_session>";
         }
-        LOGGER.debug(
-            new StringBuilder("Creating new connection for user [").append(request.getUsername())
-            .append("] and session [").append(sessionId).append("]").toString());
+        String msg = new StringBuilder("Creating new connection for user [").append(request.getUsername())
+            .append("] and session [").append(sessionId).append("]").toString();
+        LOGGER.debug(msg);
 
         Properties props = new Properties();
         props.put("sessionId", sessionId);
@@ -453,7 +454,7 @@ public class XmlaHandler {
                     } else if (inputValue instanceof Double d) {
                         // See if it can be an integer or long
                         long lval = d.longValue();
-                        if (d.equals(new Double(lval))) {
+                        if (d.equals(Double.valueOf(lval))) {
                             // It can be converted from double to long
                             // without loss of precision.
                             setValueAndType(lval);
@@ -759,8 +760,8 @@ public class XmlaHandler {
         }
         if (LOGGER.isDebugEnabled()) {
             long end = System.currentTimeMillis();
-            LOGGER.debug("XmlaHandler.process: time = " + (end - start));
-            LOGGER.debug("XmlaHandler.process: " + Util.printMemory());
+            LOGGER.debug("XmlaHandler.process: time = {}", (end - start));
+            LOGGER.debug("XmlaHandler.process: {}",  Util.printMemory());
         }
     }
 
@@ -936,12 +937,9 @@ public class XmlaHandler {
                                     null
                             );
 
-                            String filePath = java.net.URI.create(catalogUrl).getPath();
-                            java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath));
-                            try {
+                            String filePath = java.net.URI.create(catalogUrl).getPath();;
+                            try( java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath)) ) {
                                 out.write(objectDefinition);
-                            } finally {
-                                out.close();
                             }
                         }
                     } catch (org.olap4j.OlapException oe) {
@@ -960,7 +958,7 @@ public class XmlaHandler {
 
                 }
             }
-            else if(defaultXmlaRequest.getCommand().toUpperCase().equals("STATEMENT")) {
+            else if(defaultXmlaRequest.getCommand().equalsIgnoreCase("STATEMENT")) {
                 final OlapConnection connection = getConnection(request, Collections.<String, String>emptyMap());
                 final mondrian.rolap.RolapConnection rolapConnection =
                         ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
@@ -1147,7 +1145,7 @@ public class XmlaHandler {
                 }
             } catch (XmlaException xex) {
                 throw xex;
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 throw new XmlaException(
                         SERVER_FAULT_FC,
                         HSB_EXECUTE_UNPARSE_CODE,
@@ -1906,22 +1904,20 @@ public class XmlaHandler {
                 writer.startElement("row");
                 for (int i = 0; i < row.length; i++) {
                     Object value = row[i];
-                    if(value != null) {
+                    if(value == null) {
+                        writer.characters("null");
+                    } else {
                         writer.startElement(
                                 columns.get(i).encodedName,
                                 new Object[]{
                                         "xsi:type",
                                         columns.get(i).xsdType});
-                        if (value == null) {
-                            writer.characters("null");
-                        } else {
-                            String valueString = value.toString();
-                            if (value instanceof Number) {
-                                valueString =
-                                        XmlaUtil.normalizeNumericString(valueString);
-                            }
-                            writer.characters(valueString);
+                        String valueString = value.toString();
+                        if (value instanceof Number) {
+                            valueString =
+                                XmlaUtil.normalizeNumericString(valueString);
                         }
+                        writer.characters(valueString);
                         writer.endElement();
                     }
                 }
@@ -2408,8 +2404,9 @@ public class XmlaHandler {
                     values.add("type");
                     values.add(cellProperty.getXsdType());
                 }
-
-                writer.element(cellProperty.getAlias(), values.toArray());
+                if (cellProperty != null) {
+                    writer.element(cellProperty.getAlias(), values.toArray());
+                }
             }
 
             writer.endElement(); // CellInfo
@@ -2593,7 +2590,7 @@ public class XmlaHandler {
                 // members (which happens when there is no WHERE clause) and we
                 // need to be able to distinguish between the two.
 
-                if(slicerAxisHierarchies.size() > 0) {
+                if(!slicerAxisHierarchies.isEmpty()) {
                     axis(
                             writer,
                             slicerAxis,
@@ -2613,7 +2610,7 @@ public class XmlaHandler {
                 final List<Position> slicerPositions =
                     slicerAxis.getPositions();
                 if (slicerPositions != null
-                    && slicerPositions.size() > 0)
+                    && !slicerPositions.isEmpty())
                 {
                     final Position pos0 = slicerPositions.get(0);
                     int i = 0;
@@ -2968,12 +2965,12 @@ public class XmlaHandler {
             writer.startElement(
                 "Cell",
                 "CellOrdinal", ordinal);
-            for(String propertyName: this.queryCellPropertyNames){
-                if(propertyName != null) {
+            for(String propertyName: this.queryCellPropertyNames) {
+                if (propertyName != null) {
                     propertyName = propertyName.toUpperCase();
-                }
-                if(propertyName.equals("CELL_ORDINAL")) {
-                    continue;
+                    if (propertyName.equals("CELL_ORDINAL")) {
+                        continue;
+                    }
                 }
                 mondrian.olap4j.MondrianOlap4jCell mondrianOlap4jCell = (mondrian.olap4j.MondrianOlap4jCell)cell;
                 Object value = mondrianOlap4jCell.getRolapCell().getPropertyValue(propertyName);
@@ -3365,7 +3362,7 @@ public class XmlaHandler {
                 }
 
                 ++cellOrdinal;
-                Util.discard(cellOrdinal);
+                discard(cellOrdinal);
 
                 if (axis >= 2) {
                     iterate(writer, axis - 1, ho);
@@ -3391,7 +3388,7 @@ public class XmlaHandler {
             throws OlapException
         {
             ++cellOrdinal;
-            Util.discard(cellOrdinal);
+            discard(cellOrdinal);
 
             // Ignore empty cells.
             final Object cellValue = cell.getValue();
@@ -3455,7 +3452,7 @@ public class XmlaHandler {
 
         } catch (XmlaException xex) {
             throw xex;
-        } catch (Throwable t) {
+        } catch (Exception t) {
             throw new XmlaException(
                     SERVER_FAULT_FC,
                     HSB_DISCOVER_UNPARSE_CODE,
@@ -3467,7 +3464,7 @@ public class XmlaHandler {
                 writer.endElement();
                 writer.endElement();
                 writer.endElement();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 // Ignore any errors balancing the tags. The original exception
                 // is more important.
             }
@@ -3594,7 +3591,7 @@ public class XmlaHandler {
             }
         } catch (XmlaException xex) {
             throw xex;
-        } catch (Throwable t) {
+        } catch (Exception t) {
             throw new XmlaException(
                 SERVER_FAULT_FC,
                 HSB_DISCOVER_UNPARSE_CODE,
@@ -3606,7 +3603,7 @@ public class XmlaHandler {
                 writer.endElement();
                 writer.endElement();
                 writer.endElement();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 // Ignore any errors balancing the tags. The original exception
                 // is more important.
             }

@@ -49,6 +49,7 @@ import java.util.TimeZone;
  */
 public class Schedule {
 
+    public static final String PERIOD_MUST_BE_POSITIVE = "period must be positive";
     // members
 
     private DateSchedule dateSchedule;
@@ -72,7 +73,7 @@ public class Schedule {
 
     static final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
 
-    static final int allDaysOfWeekBitmap =
+    static final int ALL_DAYS_OF_WEEK_BITMAP =
         (1 << Calendar.MONDAY)
         | (1 << Calendar.TUESDAY)
         | (1 << Calendar.WEDNESDAY)
@@ -80,10 +81,10 @@ public class Schedule {
         | (1 << Calendar.FRIDAY)
         | (1 << Calendar.SATURDAY)
         | (1 << Calendar.SUNDAY);
-    static final int allDaysOfMonthBitmap =
+    static final int ALL_DAYS_OF_MONTH_BITMAP =
         0xefffFffe // bits 1..31
         | (1 << LAST_DAY_OF_MONTH);
-    static final int allWeeksOfMonthBitmap =
+    static final int ALL_WEEKS_OF_MONTH_BITMAP =
         0x0000003e // bits 1..5
         | (1 << LAST_WEEK_OF_MONTH);
 
@@ -341,12 +342,8 @@ public class Schedule {
         if (tz == null || tz.getID().equals("GMT")) {
             return nextOccurrence1(next, strict);
         } else {
-            int offset;
-            if (next == null) {
-                offset = tz.getRawOffset();
-            } else {
-                offset = ScheduleUtil.timezoneOffset(tz, next);
-            }
+            int offset = ScheduleUtil.timezoneOffset(tz, next);
+
             // Add the offset to the calendar, so that the calendar looks like
             // the local time (even though it is still in GMT). Suppose an
             // event runs at 12:00 JST each day. At 02:00 GMT they ask for the
@@ -440,17 +437,18 @@ interface DateSchedule {
      * @pre earliest != null
      */
     Calendar nextOccurrence(Calendar earliest, boolean strict);
-};
+}
 
 /**
  * A <code>DailyDateSchedule</code> fires every day.
  */
 class DailyDateSchedule implements DateSchedule {
+
     int period;
     int beginOrdinal;
     DailyDateSchedule(Calendar begin, int period) {
         this.period = period;
-        ScheduleUtil.assertTrue(period > 0, "period must be positive");
+        ScheduleUtil.assertTrue(period > 0, Schedule.PERIOD_MUST_BE_POSITIVE);
         this.beginOrdinal = ScheduleUtil.julianDay(
             begin == null ? ScheduleUtil.epochDay : begin);
     }
@@ -482,15 +480,15 @@ class WeeklyDateSchedule implements DateSchedule {
 
     WeeklyDateSchedule(Calendar begin, int period, int daysOfWeekBitmap) {
         this.period = period;
-        ScheduleUtil.assertTrue(period > 0, "period must be positive");
+        ScheduleUtil.assertTrue(period > 0, Schedule.PERIOD_MUST_BE_POSITIVE);
         this.beginOrdinal = ScheduleUtil.julianDay(
             begin == null ? ScheduleUtil.epochDay : begin) / 7;
         this.daysOfWeekBitmap = daysOfWeekBitmap;
         ScheduleUtil.assertTrue(
-            (daysOfWeekBitmap & Schedule.allDaysOfWeekBitmap) != 0,
+            (daysOfWeekBitmap & Schedule.ALL_DAYS_OF_WEEK_BITMAP) != 0,
             "weekly schedule must have at least one day set");
         ScheduleUtil.assertTrue(
-            (daysOfWeekBitmap & Schedule.allDaysOfWeekBitmap)
+            (daysOfWeekBitmap & Schedule.ALL_DAYS_OF_WEEK_BITMAP)
             == daysOfWeekBitmap,
             "weekly schedule has bad bits set: " + daysOfWeekBitmap);
     }
@@ -533,14 +531,14 @@ class MonthlyByDayDateSchedule implements DateSchedule {
         int daysOfMonthBitmap)
     {
         this.period = period;
-        ScheduleUtil.assertTrue(period > 0, "period must be positive");
+        ScheduleUtil.assertTrue(period > 0, Schedule.PERIOD_MUST_BE_POSITIVE);
         this.beginMonth = begin == null ? 0 : monthOrdinal(begin);
         this.daysOfMonthBitmap = daysOfMonthBitmap;
         ScheduleUtil.assertTrue(
-            (daysOfMonthBitmap & Schedule.allDaysOfMonthBitmap) != 0,
+            (daysOfMonthBitmap & Schedule.ALL_DAYS_OF_MONTH_BITMAP) != 0,
             "monthly day schedule must have at least one day set");
         ScheduleUtil.assertTrue(
-            (daysOfMonthBitmap & Schedule.allDaysOfMonthBitmap)
+            (daysOfMonthBitmap & Schedule.ALL_DAYS_OF_MONTH_BITMAP)
             == daysOfMonthBitmap,
             "monthly schedule has bad bits set: " + daysOfMonthBitmap);
     }
@@ -603,22 +601,22 @@ class MonthlyByWeekDateSchedule implements DateSchedule {
         int weeksOfMonthBitmap)
     {
         this.period = period;
-        ScheduleUtil.assertTrue(period > 0, "period must be positive");
+        ScheduleUtil.assertTrue(period > 0, Schedule.PERIOD_MUST_BE_POSITIVE);
         this.beginMonth = begin == null ? 0 : monthOrdinal(begin);
         this.daysOfWeekBitmap = daysOfWeekBitmap;
         ScheduleUtil.assertTrue(
-            (daysOfWeekBitmap & Schedule.allDaysOfWeekBitmap) != 0,
+            (daysOfWeekBitmap & Schedule.ALL_DAYS_OF_WEEK_BITMAP) != 0,
             "weekly schedule must have at least one day set");
         ScheduleUtil.assertTrue(
-            (daysOfWeekBitmap & Schedule.allDaysOfWeekBitmap)
+            (daysOfWeekBitmap & Schedule.ALL_DAYS_OF_WEEK_BITMAP)
             == daysOfWeekBitmap,
             "weekly schedule has bad bits set: " + daysOfWeekBitmap);
         this.weeksOfMonthBitmap = weeksOfMonthBitmap;
         ScheduleUtil.assertTrue(
-            (weeksOfMonthBitmap & Schedule.allWeeksOfMonthBitmap) != 0,
+            (weeksOfMonthBitmap & Schedule.ALL_WEEKS_OF_MONTH_BITMAP) != 0,
             "weeks of month schedule must have at least one week set");
         ScheduleUtil.assertTrue(
-            (weeksOfMonthBitmap & Schedule.allWeeksOfMonthBitmap)
+            (weeksOfMonthBitmap & Schedule.ALL_WEEKS_OF_MONTH_BITMAP)
             == weeksOfMonthBitmap,
             "week of month schedule has bad bits set: "
             + weeksOfMonthBitmap);
@@ -682,6 +680,10 @@ class ScheduleUtil {
     static final Calendar epochDay = ScheduleUtil.createCalendar(new Date(0));
     static final Calendar midnightTime =
         ScheduleUtil.createTimeCalendar(0, 0, 0);
+
+    private ScheduleUtil() {
+        // constructor
+    }
 
     public static void assertTrue(boolean b) {
         if (!b) {
@@ -876,9 +878,9 @@ class ScheduleUtil {
      * to do this?)
      */
     public static int julianDay(Calendar calendar) {
-        int year = calendar.get(Calendar.YEAR),
-            day = calendar.get(Calendar.DAY_OF_YEAR),
-            leapDays = (year / 4) - (year / 100) + (year / 400);
+        int year = calendar.get(Calendar.YEAR);
+        int day = calendar.get(Calendar.DAY_OF_YEAR);
+        int leapDays = (year / 4) - (year / 100) + (year / 400);
         return year * 365 + leapDays + day;
     }
     /**

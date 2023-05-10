@@ -527,7 +527,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 }
                 if (childCountOfParent != -1
                     && membersToBeOptimized.size() == childCountOfParent
-                    && AggregateCalc.canOptimize(firstParentMember, baseCubeForMeasure))
+                    && firstParentMember != null && AggregateCalc.canOptimize(firstParentMember, baseCubeForMeasure))
                 {
                     optimizedMembers.add(firstParentMember);
                     didOptimize = true;

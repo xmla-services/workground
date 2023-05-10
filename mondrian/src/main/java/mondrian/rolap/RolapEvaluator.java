@@ -95,6 +95,7 @@ public class RolapEvaluator implements Evaluator {
    * Dummy value to represent null results in the expression cache.
    */
   private static final Object nullResult = new Object();
+    public static final String NULL_MEMBER_IN = "null member in ";
 
   private final RolapMember[] currentMembers;
   private final RolapEvaluator parent;
@@ -190,29 +191,28 @@ public class RolapEvaluator implements Evaluator {
 
     // Build aggregationLists, combining parent's aggregationLists (if not
     // null) and the new aggregation list (if any).
-    List<List<List<Member>>> aggregationLists = null;
+    List<List<List<Member>>> aggregationListsInner = null;
     if ( parent.aggregationLists != null ) {
-      aggregationLists = new ArrayList<>( parent.aggregationLists );
+      aggregationListsInner = new ArrayList<>( parent.aggregationLists );
     }
-    // compoundPredicates.addAll(parent.compoundPredicates);
 
     if ( parent.slicerPredicateInfo != null ) {
       this.slicerPredicateInfo = parent.slicerPredicateInfo;
     }
 
     if ( aggregationList != null ) {
-      if ( aggregationLists == null ) {
-        aggregationLists = new ArrayList<>();
+      if ( aggregationListsInner == null ) {
+        aggregationListsInner = new ArrayList<>();
       }
-      aggregationLists.add( aggregationList );
+      aggregationListsInner.add( aggregationList );
       List<Member> tuple = aggregationList.get( 0 );
       for ( Member member : tuple ) {
         setContext( member.getHierarchy().getAllMember() );
       }
     }
     this.aggregationLists =
-        aggregationLists == null ? Collections.<List<List<Member>>> emptyList() : Collections.unmodifiableList(
-            aggregationLists );
+        aggregationListsInner == null ? Collections.<List<List<Member>>> emptyList() : Collections.unmodifiableList(
+            aggregationListsInner );
   }
 
   /**
@@ -263,8 +263,8 @@ public class RolapEvaluator implements Evaluator {
   @Override
 public RolapCube getMeasureCube() {
     final RolapMember measure = currentMembers[0];
-    if ( measure instanceof RolapStoredMeasure ) {
-      return ( (RolapStoredMeasure) measure ).getCube();
+    if ( measure instanceof RolapStoredMeasure rolapStoredMeasure) {
+      return rolapStoredMeasure.getCube();
     }
     return null;
   }
@@ -318,7 +318,7 @@ public boolean currentIsEmpty() {
     } finally {
       restore( savepoint );
     }
-    return o == null || ( o instanceof Number && ( (Number) o ).intValue() == 0 );
+    return o == null || ( o instanceof Number number && number.intValue() == 0 );
   }
 
   @Override
@@ -433,28 +433,28 @@ public Date getQueryStartTime() {
 
   @Override
 public final RolapEvaluator push( Member[] members ) {
-    final RolapEvaluator evaluator = _push( null );
+    final RolapEvaluator evaluator = pushClone( null );
     evaluator.setContext( members );
     return evaluator;
   }
 
   @Override
 public final RolapEvaluator push( Member member ) {
-    final RolapEvaluator evaluator = _push( null );
+    final RolapEvaluator evaluator = pushClone( null );
     evaluator.setContext( member );
     return evaluator;
   }
 
   @Override
 public final Evaluator push( boolean nonEmpty ) {
-    final RolapEvaluator evaluator = _push( null );
+    final RolapEvaluator evaluator = pushClone( null );
     evaluator.setNonEmpty( nonEmpty );
     return evaluator;
   }
 
   @Override
 public final Evaluator push( boolean nonEmpty, boolean nativeEnabled ) {
-    final RolapEvaluator evaluator = _push( null );
+    final RolapEvaluator evaluator = pushClone( null );
     evaluator.setNonEmpty( nonEmpty );
     evaluator.setNativeEnabled( nativeEnabled );
     return evaluator;
@@ -462,7 +462,7 @@ public final Evaluator push( boolean nonEmpty, boolean nativeEnabled ) {
 
   @Override
 public final RolapEvaluator push() {
-    return _push( null );
+    return pushClone( null );
   }
 
   private void ensureCommandCapacity( int minCapacity ) {
@@ -496,7 +496,7 @@ public final RolapEvaluator push() {
    * @param aggregationList
    *          List of tuples to add to aggregation context, or null
    */
-  protected RolapEvaluator _push( List<List<Member>> aggregationList ) {
+  protected RolapEvaluator pushClone(List<List<Member>> aggregationList ) {
     root.execution.checkCancelOrTimeout();
     return new RolapEvaluator( root, this, aggregationList );
   }
@@ -510,7 +510,7 @@ public final void restore( int savepoint ) {
 
   @Override
 public final Evaluator pushAggregation( List<List<Member>> list ) {
-    return _push( list );
+    return pushClone( list );
   }
 
   /**
@@ -613,7 +613,7 @@ public final int hashCode() {
       return null;
     }
     int toRemove = 0;
-    boolean removeMember[] = new boolean[slicerTuples.getArity()];
+    boolean[] removeMember = new boolean[slicerTuples.getArity()];
     for ( int i = 0; i < slicerTuples.get( 0 ).size(); i++ ) {
       Hierarchy h = slicerTuples.get( 0 ).get( i ).getHierarchy();
       // check to see if the current member is overridden
@@ -709,16 +709,15 @@ public final void setContext( Member member, boolean safe ) {
     if ( m == previous ) {
       return;
     }
-    if ( safe ) {
-      // We call 'exists' before 'removeCalcMember' for efficiency.
-      // 'exists' has a smaller stack to search before 'removeCalcMember'
-      // adds an 'ADD_CALCULATION' command.
-      if ( !exists( ordinal ) ) {
+
+    // We call 'exists' before 'removeCalcMember' for efficiency.
+    // 'exists' has a smaller stack to search before 'removeCalcMember'
+    // adds an 'ADD_CALCULATION' command.
+    if (safe && !exists( ordinal ) ) {
         ensureCommandCapacity( commandCount + 3 );
         commands[commandCount++] = previous;
         commands[commandCount++] = ordinal;
         commands[commandCount++] = Command.SET_CONTEXT;
-      }
     }
     if ( previous.isEvaluated() ) {
       removeCalculation( previous, false );
@@ -754,6 +753,8 @@ public final void setContext( Member member, boolean safe ) {
             return true;
           }
           break;
+        default:
+          break;
       }
       i -= command.width;
     }
@@ -772,7 +773,9 @@ public final void setContext( Member member, boolean safe ) {
 public final void setContext( List<Member> memberList ) {
     for ( int i = 0, n = memberList.size(); i < n; i++ ) {
       Member member = memberList.get( i );
-      assert member != null : "null member in " + memberList;
+      if (member == null) {
+          throw new IllegalArgumentException(NULL_MEMBER_IN + memberList);
+      }
       setContext( member );
     }
   }
@@ -781,7 +784,9 @@ public final void setContext( List<Member> memberList ) {
 public final void setContext( List<Member> memberList, boolean safe ) {
     for ( int i = 0, n = memberList.size(); i < n; i++ ) {
       Member member = memberList.get( i );
-      assert member != null : "null member in " + memberList;
+      if (member == null) {
+          throw new IllegalArgumentException(NULL_MEMBER_IN + memberList);
+      }
       setContext( member, safe );
     }
   }
@@ -790,7 +795,9 @@ public final void setContext( List<Member> memberList, boolean safe ) {
 public final void setContext( Member[] members ) {
     for ( int i = 0, length = members.length; i < length; i++ ) {
       Member member = members[i];
-      assert member != null : "null member in " + Arrays.toString( members );
+      if (member == null) {
+          throw new IllegalArgumentException(NULL_MEMBER_IN + Arrays.toString( members ));
+      }
       setContext( member );
     }
   }
@@ -799,7 +806,9 @@ public final void setContext( Member[] members ) {
 public final void setContext( Member[] members, boolean safe ) {
     for ( int i = 0, length = members.length; i < length; i++ ) {
       Member member = members[i];
-      assert member != null : Arrays.asList( members );
+      if (member == null) {
+          throw new IllegalArgumentException("member should be not null");
+      }
       setContext( member, safe );
     }
   }
@@ -908,7 +917,6 @@ public final Object evaluateCurrent() {
    */
   private static void checkRecursion( RolapEvaluator eval, int c ) {
     RolapMember[] members = eval.currentMembers.clone();
-    Member expanding = eval.expandingMember;
 
     // Find an ancestor evaluator that has identical context to this one:
     // same member context, and expanding the same calculation.
@@ -928,13 +936,16 @@ public final Object evaluateCurrent() {
             members[memberOrdinal] = member;
             break;
           case SET_EXPANDING:
-            expanding = (RolapMember) eval.commands[c - 2];
+            Member expanding = (RolapMember) eval.commands[c - 2];
             if ( Arrays.equals( members, eval.currentMembers ) && expanding == eval.expandingMember ) {
               throw FunUtil.newEvalException( null,
                   new StringBuilder("Infinite loop while evaluating calculated member '")
                       .append(eval.expandingMember).append("'; context stack is ")
                       .append(eval.getContextString()).toString() );
             }
+            break;
+          default:
+            break;
         }
         c -= command.width;
       }
@@ -979,6 +990,8 @@ public final Object evaluateCurrent() {
             int memberOrdinal = (Integer) eval.commands[c - 1];
             RolapMember member = (RolapMember) eval.commands[c - 2];
             members[memberOrdinal] = member;
+            break;
+          default:
             break;
         }
         c -= command.width;
@@ -1101,9 +1114,7 @@ public final String format( Object o, String formatString ) {
       key = new ArrayList<>( currentMembers.length + ( includeAggregationList ? 2 : 1 ) );
       key.add( descriptor.getExp() );
       // noinspection ManualArrayToCollectionCopy
-      for ( RolapMember currentMember : currentMembers ) {
-        key.add( currentMember );
-      }
+      key.addAll(Arrays.asList(currentMembers));
     } else {
       final int[] hierarchyOrdinals = descriptor.getDependentHierarchyOrdinals();
       key = new ArrayList<>( hierarchyOrdinals.length + ( includeAggregationList ? 2 : 1 ) );
@@ -1266,7 +1277,7 @@ public final Object getParameterValue( ParameterSlot slot ) {
 
         case AGG_SCOPE:
           if ( calculation.containsAggregateFunction() ) {
-            if ( expandsBefore( calculation, maxSolveMember ) ) {
+            if (maxSolveMember != null && expandsBefore( calculation, maxSolveMember ) ) {
               maxSolveMember = calculation;
             }
           } else if ( calculation.isCalculatedInQuery() ) {
@@ -1286,7 +1297,7 @@ public final Object getParameterValue( ParameterSlot slot ) {
           if ( calculation.isCalculatedInQuery() ) {
             maxSolveMember = calculation;
             state = ScopedMaxSolveOrderFinderState.QUERY_SCOPE;
-          } else if ( expandsBefore( calculation, maxSolveMember ) ) {
+          } else if (maxSolveMember != null &&  expandsBefore( calculation, maxSolveMember ) ) {
             maxSolveMember = calculation;
           }
           break;
@@ -1296,10 +1307,8 @@ public final Object getParameterValue( ParameterSlot slot ) {
             continue;
           }
 
-          if ( calculation.isCalculatedInQuery() ) {
-            if ( expandsBefore( calculation, maxSolveMember ) ) {
+          if ( calculation.isCalculatedInQuery() && maxSolveMember != null && expandsBefore( calculation, maxSolveMember )) {
               maxSolveMember = calculation;
-            }
           }
           break;
       }
@@ -1392,9 +1401,10 @@ public final void setEvalAxes( boolean evalAxes ) {
             + ( evalAxes ? 0x40 : 0x80 );
     if ( false ) {
       // Enable this code block to debug checksum mismatches.
-      System.err.println( new StringBuilder("h=").append(h).append(": ").append(Arrays.asList( Arrays.asList( currentMembers ),
-          new HashSet<>( Arrays.asList( calculations ).subList( 0, calculationCount ) ),
-          expandingMember, aggregationLists, nonEmpty, nativeEnabled, firstExpanding, evalAxes )).toString() );
+        String msg = new StringBuilder("h=").append(h).append(": ").append(Arrays.asList( Arrays.asList( currentMembers ),
+            new HashSet<>( Arrays.asList( calculations ).subList( 0, calculationCount ) ),
+            expandingMember, aggregationLists, nonEmpty, nativeEnabled, firstExpanding, evalAxes )).toString();
+        LOGGER.debug(msg);
     }
     return h;
   }

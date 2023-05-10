@@ -1008,7 +1008,7 @@ public Cell getCell( int[] pos ) {
     }
 
     for ( int i = 0; i < pos.length; i++ ) {
-      if ( positionsHighCardinality.containsKey(i) && positionsHighCardinality.get( i ) ) {
+      if ( positionsHighCardinality.containsKey(i) && Boolean.TRUE.equals( positionsHighCardinality.get( i ) ) ) {
         final Locus locus = new Locus( execution, null, "Loading cells" );
         Locus.push( locus );
         try {
@@ -1245,7 +1245,7 @@ public Cell getCell( int[] pos ) {
 
           ci.formatString = cachedFormatString;
           ci.valueFormatter = valueFormatter;
-        } catch ( ResultLimitExceededException | CellRequestQuantumExceededException | Error e ) {
+        } catch ( ResultLimitExceededException | CellRequestQuantumExceededException e) {
           // Do NOT ignore a ResultLimitExceededException!!!
           // or We need to throw this so another phase happens.
           // or Errors indicate fatal JVM problems; do not discard
@@ -1253,7 +1253,7 @@ public Cell getCell( int[] pos ) {
         } catch ( MondrianEvaluationException e ) {
           // ignore but warn
           LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
-        } catch ( Throwable e ) {
+        } catch ( Exception e ) {
           LOGGER.warn( MONDRIAN_EXCEPTION_IN_EXECUTE_STRIPE, e );
           discard( e );
         }
@@ -2221,7 +2221,7 @@ public Cell getCell( int[] pos ) {
         case 4:
           return new Four();
         default:
-          throw new RuntimeException( "Creating CellInfoPool with axisLength=" + axisLength );
+          throw new RolapRuntimeException( "Creating CellInfoPool with axisLength=" + axisLength );
       }
     }
 
@@ -2336,11 +2336,8 @@ public Cell getCell( int[] pos ) {
       int index = -1;
       for ( List<org.eclipse.daanse.olap.api.model.Member> subList : tupleList ) {
         if ( index == -1 ) {
-          for ( int i = 0; i < subList.size(); i++ ) {
-            if ( member2.getHierarchy().equals( subList.get( i ).getHierarchy() ) ) {
-              index = i;
-            }
-            break;
+          if (!subList.isEmpty() && member2.getHierarchy().equals( subList.get( 0 ).getHierarchy() ) ) {
+                  index = 0;
           }
           if ( index == -1 ) {
             return false; // member2's hierarchy not present in tuple

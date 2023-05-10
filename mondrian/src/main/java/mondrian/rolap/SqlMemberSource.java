@@ -12,6 +12,7 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.rolap.TupleReader.MemberBuilder;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
@@ -67,7 +69,7 @@ import mondrian.util.Pair;
  * @since 21 December, 2001
  */
 class SqlMemberSource
-    implements MemberReader, SqlTupleReader.MemberBuilder
+    implements MemberReader, MemberBuilder
 {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(SqlMemberSource.class);
@@ -569,10 +571,10 @@ RME is this right
                 ? new HighCardSqlTupleReader(constraint)
                 : new SqlTupleReader(constraint);
         if (isHighCardinality) {
-            LOGGER.warn(
-                MondrianResource.instance()
-                    .HighCardinalityInDimension.str(
-                        dimension.getUniqueName()));
+            String msg = MondrianResource.instance()
+                .HighCardinalityInDimension.str(
+                    dimension.getUniqueName());
+            LOGGER.warn(msg);
         }
         tupleReader.addLevelMembers(level, this, null);
         final TupleList tupleList =
@@ -588,6 +590,7 @@ RME is this right
     }
 
     @Override
+    @SuppressWarnings("java:S4144")
 	public Object getMemberCacheLock() {
         return cache;
     }
@@ -744,13 +747,12 @@ RME is this right
             }
             final String s = getExpression(exp, sqlQuery);
             String alias = sqlQuery.addSelect(s, property.getType().getInternalType());
-            if(needsGroupBy) {
-                // Some dialects allow us to eliminate properties from the
-                // group by that are functionally dependent on the level value
-                if (!sqlQuery.getDialect().allowsSelectNotInGroupBy()
-                        || !property.dependsOnLevelValue()) {
-                    sqlQuery.addGroupBy(s, alias);
-                }
+
+            // Some dialects allow us to eliminate properties from the
+            // group by that are functionally dependent on the level value
+            if (needsGroupBy && !sqlQuery.getDialect().allowsSelectNotInGroupBy()
+                || !property.dependsOnLevelValue()) {
+                sqlQuery.addGroupBy(s, alias);
             }
         }
         return sqlQuery.toSqlAndTypes();
@@ -1016,7 +1018,7 @@ RME is this right
                 return;
             }
             if (childLevel.isParentChild()) {
-                pair = makeChildMemberSql_PCRoot(parentMember);
+                pair = makeChildMemberSqlPCRoot(parentMember);
                 parentChild = true;
             } else {
                 pair = makeChildMemberSql(parentMember, context, constraint);
@@ -1025,7 +1027,6 @@ RME is this right
         }
         final String sql = pair.left;
 
-        int startChildrenSize = children.size();
         HashMap<RolapMember, Object> rolapToOrdinalMap = new HashMap<>();
 
         final List<BestFitColumnType> types = pair.right;
@@ -1079,7 +1080,7 @@ RME is this right
                             parentChild, stmt, key, columnOffset);
                 }
                 if (value == RolapUtil.sqlNullValue) {
-                    children.toArray();
+                    children.toArray(); // not remove call consolidate in ConcatenableList
                     addAsOldestSibling(children, member);
                 } else {
                     children.add(member);
@@ -1117,8 +1118,8 @@ RME is this right
         throws SQLException
     {
         final RolapLevel rolapChildLevel;
-        if (childLevel instanceof RolapCubeLevel) {
-            rolapChildLevel = ((RolapCubeLevel) childLevel).getRolapLevel();
+        if (childLevel instanceof RolapCubeLevel rolapCubeLevel) {
+            rolapChildLevel = rolapCubeLevel.getRolapLevel();
         } else {
             rolapChildLevel = childLevel;
         }
@@ -1172,8 +1173,8 @@ RME is this right
     @Override
 	public RolapMember allMember() {
         final RolapHierarchy rolapHierarchy =
-            hierarchy instanceof RolapCubeHierarchy
-                ? ((RolapCubeHierarchy) hierarchy).getRolapHierarchy()
+            hierarchy instanceof RolapCubeHierarchy rolapCubeHierarchy
+                ? rolapCubeHierarchy.getRolapHierarchy()
                 : hierarchy;
         return rolapHierarchy.getAllMember();
     }
@@ -1225,7 +1226,7 @@ RME is this right
      * <p>Currently, parent-child hierarchies may have only one level (plus the
      * 'All' level).
      */
-    private Pair<String, List<BestFitColumnType>> makeChildMemberSql_PCRoot(
+    private Pair<String, List<BestFitColumnType>> makeChildMemberSqlPCRoot(
         RolapMember member)
     {
         SqlQuery sqlQuery =
@@ -1255,7 +1256,7 @@ RME is this right
         } else {
             // Quote the value if it doesn't seem to be a number.
             try {
-                Util.discard(Double.parseDouble(level.getNullParentValue()));
+                discard(Double.parseDouble(level.getNullParentValue()));
                 condition.append(" = ");
                 condition.append(level.getNullParentValue());
             } catch (NumberFormatException e) {
@@ -1419,7 +1420,7 @@ RME is this right
 
 
     @Override
-	public TupleReader.MemberBuilder getMemberBuilder() {
+	public MemberBuilder getMemberBuilder() {
         return this;
     }
 
@@ -1507,7 +1508,7 @@ RME is this right
 
         @Override
 		public Exp getExpression() {
-            return getHierarchy().getAggregateChildrenExpression();
+            return super.getHierarchy().getAggregateChildrenExpression();
         }
 
         @Override
