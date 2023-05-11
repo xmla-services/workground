@@ -282,10 +282,10 @@ public class RolapHierarchy extends HierarchyBase {
         }
 
         this.relation = xmlHierarchyRelation;
-        if (xmlHierarchyRelation instanceof InlineTable) {
+        if (xmlHierarchyRelation instanceof InlineTable inlineTable) {
             this.relation =
                 RolapUtil.convertInlineTableToRelation(
-                    (InlineTable) xmlHierarchyRelation,
+                    inlineTable,
                     getRolapSchema().getDialect());
         }
         this.memberReaderClass = xmlHierarchy.memberReaderClass();
@@ -333,7 +333,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
         this.allMember.setOrdinal(0);
 
-        if (xmlHierarchy.levels().size() == 0) {
+        if (xmlHierarchy.levels().isEmpty()) {
             throw MondrianResource.instance().HierarchyHasNoLevels.ex(
                 getUniqueName());
         }
@@ -368,9 +368,9 @@ public class RolapHierarchy extends HierarchyBase {
             }
         }
 
-        if (xmlCubeDimension instanceof DimensionUsage) {
+        if (xmlCubeDimension instanceof DimensionUsage dimensionUsage) {
             String sharedDimensionName =
-                ((DimensionUsage) xmlCubeDimension).source();
+                dimensionUsage.source();
             this.sharedHierarchyName = sharedDimensionName;
             if (subName != null) {
                 this.sharedHierarchyName += "." + subName; // e.g. "Time.Weekly"
@@ -394,7 +394,7 @@ public class RolapHierarchy extends HierarchyBase {
         List<? extends Annotation> annotations)
     {
         if (annotations == null
-            || annotations.size() == 0)
+            || annotations.isEmpty())
         {
             return Map.of();
         }
@@ -434,6 +434,11 @@ public class RolapHierarchy extends HierarchyBase {
             return sharedHierarchyName.equals(that.sharedHierarchyName)
                 && getUniqueName().equals(that.getUniqueName());
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override
@@ -545,8 +550,8 @@ public class RolapHierarchy extends HierarchyBase {
      * otherwise, returns null.
      */
     public Relation getUniqueTable() {
-        if (relation instanceof Relation) {
-            return (Relation) relation;
+        if (relation instanceof Relation r) {
+            return r;
         } else if (relation instanceof Join) {
             return null;
         } else {
@@ -706,11 +711,9 @@ public class RolapHierarchy extends HierarchyBase {
         }
         final boolean failIfExists = false;
         RelationOrJoin subRelation = relation;
-        if (relation instanceof Join) {
-            if (expression != null) {
+        if (relation instanceof Join &&  expression != null) {
                 subRelation =
                     relationSubsetInverse(relation, getTableAlias(expression));
-            }
         }
         query.addFrom(subRelation, null, failIfExists);
     }
@@ -737,21 +740,19 @@ public class RolapHierarchy extends HierarchyBase {
         query.registerRootRelation(getRelation());
         final boolean failIfExists = false;
         RelationOrJoin subRelation = getRelation();
-        if (getRelation() instanceof Join) {
-            if (expression != null) {
-                // Suppose relation is
-                //   (((A join B) join C) join D)
-                // and the fact table is
-                //   F
-                // and our expression uses C. We want to make the expression
-                //   F left join ((A join B) join C).
-                // Search for the smallest subset of the relation which
-                // uses C.
-                subRelation =
-                    relationSubset(getRelation(), getTableAlias(expression));
-                if (subRelation == null) {
-                    subRelation = getRelation();
-                }
+        if (getRelation() instanceof Join && expression != null) {
+            // Suppose relation is
+            //   (((A join B) join C) join D)
+            // and the fact table is
+            //   F
+            // and our expression uses C. We want to make the expression
+            //   F left join ((A join B) join C).
+            // Search for the smallest subset of the relation which
+            // uses C.
+            subRelation =
+                relationSubset(getRelation(), getTableAlias(expression));
+            if (subRelation == null) {
+                subRelation = getRelation();
             }
         }
         query.addFrom(
@@ -865,12 +866,14 @@ public class RolapHierarchy extends HierarchyBase {
         } else if (relation instanceof Join join) {
             RelationOrJoin rightRelation =
                 relationSubset(right(join), alias);
-            return (rightRelation == null)
-                ? relationSubset(left(join), alias)
-                : MondrianProperties.instance()
+            if (rightRelation == null) {
+                return relationSubset(left(join), alias);
+            } else {
+                return MondrianProperties.instance()
                     .FilterChildlessSnowflakeMembers.get()
-                ? join
-                : rightRelation;
+                    ? join
+                    : rightRelation;
+            }
         } else {
             throw Util.newInternal("bad relation type " + relation);
         }
@@ -1048,7 +1051,8 @@ public class RolapHierarchy extends HierarchyBase {
                         .getExpanding());
         }
         boolean goesLower = false;
-        for (Member member : membersWithAccess.keySet()) {
+        for (Map.Entry<Member, Access> entry : membersWithAccess.entrySet()) {
+            Member member = entry.getKey();
             Access access = membersWithAccess.get(member);
             if (access == null) {
                 access = hAccess.getAccess(member);
@@ -1183,8 +1187,7 @@ public class RolapHierarchy extends HierarchyBase {
      */
     RolapDimension createClosedPeerDimension(
         RolapLevel src,
-        Closure clos,
-        CubeDimension xmlDimension)
+        Closure clos)
     {
         // REVIEW (mb): What about attribute primaryKeyTable?
 
@@ -1427,8 +1430,8 @@ public class RolapHierarchy extends HierarchyBase {
 
         @Override
 		public boolean equals(Object o) {
-            return o instanceof LimitedRollupMember
-                && ((LimitedRollupMember) o).member.equals(member);
+            return o instanceof LimitedRollupMember limitedRollupMember
+                && limitedRollupMember.member.equals(member);
         }
 
         @Override
@@ -1516,8 +1519,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
 
         public RolapMember substitute(RolapMember member, Access access) {
-            if (member != null
-                && member instanceof MultiCardinalityDefaultMember)
+            if (member instanceof MultiCardinalityDefaultMember)
             {
                 return new LimitedRollupMember(
                     (RolapCubeMember)
@@ -1532,8 +1534,8 @@ public class RolapHierarchy extends HierarchyBase {
             {
                 // Member is visible, but at least one of its
                 // descendants is not.
-                if (member instanceof LimitedRollupMember) {
-                    member = ((LimitedRollupMember) member).member;
+                if (member instanceof LimitedRollupMember limitedRollupMember) {
+                    member = limitedRollupMember.member;
                 }
                 return new LimitedRollupMember(
                     (RolapCubeMember) member,
@@ -1557,8 +1559,8 @@ public class RolapHierarchy extends HierarchyBase {
 
         @Override
         public RolapMember desubstitute(RolapMember member) {
-            if (member instanceof LimitedRollupMember) {
-                return ((LimitedRollupMember) member).member;
+            if (member instanceof LimitedRollupMember limitedRollupMember) {
+                return limitedRollupMember.member;
             } else {
                 return member;
             }

@@ -65,7 +65,7 @@ public class RolapCubeDimension extends RolapDimension {
                 : rolapDim.getDescription(),
             null,
             highCardinality,
-            (cubeDim.annotations() != null && cubeDim.annotations().size() > 0)
+            (cubeDim.annotations() != null && !cubeDim.annotations().isEmpty())
                 ? RolapHierarchy.createMetadataMap(cubeDim.annotations())
                 : rolapDim.getMetadata());
         this.xmlDimension = cubeDim;
@@ -98,10 +98,8 @@ public class RolapCubeDimension extends RolapDimension {
     RolapCube lookupFactCube(
         CubeDimension cubeDim, RolapSchema schema)
     {
-      if (cubeDim instanceof VirtualCubeDimension virtualCubeDim) {
-        if (virtualCubeDim.cubeName() != null) {
+      if (cubeDim instanceof VirtualCubeDimension virtualCubeDim && virtualCubeDim.cubeName() != null) {
           return schema.lookupCube(virtualCubeDim.cubeName());
-        }
       }
       return null;
     }
@@ -133,6 +131,11 @@ public class RolapCubeDimension extends RolapDimension {
             return false;
         }
         return getUniqueName().equals(that.getUniqueName());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override

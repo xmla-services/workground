@@ -112,7 +112,7 @@ public abstract class ListPredicate implements StarPredicate {
 
         if (isEqual) {
             ListPredicate thatPred = (ListPredicate) that;
-            if (getOp() != thatPred.getOp()
+            if (!getOp().equals(thatPred.getOp())
                 || getChildren().size() != thatPred.getChildren().size())
             {
                 isEqual = false;
@@ -125,7 +125,7 @@ public abstract class ListPredicate implements StarPredicate {
                     childrenHashMap =
                         new HashMap<>();
                     for (StarPredicate thisChild : getChildren()) {
-                        Integer key = new Integer(thisChild.hashCode());
+                        Integer key = Integer.valueOf(thisChild.hashCode());
                         List<StarPredicate> predList = childrenHashMap.get(key);
                         if (predList == null) {
                             predList = new ArrayList<>();

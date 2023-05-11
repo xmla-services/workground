@@ -33,7 +33,7 @@ class FormatTest {
     public static final char Nbsp = ' ';
     public static final char EA = '\u00e9'; // e acute
     public static final char UC = '\u00FB'; // u circumflex
-    
+
     private final Format.FormatLocale localeFra = Format.createLocale(
         '.', // thousandSeparator = ',' in en
         ',', // decimalPlaceholder = '.' in en
@@ -75,7 +75,7 @@ class FormatTest {
     void testNumbers() {
         checkNumbersInLocale(null);
     }
-    
+
     @Test
     void testFrenchNumbers() {
         checkNumbersInLocale(localeFra);
@@ -196,7 +196,7 @@ class FormatTest {
         }
         return result;
     }
-    
+
     @Test
     void testTrickyNumbers() {
         checkFormat(null, new BigDecimal("40.385"), "##0.0#", "40.39");
@@ -528,7 +528,7 @@ class FormatTest {
             } else {
                 o = d;
             }
-            checkFormat(null, o, fe.token);
+            checkFormat(null, o, fe.tokenValue);
         }
     }
 
@@ -652,9 +652,9 @@ class FormatTest {
 
     @Test
     void testCache() {
-        StringBuilder buf = new StringBuilder(Format.CacheLimit * 2 + 10);
+        StringBuilder buf = new StringBuilder(Format.CACHE_LIMIT * 2 + 10);
         buf.append("0.");
-        for (int i = 0; i < Format.CacheLimit * 2; ++i) {
+        for (int i = 0; i < Format.CACHE_LIMIT * 2; ++i) {
             final Format format = Format.get(buf.toString(), null);
             final String s = format.format(i);
             assertEquals(i + ".", s);
@@ -865,12 +865,12 @@ class FormatTest {
         checkFormat(
             localeDe,
             123456,
-            "###,###.00" + Format.intlCurrencySymbol,
+            "###,###.00" + Format.INTL_CURRENCY_SYMBOL,
             "123.456,00" + Euro);
         checkFormat(
             localeFra,
             123456,
-            "###,###.00" + Format.intlCurrencySymbol,
+            "###,###.00" + Format.INTL_CURRENCY_SYMBOL,
             "123.456,00FF");
         checkFormat(
             localeFra,
@@ -890,7 +890,7 @@ class FormatTest {
         checkFormat(
             null,
             new BigDecimal("1.2"),
-            "" + Format.intlCurrencySymbol + "#",
+            "" + Format.INTL_CURRENCY_SYMBOL + "#",
             "$1");
     }
 

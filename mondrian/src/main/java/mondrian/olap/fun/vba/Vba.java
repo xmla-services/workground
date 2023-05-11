@@ -41,7 +41,7 @@ import static org.eigenbase.xom.XOMUtil.discard;
  * @since Dec 31, 2007
  */
 public class Vba {
-    private static final long MILLIS_IN_A_DAY = 24 * 60 * 60 * 1000;
+    private static final long MILLIS_IN_A_DAY = 24L * 60 * 60 * 1000;
 
     private static final DateFormatSymbols DATE_FORMAT_SYMBOLS =
         new DateFormatSymbols(Locale.getDefault());
@@ -215,7 +215,7 @@ public class Vba {
     @Description(
         "Returns the integer portion of a number. If negative, returns the "
         + "negative number less than or equal to the number.")
-    public static int int_(Object number) {
+    public static int toInt(Object number) {
         if (number instanceof Number num) {
             int v = num.intValue();
             double dv = num.doubleValue();
@@ -232,7 +232,7 @@ public class Vba {
     }
 
     /**
-     * Equivalent of the {@link #int_} function on the native 'double' type.
+     * Equivalent of the {@link #toInt} function on the native 'double' type.
      * Not an MDX function.
      *
      * @param dv Double value
@@ -396,7 +396,7 @@ public class Vba {
         "Returns a Variant (Long) specifying the number of time intervals "
         + "between two specified dates.")
     public static long dateDiff(String interval, Date date1, Date date2) {
-        return _dateDiff(
+        return dateDiff(
             interval, date1, date2, Calendar.SUNDAY,
             FirstWeekOfYear.vbFirstJan1);
     }
@@ -410,7 +410,7 @@ public class Vba {
     public static long dateDiff(
         String interval, Date date1, Date date2, int firstDayOfWeek)
     {
-        return _dateDiff(
+        return dateDiff(
             interval, date1, date2, firstDayOfWeek,
             FirstWeekOfYear.vbFirstJan1);
     }
@@ -425,12 +425,12 @@ public class Vba {
         String interval, Date date1, Date date2,
         int firstDayOfWeek, int firstWeekOfYear)
     {
-        return _dateDiff(
+        return dateDiff(
             interval, date1, date2, firstDayOfWeek,
             FirstWeekOfYear.values()[firstWeekOfYear]);
     }
 
-    private static long _dateDiff(
+    private static long dateDiff(
         String intervalName, Date date1, Date date2,
         int firstDayOfWeek, FirstWeekOfYear firstWeekOfYear)
     {
@@ -454,7 +454,7 @@ public class Vba {
         "Returns a Variant (Integer) containing the specified part of a given "
         + "date.")
     public static int datePart(String interval, Date date) {
-        return _datePart(
+        return datePart(
             interval, date, Calendar.SUNDAY,
             FirstWeekOfYear.vbFirstJan1);
     }
@@ -465,7 +465,7 @@ public class Vba {
         "Returns a Variant (Integer) containing the specified part of a given "
         + "date.")
     public static int datePart(String interval, Date date, int firstDayOfWeek) {
-        return _datePart(
+        return datePart(
             interval, date, firstDayOfWeek,
             FirstWeekOfYear.vbFirstJan1);
     }
@@ -479,12 +479,12 @@ public class Vba {
         String interval, Date date, int firstDayOfWeek,
         int firstWeekOfYear)
     {
-        return _datePart(
+        return datePart(
             interval, date, firstDayOfWeek,
             FirstWeekOfYear.values()[firstWeekOfYear]);
     }
 
-    private static int _datePart(
+    private static int datePart(
         String intervalName,
         Date date,
         int firstDayOfWeek,
@@ -843,8 +843,8 @@ public class Vba {
     @Description(
         "Returns a Double specifying the internal rate of return for a series "
         + "of periodic cash flows (payments and receipts).")
-    public static double IRR(double[] valueArray) {
-        return IRR(valueArray, 0.10);
+    public static double irr(double[] valueArray) {
+        return irr(valueArray, 0.10);
     }
 
 
@@ -853,7 +853,7 @@ public class Vba {
     @Description(
         "Returns a Double specifying the internal rate of return for a series "
         + "of periodic cash flows (payments and receipts).")
-    public static double IRR(double[] valueArray, double guess) {
+    public static double irr(double[] valueArray, double guess) {
         // calc pV of stream (sum of pV's for valueArray) ((1 + guess) ^ index)
         double minGuess = 0.0;
         double maxGuess = 1.0;
@@ -889,7 +889,7 @@ public class Vba {
     @Description(
         "Returns a Double specifying the modified internal rate of return for "
         + "a series of periodic cash flows (payments and receipts).")
-    public static double MIRR(
+    public static double mirr(
         double[] valueArray,
         double financeRate,
         double reinvestRate)

@@ -16,6 +16,7 @@ package mondrian.rolap;
 import java.io.Serializable;
 import java.util.BitSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a set of bits.
@@ -443,7 +444,9 @@ public interface BitKey
      * Implementation of {@link BitKey} for bit counts less than 64.
      */
     public class Small extends AbstractBitKey {
+
         private static final long serialVersionUID = -7891880560056571197L;
+        public static final String REMOVE = "remove";
         private long bits;
 
         /**
@@ -695,12 +698,13 @@ public interface BitKey
                     return true;
                 }
                 @Override
+                @SuppressWarnings("java:S2272")
 				public Integer next() {
                     return Integer.valueOf(pos);
                 }
                 @Override
 				public void remove() {
-                    throw new UnsupportedOperationException("remove");
+                    throw new UnsupportedOperationException(REMOVE);
                 }
             };
         }
@@ -1013,10 +1017,8 @@ public interface BitKey
             } else if (bitKey instanceof BitKey.Big other) {
                 if ((this.bits0 & other.bits[0]) != 0) {
                     return true;
-                } else if ((this.bits1 & other.bits[1]) != 0) {
-                    return true;
                 } else {
-                    return false;
+                    return ((this.bits1 & other.bits[1]) != 0);
                 }
             }
             return false;
@@ -1100,12 +1102,13 @@ public interface BitKey
                     }
                 }
                 @Override
+                @SuppressWarnings("java:S2272")
 				public Integer next() {
                     return Integer.valueOf(pos);
                 }
                 @Override
 				public void remove() {
-                    throw new UnsupportedOperationException("remove");
+                    throw new UnsupportedOperationException(Small.REMOVE);
                 }
             };
         }
@@ -1591,13 +1594,14 @@ public interface BitKey
                 }
 
                 @Override
+                @SuppressWarnings("java:S2272")
 				public Integer next() {
                     return Integer.valueOf(pos);
                 }
 
                 @Override
 				public void remove() {
-                    throw new UnsupportedOperationException("remove");
+                    throw new UnsupportedOperationException(Small.REMOVE);
                 }
             };
         }
@@ -1730,8 +1734,8 @@ public interface BitKey
 
         @Override
 		public int compareTo(BitKey bitKey) {
-            if (bitKey instanceof Big) {
-                return compareUnsignedArrays(this.bits, ((Big) bitKey).bits);
+            if (bitKey instanceof Big big) {
+                return compareUnsignedArrays(this.bits, big.bits);
             } else if (bitKey instanceof Mid128 that) {
                 return -that.compareToBig(this);
             } else {
@@ -1741,7 +1745,7 @@ public interface BitKey
         }
     }
 
-    static final byte bitPositionTable[] = {
+    static final byte[] bitPositionTable = {
        -1, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
         4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
         5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,

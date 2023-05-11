@@ -68,10 +68,10 @@ public class CacheMap<S, T> implements Map<S, T> {
                 new Map.Entry<S, T>() {
                     @Override
 					public boolean equals(Object s) {
-                        if (s instanceof Map.Entry) {
-                            return ((Map.Entry) s).getKey().equals(
+                        if (s instanceof Map.Entry en) {
+                            return en.getKey().equals(
                                 entry.getKey())
-                                && ((Map.Entry) s).getValue().equals(
+                                && en.getValue().equals(
                                     entry.getValue().value);
                         } else {
                             return false;
@@ -134,7 +134,7 @@ public class CacheMap<S, T> implements Map<S, T> {
     @Override
 	public T put(final S key, final T value) {
         final Pair<S, T> pair =
-            new Pair<S, T>(value, new LinkedNode(head, key));
+            new Pair<>(value, new LinkedNode(head, key));
         final Pair<S, T> obj = map.put(key, pair);
         if (map.size() > maxSize) {
             tail.getPrevious().remove();
@@ -189,8 +189,10 @@ public class CacheMap<S, T> implements Map<S, T> {
 
     @Override
 	public boolean equals(Object o) {
-        CacheMap c = (CacheMap) o;
-        return map.equals(c.map);
+        if (o instanceof CacheMap cacheMap) {
+            return map.equals(cacheMap.map);
+        }
+        return false;
     }
 
     //
@@ -216,6 +218,11 @@ public class CacheMap<S, T> implements Map<S, T> {
 		public boolean equals(final Object o) {
             return o != null && o.equals(this.value);
         }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
     }
 
 
@@ -223,7 +230,8 @@ public class CacheMap<S, T> implements Map<S, T> {
      * Represents a node in a linked list.
      */
     private class LinkedNode<S> implements java.io.Serializable {
-        private LinkedNode<S> next, prev;
+        private LinkedNode<S> next;
+        private LinkedNode<S> prev;
         private S key;
 
         public LinkedNode(final LinkedNode<S> prev, final S key) {

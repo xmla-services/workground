@@ -343,6 +343,11 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     }
 
     @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
 	protected int computeHashCode() {
         return Util.hash(super.computeHashCode(), this.cubeDimension.cube);
     }

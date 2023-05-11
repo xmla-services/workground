@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Composite collections.
@@ -59,7 +60,7 @@ public abstract class Composite {
         Iterator<? extends T>... iterators)
     {
         final Iterator[] iterators1 = iterators;
-        return new CompositeIterator<T>(iterators1);
+        return new CompositeIterator<>(iterators1);
     }
 
     private static class CompositeIterable<T> implements Iterable<T> {
@@ -118,6 +119,9 @@ public abstract class Composite {
 
         @Override
 		public T next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             final T next1 = next;
             advance();
             return next1;
@@ -147,6 +151,9 @@ public abstract class Composite {
 
         @Override
 		public Iterator<T> next() {
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
             return iterables[i++].iterator();
         }
 

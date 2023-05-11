@@ -35,4 +35,9 @@ public class StringType extends ScalarType {
 	public boolean isInstance(Object value) {
         return value instanceof String;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

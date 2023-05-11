@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -114,7 +115,7 @@ public class JdbcSchema {
 
     private static Factory factory;
 
-    private synchronized static void makeFactory() {
+    private static synchronized void makeFactory() {
         if (factory != null) {
             return;
         }
@@ -299,16 +300,9 @@ public class JdbcSchema {
      */
     public static Datatype getDatatype(int javaType) {
         switch (javaType) {
-        case Types.TINYINT:
-        case Types.SMALLINT:
-        case Types.INTEGER:
+        case Types.TINYINT, Types.SMALLINT, Types.INTEGER:
             return Datatype.INTEGER;
-        case Types.FLOAT:
-        case Types.REAL:
-        case Types.DOUBLE:
-        case Types.NUMERIC:
-        case Types.DECIMAL:
-        case Types.BIGINT:
+        case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL, Types.BIGINT:
             return Datatype.NUMERIC;
         case Types.BOOLEAN:
             return Datatype.BOOLEAN;
@@ -318,8 +312,7 @@ public class JdbcSchema {
             return Datatype.TIME;
         case Types.TIMESTAMP:
             return Datatype.TIMESTAMP;
-        case Types.CHAR:
-        case Types.VARCHAR:
+        case Types.CHAR, Types.VARCHAR:
         default:
             return Datatype.STRING;
         }
@@ -329,14 +322,7 @@ public class JdbcSchema {
      * Returns true if the parameter is a java.sql.Type text type.
      */
     public static boolean isText(int javaType) {
-        switch (javaType) {
-        case Types.CHAR:
-        case Types.VARCHAR:
-        case Types.LONGVARCHAR:
-            return true;
-        default:
-            return false;
-        }
+        return javaType == Types.CHAR || javaType == Types.VARCHAR || javaType == Types.LONGVARCHAR;
     }
 
     enum TableUsageType {
@@ -505,12 +491,12 @@ public class JdbcSchema {
 				public String toString() {
                     StringWriter sw = new StringWriter(64);
                     PrintWriter pw = new PrintWriter(sw);
-                    print(pw, "");
+                    print(pw);
                     pw.flush();
                     return sw.toString();
                 }
 
-                public void print(final PrintWriter pw, final String prefix) {
+                private void print(final PrintWriter pw) {
                     if (getSymbolicName() != null) {
                         pw.print("symbolicName=");
                         pw.print(getSymbolicName());
@@ -729,7 +715,7 @@ public class JdbcSchema {
              * Return true if the column has at least one usage.
              */
             public boolean hasUsage() {
-                return (usages.size() != 0);
+                return !usages.isEmpty();
             }
 
             /**
@@ -779,6 +765,7 @@ public class JdbcSchema {
                     }
 
                     @Override
+                    @SuppressWarnings("java:S2272")
 					public Usage next() {
                         return nextUsage;
                     }
@@ -822,33 +809,20 @@ public class JdbcSchema {
                 pw.print(getColumnSize());
 
                 switch (getType()) {
-                case Types.TINYINT:
-                case Types.SMALLINT:
-                case Types.INTEGER:
-                case Types.BIGINT:
-                case Types.FLOAT:
-                case Types.REAL:
-                case Types.DOUBLE:
+                case Types.TINYINT, Types.SMALLINT, Types.INTEGER, Types.BIGINT, Types.FLOAT, Types.REAL, Types.DOUBLE:
                     break;
-                case Types.NUMERIC:
-                case Types.DECIMAL:
+                case Types.NUMERIC, Types.DECIMAL:
                     pw.print(", decimalDigits=");
                     pw.print(getDecimalDigits());
                     pw.print(", numPrecRadix=");
                     pw.print(getNumPrecRadix());
                     break;
-                case Types.CHAR:
-                case Types.VARCHAR:
+                case Types.CHAR, Types.VARCHAR:
                     pw.print(", charOctetLength=");
                     pw.print(getCharOctetLength());
                     break;
-                case Types.LONGVARCHAR:
-                case Types.DATE:
-                case Types.TIME:
-                case Types.TIMESTAMP:
-                case Types.BINARY:
-                case Types.VARBINARY:
-                case Types.LONGVARBINARY:
+                case Types.LONGVARCHAR, Types.DATE, Types.TIME,
+                    Types.TIMESTAMP, Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY:
                 default:
                     break;
                 }
@@ -859,7 +833,7 @@ public class JdbcSchema {
                     pw.print(" Usages [");
                     for (Usage usage : getUsages()) {
                         pw.print('(');
-                        usage.print(pw, prefix);
+                        usage.print(pw);
                         pw.print(')');
                     }
                     pw.println("]");
@@ -980,6 +954,7 @@ public class JdbcSchema {
                     }
                 }
                 @Override
+                @SuppressWarnings("java:S2272")
 				public JdbcSchema.Table.Column.Usage next() {
                     return nextObject;
                 }
@@ -1087,8 +1062,8 @@ public class JdbcSchema {
                 try {
                     DatabaseMetaData dmd = conn.getMetaData();
 
-                    String schema = JdbcSchema.this.getSchemaName();
-                    String catalog = JdbcSchema.this.getCatalogName();
+                    String schemaInner = JdbcSchema.this.getSchemaName();
+                    String catalogInner = JdbcSchema.this.getCatalogName();
                     String tableName = getName();
                     String columnNamePattern = "%";
 
@@ -1096,12 +1071,12 @@ public class JdbcSchema {
                     try {
                         Map<String, Column> map = getColumnMap();
                         rs = dmd.getColumns(
-                            catalog,
-                            schema,
+                            catalogInner,
+                            schemaInner,
                             tableName,
                             columnNamePattern);
                         while (rs.next()) {
-                            String name = rs.getString(4);
+                            String nameInner = rs.getString(4);
                             int type = rs.getInt(5);
                             String typeName = rs.getString(6);
                             int columnSize = getSafeInt(rs, 7);
@@ -1110,7 +1085,7 @@ public class JdbcSchema {
                             int charOctetLength = rs.getInt(16);
                             String isNullable = rs.getString(18);
 
-                            Column column = new Column(name);
+                            Column column = new Column(nameInner);
                             column.setType(type);
                             column.setTypeName(typeName);
                             column.setColumnSize(columnSize);
@@ -1119,7 +1094,7 @@ public class JdbcSchema {
                             column.setCharOctetLength(charOctetLength);
                             column.setIsNullable(!"NO".equals(isNullable));
 
-                            map.put(name, column);
+                            map.put(nameInner, column);
                             totalColumnSize += column.getColumnSize();
                         }
                     } finally {
@@ -1379,10 +1354,10 @@ public class JdbcSchema {
         final String tableName = "%";
         ResultSet rs = null;
         try {
-            getLogger().debug(
-                new StringBuilder("Getting list of tables from catalog ")
+            String msg = new StringBuilder("Getting list of tables from catalog ")
                 .append(scanCatalogProp).append(" schema ")
-                .append(scanSchemaProp).append(" table ").append(tableName).toString());
+                .append(scanSchemaProp).append(" table ").append(tableName).toString();
+            getLogger().debug(msg);
             rs = databaseMetaData.getTables(
                 scanCatalogProp,
                 scanSchemaProp,
@@ -1413,7 +1388,7 @@ public class JdbcSchema {
         String name = rs.getString(3);
         String tableType = rs.getString(4);
         Table table = new Table(name, tableType);
-        getLogger().debug("Adding table " + name);
+        getLogger().debug("Adding table {}", name);
 
         tables.put(table.getName(), table);
     }

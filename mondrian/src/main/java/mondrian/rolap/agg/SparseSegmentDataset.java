@@ -42,7 +42,7 @@ class SparseSegmentDataset implements SegmentDataset {
      * Creates an empty SparseSegmentDataset.
      */
     SparseSegmentDataset() {
-        this(new HashMap<CellKey, Object>());
+        this(new HashMap<>());
     }
 
     /**
@@ -94,7 +94,7 @@ class SparseSegmentDataset implements SegmentDataset {
     @Override
 	public double getBytes() {
         // assume a slot, key, and value are each 4 bytes
-        return values.size() * 12;
+        return values.size() * 12d;
     }
 
     @Override

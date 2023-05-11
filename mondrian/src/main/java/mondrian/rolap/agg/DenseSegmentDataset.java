@@ -58,7 +58,7 @@ abstract class DenseSegmentDataset implements SegmentDataset {
     @Override
 	public final double getBytes() {
         // assume a slot, key, and value are each 4 bytes
-        return getSize() * 12;
+        return getSize() * 12d;
     }
 
     @Override

@@ -34,12 +34,12 @@ public class Scanner {
     /** single lookahead character */
     protected int nextChar;
     /** next lookahead character */
-    private int lookaheadChars[] = new int[16];
+    private int[] lookaheadChars = new int[16];
     private int firstLookaheadChar = 0;
     private int lastLookaheadChar = 0;
-    private Hashtable<String, Integer> m_resWordsTable;
+    private Hashtable<String, Integer> mResWordsTable;
     private int iMaxResword;
-    private String m_aResWords[];
+    private String[] mAResWords;
     protected boolean debug;
 
     /** lines[x] is the start of the x'th line */
@@ -67,7 +67,7 @@ public class Scanner {
     /**
      * Whether to allow nested comments.
      */
-    private static final boolean allowNestedComments = true;
+    private static final boolean ALLOW_NESTED_COMMENTS = true;
 
     /**
      * The {@link java.math.BigDecimal} value 0.
@@ -88,7 +88,7 @@ public class Scanner {
      * Returns the current nested comments state.
      */
     public static boolean getNestedCommentsState() {
-        return allowNestedComments;
+        return ALLOW_NESTED_COMMENTS;
     }
 
     /**
@@ -138,7 +138,7 @@ public class Scanner {
             // if the desired character not in lookahead buffer, read it in
             if (n > lastLookaheadChar - firstLookaheadChar) {
                 int len = lastLookaheadChar - firstLookaheadChar;
-                int t[];
+                int[] t;
 
                 // make sure we do not go off the end of the buffer
                 if (n + firstLookaheadChar > lookaheadChars.length) {
@@ -207,8 +207,8 @@ public class Scanner {
     private Symbol trace(Symbol s) {
         if (debug) {
             String name = null;
-            if (s.sym < m_aResWords.length) {
-                name = m_aResWords[s.sym];
+            if (s.sym < mAResWords.length) {
+                name = mAResWords[s.sym];
             }
 
             LOGGER.error(
@@ -222,7 +222,7 @@ public class Scanner {
     }
 
     private void initResword(int id, String s) {
-        m_resWordsTable.put(s, id);
+        mResWordsTable.put(s, id);
         if (id > iMaxResword) {
             iMaxResword = id;
         }
@@ -237,7 +237,7 @@ public class Scanner {
         //   grep -list // |
         //   sed -e 's/,//' |
         //   awk '{printf "initResword(%20s,%c%s%c);",$1,34,$1,34}'
-        m_resWordsTable = new Hashtable<>();
+        mResWordsTable = new Hashtable<>();
         iMaxResword = 0;
 //      initResword(ParserSym.ALL,                  "ALL");
         initResword(ParserSym.AND,                  "AND");
@@ -308,19 +308,19 @@ public class Scanner {
         initResword(ParserSym.WITH,                 "WITH");
         initResword(ParserSym.XOR,                  "XOR");
 
-        m_aResWords = new String[iMaxResword + 1];
-        Enumeration<String> e = m_resWordsTable.keys();
+        mAResWords = new String[iMaxResword + 1];
+        Enumeration<String> e = mResWordsTable.keys();
         while (e.hasMoreElements()) {
             Object o = e.nextElement();
             String s = (String) o;
-            int i = (m_resWordsTable.get(s)).intValue();
-            m_aResWords[i] = s;
+            int i = (mResWordsTable.get(s)).intValue();
+            mAResWords[i] = s;
         }
     }
 
     /** return the name of the reserved word whose token code is "i" */
     public String lookupReserved(int i) {
-        return m_aResWords[i];
+        return mAResWords[i];
     }
 
     private Symbol makeSymbol(int id, Object o) {
@@ -359,7 +359,7 @@ public class Scanner {
      * @return Token
      */
     private Symbol makeRes(int i) {
-        return makeSymbol(i, m_aResWords[i]);
+        return makeSymbol(i, mAResWords[i]);
     }
 
     /**
@@ -425,7 +425,7 @@ public class Scanner {
                 if (--depth == 0) {
                     return;
                 }
-            } else if (allowNestedComments && checkForSymbol(startDelim)) {
+            } else if (ALLOW_NESTED_COMMENTS && checkForSymbol(startDelim)) {
                // eat the nested start delimiter
                 for (int x = 0; x < startDelim.length(); x++) {
                     advance();
@@ -474,7 +474,7 @@ public class Scanner {
     /**
      * Recognizes and returns the next complete token.
      */
-    public Symbol next_token() throws IOException {
+    public Symbol nextToken() throws IOException {
         StringBuilder id;
         boolean ampersandId = false;
         for (;;) {
@@ -504,7 +504,8 @@ public class Scanner {
                 // handled by the parser.
                 //
                 BigDecimal n = BigDecimalZero;
-                int digitCount = 0, exponent = 0;
+                int digitCount = 0;
+                int exponent = 0;
                 boolean positive = true;
                 BigDecimal mantissa = BigDecimalZero;
                 State state = State.leftOfPoint;
@@ -643,7 +644,7 @@ public class Scanner {
                         break;
                     default:
                         String strId = id.toString();
-                        Integer i = m_resWordsTable.get(
+                        Integer i = mResWordsTable.get(
                             strId.toUpperCase());
                         if (i == null) {
                             // identifier

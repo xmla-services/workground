@@ -13,6 +13,8 @@ package mondrian.olap.type;
 
 import mondrian.olap.Util;
 
+import java.util.Objects;
+
 /**
  * Subclass of {@link NumericType} which guarantees fixed number of decimal
  * places. In particular, a decimal with zero scale is an integer.
@@ -71,11 +73,16 @@ public class DecimalType extends NumericType {
     }
 
     @Override
-	public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj instanceof DecimalType that) {
             return this.precision == that.precision
                 && this.scale == that.scale;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), precision, scale);
     }
 }

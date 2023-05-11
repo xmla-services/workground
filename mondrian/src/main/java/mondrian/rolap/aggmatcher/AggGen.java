@@ -146,12 +146,13 @@ public class AggGen {
                 return;
             }
         }
-        JdbcSchema.Table.Column.Usage usage;
+        JdbcSchema.Table.Column.Usage usage = null;
         if (column.hasUsage(JdbcSchema.UsageType.FOREIGN_KEY)) {
             Iterator<JdbcSchema.Table.Column.Usage> it =
                 column.getUsages(JdbcSchema.UsageType.FOREIGN_KEY);
-            it.hasNext();
-            usage = it.next();
+            if (it.hasNext()) {
+                usage = it.next();
+            }
         } else {
             usage = column.newUsage(JdbcSchema.UsageType.FOREIGN_KEY);
             usage.setSymbolicName(JdbcSchema.UsageType.FOREIGN_KEY.name());
