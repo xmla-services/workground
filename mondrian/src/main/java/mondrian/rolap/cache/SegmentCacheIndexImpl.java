@@ -33,7 +33,6 @@ import mondrian.olap.QueryCanceledException;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.RolapUtil;
-import mondrian.rolap.agg.AggregationKey;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.SegmentBuilder;
 import mondrian.server.Execution;
@@ -58,6 +57,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
     private static final Logger LOGGER =
         LoggerFactory.getLogger(SegmentCacheIndexImpl.class);
+    public static final String SEGMENT_CACHE_INDEX_IMPL = "SegmentCacheIndexImpl(";
 
     private final Map<List, List<SegmentHeader>> bitkeyMap =
         new HashMap<>();
@@ -93,7 +93,9 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
      */
     public SegmentCacheIndexImpl(Thread thread) {
         this.thread = thread;
-        assert thread != null;
+        if (thread == null) {
+            throw new IllegalArgumentException("SegmentCacheIndexImpl: thread should be not null");
+        }
     }
 
     public static List makeConverterKey(SegmentHeader header) {
@@ -106,7 +108,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             header.compoundPredicates);
     }
 
-    public static List makeConverterKey(CellRequest request, AggregationKey key)
+    public static List makeConverterKey(CellRequest request)
     {
         return Arrays.asList(
             request.getMeasure().getStar().getSchema().getName(),
@@ -132,7 +134,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace(
-                new StringBuilder("SegmentCacheIndexImpl(")
+                new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
                     .append(System.identityHashCode(this))
                     .append(")locate:")
                     .append("\nschemaName:").append(schemaName)
@@ -157,10 +159,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                 compoundPredicates);
         final List<SegmentHeader> headerList = bitkeyMap.get(starKey);
         if (headerList == null) {
-            LOGGER.trace(
-                new StringBuilder("SegmentCacheIndexImpl(")
-                    .append(System.identityHashCode(this))
-                    .append(").locate:NOMATCH").toString());
+            String msg = new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
+                .append(System.identityHashCode(this))
+                .append(").locate:NOMATCH").toString();
+            LOGGER.trace(msg);
             return Collections.emptyList();
         }
         for (SegmentHeader header : headerList) {
@@ -176,7 +178,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         if (LOGGER.isTraceEnabled()) {
             final StringBuilder sb =
                 new StringBuilder(
-                    new StringBuffer("SegmentCacheIndexImpl(")
+                    new StringBuffer(SEGMENT_CACHE_INDEX_IMPL)
                         .append(System.identityHashCode(this))
                         .append(").locate:MATCH").toString());
             for (SegmentHeader header : list) {
@@ -195,12 +197,11 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         boolean loading)
     {
         checkThread();
-
-        LOGGER.debug(
-            new StringBuilder("SegmentCacheIndexImpl(")
-                .append(System.identityHashCode(this))
-                .append(").add:\n")
-                .append(header.toString()).toString());
+        String msg = new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
+            .append(System.identityHashCode(this))
+            .append(").add:\n")
+            .append(header.toString()).toString();
+        LOGGER.debug(msg);
 
         HeaderInfo headerInfo = headerMap.get(header);
         if (headerInfo == null) {
@@ -214,21 +215,14 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
 
         final List bitkeyKey = makeBitkeyKey(header);
-        List<SegmentHeader> headerList = bitkeyMap.get(bitkeyKey);
-        if (headerList == null) {
-            headerList = new ArrayList<>();
-            bitkeyMap.put(bitkeyKey, headerList);
-        }
+        List<SegmentHeader> headerList = bitkeyMap.computeIfAbsent(bitkeyKey, k -> new ArrayList<>());
         if (!headerList.contains(header)) {
             headerList.add(header);
         }
 
         final List factKey = makeFactKey(header);
-        FactInfo factInfo = factMap.get(factKey);
-        if (factInfo == null) {
-            factInfo = new FactInfo();
-            factMap.put(factKey, factInfo);
-        }
+        FactInfo factInfo = factMap.computeIfAbsent(factKey, k -> new FactInfo());
+
         if (!factInfo.headerList.contains(header)) {
             factInfo.headerList.add(header);
         }
@@ -242,11 +236,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
 
         final List fuzzyFactKey = makeFuzzyFactKey(header);
-        FuzzyFactInfo fuzzyFactInfo = fuzzyFactMap.get(fuzzyFactKey);
-        if (fuzzyFactInfo == null) {
-            fuzzyFactInfo = new FuzzyFactInfo();
-            fuzzyFactMap.put(fuzzyFactKey, fuzzyFactInfo);
-        }
+        FuzzyFactInfo fuzzyFactInfo = fuzzyFactMap.computeIfAbsent(fuzzyFactKey, k -> new FuzzyFactInfo());
         if (!fuzzyFactInfo.headerList.contains(header)) {
             fuzzyFactInfo.headerList.add(header);
         }
@@ -261,7 +251,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         LOGGER.trace(
             "SegmentCacheIndexImpl.update: Updating header from:\n{}\n\nto\n\n{}",
-            oldHeader.toString(), newHeader.toString());
+            oldHeader, newHeader);
         final HeaderInfo headerInfo = headerMap.get(oldHeader);
         headerMap.remove(oldHeader);
         if(headerInfo != null) {
@@ -314,11 +304,14 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         final HeaderInfo headerInfo = headerMap.get(header);
         if (headerInfo == null) {
-            LOGGER.trace("loadFailed: Missing header " + header);
+            LOGGER.trace("loadFailed: Missing header {}", header);
             return;
         }
-        assert headerInfo.slot != null
-            : new StringBuilder("segment header ").append(header.getUniqueID()).append(" is not loading").toString();
+        if (headerInfo.slot == null) {
+            throw new IllegalArgumentException(
+                new StringBuilder("segment header ").append(header.getUniqueID()).append(" is not loading").toString()
+            );
+        }
         headerInfo.slot.fail(throwable);
         remove(header);
         // Cleanup the HeaderInfo
@@ -332,32 +325,32 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace(
-                new StringBuilder("SegmentCacheIndexImpl(")
+                new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
                     .append(System.identityHashCode(this))
                     .append(").remove:\n")
                     .append(header.toString()).toString(),
                 new Throwable("Removal."));
         } else {
             LOGGER.debug(
-                "SegmentCacheIndexImpl.remove:\n"
-                + header.toString());
+                "SegmentCacheIndexImpl.remove:\n{}",
+                header);
         }
 
         final HeaderInfo headerInfo = headerMap.get(header);
         if (headerInfo == null) {
-            LOGGER.debug(
-                new StringBuilder("SegmentCacheIndexImpl(")
-                    .append(System.identityHashCode(this))
-                    .append(").remove:UNKNOWN HEADER").toString());
+            String msg = new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
+                .append(System.identityHashCode(this))
+                .append(").remove:UNKNOWN HEADER").toString();
+            LOGGER.debug(msg);
             return;
         }
         if (headerInfo.slot != null && !headerInfo.slot.isDone()) {
             // Cannot remove while load is pending; flag for removal after load
             headerInfo.removeAfterLoad = true;
-            LOGGER.debug(
-                new StringBuilder("SegmentCacheIndexImpl(")
-                    .append(System.identityHashCode(this))
-                    .append(").remove:DEFFERED").toString());
+            String msg = new StringBuilder(SEGMENT_CACHE_INDEX_IMPL)
+                .append(System.identityHashCode(this))
+                .append(").remove:DEFFERED").toString();
+            LOGGER.debug(msg);
             return;
         }
 
@@ -368,7 +361,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         if (factInfo != null) {
             factInfo.headerList.remove(header);
             factInfo.bitkeyPoset.remove(header.getConstrainedColumnsBitKey());
-            if (factInfo.headerList.size() == 0) {
+            if (factInfo.headerList.isEmpty()) {
                 factMap.remove(factKey);
             }
         }
@@ -377,7 +370,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         final FuzzyFactInfo fuzzyFactInfo = fuzzyFactMap.get(fuzzyFactKey);
         if (fuzzyFactInfo != null) {
             fuzzyFactInfo.headerList.remove(header);
-            if (fuzzyFactInfo.headerList.size() == 0) {
+            if (fuzzyFactInfo.headerList.isEmpty()) {
                 fuzzyFactMap.remove(fuzzyFactKey);
             }
         }
@@ -385,7 +378,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         final List bitkeyKey = makeBitkeyKey(header);
         final List<SegmentHeader> headerList = bitkeyMap.get(bitkeyKey);
         headerList.remove(header);
-        if (headerList.size() == 0) {
+        if (headerList.isEmpty()) {
             bitkeyMap.remove(bitkeyKey);
         }
     }
@@ -525,10 +518,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                     List<SegmentHeader> o1,
                     List<SegmentHeader> o2)
                 {
-                    if (o1.size() == 0) {
+                    if (o1.isEmpty()) {
                         return -1;
                     }
-                    if (o2.size() == 0) {
+                    if (o2.isEmpty()) {
                         return 1;
                     }
                     return o1.get(0).getUniqueID()
@@ -578,13 +571,12 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         checkThread();
         List<SegmentHeader> toRemove = new ArrayList<>();
         for (Entry<SegmentHeader, HeaderInfo> entry : headerMap.entrySet()) {
-            if (entry.getValue().clients.remove(exec)) {
-                if (entry.getValue().slot != null
-                    && !entry.getValue().slot.isDone()
-                    && entry.getValue().clients.isEmpty())
-                {
-                    toRemove.add(entry.getKey());
-                }
+            if (entry.getValue().clients.remove(exec)
+                && entry.getValue().slot != null
+                && !entry.getValue().slot.isDone()
+                && entry.getValue().clients.isEmpty())
+            {
+                toRemove.add(entry.getKey());
             }
         }
         // Make sure to cleanup the orphaned segments.
@@ -652,9 +644,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             measureName,
             compoundPredicates);
         final FactInfo factInfo = factMap.get(factKey);
-        assert factInfo != null : "should have called 'add' first";
         if (factInfo == null) {
-            return;
+            throw new IllegalArgumentException("setConverter: should have called 'add' first");
         }
         factInfo.converter = converter;
     }
@@ -931,7 +922,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         for (SegmentColumn column : columnList) {
             // For each value, which equivalence class it belongs to.
             final SortedMap<Comparable, BitSet> valueMap =
-                new TreeMap<Comparable, BitSet>(RolapUtil.ROLAP_COMPARATOR);
+                new TreeMap<>(RolapUtil.ROLAP_COMPARATOR);
 
             int h = -1;
             for (SegmentHeader header : Pair.leftIter(matchingHeaders)) {
@@ -952,11 +943,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                     }
                 } else {
                     for (Comparable value : column1.getValues()) {
-                        BitSet bitSet = valueMap.get(value);
-                        if (bitSet == null) {
-                            bitSet = new BitSet();
-                            valueMap.put(value, bitSet);
-                        }
+                        BitSet bitSet = valueMap.computeIfAbsent(value, k -> new BitSet());
                         bitSet.set(h);
                     }
                 }
@@ -991,10 +978,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                 new HashMap<>();
             for (Map.Entry<Comparable, BitSet> entry : valueMap.entrySet()) {
                 final BitSet bitSet = entry.getValue();
-                if (!eqclassPrimaryValues.containsKey(bitSet)) {
-                    final Comparable value = entry.getKey();
-                    eqclassPrimaryValues.put(bitSet, value);
-                }
+                eqclassPrimaryValues.computeIfAbsent(bitSet, k -> entry.getKey());
             }
             valueLists.add(
                 new ArrayList<>(

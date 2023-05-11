@@ -315,7 +315,6 @@ class DefaultRecognizer extends Recognizer {
                 }
                 makeLevelColumnUsage(
                     pair.right,
-                    hierarchy,
                     hierarchyUsage,
                     pair.right.column.name(),
                     getColumnName(pair.left.getKeyExp()),

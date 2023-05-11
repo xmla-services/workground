@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import mondrian.server.monitor.CellCacheEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,6 +113,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
    * Creates a Monitor.
    */
   public MonitorImpl() {
+      //constructor
   }
 
   // Commands
@@ -134,6 +136,7 @@ public void sendEvent( Event event ) {
       }
       ACTOR.eventQueue.put( Pair.<Handler, Message> of( handler, event ) );
     } catch ( InterruptedException e ) {
+      Thread.currentThread().interrupt();
       throw Util.newError( e, "Exception while sending event " + event );
     }
   }
@@ -171,7 +174,7 @@ public List<SqlStatementInfo> getSqlStatements() {
    * A kind of message that produces a response. The response may be null, but even so, it will be stored and the caller
    * must collect it.
    */
-  static abstract class Command implements Message {
+  abstract static class Command implements Message {
 
     private final MDCUtil mdc = new MDCUtil();
 
@@ -725,10 +728,8 @@ public List<SqlStatementInfo> getSqlStatements() {
     private void foo( MutableExecutionInfo exec, CellCacheSegmentDeleteEvent event ) {
       ++exec.cellCacheSegmentDeleteCount;
       exec.cellCacheSegmentCoordinateSum -= event.coordinateCount;
-      switch ( event.source ) {
-        case EXTERNAL:
+      if (CellCacheEvent.Source.EXTERNAL.equals( event.source )) {
           ++exec.cellCacheSegmentDeleteViaExternalCount;
-          break;
       }
     }
 
@@ -851,8 +852,8 @@ public List<SqlStatementInfo> getSqlStatements() {
             final Message message = entry.right;
             message.setContextMap(); // Set MDC logging info into this thread
             final Object result = message.accept( handler );
-            if ( message instanceof Command ) {
-              responseMap.put( (Command) message, result );
+            if ( message instanceof Command command) {
+              responseMap.put( command, result );
             } else {
               // Broadcast the event to anyone who is interested.
               RolapUtil.MONITOR_LOGGER.debug( "",message );
@@ -865,7 +866,7 @@ public List<SqlStatementInfo> getSqlStatements() {
             Thread.currentThread().interrupt();
             LOGGER.warn( "Monitor thread interrupted.", e );
             return;
-          } catch ( Throwable t ) {
+          } catch ( Exception t ) {
             LOGGER.error( "Runtime error on the monitor thread.", t );
           }
         }
@@ -886,12 +887,14 @@ public List<SqlStatementInfo> getSqlStatements() {
       try {
         eventQueue.put( Pair.<Handler, Message> of( handler, command ) );
       } catch ( InterruptedException e ) {
-        throw Util.newError( e, "Interrupted while sending " + command );
+          Thread.currentThread().interrupt();
+          throw Util.newError( e, "Interrupted while sending " + command );
       }
       try {
         return responseMap.get( command );
       } catch ( InterruptedException e ) {
-        throw Util.newError( e, "Interrupted while awaiting " + command );
+          Thread.currentThread().interrupt();
+          throw Util.newError( e, "Interrupted while awaiting " + command );
       }
     }
   }

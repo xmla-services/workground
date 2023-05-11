@@ -91,8 +91,8 @@ public class SetType implements Type {
     }
 
     public List<Hierarchy> getHierarchies() {
-        if(elementType instanceof TupleType) {
-            return ((TupleType)elementType).getHierarchies();
+        if(elementType instanceof TupleType tupleType) {
+            return tupleType.getHierarchies();
         }
         else { //MemberType
             ArrayList<Hierarchy> result = new ArrayList<>();

@@ -318,7 +318,6 @@ class ExplicitRecognizer extends Recognizer {
 
                 makeLevelColumnUsage(
                     aggTableColumnMap.get(aggLevel.getColumnName()),
-                    hierarchy,
                     hierarchyUsage,
                     getColumnName(aggLevel.getRolapFieldName()),
                     aggLevels.get(levelMatches.indexOf(pair)).getColumnName(),
