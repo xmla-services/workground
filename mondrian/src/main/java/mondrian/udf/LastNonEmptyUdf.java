@@ -55,8 +55,7 @@ public class LastNonEmptyUdf implements UserDefinedFunction {
         //                 [Measures].[Unit Sales])
         // will return a member of the [Time] dimension.
         SetType setType = (SetType) parameterTypes[0];
-        MemberType memberType = (MemberType) setType.getElementType();
-        return memberType;
+        return (MemberType) setType.getElementType();
     }
 
     @Override
@@ -110,11 +109,6 @@ public class LastNonEmptyUdf implements UserDefinedFunction {
                 continue;
             }
             if (o instanceof RuntimeException runtimeException) {
-                if (o == RolapUtil.valueNotReadyException) {
-                    // Value is not in the cache yet, so we don't know whether
-                    // it will be empty. Carry on...
-                    continue;
-                }
                 return runtimeException;
             }
             return member;

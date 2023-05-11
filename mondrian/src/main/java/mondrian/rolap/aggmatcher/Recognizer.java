@@ -129,7 +129,6 @@ abstract class Recognizer {
         // Check levels
         List<JdbcSchema.Table.Column.Usage> notSeenForeignKeys =
             checkForeignKeys();
-//printNotSeenForeignKeys(notSeenForeignKeys);
         checkLevels(notSeenForeignKeys);
 
         if (returnValue) {
@@ -188,7 +187,6 @@ abstract class Recognizer {
 
         try {
             Matcher factCountMatcher = getFactCountMatcher();
-            JdbcSchema.Table.Column factColumn = null;
             int nosOfFactCounts = 0;
             for (JdbcSchema.Table.Column aggColumn : aggTable.getColumns()) {
                 // if marked as ignore, then do not consider
@@ -199,7 +197,6 @@ abstract class Recognizer {
                     if (aggColumn.getDatatype().isNumeric()) {
                         makeFactCount(aggColumn);
                         nosOfFactCounts++;
-                        factColumn = aggColumn;
                     } else {
                         String msg = mres.NonNumericFactCountColumn.str(
                             aggTable.getName(),
@@ -522,7 +519,6 @@ abstract class Recognizer {
                 // to each "unassigned" column in the aggTable.
                 // Remember that the rule is if a level does appear,
                 // then all of the higher levels must also appear.
-                String dimName = dim.getName();
 
                 Hierarchy[] hierarchies = dim.getHierarchies();
                 for (Hierarchy hierarchy : hierarchies) {
@@ -570,12 +566,12 @@ abstract class Recognizer {
      */
     private void printNotSeenForeignKeys(List notSeenForeignKeys) {
         LOGGER.debug(
-            "Recognizer.printNotSeenForeignKeys: "
-            + aggTable.getName());
+            "Recognizer.printNotSeenForeignKeys: {}", aggTable.getName());
         for (Iterator it = notSeenForeignKeys.iterator(); it.hasNext();) {
             JdbcSchema.Table.Column.Usage usage =
                 (JdbcSchema.Table.Column.Usage) it.next();
-            LOGGER.debug("  " + usage.getColumn().getName());
+            String msg = new StringBuilder("  ").append(usage.getColumn().getName()).toString();
+            LOGGER.debug(msg);
         }
     }
 
@@ -619,7 +615,6 @@ abstract class Recognizer {
      */
     protected void makeLevelColumnUsage(
         final JdbcSchema.Table.Column aggColumn,
-        final Hierarchy hierarchy,
         final HierarchyUsage hierarchyUsage,
         final String factColumnName,
         final String levelColumnName,
@@ -711,13 +706,15 @@ abstract class Recognizer {
                     msgRecorder.throwRTException();
                 }
 
-                RolapStar.Column rc = descTable.lookupColumn(factColumnName);
-
+                RolapStar.Column rc = null;
+                if (descTable != null) {
+                    rc = descTable.lookupColumn(factColumnName);
+                }
                 if (rc == null) {
                     rc = lookupInChildren(descTable, factColumnName);
                 }
 
-                if (rc == null &&  hierarchyUsage.getUsagePrefix() != null) {
+                if (rc == null &&  hierarchyUsage.getUsagePrefix() != null && descTable != null) {
                     // look for the name w/ usage prefix stripped off
                     rc = descTable.lookupColumn(
                         factColumnName.substring(
@@ -918,21 +915,18 @@ abstract class Recognizer {
                 rollupAgg =  new RolapAggregator.AvgFromSum(columnExpr);
             }
         } else if (factAgg == RolapAggregator.Sum) {
-            if (siblingAgg == RolapAggregator.Avg) {
-                rollupAgg =  new RolapAggregator.SumFromAvg(columnExpr);
-            } else if (siblingAgg instanceof RolapAggregator.AvgFromAvg) {
-                // needed for BUG_1541077.testTotalAmount
+            if (siblingAgg == RolapAggregator.Avg || siblingAgg instanceof RolapAggregator.AvgFromAvg) {
                 rollupAgg =  new RolapAggregator.SumFromAvg(columnExpr);
             }
         } else if (factAgg == RolapAggregator.DistinctCount) {
             rollupAgg = factAgg;
         }
 
-        if (rollupAgg == null) {
+        if (rollupAgg == null && factAgg != null) {
             rollupAgg = (RolapAggregator) factAgg.getRollup();
         }
 
-        if (rollupAgg == null) {
+        if (rollupAgg == null && factAgg != null) {
             String msg = mres.NoAggregatorFound.str(
                 aggUsage.getSymbolicName(),
                 factAgg.getName(),

@@ -721,7 +721,7 @@ class BatchLoader {
                     converter);
 
                 converterMap.put(
-                    SegmentCacheIndexImpl.makeConverterKey(request, key),
+                    SegmentCacheIndexImpl.makeConverterKey(request),
                     converter);
             }
             return true;
@@ -767,7 +767,7 @@ class BatchLoader {
                         rollup));
                 rollupBitmaps.add(request.getConstrainedColumnsBitKey());
                 converterMap.put(
-                    SegmentCacheIndexImpl.makeConverterKey(request, key),
+                    SegmentCacheIndexImpl.makeConverterKey(request),
                     new SegmentBuilder.StarSegmentConverter(
                         measure,
                         key.getCompoundPredicateList()));
@@ -868,7 +868,7 @@ class BatchLoader {
             batch = new Batch(request);
             batches.put(key, batch);
             converterMap.put(
-                SegmentCacheIndexImpl.makeConverterKey(request, key),
+                SegmentCacheIndexImpl.makeConverterKey(request),
                 converter);
 
             if (LOGGER.isDebugEnabled()) {
