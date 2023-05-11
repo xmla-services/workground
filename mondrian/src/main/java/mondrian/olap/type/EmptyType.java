@@ -34,4 +34,10 @@ public class EmptyType extends ScalarType
 	public boolean equals(Object obj) {
         return obj instanceof EmptyType;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

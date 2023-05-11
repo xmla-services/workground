@@ -112,19 +112,19 @@ class VbaTest   {
     void testInt() {
         // if negative, Int() returns the closest number less than or
         // equal to the number.
-        assertEquals(1, Vba.int_(1));
-        assertEquals(1, Vba.int_(1.4));
-        assertEquals(1, Vba.int_(1.5));
-        assertEquals(2, Vba.int_(2.5));
-        assertEquals(1, Vba.int_(1.6));
-        assertEquals(-2, Vba.int_(-2));
-        assertEquals(-2, Vba.int_(-1.4));
-        assertEquals(-2, Vba.int_(-1.5));
-        assertEquals(-2, Vba.int_(-1.6));
-        assertEquals(Integer.MAX_VALUE, Vba.int_((double) Integer.MAX_VALUE));
-        assertEquals(Integer.MIN_VALUE, Vba.int_((double) Integer.MIN_VALUE));
+        assertEquals(1, Vba.toInt(1));
+        assertEquals(1, Vba.toInt(1.4));
+        assertEquals(1, Vba.toInt(1.5));
+        assertEquals(2, Vba.toInt(2.5));
+        assertEquals(1, Vba.toInt(1.6));
+        assertEquals(-2, Vba.toInt(-2));
+        assertEquals(-2, Vba.toInt(-1.4));
+        assertEquals(-2, Vba.toInt(-1.5));
+        assertEquals(-2, Vba.toInt(-1.6));
+        assertEquals(Integer.MAX_VALUE, Vba.toInt((double) Integer.MAX_VALUE));
+        assertEquals(Integer.MIN_VALUE, Vba.toInt((double) Integer.MIN_VALUE));
         try {
-            Object o = Vba.int_("a");
+            Object o = Vba.toInt("a");
             fail("expected error, got " + o);
         } catch (RuntimeException e) {
             assertMessage(e, "Invalid parameter.");
@@ -468,7 +468,7 @@ class VbaTest   {
             assertEquals( -365, Vba.dateDiff(i, nextMonth, date),i);
         }
     }
-    
+
     @Test
     void testDateDiff_Days_FromDecToJan() throws Exception {
         Date date = toDate("2001/12/01 00:00:00");
@@ -1061,30 +1061,30 @@ class VbaTest   {
     @Test
     void testIRR() {
         double vals[] = {-1000, 50, 50, 50, 50, 50, 1050};
-        assertTrue(Math.abs(0.05 - Vba.IRR(vals, 0.1)) < 0.0000001);
+        assertTrue(Math.abs(0.05 - Vba.irr(vals, 0.1)) < 0.0000001);
 
         vals = new double[] {-1000, 200, 200, 200, 200, 200, 200};
-        assertTrue(Math.abs(0.05471796 - Vba.IRR(vals, 0.1)) < 0.0000001);
+        assertTrue(Math.abs(0.05471796 - Vba.irr(vals, 0.1)) < 0.0000001);
 
         // what happens if the numbers are inversed? this may not be
         // accurate
 
         vals = new double[] {1000, -200, -200, -200, -200, -200, -200};
-        assertTrue(Math.abs(0.05471796 - Vba.IRR(vals, 0.1)) < 0.0000001);
+        assertTrue(Math.abs(0.05471796 - Vba.irr(vals, 0.1)) < 0.0000001);
     }
 
     @Test
     void testMIRR() {
         double vals[] = {-1000, 50, 50, 50, 50, 50, 1050};
-        assertTrue(Math.abs(0.05 - Vba.MIRR(vals, 0.05, 0.05)) < 0.0000001);
+        assertTrue(Math.abs(0.05 - Vba.mirr(vals, 0.05, 0.05)) < 0.0000001);
 
         vals = new double[] {-1000, 200, 200, 200, 200, 200, 200};
         assertTrue(
-            Math.abs(0.05263266 - Vba.MIRR(vals, 0.05, 0.05)) < 0.0000001);
+            Math.abs(0.05263266 - Vba.mirr(vals, 0.05, 0.05)) < 0.0000001);
 
         vals = new double[] {-1000, 200, 200, 200, 200, 200, 200};
         assertTrue(
-            Math.abs(0.04490701 - Vba.MIRR(vals, 0.06, 0.04)) < 0.0000001);
+            Math.abs(0.04490701 - Vba.mirr(vals, 0.06, 0.04)) < 0.0000001);
     }
 
     @Test

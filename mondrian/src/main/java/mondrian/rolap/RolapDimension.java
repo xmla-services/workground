@@ -255,6 +255,11 @@ class RolapDimension extends DimensionBase {
       return super.equals(o);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     private boolean isMeasuresDimension() {
       return this.getDimensionType() == DimensionType.MEASURES_DIMENSION;
     }

@@ -17,8 +17,6 @@ import java.util.Timer;
 
 import org.olap4j.OlapException;
 import org.olap4j.Scenario;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.RolapSchema;
@@ -28,8 +26,8 @@ import mondrian.rolap.agg.SegmentCacheWorker;
 
 public class Session
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Session.class);
-    final static Map<String, Session> sessions = new HashMap<>();
+    static final Map<String, Session> sessions = new HashMap<>();
+    public static final String SESSION_WITH_ID = "Session with id \"";
 
     static java.util.Timer timer = new Timer(true);
     static java.util.TimerTask timerTask = new java.util.TimerTask() {
@@ -46,14 +44,14 @@ public class Session
                     toRemove.add(entry.getKey());
                 }
             }
-            for(String sessionId : toRemove) {
-                closeInternal(sessionId);
+            for(String sessionIdInner : toRemove) {
+                closeInternal(sessionIdInner);
             }
         }
     };
     static
     {
-        timer.scheduleAtFixedRate(timerTask, 0, 60*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 60*1000l);
     }
 
     String sessionId;
@@ -61,14 +59,14 @@ public class Session
     {
         this.sessionId = sessionId;
     }
-    public static Session create(String sessionId) throws OlapException
+    public static Session create(String sessionId)
     {
         if(sessions.containsKey(sessionId)) {
             throw new mondrian.xmla.XmlaException(
                     "XMLAnalysisError",
                     "0xc10c000a",
-                    new StringBuilder("Session with id \"").append(sessionId).append("\" already exists.").toString(),
-                    new OlapException(new StringBuilder("Session with id \"").append(sessionId)
+                    new StringBuilder(SESSION_WITH_ID).append(sessionId).append("\" already exists.").toString(),
+                    new OlapException(new StringBuilder(SESSION_WITH_ID).append(sessionId)
                         .append("\" already exists.").toString())
             );
         }
@@ -86,14 +84,14 @@ public class Session
         return sessions.get(sessionId);
     }
 
-    public static Session get(String sessionId) throws OlapException
+    public static Session get(String sessionId)
     {
         if(!sessions.containsKey(sessionId)) {
             throw new mondrian.xmla.XmlaException(
                     "XMLAnalysisError",
                     "0xc10c000a",
-                    new StringBuilder("Session with id \"").append(sessionId).append("\" does not exists.").toString(),
-                    new OlapException(new StringBuilder("Session with id \"")
+                    new StringBuilder(SESSION_WITH_ID).append(sessionId).append("\" does not exists.").toString(),
+                    new OlapException(new StringBuilder(SESSION_WITH_ID)
                         .append(sessionId).append("\" does not exist").toString())
             );
         }
@@ -102,7 +100,7 @@ public class Session
 
     java.time.LocalDateTime checkInTime = null;
 
-    public static void checkIn(String sessionId) throws OlapException
+    public static void checkIn(String sessionId)
     {
         Session session = get(sessionId);
         session.checkInTime = java.time.LocalDateTime.now();
@@ -142,9 +140,9 @@ public class Session
         }
     }
 
-    public static void close(String sessionId) throws OlapException
+    public static void close(String sessionId)
     {
-        Session session = Session.get(sessionId);
+        Session.get(sessionId);
 
         closeInternal(sessionId);
     }

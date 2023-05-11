@@ -140,11 +140,11 @@ parser code {:
             parent.init();
         }
 
-        public Symbol next_token() throws java.io.IOException {
+        public Symbol nextToken() throws java.io.IOException {
             if (i < tokens.length) {
                 return new Symbol(tokens[i++], 0, 0, null);
             }
-            return parent.next_token();
+            return parent.nextToken();
         }
 
         void getLocation(Symbol symbol, int[] loc) {
@@ -348,7 +348,7 @@ init with {:
     scanner.init();
 :};
 scan with {:
-    return scanner.next_token();
+    return scanner.nextToken();
 :};
 
 // Terminals (tokens returned by the scanner).

@@ -159,7 +159,7 @@ public class SqlTupleReader implements TupleReader {
     @Override
 	public void open() {
       levels = (RolapLevel[]) level.getHierarchy().getLevels();
-      setList( new ArrayList<RolapMember>() );
+      setList( new ArrayList<>() );
       levelDepth = level.getDepth();
       parentChild = level.isParentChild();
       // members[i] is the current member of level#i, and siblings[i]
@@ -169,7 +169,7 @@ public class SqlTupleReader implements TupleReader {
           Collections.<RolapMember>nCopies( levels.length, null ) );
       siblings = new ArrayList<>();
       for ( int i = 0; i < levels.length + 1; i++ ) {
-        siblings.add( new ArrayList<RolapMember>() );
+        siblings.add( new ArrayList<>() );
       }
     }
 
@@ -212,11 +212,11 @@ public class SqlTupleReader implements TupleReader {
                 parentMember = keyToMember.get( parentValue );
               }
               if ( parentMember == null ) {
-                LOGGER.warn(
-                  MondrianResource.instance()
+                String msg = MondrianResource.instance()
                     .LevelTableParentNotFound.str(
-                    childLevel.getUniqueName(),
-                    String.valueOf( parentValue ) ) );
+                        childLevel.getUniqueName(),
+                        String.valueOf( parentValue ) );
+                LOGGER.warn(msg);
               }
             }
           }
@@ -294,7 +294,7 @@ public class SqlTupleReader implements TupleReader {
             List<RolapMember> cachedChildren =
               cache.getChildrenFromCache( member, mcc );
             if ( i < levelDepth && cachedChildren == null ) {
-              siblings.set( i + 1, new ArrayList<RolapMember>() );
+              siblings.set( i + 1, new ArrayList<>() );
             } else {
               // don't bother building up a list
               siblings.set( i + 1, null );
@@ -420,9 +420,9 @@ public Object getCacheKey() {
   private List<List<RolapLevel>> targetsToLevels(
     List<List<TargetBase>> targetGroups ) {
     List<List<RolapLevel>> groupedLevelList = new ArrayList<>();
-    for ( List<TargetBase> targets : targetGroups ) {
+    for ( List<TargetBase> targetsInner : targetGroups ) {
       List<RolapLevel> levels = new ArrayList<>();
-      for ( TargetBase target : targets ) {
+      for ( TargetBase target : targetsInner ) {
         levels.add( target.getLevel() );
       }
       groupedLevelList.add( levels );
@@ -611,7 +611,7 @@ public TupleList readMembers(
   }
 
   protected List<Member> bumpNullMember( List<Member> members ) {
-    if ( members.size() > 0
+    if ( !members.isEmpty()
       && ( (RolapMemberBase) members.get( members.size() - 1 ) ).getKey()
       == RolapUtil.sqlNullValue ) {
       Member removed = members.remove( members.size() - 1 );
@@ -816,13 +816,13 @@ public TupleList readTuples(
     Map<TargetBase, List<RolapCube>> targetMap = new HashMap<>();
 
     for ( TargetBase target : targets ) {
-      targetMap.put( target, new ArrayList<RolapCube>() );
+      targetMap.put( target, new ArrayList<>() );
     }
 
     for ( TargetBase target : targets ) {
       // first try to map to cubes in the query
       mapTargetToCubes( cubesFromQuery, targetMap, target );
-      if ( targetMap.get( target ).size() == 0 ) {
+      if ( targetMap.get( target ).isEmpty() ) {
         // none found, map against all base cubes in the virtual
         // so we don't have an empty list.
         mapTargetToCubes(
@@ -910,7 +910,7 @@ public TupleList readTuples(
           if ( target.srcMembers == null ) {
             try {
               column = target.addRow( stmt, column );
-            } catch ( Throwable e ) {
+            } catch ( Exception e ) {
               throw Util.newError( e, message );
             }
           } else {
@@ -970,7 +970,7 @@ public TupleList readTuples(
         getBaseCubeCollection( query );
       Collection<RolapCube> fullyJoiningBaseCubes =
         getFullyJoiningBaseCubes( baseCubes, targetGroup );
-      if ( fullyJoiningBaseCubes.size() == 0 ) {
+      if ( fullyJoiningBaseCubes.isEmpty() ) {
         return sqlForEmptyTuple( context, baseCubes );
       }
       // generate sub-selects, each one joining with one of
@@ -1007,8 +1007,7 @@ public TupleList readTuples(
             // the fact table.
             if ( LOGGER.isDebugEnabled() ) {
               LOGGER.debug(
-                "No non-calculated member found in cube "
-                  + baseCube.getName() );
+                "No non-calculated member found in cube {}", baseCube.getName() );
             }
             measureInCurrentbaseCube =
               baseCube.getMeasures().get( 0 );
@@ -1152,11 +1151,10 @@ public TupleList readTuples(
     }
     Set<RolapCube> cubes = new TreeSet<>( new RolapCube.CubeComparator() );
     for ( Member member : getMeasures( query ) ) {
-      if ( member instanceof RolapStoredMeasure ) {
-        cubes.add( ( (RolapStoredMeasure) member ).getCube() );
-      } else if ( member instanceof RolapHierarchy.RolapCalculatedMeasure ) {
-        RolapCube baseCube = (
-          (RolapHierarchy.RolapCalculatedMeasure) member ).getBaseCube();
+      if ( member instanceof RolapStoredMeasure rolapStoredMeasure) {
+        cubes.add( rolapStoredMeasure.getCube() );
+      } else if ( member instanceof RolapHierarchy.RolapCalculatedMeasure rolapCalculatedMeasure ) {
+        RolapCube baseCube = ( rolapCalculatedMeasure ).getBaseCube();
         if ( baseCube != null ) {
           cubes.add( baseCube );
         }
@@ -1261,13 +1259,12 @@ public TupleList readTuples(
 
     // lookup RolapHierarchy of base cube that matches this hierarchy
 
-    if ( !level.isAll() && hierarchy instanceof RolapCubeHierarchy cubeHierarchy ) {
-      if ( baseCube != null
-        && !cubeHierarchy.getCube().equalsOlapElement( baseCube ) ) {
+    if ( !level.isAll() && hierarchy instanceof RolapCubeHierarchy cubeHierarchy
+        && baseCube != null
+        && !cubeHierarchy.getCube().equalsOlapElement( baseCube )) {
         // replace the hierarchy with the underlying base cube hierarchy
         // in the case of virtual cubes
         hierarchy = baseCube.findBaseCubeHierarchy( hierarchy );
-      }
     }
 
     RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
@@ -1408,7 +1405,7 @@ public TupleList readTuples(
         final Expression propExp =
           targetExp.get( property.getExp() );
         final String propSql;
-        if ( propExp instanceof Column ) {
+        if ( propExp instanceof Column column) {
           // When dealing with a column, we must use the same table
           // alias as the one used by the level. We also assume that
           // the property lives in the same table as the level.
@@ -1416,21 +1413,19 @@ public TupleList readTuples(
             sqlQuery.getDialect().quoteIdentifier(
                 ExpressionUtil.getTableAlias(propExp),
 
-              ( (Column) propExp ).name() );
+                column.name() );
         } else {
           propSql = getExpression( property.getExp(), sqlQuery );
         }
         final String propAlias = sqlQuery.addSelect(
           propSql,
           property.getType().getInternalType() );
-        if ( needsGroupBy ) {
-          // Certain dialects allow us to eliminate properties
-          // from the group by that are functionally dependent
-          // on the level value
-          if ( !sqlQuery.getDialect().allowsSelectNotInGroupBy()
-            || !property.dependsOnLevelValue() ) {
+        if ( needsGroupBy && ( !sqlQuery.getDialect().allowsSelectNotInGroupBy()
+            || !property.dependsOnLevelValue() )) {
+            // Certain dialects allow us to eliminate properties
+            // from the group by that are functionally dependent
+            // on the level value
             sqlQuery.addGroupBy( propSql, propAlias );
-          }
         }
       }
     }

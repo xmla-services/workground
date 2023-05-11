@@ -24,6 +24,9 @@ import java.util.NoSuchElementException;
  * @since december, 2007
  */
 public class ConcatenableList<T> extends AbstractList<T> {
+
+    public static final String OUT_OF_CONCATENABLE_LIST_RANGE = " out of concatenable list range";
+    public static final String INDEX = "Index ";
     private static int nextHashCode = 1000;
 
     // The backing collection of sublists
@@ -101,7 +104,7 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     this.getIterator = null;
                     this.previousIndex = -200;
                     throw new IndexOutOfBoundsException(
-                        new StringBuilder("Index ").append(index).append(" out of concatenable list range").toString());
+                        new StringBuilder(INDEX).append(index).append(OUT_OF_CONCATENABLE_LIST_RANGE).toString());
                 }
             } else if (this.previousIndex + 1 == index
                 && this.getIterator != null)
@@ -115,8 +118,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     this.getIterator = null;
                     this.previousIndex = -200;
                     throw new IndexOutOfBoundsException(
-                        new StringBuilder("Index ").append(index)
-                            .append(" out of concatenable list range").toString());
+                        new StringBuilder(INDEX).append(index)
+                            .append(OUT_OF_CONCATENABLE_LIST_RANGE).toString());
                 }
             } else if (this.previousIndex == index) {
                 return this.previousElement;
@@ -128,13 +131,13 @@ public class ConcatenableList<T> extends AbstractList<T> {
                 final Iterator<T> it = this.iterator();
                 if (!it.hasNext()) {
                     throw new IndexOutOfBoundsException(
-                        new StringBuilder("Index ").append(index).append(" out of concatenable list range").toString());
+                        new StringBuilder(INDEX).append(index).append(OUT_OF_CONCATENABLE_LIST_RANGE).toString());
                 }
                 for (int i = 0; i < index; i++) {
                     if (!it.hasNext()) {
                         throw new IndexOutOfBoundsException(
-                            new StringBuilder("Index ").append(index)
-                            .append(" out of concatenable list range").toString());
+                            new StringBuilder(INDEX).append(index)
+                            .append(OUT_OF_CONCATENABLE_LIST_RANGE).toString());
                     }
                     this.prePreviousElement = it.next();
                 }

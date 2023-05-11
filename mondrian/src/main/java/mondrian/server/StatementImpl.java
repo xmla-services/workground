@@ -27,7 +27,7 @@ import mondrian.spi.ProfileHandler;
  * @author jhyde
  */
 public abstract class StatementImpl implements Statement {
-    private static AtomicLong SEQ = new AtomicLong();
+    private static final AtomicLong SEQ = new AtomicLong();
 
     /**
      * Writer to which to send profiling information, or null if profiling is
@@ -41,7 +41,7 @@ public abstract class StatementImpl implements Statement {
      * Query timeout, in milliseconds
      */
     protected long queryTimeout =
-        MondrianProperties.instance().QueryTimeout.get() * 1000;
+        MondrianProperties.instance().QueryTimeout.get() * 1000l;
 
     /**
      * The current execution context, or null if query is not executing.
@@ -59,7 +59,7 @@ public abstract class StatementImpl implements Statement {
     /**
      * Creates a StatementImpl.
      */
-    public StatementImpl() {
+    protected StatementImpl() {
         this.id = SEQ.getAndIncrement();
     }
 

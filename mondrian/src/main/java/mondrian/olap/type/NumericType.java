@@ -41,4 +41,9 @@ public class NumericType extends ScalarType {
         return value instanceof Number
             || value instanceof Character;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

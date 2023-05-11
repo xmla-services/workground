@@ -34,7 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import mondrian.olap.Util;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 /**
  * <code>Format</code> formats numbers, strings and dates according to the
@@ -77,14 +77,14 @@ import mondrian.olap.Util;
  */
 public class Format {
     private String formatString;
-    private BasicFormat format;
+    private BasicFormat formatValue;
     private FormatLocale locale;
 
     /**
      * Maximum number of entries in the format cache used by
      * {@link #get(String, java.util.Locale)}.
      */
-    public static final int CacheLimit = 1000;
+    public static final int CACHE_LIMIT = 1000;
 
     /**
      * Maps (formatString, locale) pairs to {@link Format} objects.
@@ -95,16 +95,16 @@ public class Format {
         new LinkedHashMap<>() {
             @Override
 			public boolean removeEldestEntry(Map.Entry<String, Format> entry) {
-                return size() > CacheLimit;
+                return size() > CACHE_LIMIT;
             }
         };
 
-    static final char thousandSeparator_en = ',';
-    static final char decimalPlaceholder_en = '.';
-    static final String dateSeparator_en = "/";
-    static final String timeSeparator_en = ":";
-    static final String currencySymbol_en = "$";
-    static final String currencyFormat_en = "$#,##0.00";
+    static final char THOUSAND_SEPARATOR_EN = ',';
+    static final char DECIMAL_PLACEHOLDER_EN = '.';
+    static final String DATE_SEPARATOR_EN = "/";
+    static final String TIME_SEPARATOR_EN = ":";
+    static final String CURRENCY_SYMBOL_EN = "$";
+    static final String CURRENCY_FORMAT_EN = "$#,##0.00";
     static final String[] daysOfWeekShort_en = {
         "", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
     };
@@ -120,7 +120,7 @@ public class Format {
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December", "",
     };
-    static final char intlCurrencySymbol = '\u00a4';
+    static final char INTL_CURRENCY_SYMBOL = '\u00a4';
 
     /**
      * Maps strings representing locales (for example, "en_US_Boston", "en_US",
@@ -148,19 +148,24 @@ public class Format {
     static class Token {
         final int code;
         final int flags;
-        final String token;
+        final String tokenValue;
         final FormatType formatType;
 
         Token(int code, int flags, String token)
         {
             this.code = code;
             this.flags = flags;
-            this.token = token;
-            this.formatType =
-                isNumeric() ? FormatType.NUMERIC
-                    : isDate() ? FormatType.DATE
-                        : isString() ? FormatType.STRING
-                        : null;
+            this.tokenValue = token;
+
+            if (isNumeric()) {
+                this.formatType = FormatType.NUMERIC;
+            } else {
+                if (isDate()) {
+                    this.formatType = FormatType.DATE;
+                } else {
+                    this.formatType = isString() ? FormatType.STRING : null;
+                }
+            }
         }
 
         boolean compatibleWith(FormatType formatType)
@@ -197,11 +202,11 @@ public class Format {
         BasicFormat makeFormat(FormatLocale locale)
         {
             if (isDate()) {
-                return new DateFormat(code, token, locale, false);
+                return new DateFormat(code, tokenValue, locale, false);
             } else if (isNumeric()) {
-                return new LiteralFormat(code, token);
+                return new LiteralFormat(code, tokenValue);
             } else {
-                return new LiteralFormat(token);
+                return new LiteralFormat(tokenValue);
             }
         }
     }
@@ -494,7 +499,7 @@ public class Format {
                 + dayOfYear
                 + 2; // kludge factor to agree with Excel
             final long millis =
-                calendar.get(Calendar.HOUR_OF_DAY) * 3600000
+                calendar.get(Calendar.HOUR_OF_DAY) * 3600000l
                 + calendar.get(Calendar.MINUTE) * 60000
                 + calendar.get(Calendar.SECOND) * 1000
                 + calendar.get(Calendar.MILLISECOND);
@@ -737,7 +742,6 @@ public class Format {
         final ArrayStack<Integer> cachedThousandSeparatorPositions;
 
         NumericFormat(
-            String token,
             FormatLocale locale,
             int expFormat,
             int digitsLeftOfPoint, int zeroesLeftOfPoint,
@@ -916,10 +920,7 @@ public class Format {
             if (i0 > 0) {
                 return false;
             }
-            if (fd.digits[0] >= '5') {
-                return true;
-            }
-            return false;
+            return fd.digits[0] >= '5';
         }
 
         @Override
@@ -1071,15 +1072,13 @@ public class Format {
                 buf.append(woy);
                 break;
             }
-            case FORMAT_M:
-            case FORMAT_M_UPPER:
+            case FORMAT_M, FORMAT_M_UPPER:
             {
                 int m = calendar.get(Calendar.MONTH) + 1; // 0-based
                 buf.append(m);
                 break;
             }
-            case FORMAT_MM:
-            case FORMAT_MM_UPPER:
+            case FORMAT_MM, FORMAT_MM_UPPER:
             {
                 int mm = calendar.get(Calendar.MONTH) + 1; // 0-based
                 if (mm < 10) {
@@ -1088,17 +1087,13 @@ public class Format {
                 buf.append(mm);
                 break;
             }
-            case FORMAT_MMM_LOWER:
-            case FORMAT_MMM_UPPER:
+            case FORMAT_MMM_LOWER, FORMAT_MMM_UPPER:
             {
                 int m = calendar.get(Calendar.MONTH); // 0-based
                 buf.append(locale.monthsShort[m]); // e.g. Jan
                 break;
             }
-            case FORMAT_MMMM_LOWER:
-            case FORMAT_MMMM_UPPER:
-            case FORMAT_MMMMM_LOWER:
-            case FORMAT_MMMMM_UPPER:
+            case FORMAT_MMMM_LOWER, FORMAT_MMMM_UPPER, FORMAT_MMMMM_LOWER, FORMAT_MMMMM_UPPER:
             {
                 int m = calendar.get(Calendar.MONTH); // 0-based
                 buf.append(locale.monthsLong[m]); // e.g. January
@@ -1140,8 +1135,7 @@ public class Format {
                 buf.append(h);
                 break;
             }
-            case FORMAT_HH:
-            case FORMAT_HH_UPPER:
+            case FORMAT_HH, FORMAT_HH_UPPER:
             {
                 int h = calendar.get(
                     twelveHourClock ? Calendar.HOUR : Calendar.HOUR_OF_DAY);
@@ -1192,8 +1186,7 @@ public class Format {
                 format(FORMAT_SS, calendar, buf);
                 break;
             }
-            case FORMAT_AMPM:
-            case FORMAT_UPPER_AM_SOLIDUS_PM:
+            case FORMAT_AMPM, FORMAT_UPPER_AM_SOLIDUS_PM:
             {
                 boolean isAm = calendar.get(Calendar.AM_PM) == Calendar.AM;
                 buf.append(isAm ? "AM" : "PM");
@@ -1257,27 +1250,27 @@ public class Format {
         {
             this.locale = locale;
             if (thousandSeparator == '\0') {
-                thousandSeparator = thousandSeparator_en;
+                thousandSeparator = THOUSAND_SEPARATOR_EN;
             }
             this.thousandSeparator = thousandSeparator;
             if (decimalPlaceholder == '\0') {
-                decimalPlaceholder = decimalPlaceholder_en;
+                decimalPlaceholder = DECIMAL_PLACEHOLDER_EN;
             }
             this.decimalPlaceholder = decimalPlaceholder;
             if (dateSeparator == null) {
-                dateSeparator = dateSeparator_en;
+                dateSeparator = DATE_SEPARATOR_EN;
             }
             this.dateSeparator = dateSeparator;
             if (timeSeparator == null) {
-                timeSeparator = timeSeparator_en;
+                timeSeparator = TIME_SEPARATOR_EN;
             }
             this.timeSeparator = timeSeparator;
             if (currencySymbol == null) {
-                currencySymbol = currencySymbol_en;
+                currencySymbol = CURRENCY_SYMBOL_EN;
             }
             this.currencySymbol = currencySymbol;
             if (currencyFormat == null) {
-                currencyFormat = currencyFormat_en;
+                currencyFormat = CURRENCY_FORMAT_EN;
             }
             this.currencyFormat = currencyFormat;
             if (daysOfWeekShort == null) {
@@ -1454,8 +1447,8 @@ public class Format {
     private static Token nfe(
         int code, int flags, String token, String purpose, String description)
     {
-        Util.discard(purpose);
-        Util.discard(description);
+        discard(purpose);
+        discard(description);
         formatTokenToFormatString.put(code, token);
         return new Token(code, flags, token);
     }
@@ -1476,6 +1469,8 @@ public class Format {
         return formatTokenToFormatString.get(code);
     }
 
+    public static final String DISPLAY_THE_MONTH_AS_A_FULL_MONTH_NAME_JANUARY_DECEMBER = "Display the month as a full month name (January - December).";
+    public static final String SCIENTIFIC_FORMAT = "Scientific format";
     private static final Token[] tokens = {
         nfe(
             FORMAT_NULL,
@@ -1585,7 +1580,7 @@ public class Format {
             DATE,
             "mmmm",
             null,
-            "Display the month as a full month name (January - December)."),
+            DISPLAY_THE_MONTH_AS_A_FULL_MONTH_NAME_JANUARY_DECEMBER),
         nfe(
             FORMAT_MMM_UPPER,
             DATE,
@@ -1597,7 +1592,7 @@ public class Format {
             DATE,
             "MMMM",
             null,
-            "Display the month as a full month name (January - December)."),
+            DISPLAY_THE_MONTH_AS_A_FULL_MONTH_NAME_JANUARY_DECEMBER),
         nfe(
             FORMAT_Q,
             DATE,
@@ -1810,7 +1805,7 @@ public class Format {
             FORMAT_E_MINUS_UPPER,
             NUMERIC | SPECIAL,
             "E-",
-            "Scientific format",
+            SCIENTIFIC_FORMAT,
             "If the format expression contains at least one digit placeholder "
             + "(0 or #) to the right of E-, E+, e-, or e+, the number is "
             + "displayed in scientific format and E or e is inserted between "
@@ -1823,19 +1818,19 @@ public class Format {
             FORMAT_E_PLUS_UPPER,
             NUMERIC | SPECIAL,
             "E+",
-            "Scientific format",
+            SCIENTIFIC_FORMAT,
             "See E-."),
         nfe(
             FORMAT_E_MINUS_LOWER,
             NUMERIC | SPECIAL,
             "e-",
-            "Scientific format",
+            SCIENTIFIC_FORMAT,
             "See E-."),
         nfe(
             FORMAT_E_PLUS_LOWER,
             NUMERIC | SPECIAL,
             "e+",
-            "Scientific format",
+            SCIENTIFIC_FORMAT,
             "See E-."),
         nfe(
             FORMAT_LITERAL,
@@ -1953,7 +1948,7 @@ public class Format {
         nfe(
             FORMAT_INTL_CURRENCY,
             NUMERIC | SPECIAL,
-            intlCurrencySymbol + "",
+            INTL_CURRENCY_SYMBOL + "",
             null,
             "Display the locale's currency symbol."),
         nfe(
@@ -1981,13 +1976,13 @@ public class Format {
             DATE,
             "mmmmm",
             null,
-            "Display the month as a full month name (January - December)."),
+            DISPLAY_THE_MONTH_AS_A_FULL_MONTH_NAME_JANUARY_DECEMBER),
         nfe(
             FORMAT_MMMMM_UPPER,
             DATE,
             "MMMMM",
             null,
-            "Display the month as a full month name (January - December)."),
+            DISPLAY_THE_MONTH_AS_A_FULL_MONTH_NAME_JANUARY_DECEMBER),
         nfe(
             FORMAT_HH_UPPER,
             DATE,
@@ -2144,20 +2139,20 @@ public class Format {
         // If the format string is empty, use a Java format.
         // Later entries in the formats list default to the first (e.g.
         // "#.00;;Nil"), but the first entry must be set.
-        if (alternateFormatList.size() == 0
+        if (alternateFormatList.isEmpty()
             || alternateFormatList.get(0) == null)
         {
-            format = new JavaFormat(locale.locale);
+            formatValue = new JavaFormat(locale.locale);
         } else if (alternateFormatList.size() == 1
                    && (formatType[0] == FormatType.DATE
                        || formatType[0] == FormatType.STRING))
         {
-            format = alternateFormatList.get(0);
+            formatValue = alternateFormatList.get(0);
         } else {
             BasicFormat[] alternateFormats =
                 alternateFormatList.toArray(
                     new BasicFormat[alternateFormatList.size()]);
-            format = new AlternateFormat(alternateFormats, locale);
+            formatValue = new AlternateFormat(alternateFormats, locale);
         }
     }
 
@@ -2165,7 +2160,7 @@ public class Format {
      * Constructs a <code>Format</code> in a specific locale, or retrieves
      * one from the cache if one already exists.
      *
-     * <p>If the number of entries in the cache exceeds {@link #CacheLimit},
+     * <p>If the number of entries in the cache exceeds {@link #CACHE_LIMIT},
      * replaces the eldest entry in the cache.
      *
      * @param formatString the format string; see
@@ -2309,7 +2304,7 @@ public class Format {
         // u00a4 (The international currency symbol). For those cases,
         // we use the default system locale currency symbol.
         String currencySymbol = decimalSymbols.getCurrencySymbol();
-        if (currencySymbol.equals(Format.intlCurrencySymbol + "")) {
+        if (currencySymbol.equals(Format.INTL_CURRENCY_SYMBOL + "")) {
             final DecimalFormatSymbols defaultDecimalSymbols =
                 new DecimalFormatSymbols(Locale.getDefault());
             currencySymbol = defaultDecimalSymbols.getCurrencySymbol();
@@ -2435,15 +2430,15 @@ public class Format {
         StringBuilder ignored = new StringBuilder();
         String prevIgnored = null;
         boolean haveSeenNumber = false;
-        int digitsLeftOfPoint = 0,
-            digitsRightOfPoint = 0,
-            digitsRightOfExp = 0,
-            zeroesLeftOfPoint = 0,
-            zeroesRightOfPoint = 0,
-            zeroesRightOfExp = 0;
-        boolean useDecimal = false,
-            useThouSep = false,
-            fillFromRight = true;
+        int digitsLeftOfPoint = 0;
+        int digitsRightOfPoint = 0;
+        int digitsRightOfExp = 0;
+        int zeroesLeftOfPoint = 0;
+        int zeroesRightOfPoint = 0;
+        int zeroesRightOfExp = 0;
+        boolean useDecimal = false;
+        boolean useThouSep = false;
+        boolean fillFromRight = true;
 
         // Whether to print numbers in decimal or exponential format.  Valid
         // values are FORMAT_NULL, FORMAT_E_PLUS_LOWER, FORMAT_E_MINUS_LOWER,
@@ -2471,7 +2466,7 @@ public class Format {
             String newFormatString;
             final Token token = findToken(formatString, formatTypeOut[0]);
             if (token != null) {
-                String matched = token.token;
+                String matched = token.tokenValue;
                 newFormatString = formatString.substring(matched.length());
                 if (token.isSpecial()) {
                     switch (token.code) {
@@ -2516,8 +2511,7 @@ public class Format {
                         }
                         break;
 
-                    case FORMAT_M:
-                    case FORMAT_MM:
+                    case FORMAT_M, FORMAT_MM:
                     {
                         // "m" and "mm" mean minute if immediately after
                         // "h" or "hh"; month otherwise.
@@ -2607,10 +2601,7 @@ public class Format {
                         break;
                     }
 
-                    case FORMAT_E_MINUS_UPPER:
-                    case FORMAT_E_PLUS_UPPER:
-                    case FORMAT_E_MINUS_LOWER:
-                    case FORMAT_E_PLUS_LOWER:
+                    case FORMAT_E_MINUS_UPPER, FORMAT_E_PLUS_UPPER, FORMAT_E_MINUS_LOWER, FORMAT_E_PLUS_LOWER:
                     {
                         if (numberState == LEFT_OF_POINT) {
                             decimalShift =
@@ -2726,7 +2717,7 @@ public class Format {
                                 thousands, formatString, decimalShift);
                     }
                     NumericFormat numericFormat = new NumericFormat(
-                        prevIgnored, locale, expFormat, digitsLeftOfPoint,
+                        locale, expFormat, digitsLeftOfPoint,
                         zeroesLeftOfPoint, digitsRightOfPoint,
                         zeroesRightOfPoint, digitsRightOfExp, zeroesRightOfExp,
                         useDecimal, useThouSep, originalFormatString);
@@ -2752,7 +2743,7 @@ public class Format {
                         thousands, formatString, decimalShift);
             }
             NumericFormat numericFormat = new NumericFormat(
-                prevIgnored, locale, expFormat, digitsLeftOfPoint,
+                locale, expFormat, digitsLeftOfPoint,
                 zeroesLeftOfPoint, digitsRightOfPoint, zeroesRightOfPoint,
                 digitsRightOfExp, zeroesRightOfExp, useDecimal, useThouSep,
                 originalFormatString);
@@ -2777,12 +2768,12 @@ public class Format {
             case FORMAT_HH_UPPER:
                 isFormatHH = true;
                 break;
-            case FORMAT_UPPER_AM_SOLIDUS_PM:
-            case FORMAT_LOWER_AM_SOLIDUS_PM:
-            case FORMAT_UPPER_A_SOLIDUS_P:
-            case FORMAT_LOWER_A_SOLIDUS_P:
-            case FORMAT_AMPM:
-                twelveHourClock = true & !isFormatHH;
+            case FORMAT_UPPER_AM_SOLIDUS_PM,
+                FORMAT_LOWER_AM_SOLIDUS_PM,
+                FORMAT_UPPER_A_SOLIDUS_P,
+                FORMAT_LOWER_A_SOLIDUS_P,
+                FORMAT_AMPM:
+                twelveHourClock = true && !isFormatHH;
                 break;
 
             case FORMAT_PERCENT:
@@ -2820,16 +2811,16 @@ public class Format {
 
         if (twelveHourClock) {
             for (int i = 0; i < formatList.size(); i++) {
-                if (formatList.get(i) instanceof DateFormat) {
-                    ((DateFormat) formatList.get(i)).setTwelveHourClock(true);
+                if (formatList.get(i) instanceof DateFormat dateFormat) {
+                    dateFormat.setTwelveHourClock(true);
                 }
             }
         }
 
         if (decimalShift != 0) {
             for (int i = 0; i < formatList.size(); i++) {
-                if (formatList.get(i) instanceof NumericFormat) {
-                    ((NumericFormat) formatList.get(i)).decimalShift =
+                if (formatList.get(i) instanceof NumericFormat numericFormat) {
+                    numericFormat.decimalShift =
                         decimalShift;
                 }
             }
@@ -2842,14 +2833,14 @@ public class Format {
         // special powers.
         for (int i = 0; i < formatList.size(); ++i) {
             if (i > 0
-                && formatList.get(i) instanceof LiteralFormat
-                && formatList.get(i - 1) instanceof LiteralFormat)
+                && formatList.get(i) instanceof LiteralFormat literalFormat
+                && formatList.get(i - 1) instanceof LiteralFormat literalFormat1)
             {
                 formatList.set(
                     i - 1,
                     new LiteralFormat(
-                        ((LiteralFormat) formatList.get(i - 1)).s
-                        + ((LiteralFormat) formatList.get(i)).s));
+                        literalFormat1.s
+                        + literalFormat.s));
                 formatList.remove(i);
                 --i;
             }
@@ -2881,7 +2872,7 @@ public class Format {
     private Token findToken(String formatString, FormatType formatType) {
         for (int i = tokens.length - 1; i > 0; i--) {
             final Token token = tokens[i];
-            if (formatString.startsWith(token.token)
+            if (formatString.startsWith(token.tokenValue)
                 && token.compatibleWith(formatType))
             {
                 return token;
@@ -2899,7 +2890,7 @@ public class Format {
             thousands.set(i, integer - offset);
             ++offset;
         }
-        while (thousands.size() > 0
+        while (!thousands.isEmpty()
             && thousands.get(thousands.size() - 1) == 0)
         {
             shift -= 3;
@@ -2917,36 +2908,36 @@ public class Format {
 
     private StringBuilder format(Object o, StringBuilder buf) {
         if (o == null) {
-            format.formatNull(buf);
+            formatValue.formatNull(buf);
         } else {
             // For final classes, it is more efficient to switch using
             // class equality than using 'instanceof'.
             Class<? extends Object> clazz = o.getClass();
             if (clazz == Double.class) {
-                format.format((Double) o, buf);
+                formatValue.format((Double) o, buf);
             } else if (clazz == Float.class) {
-                format.format((Float) o, buf);
+                formatValue.format((Float) o, buf);
             } else if (clazz == Integer.class) {
-                format.format((Integer) o, buf);
+                formatValue.format((Integer) o, buf);
             } else if (clazz == Long.class) {
-                format.format((Long) o, buf);
+                formatValue.format((Long) o, buf);
             } else if (clazz == Short.class) {
-                format.format((Short) o, buf);
+                formatValue.format((Short) o, buf);
             } else if (clazz == Byte.class) {
-                format.format((Byte) o, buf);
-            } else if (o instanceof BigDecimal) {
-                format.format(
-                    (BigDecimal) o, buf); // PDI-16761 if we cast it to double type we lose precision
-            } else if (o instanceof BigInteger) {
-                format.format(
-                    ((BigInteger) o).longValue(), buf);
+                formatValue.format((Byte) o, buf);
+            } else if (o instanceof BigDecimal bigDecimal) {
+                formatValue.format(
+                    bigDecimal, buf); // PDI-16761 if we cast it to double type we lose precision
+            } else if (o instanceof BigInteger bigInteger) {
+                formatValue.format(
+                    bigInteger.longValue(), buf);
             } else if (clazz == String.class) {
-                format.format((String) o, buf);
+                formatValue.format((String) o, buf);
             } else if (o instanceof java.util.Date) {
                 // includes java.sql.Date, java.sql.Time and java.sql.Timestamp
-                format.format((Date) o, buf);
-            } else if (o instanceof Calendar) {
-                format.format((Calendar) o, buf);
+                formatValue.format((Date) o, buf);
+            } else if (o instanceof Calendar calendar) {
+                formatValue.format(calendar, buf);
             } else {
                 buf.append(o.toString());
             }
@@ -2966,7 +2957,7 @@ public class Format {
         if (fd.isExceptional
             || fd.nDigits == 1 && fd.digits[0] == '0')
         {
-            ; // don't multiply zero
+            // don't multiply zero
         } else {
             fd.decExponent += i;
         }
@@ -3000,7 +2991,7 @@ public class Format {
                 Math.abs(fd.decExponent),
                 minDigitsLeftOfDecimal) * 4 / 3
             + maxDigitsRightOfDecimal;
-        char result[] = new char[resultLen];
+        char[] result = new char[resultLen];
         int i = formatFd1(
             fd,
             result,
@@ -3021,7 +3012,7 @@ public class Format {
     /** Formats a floating decimal to a given char array. */
     private static int formatFd1(
         MondrianFloatingDecimal fd,
-        char result[],
+        char[] result,
         int i,
         int minDigitsLeftOfDecimal,
         char decimalChar, // '.' or ','
@@ -3074,7 +3065,7 @@ public class Format {
 
     static int formatFd2(
         MondrianFloatingDecimal fd,
-        char result[],
+        char[] result,
         int i,
         int minDigitsLeftOfDecimal,
         char decimalChar, // '.' or ','
@@ -3102,10 +3093,10 @@ public class Format {
         // |- wholeDigits=5 -------------|- fractionDigits=5 -----------|
         // |- totalDigits=10 -------------------------------------------|
         // |                             |- maxDigitsRightOfDecimal=5 --|
-        int wholeDigits = Math.max(fd.decExponent, minDigitsLeftOfDecimal),
-            fractionDigits = Math.max(
-                fd.nDigits - fd.decExponent, minDigitsRightOfDecimal),
-            totalDigits = wholeDigits + fractionDigits;
+        int wholeDigits = Math.max(fd.decExponent, minDigitsLeftOfDecimal);
+        int fractionDigits = Math.max(
+                fd.nDigits - fd.decExponent, minDigitsRightOfDecimal);
+        int totalDigits = wholeDigits + fractionDigits;
         char[] digits2 = new char[totalDigits];
         for (int j = 0; j < totalDigits; j++) {
             digits2[j] = '0';
@@ -3165,8 +3156,8 @@ public class Format {
         }
 
         // Find the first non-zero digit and the last non-zero digit.
-        int firstNonZero = wholeDigits,
-            firstTrailingZero = 0;
+        int firstNonZero = wholeDigits;
+        int firstTrailingZero = 0;
         for (int j = 0; j < totalDigits; j++) {
             if (digits2[j] != '0') {
                 if (j < firstNonZero) {
@@ -3189,7 +3180,7 @@ public class Format {
         }
 
         if (thousandChar != '\0'
-            && thousandSeparatorPositions.size() > 0)
+            && !thousandSeparatorPositions.isEmpty())
         {
             // Now print the number. That will happen backwards, so we
             // store it temporarily and then invert.
@@ -3217,7 +3208,7 @@ public class Format {
             }
             // We're done. Invert the print out and add it to
             // the result array.
-            while (formattedWholeDigits.size() > 0) {
+            while (!formattedWholeDigits.isEmpty()) {
                 result[i++] = formattedWholeDigits.pop();
             }
         } else {
@@ -3265,7 +3256,7 @@ public class Format {
         boolean     isExceptional;
         boolean     isNegative;
         int         decExponent;
-        char        digits[];
+        char[]        digits;
         int         nDigits;
 
         /** Creates a floating decimal with a given value. */

@@ -31,4 +31,9 @@ public class NullType extends ScalarType
 	public boolean equals(Object obj) {
         return obj instanceof NullType;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
