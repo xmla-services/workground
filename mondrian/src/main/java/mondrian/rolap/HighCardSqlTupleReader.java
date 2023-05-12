@@ -44,8 +44,6 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
   private ResultLoader resultLoader;
   private boolean moreRows;
 
-  int maxRows = 0;
-
   public HighCardSqlTupleReader( final TupleConstraint constraint ) {
     super( constraint );
   }
@@ -128,10 +126,8 @@ protected void prepareTuples(
         throw Util.newError( sqle, message );
       }
     } finally {
-      if ( !moreRows || !success ) {
-        if ( stmt != null ) {
+      if ( ( !moreRows || !success ) && stmt != null ) {
           stmt.close();
-        }
       }
     }
   }

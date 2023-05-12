@@ -12,6 +12,7 @@
 package mondrian.rolap;
 
 import static org.apache.commons.collections.CollectionUtils.filter;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,10 +119,8 @@ public class MemberCacheHelper implements MemberCache {
     }
 
     public synchronized void checkCacheStatus() {
-        if (changeListener != null) {
-            if (changeListener.isHierarchyChanged(rolapHierarchy)) {
-                flushCache();
-            }
+        if (changeListener != null && changeListener.isHierarchyChanged(rolapHierarchy)) {
+            flushCache();
         }
     }
 
@@ -156,9 +155,9 @@ public class MemberCacheHelper implements MemberCache {
             constraint =
                 sqlConstraintFactory.getMemberChildrenConstraint(null);
         }
-        if (constraint instanceof ChildByNameConstraint) {
+        if (constraint instanceof ChildByNameConstraint childByNameConstraint) {
             return findNamedChildrenInCache(
-                member, ((ChildByNameConstraint) constraint).getChildNames());
+                member, childByNameConstraint.getChildNames());
         }
         return mapMemberToChildren.get(member, constraint);
     }
@@ -350,7 +349,7 @@ public class MemberCacheHelper implements MemberCache {
                             {
                                 List<RolapMember> siblings = entry.getValue();
                                 boolean removedIt = siblings.remove(member);
-                                Util.discard(removedIt);
+                                discard(removedIt);
                             } else {
                                 iter.remove();
                             }

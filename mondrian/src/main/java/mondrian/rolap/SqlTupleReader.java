@@ -107,7 +107,7 @@ public class SqlTupleReader implements TupleReader {
     LoggerFactory.getLogger( SqlTupleReader.class );
   protected final TupleConstraint constraint;
   List<TargetBase> targets = new ArrayList<>();
-  int maxRows = 0;
+  protected int maxRows = 0;
 
   /**
    * How many members could not be instantiated in this iteration. This phenomenon occurs in a parent-child hierarchy,

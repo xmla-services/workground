@@ -122,9 +122,9 @@ public class ExplicitRules {
 
             Relation relation = xmlCube.fact();
 
-            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) {
+            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table) {
                 List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> aggExcludes =
-                    ((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) relation).aggExcludes();
+                    table.aggExcludes();
                 if (aggExcludes != null) {
                     for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude : aggExcludes) {
                         Exclude exclude =
@@ -133,7 +133,7 @@ public class ExplicitRules {
                     }
                 }
                 List<? extends AggTable> aggTables =
-                    ((Table) relation).aggTables();
+                    table.aggTables();
                 if (aggTables != null) {
                     for (AggTable aggTable : aggTables) {
                         TableDef tableDef = TableDef.make(aggTable, group);
@@ -401,8 +401,8 @@ public class ExplicitRules {
 		public void validate(final MessageRecorder msgRecorder) {
             msgRecorder.pushContextName("ExcludeName");
             try {
-                String name = getName();
-                checkAttributeString(msgRecorder, name, "name");
+                String nameInner = getName();
+                checkAttributeString(msgRecorder, nameInner, "name");
 
 
 // RME TODO
@@ -514,7 +514,7 @@ public class ExplicitRules {
      * fact count column, optional ignore columns, foreign key mappings,
      * measure column mappings and level column mappings.
      */
-    public static abstract class TableDef {
+    public abstract static class TableDef {
 
         /**
          * Given a AggTable instance create a TableDef instance
@@ -741,12 +741,12 @@ public class ExplicitRules {
             public void validate(final MessageRecorder msgRecorder) {
                 msgRecorder.pushContextName("Level");
                 try {
-                    String name = getName();
-                    String columnName = getColumnName();
-                    checkAttributeString(msgRecorder, name, "name");
-                    checkAttributeString(msgRecorder, columnName, "column");
+                    String nameInner = getName();
+                    String columnNameInner = getColumnName();
+                    checkAttributeString(msgRecorder, nameInner, "name");
+                    checkAttributeString(msgRecorder, columnNameInner, "column");
 
-                    List<Id.Segment> names = Util.parseIdentifier(name);
+                    List<Id.Segment> names = Util.parseIdentifier(nameInner);
                     // must be [hierarchy usage name].[level name]
                     if (!(names.size() == 2
                         || MondrianProperties.instance().SsasCompatibleNaming
@@ -756,7 +756,7 @@ public class ExplicitRules {
                         msgRecorder.reportError(
                             mres.BadLevelNameFormat.str(
                                 msgRecorder.getContext(),
-                                name));
+                                nameInner));
                     } else {
                         RolapCube cube = ExplicitRules.TableDef.this.getCube();
                         SchemaReader schemaReader = cube.getSchemaReader();
@@ -947,17 +947,17 @@ public class ExplicitRules {
             public void validate(final MessageRecorder msgRecorder) {
                 msgRecorder.pushContextName("Measure");
                 try {
-                    String name = getName();
+                    String nameInner = getName();
                     String column = getColumnName();
-                    checkAttributeString(msgRecorder, name, "name");
+                    checkAttributeString(msgRecorder, nameInner, "name");
                     checkAttributeString(msgRecorder, column, "column");
 
-                    List<Id.Segment> names = Util.parseIdentifier(name);
+                    List<Id.Segment> names = Util.parseIdentifier(nameInner);
                     if (names.size() != 2) {
                         msgRecorder.reportError(
                             mres.BadMeasureNameFormat.str(
                                 msgRecorder.getContext(),
-                                name));
+                                nameInner));
                     } else {
                         RolapCube cube = ExplicitRules.TableDef.this.getCube();
                         SchemaReader schemaReader = cube.getSchemaReader();
@@ -1160,9 +1160,9 @@ public class ExplicitRules {
                 @Override
 				public boolean matches(String name) {
                     // Match is case insensitive
-                    final String factCountName = TableDef.this.factCountName;
-                    return factCountName != null
-                        && factCountName.equalsIgnoreCase(name);
+                    final String factCountNameInner = TableDef.this.factCountName;
+                    return factCountNameInner != null
+                        && factCountNameInner.equalsIgnoreCase(name);
                 }
             };
         }

@@ -40,6 +40,10 @@ import mondrian.util.Pair;
  * @author Richard M. Emberson
  */
 class ExplicitRecognizer extends Recognizer {
+
+    public static final String THE_AGGREGATE_TABLE = "The aggregate table ";
+    public static final String CONTAINS_THE_COLUMN = " contains the column ";
+    public static final String WHICH_MAPS_TO_THE_LEVEL = " which maps to the level ";
     private ExplicitRules.TableDef tableDef;
     private RolapCube cube;
 
@@ -129,10 +133,10 @@ class ExplicitRecognizer extends Recognizer {
                         Id.Segment nameLast = Util.last(parts);
 
                         RolapStar.Measure m = null;
-                        if (nameLast instanceof Id.NameSegment) {
+                        if (nameLast instanceof Id.NameSegment nameSegment) {
                             m = star.getFactTable().lookupMeasureByName(
                                 cube.getName(),
-                                ((Id.NameSegment) nameLast).name);
+                                nameSegment.name);
                         }
                         RolapAggregator agg = null;
                         if (m != null) {
@@ -299,7 +303,7 @@ class ExplicitRecognizer extends Recognizer {
                     }
                 }
             }
-            if (levelMatches.size() == 0) {
+            if (levelMatches.isEmpty()) {
                 return;
             }
             sortLevelMatches(levelMatches, aggLevels);
@@ -390,11 +394,11 @@ class ExplicitRecognizer extends Recognizer {
                         levelMatches.indexOf(pair) - 1).left.getDepth())
             {
                 msgRecorder.reportError(
-                    new StringBuilder("The aggregate table ")
+                    new StringBuilder(THE_AGGREGATE_TABLE)
                         .append(aggTable.getName())
-                        .append(" contains the column ")
+                        .append(CONTAINS_THE_COLUMN)
                         .append(pair.right.getName())
-                        .append(" which maps to the level ")
+                        .append(WHICH_MAPS_TO_THE_LEVEL)
                         .append(pair.left.getUniqueName())
                         .append(" but its parent level is not part of that aggregation.").toString());
             }
@@ -405,9 +409,9 @@ class ExplicitRecognizer extends Recognizer {
             {
                 forceCollapse = true;
                 msgRecorder.reportWarning(
-                    new StringBuilder("The aggregate table ").append(aggTable.getName())
-                        .append(" contains the column ").append(pair.right.getName())
-                        .append(" which maps to the level ")
+                    new StringBuilder(THE_AGGREGATE_TABLE).append(aggTable.getName())
+                        .append(CONTAINS_THE_COLUMN).append(pair.right.getName())
+                        .append(WHICH_MAPS_TO_THE_LEVEL)
                         .append(pair.left.getUniqueName())
                         .append(" and is marked as non-collapsed, but its parent column is already present.")
                         .toString());
@@ -419,11 +423,11 @@ class ExplicitRecognizer extends Recognizer {
                 && aggLevels.get(levelMatches.indexOf(pair)).isCollapsed())
             {
                 msgRecorder.reportError(
-                    new StringBuilder("The aggregate table ")
+                    new StringBuilder(THE_AGGREGATE_TABLE)
                         .append(aggTable.getName())
-                        .append(" contains the column ")
+                        .append(CONTAINS_THE_COLUMN)
                         .append(pair.right.getName())
-                        .append(" which maps to the level ")
+                        .append(WHICH_MAPS_TO_THE_LEVEL)
                         .append(pair.left.getUniqueName())
                         .append(" but its parent level is not part of that aggregation and this level is marked as collapsed.")
                         .toString());
@@ -435,11 +439,11 @@ class ExplicitRecognizer extends Recognizer {
                         && !pair.left.isUnique())
             {
                 msgRecorder.reportError(
-                    new StringBuilder("The aggregate table ")
+                    new StringBuilder(THE_AGGREGATE_TABLE)
                         .append(aggTable.getName())
-                        .append(" contains the column ")
+                        .append(CONTAINS_THE_COLUMN)
                         .append(pair.right.getName())
-                        .append(" which maps to the level ")
+                        .append(WHICH_MAPS_TO_THE_LEVEL)
                         .append(pair.left.getUniqueName())
                         .append(" but that level doesn't have unique members and this level is marked as non collapsed.")
                         .toString());

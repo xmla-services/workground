@@ -69,17 +69,17 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
     }
 
     private List<String> computeDistinctColumnNames() {
-        final List<String> columnNames = new ArrayList<>();
+        final List<String> columnNamesInner = new ArrayList<>();
         final Set<String> columnNameSet = new HashSet<>();
 
         final RolapStar.Column[] columns = getColumns();
         for (RolapStar.Column column : columns) {
-            addColumnName(column, columnNames, columnNameSet);
+            addColumnName(column, columnNamesInner, columnNameSet);
         }
 
-        addColumnName(request.getMeasure(), columnNames, columnNameSet);
+        addColumnName(request.getMeasure(), columnNamesInner, columnNameSet);
 
-        return columnNames;
+        return columnNamesInner;
     }
 
     private void addColumnName(
@@ -99,8 +99,8 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         String columnName = column.getName();
         if (columnName != null) {
             // nothing
-        } else if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
-            columnName = ((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) column.getExpression()).name();
+        } else if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column col) {
+            columnName = col.name();
         } else {
             columnName = "c" + Integer.toString(columnNames.size());
         }
@@ -139,14 +139,14 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
 
     @Override
 	public int getMeasureCount() {
-        return request.getDrillThroughMeasures().size() > 0
+        return !request.getDrillThroughMeasures().isEmpty()
             ? request.getDrillThroughMeasures().size()
             : 1;
     }
 
     @Override
 	public RolapStar.Measure getMeasure(final int i) {
-        return request.getDrillThroughMeasures().size() > 0
+        return !request.getDrillThroughMeasures().isEmpty()
             ? request.getDrillThroughMeasures().get(i)
             : request.getMeasure();
     }
@@ -169,7 +169,7 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
     @Override
 	public String getMeasureAlias(final int i) {
         String alias =
-            request.getDrillThroughMeasures().size() > 0
+            !request.getDrillThroughMeasures().isEmpty()
                 ? request.getDrillThroughMeasures().get(i).getName()
                 : columnNames.get(columnNames.size() - 1);
         int j = 0;

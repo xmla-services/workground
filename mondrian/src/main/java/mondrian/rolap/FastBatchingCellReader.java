@@ -70,8 +70,6 @@ import mondrian.util.Pair;
  * fact that a cell was requested.</p>
  */
 public class FastBatchingCellReader implements CellReader {
-    private static final Logger LOGGER =
-        LoggerFactory.getLogger(FastBatchingCellReader.class);
 
     private final int cellRequestLimit;
 
@@ -127,8 +125,9 @@ public class FastBatchingCellReader implements CellReader {
         AggregationManager aggMgr)
     {
         this.execution = execution;
-        assert cube != null;
-        assert execution != null;
+        if (cube == null || execution == null) {
+            throw new IllegalArgumentException("FastBatchingCellReader: cube and execution should not be null");
+        }
         this.cube = cube;
         this.aggMgr = aggMgr;
         cacheMgr = aggMgr.getCacheMgr(execution.getMondrianStatement().getMondrianConnection());
@@ -199,7 +198,9 @@ public class FastBatchingCellReader implements CellReader {
     }
 
     public final void recordCellRequest(CellRequest request) {
-        assert !request.isUnsatisfiable();
+        if (request.isUnsatisfiable()) {
+            throw new IllegalArgumentException("request.isUnsatisfiable is true");
+        }
         ++missCount;
         cellRequests.add(request);
         if (cellRequests.size() % cellRequestLimit == 0) {
@@ -584,7 +585,7 @@ public class FastBatchingCellReader implements CellReader {
  */
 class BatchLoader {
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(FastBatchingCellReader.class);
+        LoggerFactory.getLogger(BatchLoader.class);
 
     private final Locus locus;
     private final SegmentCacheManager cacheMgr;
@@ -832,7 +833,8 @@ class BatchLoader {
           List<SortedSet<Comparable>> headerValues =
               new ArrayList<>(bitKey.cardinality());
           Map<Integer, Integer> valueIndexes = new HashMap<>();
-          int relevantCCIdx = 0, keyValuesIdx = 0;
+          int relevantCCIdx = 0;
+          int keyValuesIdx = 0;
           for (int bitPos : headerBitKey) {
               if (bitKey.get(bitPos)) {
                   headerValues.add(
@@ -937,7 +939,7 @@ class BatchLoader {
 
         if (LOGGER.isDebugEnabled()) {
             final long t2 = System.currentTimeMillis();
-            LOGGER.debug("load (millis): " + (t2 - t1));
+            LOGGER.debug("load (millis): {}", (t2 - t1));
         }
 
         // Create a response and return it to the client. The response is a
@@ -1103,7 +1105,7 @@ class BatchLoader {
         }
     }
 
-    private static final Logger BATCH_LOGGER = LoggerFactory.getLogger(Batch.class);
+    private static final Logger BATCH_LOGGER = LoggerFactory.getLogger(BatchLoader.class);
 
     public static class RollupInfo {
         final RolapStar.Column[] constrainedColumns;
@@ -1241,7 +1243,7 @@ class BatchLoader {
             tuples.add(tuple);
             final RolapStar.Measure measure = request.getMeasure();
             if (!measuresList.contains(measure)) {
-                assert (measuresList.size() == 0)
+                assert (measuresList.isEmpty())
                        || (measure.getStar()
                            == (measuresList.get(0)).getStar())
                     : "Measure must belong to same star as other measures";
@@ -1437,23 +1439,21 @@ class BatchLoader {
                     "AggGen: Sorry, can not create SQL for virtual Cube \"")
                     .append(cube == null ? null : cube.getName())
                     .append("\", operation not currently supported");
-                BATCH_LOGGER.error(buf.toString());
+                String msg = buf.toString();
+                BATCH_LOGGER.error(msg);
 
             } else {
                 final AggGen aggGen =
                     new AggGen(cube.getName(), cube.getStar(), columns);
                 if (aggGen.isReady()) {
                     // PRINT TO STDOUT - DO NOT USE BATCH_LOGGER
-                    System.out.println(
-                        "createLost:" + Util.NL + aggGen.createLost());
-                    System.out.println(
-                        "insertIntoLost:" + Util.NL + aggGen.insertIntoLost());
-                    System.out.println(
-                        "createCollapsed:" + Util.NL
-                        + aggGen.createCollapsed());
-                    System.out.println(
-                        "insertIntoCollapsed:" + Util.NL
-                        + aggGen.insertIntoCollapsed());
+                    LOGGER.debug(
+                        "createLost:{}{}", Util.NL, aggGen.createLost());
+                    LOGGER.debug(
+                        "insertIntoLost:{}{}", Util.NL, aggGen.insertIntoLost());
+                    LOGGER.debug(
+                        "createCollapsed:{}{}", Util.NL, aggGen.createCollapsed());
+                    LOGGER.debug("insertIntoCollapsed: {}{}", Util.NL, aggGen.insertIntoCollapsed());
                 } else {
                     BATCH_LOGGER.error("AggGen failed");
                 }
@@ -1508,10 +1508,8 @@ class BatchLoader {
             for (RolapStar.Measure measure : measuresList) {
                 if (measure.getAggregator().isDistinct()
                     && measure.getExpression() instanceof
-                    ExpressionView)
+                    ExpressionView measureExpr)
                 {
-                    ExpressionView measureExpr =
-                        (ExpressionView) measure.getExpression();
                     SQL measureSql = measureExpr.sqls().get(0);
                     // Checks if the SQL contains "SELECT" to detect the case a
                     // subquery is used to define the measure. This is not a
@@ -1659,8 +1657,8 @@ class BatchLoader {
         }
 
         boolean haveSameStarAndAggregation(Batch other) {
-            boolean rollup[] = {false};
-            boolean otherRollup[] = {false};
+            boolean[] rollup = {false};
+            boolean[] otherRollup = {false};
 
             boolean hasSameAggregation =
                 getAgg(rollup) == other.getAgg(otherRollup);
@@ -1846,9 +1844,9 @@ class BatchLoader {
             Object v1 = o1.getValue();
             Object v2 = o2.getValue();
             if (v1.getClass() == v2.getClass()
-                && v1 instanceof Comparable)
+                && v1 instanceof Comparable comparable)
             {
-                return ((Comparable) v1).compareTo(v2);
+                return comparable.compareTo(v2);
             } else {
                 return v1.toString().compareTo(v2.toString());
             }

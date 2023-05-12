@@ -55,8 +55,8 @@ public class DrillThroughCellRequest extends CellRequest {
     }
 
     public boolean includeInSelect(RolapStar.Column column) {
-        if (drillThroughColumns.size() == 0
-            && drillThroughMeasures.size() == 0)
+        if (drillThroughColumns.isEmpty()
+            && drillThroughMeasures.isEmpty())
         {
             return true;
         }
@@ -68,8 +68,8 @@ public class DrillThroughCellRequest extends CellRequest {
     }
 
     public boolean includeInSelect(RolapStar.Measure measure) {
-        if (drillThroughColumns.size() == 0
-            && drillThroughMeasures.size() == 0)
+        if (drillThroughColumns.isEmpty()
+            && drillThroughMeasures.isEmpty())
         {
             return true;
         }
