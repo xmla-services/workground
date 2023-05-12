@@ -15,6 +15,7 @@ package mondrian.rolap.util;
 
 import java.util.Objects;
 
+import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
@@ -23,26 +24,26 @@ import mondrian.rolap.sql.SqlQuery;
 
 public class ExpressionUtil {
 
-    static public String getExpression(Expression expression, final SqlQuery query) {
+    public static String getExpression(Expression expression, final SqlQuery query) {
         if (expression instanceof Column) {
             return query.getDialect().quoteIdentifier(expression.table(), expression.name());
         }
-        if (expression instanceof ExpressionView) {
+        if (expression instanceof ExpressionView expressionView) {
             SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
-            ((ExpressionView) expression).sqls().forEach(e -> codeSet.put(e.dialect(), e.content()));
+            expressionView.sqls().forEach(e -> codeSet.put(e.dialect(), e.content()));
             return codeSet.chooseQuery(query.getDialect());
         }
-        throw new RuntimeException("getExpression error. Expression is not ExpressionView or Column");
+        throw new RolapRuntimeException("getExpression error. Expression is not ExpressionView or Column");
     }
 
-    static public int hashCode(Expression expression) {
+    public static int hashCode(Expression expression) {
         if (expression instanceof Column) {
             return expression.name().hashCode() ^ (expression.table()==null ? 0 : expression.table().hashCode());
         }
-        if (expression instanceof ExpressionView) {
+        if (expression instanceof ExpressionView expressionView) {
             int h = 17;
-            for (int i = 0; i < ((ExpressionView) expression).sqls().size(); i++) {
-                h = 37 * h + SQLUtil.hashCode(((ExpressionView) expression).sqls().get(i));
+            for (int i = 0; i < expressionView.sqls().size(); i++) {
+                h = 37 * h + SQLUtil.hashCode(expressionView.sqls().get(i));
             }
             return h;
         }
@@ -57,15 +58,15 @@ public class ExpressionUtil {
             return expression.name().equals(that.name()) &&
                 Objects.equals(expression.table(), that.table());
         }
-        if (expression instanceof ExpressionView) {
+        if (expression instanceof ExpressionView expressionView) {
             if (!(obj instanceof ExpressionView that)) {
                 return false;
             }
-            if (((ExpressionView) expression).sqls().size() != that.sqls().size()) {
+            if (expressionView.sqls().size() != that.sqls().size()) {
                 return false;
             }
-            for (int i = 0; i < ((ExpressionView) expression).sqls().size(); i++) {
-                if (! ((ExpressionView) expression).sqls().get(i).equals(that.sqls().get(i))) {
+            for (int i = 0; i < expressionView.sqls().size(); i++) {
+                if (! expressionView.sqls().get(i).equals(that.sqls().get(i))) {
                     return false;
                 }
             }
@@ -75,23 +76,23 @@ public class ExpressionUtil {
     }
 
     public static String genericExpression(Expression expression) {
-        if (expression instanceof Column) {
-            return ((Column) expression).genericExpression();
+        if (expression instanceof Column column) {
+            return column.genericExpression();
         }
-        if (expression instanceof ExpressionView) {
-            for (int i = 0; i < ((ExpressionView) expression).sqls().size(); i++) {
-                if (((ExpressionView) expression).sqls().get(i).dialect().equals("generic")) {
-                    return ((ExpressionView) expression).sqls().get(i).content();
+        if (expression instanceof ExpressionView expressionView) {
+            for (int i = 0; i < expressionView.sqls().size(); i++) {
+                if (expressionView.sqls().get(i).dialect().equals("generic")) {
+                    return expressionView.sqls().get(i).content();
                 }
             }
             return ((ExpressionView) expression).sqls().get(0).content();
         }
-        throw new RuntimeException("genericExpression error");
+        throw new RolapRuntimeException("genericExpression error");
     }
 
     public static String toString(Expression expression) {
-        if (expression instanceof ExpressionView) {
-            return ((ExpressionView) expression).sqls().get(0).content();
+        if (expression instanceof ExpressionView expressionView) {
+            return expressionView.sqls().get(0).content();
         }
         return expression.toString();
     }
@@ -107,6 +108,6 @@ public class ExpressionUtil {
         if (expression instanceof ExpressionView) {
             return null;
         }
-        throw new RuntimeException("Expression getTableAlias error");
+        throw new RolapRuntimeException("Expression getTableAlias error");
     }
 }

@@ -109,6 +109,10 @@ public interface CellKey extends Serializable {
     int getOffset(int[] axisMultipliers);
 
     public abstract class Generator {
+
+        private Generator() {
+        }
+
         /**
          * Creates a CellKey with a given number of axes.
          *
@@ -276,21 +280,18 @@ public interface CellKey extends Serializable {
 
         @Override
 		public int getAxis(int axis) {
-            switch (axis) {
-            case 0:
+            if (axis == 0){
                 return ordinal0;
-            default:
+            } else {
                 throw new ArrayIndexOutOfBoundsException(axis);
             }
         }
 
         @Override
 		public void setAxis(int axis, int value) {
-            switch (axis) {
-            case 0:
+            if (axis == 0) {
                 ordinal0 = value;
-                break;
-            default:
+            } else {
                 throw new ArrayIndexOutOfBoundsException(axis);
             }
         }

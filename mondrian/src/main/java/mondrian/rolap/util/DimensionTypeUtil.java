@@ -19,10 +19,14 @@ import mondrian.olap.DimensionType;
 
 public class DimensionTypeUtil {
 
+    private DimensionTypeUtil() {
+        // constructor
+    }
+
     // Return the dimension's enumerated type.
     public static DimensionType getDimensionType(PrivateDimension dimension) {
         if (dimension.type() == null) {
-            return null; //DimensionType.StandardDimension;
+            return null;
         } else {
             return DimensionType.fromValue(dimension.type().getValue());
         }

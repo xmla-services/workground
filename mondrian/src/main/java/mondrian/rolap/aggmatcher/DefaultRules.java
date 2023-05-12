@@ -173,8 +173,7 @@ public class DefaultRules {
     protected static DefaultDef.AggRules makeAggRules(final File file) {
         DOMWrapper def = makeDOMWrapper(file);
         try {
-            DefaultDef.AggRules rules = new DefaultDef.AggRules(def);
-            return rules;
+            return new DefaultDef.AggRules(def);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex(file.getName(), e);
         }
@@ -183,8 +182,7 @@ public class DefaultRules {
     protected static DefaultDef.AggRules makeAggRules(final URL url) {
         DOMWrapper def = makeDOMWrapper(url);
         try {
-            DefaultDef.AggRules rules = new DefaultDef.AggRules(def);
-            return rules;
+            return new DefaultDef.AggRules(def);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex(url.toString(), e);
         }
@@ -195,8 +193,7 @@ public class DefaultRules {
     {
         DOMWrapper def = makeDOMWrapper(inStream);
         try {
-            DefaultDef.AggRules rules = new DefaultDef.AggRules(def);
-            return rules;
+            return new DefaultDef.AggRules(def);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex("InputStream", e);
         }
@@ -208,8 +205,7 @@ public class DefaultRules {
     {
         DOMWrapper def = makeDOMWrapper(text, name);
         try {
-            DefaultDef.AggRules rules = new DefaultDef.AggRules(def);
-            return rules;
+            return new DefaultDef.AggRules(def);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex(name, e);
         }
@@ -226,8 +222,7 @@ public class DefaultRules {
     protected static DOMWrapper makeDOMWrapper(final URL url) {
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
-            DOMWrapper def = xmlParser.parse(url);
-            return def;
+            return xmlParser.parse(url);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex(url.toString(), e);
         }
@@ -236,8 +231,7 @@ public class DefaultRules {
     protected static DOMWrapper makeDOMWrapper(final InputStream inStream) {
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
-            DOMWrapper def = xmlParser.parse(inStream);
-            return def;
+            return xmlParser.parse(inStream);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex("InputStream", e);
         }
@@ -249,8 +243,7 @@ public class DefaultRules {
     {
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
-            DOMWrapper def = xmlParser.parse(text);
-            return def;
+            return xmlParser.parse(text);
         } catch (XOMException e) {
             throw mres.AggRuleParse.ex(name, e);
         }
@@ -418,12 +411,10 @@ public class DefaultRules {
         final String aggregateName)
     {
         DefaultDef.AggRule rule = getAggRule();
-        Recognizer.Matcher matcher =
-            rule.getMeasureMap().getMatcher(
-                measureName,
-                measureColumnName,
-                aggregateName);
-        return matcher;
+        return rule.getMeasureMap().getMatcher(
+            measureName,
+            measureColumnName,
+            aggregateName);
     }
 
     /**
@@ -437,13 +428,11 @@ public class DefaultRules {
         final String levelColumnName)
     {
         DefaultDef.AggRule rule = getAggRule();
-        Recognizer.Matcher matcher =
-            rule.getLevelMap().getMatcher(
+        return rule.getLevelMap().getMatcher(
                 usagePrefix,
                 hierarchyName,
                 levelName,
                 levelColumnName);
-        return matcher;
     }
 
     /**

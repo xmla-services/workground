@@ -101,8 +101,8 @@ public class LiteralStarPredicate extends AbstractColumnPredicate {
         // TRUE intersects everything except FALSE
         if (!value) {
             return false;
-        } else if (other instanceof LiteralStarPredicate) {
-            return ((LiteralStarPredicate) other).value;
+        } else if (other instanceof LiteralStarPredicate literalStarPredicate) {
+            return literalStarPredicate.value;
         } else {
             return true;
         }

@@ -10,6 +10,7 @@
 package mondrian.rolap.format;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
@@ -136,7 +137,9 @@ public class FormatterFactory {
         return DEFAULT_PROPERTY_FORMATTER;
     }
 
-    private static <T> T createFormatter(String className) throws Exception {
+    private static <T> T createFormatter(String className) throws
+        ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+        InstantiationException, IllegalAccessException {
         @SuppressWarnings("unchecked")
         Class<T> clazz = (Class<T>) Class.forName(className);
         Constructor<T> constructor = clazz.getConstructor();

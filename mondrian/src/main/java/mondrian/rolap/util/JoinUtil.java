@@ -13,6 +13,7 @@
  */
 package mondrian.rolap.util;
 
+import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
@@ -21,18 +22,22 @@ import mondrian.olap.Util;
 
 public class JoinUtil {
 
+    private JoinUtil() {
+        // constructor
+    }
+
     public static RelationOrJoin left(Join join) {
-        if (join.relations() != null && join.relations().size() > 0) {
+        if (join.relations() != null && !join.relations().isEmpty()) {
             return join.relations().get(0);
         }
-        throw new RuntimeException("Join left error");
+        throw new RolapRuntimeException("Join left error");
     }
 
     public static RelationOrJoin right(Join join) {
         if (join.relations() != null && join.relations().size() > 1) {
             return join.relations().get(1);
         }
-        throw new RuntimeException("Join left error");
+        throw new RolapRuntimeException("Join left error");
     }
 
     public static void changeLeftRight(Join join, RelationOrJoin left, RelationOrJoin right) {
@@ -50,8 +55,8 @@ public class JoinUtil {
             return join.leftAlias();
         }
         RelationOrJoin left = left(join);
-        if (left instanceof Relation) {
-            return RelationUtil.getAlias((Relation) left);
+        if (left instanceof Relation relation) {
+            return RelationUtil.getAlias(relation);
         }
         throw Util.newInternal(
             new StringBuilder("alias is required because ").append(left).append(" is not a table").toString());
@@ -66,11 +71,11 @@ public class JoinUtil {
             return join.rightAlias();
         }
         RelationOrJoin right = right(join);
-        if (right instanceof Relation) {
-            return RelationUtil.getAlias(((Relation) right));
+        if (right instanceof Relation relation) {
+            return RelationUtil.getAlias(relation);
         }
-        if (right instanceof Join) {
-            return getLeftAlias(((Join) right));
+        if (right instanceof Join j) {
+            return getLeftAlias(j);
         }
         throw Util.newInternal(
             new StringBuilder("alias is required because ").append(right).append(" is not a table").toString());

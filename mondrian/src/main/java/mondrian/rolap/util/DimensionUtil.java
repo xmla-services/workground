@@ -13,6 +13,7 @@
  */
 package mondrian.rolap.util;
 
+import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
@@ -24,32 +25,38 @@ import mondrian.olap.Util;
 
 public class DimensionUtil {
 
+    public static final String SCHEMA_NULL = "schema != null";
+
+    private DimensionUtil() {
+        // constructor
+    }
+
     public static PrivateDimension getDimension(Schema schema, CubeDimension dimension) {
-        if (dimension instanceof DimensionUsage) {
-            Util.assertPrecondition(schema != null, "schema != null");
+        if (dimension instanceof DimensionUsage dimensionUsage) {
+            Util.assertPrecondition(schema != null, SCHEMA_NULL);
             for (int i = 0; i < schema.dimensions().size(); i++) {
-                if (schema.dimensions().get(i).name().equals(((DimensionUsage) dimension).source())) {
+                if (schema.dimensions().get(i).name().equals(dimensionUsage.source())) {
                     return schema.dimensions().get(i);
                 }
             }
             throw Util.newInternal(
                 new StringBuilder("Cannot find shared dimension '")
-                    .append(((DimensionUsage) dimension).source()).append("'").toString());
+                    .append(dimensionUsage.source()).append("'").toString());
         }
-        if (dimension instanceof PrivateDimension) {
-            Util.assertPrecondition(schema != null, "schema != null");
-            return (PrivateDimension)dimension;
+        if (dimension instanceof PrivateDimension privateDimension) {
+            Util.assertPrecondition(schema != null, SCHEMA_NULL);
+            return privateDimension;
         }
-        if (dimension instanceof VirtualCubeDimension) {
-            Util.assertPrecondition(schema != null, "schema != null");
-            if (((VirtualCubeDimension)dimension).cubeName() == null) {
+        if (dimension instanceof VirtualCubeDimension virtualCubeDimension) {
+            Util.assertPrecondition(schema != null, SCHEMA_NULL);
+            if (virtualCubeDimension.cubeName() == null) {
                 return getPublicDimension(schema, dimension.name());
             } else {
-                Cube cube = getCube(schema, ((VirtualCubeDimension)dimension).cubeName());
+                Cube cube = getCube(schema, virtualCubeDimension.cubeName());
                 return getDimension(cube, schema, dimension.name());
             }
         }
-        throw new RuntimeException("getDimension error");
+        throw new RolapRuntimeException("getDimension error");
     }
 
     private static PrivateDimension  getPublicDimension(Schema schema, String dimensionName) {

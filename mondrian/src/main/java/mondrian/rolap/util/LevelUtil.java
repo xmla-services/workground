@@ -22,6 +22,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 
 public class LevelUtil {
 
+    private LevelUtil() {
+        // constructor
+    }
+
     public static Expression getKeyExp(Level level) {
         if (level.keyExpression() != null) {
             return level.keyExpression();

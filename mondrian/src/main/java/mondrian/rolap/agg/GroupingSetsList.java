@@ -114,7 +114,7 @@ final class GroupingSetsList {
         if (!useGroupingSet) {
             return Collections.singletonList(BitKey.EMPTY);
         }
-        final List<BitKey> rollupColumnsBitKeyList = new ArrayList<>();
+        final List<BitKey> rollupColumnsBitKeyListInternal = new ArrayList<>();
         final int bitKeyLength = getDefaultColumns().length;
         for (RolapStar.Column[] groupingSetColumns : groupingSetsColumns) {
             BitKey groupingColumnsBitKey =
@@ -129,9 +129,9 @@ final class GroupingSetsList {
                 }
                 bitPosition++;
             }
-            rollupColumnsBitKeyList.add(groupingColumnsBitKey);
+            rollupColumnsBitKeyListInternal.add(groupingColumnsBitKey);
         }
-        return rollupColumnsBitKeyList;
+        return rollupColumnsBitKeyListInternal;
     }
 
     private int[] loadRollupIndex() {
@@ -139,15 +139,15 @@ final class GroupingSetsList {
             return new int[0];
         }
         RolapStar.Column[] detailedColumns = getDefaultColumns();
-        int[] columnIndexToGroupingIndexMap = new int[detailedColumns.length];
+        int[] columnIndexToGroupingIndexInternalMap = new int[detailedColumns.length];
         for (int columnIndex = 0; columnIndex < detailedColumns.length;
              columnIndex++)
         {
             int rollupIndex =
                 rollupColumns.indexOf(detailedColumns[columnIndex]);
-            columnIndexToGroupingIndexMap[columnIndex] = rollupIndex;
+            columnIndexToGroupingIndexInternalMap[columnIndex] = rollupIndex;
         }
-        return columnIndexToGroupingIndexMap;
+        return columnIndexToGroupingIndexInternalMap;
     }
 
     private List<RolapStar.Column> findRollupColumns() {

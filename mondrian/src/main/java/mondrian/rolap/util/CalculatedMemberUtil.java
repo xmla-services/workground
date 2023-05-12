@@ -18,6 +18,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty
 
 public class CalculatedMemberUtil {
 
+    private CalculatedMemberUtil() {
+    }
+
     public static String getFormula(CalculatedMember calculatedMember) {
         if (calculatedMember.formulaElement() != null) {
             return calculatedMember.formulaElement().cdata();

@@ -56,9 +56,8 @@ class ChildByNameConstraint extends DefaultMemberChildrenConstraint {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ChildByNameConstraint
-            && getCacheKey().equals(
-                ((ChildByNameConstraint) obj).getCacheKey());
+        return obj instanceof ChildByNameConstraint childByNameConstraint
+            && getCacheKey().equals(childByNameConstraint.getCacheKey());
     }
 
     @Override

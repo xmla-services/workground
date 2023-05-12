@@ -78,8 +78,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
     private static Set<Object> createValues(List<StarColumnPredicate> list) {
         final HashSet<Object> set = new HashSet<>();
         for (StarColumnPredicate predicate : list) {
-            if (predicate instanceof ValueColumnPredicate) {
-                set.add(((ValueColumnPredicate) predicate).getValue());
+            if (predicate instanceof ValueColumnPredicate valueColumnPredicate) {
+                set.add(valueColumnPredicate.getValue());
             } else {
                 // One of the children is not a value predicate. We will have to
                 // evaluate the predicate long-hand.
@@ -165,11 +165,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
                     for (StarColumnPredicate thisChild : getPredicates()) {
                         Integer key = thisChild.hashCode();
                         List<StarColumnPredicate> predList =
-                            childrenHashMap.get(key);
-                        if (predList == null) {
-                            predList = new ArrayList<>();
-                            childrenHashMap.put(key, predList);
-                        }
+                            childrenHashMap.computeIfAbsent(key, k -> new ArrayList<>());
                         predList.add(thisChild);
                     }
                 }
@@ -242,15 +238,15 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
 
     @Override
 	public boolean mightIntersect(StarPredicate other) {
-        if (other instanceof LiteralStarPredicate) {
-            return ((LiteralStarPredicate) other).getValue();
+        if (other instanceof LiteralStarPredicate literalStarPredicate) {
+            return literalStarPredicate.getValue();
         }
         if (other instanceof ValueColumnPredicate valueColumnPredicate) {
             return evaluate(valueColumnPredicate.getValue());
         }
-        if (other instanceof ListColumnPredicate) {
+        if (other instanceof ListColumnPredicate listColumnPredicate) {
             final List<Object> thatSet = new ArrayList<>();
-            ((ListColumnPredicate) other).values(thatSet);
+            listColumnPredicate.values(thatSet);
             for (Object o : thatSet) {
                 if (evaluate(o)) {
                     return true;
@@ -263,7 +259,10 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
 
     @Override
 	public StarColumnPredicate minus(StarPredicate predicate) {
-        assert predicate != null;
+        if (predicate == null) {
+            throw new IllegalArgumentException("predicate should not be null");
+        }
+
         if (predicate instanceof LiteralStarPredicate literalStarPredicate) {
             if (literalStarPredicate.getValue()) {
                 // X minus TRUE --> FALSE
@@ -295,6 +294,9 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
 
     @Override
 	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
+        if (predicate.getConstrainedColumn() != getConstrainedColumn()) {
+            throw new IllegalArgumentException("wrong predicate constrainedColumn");
+        }
         assert predicate.getConstrainedColumn() == getConstrainedColumn();
         if (predicate instanceof ListColumnPredicate that) {
             final List<StarColumnPredicate> list =

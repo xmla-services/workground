@@ -33,6 +33,7 @@ public class DefaultTupleConstraint implements TupleConstraint {
         RolapCube baseCube,
         AggStar aggStar)
     {
+        //empty
     }
 
     @Override
@@ -42,6 +43,7 @@ public class DefaultTupleConstraint implements TupleConstraint {
         AggStar aggStar,
         RolapLevel level)
     {
+        //empty
     }
 
     @Override
