@@ -18,6 +18,7 @@ import static mondrian.xmla.XmlaConstants.NS_XMLA_ROWSET;
 import static mondrian.xmla.XmlaConstants.NS_XSD;
 import static mondrian.xmla.XmlaConstants.NS_XSI;
 import static mondrian.xmla.XmlaHandler.getExtra;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -1338,7 +1339,7 @@ public enum RowsetDefinition {
         Column[] columnDefinitions,
         Column[] sortColumnDefinitions)
     {
-        Util.discard(ordinal);
+        discard(ordinal);
         this.schemaGuid = schemaGuid;
         this.description = description;
         this.columnDefinitions = columnDefinitions;
@@ -1736,16 +1737,8 @@ public enum RowsetDefinition {
                 String javaMethodName = "get" + name;
                 Method method = row.getClass().getMethod(javaMethodName);
                 return method.invoke(row);
-            } catch (SecurityException e) {
-                throw Util.newInternal(
-                    e, "Error while accessing rowset column " + name);
-            } catch (IllegalAccessException e) {
-                throw Util.newInternal(
-                    e, "Error while accessing rowset column " + name);
-            } catch (NoSuchMethodException e) {
-                throw Util.newInternal(
-                    e, "Error while accessing rowset column " + name);
-            } catch (InvocationTargetException e) {
+            } catch (SecurityException | IllegalAccessException
+                | NoSuchMethodException | InvocationTargetException e) {
                 throw Util.newInternal(
                     e, "Error while accessing rowset column " + name);
             }
@@ -2141,7 +2134,7 @@ public enum RowsetDefinition {
                             }
                         }
                     }
-                    else if(catalogs.size() > 0){
+                    else if(!catalogs.isEmpty()){
                         propertyValue = catalogs.get(0).getName();
                     }
                 }
@@ -2241,16 +2234,16 @@ public enum RowsetDefinition {
                     row.set(EnumType.name, "string");
 
                     final String name =
-                        (value instanceof XmlaConstant)
-                            ? ((XmlaConstant) value).xmlaName()
+                        (value instanceof XmlaConstant xmlaConstant)
+                            ? xmlaConstant.xmlaName()
                             : value.name();
                     row.set(ElementName.name, name);
 
                     final String description =
-                     (value instanceof XmlaConstant)
-                        ? ((XmlaConstant) value).getDescription()
-                         : (value instanceof XmlaConstants.EnumWithDesc)
-                        ? ((XmlaConstants.EnumWithDesc) value).getDescription()
+                     (value instanceof XmlaConstant xmlaConstant)
+                        ? xmlaConstant.getDescription()
+                         : (value instanceof XmlaConstants.EnumWithDesc enumWithDesc)
+                        ? enumWithDesc.getDescription()
                              : null;
                     if (description != null) {
                         row.set(
@@ -2265,9 +2258,9 @@ public enum RowsetDefinition {
                         break;
                     default:
                         final int ordinal =
-                            (value instanceof XmlaConstant
-                             && ((XmlaConstant) value).xmlaOrdinal() != -1)
-                                ? ((XmlaConstant) value).xmlaOrdinal()
+                            (value instanceof XmlaConstant xmlaConstant
+                             && xmlaConstant.xmlaOrdinal() != -1)
+                                ? xmlaConstant.xmlaOrdinal()
                                 : value.ordinal();
                         row.set(ElementValue.name, ordinal);
                         break;
@@ -3632,7 +3625,7 @@ TODO: see above
                 XmlaResponse response,
                 OlapConnection connection,
                 List<Row> rows)
-                throws XmlaException, OlapException, SQLException
+                throws XmlaException, SQLException
         {
             mondrian.rolap.RolapConnection rolapConnection =
                     ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
@@ -4823,7 +4816,7 @@ TODO: see above
             }
 
             VarType(String description) {
-                Util.discard(description);
+                discard(description);
             }
         }
 

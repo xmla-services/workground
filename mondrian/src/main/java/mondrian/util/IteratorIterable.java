@@ -14,6 +14,7 @@ package mondrian.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Iterable over an iterator.
@@ -69,6 +70,9 @@ public class IteratorIterable<E> implements Iterable<E> {
 
                 @Override
 				public E next() {
+                    if(!hasNext()){
+                        throw new NoSuchElementException();
+                    }
                     return list.get(i++);
                 }
 

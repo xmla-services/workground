@@ -77,6 +77,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         "Envelope element not in SOAP namespace";
     public static final String INVALID_SOAP_MESSAGE_TOP_ELEMENT_NOT_ENVELOPE = "Invalid SOAP message: Top element not" +
         " Envelope";
+    public static final String THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST = "This should be handled at begin of processing request";
 
     private DocumentBuilderFactory domFactory = null;
 
@@ -665,7 +666,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                 }
             } catch (UnsupportedEncodingException uee) {
                 LOGGER.warn(
-                    "This should be handled at begin of processing request",
+                    THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST,
                     uee);
             }
 
@@ -681,7 +682,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     }
                 } catch (UnsupportedEncodingException uee) {
                     LOGGER.warn(
-                        "This should be handled at begin of processing request",
+                        THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST,
                         uee);
                 }
                 LOGGER.debug(buf.toString());
@@ -839,7 +840,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
             writer.endDocument();
         } catch (UnsupportedEncodingException uee) {
             LOGGER.warn(
-                "This should be handled at begin of processing request",
+                THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST,
                 uee);
         } catch (Exception e) {
             LOGGER.error(

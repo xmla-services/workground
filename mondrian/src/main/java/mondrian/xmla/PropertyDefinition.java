@@ -38,9 +38,10 @@ public enum PropertyDefinition {
         XmlaConstants.Access.Write,
         "-1",
         XmlaConstants.Method.EXECUTE,
-        "Contains a zero-based integer value corresponding to a CellOrdinal attribute value. (The CellOrdinal attribute is part of the Cell element in the CellData section of MDDataSet.)\n"
-        + "Used together with the EndRange property, the client application can use this property to restrict an OLAP dataset returned by a command to a specific range of cells. If -1 is specified, all cells up to the cell specified in the EndRange property are returned.\n"
-        + "The default value for this property is -1."),
+        """
+        Contains a zero-based integer value corresponding to a CellOrdinal attribute value. (The CellOrdinal attribute is part of the Cell element in the CellData section of MDDataSet.)
+        Used together with the EndRange property, the client application can use this property to restrict an OLAP dataset returned by a command to a specific range of cells. If -1 is specified, all cells up to the cell specified in the EndRange property are returned.
+        The default value for this property is -1."""),
 
     Catalog(
         RowsetDefinition.Type.STRING,
@@ -48,9 +49,10 @@ public enum PropertyDefinition {
         XmlaConstants.Access.ReadWrite,
         "",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-        "When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG.\n"
-        + "When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG.\n"
-        + "The default value for this property is an empty string."),
+        """
+        When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG.
+        When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG.
+        The default value for this property is an empty string."""),
 
     Content(
         RowsetDefinition.Type.ENUM_STRING,
@@ -58,11 +60,12 @@ public enum PropertyDefinition {
         XmlaConstants.Access.Write,
         XmlaConstants.Content.DEFAULT.name(),
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-        "An enumerator that specifies what type of data is returned in the result set.\n"
-        + "None: Allows the structure of the command to be verified, but not executed. Analogous to using Prepare to check syntax, and so on.\n"
-        + "Schema: Contains the XML schema (which indicates column information, and so on) that relates to the requested query.\n"
-        + "Data: Contains only the data that was requested.\n"
-        + "SchemaData: Returns both the schema information as well as the data."),
+        """
+        An enumerator that specifies what type of data is returned in the result set.
+        None: Allows the structure of the command to be verified, but not executed. Analogous to using Prepare to check syntax, and so on.
+        Schema: Contains the XML schema (which indicates column information, and so on) that relates to the requested query.
+        Data: Contains only the data that was requested.
+        SchemaData: Returns both the schema information as well as the data."""),
 
     Cube(
         RowsetDefinition.Type.STRING,
@@ -115,10 +118,11 @@ public enum PropertyDefinition {
         XmlaConstants.Access.Write,
         "Native",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-        "Enumerator that determines the format of the returned result set. Values include:\n"
-        + "Tabular: a flat or hierarchical rowset. Similar to the XML RAW format in SQL. The Format property should be set to Tabular for OLE DB for Data Mining commands.\n"
-        + "Multidimensional: Indicates that the result set will use the MDDataSet format (Execute method only).\n"
-        + "Native: The client does not request a specific format, so the provider may return the format  appropriate to the query. (The actual result type is identified by namespace of the result.)"),
+        """
+        Enumerator that determines the format of the returned result set. Values include:
+        Tabular: a flat or hierarchical rowset. Similar to the XML RAW format in SQL. The Format property should be set to Tabular for OLE DB for Data Mining commands.
+        Multidimensional: Indicates that the result set will use the MDDataSet format (Execute method only).
+        Native: The client does not request a specific format, so the provider may return the format  appropriate to the query. (The actual result type is identified by namespace of the result.)"""),
 
     LocaleIdentifier(
         RowsetDefinition.Type.UNSIGNED_INTEGER,
@@ -126,9 +130,11 @@ public enum PropertyDefinition {
         XmlaConstants.Access.ReadWrite,
         "None",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-        "Use this to read or set the numeric locale identifier for this request. The default is provider-specific.\n"
-        + "For the complete hexadecimal list of language identifiers, search on \"Language Identifiers\" in the MSDN Library at http://www.msdn.microsoft.com.\n"
-        + "As an extension to the XMLA standard, Mondrian also allows locale codes as specified by ISO-639 and ISO-3166 and as used by Java; for example 'en-US'.\n"),
+        """
+        Use this to read or set the numeric locale identifier for this request. The default is provider-specific.
+        For the complete hexadecimal list of language identifiers, search on "Language Identifiers" in the MSDN Library at http://www.msdn.microsoft.com.
+        As an extension to the XMLA standard, Mondrian also allows locale codes as specified by ISO-639 and ISO-3166 and as used by Java; for example 'en-US'.
+        """),
 
     MDXSupport(
         RowsetDefinition.Type.ENUM_STRING,
@@ -184,9 +190,10 @@ public enum PropertyDefinition {
         XmlaConstants.Access.Read,
         "None",
         XmlaConstants.Method.DISCOVER,
-        "Property that specifies the degree of support in the provider for state. For information about state in XML for Analysis, see \"Support for Statefulness in XML for Analysis.\" Minimum enumeration values are as follows:\n"
-        + "None - No support for sessions or stateful operations.\n"
-        + "Sessions - Provider supports sessions."),
+        """
+        Property that specifies the degree of support in the provider for state. For information about state in XML for Analysis, see "Support for Statefulness in XML for Analysis." Minimum enumeration values are as follows:
+        None - No support for sessions or stateful operations.
+        Sessions - Provider supports sessions."""),
 
     Timeout(
         RowsetDefinition.Type.UNSIGNED_INTEGER,

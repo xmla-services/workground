@@ -129,6 +129,7 @@ import mondrian.xmla.impl.DefaultSaxWriter;
  * @since 27 April, 2003
  */
 public class XmlaHandler {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlaHandler.class);
 
     /**
@@ -147,6 +148,9 @@ public class XmlaHandler {
      * driver that supports i18n to use this property name.
      */
     public static final String JDBC_LOCALE = "locale";
+    public static final String SESSION_ID = "sessionId";
+    public static final String CANCELED = "CANCELED";
+    public static final String CODE3238658121 = "3238658121";
 
     final ConnectionFactory connectionFactory;
     private final String prefix;
@@ -216,7 +220,7 @@ public class XmlaHandler {
         LOGGER.debug(msg);
 
         Properties props = new Properties();
-        props.put("sessionId", sessionId);
+        props.put(SESSION_ID, sessionId);
         for (Map.Entry<String, String> entry : propMap.entrySet()) {
             props.put(entry.getKey(), entry.getValue());
         }
@@ -439,7 +443,7 @@ public class XmlaHandler {
                     } else if (inputValue instanceof Float f) {
                         // See if it can be an integer or long
                         long lval = f.longValue();
-                        if (f.equals(new Float(lval))) {
+                        if (f.equals(Float.valueOf(lval))) {
                             // It can be converted from double to long
                             // without loss of precision.
                             setValueAndType(lval);
@@ -809,11 +813,11 @@ public class XmlaHandler {
     private ArrayList<XmlaRequest> currentRequests = new ArrayList<>();
 
     private void checkedCanceled(XmlaRequest request) {
-        String canceled = request.getProperties().get("CANCELED");
+        String canceled = request.getProperties().get(CANCELED);
         if(canceled != null && canceled.equals("true")) {
             throw new XmlaException(
                     CLIENT_FAULT_FC,
-                    "3238658121",
+                    CODE3238658121,
                     "",
                     new Exception("The query was canceled by user.")
             );
@@ -850,41 +854,41 @@ public class XmlaHandler {
 
         try {
 
-            if(defaultXmlaRequest.getCommand().toUpperCase().equals("CANCEL")){
+            if(defaultXmlaRequest.getCommand().equalsIgnoreCase("CANCEL")){
                 try {
                     final OlapConnection connection1 = getConnection(request, Collections.<String, String>emptyMap());
                     final mondrian.rolap.RolapConnection rolapConnection1 =
                             ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
 
                     for(XmlaRequest xmlaRequest: currentRequests){
-                        if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
-                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                        if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get(SESSION_ID))){
+                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED, "true");
                         }
                     }
 
                     mondrian.olap.MondrianServer mondrianServer =
                             mondrian.olap.MondrianServer.forConnection(rolapConnection1);
-                    String sessionId = rolapConnection1.getConnectInfo().get("sessionId");
+                    String sessionId = rolapConnection1.getConnectInfo().get(SESSION_ID);
                     for(mondrian.server.Statement statement: mondrianServer.getStatements(sessionId)) {
-                        if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                        if(statement.getMondrianConnection().getConnectInfo().get(SESSION_ID).equals(rolapConnection1.getConnectInfo().get(SESSION_ID))){
                             statement.cancel();
                         }
                     }
                     for(XmlaRequest xmlaRequest: currentRequests){
                         if(xmlaRequest.getSessionId().equals(sessionId)){
-                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty(CANCELED, "true");
                         }
                     }
                 } catch (org.olap4j.OlapException oe) {
                     throw new XmlaException(
                             CLIENT_FAULT_FC,
-                            "3238658121",
+                            CODE3238658121,
                             USM_DOM_PARSE_FAULT_FS,
                             oe);
                 } catch (java.sql.SQLException oe) {
                     throw new XmlaException(
                             CLIENT_FAULT_FC,
-                            "3238658121",
+                            CODE3238658121,
                             USM_DOM_PARSE_FAULT_FS,
                             oe);
                 }
@@ -945,13 +949,13 @@ public class XmlaHandler {
                     } catch (org.olap4j.OlapException oe) {
                         throw new XmlaException(
                                 CLIENT_FAULT_FC,
-                                "3238658121",
+                                CODE3238658121,
                                 USM_DOM_PARSE_FAULT_FS,
                                 oe);
                     } catch (java.io.IOException e) {
                         throw new XmlaException(
                                 CLIENT_FAULT_FC,
-                                "3238658121",
+                                CODE3238658121,
                                 USM_DOM_PARSE_FAULT_FS,
                                 e);
                     }
@@ -1113,23 +1117,10 @@ public class XmlaHandler {
                     "xmlns:xsd", NS_XSD,
                     "xmlns:EX", NS_XMLA_EX);
 
-            switch (content) {
-                case Schema:
-                case SchemaData:
-                    if (result != null) {
-                        result.metadata(writer);
-                    }
-                /*
-                //Galaktika: Do not write schema for NS_XMLA_EMPTY
-                else {
-                    if (rowset) {
-                        writer.verbatim(EMPTY_ROW_SET_XML_SCHEMA);
-                    } else {
-                        writer.verbatim(EMPTY_MD_DATA_SET_XML_SCHEMA);
-                    }
+            if (Content.Schema.equals(content) || Content.SchemaData.equals(content))  {
+                if (result != null) {
+                    result.metadata(writer);
                 }
-                */
-                    break;
             }
 
             try {
@@ -1161,7 +1152,7 @@ public class XmlaHandler {
         } catch (org.olap4j.OlapException oe) {
             throw new XmlaException(
                     CLIENT_FAULT_FC,
-                    "3238658121",
+                    CODE3238658121,
                     USM_DOM_PARSE_FAULT_FS,
                     oe);
         } finally {
@@ -2177,16 +2168,17 @@ public class XmlaHandler {
             public String getXsdType() {return this.xsdType; }
         }
 
-        protected static Map<String, CellProperty> cellPropertyMap =new HashMap<>() {{
-            put("CELL_ORDINAL", new CellProperty("CELL_ORDINAL", "CellOrdinal", "xsd:unsignedInt"));
-            put("VALUE", new CellProperty("VALUE", "Value", null));
-            put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
-            put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
-            put("LANGUAGE", new CellProperty("LANGUAGE", "Language", "xsd:unsignedInt"));
-            put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", "xsd:unsignedInt"));
-            put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", "xsd:unsignedInt"));
-            put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
-        }};
+        protected static Map<String, CellProperty> cellPropertyMap =new HashMap<>();
+        static {
+            cellPropertyMap.put("CELL_ORDINAL", new CellProperty("CELL_ORDINAL", "CellOrdinal", "xsd:unsignedInt"));
+            cellPropertyMap.put("VALUE", new CellProperty("VALUE", "Value", null));
+            cellPropertyMap.put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
+            cellPropertyMap.put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
+            cellPropertyMap.put("LANGUAGE", new CellProperty("LANGUAGE", "Language", "xsd:unsignedInt"));
+            cellPropertyMap.put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", "xsd:unsignedInt"));
+            cellPropertyMap.put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", "xsd:unsignedInt"));
+            cellPropertyMap.put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
+        }
 
         protected static final List<Property> defaultProps =
             Arrays.asList(
@@ -2301,7 +2293,7 @@ public class XmlaHandler {
                         mondrian.olap.Util.parseIdentifier(cellProperty.toString()).get(0)).name;
                 queryCellPropertyNames.add(propertyName);
             }
-            if(queryCellPropertyNames.size() == 0) {
+            if(queryCellPropertyNames.isEmpty()) {
                 queryCellPropertyNames.add("VALUE");
                 queryCellPropertyNames.add("FORMATTED_VALUE");
             }
@@ -2711,7 +2703,7 @@ public class XmlaHandler {
                 Level level = entry.getKey();
                 ArrayList<org.eclipse.daanse.olap.api.model.Member> members = entry.getValue();
 
-                if (members.size() > 0
+                if (!members.isEmpty()
                         && members.get(0).getLevel().getChildLevel() != null
                         && !members.get(0).getLevel().isAll()) {
                     Locus.execute(
@@ -3164,7 +3156,7 @@ public class XmlaHandler {
             int dimensionCount = 0;
             for (int i = axes.size() - 1; i > 0; i--) {
                 CellSetAxis axis = axes.get(i);
-                if (axis.getPositions().size() == 0) {
+                if (axis.getPositions().isEmpty()) {
                     // If any axis is empty, the whole data set is empty.
                     empty = true;
                     continue;
@@ -3203,7 +3195,7 @@ public class XmlaHandler {
                     // properties.
                     List<Property> dimProps =
                         axis.getAxisMetaData().getProperties();
-                    if (dimProps.size() == 0) {
+                    if (dimProps.isEmpty()) {
                         dimProps = MemberCaptionIdArray;
                     }
                     for (int j = z0; j < memberOrdinal; j++) {
@@ -3226,7 +3218,7 @@ public class XmlaHandler {
             this.members = new Member[memberOrdinal + 1];
 
             // Deduce the list of column headings.
-            if (axes.size() > 0) {
+            if (!axes.isEmpty()) {
                 CellSetAxis columnsAxis = axes.get(0);
                 for (Position position : columnsAxis.getPositions()) {
                     String name = null;
@@ -3839,7 +3831,7 @@ public class XmlaHandler {
          * @param level
          * @return String|Numeric|Integer|Boolean|Date|Time|Timestamp
          */
-        default public String getLevelDataType( Level level ) {
+        default String getLevelDataType( Level level ) {
           return null;
         }
 
@@ -3982,10 +3974,10 @@ public class XmlaHandler {
         @Override
 		public boolean isPropertyInternal(Property property) {
             return
-                property instanceof Property.StandardMemberProperty
-                && ((Property.StandardMemberProperty) property).isInternal()
-                || property instanceof Property.StandardCellProperty
-                && ((Property.StandardCellProperty) property).isInternal();
+                property instanceof Property.StandardMemberProperty standardMemberProperty
+                && standardMemberProperty.isInternal()
+                || property instanceof Property.StandardCellProperty standardCellProperty
+                && standardCellProperty.isInternal();
         }
 
         @Override

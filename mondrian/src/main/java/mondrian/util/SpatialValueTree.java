@@ -110,6 +110,11 @@ public interface SpatialValueTree
 			public int hashCode() {
                 return 42;
             }
+
+            @Override
+            public boolean equals(Object obj) {
+                return super.equals(obj);
+            }
         };
 
     /**
