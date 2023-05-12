@@ -1322,6 +1322,8 @@ public class Format {
             case LOWER:
                 s = s.toLowerCase();
                 break;
+            default:
+                break;
             }
             buf.append(s);
         }

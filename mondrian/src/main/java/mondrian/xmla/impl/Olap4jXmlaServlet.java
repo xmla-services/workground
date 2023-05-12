@@ -100,13 +100,10 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
                 Method unwrapMethod = wrapperClass.getMethod("unwrap");
                 return clazz.cast(unwrapMethod.invoke(connection, clazz));
             }
-        } catch (ClassNotFoundException e) {
-            // ignore
-        } catch (NoSuchMethodException e) {
-            // ignore
-        } catch (InvocationTargetException e) {
-            // ignore
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException
+            | NoSuchMethodException
+            | InvocationTargetException
+            | IllegalAccessException e) {
             // ignore
         }
         if (connection instanceof OlapWrapper olapWrapper) {

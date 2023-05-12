@@ -324,21 +324,23 @@ public interface XmlaConstants {
     // is a better term
     public static final String UNKNOWN_ERROR_FAULT_FS = "Internal Error";
 
+    String NUMBERS = "0123456789";
+
     public enum Literal implements XmlaConstant {
         CATALOG_NAME(
-                2, null, 24, ".", "0123456789", 2,
+                2, null, 24, ".", NUMBERS, 2,
                 "A catalog name in a text command."),
         CATALOG_SEPARATOR(3, ".", 0, null, null, 3, null),
-        COLUMN_ALIAS(5, null, -1, "'\"[]", "0123456789", 5, null),
-        COLUMN_NAME(6, null, -1, ".", "0123456789", 6, null),
-        CORRELATION_NAME(7, null, -1, "'\"[]", "0123456789", 7, null),
-        CUBE_NAME(21, null, -1, ".", "0123456789", 21, null),
-        DIMENSION_NAME(22, null, -1, ".", "0123456789", 22, null),
-        HIERARCHY_NAME(23, null, -1, ".", "0123456789", 23, null),
-        LEVEL_NAME(24, null, -1, ".", "0123456789", 24, null),
-        MEMBER_NAME(25, null, -1, ".", "0123456789", 25, null),
-        PROCEDURE_NAME(14, null, -1, ".", "0123456789", 14, null),
-        PROPERTY_NAME(26, null, -1, ".", "0123456789", 26, null),
+        COLUMN_ALIAS(5, null, -1, "'\"[]", NUMBERS, 5, null),
+        COLUMN_NAME(6, null, -1, ".", NUMBERS, 6, null),
+        CORRELATION_NAME(7, null, -1, "'\"[]", NUMBERS, 7, null),
+        CUBE_NAME(21, null, -1, ".", NUMBERS, 21, null),
+        DIMENSION_NAME(22, null, -1, ".", NUMBERS, 22, null),
+        HIERARCHY_NAME(23, null, -1, ".", NUMBERS, 23, null),
+        LEVEL_NAME(24, null, -1, ".", NUMBERS, 24, null),
+        MEMBER_NAME(25, null, -1, ".", NUMBERS, 25, null),
+        PROCEDURE_NAME(14, null, -1, ".", NUMBERS, 14, null),
+        PROPERTY_NAME(26, null, -1, ".", NUMBERS, 26, null),
         QUOTE(
                 15, "[", -1, null, null, 15,
                 "The character used in a text command as the opening quote for "
@@ -350,7 +352,7 @@ public interface XmlaConstants {
                         + "providers that use the same character as the prefix and suffix "
                         + "may not return this literal value and can set the lt member of "
                         + "the DBLITERAL structure to DBLITERAL_INVALID if requested."),
-        TABLE_NAME(17, null, -1, ".", "0123456789", 17, null),
+        TABLE_NAME(17, null, -1, ".", NUMBERS, 17, null),
         TEXT_COMMAND(
                 18, null, -1, null, null, 18,
                 "A text command, such as an SQL statement."),

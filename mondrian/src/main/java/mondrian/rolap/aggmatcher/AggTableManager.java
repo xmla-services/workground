@@ -181,6 +181,7 @@ public class AggTableManager {
      *
      * @throws SQLException
      */
+    @SuppressWarnings({"java:S1143", "java:S1163"}) // throw exception in final
     private void loadRolapStarAggregates(
         PropertyList connectInfo)
         throws SQLException
@@ -201,7 +202,6 @@ public class AggTableManager {
                 // loads tables, not their columns
                 db.load(connectInfo);
 
-                loop:
                 for (RolapStar star : getStars()) {
                     // This removes any AggStars from any previous invocation of
                     // this method (if any)
@@ -219,14 +219,14 @@ public class AggTableManager {
                         msgRecorder.reportWarning(
                             "No Table found for fact name="
                                 + factTableName);
-                        continue loop;
+                        continue;
                     }
 
                     // For each column in the dbFactTable, figure out it they
                     // are measure or foreign key columns
 
                     bindToStar(dbFactTable, star, msgRecorder);
-                    String schema = dbFactTable.table.schema();
+                    String schemaInner = dbFactTable.table.schema();
 
                     // Now look at all tables in the database and per table,
                     // first see if it is a match for an aggregate table for
@@ -264,27 +264,24 @@ public class AggTableManager {
                                 msgRecorder);
                             approxRowCount = tableDef.getApproxRowCount();
                         }
+                        // Is it handled by the DefaultRules
                         if (! makeAggStar
-                            && MondrianProperties
-                            .instance().ReadAggregates.get())
-                        {
-                            // Is it handled by the DefaultRules
-                            if (rules.matchesTableName(factTableName, name)) {
-                                // load columns
-                                dbTable.load();
-                                makeAggStar = rules.columnsOK(
-                                    star,
-                                    dbFactTable,
-                                    dbTable,
-                                    msgRecorder);
-                            }
+                            && MondrianProperties.instance().ReadAggregates.get()
+                            && rules.matchesTableName(factTableName, name)) {
+                            // load columns
+                            dbTable.load();
+                            makeAggStar = rules.columnsOK(
+                                star,
+                                dbFactTable,
+                                dbTable,
+                                msgRecorder);
                         }
 
                         if (makeAggStar) {
                             dbTable.setTableUsageType(
                                 JdbcSchema.TableUsageType.AGG);
                             dbTable.table = new TableR(
-                                schema,
+                                schemaInner,
                                 name,
                                 null, // null alias
                                 null); // don't know about table hints
@@ -295,10 +292,10 @@ public class AggTableManager {
                             if (aggStar.getSize() > 0) {
                                 star.addAggStar(aggStar);
                             } else {
-                                getLogger().warn(
-                                    mres.AggTableZeroSize.str(
-                                        aggStar.getFactTable().getName(),
-                                        factTableName));
+                                String msg = mres.AggTableZeroSize.str(
+                                    aggStar.getFactTable().getName(),
+                                    factTableName);
+                                getLogger().warn(msg);
                             }
                         }
                         // Note: if the dbTable name matches but the columnsOK

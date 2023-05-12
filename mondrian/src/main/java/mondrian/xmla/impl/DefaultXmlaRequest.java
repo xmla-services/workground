@@ -40,10 +40,13 @@ import mondrian.xmla.XmlaUtil;
 public class DefaultXmlaRequest
     implements XmlaRequest, XmlaConstants
 {
+
     private static final Logger LOGGER =
         LoggerFactory.getLogger(DefaultXmlaRequest.class);
 
     private static final String MSG_INVALID_XMLA = "Invalid XML/A message";
+    public static final String KEY = " key=\"";
+    public static final String VALUE = "\", value=\"";
 
     /* common content */
     private Method method;
@@ -314,7 +317,7 @@ public class DefaultXmlaRequest
     private void initRestrictions(Element restrictionsRoot)
         throws XmlaException
     {
-        Map<String, List<String>> restrictions =
+        Map<String, List<String>> restrictionsInner =
             new HashMap<>();
         Element[] childElems =
             XmlaUtil.filterChildElements(
@@ -325,39 +328,37 @@ public class DefaultXmlaRequest
             NodeList nlst = childElems[0].getChildNodes();
             for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
                 Node n = nlst.item(i);
-                if (n instanceof Element e) {
-                    if (NS_XMLA.equals(e.getNamespaceURI())) {
-                        String key = e.getLocalName();
+                if (n instanceof Element e && NS_XMLA.equals(e.getNamespaceURI())) {
+                    String key = e.getLocalName();
 
-                        List<String> values;
-                        if (restrictions.containsKey(key)) {
-                            values = restrictions.get(key);
+                    List<String> values;
+                    if (restrictionsInner.containsKey(key)) {
+                        values = restrictionsInner.get(key);
+                    } else {
+                        values = new ArrayList<>();
+                        restrictionsInner.put(key, values);
+                    }
+
+                    NodeList propertyValues = e.getChildNodes();
+                    for (int j = 0, pvlen = propertyValues.getLength(); j < pvlen; j++) {
+                        String value = "";
+                        Node vn = propertyValues.item(j);
+                        if (vn instanceof Element ve) {
+                            value = XmlaUtil.textInElement(ve);
                         } else {
-                            values = new ArrayList<>();
-                            restrictions.put(key, values);
+                            value = XmlaUtil.textInElement(e);
+                        }
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug(
+                                new StringBuilder("DefaultXmlaRequest.initRestrictions: ")
+                                    .append(KEY)
+                                    .append(key)
+                                    .append(VALUE)
+                                    .append(value)
+                                    .append("\"").toString());
                         }
 
-                        NodeList propertyValues = e.getChildNodes();
-                        for (int j = 0, pvlen = propertyValues.getLength(); j < pvlen; j++) {
-                            String value = "";
-                            Node vn = propertyValues.item(j);
-                            if (vn instanceof Element ve) {
-                                value = XmlaUtil.textInElement(ve);
-                            } else {
-                                value = XmlaUtil.textInElement(e);
-                            }
-                            if (LOGGER.isDebugEnabled()) {
-                                LOGGER.debug(
-                                        new StringBuilder("DefaultXmlaRequest.initRestrictions: ")
-                                            .append(" key=\"")
-                                            .append(key)
-                                            .append("\", value=\"")
-                                            .append(value)
-                                            .append("\"").toString());
-                            }
-
-                            values.add(value);
-                        }
+                        values.add(value);
                     }
                 }
             }
@@ -380,28 +381,28 @@ public class DefaultXmlaRequest
                 .Literal.CATALOG_NAME.name();
 
         if (this.properties.containsKey(key)
-            && !restrictions.containsKey(key))
+            && !restrictionsInner.containsKey(key))
         {
             List<String> values;
             values = new ArrayList<>();
-            restrictions.put(this.properties.get(key), values);
+            restrictionsInner.put(this.properties.get(key), values);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                     new StringBuilder("DefaultXmlaRequest.initRestrictions: ")
-                        .append(" key=\"")
+                        .append(KEY)
                         .append(key)
-                        .append("\", value=\"")
+                        .append(VALUE)
                         .append(this.properties.get(key))
                         .append("\"").toString());
             }
         }
 
-        this.restrictions = (Map) Collections.unmodifiableMap(restrictions);
+        this.restrictions = (Map) Collections.unmodifiableMap(restrictionsInner);
     }
 
     private void initProperties(Element propertiesRoot) throws XmlaException {
-        Map<String, String> properties = new HashMap<>();
+        Map<String, String> propertiesInner = new HashMap<>();
         Element[] childElems =
             XmlaUtil.filterChildElements(
                 propertiesRoot,
@@ -411,23 +412,21 @@ public class DefaultXmlaRequest
             NodeList nlst = childElems[0].getChildNodes();
             for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
                 Node n = nlst.item(i);
-                if (n instanceof Element e) {
-                    if (NS_XMLA.equals(e.getNamespaceURI())) {
-                        String key = e.getLocalName();
-                        String value = XmlaUtil.textInElement(e);
+                if (n instanceof Element e && NS_XMLA.equals(e.getNamespaceURI())) {
+                    String key = e.getLocalName();
+                    String value = XmlaUtil.textInElement(e);
 
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug(
-                                new StringBuilder("DefaultXmlaRequest.initProperties: ")
-                                    .append(" key=\"")
-                                    .append(key)
-                                    .append("\", value=\"")
-                                    .append(value)
-                                    .append("\"").toString());
-                        }
-
-                        properties.put(key, value);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(
+                            new StringBuilder("DefaultXmlaRequest.initProperties: ")
+                                .append(KEY)
+                                .append(key)
+                                .append(VALUE)
+                                .append(value)
+                                .append("\"").toString());
                     }
+
+                    propertiesInner.put(key, value);
                 }
             }
         } else if (childElems.length > 1) {
@@ -440,22 +439,21 @@ public class DefaultXmlaRequest
                 HSB_BAD_PROPERTIES_LIST_CODE,
                 HSB_BAD_PROPERTIES_LIST_FAULT_FS,
                 Util.newError(buf.toString()));
-        } else {
         }
-        this.properties = Collections.unmodifiableMap(properties);
+        this.properties = Collections.unmodifiableMap(propertiesInner);
     }
 
     private void initParameters(Element parameterElement) throws XmlaException {
-        Map<String, String> parameters = new HashMap<>();
+        Map<String, String> parametersInner = new HashMap<>();
 
         NodeList nlst = parameterElement.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
             Node n = nlst.item(i);
-            if (n instanceof Element) {
+            if (n instanceof Element element) {
                 String name = null;
                 Element[] nameElems =
                         XmlaUtil.filterChildElements(
-                                (Element)n,
+                                element,
                                 NS_XMLA,
                                 "Name");
                 if(nameElems.length > 0) {
@@ -472,11 +470,11 @@ public class DefaultXmlaRequest
                         value = XmlaUtil.textInElement(valueElems[0]);
                     }
 
-                    parameters.put(name, value);
+                    parametersInner.put(name, value);
                 }
             }
         }
-        this.parameters = Collections.unmodifiableMap(parameters);
+        this.parameters = Collections.unmodifiableMap(parametersInner);
     }
 
 
@@ -499,11 +497,11 @@ public class DefaultXmlaRequest
         }
         else {
             command = commandElements[0].getLocalName();
-            if(command != null && command.toUpperCase().equals("STATEMENT")) {
+            if(command != null && command.equalsIgnoreCase("STATEMENT")) {
                 statement = XmlaUtil.textInElement(commandElements[0]).replaceAll("\\r", "");
                 drillthrough = statement.toUpperCase().indexOf("DRILLTHROUGH") != -1;
             }
-            else if(command != null && command.toUpperCase().equals("ALTER")) {
+            else if(command != null && command.equalsIgnoreCase("ALTER")) {
                 Element[] objectElements =
                         XmlaUtil.filterChildElements(
                                 commandElements[0],
@@ -566,10 +564,7 @@ public class DefaultXmlaRequest
                     this.objectDefinition = XmlaUtil.textInElement(objectDefinitionElements[0]);
                 }
             }
-            else if(command != null && command.toUpperCase().equals("CANCEL")) {
-                ;
-            }
-            else {
+            else if(!(command != null && command.equalsIgnoreCase("CANCEL"))) {
                 StringBuilder buf = new StringBuilder(100);
                 buf.append(MSG_INVALID_XMLA);
                 buf.append(": Wrong child of Command elements: ");

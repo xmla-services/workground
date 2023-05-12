@@ -73,16 +73,19 @@ class JsonSaxWriter implements SaxWriter {
             name = subName;
         }
         if (stack.peek().name != null) {
-            assert name.equals(stack.peek().name)
-                : new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
-                  .append(name).append("]").toString();
+            if (!name.equals(stack.peek().name)) {
+                throw new IllegalArgumentException(new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
+                    .append(name).append("]").toString());
+            }
             buf.append("[");
         } else {
             Util.quoteForMdx(buf, name);
             buf.append(": [");
         }
 
-        assert subName != null;
+        if (subName == null) {
+            throw new IllegalArgumentException("subName should not be null");
+        }
         stack.push(new Frame(subName));
         indent();
     }
@@ -103,9 +106,10 @@ class JsonSaxWriter implements SaxWriter {
         comma();
         buf.append(indentString);
         if (stack.peek().name != null) {
-            assert name.equals(stack.peek().name)
-                : new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
-                  .append(name).append("]").toString();
+            if (!name.equals(stack.peek().name)) {
+                throw new IllegalArgumentException(new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
+                    .append(name).append("]").toString());
+            }
             buf.append("{");
         } else {
             Util.quoteForMdx(buf, name);

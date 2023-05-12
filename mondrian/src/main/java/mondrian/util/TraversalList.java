@@ -14,6 +14,7 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import mondrian.olap.Util;
 
@@ -61,6 +62,9 @@ public class TraversalList<T> extends UnsupportedList<List<T>> {
 
             @Override
 			public List<T> next() {
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
                 if (precalculated != null) {
                     final List<T> t = precalculated;
                     precalculated = null;

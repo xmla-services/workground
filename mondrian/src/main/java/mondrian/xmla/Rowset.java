@@ -111,7 +111,7 @@ abstract class Rowset implements XmlaConstants {
             list.add(column);
         }
         list = pruneRestrictions(list);
-        boolean deep = false;
+        boolean deepInner = false;
         for (Map.Entry<String, String> propertyEntry : properties.entrySet()) {
             String propertyName = propertyEntry.getKey();
             final PropertyDefinition propertyDef =
@@ -124,10 +124,10 @@ abstract class Rowset implements XmlaConstants {
             final String propertyValue = propertyEntry.getValue();
             setProperty(propertyDef, propertyValue);
             if (propertyDef == PropertyDefinition.Deep) {
-                deep = Boolean.valueOf(propertyValue);
+                deepInner = Boolean.valueOf(propertyValue);
             }
         }
-        this.deep = deep;
+        this.deep = deepInner;
     }
 
     protected ArrayList<RowsetDefinition.Column> pruneRestrictions(
@@ -482,9 +482,9 @@ abstract class Rowset implements XmlaConstants {
     }
 
     protected Predicate<Catalog> catNameCond() {
-        Map<String, String> properties = request.getProperties();
+        Map<String, String> propertiesInner = request.getProperties();
         final String catalogName =
-            properties.get(PropertyDefinition.Catalog.name());
+            propertiesInner.get(PropertyDefinition.Catalog.name());
         if (catalogName != null) {
             return new Predicate<>() {
                 @Override
