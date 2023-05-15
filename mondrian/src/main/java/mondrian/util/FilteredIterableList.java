@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Iterable list which filters undesirable elements.
@@ -112,6 +113,9 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
                     }
                     @Override
 					public T next() {
+                        if(!hasNext()){
+                            throw new NoSuchElementException();
+                        }
                         idx++;
                         final T n = nxt;
                         cached.put(idx - 1, n);

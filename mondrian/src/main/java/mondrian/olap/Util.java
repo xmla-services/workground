@@ -208,6 +208,7 @@ public class Util extends XOMUtil {
      * things are available via {@link mondrian.util.UtilCompatible}.
      * Retroweaver has some problems involving {@link java.util.EnumSet}.
      */
+    @SuppressWarnings("java:S1872")
     public static final boolean RETROWOVEN =
         Access.class.getSuperclass().getName().equals(
             "net.sourceforge.retroweaver.runtime.java.lang.Enum");
@@ -1215,7 +1216,7 @@ public class Util extends XOMUtil {
     public static Random createRandom(long seed) {
         if (seed == 0) {
             seed = random.nextLong();
-            LOGGER.debug("random: seed=" + seed);
+            LOGGER.debug("random: seed={}", seed);
         } else if (seed == -1 && metaRandom != null) {
             seed = metaRandom.nextLong();
         }
@@ -1542,7 +1543,9 @@ public class Util extends XOMUtil {
         int maxLength,
         Collection<String> nameList)
     {
-        assert name != null;
+        if (name == null) {
+            throw new IllegalArgumentException("name should be not null");
+        }
         if (name.length() > maxLength) {
             name = name.substring(0, maxLength);
         }
@@ -4298,18 +4301,18 @@ public class Util extends XOMUtil {
             return -1;
         }
         private int[] compile(byte[] key) {
-            int[] matcher = new int[key.length];
+            int[] matcherInner = new int[key.length];
             int j = 0;
             for (int i = 1; i < key.length; i++) {
                 while (j > 0 && key[j] != key[i]) {
-                    j = matcher[j - 1];
+                    j = matcherInner[j - 1];
                 }
                 if (key[i] == key[j]) {
                     j++;
                 }
-                matcher[i] = j;
+                matcherInner[i] = j;
             }
-            return matcher;
+            return matcherInner;
         }
     }
 

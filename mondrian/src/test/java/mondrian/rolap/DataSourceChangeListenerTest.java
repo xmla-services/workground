@@ -11,7 +11,7 @@
 package mondrian.rolap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
@@ -133,7 +133,7 @@ class DataSourceChangeListenerTest {
             sqlLogger.clear();
             // s1 should not be empty
 
-            assertFalse("[]".equals(s1));
+            assertNotEquals("[]", s1);
 
             // Run query again, to make sure only cache is used
             Result r2 = executeQuery(connection,
@@ -170,7 +170,7 @@ class DataSourceChangeListenerTest {
             s4 = sqlLogger.getSqlQueries().toString();
 
             sqlLogger.clear();
-            assertFalse("[]".equals(s4));
+            assertNotEquals("[]", s4);
 
             // Attach dummy change listener that tells mondrian the
             // datasource is always changed.
@@ -224,7 +224,7 @@ class DataSourceChangeListenerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void dont_testParallelDataSourceChangeListenerPlugin(TestingContext context) {
+    void dont_testParallelDataSourceChangeListenerPlugin(TestingContext context) {
         if (true) {
             return;
         }
@@ -243,8 +243,7 @@ class DataSourceChangeListenerTest {
      * @param workerCount Number of worker threads
      * @param cycleCount Number of cycles each thread should perform
      */
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @SuppressWarnings("java:S2925")
     private void checkCacheFlushing(TestingContext context,
         final int workerCount,
         final int cycleCount)

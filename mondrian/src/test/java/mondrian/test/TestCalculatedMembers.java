@@ -12,6 +12,7 @@
 package mondrian.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.assertExprReturns;
 import static org.opencube.junit5.TestUtil.assertExprThrows;
@@ -53,7 +54,7 @@ import mondrian.rolap.BatchTestCase;
  * @author jhyde
  * @since 5 October, 2002
  */
-public class TestCalculatedMembers extends BatchTestCase {
+ class TestCalculatedMembers extends BatchTestCase {
 
     private PropertySaver5 propSaver;
 
@@ -69,7 +70,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberInCube(TestingContext context) {
+     void testCalculatedMemberInCube(TestingContext context) {
         assertExprReturns(context.createConnection(), "[Measures].[Profit]", "$339,610.90");
 
         // Testcase for bug 829012.
@@ -91,7 +92,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberInCubeViaApi(TestingContext context) {
+     void testCalculatedMemberInCubeViaApi(TestingContext context) {
         Cube salesCube = getSalesCube(context.createConnection(), "Sales");
         salesCube.createCalculatedMember(
             "<CalculatedMember name='Profit2'"
@@ -126,7 +127,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberInCubeWithSpace(TestingContext context) {
+     void testCalculatedMemberInCubeWithSpace(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null,
@@ -140,7 +141,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberInCubeWithProps(TestingContext context) {
+     void testCalculatedMemberInCubeWithProps(TestingContext context) {
         Cube salesCube = getSalesCube(context.createConnection(), "Sales");
 
         // member with a property
@@ -231,8 +232,6 @@ public class TestCalculatedMembers extends BatchTestCase {
         assertEquals("339,610.90", s);
     }
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     private Cube getSalesCube(Connection connection, String cubeName) {
         Cube[] cubes = connection.getSchema().getSchemaReader().getCubes();
         for (Cube cube : cubes) {
@@ -245,7 +244,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberInCubeAndQuery(TestingContext context) {
+     void testCalculatedMemberInCubeAndQuery(TestingContext context) {
         // Profit is defined in the cube.
         // Profit Change is defined in the query.
         assertQueryReturns(context.createConnection(),
@@ -273,7 +272,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQueryCalculatedMemberOverridesCube(TestingContext context) {
+     void testQueryCalculatedMemberOverridesCube(TestingContext context) {
         // Profit is defined in the cube, and has a format string "$#,###".
         // We define it in a query to make sure that the format string in the
         // cube doesn't change.
@@ -308,7 +307,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQueryCalcMemberOverridesShallowerStoredMember(TestingContext context) {
+     void testQueryCalcMemberOverridesShallowerStoredMember(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
             return;
@@ -345,7 +344,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testEarlierCalcMember(TestingContext context) {
+     void testEarlierCalcMember(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // functionality requires new name resolver
             return;
@@ -368,7 +367,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testWhole(TestingContext context) {
+     void _testWhole(TestingContext context) {
         // "allmembers" tests compatibility with MSAS
 
         executeQuery(
@@ -451,7 +450,7 @@ public class TestCalculatedMembers extends BatchTestCase {
             + " from Sales", context.createConnection());
 
         // Repeat time-related measures with more time members.
-        executeQuery(
+        Result result = executeQuery(
             "with\n"
             + "member [Measures].[Total Store Sales, Quarter to date] as\n"
             + " 'sum(PeriodsToDate([Time].[Quarter]), [Measures].[Store Sales])'\n"
@@ -475,11 +474,12 @@ public class TestCalculatedMembers extends BatchTestCase {
             + "  [Time].[Month].members) on columns,\n"
             + " AddCalculatedMembers([Measures].members) on rows\n"
             + " from Sales", context.createConnection());
+        assertNotNull(result);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberCaption(TestingContext context) {
+     void testCalculatedMemberCaption(TestingContext context) {
         String mdx =
             "select {[Measures].[Profit Growth]} on columns from Sales";
         Result result = executeQuery(mdx, context.createConnection());
@@ -487,12 +487,12 @@ public class TestCalculatedMembers extends BatchTestCase {
         Position pos0 = axis0.getPositions().get(0);
         Member profGrowth = pos0.get(0);
         String caption = profGrowth.getCaption();
-        assertEquals(caption, "Gewinn-Wachstum");
+        assertEquals("Gewinn-Wachstum", caption );
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberIsSetFails(TestingContext context) {
+     void testCalcMemberIsSetFails(TestingContext context) {
         // A member which is a set, and more important, cannot be converted to
         // a value, is an error.
         String queryString =
@@ -564,7 +564,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBracketInCalcMemberName(TestingContext context) {
+     void testBracketInCalcMemberName(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[has a [bracket]] in it] as \n"
             + "' [Measures].CurrentMember.Name '\n"
@@ -583,7 +583,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNpeInIif(TestingContext context) {
+     void testNpeInIif(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Foo] AS ' 1 / [Measures].[Unit Sales] ',\n"
             + "  FORMAT_STRING=IIf([Measures].[Foo] < .3, \"|0.0|style=red\",\"0.0\")\n"
@@ -617,7 +617,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBracketInCubeCalcMemberName(TestingContext context) {
+     void testBracketInCubeCalcMemberName(TestingContext context) {
         final String cubeName = "Sales_BracketInCubeCalcMemberName";
         String s =
             "<Cube name=\"" + cubeName + "\">\n"
@@ -666,7 +666,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPropertyReferencesCalcMember(TestingContext context) {
+     void testPropertyReferencesCalcMember(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',"
             + " FORMAT_STRING=IIf([Measures].[Foo] < 600000, \"|#,##0|style=red\",\"#,##0\")  "
@@ -682,7 +682,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberWithQuote(TestingContext context) {
+     void testCalcMemberWithQuote(TestingContext context) {
         // MSAS ignores single-quotes
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as '1 + 2'\n"
@@ -824,7 +824,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQuoteInCalcMember(TestingContext context) {
+     void testQuoteInCalcMember(TestingContext context) {
         final String cubeName = "Sales_Bug1410383";
         String s =
                 "<Cube name=\"" + cubeName + "\">\n"
@@ -901,7 +901,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testChildrenOfCalcMembers(TestingContext context) {
+     void testChildrenOfCalcMembers(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Time].[Time].[# Months Product Sold] as 'Count(Descendants([Time].[Time].LastSibling, [Time].[Month]), EXCLUDEEMPTY)'\n"
             + "select Crossjoin([Time].[# Months Product Sold].Children,\n"
@@ -918,7 +918,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonCharacterMembers(TestingContext context) {
+     void testNonCharacterMembers(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Has Coffee Bar].[Maybe] as \n"
             + "'SUM([Has Coffee Bar].members)' \n"
@@ -936,7 +936,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFormatString(TestingContext context) {
+     void testFormatString(TestingContext context) {
         // Verify that
         // (a) a calculated member without a format string does not
         //     override the format string of a base measure
@@ -986,7 +986,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNegativeSolveOrder(TestingContext context) {
+     void testNegativeSolveOrder(TestingContext context) {
         // Negative solve orders are OK.
         assertQueryReturns(context.createConnection(),
             "with member measures.blah as 'measures.[unit sales]', SOLVE_ORDER = -6 select {measures.[unit sales], measures.blah} on 0 from sales",
@@ -1025,7 +1025,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInQuery(TestingContext context) {
+     void testCalcMemberCustomFormatterInQuery(TestingContext context) {
         // calc measure defined in query
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
@@ -1054,7 +1054,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInQueryNegative(TestingContext context) {
+     void testCalcMemberCustomFormatterInQueryNegative(TestingContext context) {
         assertQueryThrows(context,
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='mondrian.test.NonExistentCellFormatter' \n"
@@ -1066,7 +1066,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInQueryNegative2(TestingContext context) {
+     void testCalcMemberCustomFormatterInQueryNegative2(TestingContext context) {
         String query =
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='java.lang.String' \n"
@@ -1083,7 +1083,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInNonMeasureInQuery(TestingContext context) {
+     void testCalcMemberCustomFormatterInNonMeasureInQuery(TestingContext context) {
         // CELL_FORMATTER is ignored for calc members which are not measures.
         //
         // We could change this behavior if it makes sense. In fact, we would
@@ -1106,7 +1106,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInSchema(TestingContext context) {
+     void testCalcMemberCustomFormatterInSchema(TestingContext context) {
         // calc member defined in schema
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -1145,7 +1145,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInSchemaNegative(TestingContext context) {
+     void testCalcMemberCustomFormatterInSchemaNegative(TestingContext context) {
         // calc member defined in schema
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -1171,7 +1171,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testStrToSetInCubeCalcMember(TestingContext context) {
+     void testStrToSetInCubeCalcMember(TestingContext context) {
         // calc member defined in schema
         String cubeName = "Sales";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -1202,7 +1202,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCreateCalculatedMember(TestingContext context) {
+     void testCreateCalculatedMember(TestingContext context) {
         // REVIEW: What is the purpose of this test?
         String query =
             "WITH MEMBER [Product].[Calculated Member] as 'AGGREGATE({})'\n"
@@ -1231,7 +1231,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSetIncludesSelf(TestingContext context) {
+     void testSetIncludesSelf(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with set [Top Products] as ' [Product].Children '\n"
             + "member [Product].[Top Product Total] as ' Aggregate([Top Products]) '\n"
@@ -1262,7 +1262,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNegativeSolveOrderForCalMemberWithFilter(TestingContext context) {
+     void testNegativeSolveOrderForCalMemberWithFilter(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level],[*BASE_MEMBERS_Product])' "
@@ -1305,7 +1305,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNegativeSolveOrderForCalMemberWithFilters2(TestingContext context) {
+     void testNegativeSolveOrderForCalMemberWithFilters2(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Education Level],[*BASE_MEMBERS_Product])' "
@@ -1353,7 +1353,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonTopLevelCalculatedMember(TestingContext context) {
+     void testNonTopLevelCalculatedMember(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
@@ -1391,7 +1391,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberChildren(TestingContext context) {
+     void testCalculatedMemberChildren(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Product].[Test] as '[Product].[Food]' "
             + "select {[Measures].[Unit Sales]} on columns, "
@@ -1416,7 +1416,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedMemberMSASCompatibility(TestingContext context) {
+     void testCalculatedMemberMSASCompatibility(TestingContext context) {
         propSaver.set(MondrianProperties.instance().CaseSensitive, false);
         assertQueryReturns(context.createConnection(),
             "with "
@@ -1463,7 +1463,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSimulatedCompoundSlicer(TestingContext context) {
+     void testSimulatedCompoundSlicer(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with\n"
             + "  member [Measures].[Price per Unit] as\n"
@@ -1540,7 +1540,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundSlicerOverTuples(TestingContext context) {
+     void testCompoundSlicerOverTuples(TestingContext context) {
         // reference query
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
@@ -1623,7 +1623,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testExponentialPerformanceBugMondrian608(TestingContext context) {
+     void testExponentialPerformanceBugMondrian608(TestingContext context) {
         // Run variants of the same query with increasing expression complexity.
         // With MONDRIAN-608, running time triples each iteration (for
         // example, i=10 takes 2.7s, i=11 takes 9.6s), so 20 would be very
@@ -1701,7 +1701,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCycleFalsePositive(TestingContext context) {
+     void testCycleFalsePositive(TestingContext context) {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // This test uses old-style [dimension.hierarchy] names.
             return;
@@ -1813,7 +1813,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian852(TestingContext context) {
+     void testBugMondrian852(TestingContext context) {
         // Simpler repro case.
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Bar] as cast(123 as string)\n"
@@ -1895,7 +1895,7 @@ public class TestCalculatedMembers extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonCanonical(TestingContext context) {
+     void testNonCanonical(TestingContext context) {
         // define without 'all', refer with 'all'
         final String expected =
             "Axis #0:\n"
@@ -1921,7 +1921,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberParentOfCalcMember(TestingContext context) {
+     void testCalcMemberParentOfCalcMember(TestingContext context) {
         // SSAS fails with "The X calculated member cannot be used as a parent
         // of another calculated member."
         assertQueryThrows(context,
@@ -1935,7 +1935,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberSameNameDifferentHierarchies(TestingContext context) {
+     void testCalcMemberSameNameDifferentHierarchies(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member [Gender].[X] as 4\n"
             + " member [Marital Status].[X] as 5\n"
@@ -1951,7 +1951,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberTooDeep(TestingContext context) {
+     void testCalcMemberTooDeep(TestingContext context) {
         // SSAS fails with "The X calculated member cannot be created because
         // its parent is at the lowest level in the Gender hierarchy."
         assertQueryThrows(context,

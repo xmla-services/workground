@@ -210,13 +210,12 @@ public class Scanner {
             if (s.sym < mAResWords.length) {
                 name = mAResWords[s.sym];
             }
-
-            LOGGER.error(
-                new StringBuilder("Scanner returns #").append(s.sym)
+            String msg = new StringBuilder("Scanner returns #").append(s.sym)
                 .append((name == null ? "" : new StringBuilder(":").append(name).toString()))
                 .append(
                     (s.value == null ? "" : new StringBuilder("(").append(s.value.toString()).append(")").toString())
-                ).toString());
+                ).toString();
+            LOGGER.error(msg);
         }
         return s;
     }
@@ -343,13 +342,12 @@ public class Scanner {
     }
 
     private Symbol makeId(String s, boolean quoted, boolean ampersand) {
-        return makeSymbol(
-            quoted && ampersand
-            ? ParserSym.AMP_QUOTED_ID
-            : quoted
-            ? ParserSym.QUOTED_ID
-            : ParserSym.ID,
-            s);
+        if (quoted && ampersand) {
+            return makeSymbol( ParserSym.AMP_QUOTED_ID, s);
+        } else {
+            return makeSymbol( quoted ? ParserSym.QUOTED_ID : ParserSym.ID,
+                s );
+        }
     }
 
     /**
@@ -482,8 +480,7 @@ public class Scanner {
             switch (nextChar) {
             case '.':
                 switch (lookahead()) {
-                case '0': case '1': case '2': case '3': case '4':
-                case '5': case '6': case '7': case '8': case '9':
+                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
                     // We're looking at the '.' on the start of a number,
                     // e.g. .1; fall through to parse a number.
                     break;
@@ -493,8 +490,7 @@ public class Scanner {
                 }
                 // fall through
 
-            case '0': case '1': case '2': case '3': case '4':
-            case '5': case '6': case '7': case '8': case '9':
+                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 
                 // Parse a number.  Valid examples include 1, 1.2, 0.1, .1,
                 // 1e2, 1E2, 1e-2, 1e+2.  Invalid examples include e2, 1.2.3,
@@ -540,8 +536,7 @@ public class Scanner {
                         }
                         break;
 
-                    case 'E':
-                    case 'e':
+                    case 'E', 'e':
                         switch (state) {
                         case inExponent:
                             // Error: we are seeing an 'e' in the exponent
@@ -569,16 +564,14 @@ public class Scanner {
                         state = State.inExponent;
                         break;
 
-                    case'0': case'1': case'2': case'3': case'4':
-                    case'5': case'6': case'7': case'8': case'9':
+                    case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
                         n = n.movePointRight(1);
                         n = n.add(BigDecimal.valueOf(nextChar - '0'));
                         digitCount++;
                         advance();
                         break;
 
-                    case '+':
-                    case '-':
+                    case '+', '-':
                         if (state == State.inExponent
                             && digitCount == 0)
                         {
@@ -818,29 +811,24 @@ public class Scanner {
             case -1:
                 // we're done
                 return makeToken(ParserSym.EOF, "EOF");
-
+            case ' ', '\t', '\n', '\r':
+                // whitespace can be ignored
+                iPrevChar = iChar;
+                advance();
+                break;
             default:
                 // If it's whitespace, skip over it.
-                // (When we switch to JDK 1.5, use Character.isWhitespace(int);
-                // til then, there's just Character.isWhitespace(char).)
+                //  When we switch to JDK 1.5, use Character.isWhitespace(int);
+                // til then, there's just Character.isWhitespace(char).
                 if (nextChar <= Character.MAX_VALUE
                     && Character.isWhitespace((char) nextChar))
                 {
                     // fall through
                 } else {
                     // everything else is an error
-                    throw new RuntimeException(
+                    throw new OlapRuntimeException(
                         new StringBuilder("Unexpected character '").append((char) nextChar).append("'").toString());
                 }
-
-            case ' ':
-            case '\t':
-            case '\n':
-            case '\r':
-                // whitespace can be ignored
-                iPrevChar = iChar;
-                advance();
-                break;
             }
         }
     }

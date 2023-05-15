@@ -12,6 +12,7 @@ package mondrian.rolap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -188,8 +189,7 @@ class RolapCubeTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void
-        testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestingContext context)
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForHierarchy(TestingContext context)
     {
         String[] expectedCalculatedMembersFromProduct = {
             "[Product].[~Missing]"
@@ -344,21 +344,19 @@ class RolapCubeTest {
                 storeMembersCAAndOR(readerWarehouseAndSales).slice(0);
             Dimension storeDim3 =
                 storeMembersWarehouseAndSales.get(0).getDimension();
-            assertFalse(storeDim1.equals(storeDim3));
+            assertNotEquals(storeDim1, storeDim3);
 
             List<Member> warehouseMembers =
                 warehouseMembersCanadaMexicoUsa(readerWarehouseAndSales);
             Dimension warehouseDim = warehouseMembers.get(0).getDimension();
-            assertFalse(storeDim3.equals(warehouseDim));
+            assertNotEquals(storeDim3, warehouseDim);
         } finally {
             connection1.close();
             connection2.close();
         }
     }
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    private void createTestContextWithAdditionalMembersAndARole(TestingContext context) {
+    void createTestContextWithAdditionalMembersAndARole(TestingContext context) {
         String nonAccessibleMember =
             "  <CalculatedMember name=\"~Missing\" dimension=\"Gender\">\n"
             + "    <Formula>100</Formula>\n"

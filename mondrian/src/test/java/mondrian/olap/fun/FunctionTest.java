@@ -870,7 +870,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testValidMeasureNonEmpty(TestingContext context) {
+  void _testValidMeasureNonEmpty(TestingContext context) {
     // Note that [with VM2] is NULL where it needs to be - and therefore
     // does not prevent NON EMPTY from eliminating empty rows.
     TestUtil.assertQueryReturns(context.createConnection(),
@@ -7021,7 +7021,7 @@ class FunctionTest {//extends FoodMartTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testParallelPeriodThrowsException(TestingContext context) {
+  void _testParallelPeriodThrowsException(TestingContext context) {
     assertQueryThrows(context,
       "select {parallelperiod([Time].[Year], 1)} on columns "
         + "from [Sales] where ([Time].[1998].[Q1].[2])",
@@ -10791,7 +10791,7 @@ class FunctionTest {//extends FoodMartTestCase {
    * Executes a scalar expression, and asserts that the result is as expected. For example, <code>assertExprReturns ("1
    * + 2", "3")</code> should succeed.
    */
-  public void assertExprReturns(Connection connection, String expr, String expected ) {
+  void assertExprReturns(Connection connection, String expr, String expected ) {
     String actual = executeExpr(connection, expr);
     assertEquals( expected, actual );
   }
@@ -10803,7 +10803,7 @@ class FunctionTest {//extends FoodMartTestCase {
    * @param expected Expected value
    * @param delta    Maximum allowed deviation from expected value
    */
-  public void assertExprReturns(Connection connection,
+  void assertExprReturns(Connection connection,
     String expr, double expected, double delta ) {
     Object value = executeExprRaw(connection, expr).getValue();
 
@@ -10826,7 +10826,7 @@ class FunctionTest {//extends FoodMartTestCase {
   /**
    * Compiles a scalar expression, and asserts that the program looks as expected.
    */
-  public void assertExprCompilesTo(Connection connection,
+  void assertExprCompilesTo(Connection connection,
     String expr,
     String expectedCalc ) {
     final String actualCalc =
@@ -10845,7 +10845,7 @@ class FunctionTest {//extends FoodMartTestCase {
   /**
    * Compiles a set expression, and asserts that the program looks as expected.
    */
-  public void assertAxisCompilesTo(Connection connection,
+  void assertAxisCompilesTo(Connection connection,
     String expr,
     String expectedCalc ) {
     final String actualCalc =
@@ -11164,7 +11164,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testRank3Huge(TestingContext context) {
+  void _testRank3Huge(TestingContext context) {
     // If caching is disabled, don't even try -- it will take too long.
     if ( !MondrianProperties.instance().EnableExpCache.get() ) {
       return;
@@ -11258,7 +11258,7 @@ class FunctionTest {//extends FoodMartTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testLinRegAll(TestingContext context) {
+  void _testLinRegAll(TestingContext context) {
     // We have not implemented the LastPeriods function, so we use
     //   [Time].CurrentMember.Lag(9) : [Time].CurrentMember
     // is equivalent to
@@ -11563,7 +11563,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testLinRegR2(TestingContext context) {
+  void _testLinRegR2(TestingContext context) {
     // Why would R2 equal the slope
     if ( false ) {
       assertExprReturns(context.createConnection(),
@@ -11600,7 +11600,7 @@ Intel platforms):
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void _testLinRegVariance(TestingContext context) {
+  void _testLinRegVariance(TestingContext context) {
     assertExprReturns(context.createConnection(),
       "LinRegVariance([Time].[Month].members,"
         + " [Measures].[Unit Sales], [Measures].[Store Sales])",
@@ -12441,7 +12441,7 @@ Intel platforms):
         + "Row #1: 841\n" ); // Calculated child for [Non-Consumable]
     Member member = executeSingletonAxis(context.createConnection(),
       "[Product].[All Products].CalculatedChild(\"foobar\")" );
-    assertEquals( member, null );
+    assertEquals( null, member );
   }
 
   @Disabled //disabled for CI build
@@ -12476,7 +12476,7 @@ Intel platforms):
         + "Row #1: 6,838\n" );
     Member member = executeSingletonAxis(context.createConnection(),
       "[Product].[All Products].CalculatedChild(\"foobar\")" );
-    assertEquals( member, null );
+    assertEquals( null, member );
   }
 
   @ParameterizedTest
@@ -12485,7 +12485,7 @@ Intel platforms):
     Member member =
       executeSingletonAxis(context.createConnection(),
         "[Measures].[Store Sales].CalculatedChild(\"foobar\")" );
-    assertEquals( member, null );
+    assertEquals( null, member );
   }
 
   @ParameterizedTest
@@ -12494,7 +12494,7 @@ Intel platforms):
     Member member =
       executeSingletonAxis(context.createConnection(),
         "[Measures].[Store Sales].parent.CalculatedChild(\"foobar\")" );
-    assertEquals( member, null );
+    assertEquals( null, member);
   }
 
   @ParameterizedTest
@@ -12509,7 +12509,7 @@ Intel platforms):
     assertEquals(Integer.class, cell.getValue().getClass(),
             "Cast to Integer resulted in wrong datatype\n"
                     + cell.getValue().getClass().toString());
-    assertEquals( cell.getValue(), 1 );
+    assertEquals(1, cell.getValue() );
 
     // From integer
     // To integer (trivial)
@@ -13034,9 +13034,8 @@ Intel platforms):
       assertEquals(
         mondrianEvaluationException.getClass(),
         ( MondrianEvaluationException.class ) );
-      assertEquals(
-        mondrianEvaluationException.getMessage(),
-        "No method with the signature UCase(NULL) matches known functions." );
+      assertEquals( "No method with the signature UCase(NULL) matches known functions.",
+          mondrianEvaluationException.getMessage() );
       return;
     }
     fail( "MondrianEvaluationException is expected here" );
@@ -13709,9 +13708,7 @@ Intel platforms):
    * @param depthLimit Max recursion depth
    * @param breadth    Number of iterations at each depth
    */
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  private void generateComplex(
+  void generateComplex(
     StringBuilder buf,
     String indent,
     int depth,
@@ -14769,7 +14766,7 @@ Intel platforms):
    *
    * @return string containing all dimensions except those given
    */
-  public String allHiersExcept( String... hiers ) {
+  String allHiersExcept( String... hiers ) {
     for ( String hier : hiers ) {
       assert contains( AllHiers, hier ) : "unknown hierarchy " + hier;
     }

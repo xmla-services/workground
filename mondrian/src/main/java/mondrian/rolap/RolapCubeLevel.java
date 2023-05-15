@@ -32,8 +32,6 @@ import mondrian.rolap.util.ExpressionUtil;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.MemberFormatter;
 
-import java.util.Objects;
-
 /**
  * RolapCubeLevel wraps a RolapLevel for a specific Cube.
  *
@@ -298,6 +296,11 @@ public class RolapCubeLevel extends RolapLevel {
      */
     public RolapLevel getRolapLevel() {
         return rolapLevel;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override
