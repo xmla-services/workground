@@ -128,7 +128,7 @@ public class AggregationKey
         }
         return constrainedColumnsBitKey.equals(that.constrainedColumnsBitKey)
             && star.equals(that.star)
-            && equal(compoundPredicateList, that.compoundPredicateList);
+            && equalAggregationKey(compoundPredicateList, that.compoundPredicateList);
     }
 
     /**
@@ -138,7 +138,7 @@ public class AggregationKey
      * @param list2 Second compound predicate map
      * @return Whether compound predicate maps are equal
      */
-    static boolean equal(
+    static boolean equalAggregationKey(
         final List<StarPredicate> list1,
         final List<StarPredicate> list2)
     {

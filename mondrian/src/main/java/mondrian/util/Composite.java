@@ -22,6 +22,10 @@ import java.util.NoSuchElementException;
  */
 public abstract class Composite {
 
+    private Composite() {
+        // constructor
+    }
+
     /**
      * Creates a composite list, inferring the element type from the arguments.
      *

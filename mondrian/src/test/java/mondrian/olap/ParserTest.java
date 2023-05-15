@@ -12,7 +12,9 @@
 package mondrian.olap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -51,7 +53,6 @@ class ParserTest {
 
     static final BuiltinFunTable funTable = BuiltinFunTable.instance();
 
-    @Test
     protected TestParser createParser() {
         return new TestParser();
     }
@@ -165,10 +166,6 @@ class ParserTest {
             "Unexpected character ']'");
     }
 
-    @Test
-    void testUnderscore() {
-    }
-
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testUnparse(TestingContext context) {
@@ -228,10 +225,10 @@ class ParserTest {
         QueryAxis[] axes = p.getAxes();
 
         assertEquals(2, axes.length, "Number of axes");
-        assertEquals(            
+        assertEquals(
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(0).name(),
             axes[0].getAxisName(), "Axis index name must be correct");
-        assertEquals(            
+        assertEquals(
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(1).name(),
             axes[1].getAxisName(), "Axis index name must be correct");
 
@@ -242,10 +239,10 @@ class ParserTest {
             p.parseInternal(null, query, false, funTable, false), "Test parser should return null query");
 
         assertEquals(2, axes.length, "Number of axes");
-        assertEquals(            
+        assertEquals(
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(0).name(),
             axes[0].getAxisName(),"Axis index name must be correct");
-        assertEquals(            
+        assertEquals(
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(1).name(),
             axes[1].getAxisName(), "Axis index name must be correct");
 
@@ -646,11 +643,12 @@ class ParserTest {
     void testIdentifier() {
         // must have at least one segment
         Id id;
+        List<Id.Segment> list  = Collections.<Id.Segment>emptyList();
         try {
-            id = new Id(Collections.<Id.Segment>emptyList());
+            id = new Id(list);
             fail("expected exception, got " + id);
         } catch (IllegalArgumentException e) {
-            // ok
+            assertInstanceOf(IllegalArgumentException.class, e);
         }
 
         id = new Id(new Id.NameSegment("foo"));
@@ -661,7 +659,7 @@ class ParserTest {
             new Id.KeySegment(
                 new Id.NameSegment(
                     "bar", Id.Quoting.QUOTED)));
-        assertTrue(id != id2);
+        assertNotSame(id, id2);
         assertEquals("[foo]", id.toString());
         assertEquals("[foo].&[bar]", id2.toString());
 
@@ -679,9 +677,10 @@ class ParserTest {
         } catch (UnsupportedOperationException e) {
             // ok
         }
+        Id.NameSegment nameSegment = new Id.NameSegment("baz");
         try {
             segments.add(
-                new Id.NameSegment("baz"));
+                nameSegment);
             fail("expected exception");
         } catch (UnsupportedOperationException e) {
             // ok
@@ -723,7 +722,7 @@ class ParserTest {
      */
     @Disabled
     @Test
-    public void _testInnerSelect() {
+    void _testInnerSelect() {
         assertParseQuery(
             "SELECT FROM "
             + "(SELECT ({[ProductDim].[Product Group].&[Mobile Phones]}) "
@@ -739,7 +738,7 @@ class ParserTest {
     @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testRealInnerSelect(TestingContext context) {
+    void _testRealInnerSelect(TestingContext context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
         "select\n"
@@ -749,7 +748,7 @@ class ParserTest {
         + ")\n"
         + "CELL PROPERTIES VALUE",
         "xxx"); //need check result
-    }    
+    }
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-648">

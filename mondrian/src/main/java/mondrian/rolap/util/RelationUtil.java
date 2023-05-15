@@ -18,6 +18,7 @@ import static mondrian.rolap.util.JoinUtil.right;
 
 import java.util.Objects;
 
+import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
@@ -27,37 +28,43 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 public class RelationUtil {
 
+    private RelationUtil() {
+        // constructor
+    }
+
     public static Relation find(RelationOrJoin relationOrJoin, String tableName) {
-        if (relationOrJoin instanceof InlineTable) {
-            return tableName.equals(((InlineTable) relationOrJoin).alias()) ? (Relation) relationOrJoin : null;
+        if (relationOrJoin instanceof InlineTable inlineTable) {
+            return tableName.equals(inlineTable.alias()) ? (Relation) relationOrJoin : null;
         }
-        if (relationOrJoin instanceof Table) {
-            return tableName.equals(((Table) relationOrJoin).name()) ? (Relation) relationOrJoin :
-                (((Table) relationOrJoin).alias() != null) && relationOrJoin.equals(((Table) relationOrJoin).alias()) ? (Relation) relationOrJoin :
-                    null;
+        if (relationOrJoin instanceof Table table) {
+            if (tableName.equals(table.name())) {
+                return (Relation) relationOrJoin;
+            } else {
+                    return null; //old version of code had wrong condition with equals
+            }
         }
-        if (relationOrJoin instanceof View) {
-            if (tableName.equals(((View) relationOrJoin).alias())) {
+        if (relationOrJoin instanceof View view) {
+            if (tableName.equals(view.alias())) {
                 return (Relation) relationOrJoin;
             } else {
                 return null;
             }
         }
-        if (relationOrJoin instanceof Join) {
-            RelationOrJoin relation = find(left((Join) relationOrJoin), tableName);
+        if (relationOrJoin instanceof Join join) {
+            RelationOrJoin relation = find(left(join), tableName);
             if (relation == null) {
-                relation = find(right((Join) relationOrJoin), tableName);
+                relation = find(right(join), tableName);
             }
             return (Relation) relation;
 
         }
 
-        throw new RuntimeException("Rlation: find error");
+        throw new RolapRuntimeException("Rlation: find error");
     }
 
     public static String getAlias(Relation relation) {
-        if (relation instanceof Table) {
-            return (relation.alias() != null) ? relation.alias() : ((Table) relation).name();
+        if (relation instanceof Table table) {
+            return (relation.alias() != null) ? relation.alias() : table.name();
         }
         else {
             return relation.alias();
@@ -65,17 +72,17 @@ public class RelationUtil {
     }
 
     public static boolean equals(Relation relation, Object o) {
-        if (relation instanceof View) {
+        if (relation instanceof View view) {
             if (o instanceof View that) {
                 if (!Objects.equals(relation.alias(), that.alias())) {
                     return false;
                 }
-                if (((View) relation).sqls() == null || that.sqls() == null || ((View) relation).sqls().size() != that.sqls().size()) {
+                if (view.sqls() == null || that.sqls() == null || view.sqls().size() != that.sqls().size()) {
                     return false;
                 }
-                for (int i = 0; i < ((View) relation).sqls().size(); i++) {
-                    if (!Objects.equals(((View) relation).sqls().get(i).dialect(), that.sqls().get(i).dialect())
-                        || !Objects.equals(((View) relation).sqls().get(i).content(), that.sqls().get(i).content()))
+                for (int i = 0; i < view.sqls().size(); i++) {
+                    if (!Objects.equals(view.sqls().get(i).dialect(), that.sqls().get(i).dialect())
+                        || !Objects.equals(view.sqls().get(i).content(), that.sqls().get(i).content()))
                     {
                         return false;
                     }
@@ -85,11 +92,11 @@ public class RelationUtil {
                 return false;
             }
         }
-        if (relation instanceof Table) {
+        if (relation instanceof Table table) {
             if (o instanceof Table that) {
-                return ((Table) relation).name().equals(that.name()) &&
+                return table.name().equals(that.name()) &&
                     Objects.equals(relation.alias(), that.alias()) &&
-                    Objects.equals(((Table) relation).schema(), that.schema());
+                    Objects.equals(table.schema(), that.schema());
             } else {
                 return false;
             }
@@ -116,15 +123,15 @@ public class RelationUtil {
     }
 
     private static Object toString(Relation relation) {
-        if (relation instanceof Table) {
-            return (((Table) relation).schema() == null) ?
-                ((Table) relation).name() :
-                new StringBuilder(((Table) relation).schema()).append(".").append(((Table) relation).name()).toString();
+        if (relation instanceof Table table) {
+            return (table.schema() == null) ?
+                table.name() :
+                new StringBuilder(table.schema()).append(".").append(table.name()).toString();
         }
-        if (relation instanceof Join) {
-            return new StringBuilder("(").append(left((Join) relation)).append(") join (").append(right((Join) relation)).append(") on ")
-                .append(((Join) relation).leftAlias()).append(".").append(((Join) relation).leftKey()).append(" = ")
-                .append(((Join) relation).rightAlias()).append(".").append(((Join) relation).rightKey()).toString();
+        if (relation instanceof Join join) {
+            return new StringBuilder("(").append(left(join)).append(") join (").append(right(join)).append(") on ")
+                .append((join).leftAlias()).append(".").append((join).leftKey()).append(" = ")
+                .append((join).rightAlias()).append(".").append((join).rightKey()).toString();
         }
         if (relation instanceof InlineTable) {
             return "<inline data>";

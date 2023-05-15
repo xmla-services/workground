@@ -113,27 +113,28 @@ public class MemberTuplePredicate implements StarPredicate {
         RolapMember member,
         RolapCube baseCube)
     {
-        List<RolapStar.Column> columnList = new ArrayList<>();
+        List<RolapStar.Column> columnListInner = new ArrayList<>();
         while (true) {
             RolapLevel level = member.getLevel();
             RolapStar.Column column = null;
-            if (level instanceof RolapCubeLevel) {
-                column = ((RolapCubeLevel)level)
+            if (level instanceof RolapCubeLevel rolapCubeLevel) {
+                column = rolapCubeLevel
                                 .getBaseStarKeyColumn(baseCube);
             } else {
                 (new Exception()).printStackTrace();
             }
-
-            if (columnBitKey == null) {
-                columnBitKey =
-                    BitKey.Factory.makeBitKey(
-                        column.getStar().getColumnCount());
-                columnBitKey.clear();
+            if (column != null) {
+                if (columnBitKey == null) {
+                    columnBitKey =
+                        BitKey.Factory.makeBitKey(
+                            column.getStar().getColumnCount());
+                    columnBitKey.clear();
+                }
+                columnBitKey.set(column.getBitPosition());
+                columnListInner.add(0, column);
             }
-            columnBitKey.set(column.getBitPosition());
-            columnList.add(0, column);
             if (level.isUnique()) {
-                return columnList;
+                return columnListInner;
             }
             member = member.getParentMember();
         }
@@ -220,6 +221,8 @@ public class MemberTuplePredicate implements StarPredicate {
                     } else {
                         return false;
                     }
+                default:
+                    break;
                 }
             }
         }

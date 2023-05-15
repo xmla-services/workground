@@ -20,7 +20,11 @@ import mondrian.server.Execution;
  */
 public class CancellationChecker {
 
-  public static void checkCancelOrTimeout(
+    private CancellationChecker() {
+        // constructor
+    }
+
+    public static void checkCancelOrTimeout(
       int currentIteration, Execution execution)
   {
     checkCancelOrTimeout((long) currentIteration, execution);

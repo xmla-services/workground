@@ -1556,9 +1556,7 @@ public enum RowsetDefinition {
         switch (prop.getDatatype()) {
         case STRING:
             return XmlaConstants.DBType.WSTR;
-        case INTEGER:
-        case UNSIGNED_INTEGER:
-        case DOUBLE:
+        case INTEGER, UNSIGNED_INTEGER, DOUBLE:
             return XmlaConstants.DBType.R8;
         case BOOLEAN:
             return XmlaConstants.DBType.BOOL;
@@ -1890,10 +1888,7 @@ public enum RowsetDefinition {
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2028,10 +2023,7 @@ public enum RowsetDefinition {
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2151,10 +2143,7 @@ public enum RowsetDefinition {
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2252,8 +2241,7 @@ public enum RowsetDefinition {
                     }
 
                     switch (enumerator.type) {
-                    case STRING:
-                    case STRING_ARRAY:
+                    case STRING, STRING_ARRAY:
                         // these don't have ordinals
                         break;
                     default:
@@ -2296,10 +2284,7 @@ public enum RowsetDefinition {
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2338,10 +2323,7 @@ public enum RowsetDefinition {
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2432,10 +2414,7 @@ public enum RowsetDefinition {
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2477,10 +2456,7 @@ public enum RowsetDefinition {
                     final String catalogUrl = ((mondrian.olap4j.MondrianOlap4jConnection)connection)
                             .getMondrianConnection().getCatalogName();
                     catalogStr = Util.readVirtualFileAsString(catalogUrl);
-                } catch (OlapException e) {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e) {
+                } catch (OlapException | IOException e) {
                     throw new RuntimeException(e);
                 }
                 Row row = new Row();
@@ -2495,10 +2471,7 @@ public enum RowsetDefinition {
                 PropertyDefinition propertyDef,
                 String value)
         {
-            switch (propertyDef) {
-                case Content:
-                    break;
-                default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                     super.setProperty(propertyDef, value);
             }
         }
@@ -2590,10 +2563,7 @@ public enum RowsetDefinition {
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -2960,9 +2930,7 @@ TODO: see above
                     row.set(CharacterMaximumLength.name, 0);
                     row.set(CharacterOctetLength.name, 0);
                     break;
-                case INTEGER:
-                case UNSIGNED_INTEGER:
-                case DOUBLE:
+                case INTEGER, UNSIGNED_INTEGER, DOUBLE:
                     // TODO: 16/255 seems to be what MS SQL Server
                     // always returns.
                     row.set(NumericPrecision.name, 16);
@@ -2988,10 +2956,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -3257,10 +3222,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -3328,10 +3290,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -3569,10 +3528,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -3661,10 +3617,7 @@ TODO: see above
                 PropertyDefinition propertyDef,
                 String value)
         {
-            switch (propertyDef) {
-                case Content:
-                    break;
-                default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                     super.setProperty(propertyDef, value);
             }
         }
@@ -3841,10 +3794,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -4217,10 +4167,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -4538,10 +4485,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -4719,7 +4663,7 @@ TODO: see above
                 Cube cube,
                 Dimension dimension,
                 List<Row> rows)
-                throws XmlaException, SQLException
+                throws XmlaException
         {
             String desc = dimension.getDescription();
             if (desc == null) {
@@ -4748,11 +4692,8 @@ TODO: see above
 		protected void setProperty(
                 PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-                case Content:
-                    break;
-                default:
-                    super.setProperty(propertyDef, value);
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
+                super.setProperty(propertyDef, value);
             }
         }
     }
@@ -4788,28 +4729,27 @@ TODO: see above
                     return Empty;
                 case Category.ARRAY:
                     return Array;
-                case Category.DIMENSION:
-                case Category.HIERARCHY:
-                case Category.LEVEL:
-                case Category.MEMBER:
-                case Category.SET:
-                case Category.TUPLE:
-                case Category.CUBE:
-                case Category.VALUE:
+                case Category.DIMENSION,
+                Category.HIERARCHY,
+                Category.LEVEL,
+                Category.MEMBER,
+                Category.SET,
+                Category.TUPLE,
+                Category.CUBE,
+                Category.VALUE:
                     return Variant;
                 case Category.LOGICAL:
                     return Boolean;
                 case Category.NUMERIC:
                     return Double;
-                case Category.STRING:
-                case Category.SYMBOL:
-                case Category.CONSTANT:
+                case Category.STRING, Category.SYMBOL, Category.CONSTANT:
                     return String;
                 case Category.DATE_TIME:
                     return Date;
-                case Category.INTEGER:
-                case Category.MASK:
+                case Category.INTEGER, Category.MASK:
                     return Integer;
+                default:
+                    break;
                 }
                 // NOTE: this should never happen
                 return Empty;
@@ -4936,10 +4876,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -5399,10 +5336,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -5811,10 +5745,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -6142,10 +6073,7 @@ TODO: see above
 		protected void setProperty(
             PropertyDefinition propertyDef, String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -6592,8 +6520,8 @@ TODO: see above
             final Object unameRestrictions =
                 restrictions.get(MemberUniqueName.name);
             List<String> list;
-            if (unameRestrictions instanceof String) {
-                list = Collections.singletonList((String) unameRestrictions);
+            if (unameRestrictions instanceof String str) {
+                list = Collections.singletonList(str);
             } else {
                 list = (List<String>) unameRestrictions;
             }
@@ -6695,10 +6623,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }
@@ -7183,7 +7108,7 @@ TODO: see above
                 Catalog catalog,
                 Cube cube,
                 List<Row> rows)
-                throws XmlaException, SQLException
+                throws XmlaException
         {
 //            for (Measuregroup measuregroup
 //                    : filter(
@@ -7202,7 +7127,7 @@ TODO: see above
                 Catalog catalog,
                 Cube cube,
                 List<Row> rows)
-                throws XmlaException, SQLException
+                throws XmlaException
         {
             Row row = new Row();
             row.set(CatalogName.name, catalog.getName());
@@ -7392,8 +7317,7 @@ TODO: see above
                 case CELL:
                     populateCell(rows);
                     break;
-                case SYSTEM:
-                case BLOB:
+                case SYSTEM, BLOB:
                 default:
                     break;
                 }
@@ -7572,10 +7496,7 @@ TODO: see above
             PropertyDefinition propertyDef,
             String value)
         {
-            switch (propertyDef) {
-            case Content:
-                break;
-            default:
+            if (!PropertyDefinition.Content.equals(propertyDef)) {
                 super.setProperty(propertyDef, value);
             }
         }

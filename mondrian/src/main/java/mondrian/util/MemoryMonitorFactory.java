@@ -98,13 +98,13 @@ public final class MemoryMonitorFactory
      * clear method should be in the finally-clause of that try-block.
      */
     public static void clearThreadLocalClassName() {
-        ClassName.set(null);
+        ClassName.remove();
         if (factory.testSingleInstance != null) {
             factory.testSingleInstance.removeAllListener();
             factory.testSingleInstance = null;
         }
-        if (factory.singleInstance instanceof MemoryMonitor.Test) {
-            ((MemoryMonitor.Test) factory.singleInstance).resetFromTest();
+        if (factory.singleInstance instanceof MemoryMonitor.Test test) {
+            test.resetFromTest();
         }
     }
 

@@ -54,26 +54,28 @@ public class PropertyUtil {
      */
     public static void main0(String[] args) throws IllegalAccessException {
         Object properties1 = null; // MondrianProperties.instance();
-        System.out.println("<PropertyDefinitions>");
+        LOGGER.debug("<PropertyDefinitions>");
         for (Field field : properties1.getClass().getFields()) {
             org.eigenbase.util.property.Property o =
                 (org.eigenbase.util.property.Property) field.get(properties1);
             LOGGER.debug("    <PropertyDefinition>");
-            LOGGER.debug(new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString());
-            LOGGER.debug(new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString());
-            LOGGER.debug(
-                new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString());
-            LOGGER.debug(
-                new StringBuilder("        <Type>")
+            String msg = new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString();
+            LOGGER.debug(msg);
+            msg = new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString();
+            LOGGER.debug(msg);
+            msg = new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString();
+            LOGGER.debug(msg);
+            msg = new StringBuilder("        <Type>")
                 .append((o instanceof BooleanProperty ? "boolean"
                     : o instanceof IntegerProperty ? "int"
-                        : o instanceof DoubleProperty ? "double"
-                            : "String"))
-                .append("</Type>").toString());
+                    : o instanceof DoubleProperty ? "double"
+                    : "String"))
+                .append("</Type>").toString();
+            LOGGER.debug(msg);
             if (o.getDefaultValue() != null) {
-                LOGGER.debug(
-                    new StringBuilder("        <Default>")
-                    .append(o.getDefaultValue()).append("</Default").append(">").toString());
+                msg = new StringBuilder("        <Default>")
+                    .append(o.getDefaultValue()).append("</Default").append(">").toString();
+                LOGGER.debug(msg);
             }
             LOGGER.debug("    </PropertyDefinition>");
         }
@@ -118,8 +120,8 @@ public class PropertyUtil {
     {
         try {
             new PropertyUtil().generate(args);
-        } catch (Throwable e) {
-            System.out.println("Error while generating properties files.");
+        } catch (Exception e) {
+            LOGGER.error("Error while generating properties files.");
             e.printStackTrace();
         }
     }
@@ -195,8 +197,8 @@ public class PropertyUtil {
             out.close();
             fw.close();
             success = true;
-        } catch (Throwable e) {
-            throw new RuntimeException("Error while generating " + file, e);
+        } catch (Exception e) {
+            throw new UtilRuntimeException("Error while generating " + file, e);
         } finally {
             if (out != null) {
                 out.close();
@@ -365,15 +367,15 @@ public class PropertyUtil {
                     out,
                     "",
                     "#",
-                    wrapText(
-                        "This software is subject to the terms of the Eclipse Public License v1.0\n"
-                        + "Agreement, available at the following URL:\n"
-                        + "http://www.eclipse.org/legal/epl-v10.html.\n"
-                        + "You must accept the terms of that agreement to use this software.\n"
-                        + "\n"
-                        + "Copyright (C) 2001-2005 Julian Hyde\n"
-                        + "Copyright (C) 2005-2011 Pentaho and others\n"
-                        + "All Rights Reserved."));
+                    wrapText("""
+                        This software is subject to the terms of the Eclipse Public License v1.0
+                        Agreement, available at the following URL:
+                        "http://www.eclipse.org/legal/epl-v10.html.
+                        You must accept the terms of that agreement to use this software.
+
+                        Copyright (C) 2001-2005 Julian Hyde
+                        Copyright (C) 2005-2011 Pentaho and others
+                        All Rights Reserved."""));
                 out.println();
 
                 char[] chars = new char[79];
@@ -539,11 +541,10 @@ public class PropertyUtil {
             if (defaultValue == null) {
                 return "-";
             }
-            switch (propertyType) {
-            case INT, DOUBLE:
+            if (PropertyType.INT.equals(propertyType) || PropertyType.DOUBLE.equals(propertyType)) {
                 return new DecimalFormat("#,###.#").format(
                     new BigDecimal(defaultValue));
-            default:
+            } else {
                 return defaultValue;
             }
         }

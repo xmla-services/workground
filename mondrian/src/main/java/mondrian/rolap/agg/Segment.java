@@ -295,7 +295,7 @@ public String toString() {
 
   private boolean matchesInternal( AggregationKey aggKey ) {
     return constrainedColumnsBitKey.equals( aggKey.getConstrainedColumnsBitKey() ) && star.equals( aggKey.getStar() )
-        && AggregationKey.equal( compoundPredicateList, aggKey.compoundPredicateList );
+        && AggregationKey.equalAggregationKey( compoundPredicateList, aggKey.compoundPredicateList );
   }
 
   /**
