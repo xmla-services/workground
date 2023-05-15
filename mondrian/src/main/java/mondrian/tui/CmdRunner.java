@@ -35,6 +35,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -43,6 +44,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
+import org.eigenbase.xom.XOMException;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapStatement;
@@ -60,6 +62,12 @@ import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
+import org.xml.sax.SAXException;
+
+import javax.servlet.ServletException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathException;
 
 /**
  * Command line utility which reads and executes MDX commands.
@@ -71,6 +79,11 @@ import mondrian.rolap.RolapCube;
 public class CmdRunner {
 
     private static final String NL = Util.NL;
+    public static final String FOR_PARAMETER_NAMED = "For parameter named \"";
+    public static final String THE_VALUE_WAS_TYPE = "the value was type \"";
+    public static final String NO_CUBE_FOUND_WITH_NAME = "No cube found with name \"";
+    public static final String XML_DATA_IS_VALID = "XML Data is Valid";
+    public static final String BAD_COMMAND_USAGE = "Bad command usage: \"";
 
     private static boolean reloadConnection = true;
     private static final String CATALOG_NAME = "FoodMart";
@@ -222,8 +235,7 @@ public class CmdRunner {
         final Property property = PropertyInfo.lookupProperty(
             MondrianProperties.instance(),
             name);
-        String oldValue = property.getString();
-        if (! Objects.equals(oldValue, value)) {
+        if (property != null && !Objects.equals(property.getString(), value)) {
             property.setString(value);
             return true;
         } else {
@@ -340,10 +352,10 @@ public class CmdRunner {
         case Category.NUMERIC:
             if (type != Expr.Type.NUMERIC) {
                 String msg =
-                    new StringBuilder("For parameter named \"")
+                    new StringBuilder(FOR_PARAMETER_NAMED)
                         .append(name)
                         .append("\" of Catetory.Numeric, ")
-                        .append("the value was type \"")
+                        .append(THE_VALUE_WAS_TYPE)
                         .append(type)
                         .append("\"").toString();
                 throw new IllegalArgumentException(msg);
@@ -352,10 +364,10 @@ public class CmdRunner {
         case Category.STRING:
             if (type != Expr.Type.STRING) {
                 String msg =
-                    new StringBuilder("For parameter named \"")
+                    new StringBuilder(FOR_PARAMETER_NAMED)
                         .append(name)
                         .append("\" of Catetory.String, ")
-                        .append("the value was type \"")
+                        .append(THE_VALUE_WAS_TYPE)
                         .append(type)
                         .append("\"").toString();
                 throw new IllegalArgumentException(msg);
@@ -364,10 +376,10 @@ public class CmdRunner {
 
         case Category.MEMBER:
             if (type != Expr.Type.MEMBER) {
-                String msg = new StringBuilder("For parameter named \"")
+                String msg = new StringBuilder(FOR_PARAMETER_NAMED)
                     .append(name)
                     .append("\" of Catetory.Member, ")
-                    .append("the value was type \"")
+                    .append(THE_VALUE_WAS_TYPE)
                     .append(type)
                     .append("\"").toString();
                 throw new IllegalArgumentException(msg);
@@ -497,7 +509,7 @@ public class CmdRunner {
     public void listCubeAttribues(String name, StringBuilder buf) {
         Cube cube = getCube(name);
         if (cube == null) {
-            buf.append("No cube found with name \"");
+            buf.append(NO_CUBE_FOUND_WITH_NAME);
             buf.append(name);
             buf.append("\"");
         } else {
@@ -518,7 +530,7 @@ public class CmdRunner {
     {
         Cube cube = getCube(cubename);
         if (cube == null) {
-            buf.append("No cube found with name \"");
+            buf.append(NO_CUBE_FOUND_WITH_NAME);
             buf.append(cubename);
             buf.append("\"");
         } else {
@@ -543,7 +555,7 @@ public class CmdRunner {
     {
         Cube cube = getCube(cubename);
         if (cube == null) {
-            buf.append("No cube found with name \"");
+            buf.append(NO_CUBE_FOUND_WITH_NAME);
             buf.append(cubename);
             buf.append("\"");
         } else {
@@ -639,7 +651,7 @@ public class CmdRunner {
             cellSet = statement.executeOlapQuery(queryString);
             return f.apply(cellSet);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new TuiRuntimeException(e);
         } finally {
             queryTime = (System.currentTimeMillis() - start);
             totalQueryTime += queryTime;
@@ -917,7 +929,7 @@ public class CmdRunner {
             try {
                 line = readLine(in, inMdxCmd);
             } catch (IOException e) {
-                throw new RuntimeException(
+                throw new TuiRuntimeException(
                     "Exception while reading command line", e);
             }
             if (line != null) {
@@ -925,12 +937,11 @@ public class CmdRunner {
             }
             debug("line=" + line);
 
-            if (! inMdxCmd) {
-                // If not in the middle of reading an mdx query and
-                // we reach end of file on the stream, then we are over.
-                if (line == null) {
+
+            // If not in the middle of reading an mdx query and
+            // we reach end of file on the stream, then we are over.
+            if (! inMdxCmd && line == null) {
                     return;
-                }
             }
 
             // If not reading an mdx query, then check if the line is a
@@ -977,9 +988,9 @@ public class CmdRunner {
                 // If EXECUTE_CHAR, then execute, otherwise its the
                 // CANCEL_CHAR and simply empty buffer.
                 if ((line == null) || (line.charAt(0) == EXECUTE_CHAR)) {
-                    String mdxCmd = buf.toString().trim();
-                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmd).append("\"").toString());
-                    resultString = executeMdxCmd(mdxCmd);
+                    String mdxCmdInner = buf.toString().trim();
+                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmdInner).append("\"").toString());
+                    resultString = executeMdxCmd(mdxCmdInner);
                 }
 
                 inMdxCmd = false;
@@ -991,9 +1002,9 @@ public class CmdRunner {
                 if (line.endsWith(SEMI_COLON_STRING)) {
                     // Remove the ';' character.
                     buf.append(line.substring(0, line.length() - 1));
-                    String mdxCmd = buf.toString().trim();
-                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmd).append("\"").toString());
-                    resultString = executeMdxCmd(mdxCmd);
+                    String mdxCmdInner = buf.toString().trim();
+                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmdInner).append("\"").toString());
+                    resultString = executeMdxCmd(mdxCmdInner);
                     inMdxCmd = false;
                 } else {
                     buf.append(line);
@@ -1264,9 +1275,8 @@ public class CmdRunner {
      */
     protected void processSoapXmla(
         File file,
-        int validateXmlaResponse)
-        throws Exception
-    {
+        int validateXmlaResponse) throws ServletException, IOException, SAXException,
+        ParserConfigurationException, TransformerException, XPathException {
         String catalogURL = CmdRunner.getCatalogURLProperty();
         Map<String, String> catalogNameUrls = new HashMap<>();
         catalogNameUrls.put(CATALOG_NAME, catalogURL);
@@ -1293,11 +1303,13 @@ public class CmdRunner {
             break;
         case VALIDATE_TRANSFORM:
             XmlaSupport.validateSchemaSoapXmla(bytes);
-            out.println("XML Data is Valid");
+            out.println(XML_DATA_IS_VALID);
             break;
         case VALIDATE_XPATH:
             XmlaSupport.validateSoapXmlaUsingXpath(bytes);
-            out.println("XML Data is Valid");
+            out.println(XML_DATA_IS_VALID);
+            break;
+        default:
             break;
         }
     }
@@ -1308,9 +1320,8 @@ public class CmdRunner {
      */
     protected void processXmla(
         File file,
-        int validateXmlaResponce)
-        throws Exception
-    {
+        int validateXmlaResponce) throws XOMException, IOException, SAXException, ParserConfigurationException,
+        TransformerException, XPathException {
         String catalogURL = CmdRunner.getCatalogURLProperty();
         Map<String, String> catalogNameUrls = new HashMap<>();
         catalogNameUrls.put(CATALOG_NAME, catalogURL);
@@ -1336,11 +1347,13 @@ public class CmdRunner {
             break;
         case VALIDATE_TRANSFORM:
             XmlaSupport.validateSchemaXmla(bytes);
-            out.println("XML Data is Valid");
+            out.println(XML_DATA_IS_VALID);
             break;
         case VALIDATE_XPATH:
             XmlaSupport.validateXmlaUsingXpath(bytes);
-            out.println("XML Data is Valid");
+            out.println(XML_DATA_IS_VALID);
+            break;
+        default:
             break;
         }
     }
@@ -1634,7 +1647,7 @@ public class CmdRunner {
             }
 
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -1699,7 +1712,7 @@ public class CmdRunner {
             if ((token.length() == 1) && (token.charAt(0) == EXECUTE_CHAR)) {
                 // file '='
                 if (this.filename == null) {
-                    buf.append("Bad command usage: \"");
+                    buf.append(BAD_COMMAND_USAGE);
                     buf.append(mdxCmd);
                     buf.append("\", no file to re-execute");
                     buf.append(NL);
@@ -1724,7 +1737,7 @@ public class CmdRunner {
             }
 
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -1783,7 +1796,7 @@ public class CmdRunner {
                 appendList(buf);
             }
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -1909,7 +1922,7 @@ public class CmdRunner {
                 }
             }
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -1972,7 +1985,7 @@ public class CmdRunner {
             }
 
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -2042,7 +2055,7 @@ public class CmdRunner {
             }
 
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -2102,7 +2115,7 @@ public class CmdRunner {
                 appendList(buf);
             }
         } else {
-            buf.append("Bad command usage: \"");
+            buf.append(BAD_COMMAND_USAGE);
             buf.append(mdxCmd);
             buf.append('"');
             buf.append(NL);
@@ -2129,7 +2142,6 @@ public class CmdRunner {
                 ? "" : mdxCmd.substring(4);
         } catch (Exception ex) {
             setError(ex);
-            //return error;
             return null;
         }
     }
@@ -2174,11 +2186,7 @@ public class CmdRunner {
             String cubeName = m.group(1);
             String expression = mdxCmd.substring(cubeName.length() + 1);
 
-            if (cubeName.charAt(0) == '"') {
-                cubeName = cubeName.substring(1, cubeName.length() - 1);
-            } else if (cubeName.charAt(0) == '\'') {
-                cubeName = cubeName.substring(1, cubeName.length() - 1);
-            } else if (cubeName.charAt(0) == '[') {
+            if (cubeName.charAt(0) == '"' || cubeName.charAt(0) == '\'' || cubeName.charAt(0) == '[') {
                 cubeName = cubeName.substring(1, cubeName.length() - 1);
             }
 
@@ -2208,7 +2216,7 @@ public class CmdRunner {
 
             Cube cube = getCube(cubeName);
             if (cube == null) {
-                buf.append("No cube found with name \"");
+                buf.append(NO_CUBE_FOUND_WITH_NAME);
                 buf.append(cubeName);
                 buf.append("\"");
                 String msg = buf.toString();
@@ -2217,10 +2225,8 @@ public class CmdRunner {
 
             } else {
                 try {
-                    if (cubeName.indexOf(' ') >= 0) {
-                        if (cubeName.charAt(0) != '[') {
-                            cubeName = Util.quoteMdxIdentifier(cubeName);
-                        }
+                    if (cubeName.indexOf(' ') >= 0 && cubeName.charAt(0) != '[') {
+                        cubeName = Util.quoteMdxIdentifier(cubeName);
                     }
                     final char c = '\'';
                     if (expression.indexOf('\'') != -1) {
