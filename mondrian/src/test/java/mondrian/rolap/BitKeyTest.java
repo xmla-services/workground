@@ -13,6 +13,7 @@ package mondrian.rolap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.BitSet;
@@ -217,8 +218,7 @@ class BitKeyTest {
      * (comparing in both directions). All keys must be equal (albeit different
      * representations).
      */
-	@Test
-    private void doHashCode(BitKey[] bitKeys) {
+    void doHashCode(BitKey[] bitKeys) {
         for (int i1 = 0; i1 < bitKeys.length; i1++) {
             BitKey bitKey1 = bitKeys[i1];
             for (int i2 = 0; i2 < bitKeys.length; i2++) {
@@ -345,7 +345,7 @@ class BitKeyTest {
     void testNewBitKeyIsTheSameAsAClearedBitKey() {
         BitKey bitKey = BitKey.Factory.makeBitKey(8);
         bitKey.set(1);
-        assertFalse(BitKey.Factory.makeBitKey(8).equals(bitKey));
+        assertNotEquals(BitKey.Factory.makeBitKey(8), bitKey);
         bitKey.clear();
         assertEquals(BitKey.Factory.makeBitKey(8), bitKey);
     }
@@ -584,9 +584,9 @@ class BitKeyTest {
                         i >= 0;
                         i = bitSet.nextSetBit(i + 1))
                     {
-                        assertTrue(i == positions0[j++]);
+                        assertEquals(i,  positions0[j++]);
                     }
-                    assertTrue(j == positions0.length);
+                    assertEquals(j, positions0.length);
                 }
             });
     }
@@ -876,7 +876,6 @@ class BitKeyTest {
         }
     }
 
-	@Test
     private void doTestNotEquals(
         int size0,
         int[] positions0,

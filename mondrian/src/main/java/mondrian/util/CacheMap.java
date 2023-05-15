@@ -94,6 +94,7 @@ public class CacheMap<S, T> implements Map<S, T> {
                     }
 
                     @Override
+                    @SuppressWarnings("java:S2293")
 					public T setValue(final T x) {
                         return entry.setValue(
                             new Pair<S, T>(
@@ -202,7 +203,7 @@ public class CacheMap<S, T> implements Map<S, T> {
     /**
      * Pair of linked key - value
      */
-    private final class Pair<S, T> implements java.io.Serializable {
+    private static final class Pair<S, T> implements java.io.Serializable {
         private final T value;
         private final WeakReference<LinkedNode<S>> node;
         private Pair(final T value, final LinkedNode<S> node) {
@@ -229,7 +230,7 @@ public class CacheMap<S, T> implements Map<S, T> {
     /**
      * Represents a node in a linked list.
      */
-    private class LinkedNode<S> implements java.io.Serializable {
+    private static class LinkedNode<S> implements java.io.Serializable {
         private LinkedNode<S> next;
         private LinkedNode<S> prev;
         private S key;

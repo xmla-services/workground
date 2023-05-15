@@ -9,6 +9,7 @@
 */
 package mondrian.test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertAxisThrows;
@@ -133,9 +134,7 @@ protected void assertQuerySql(Connection connection,
               + "    ISNULL(`product`.`product_name`) ASC, `product`.`product_name` ASC");
     }
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public static  String getMysqlAgg(Connection connection) {
+    private static String getMysqlAgg(Connection connection) {
       return "select\n"
               + "    `product_class`.`product_family` as `c0`,\n"
               + "    `product_class`.`product_department` as `c1`,\n"
@@ -496,7 +495,7 @@ protected void assertQuerySql(Connection connection,
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1430"> Mondrian-1430:</a> Native top count support
    * for + and tuple (Parentheses) expressions in Calculated member slicer
    */
-  @Disabled //disabled for CI build
+  @Disabled("disabled for CI build") //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeTopCountWithParenthesesMemberSlicer(TestingContext context) {
@@ -767,10 +766,11 @@ protected void assertQuerySql(Connection connection,
     }
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
+    Connection connection = context.createConnection();
     try {
       executeQuery(
         "select TopCount( CrossJoin(Gender.Gender.members, Product.Drink.Children), 2) "
-          + "on 0 from Sales", context.createConnection());
+          + "on 0 from Sales", connection);
       fail( "Expected expression to fail native eval" );
     } catch ( NativeEvaluationUnsupportedException neue ) {
       assertTrue(
@@ -786,11 +786,12 @@ protected void assertQuerySql(Connection connection,
     }
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
+    Connection connection = context.createConnection();
     try {
       executeQuery(
         "with member Gender.foo as '1'"
           + "select TopCount( {Gender.foo, Gender.Gender.members}, 2) "
-          + "on 0 from Sales", context.createConnection());
+          + "on 0 from Sales", connection);
       fail( "Expected expression to fail native eval" );
     } catch ( NativeEvaluationUnsupportedException neue ) {
       assertTrue(
@@ -1470,7 +1471,7 @@ protected void assertQuerySql(Connection connection,
         + "  </Role>\n" );
     withSchema(context, schema);
     withRole(context, "F-MIS-BE-CLIENT" );
-    executeQuery(
+    Result result = executeQuery(
       "With\n"
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Store],[*BASE_MEMBERS_Warehouse])'\n"
         + "Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Store].CurrentMember.OrderKey,BASC,[Warehouse]"
@@ -1486,9 +1487,10 @@ protected void assertQuerySql(Connection connection,
         + "[*BASE_MEMBERS_Measures] on columns,\n"
         + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
         + "From [Warehouse and Sales]\n", context.createConnection());
+    assertNotNull(result);
   }
 
-  @Disabled //disabled for CI build
+  @Disabled("disabled for CI build") //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testNativeHonorsRoleRestrictions(TestingContext context) {

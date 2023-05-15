@@ -118,6 +118,7 @@ public class CartesianProductList<T>
         }
 
         @Override
+        @SuppressWarnings("java:S2272")
 		public List<T> next() {
             @SuppressWarnings({"unchecked"})
             List<T> result = Util.flatListCopy(elements);
