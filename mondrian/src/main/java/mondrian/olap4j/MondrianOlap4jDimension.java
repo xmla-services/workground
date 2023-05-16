@@ -45,8 +45,8 @@ class MondrianOlap4jDimension
 
     @Override
 	public boolean equals(Object obj) {
-        return obj instanceof MondrianOlap4jDimension
-            && dimension.equals(((MondrianOlap4jDimension) obj).dimension);
+        return obj instanceof MondrianOlap4jDimension mo4jd
+            && dimension.equals(mo4jd.dimension);
     }
 
     @Override

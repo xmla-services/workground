@@ -9,6 +9,7 @@
 package mondrian.rolap;
 
 import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -115,8 +116,9 @@ public class CacheControlImpl implements CacheControl {
 
     @Override
 	public CellRegion createCrossjoinRegion(CellRegion... regions) {
-        assert regions != null;
-        assert regions.length >= 2;
+        if (regions == null || regions.length < 2) {
+            throw new IllegalArgumentException("regions should be not null and regions.length should be >=2");
+        }
         final HashSet<Dimension> set = new HashSet<>();
         final List<CellRegionImpl> list = new ArrayList<>();
         for (CellRegion region : regions) {
@@ -191,7 +193,7 @@ public class CacheControlImpl implements CacheControl {
             cube.getSchemaReader(null).withLocus().getLevelMembers(
                 measuresDimension.getHierarchy().getLevels()[0],
                 false);
-        if (measures.size() == 0) {
+        if (measures.isEmpty()) {
             return new EmptyCellRegion();
         }
         return new MemberCellRegion(measures, false);
@@ -331,8 +333,8 @@ public class CacheControlImpl implements CacheControl {
      */
     @Override
 	public void flushSchema(Schema schema) {
-        if (RolapSchema.class.isInstance(schema)) {
-            RolapSchemaPool.instance().remove((RolapSchema)schema);
+        if (schema instanceof RolapSchema rolapSchema) {
+            RolapSchemaPool.instance().remove(rolapSchema);
         } else {
             throw new UnsupportedOperationException(
                 new StringBuilder(schema.getClass().getName()).append(" cannot be flushed").toString());
@@ -522,7 +524,7 @@ public class CacheControlImpl implements CacheControl {
                                 genericExpression(((RolapLevel) member.getLevel()).getKeyExp());
                             if (!levels.containsKey(ccName)) {
                                 levels.put(
-                                    ccName, new HashSet<Comparable>());
+                                    ccName, new HashSet<>());
                             }
                                 levels.get(ccName).add(
                                     (Comparable)((RolapMember)member).getKey());
@@ -629,7 +631,9 @@ public class CacheControlImpl implements CacheControl {
         boolean descendants)
     {
         if (upperMember != null && lowerMember != null) {
-            assert upperMember.getLevel().equals(lowerMember.getLevel());
+            if (!upperMember.getLevel().equals(lowerMember.getLevel())) {
+                throw new IllegalArgumentException("upper member level should be equals lower member level");
+            }
         }
         if (lowerMember == null) {
             lowerInclusive = false;
@@ -652,9 +656,9 @@ public class CacheControlImpl implements CacheControl {
 
     @Override
 	public MemberSet filter(Level level, MemberSet baseSet) {
-        if (level instanceof RolapCubeLevel) {
+        if (level instanceof RolapCubeLevel rolapCubeLevel) {
             // be forgiving
-            level = ((RolapCubeLevel) level).getRolapLevel();
+            level = rolapCubeLevel.getRolapLevel();
         }
         return ((MemberSetPlus) baseSet).filter((RolapLevel) level);
     }
@@ -893,7 +897,7 @@ public class CacheControlImpl implements CacheControl {
                     // skip to the next cube if necessary.
                     final List<Dimension> dimensions =
                         memberRegion.getDimensionality();
-                    if (dimensions.size() > 0) {
+                    if (!dimensions.isEmpty()) {
                         for (Cube cube
                             : dimensions.get(0) .getSchema().getCubes())
                         {
@@ -909,16 +913,11 @@ public class CacheControlImpl implements CacheControl {
                                 flush(crossRegion);
                             } catch (UndeclaredThrowableException e) {
                                 if (e.getCause()
-                                    instanceof InvocationTargetException)
+                                    instanceof InvocationTargetException ite)
                                 {
-                                    final InvocationTargetException ite =
-                                        (InvocationTargetException)e.getCause();
                                     if (ite.getTargetException()
-                                        instanceof MondrianException)
+                                        instanceof MondrianException me)
                                     {
-                                        final MondrianException me =
-                                            (MondrianException)
-                                                ite.getTargetException();
                                         if (me.getMessage()
                                             .matches(
                                                 "^Mondrian Error:Member '\\[.*\\]' not found$"))
@@ -968,10 +967,10 @@ public class CacheControlImpl implements CacheControl {
         private final Dimension dimension;
 
         MemberCellRegion(List<Member> memberList, boolean descendants) {
-            assert memberList.size() > 0;
+            assert !memberList.isEmpty();
             this.memberList = memberList;
             this.dimension = (memberList.get(0)).getDimension();
-            Util.discard(descendants);
+            discard(descendants);
         }
 
         @Override
@@ -1137,8 +1136,8 @@ public class CacheControlImpl implements CacheControl {
         @Override
 		public void accept(CellRegionVisitor visitor) {
             visitor.visit(this);
-            for (CellRegion component : components) {
-                CellRegionImpl cellRegion = (CellRegionImpl) component;
+            for (CellRegionImpl component : components) {
+                CellRegionImpl cellRegion = component;
                 cellRegion.accept(visitor);
             }
         }
@@ -1176,7 +1175,7 @@ public class CacheControlImpl implements CacheControl {
 
         UnionCellRegion(List<CellRegionImpl> regions) {
             this.regions = regions;
-            assert regions.size() >= 1;
+            assert !regions.isEmpty();
 
             // All regions must have same dimensionality.
             for (int i = 1; i < regions.size(); i++) {
@@ -1320,7 +1319,7 @@ public class CacheControlImpl implements CacheControl {
      * flushing a range of members from the cache, you may not wish to fetch
      * all of the members into the cache in order to flush them.
      */
-    public static abstract class MemberSetVisitorImpl
+    public abstract static class MemberSetVisitorImpl
         implements MemberSetVisitor
     {
         @Override
@@ -1710,7 +1709,9 @@ public class CacheControlImpl implements CacheControl {
         private Callable<Boolean> callable;
 
         public AddMemberCommand(RolapMember member) {
-            assert member != null;
+            if (member == null) {
+                throw new IllegalArgumentException("member should be not null");
+            }
             this.member = stripMember(member);
         }
 
@@ -1837,8 +1838,8 @@ public class CacheControlImpl implements CacheControl {
     }
 
     private static RolapMember stripMember(RolapMember member) {
-        if (member instanceof RolapCubeMember) {
-            member = ((RolapCubeMember) member).member;
+        if (member instanceof RolapCubeMember rolapCubeMember) {
+            member = rolapCubeMember.member;
         }
         return member;
     }
@@ -1846,8 +1847,8 @@ public class CacheControlImpl implements CacheControl {
     private static void stripMemberList(List<RolapMember> members) {
         for (int i = 0; i < members.size(); i++) {
             RolapMember member = members.get(i);
-            if (member instanceof RolapCubeMember) {
-                members.set(i, ((RolapCubeMember) member).member);
+            if (member instanceof RolapCubeMember rolapCubeMember) {
+                members.set(i, rolapCubeMember.member);
             }
         }
     }

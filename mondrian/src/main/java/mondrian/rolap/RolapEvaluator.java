@@ -352,7 +352,6 @@ public final int savepoint() {
     ensureCommandCapacity( commandCount + 3 );
     commands[commandCount++] = Command.SAVEPOINT;
     // noinspection AssertWithSideEffects
-    assert !Util.DEBUG || addChecksumStateCommand();
     return commandCount1;
   }
 
@@ -1423,7 +1422,7 @@ public boolean shouldIgnoreUnrelatedDimensions() {
     SET_CONTEXT( 2 ) {
       @Override
       void execute( RolapEvaluator evaluator ) {
-        final int memberOrdinal = (Integer) evaluator.commands[--evaluator.commandCount];
+        --evaluator.commandCount;
         final RolapMember member = (RolapMember) evaluator.commands[--evaluator.commandCount];
         evaluator.setContext( member, false );
       }

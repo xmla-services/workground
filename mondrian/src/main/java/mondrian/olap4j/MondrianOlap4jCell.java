@@ -118,8 +118,8 @@ public class MondrianOlap4jCell implements Cell {
     @Override
 	public String getErrorText() {
         Object o = cell.getValue();
-        if (o instanceof Throwable) {
-            return ((Throwable) o).getMessage();
+        if (o instanceof Throwable throwable) {
+            return throwable.getMessage();
         } else {
             return null;
         }
@@ -140,7 +140,7 @@ public class MondrianOlap4jCell implements Cell {
         return drillThroughInternal(
             -1,
             -1,
-            new ArrayList<OlapElement>(),
+            new ArrayList<>(),
             false,
             null,
             null);

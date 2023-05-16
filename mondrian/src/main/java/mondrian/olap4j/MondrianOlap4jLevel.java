@@ -59,8 +59,8 @@ class MondrianOlap4jLevel
 
     @Override
 	public boolean equals(Object obj) {
-        return obj instanceof MondrianOlap4jLevel
-            && level.equals(((MondrianOlap4jLevel) obj).level);
+        return obj instanceof MondrianOlap4jLevel mo4jl
+            && level.equals(mo4jl.level);
     }
 
     @Override

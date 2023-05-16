@@ -11,7 +11,6 @@ package mondrian.olap4j;
 
 import java.sql.Connection;
 import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -103,18 +102,6 @@ public class MondrianOlap4jDriver implements Driver {
     public MondrianOlap4jDriver(Context context) {
         this.context = context;
         this.factory = new FactoryJdbc41Impl();
-    }
-
-    /**
-     * Registers an instance of MondrianOlap4jDriver.
-     *
-     * <p>Called implicitly on class load, and implements the traditional
-     * 'Class.forName' way of registering JDBC drivers.
-     *
-     * @throws SQLException on error
-     */
-    private static void register() throws SQLException {
-        DriverManager.registerDriver(new MondrianOlap4jDriver());
     }
 
     @Override
