@@ -42,6 +42,8 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
+import static org.eigenbase.xom.XOMUtil.discard;
+
 /**
  * <code>RolapAggregationManager</code> manages all {@link Aggregation}s
  * in the system. It is a singleton class.
@@ -161,7 +163,7 @@ public class AggregationManager extends RolapAggregationManager {
                     futures.add(segmentCacheManager.cacheExecutor.submit(task));
                 }
                 for (Future<Boolean> future : futures) {
-                    Util.discard(Util.safeGet(future, "Flush cache"));
+                    discard(Util.safeGet(future, "Flush cache"));
                 }
             }
 
@@ -233,9 +235,7 @@ public class AggregationManager extends RolapAggregationManager {
 
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
-                "DrillThroughSQL: "
-                + pair.left
-                + Util.NL);
+                "DrillThroughSQL: {}{}" ,pair.left, Util.NL);
         }
 
         return pair.left;
@@ -305,8 +305,7 @@ public class AggregationManager extends RolapAggregationManager {
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
-                        "generateSqlQuery: sql="
-                        + sql.left);
+                        "generateSqlQuery: sql={}", sql.left);
                 }
 
                 return sql;
@@ -383,6 +382,9 @@ public class AggregationManager extends RolapAggregationManager {
         // whose level BitKey is an exact match and the aggregate table
         // can NOT have any foreign keys.
         assert rollup != null;
+        if (rollup == null) {
+            throw new IllegalArgumentException("rollup should be not null");
+        }
         BitKey fullBitKey = levelBitKey.or(measureBitKey);
 
         // a levelBitKey with all parent bits set.

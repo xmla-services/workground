@@ -105,7 +105,7 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
         case TYPE_OTHER:
             return Datatype.VARIANT;
         default:
-            throw new RuntimeException("unexpected: " + property.getType());
+            throw new Olap4jRuntimeException("unexpected: " + property.getType());
         }
     }
 

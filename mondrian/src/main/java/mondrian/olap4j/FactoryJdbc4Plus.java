@@ -26,11 +26,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.daanse.engine.api.Context;
-import org.olap4j.CellSetMetaData;
 import org.olap4j.OlapConnection;
-import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
-import org.olap4j.OlapStatement;
 
 import mondrian.rolap.RolapConnection;
 
@@ -42,9 +39,13 @@ import mondrian.rolap.RolapConnection;
  */
 class FactoryJdbc4Plus {
 
+    private FactoryJdbc4Plus() {
+        // constructor
+    }
+
     // Inner classes
 
-    protected static abstract class AbstractEmptyResultSet
+    protected abstract static class AbstractEmptyResultSet
         extends EmptyResultSet
     {
         AbstractEmptyResultSet(
@@ -374,7 +375,7 @@ class FactoryJdbc4Plus {
         }
     }
 
-    static abstract class AbstractConnection
+    abstract static class AbstractConnection
         extends MondrianOlap4jConnection
         implements OlapConnection
     {
@@ -385,16 +386,6 @@ class FactoryJdbc4Plus {
             Properties info, Context context) throws SQLException
         {
             super(factory, driver, url, info, context);
-        }
-
-        @Override
-		public OlapStatement createStatement() {
-            return super.createStatement();
-        }
-
-        @Override
-		public OlapDatabaseMetaData getMetaData() {
-            return super.getMetaData();
         }
 
         // implement java.sql.Connection methods
@@ -464,10 +455,10 @@ class FactoryJdbc4Plus {
         }
     }
 
-    static abstract class AbstractCellSet
+    abstract static class AbstractCellSet
         extends MondrianOlap4jCellSet
     {
-        public AbstractCellSet(
+        protected AbstractCellSet(
             MondrianOlap4jStatement olap4jStatement)
         {
             super(olap4jStatement);
@@ -796,20 +787,15 @@ class FactoryJdbc4Plus {
     // No need for an "AbstractStatement" class. Statement API is the same
     // JDBC 3 and JDBC 4.
 
-    static abstract class AbstractPreparedStatement
+    abstract static class AbstractPreparedStatement
         extends MondrianOlap4jPreparedStatement
     {
-        public AbstractPreparedStatement(
+        protected AbstractPreparedStatement(
             MondrianOlap4jConnection olap4jConnection,
             String mdx)
             throws OlapException
         {
             super(olap4jConnection, mdx);
-        }
-
-        @Override
-		public CellSetMetaData getMetaData() {
-            return super.getMetaData();
         }
 
         // implement java.sql.PreparedStatement methods
@@ -942,19 +928,14 @@ class FactoryJdbc4Plus {
         }
     }
 
-    static abstract class AbstractDatabaseMetaData
+    abstract static class AbstractDatabaseMetaData
         extends MondrianOlap4jDatabaseMetaData
     {
-        public AbstractDatabaseMetaData(
+        protected AbstractDatabaseMetaData(
             MondrianOlap4jConnection olap4jConnection,
             RolapConnection mondrianConnection)
         {
             super(olap4jConnection, mondrianConnection);
-        }
-
-        @Override
-		public OlapConnection getConnection() {
-            return super.getConnection();
         }
 
         // implement java.sql.DatabaseMetaData methods

@@ -148,15 +148,15 @@ class MondrianOlap4jCube
                 // org.olap4j.metadata.Measure
                 MondrianOlap4jMember olap4jMember = olap4jConnection.toOlap4j(
                     member);
-                if (olap4jMember instanceof Measure) {
-                    measures.add((Measure) olap4jMember);
+                if (olap4jMember instanceof Measure measure) {
+                    measures.add(measure);
                 }
             }
             return measures;
         } catch (OlapException e) {
             // OlapException not possible, since measures are stored in memory.
             // Demote from checked to unchecked exception.
-            throw new RuntimeException(e);
+            throw new Olap4jRuntimeException(e);
         }
     }
 

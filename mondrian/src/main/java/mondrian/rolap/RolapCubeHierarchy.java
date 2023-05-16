@@ -311,21 +311,19 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         RelationOrJoin oldrel,
         RelationOrJoin newrel)
     {
-        if (oldrel == null && newrel == null) {
-            return;
-        } else if (oldrel instanceof Relation oldrelRelation
-            && newrel instanceof Relation newrelRelation)
-        {
-            aliases.put(
-                RelationUtil.getAlias(oldrelRelation),
-                RelationUtil.getAlias(newrelRelation));
-        } else if (oldrel instanceof Join oldjoin
-            && newrel instanceof Join newjoin)
-        {
-            extractNewAliases(left(oldjoin), left(newjoin));
-            extractNewAliases(right(oldjoin), right(newjoin));
-        } else {
-            throw new UnsupportedOperationException();
+        if (oldrel != null && newrel != null) {
+            if (oldrel instanceof Relation oldrelRelation
+                && newrel instanceof Relation newrelRelation) {
+                aliases.put(
+                    RelationUtil.getAlias(oldrelRelation),
+                    RelationUtil.getAlias(newrelRelation));
+            } else if (oldrel instanceof Join oldjoin
+                && newrel instanceof Join newjoin) {
+                extractNewAliases(left(oldjoin), left(newjoin));
+                extractNewAliases(right(oldjoin), right(newjoin));
+            } else {
+                throw new UnsupportedOperationException();
+            }
         }
     }
 
@@ -426,14 +424,18 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      * @return Member of this hierarchy
      */
     private RolapCubeMember bootstrapLookup(RolapMember rolapMember) {
-        RolapCubeMember parent =
-            rolapMember.getParentMember() == null
-                ? null
-                : rolapMember.getParentMember().isAll()
-                    ? currentAllMember
-                    : bootstrapLookup(rolapMember.getParentMember());
+        RolapCubeMember parent = getParent(rolapMember);
         RolapCubeLevel level = cubeLevels[rolapMember.getLevel().getDepth()];
         return reader.lookupCubeMember(parent, rolapMember, level);
+    }
+
+    private RolapCubeMember getParent(RolapMember rolapMember) {
+        if (rolapMember.getParentMember() == null) {
+            return null;
+        }
+            return rolapMember.getParentMember().isAll()
+            ? currentAllMember
+            : bootstrapLookup(rolapMember.getParentMember());
     }
 
     @Override
@@ -813,6 +815,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     // for performance, we should check level.isAll at the top
                     // of the method; if it is for correctness, leave the code
                     // in
+                    /*
                     if (false && member == rolapHierarchy.getAllMember()) {
                         newlist.add(getAllMember());
                     } else {
@@ -822,6 +825,12 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                                         cubeLevel);
                         newlist.add(cubeMember);
                     }
+                     old code  if condition all time false*/
+                    RolapCubeMember cubeMember =
+                        lookupCubeMemberWithParent(
+                            member,
+                            cubeLevel);
+                    newlist.add(cubeMember);
                 }
                 rolapCubeCacheHelper.putLevelMembersInCache(
                     level, constraint, newlist);

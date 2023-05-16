@@ -49,8 +49,8 @@ public class MondrianOlap4jHierarchy
 
     @Override
 	public boolean equals(Object obj) {
-        return obj instanceof MondrianOlap4jHierarchy
-            && hierarchy.equals(((MondrianOlap4jHierarchy) obj).hierarchy);
+        return obj instanceof MondrianOlap4jHierarchy mo4jh
+            && hierarchy.equals(mo4jh.hierarchy);
     }
 
     @Override

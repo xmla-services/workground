@@ -25,6 +25,7 @@ public class MdxParserValidatorImpl implements MdxParserValidator {
      * Creates a MdxParserValidatorImpl.
      */
     public MdxParserValidatorImpl() {
+        // constructor
     }
 
     @Override

@@ -43,6 +43,12 @@ import mondrian.xmla.XmlaUtil;
  * @since May 23, 2007
  */
 abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
+
+    public static final String SCHEMA_NAME = "SCHEMA_NAME";
+    public static final String CUBE_NAME = "CUBE_NAME";
+    public static final String CATALOG_NAME = "CATALOG_NAME";
+    public static final String DIMENSION_UNIQUE_NAME = "DIMENSION_UNIQUE_NAME";
+    public static final String HIERARCHY_UNIQUE_NAME = "HIERARCHY_UNIQUE_NAME";
     final MondrianOlap4jConnection olap4jConnection;
 
     private static final Comparator<Catalog> CATALOG_COMP =
@@ -97,7 +103,6 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     private ResultSet getMetadata(
         String methodName,
         Object... patternValues)
-        throws OlapException
     {
         Map<String, Object> restrictionMap =
             new HashMap<>();
@@ -106,8 +111,8 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
             final String key = (String) patternValues[i * 2];
             Object value = patternValues[i * 2 + 1];
             if (value != null) {
-                if (value instanceof String) {
-                    value = Collections.singletonList((String) value);
+                if (value instanceof String str) {
+                    value = Collections.singletonList(str);
                 }
                 restrictionMap.put(key, value);
             }
@@ -764,7 +769,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
         String catalog,
         String schemaPattern,
         String tableNamePattern,
-        String types[]) throws SQLException
+        String[] types) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
@@ -1137,8 +1142,8 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_ACTIONS",
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
             "ACTION_NAME", wildcard(actionNamePattern));
     }
 
@@ -1173,11 +1178,11 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_PROPERTIES",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
-            "DIMENSION_UNIQUE_NAME", dimensionUniqueName,
-            "HIERARCHY_UNIQUE_NAME", hierarchyUniqueName,
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
+            DIMENSION_UNIQUE_NAME, dimensionUniqueName,
+            HIERARCHY_UNIQUE_NAME, hierarchyUniqueName,
             "LEVEL_UNIQUE_NAME", levelUniqueName,
             "MEMBER_UNIQUE_NAME", memberUniqueName,
             "PROPERTY_NAME", wildcard(propertyNamePattern));
@@ -1204,9 +1209,9 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_CUBES",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern));
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern));
     }
 
     @Override
@@ -1219,8 +1224,8 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_DIMENSIONS",
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
             "DIMENSION_NAME", wildcard(dimensionNamePattern));
     }
 
@@ -1244,10 +1249,10 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_HIERARCHIES",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
-            "DIMENSION_UNIQUE_NAME", dimensionUniqueName,
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
+            DIMENSION_UNIQUE_NAME, dimensionUniqueName,
             "HIERARCHY_NAME", wildcard(hierarchyNamePattern));
     }
 
@@ -1261,9 +1266,9 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_MEASURES",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
             "MEASURE_NAME", wildcard(measureNamePattern),
             "MEASURE_UNIQUE_NAME", measureUniqueName);
     }
@@ -1289,11 +1294,11 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
         }
         return getMetadata(
             "MDSCHEMA_MEMBERS",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
-            "DIMENSION_UNIQUE_NAME", dimensionUniqueName,
-            "HIERARCHY_UNIQUE_NAME", hierarchyUniqueName,
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
+            DIMENSION_UNIQUE_NAME, dimensionUniqueName,
+            HIERARCHY_UNIQUE_NAME, hierarchyUniqueName,
             "LEVEL_UNIQUE_NAME", levelUniqueName,
             "MEMBER_UNIQUE_NAME", memberUniqueName,
             "TREE_OP", treeOpString);
@@ -1310,11 +1315,11 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_LEVELS",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
-            "DIMENSION_UNIQUE_NAME", dimensionUniqueName,
-            "HIERARCHY_UNIQUE_NAME", hierarchyUniqueName,
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
+            DIMENSION_UNIQUE_NAME, dimensionUniqueName,
+            HIERARCHY_UNIQUE_NAME, hierarchyUniqueName,
             "LEVEL_NAME", wildcard(levelNamePattern));
     }
 
@@ -1327,9 +1332,9 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     {
         return getMetadata(
             "MDSCHEMA_SETS",
-            "CATALOG_NAME", catalog,
-            "SCHEMA_NAME", wildcard(schemaPattern),
-            "CUBE_NAME", wildcard(cubeNamePattern),
+            CATALOG_NAME, catalog,
+            SCHEMA_NAME, wildcard(schemaPattern),
+            CUBE_NAME, wildcard(cubeNamePattern),
             "SET_NAME", wildcard(setNamePattern));
     }
 }

@@ -69,7 +69,7 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
                 deduceType(rowList, i);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new Olap4jRuntimeException(e);
         }
     }
 
@@ -87,8 +87,8 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
                 if (type == Types.OTHER) {
                     type = deduceColumnType(o);
                 }
-                if (o instanceof String) {
-                    maxLen = Math.max(maxLen, ((String) o).length());
+                if (o instanceof String str) {
+                    maxLen = Math.max(maxLen, str.length());
                 }
             }
         }
@@ -166,10 +166,10 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
     @Override
 	public boolean getBoolean(int columnIndex) throws SQLException {
         Object o = getColumn(columnIndex - 1);
-        if (o instanceof Boolean) {
-            return (Boolean) o;
-        } else if (o instanceof String) {
-            return Boolean.valueOf((String) o);
+        if (o instanceof Boolean b) {
+            return b;
+        } else if (o instanceof String str) {
+            return Boolean.valueOf(str);
         } else {
             return !o.equals(0);
         }
@@ -266,10 +266,10 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
     @Override
 	public boolean getBoolean(String columnLabel) throws SQLException {
         Object o = getColumn(columnLabel);
-        if (o instanceof Boolean) {
-            return (Boolean) o;
-        } else if (o instanceof String) {
-            return Boolean.valueOf((String) o);
+        if (o instanceof Boolean b) {
+            return b;
+        } else if (o instanceof String str) {
+            return Boolean.valueOf(str);
         } else {
             return !o.equals(0);
         }
@@ -445,7 +445,7 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
 
     @Override
 	public boolean first() throws SQLException {
-        if (rowList.size() == 0) {
+        if (rowList.isEmpty()) {
             return false;
         } else {
             rowOrdinal = 0;
@@ -455,7 +455,7 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
 
     @Override
 	public boolean last() throws SQLException {
-        if (rowList.size() == 0) {
+        if (rowList.isEmpty()) {
             return false;
         } else {
             rowOrdinal = rowList.size() - 1;
@@ -598,7 +598,7 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
     }
 
     @Override
-	public void updateBytes(int columnIndex, byte x[]) throws SQLException {
+	public void updateBytes(int columnIndex, byte[] x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -707,7 +707,7 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
     }
 
     @Override
-	public void updateBytes(String columnLabel, byte x[]) throws SQLException {
+	public void updateBytes(String columnLabel, byte[] x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 

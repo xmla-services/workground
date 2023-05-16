@@ -29,7 +29,6 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.MemberArrayValueCalc;
@@ -56,10 +55,11 @@ import mondrian.olap.type.Type;
  */
 class OrderFunDef extends FunDefBase {
 
-  static final ResolverImpl Resolver = new ResolverImpl();
+    static final ResolverImpl Resolver = new ResolverImpl();
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
+    public static final String CALC_IMPL = "CalcImpl";
 
-  public OrderFunDef( ResolverBase resolverBase, int type, int[] types ) {
+    public OrderFunDef( ResolverBase resolverBase, int type, int[] types ) {
     super( resolverBase, type, types );
   }
 
@@ -75,9 +75,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     assert keySpecCount >= 1;
     final Calc expCalc = keySpecList.get( 0 ).getKey();
     calcList[1] = expCalc;
-    if ( keySpecCount == 1 ) {
 
-      if ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) ) {
+    if (keySpecCount == 1 && ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) )) {
         List<MemberCalc> constantList = new ArrayList<>();
         List<MemberCalc> variableList = new ArrayList<>();
         final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractCalc) expCalc ).getCalcs();
@@ -95,7 +94,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           // All members are constant. Optimize by setting entire
           // context first.
           calcList[1] = new ValueCalc( expCalc.getType()  );
-          return new ContextCalc( calcs, new CalcImpl( "CalcImpl",call.getType(), calcList, keySpecList ) );
+          return new ContextCalc( calcs, new CalcImpl(CALC_IMPL,call.getType(), calcList, keySpecList ) );
         } else {
           // Some members are constant. Evaluate these before
           // evaluating the list expression.
@@ -103,16 +102,15 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
               MemberValueCalc.create(  expCalc.getType() , variableList.toArray(
                   new MemberCalc[variableList.size()] ), compiler.getEvaluator()
                       .mightReturnNullForUnrelatedDimension() );
-          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( "CalcImpl",call.getType(),
+          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( CALC_IMPL,call.getType(),
               calcList, keySpecList ) );
         }
-      }
     }
     for ( int i = 1; i < keySpecCount; i++ ) {
       final Calc expCalcs = keySpecList.get( i ).getKey();
       calcList[i + 1] = expCalcs;
     }
-    return new CalcImpl( "CalcImpl",call.getType(), calcList, keySpecList );
+    return new CalcImpl( CALC_IMPL,call.getType(), calcList, keySpecList );
   }
 
   private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
@@ -148,7 +146,6 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     public CalcImpl( String name,Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
       super( name,type, calcList );
-      // assert iterCalc.getResultStyle() == ResultStyle.MUTABLE_LIST;
       this.iterCalc = (IterCalc) calcList[0];
       this.sortKeyCalc = calcList[1];
       this.keySpecList = keySpecList;
@@ -162,7 +159,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       final TupleIterable iterable = iterCalc.evaluateIterable( rootEvaluator );
       // REVIEW: If iterable happens to be a list, we'd like to pass it,
       // but we cannot yet guarantee that it is mutable.
-      final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null;
+      // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code
+      final TupleList list = null;
       XOMUtil.discard( iterCalc.getResultStyle() );
       return handleSortWithOneKeySpec( subEvaluator, iterable, list );
     }
@@ -174,7 +172,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         final TupleIterable iterable = iterCalc.evaluateIterable( evaluator );
         // REVIEW: If iterable happens to be a list, we'd like to pass it,
         // but we cannot yet guarantee that it is mutable.
-        final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null;
+        // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code list all time null
+        final TupleList list = null;
         // go by size of keySpecList before purging
         if ( originalKeySpecCount == 1 ) {
           return handleSortWithOneKeySpec( evaluator, iterable, list );
@@ -188,9 +187,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           try {
             evaluator.setNonEmpty( false );
             if ( arity == 1 ) {
+              //tupleList =
+              //    new UnaryTupleList( Sorter.sortMembers( evaluator, iterable.slice( 0 ), list == null ? null : list
+              //        .slice( 0 ), keySpecList ) ); -- old code list all time null
               tupleList =
-                  new UnaryTupleList( Sorter.sortMembers( evaluator, iterable.slice( 0 ), list == null ? null : list
-                      .slice( 0 ), keySpecList ) );
+                     new UnaryTupleList( Sorter.sortMembers( evaluator, iterable.slice( 0 ), null, keySpecList ) );
             } else {
               tupleList = Sorter.sortTuples( evaluator, iterable, list, keySpecList, arity );
             }
@@ -236,8 +237,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
 
         Flag sortKeyDir = spec.getDirection();
-        result.append( sortKeyDir.descending ? ( sortKeyDir.brk ? Flag.BDESC : Flag.DESC ) : ( sortKeyDir.brk
-            ? Flag.BASC : Flag.ASC ) );
+        result.append( sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk) );
       }
       arguments.put( "direction", result.toString() );
     }
@@ -247,7 +247,15 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
 
-    private void purgeKeySpecList( List<SortKeySpec> keySpecList, TupleList list ) {
+    private Flag getDesc(boolean brk) {
+        return brk ? Flag.BDESC : Flag.DESC;
+    }
+
+    private Flag getAsc(boolean brk) {
+        return brk ? Flag.BASC : Flag.ASC;
+    }
+
+      private void purgeKeySpecList( List<SortKeySpec> keySpecList, TupleList list ) {
       if ( list == null || list.isEmpty() ) {
         return;
       }
@@ -269,8 +277,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       while ( iter.hasNext() ) {
         SortKeySpec key = iter.next();
         Calc expCalc = key.getKey();
-        if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl ) {
-          Calc[] calcs = ( (MemberOrderKeyFunDef.CalcImpl) expCalc ).getCalcs();
+        if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl calc) {
+          Calc[] calcs = calc.getCalcs();
           MemberCalc memberCalc = (MemberCalc) calcs[0];
           if ( memberCalc instanceof ConstantCalc || !listHierarchies.contains( memberCalc.getType()
               .getHierarchy() ) ) {

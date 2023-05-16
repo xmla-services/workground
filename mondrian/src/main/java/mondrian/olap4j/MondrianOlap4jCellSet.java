@@ -73,7 +73,7 @@ abstract class MondrianOlap4jCellSet
      *
      * @param olap4jStatement Statement
      */
-    public MondrianOlap4jCellSet(
+    protected MondrianOlap4jCellSet(
         MondrianOlap4jStatement olap4jStatement)
     {
         super(olap4jStatement, olap4jStatement.getQueryTimeoutMillis());
@@ -81,10 +81,8 @@ abstract class MondrianOlap4jCellSet
         this.query = olap4jStatement.getQuery();
         assert query != null;
         this.closed = false;
-        if (olap4jStatement instanceof MondrianOlap4jPreparedStatement) {
-            this.metaData =
-                ((MondrianOlap4jPreparedStatement) olap4jStatement)
-                    .cellSetMetaData;
+        if (olap4jStatement instanceof MondrianOlap4jPreparedStatement mo4jps) {
+            this.metaData = mo4jps.cellSetMetaData;
         } else {
             this.metaData =
                 new MondrianOlap4jCellSetMetaData(
@@ -672,7 +670,7 @@ abstract class MondrianOlap4jCellSet
     }
 
     @Override
-	public void updateBytes(int columnIndex, byte x[]) throws SQLException {
+	public void updateBytes(int columnIndex, byte[] x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -781,7 +779,7 @@ abstract class MondrianOlap4jCellSet
     }
 
     @Override
-	public void updateBytes(String columnLabel, byte x[]) throws SQLException {
+	public void updateBytes(String columnLabel, byte[] x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 

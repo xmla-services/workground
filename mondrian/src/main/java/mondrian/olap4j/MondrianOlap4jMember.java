@@ -59,8 +59,8 @@ public class MondrianOlap4jMember
 
     @Override
 	public boolean equals(Object obj) {
-        return obj instanceof MondrianOlap4jMember
-            && member.equals(((MondrianOlap4jMember) obj).member);
+        return obj instanceof MondrianOlap4jMember mo4jm
+            && member.equals(mo4jm.member);
     }
 
     @Override

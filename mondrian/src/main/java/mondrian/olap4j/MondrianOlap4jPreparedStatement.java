@@ -52,8 +52,9 @@ import org.olap4j.type.Type;
 
 import mondrian.olap.Parameter;
 import mondrian.olap.Query;
-import mondrian.olap.Util;
 import mondrian.util.Pair;
+
+import static org.eigenbase.xom.XOMUtil.discard;
 
 /**
  * Implementation of {@link PreparedOlapStatement}
@@ -69,7 +70,7 @@ abstract class MondrianOlap4jPreparedStatement
     extends MondrianOlap4jStatement
     implements PreparedOlapStatement, OlapParameterMetaData
 {
-    private final String mdx; // for debug
+
     MondrianOlap4jCellSetMetaData cellSetMetaData;
 
     /**
@@ -86,7 +87,6 @@ abstract class MondrianOlap4jPreparedStatement
         throws OlapException
     {
         super(olap4jConnection);
-        this.mdx = mdx;
         final Pair<Query, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
         this.query = pair.left;
         this.cellSetMetaData = pair.right;
@@ -169,7 +169,7 @@ abstract class MondrianOlap4jPreparedStatement
     }
 
     @Override
-	public void setBytes(int parameterIndex, byte x[]) throws SQLException {
+	public void setBytes(int parameterIndex, byte[] x) throws SQLException {
         getParameter(parameterIndex).setValue(x);
     }
 
@@ -476,7 +476,7 @@ abstract class MondrianOlap4jPreparedStatement
     @Override
 	public int getParameterMode(int param) throws SQLException {
         Parameter paramDef = getParameter(param); // forces param range check
-        Util.discard(paramDef);
+        discard(paramDef);
         return ParameterMetaData.parameterModeIn;
     }
 
@@ -509,32 +509,32 @@ abstract class MondrianOlap4jPreparedStatement
     }
 
     <T> T foo(TypeHelper<T> helper, Type type) {
-        if (type instanceof BooleanType) {
-            return helper.booleanType((BooleanType) type);
-        } else if (type instanceof CubeType) {
-            return helper.cubeType((CubeType) type);
-        } else if (type instanceof DecimalType) {
-            return helper.decimalType((DecimalType) type);
-        } else if (type instanceof DimensionType) {
-            return helper.dimensionType((DimensionType) type);
-        } else if (type instanceof HierarchyType) {
-            return helper.hierarchyType((HierarchyType) type);
-        } else if (type instanceof LevelType) {
-            return helper.levelType((LevelType) type);
-        } else if (type instanceof MemberType) {
-            return helper.memberType((MemberType) type);
-        } else if (type instanceof NullType) {
-            return helper.nullType((NullType) type);
-        } else if (type instanceof NumericType) {
-            return helper.numericType((NumericType) type);
-        } else if (type instanceof SetType) {
-            return helper.setType((SetType) type);
-        } else if (type instanceof StringType) {
-            return helper.stringType((StringType) type);
-        } else if (type instanceof TupleType) {
-            return helper.tupleType((TupleType) type);
-        } else if (type instanceof SymbolType) {
-            return helper.symbolType((SymbolType) type);
+        if (type instanceof BooleanType booleanType) {
+            return helper.booleanType(booleanType);
+        } else if (type instanceof CubeType cubeType) {
+            return helper.cubeType(cubeType);
+        } else if (type instanceof DecimalType decimalType) {
+            return helper.decimalType(decimalType);
+        } else if (type instanceof DimensionType dimensionType) {
+            return helper.dimensionType(dimensionType);
+        } else if (type instanceof HierarchyType hierarchyType) {
+            return helper.hierarchyType(hierarchyType);
+        } else if (type instanceof LevelType levelType) {
+            return helper.levelType(levelType);
+        } else if (type instanceof MemberType memberType) {
+            return helper.memberType(memberType);
+        } else if (type instanceof NullType nullType) {
+            return helper.nullType(nullType);
+        } else if (type instanceof NumericType numericType) {
+            return helper.numericType(numericType);
+        } else if (type instanceof SetType setType) {
+            return helper.setType(setType);
+        } else if (type instanceof StringType stringType) {
+            return helper.stringType(stringType);
+        } else if (type instanceof TupleType tupleType) {
+            return helper.tupleType(tupleType);
+        } else if (type instanceof SymbolType symbolType) {
+            return helper.symbolType(symbolType);
         } else {
             throw new UnsupportedOperationException();
         }

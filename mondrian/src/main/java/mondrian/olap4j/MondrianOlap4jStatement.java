@@ -538,7 +538,7 @@ abstract class MondrianOlap4jStatement
         try {
             return olap4jConnection.getMondrianConnection();
         } catch (OlapException e) {
-            throw new RuntimeException(e);
+            throw new Olap4jRuntimeException(e);
         }
     }
 

@@ -16,7 +16,6 @@ package mondrian.rolap;
 import java.io.Serializable;
 import java.util.BitSet;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Represents a set of bits.
