@@ -422,7 +422,7 @@ public class RolapSchema implements Schema {
                 // If a null catalogStr was passed in, we should have
                 // computed it above by re-reading the catalog URL.
                 assert catalogStr != null;
-                md5Bytes = new ByteString(Util.digestMd5(catalogStr));
+                md5Bytes = new ByteString(Util.digestSHA(catalogStr));
             }
 
             // throw error if we have an incompatible schema

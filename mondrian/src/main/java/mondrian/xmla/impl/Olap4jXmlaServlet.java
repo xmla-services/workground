@@ -80,38 +80,6 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
     private static final String OLAP_DRIVER_MAX_NUM_CONNECTIONS_PER_USER =
         "OlapDriverMaxNumConnectionsPerUser";
 
-    /**
-     * Unwraps a given interface from a given connection.
-     *
-     * @param connection Connection object
-     * @param clazz Interface to unwrap
-     * @param <T> Type of interface
-     * @return Unwrapped object; never null
-     * @throws java.sql.SQLException if cannot convert
-     */
-    private static <T> T unwrap(Connection connection, Class<T> clazz)
-        throws SQLException
-    {
-        // Invoke Wrapper.unwrap(). Works for JDK 1.6 and later, but we use
-        // reflection so that it compiles on JDK 1.5.
-        try {
-            final Class<?> wrapperClass = Class.forName("java.sql.Wrapper");
-            if (wrapperClass.isInstance(connection)) {
-                Method unwrapMethod = wrapperClass.getMethod("unwrap");
-                return clazz.cast(unwrapMethod.invoke(connection, clazz));
-            }
-        } catch (ClassNotFoundException
-            | NoSuchMethodException
-            | InvocationTargetException
-            | IllegalAccessException e) {
-            // ignore
-        }
-        if (connection instanceof OlapWrapper olapWrapper) {
-            return olapWrapper.unwrap(clazz);
-        }
-        throw new SQLException("not an instance");
-    }
-
     @Override
     protected XmlaHandler.ConnectionFactory createConnectionFactory(
         ServletConfig servletConfig)
@@ -170,7 +138,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
                     .append("olap4j connection to [")
                     .append(olap4jDriverConnectionString).append("] using driver ")
                     .append("[").append(olap4jDriverClassName).append("]").toString();
-            LOGGER.error(msg, ex);
+            LOGGER.error(msg);
             throw new ServletException(msg, ex);
         }
     }
@@ -252,6 +220,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         }
 
         @Override
+        @SuppressWarnings({"java:S3599", "java:S1171"})
 		public OlapConnection getConnection(
             String catalog,
             String schema,
@@ -325,6 +294,74 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         {
             return discoverDatasourcesResponse;
         }
+
+        /**
+         * Unwraps a given interface from a given connection.
+         *
+         * @param connection Connection object
+         * @param clazz Interface to unwrap
+         * @param <T> Type of interface
+         * @return Unwrapped object; never null
+         * @throws java.sql.SQLException if cannot convert
+         */
+        private static <T> T unwrap(Connection connection, Class<T> clazz)
+            throws SQLException
+        {
+            // Invoke Wrapper.unwrap(). Works for JDK 1.6 and later, but we use
+            // reflection so that it compiles on JDK 1.5.
+            try {
+                final Class<?> wrapperClass = Class.forName("java.sql.Wrapper");
+                if (wrapperClass.isInstance(connection)) {
+                    Method unwrapMethod = wrapperClass.getMethod("unwrap");
+                    return clazz.cast(unwrapMethod.invoke(connection, clazz));
+                }
+            } catch (ClassNotFoundException
+                | NoSuchMethodException
+                | InvocationTargetException
+                | IllegalAccessException e) {
+                // ignore
+            }
+            if (connection instanceof OlapWrapper olapWrapper) {
+                return olapWrapper.unwrap(clazz);
+            }
+            throw new SQLException("not an instance");
+        }
+
+        /**
+         * Returns something that implements {@link OlapConnection} but still
+         * behaves as the wrapper returned by the connection pool.
+         *
+         * <p>In other words we want the "close" method to play nice and do all the
+         * pooling actions while we want all the olap methods to execute directly on
+         * the un-wrapped OlapConnection object.
+         */
+        private static OlapConnection createDelegatingOlapConnection(
+            final Connection connection,
+            final OlapConnection olapConnection)
+        {
+            return (OlapConnection) Proxy.newProxyInstance(
+                olapConnection.getClass().getClassLoader(),
+                new Class[] {OlapConnection.class},
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(
+                        Object proxy,
+                        Method method,
+                        Object[] args)
+                        throws Throwable
+                    {
+                        if ("unwrap".equals(method.getName())
+                            || OlapConnection.class
+                            .isAssignableFrom(method.getDeclaringClass()))
+                        {
+                            return method.invoke(olapConnection, args);
+                        } else {
+                            return method.invoke(connection, args);
+                        }
+                    }
+                }
+            );
+        }
     }
 
     /**
@@ -394,39 +431,4 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         return options;
     }
 
-    /**
-     * Returns something that implements {@link OlapConnection} but still
-     * behaves as the wrapper returned by the connection pool.
-     *
-     * <p>In other words we want the "close" method to play nice and do all the
-     * pooling actions while we want all the olap methods to execute directly on
-     * the un-wrapped OlapConnection object.
-     */
-    private static OlapConnection createDelegatingOlapConnection(
-        final Connection connection,
-        final OlapConnection olapConnection)
-    {
-        return (OlapConnection) Proxy.newProxyInstance(
-            olapConnection.getClass().getClassLoader(),
-            new Class[] {OlapConnection.class},
-            new InvocationHandler() {
-                @Override
-				public Object invoke(
-                    Object proxy,
-                    Method method,
-                    Object[] args)
-                    throws Throwable
-                {
-                    if ("unwrap".equals(method.getName())
-                        || OlapConnection.class
-                        .isAssignableFrom(method.getDeclaringClass()))
-                    {
-                        return method.invoke(olapConnection, args);
-                    } else {
-                        return method.invoke(connection, args);
-                    }
-                }
-            }
-        );
-    }
 }

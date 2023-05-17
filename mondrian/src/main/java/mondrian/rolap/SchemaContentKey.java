@@ -49,6 +49,6 @@ public class SchemaContentKey extends StringKey {
             ConnectionKey.attributeValue(buf, "catalog", catalogUrl);
         }
         return new SchemaContentKey(
-            new ByteString(Util.digestMd5(buf.toString())).toString());
+            new ByteString(Util.digestSHA(buf.toString())).toString());
     }
 }

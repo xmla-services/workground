@@ -96,7 +96,6 @@ public abstract class Composite {
         public CompositeIterator(final Iterable<T>[] iterables) {
             this.iteratorIterator =
                 new IterableIterator<>(iterables);
-                Arrays.asList(iterables).iterator();
             this.iterator = Collections.<T>emptyList().iterator();
             this.hasNext = true;
             advance();

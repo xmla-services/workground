@@ -250,15 +250,15 @@ public class Util extends XOMUtil {
     }
 
     /**
-     * Creates an MD5 hash of a String.
+     * Creates an SHA-512 hash of a String.
      *
      * @param value String to create one way hash upon.
-     * @return MD5 hash.
+     * @return SHA-512 hash.
      */
-    public static byte[] digestMd5(final String value) {
+    public static byte[] digestSHA(final String value) {
         final MessageDigest algorithm;
         try {
-            algorithm = MessageDigest.getInstance("MD5");
+            algorithm = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             throw new UtilException(e);
         }

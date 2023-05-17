@@ -995,6 +995,7 @@ RME is this right
         return childLevel;
     }
 
+    @SuppressWarnings("java:S2201") // not remove call consolidate in ConcatenableList
     private void getMemberChildren2(
         RolapMember parentMember,
         List<RolapMember> children,
