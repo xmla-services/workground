@@ -104,7 +104,7 @@ public class EndpointRegistrar {
 				handlerMap.put(handler, new HandlerInfo(filter, priority == null ? 0 : priority.intValue()));
 				updateAll();
 			} catch (RuntimeException e) {
-				e.printStackTrace();
+				logger.error("EndpointRegistrar error addHandler", e);
 			}
 		}
 	}
@@ -167,7 +167,6 @@ public class EndpointRegistrar {
 			} catch (UnsupportedOperationException | WebServiceException e) {
 				// can't set a handler chain then!
 				logger.warn("Can't update handler chain for {}: {}", endpoint, e.toString());
-				e.printStackTrace();
 			}
 			endpoint.setProperties(properties);
 			synchronized (contextMap) {

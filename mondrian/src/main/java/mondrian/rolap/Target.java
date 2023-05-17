@@ -17,6 +17,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -24,8 +25,10 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.sql.TupleConstraint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
- /**
+/**
  * Helper class for {@link mondrian.rolap.HighCardSqlTupleReader} that
  * keeps track of target levels and constraints for adding to SQL query.
  *
@@ -35,6 +38,7 @@ import mondrian.rolap.sql.TupleConstraint;
  */
 @Deprecated
 public class Target extends TargetBase {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Target.class);
     private final HighCardSqlTupleReader sqlTupleReader;
     private final MemberCache cache;
     private final TupleConstraint constraint;
@@ -59,7 +63,7 @@ public class Target extends TargetBase {
     @Override
 	public void open() {
         levels = (RolapLevel[]) level.getHierarchy().getLevels();
-        setList(new ArrayList<RolapMember>());
+        setList(new ArrayList<>());
         levelDepth = level.getDepth();
         parentChild = level.isParentChild();
     }
@@ -149,10 +153,10 @@ public class Target extends TargetBase {
                 while (this.moreRows) {
                     this.moreRows = sqlTupleReader.readNextTuple();
                     if (limit > 0 && !asList && getList().size() > limit) {
-                        System.out.println(
-                            "Target: 199, Ouch! Toooo big array..."
-                            + hashCode());
-                        new Throwable().printStackTrace();
+
+                        LOGGER.debug(
+                            "Target: 199, Ouch! Toooo big array...{}",
+                            hashCode());
                     }
                 }
 
@@ -173,7 +177,7 @@ public class Target extends TargetBase {
                 if (0 < limit && index < 0) {
                     // Cannot send NoSuchElementException since its intercepted
                     // by AbstractSequentialList to identify out of bounds.
-                    throw new RuntimeException(
+                    throw new RolapRuntimeException(
                         new StringBuilder("Element ").append(idx)
                         .append(" has been forgotten").toString());
                 }
@@ -200,7 +204,7 @@ public class Target extends TargetBase {
                         // upstream before it ever reaches this point.
                         // For now it is sufficient. We get the speed of
                         // random access along with quick offsets.
-                        int deltaOffset = Math.round((limit / 10) + 0.5f);
+                        int deltaOffset = Math.round((limit / 10f) + 0.5f);
                         index -= deltaOffset;
                         offset += deltaOffset;
                         setList(
@@ -264,6 +268,9 @@ public class Target extends TargetBase {
 
                     @Override
 					public RolapMember next() {
+                        if(!hasNext()){
+                            throw new NoSuchElementException();
+                        }
                         return get(cursor++);
                     }
 

@@ -60,13 +60,13 @@ public class HttpWhiteboardPublisher {
 		logger.info("Registering {} with http whiteboard at context path {}", endpoint, path);
 		WhiteboardHttpContext httpContext = new WhiteboardHttpContext(path.toString(), endpoint.getProperties());
 		registrationMap.put(endpoint, httpContext);
-		System.out.println(">>> HttpWhiteboardPublisher publishing");
+		logger.debug(">>> HttpWhiteboardPublisher publishing");
 		try {
 			endpoint.publish(httpContext);
-			System.out.println(">>> HttpWhiteboardPublisher register service");
+			logger.debug(">>> HttpWhiteboardPublisher register service");
 			httpContext.register(bundleContext);
 		} catch (RuntimeException e) {
-			e.printStackTrace();
+			logger.error("HttpWhiteboardPublisher publishEndpoint error", e);
 		}
 	}
 

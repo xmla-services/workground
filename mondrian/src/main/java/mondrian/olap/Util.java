@@ -35,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -222,7 +223,7 @@ public class Util extends XOMUtil {
      */
     public static final boolean DEBUG = false;
 
-    private static final Random random = new Random();
+    private static final SecureRandom random = new SecureRandom();
 
     static {
         compatible = new UtilCompatibleJdk16();

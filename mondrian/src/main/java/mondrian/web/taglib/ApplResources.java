@@ -11,6 +11,9 @@
 
 package mondrian.web.taglib;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -29,6 +32,7 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class ApplResources implements Listener.ApplicationContext {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplResources.class);
     private static final String ATTRNAME = "mondrian.web.taglib.ApplResources";
     private ServletContext context;
 
@@ -65,7 +69,7 @@ public class ApplResources implements Listener.ApplicationContext {
             }
             return templates.newTransformer();
         } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+            LOGGER.error("getTransformer error");
             throw new RuntimeException(e.toString());
         }
     }

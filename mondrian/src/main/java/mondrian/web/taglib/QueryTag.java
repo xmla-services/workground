@@ -11,6 +11,9 @@
 
 package mondrian.web.taglib;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
@@ -41,14 +44,17 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  */
 public class QueryTag extends BodyTagSupport {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueryTag.class);
+
     public QueryTag() {
+        // constructor
     }
 
     @Override
 	public int doAfterBody() throws JspException {
         try {
-            ApplResources ar =
-                ApplResources.getInstance(pageContext.getServletContext());
+
+            ApplResources.getInstance(pageContext.getServletContext());
             ResultCache rc =
                 ResultCache.getInstance(
                     pageContext.getSession(),
@@ -61,7 +67,7 @@ public class QueryTag extends BodyTagSupport {
             }
             return SKIP_BODY;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("QueryTag doAfterBody error");
             throw new JspException(e);
         }
     }

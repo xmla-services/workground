@@ -45,8 +45,8 @@ import mondrian.olap.Util;
  * @author Andreas Voss, 22 March, 2002
  */
 public class DomBuilder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DomBuilder.class);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomBuilder.class);
     Document factory;
     Result result;
     int dimCount;
@@ -66,7 +66,6 @@ public class DomBuilder {
         Document doc = db.newDocument();
         Element table = build(doc, result);
         doc.appendChild(table);
-        // debug(doc);
         return doc;
     }
 
@@ -203,7 +202,6 @@ public class DomBuilder {
             }
             for (int i = 0; i < positions.size(); i++) {
                 Position position = positions.get(i);
-                //Member[] currentMembers = positions.get(i).getMembers();
 
                 for (int j = 0; j < rowIndex - 1; j++) {
                     Member currentMember = position.get(j);
@@ -274,7 +272,7 @@ public class DomBuilder {
         ColumnBuilder cb = new ColumnBuilder(parent, axis);
         final int N = cb.getRowCount();
         for (int i = 0; i < N; i++) {
-            Element row = cb.build(i);
+            cb.build(i);
         }
     }
 
@@ -309,7 +307,7 @@ public class DomBuilder {
         List<Position> positions = result.getSlicerAxis().getPositions();
         for (int i = 0; i < positions.size(); i++) {
             Position position = positions.get(i);
-            if (position.size() > 0) {
+            if (!position.isEmpty()) {
                 Element el = elem("position", parent);
                 for (int j = 0; j < position.size(); j++) {
                     createMemberElem("member", el, position.get(j));
@@ -379,9 +377,10 @@ public class DomBuilder {
             templates.newTransformer().transform(
                 new DOMSource(doc),
                 new StreamResult(result));
-            LOGGER.debug(result.toString());
+            String msg = result.toString();
+            LOGGER.debug(msg);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("DomBuilder error", e);
         }
     }
 

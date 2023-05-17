@@ -17,6 +17,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 /**
@@ -42,8 +44,10 @@ import org.w3c.dom.Document;
  * @author Andreas Voss, 22 March, 2002
  */
 public class TransformTag extends TagSupport {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransformTag.class);
 
     public TransformTag() {
+        // constructor
     }
 
     @Override
@@ -57,12 +61,12 @@ public class TransformTag extends TagSupport {
                     pageContext.getServletContext(),
                     query);
             Document doc = rc.getDOM();
-            // DomBuilder.debug(doc);
+            // DomBuilder can use for debug
             Transformer transformer = ar.getTransformer(xsltURI, xsltCache);
             transformer.transform(
                 new DOMSource(doc), new StreamResult(pageContext.getOut()));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("doEndTag error");
             throw new JspException(e);
         }
         return EVAL_PAGE;

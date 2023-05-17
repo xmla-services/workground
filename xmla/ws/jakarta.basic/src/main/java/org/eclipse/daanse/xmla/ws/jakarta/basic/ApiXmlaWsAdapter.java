@@ -91,9 +91,11 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Session;
 
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.ws.Holder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApiXmlaWsAdapter implements WsAdapter {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApiXmlaWsAdapter.class);
 	XmlaService xmlaService;
 
 	public ApiXmlaWsAdapter(XmlaService xmlaService) {
@@ -174,7 +176,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
             };
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("ApiXmlaWsAdapter discover error", e);
 		}
 		return null;
 	}
@@ -202,7 +204,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+		    LOGGER.error("ApiXmlaWsAdapter execute error", e);
 		}
 		return executeResponse;
 	}

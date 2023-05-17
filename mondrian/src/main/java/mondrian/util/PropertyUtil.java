@@ -121,8 +121,7 @@ public class PropertyUtil {
         try {
             new PropertyUtil().generate(args);
         } catch (Exception e) {
-            LOGGER.error("Error while generating properties files.");
-            e.printStackTrace();
+            LOGGER.error("Error while generating properties files.", e);
         }
     }
 
