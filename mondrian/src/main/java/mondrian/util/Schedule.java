@@ -676,6 +676,7 @@ class MonthlyByWeekDateSchedule implements DateSchedule {
 /**
  * Utility functions for {@link Schedule} and supporting classes.
  */
+@SuppressWarnings("java:S2885")
 class ScheduleUtil {
     static final Calendar epochDay = ScheduleUtil.createCalendar(new Date(0));
     static final Calendar midnightTime =

@@ -283,7 +283,8 @@ public class Target extends TargetBase {
         };
 
         if (asList) {
-            l.size();
+            int s = l.size();
+            LOGGER.debug("size {}", s);
         }
 
         return Util.cast(l);

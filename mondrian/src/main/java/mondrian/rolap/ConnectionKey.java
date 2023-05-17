@@ -57,7 +57,7 @@ public class ConnectionKey extends StringKey {
                 attributeValue(buf, "jdbcUser", jdbcUser);
                 attributeValue(buf, "dataSourceStr", dataSourceStr);
             }
-            s = new ByteString(Util.digestMd5(buf.toString())).toString();
+            s = new ByteString(Util.digestSHA(buf.toString())).toString();
         }
         return new ConnectionKey(s);
     }

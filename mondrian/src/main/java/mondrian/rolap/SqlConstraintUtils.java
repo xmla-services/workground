@@ -491,7 +491,10 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     } else {
       if ( column.getDatatype().isNumeric() ) {
         // make sure it can be parsed
-        Double.valueOf( value );
+        var d = Double.valueOf( value );
+        if (d == null) {
+            throw new IllegalArgumentException("value should be parse to double");
+        }
       }
 
       // No extra slicers.... just use the = method
@@ -1408,7 +1411,11 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       } else {
         if ( datatype.isNumeric() ) {
           // make sure it can be parsed
-          Double.valueOf( columnValue );
+          var d = Double.valueOf( columnValue );
+          if (d == null) {
+              throw new IllegalArgumentException("value should be parse to double");
+          }
+
         }
         final StringBuilder buf = new StringBuilder();
         query.getDialect().quote( buf, columnValue, datatype );

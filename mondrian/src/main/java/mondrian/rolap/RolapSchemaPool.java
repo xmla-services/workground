@@ -253,7 +253,7 @@ public class RolapSchemaPool {
         String catalogStr,
         SchemaKey key)
     {
-        final ByteString md5Bytes = new ByteString(Util.digestMd5(catalogStr));
+        final ByteString md5Bytes = new ByteString(Util.digestSHA(catalogStr));
         RolapSchema schema = lookUp(mapMd5ToSchema, md5Bytes, pinSchemaTimeout);
         if (schema != null) {
             return schema;
