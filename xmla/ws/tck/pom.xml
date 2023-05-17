@@ -6,6 +6,10 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>
+  
+  <properties>
+	  <sonar.tests>src/</sonar.tests>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
