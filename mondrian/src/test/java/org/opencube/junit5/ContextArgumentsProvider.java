@@ -54,9 +54,12 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ServiceConsumer(cardinality = Cardinality.MULTIPLE, value = DatabaseProvider.class)
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContextArgumentsProvider.class);
 	private ContextSource contextSource;
 
 	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, Context>>> store = new HashMap<>();
@@ -131,7 +134,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								return o.testCase;
 							} catch (JAXBException e) {
-								e.printStackTrace();
+							    LOGGER.error("readTestcases error", e);
 							}
 
 						}
@@ -155,7 +158,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				try {
 					return c.getConstructor().newInstance();
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error("prepareContexts error", e);
 					return null;
 				}
 			});
@@ -201,7 +204,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 							} catch (Exception e) {
 
-								e.printStackTrace();
+                                LOGGER.error("prepareContexts error", e);
 								throw new RuntimeException(e);
 							}
 
@@ -212,7 +215,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								try {
 									return c.getConstructor().newInstance();
 								} catch (Exception e) {
-									e.printStackTrace();
+                                    LOGGER.error("prepareContexts error", e);
 									throw new RuntimeException(e);
 								}
 							}).forEachOrdered(u->context.update(u));

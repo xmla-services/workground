@@ -32,7 +32,7 @@ import org.osgi.service.log.LoggerFactory;
 import jakarta.xml.ws.Endpoint;
 
 /**
- * 
+ *
  * publishes Endpoints with the default embedded server
  */
 @Component(immediate = true, configurationPolicy = ConfigurationPolicy.REQUIRE, name = "org.eclipse.daanse.ws.runtime.embedded")
@@ -54,11 +54,11 @@ public class EmbeddedPublisher {
 		Object path = Objects.requireNonNullElse(properties.get(SoapWhiteboardConstants.SOAP_ENDPOINT_PATH), "/");
 		String epAddress = config.protocol() + "://" + config.host() + ":" + config.port() + path;
 		logger.info("Registering {} with embedded server and address {}", endpoint, epAddress);
-		System.out.println(">>> PUBLISH EP @ " + epAddress + " properties=" + properties);
+		logger.debug(">>> PUBLISH EP @ " + epAddress + " properties=" + properties);
 		try {
 			endpoint.publish(epAddress);
 		} catch (RuntimeException e) {
-			e.printStackTrace();
+			logger.error("EmbeddedPublisher publishEndpoint error", e);
 		}
 	}
 

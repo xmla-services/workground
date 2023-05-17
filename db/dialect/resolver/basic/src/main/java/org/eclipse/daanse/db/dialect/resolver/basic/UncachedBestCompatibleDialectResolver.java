@@ -76,7 +76,6 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
                     .findFirst()
                     .map(Entry::getKey);
         } catch (SQLException e) {
-            e.printStackTrace();
             LOGGER.error("connection error", e);
         }
         return Optional.empty();

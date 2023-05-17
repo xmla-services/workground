@@ -75,9 +75,12 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRo
 
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DiscoverServiceImpl implements DiscoverService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DiscoverServiceImpl.class);
     private SoapClient soapClient;
 
     public DiscoverServiceImpl(SoapClient soapClient) {
@@ -90,7 +93,7 @@ public class DiscoverServiceImpl implements DiscoverService {
         try {
             soapClient.callSoapWebService(null, null);
         } catch (SOAPException e) {
-            e.printStackTrace();
+            LOGGER.error("DiscoverService dbSchemaCatalogs error", e);
         }
         return null;
     }
@@ -173,14 +176,13 @@ public class DiscoverServiceImpl implements DiscoverService {
                         message.getSOAPBody()
                                 .addChildElement("dummy");
                     } catch (SOAPException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LOGGER.error("DiscoverService accept error", e);
                     }
                 }
             };
             soapClient.callSoapWebService(Optional.empty(), msg);
         } catch (SOAPException e) {
-            e.printStackTrace();
+            LOGGER.error("DiscoverService dataSources error", e);
         }
         return null;
     }

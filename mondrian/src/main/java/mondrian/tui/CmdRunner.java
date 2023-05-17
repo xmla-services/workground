@@ -35,7 +35,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import mondrian.rolap.RolapRuntimeException;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -62,6 +61,8 @@ import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.servlet.ServletException;
@@ -77,7 +78,7 @@ import javax.xml.xpath.XPathException;
  * @author Richard Emberson
  */
 public class CmdRunner {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmdRunner.class);
     private static final String NL = Util.NL;
     public static final String FOR_PARAMETER_NAMED = "For parameter named \"";
     public static final String THE_VALUE_WAS_TYPE = "the value was type \"";
@@ -2447,8 +2448,7 @@ public class CmdRunner {
             usage(badOption.getMessage(), System.out);
             Throwable t = badOption.getCause();
             if (t != null) {
-                System.out.println(t);
-                t.printStackTrace();
+                LOGGER.error("CmdRunner error", t);
             }
             return;
         }

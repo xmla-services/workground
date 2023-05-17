@@ -355,7 +355,7 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
+            LOGGER.error("encodeObject error", e);
             return null;
         }   // end catch
         finally
@@ -491,7 +491,7 @@ public class Base64
             }   // end try
             catch( java.io.IOException e )
             {
-                LOGGER.error("encode error", e);
+                LOGGER.error("encodeBytes error", e);
                 return null;
             }   // end catch
             finally
@@ -775,7 +775,7 @@ public class Base64
         }   // end try
         catch( java.io.IOException | java.lang.ClassNotFoundException e )
         {
-            e.printStackTrace();
+            LOGGER.error("decodeToObject error", e);
             obj = null;
         }   // end catch
 
