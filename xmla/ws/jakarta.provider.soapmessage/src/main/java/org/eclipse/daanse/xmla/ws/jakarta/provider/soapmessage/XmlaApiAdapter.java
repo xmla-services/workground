@@ -45,7 +45,7 @@ public class XmlaApiAdapter {
         try {
             handleBody(message.getSOAPBody());
         } catch (SOAPException e) {
-            e.printStackTrace();
+            LOGGER.error("handleRequest error", e);
         }
 
         return null;
