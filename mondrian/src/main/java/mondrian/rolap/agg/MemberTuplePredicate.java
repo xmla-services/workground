@@ -23,6 +23,8 @@ import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Predicate which constrains a column to a particular member, or a range
@@ -31,6 +33,7 @@ import mondrian.rolap.sql.SqlQuery;
  * @author jhyde
  */
 public class MemberTuplePredicate implements StarPredicate {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberTuplePredicate.class);
     private final Bound[] bounds;
     private final List<RolapStar.Column> columnList;
     private BitKey columnBitKey;
@@ -62,7 +65,6 @@ public class MemberTuplePredicate implements StarPredicate {
             computeColumnList(lower != null ? lower : upper, baseCube);
 
         if (lower == null) {
-            assert upper != null;
             bounds = new Bound[] {
                 new Bound(upper, upperStrict ? RelOp.LT : RelOp.LE)
             };
@@ -121,7 +123,7 @@ public class MemberTuplePredicate implements StarPredicate {
                 column = rolapCubeLevel
                                 .getBaseStarKeyColumn(baseCube);
             } else {
-                (new Exception()).printStackTrace();
+                LOGGER.debug("level not instanceof RolapCubeLevel");
             }
             if (column != null) {
                 if (columnBitKey == null) {

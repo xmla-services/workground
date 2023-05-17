@@ -491,7 +491,7 @@ public class Base64
             }   // end try
             catch( java.io.IOException e )
             {
-                e.printStackTrace();
+                LOGGER.error("encode error", e);
                 return null;
             }   // end catch
             finally
