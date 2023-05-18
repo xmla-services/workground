@@ -59,6 +59,7 @@ import mondrian.xmla.XmlaUtil;
  *
  * @author Gang Chen
  */
+@SuppressWarnings("java:S2226") //tests failed if set static for class fields
 public abstract class DefaultXmlaServlet extends XmlaServlet {
 
     protected static final String NL = System.getProperty("line.separator");
@@ -79,9 +80,9 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         " Envelope";
     public static final String THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST = "This should be handled at begin of processing request";
 
-    private static DocumentBuilderFactory domFactory = null;
+    private DocumentBuilderFactory domFactory = null;
 
-    private static boolean requireAuthenticatedSessions = false;
+    private boolean requireAuthenticatedSessions = false;
 
     /**
      * Session properties, keyed by session ID. Currently just username and
@@ -93,8 +94,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     @Override
 	public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
-        domFactory = getDocumentBuilderFactory();
-        requireAuthenticatedSessions =
+        this.domFactory = getDocumentBuilderFactory();
+        this.requireAuthenticatedSessions =
             Boolean.parseBoolean(
                 servletConfig.getInitParameter(REQUIRE_AUTHENTICATED_SESSIONS));
     }

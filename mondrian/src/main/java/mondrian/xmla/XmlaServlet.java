@@ -33,6 +33,7 @@ import java.util.Map;
  * @author Gang Chen
  * @since December, 2005
  */
+@SuppressWarnings("java:S2226") //tests failed if set static for class fields
 public abstract class XmlaServlet
     extends HttpServlet
     implements XmlaConstants
@@ -47,12 +48,12 @@ public abstract class XmlaServlet
     public static final String PARAM_CALLBACKS = "Callbacks";
     private static final String ERRORS_WHEN_HANDLING_XML_A_MESSAGE = "Errors when handling XML/A message";
 
-    protected static XmlaHandler xmlaHandler = null;
-    protected static String charEncoding = null;
+    protected XmlaHandler xmlaHandler = null;
+    protected String charEncoding = null;
     private final List<XmlaRequestCallback> callbackList =
         new ArrayList<>();
 
-    private static XmlaHandler.ConnectionFactory connectionFactory;
+    private XmlaHandler.ConnectionFactory connectionFactory;
 
     public enum Phase {
         VALIDATE_HTTP_HEAD,
@@ -106,7 +107,7 @@ public abstract class XmlaServlet
         // init: callbacks
         initCallbacks(servletConfig);
 
-        connectionFactory = createConnectionFactory(servletConfig);
+        this.connectionFactory = createConnectionFactory(servletConfig);
     }
 
     protected abstract XmlaHandler.ConnectionFactory createConnectionFactory(
@@ -119,8 +120,8 @@ public abstract class XmlaServlet
      * @return XMLA handler
      */
     protected XmlaHandler getXmlaHandler() {
-        if (xmlaHandler == null) {
-            xmlaHandler =
+        if (this.xmlaHandler == null) {
+            this.xmlaHandler =
                 new XmlaHandler(
                     connectionFactory,
                     "cxmla");
@@ -429,7 +430,7 @@ public abstract class XmlaServlet
         }
     }
 
-    private static void encodeRequestResponse(HttpServletRequest request, HttpServletResponse response) {
+    private void encodeRequestResponse(HttpServletRequest request, HttpServletResponse response) {
         if (charEncoding != null) {
             try {
                 request.setCharacterEncoding(charEncoding);
@@ -491,12 +492,12 @@ public abstract class XmlaServlet
     /**
      * Initialize character encoding
      */
-    protected static void initCharEncodingHandler(ServletConfig servletConfig) {
+    protected void initCharEncodingHandler(ServletConfig servletConfig) {
         String paramValue = servletConfig.getInitParameter(PARAM_CHAR_ENCODING);
         if (paramValue != null) {
-            charEncoding = paramValue;
+            this.charEncoding = paramValue;
         } else {
-            charEncoding = null;
+            this.charEncoding = null;
             LOGGER.warn("Use default character encoding from HTTP client");
         }
     }
