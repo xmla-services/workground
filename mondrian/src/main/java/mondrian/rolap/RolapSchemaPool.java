@@ -253,8 +253,8 @@ public class RolapSchemaPool {
         String catalogStr,
         SchemaKey key)
     {
-        final ByteString md5Bytes = new ByteString(Util.digestSHA(catalogStr));
-        RolapSchema schema = lookUp(mapMd5ToSchema, md5Bytes, pinSchemaTimeout);
+        final ByteString sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
+        RolapSchema schema = lookUp(mapMd5ToSchema, sha512Bytes, pinSchemaTimeout);
         if (schema != null) {
             return schema;
         }
@@ -263,13 +263,13 @@ public class RolapSchemaPool {
         try {
             // The motivation for repeating lookup attempt is the same
             // as described in getByKey()
-            ExpiringReference<RolapSchema> ref = mapMd5ToSchema.get(md5Bytes);
+            ExpiringReference<RolapSchema> ref = mapMd5ToSchema.get(sha512Bytes);
             if (ref != null) {
                 schema = ref.get(pinSchemaTimeout);
                 if (schema == null) {
                     // clear out the reference since schema is null
                     mapKeyToSchema.remove(key);
-                    mapMd5ToSchema.remove(md5Bytes);
+                    mapMd5ToSchema.remove(sha512Bytes);
                 } else {
                     // someone has updated the schema for us
                     return schema;
@@ -278,13 +278,13 @@ public class RolapSchemaPool {
 
             schema = createRolapSchema(
                 catalogUrl, context, connectInfo, catalogStr,
-                key, md5Bytes);
+                key, sha512Bytes);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                     "create: schema-name={}, schema-id={}",
                     schema.getName(), System.identityHashCode(schema));
             }
-            putSchema(schema, md5Bytes, pinSchemaTimeout);
+            putSchema(schema, sha512Bytes, pinSchemaTimeout);
             return schema;
         } finally {
             lock.writeLock().unlock();
@@ -298,11 +298,11 @@ public class RolapSchemaPool {
         Util.PropertyList connectInfo,
         String catalogStr,
         SchemaKey key,
-        ByteString md5Bytes)
+        ByteString sha512Bytes)
     {
         return new RolapSchema(
             key,
-            md5Bytes,
+            sha512Bytes,
             catalogUrl,
             catalogStr,
             connectInfo,

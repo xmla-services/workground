@@ -157,7 +157,7 @@ public class RolapSchema implements Schema {
      */
     private Role defaultRole;
 
-    private ByteString md5Bytes;
+    private ByteString sha512Bytes;
 
     /**
      * A schema's aggregation information
@@ -221,20 +221,20 @@ public class RolapSchema implements Schema {
      * @param key Key
      * @param connectInfo Connect properties
      * @param context Context
-     * @param md5Bytes MD5 hash
+     * @param sha512Bytes MD5 hash
      * @param useContentChecksum Whether to use content checksum
      */
     private RolapSchema(
         final SchemaKey key,
         final Util.PropertyList connectInfo,
         final Context context,
-        final ByteString md5Bytes,
+        final ByteString sha512Bytes,
         boolean useContentChecksum)
     {
         this.id = Util.generateUuidString();
         this.key = key;
-        this.md5Bytes = md5Bytes;
-        if (useContentChecksum && md5Bytes == null) {
+        this.sha512Bytes = sha512Bytes;
+        if (useContentChecksum && sha512Bytes == null) {
             throw new AssertionError();
         }
 
@@ -273,7 +273,7 @@ public class RolapSchema implements Schema {
     {
         this(key, connectInfo, context, md5Bytes, md5Bytes != null);
         load(catalogUrl, catalogStr, connectInfo);
-        assert this.md5Bytes != null;
+        assert this.sha512Bytes != null;
     }
 
     /**
@@ -287,7 +287,7 @@ public class RolapSchema implements Schema {
     {
         this.id = Util.generateUuidString();
         this.key = key;
-        this.md5Bytes = md5Bytes;
+        this.sha512Bytes = md5Bytes;
         this.defaultRole = Util.createRootRole(this);
         this.internalConnection = internalConnection;
     }
@@ -396,7 +396,7 @@ public class RolapSchema implements Schema {
 
                 // Compute catalog string, if needed for debug or for computing
                 // Md5 hash.
-                if (getLogger().isDebugEnabled() || md5Bytes == null) {
+                if (getLogger().isDebugEnabled() || sha512Bytes == null) {
                     try {
                         catalogStr = Util.readVirtualFileAsString(catalogUrl);
                     } catch (java.io.IOException ex) {
@@ -418,11 +418,11 @@ public class RolapSchema implements Schema {
                 def = xmlParser.parse(catalogStr);
             }
 
-            if (md5Bytes == null) {
+            if (sha512Bytes == null) {
                 // If a null catalogStr was passed in, we should have
                 // computed it above by re-reading the catalog URL.
                 assert catalogStr != null;
-                md5Bytes = new ByteString(Util.digestSHA(catalogStr));
+                sha512Bytes = new ByteString(Util.digestSHA(catalogStr));
             }
 
             // throw error if we have an incompatible schema
@@ -1412,7 +1412,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
      * @return MD5 checksum of this schema
      */
     public ByteString getChecksum() {
-        return md5Bytes;
+        return sha512Bytes;
     }
 
     /**
