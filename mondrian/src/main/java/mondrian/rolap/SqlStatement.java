@@ -250,7 +250,7 @@ public class SqlStatement {
       for ( BestFitColumnType type : guessTypes() ) {
         accessors.add( createAccessor( accessors.size(), type ) );
       }
-    } catch (InterruptedException | SQLException e ) {
+    } catch ( Throwable e ) {
       status = new StringBuilder(", failed (").append(e).append(")").toString();
 
       // This statement was leaked to us. It is our responsibility
