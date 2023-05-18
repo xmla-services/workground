@@ -322,6 +322,7 @@ class TestAggregationManager extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @SuppressWarnings("java:S5810")
     private void _testMultipleMeasures_withAgg(TestingContext context) {
         prepareContext(context);
         Connection connection = context.createConnection();

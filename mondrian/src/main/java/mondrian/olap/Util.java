@@ -1218,10 +1218,8 @@ public class Util extends XOMUtil {
         if (seed == 0) {
             seed = random.nextLong();
             LOGGER.debug("random: seed={}", seed);
-        } else if (seed == -1 && metaRandom != null) {
-            seed = metaRandom.nextLong();
         }
-        return new Random(seed);
+        return new SecureRandom();
     }
 
     /**

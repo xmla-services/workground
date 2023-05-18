@@ -79,9 +79,9 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         " Envelope";
     public static final String THIS_SHOULD_BE_HANDLED_AT_BEGIN_OF_PROCESSING_REQUEST = "This should be handled at begin of processing request";
 
-    private DocumentBuilderFactory domFactory = null;
+    private static DocumentBuilderFactory domFactory = null;
 
-    private boolean requireAuthenticatedSessions = false;
+    private static boolean requireAuthenticatedSessions = false;
 
     /**
      * Session properties, keyed by session ID. Currently just username and
@@ -93,8 +93,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     @Override
 	public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
-        this.domFactory = getDocumentBuilderFactory();
-        this.requireAuthenticatedSessions =
+        domFactory = getDocumentBuilderFactory();
+        requireAuthenticatedSessions =
             Boolean.parseBoolean(
                 servletConfig.getInitParameter(REQUIRE_AUTHENTICATED_SESSIONS));
     }

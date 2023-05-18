@@ -123,6 +123,7 @@ public class RolapSchema implements Schema {
 
     private static final Set<Access> memberAllowed =
         Olap4jUtil.enumSetOf(Access.NONE, Access.ALL);
+    public static final String WHILE_PARSING_CATALOG = "while parsing catalog ";
 
     private String name;
 
@@ -428,9 +429,11 @@ public class RolapSchema implements Schema {
             // throw error if we have an incompatible schema
             checkSchemaVersion(def);
             //TODO remove def
-            JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
+            JAXBContext jaxbContext =
+                JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            xmlSchema = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
+            xmlSchema =
+                (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
 
             if (getLogger().isDebugEnabled()) {
                 StringWriter sw = new StringWriter(4096);
@@ -442,15 +445,12 @@ public class RolapSchema implements Schema {
             }
 
             load(xmlSchema);
-        } catch (XOMException e) {
-            throw Util.newError(e, "while parsing catalog " + catalogUrl);
         } catch (FileSystemException e) {
-            throw Util.newError(e, "while parsing catalog " + catalogUrl);
-        } catch (IOException e) {
-            throw Util.newError(e, "while parsing catalog " + catalogUrl);
-        } catch (JAXBException e) {
-            throw Util.newError(e, "while parsing catalog " + catalogUrl);
+            throw Util.newError(e, WHILE_PARSING_CATALOG + catalogUrl);
+        } catch (XOMException | IOException | JAXBException e) {
+            throw Util.newError(e, WHILE_PARSING_CATALOG + catalogUrl);
         }
+
 
         aggTableManager.initialize(connectInfo);
         setSchemaLoadDate();
@@ -751,7 +751,7 @@ public class RolapSchema implements Schema {
 
     // package-local visibility for testing purposes
     Role createUnionRole(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role xmlRole) {
-        if (xmlRole.schemaGrants() != null && xmlRole.schemaGrants().size() > 0) {
+        if (xmlRole.schemaGrants() != null && !xmlRole.schemaGrants().isEmpty()) {
             throw MondrianResource.instance().RoleUnionGrants.ex();
         }
 
@@ -840,7 +840,7 @@ public class RolapSchema implements Schema {
             MondrianProperties.instance().IgnoreInvalidMembers.get();
 
         int membersRejected = 0;
-        if (grant.memberGrants().size() > 0) {
+        if (!grant.memberGrants().isEmpty()) {
             if (hierarchyAccess != Access.CUSTOM) {
                 throw Util.newError(
                     "You may only specify <MemberGrant> if <Hierarchy> has access='custom'");
@@ -1272,12 +1272,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                 mapSharedHierarchyNameToHierarchy.put(sharedName, hierarchy);
 }
 */
-                if (! mapSharedHierarchyNameToHierarchy.containsKey(
-                        sharedName))
-                {
-                    mapSharedHierarchyNameToHierarchy.put(
-                        sharedName, hierarchy);
-                }
+                mapSharedHierarchyNameToHierarchy.computeIfAbsent(sharedName, k -> hierarchy);
+
                 //mapSharedHierarchyNameToHierarchy.put(sharedName, hierarchy);
             } else {
 //                final RolapHierarchy sharedHierarchy = (RolapHierarchy)
@@ -1341,16 +1337,16 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
             SqlMemberSource source = new SqlMemberSource(hierarchy);
             Dimension dimension = hierarchy.getDimension();
             if (dimension.isHighCardinality()) {
-                LOGGER.warn(
-                    MondrianResource.instance()
-                        .HighCardinalityInDimension.str(
-                            dimension.getUniqueName()));
+                String msg = MondrianResource.instance()
+                    .HighCardinalityInDimension.str(
+                        dimension.getUniqueName());
+                LOGGER.warn(msg);
                 LOGGER.debug(
-                    "High cardinality for " + dimension);
+                    "High cardinality for {}", dimension);
                 return new NoCacheMemberReader(source);
             } else {
                 LOGGER.debug(
-                    "Normal cardinality for " + hierarchy.getDimension());
+                    "Normal cardinality for {}", hierarchy.getDimension());
                 if (MondrianProperties.instance().DisableCaching.get()) {
                     // If the cell cache is disabled, we can't cache
                     // the members or else we get undefined results,

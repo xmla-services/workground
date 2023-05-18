@@ -34,7 +34,7 @@ import mondrian.xmla.XmlaHandler;
 public class MondrianXmlaServlet extends DefaultXmlaServlet {
     public static final String DEFAULT_DATASOURCE_FILE = "datasources.xml";
 
-    protected MondrianServer server;
+    protected static MondrianServer server;
 
     @Override
     protected XmlaHandler.ConnectionFactory createConnectionFactory(
@@ -138,8 +138,7 @@ public class MondrianXmlaServlet extends DefaultXmlaServlet {
                     Util.toMap(System.getProperties()));
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
-                        "XmlaServlet.makeDataSources: paramValue="
-                        + paramValue);
+                        "XmlaServlet.makeDataSources: paramValue={}", paramValue);
                 }
                 // is the parameter a valid URL
                 MalformedURLException mue = null;
@@ -155,12 +154,10 @@ public class MondrianXmlaServlet extends DefaultXmlaServlet {
                     if (f.exists()) {
                         // yes, a real file path
                         dataSourcesConfigUrl = f.toURL();
-                    } else if (mue != null) {
+                    } else if (mue != null && !optional) {
                         // neither url or file,
                         // is it not optional
-                        if (! optional) {
-                            throw mue;
-                        }
+                        throw mue;
                     }
                     return null;
                 }
