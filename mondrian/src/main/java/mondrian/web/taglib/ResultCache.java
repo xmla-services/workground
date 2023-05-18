@@ -27,12 +27,14 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.Query;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 
+import java.io.Serializable;
+
 /**
  * Holds a query/result pair in the user's session.
  *
  * @author Andreas Voss, 22 March, 2002
  */
-public class ResultCache implements HttpSessionBindingListener {
+public class ResultCache implements HttpSessionBindingListener, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultCache.class);
     private static final String ATTR_NAME = "mondrian.web.taglib.ResultCache.";
     private Query query = null;
@@ -92,8 +94,8 @@ public class ResultCache implements HttpSessionBindingListener {
             }
             return document;
         } catch (ParserConfigurationException e) {
-            LOGGER.error("",e);
-            throw new RuntimeException(e.toString());
+            LOGGER.error("ResultCache getDOM error");
+            throw new RuntimeException(e);
         }
     }
 
@@ -127,7 +129,7 @@ public class ResultCache implements HttpSessionBindingListener {
 	public void valueBound(HttpSessionBindingEvent ev) {
         String connectString =
             servletContext.getInitParameter("connectString");
-        LOGGER.debug("connectString: " + connectString);
+        LOGGER.debug("connectString: {}", connectString);
         this.connection =
             DriverManager.getConnection(
                 connectString,

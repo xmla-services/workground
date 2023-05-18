@@ -97,7 +97,7 @@ public class SqlStatement {
   /**
    * Creates a SqlStatement.
    *
-   * @param dataSource           Data source
+   * @param context              Context
    * @param sql                  SQL
    * @param types                Suggested types of columns, or null; if present, must have one element for each SQL
    *                             column; each not-null entry overrides deduced JDBC type of the column
@@ -250,7 +250,7 @@ public class SqlStatement {
       for ( BestFitColumnType type : guessTypes() ) {
         accessors.add( createAccessor( accessors.size(), type ) );
       }
-    } catch ( Throwable e ) {
+    } catch (InterruptedException | SQLException e ) {
       status = new StringBuilder(", failed (").append(e).append(")").toString();
 
       // This statement was leaked to us. It is our responsibility

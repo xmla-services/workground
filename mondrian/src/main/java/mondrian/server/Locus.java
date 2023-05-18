@@ -38,7 +38,10 @@ public class Locus {
         String component,
         String message)
     {
-        assert execution != null;
+        if (execution == null) {
+            throw new IllegalArgumentException("execution should not be null");
+        }
+
         this.execution = execution;
         this.component = component;
         this.message = message;
@@ -46,7 +49,9 @@ public class Locus {
 
     public static void pop(Locus locus) {
         final Locus pop = THREAD_LOCAL.get().pop();
-        assert locus == pop;
+        if (locus != pop) {
+            throw new IllegalArgumentException("locus should be equals pop");
+        }
     }
 
     public static void push(Locus locus) {
@@ -69,6 +74,10 @@ public class Locus {
         final Statement statement = connection.getInternalStatement();
         final Execution execution = new Execution(statement, 0);
         return execute(execution, component, action);
+    }
+
+    public static void remove() {
+        THREAD_LOCAL.remove();
     }
 
     public static <T> T execute(

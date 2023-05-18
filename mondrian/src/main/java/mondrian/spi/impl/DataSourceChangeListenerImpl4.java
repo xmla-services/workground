@@ -9,6 +9,7 @@
 
 package mondrian.spi.impl;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
@@ -48,7 +49,7 @@ import mondrian.spi.DataSourceChangeListener;
 public class DataSourceChangeListenerImpl4 implements DataSourceChangeListener {
     private int flushInverseFrequencyHierarchy;
     private int flushInverseFrequencyAggregation;
-    final Random random = new Random(123456);
+    final Random random = new SecureRandom();
 
     /** Creates a new instance of DataSourceChangeListenerImpl2 */
     public DataSourceChangeListenerImpl4() {

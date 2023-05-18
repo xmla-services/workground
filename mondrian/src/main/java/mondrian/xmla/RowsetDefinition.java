@@ -2449,8 +2449,7 @@ public enum RowsetDefinition {
                 XmlaResponse response, OlapConnection connection, List<Row> rows)
                 throws XmlaException
         {
-            for (Catalog catalog
-                    : catIter(connection, catalogNameCond)) {
+            if (catIter(connection, catalogNameCond).iterator().hasNext()) {
                 String catalogStr;
                 try {
                     final String catalogUrl = ((mondrian.olap4j.MondrianOlap4jConnection)connection)
@@ -2462,7 +2461,6 @@ public enum RowsetDefinition {
                 Row row = new Row();
                 row.set(METADATA.name, catalogStr);
                 addRow(row, rows);
-                break;
             }
         }
 
@@ -4645,7 +4643,7 @@ TODO: see above
                 Catalog catalog,
                 Cube cube,
                 List<Row> rows)
-                throws XmlaException, SQLException
+                throws XmlaException
         {
             for (Dimension dimension
                     : filter(
@@ -6776,13 +6774,8 @@ TODO: see above
                         (mondrian.olap4j.MondrianOlap4jNamedSet)namedSet;
 
                 SetBase setBase = (SetBase)mondrianOlap4jNamedSet.getNamedSet();
-                String dimensions = "";
-                for(org.eclipse.daanse.olap.api.model.Hierarchy hierarchy: setBase.getHierarchies()) {
-                    if(!dimensions.equals("")) {
-                        dimensions = dimensions + ",";
-                    }
-                    dimensions = dimensions + hierarchy.getUniqueName();
-                }
+                String dimensions = setBase.getHierarchies()
+                    .stream().map(it -> it.getUniqueName()).collect(Collectors.joining(","));
 
                 Row row = new Row();
                 row.set(CatalogName.name, catalog.getName());

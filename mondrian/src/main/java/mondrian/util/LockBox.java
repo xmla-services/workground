@@ -9,6 +9,7 @@
 
 package mondrian.util;
 
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.WeakHashMap;
@@ -66,7 +67,7 @@ public class LockBox {
      */
     private final Map<LockBoxEntryImpl, Object> map =
         new WeakHashMap<>();
-    private final Random random = new Random();
+    private final Random random = new SecureRandom();
     private final byte[] bytes = new byte[16]; // 128 bit... secure enough
     private long ordinal;
 

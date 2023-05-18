@@ -47,12 +47,12 @@ public abstract class XmlaServlet
     public static final String PARAM_CALLBACKS = "Callbacks";
     private static final String ERRORS_WHEN_HANDLING_XML_A_MESSAGE = "Errors when handling XML/A message";
 
-    protected XmlaHandler xmlaHandler = null;
-    protected String charEncoding = null;
+    protected static XmlaHandler xmlaHandler = null;
+    protected static String charEncoding = null;
     private final List<XmlaRequestCallback> callbackList =
         new ArrayList<>();
 
-    private XmlaHandler.ConnectionFactory connectionFactory;
+    private static XmlaHandler.ConnectionFactory connectionFactory;
 
     public enum Phase {
         VALIDATE_HTTP_HEAD,
@@ -106,7 +106,7 @@ public abstract class XmlaServlet
         // init: callbacks
         initCallbacks(servletConfig);
 
-        this.connectionFactory = createConnectionFactory(servletConfig);
+        connectionFactory = createConnectionFactory(servletConfig);
     }
 
     protected abstract XmlaHandler.ConnectionFactory createConnectionFactory(
@@ -119,8 +119,8 @@ public abstract class XmlaServlet
      * @return XMLA handler
      */
     protected XmlaHandler getXmlaHandler() {
-        if (this.xmlaHandler == null) {
-            this.xmlaHandler =
+        if (xmlaHandler == null) {
+            xmlaHandler =
                 new XmlaHandler(
                     connectionFactory,
                     "cxmla");
@@ -429,7 +429,7 @@ public abstract class XmlaServlet
         }
     }
 
-    private void encodeRequestResponse(HttpServletRequest request, HttpServletResponse response) {
+    private static void encodeRequestResponse(HttpServletRequest request, HttpServletResponse response) {
         if (charEncoding != null) {
             try {
                 request.setCharacterEncoding(charEncoding);
@@ -491,12 +491,12 @@ public abstract class XmlaServlet
     /**
      * Initialize character encoding
      */
-    protected void initCharEncodingHandler(ServletConfig servletConfig) {
+    protected static void initCharEncodingHandler(ServletConfig servletConfig) {
         String paramValue = servletConfig.getInitParameter(PARAM_CHAR_ENCODING);
         if (paramValue != null) {
-            this.charEncoding = paramValue;
+            charEncoding = paramValue;
         } else {
-            this.charEncoding = null;
+            charEncoding = null;
             LOGGER.warn("Use default character encoding from HTTP client");
         }
     }
