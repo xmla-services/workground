@@ -6,9 +6,8 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>
-  
   <properties>
-	  <sonar.tests>src/</sonar.tests>
+    <sonar.exclusions>src/**/tck/**/*/</sonar.exclusions>
   </properties>
   <dependencies>
     <dependency>
