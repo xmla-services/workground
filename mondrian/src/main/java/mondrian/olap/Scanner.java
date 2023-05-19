@@ -566,7 +566,7 @@ public class Scanner {
 
                     case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
                         n = n.movePointRight(1);
-                        n = n.add(BigDecimal.valueOf(nextChar - '0'));
+                        n = n.add(BigDecimal.valueOf(Long.valueOf(nextChar) - '0'));
                         digitCount++;
                         advance();
                         break;

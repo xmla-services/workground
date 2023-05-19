@@ -24,12 +24,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "AggregationInstance", propOrder = {
 
 })
-public class AggregationInstance {
+public class AggregationInstance extends AbstractAggregation{
 
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "Name", required = true)
-    protected String name;
     @XmlElement(name = "AggregationType", required = true)
     protected String aggregationType;
     @XmlElement(name = "Source")
@@ -40,24 +36,6 @@ public class AggregationInstance {
     protected AggregationInstance.Measures measures;
     @XmlElement(name = "Annotations")
     protected AggregationInstance.Annotations annotations;
-    @XmlElement(name = "Description")
-    protected String description;
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
 
     public String getAggregationType() {
         return aggregationType;
@@ -101,14 +79,6 @@ public class AggregationInstance {
 
     public void setAnnotations(AggregationInstance.Annotations value) {
         this.annotations = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
