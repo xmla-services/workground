@@ -15,33 +15,10 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
-@XmlRootElement(name = "EndSession")
-public class EndSession {
+@XmlType(name = "EndSession")
+public class EndSession extends AbstractSession {
 
-  @XmlAttribute(name = "SessionId")
-  protected String sessionId;
-  @XmlAttribute(name = "mustUnderstand")
-  protected Integer mustUnderstand;
-
-  public String getSessionId() {
-    return sessionId;
-  }
-
-  public void setSessionId(String value) {
-    this.sessionId = value;
-  }
-
-  public int getMustUnderstand() {
-    return mustUnderstand;
-  }
-
-  public void setMustUnderstand(int value) {
-    this.mustUnderstand = value;
-  }
 }
