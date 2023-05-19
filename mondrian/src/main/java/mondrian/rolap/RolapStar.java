@@ -239,6 +239,10 @@ public class RolapStar {
         return statisticsCache;
     }
 
+    public void remove() {
+        localBars.remove();
+    }
+
     public static String generateExprString(Expression expression, SqlQuery query) {
         if(expression instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
             return query.getDialect().quoteIdentifier(expression.table(),
