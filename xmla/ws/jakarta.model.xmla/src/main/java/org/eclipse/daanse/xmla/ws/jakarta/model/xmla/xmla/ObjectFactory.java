@@ -19,6 +19,9 @@ import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This object contains factory methods for each Java content interface and Java
  * element interface generated in the
@@ -1737,27 +1740,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AggregationInstance.Dimensions }
+     * Create an instance of {@link List<AggregationInstanceDimension> }
      *
      */
-    public AggregationInstance.Dimensions createAggregationInstanceDimensions() {
-        return new AggregationInstance.Dimensions();
+    public List<AggregationInstanceDimension> createAggregationInstanceDimensions() {
+        return new ArrayList<>();
     }
 
     /**
-     * Create an instance of {@link AggregationInstance.Measures }
+     * Create an instance of {@link List<AggregationInstanceMeasure> }
      *
      */
-    public AggregationInstance.Measures createAggregationInstanceMeasures() {
-        return new AggregationInstance.Measures();
+    public List<AggregationInstanceMeasure> createAggregationInstanceMeasures() {
+        return new ArrayList<>();
     }
 
     /**
-     * Create an instance of {@link AggregationInstance.Annotations }
+     * Create an instance of {@link List<Annotation> }
      *
      */
-    public AggregationInstance.Annotations createAggregationInstanceAnnotations() {
-        return new AggregationInstance.Annotations();
+    public List<Annotation> createAggregationInstanceAnnotations() {
+        return new ArrayList<>();
     }
 
     /**
@@ -1817,19 +1820,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Aggregation.Dimensions }
+     * Create an instance of {@link AggregationDimension }
      *
      */
-    public Aggregation.Dimensions createAggregationDimensions() {
-        return new Aggregation.Dimensions();
+    public List<AggregationDimension> createAggregationDimensions() {
+        return new ArrayList<>();
     }
 
     /**
-     * Create an instance of {@link Aggregation.Annotations }
+     * Create an instance of {@link List<Annotation> }
      *
      */
-    public Aggregation.Annotations createAggregationAnnotations() {
-        return new Aggregation.Annotations();
+    public List<Annotation> createAggregationAnnotations() {
+        return new ArrayList<>();
     }
 
     /**

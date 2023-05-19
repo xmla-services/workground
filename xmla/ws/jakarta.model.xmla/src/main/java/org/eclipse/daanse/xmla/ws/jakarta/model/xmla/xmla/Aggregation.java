@@ -18,95 +18,24 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Aggregation", propOrder = {
+@XmlType(name = "", propOrder = {"dimensions"})
+@XmlRootElement(name = "Aggregation")
+public class Aggregation extends AbstractAggregation {
 
-})
-public class Aggregation {
+    @XmlElement(name = "Dimension", type = AggregationDimension.class)
+    @XmlElementWrapper(name = "Dimensions")
+    protected List<AggregationDimension> dimensions;
 
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "Dimensions")
-    protected Aggregation.Dimensions dimensions;
-    @XmlElement(name = "Annotations")
-    protected Aggregation.Annotations annotations;
-    @XmlElement(name = "Description")
-    protected String description;
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public Aggregation.Dimensions getDimensions() {
+    public List<AggregationDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Aggregation.Dimensions value) {
+    public void setDimensions(List<AggregationDimension> value) {
         this.dimensions = value;
     }
-
-    public Aggregation.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Aggregation.Annotations value) {
-        this.annotations = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension")
-        protected List<AggregationDimension> dimension;
-
-        public List<AggregationDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<AggregationDimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
 }

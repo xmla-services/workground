@@ -219,19 +219,11 @@ public class MajorObjectConvertor {
         if (aggregation != null) {
             return new AggregationR(Optional.ofNullable(aggregation.getID()),
                 aggregation.getName(),
-                Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
-                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null :
-                    aggregation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAggregationDimensionList(aggregation.getDimensions())),
+                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
                 Optional.ofNullable(aggregation.getDescription()));
         }
         return null;
-    }
-
-    private static List<AggregationDimension> convertAggregationDimensions(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation.Dimensions dimensions) {
-        if (dimensions != null) {
-            return convertAggregationDimensionList(dimensions.getDimension());
-        }
-        return List.of();
     }
 
     private static List<AggregationDimension> convertAggregationDimensionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension> dimensionList) {

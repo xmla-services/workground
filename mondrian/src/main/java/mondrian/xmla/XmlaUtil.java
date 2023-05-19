@@ -434,7 +434,7 @@ public class XmlaUtil implements XmlaConstants {
                 columnName = Util.camelToUpper(columnName);
             }
             // VALUE is a SQL reserved word
-            if (columnName.equals("VALUE")) {
+            if (columnName.equalsIgnoreCase("VALUE")) {
                 columnName = "PROPERTY_VALUE";
             }
             result.headerList.add(columnName);
