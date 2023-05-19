@@ -53,31 +53,33 @@ public class PropertyUtil {
      * @throws IllegalAccessException on error
      */
     public static void main0(String[] args) throws IllegalAccessException {
-        Object properties1 = null; // MondrianProperties.instance();
+        Object properties1 = null; // MondrianProperties.instance(); but MondrianProperties not available here. make sence to delete this main
         LOGGER.debug("<PropertyDefinitions>");
-        for (Field field : properties1.getClass().getFields()) {
-            org.eigenbase.util.property.Property o =
-                (org.eigenbase.util.property.Property) field.get(properties1);
-            LOGGER.debug("    <PropertyDefinition>");
-            String msg = new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString();
-            LOGGER.debug(msg);
-            msg = new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString();
-            LOGGER.debug(msg);
-            msg = new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString();
-            LOGGER.debug(msg);
-            msg = new StringBuilder("        <Type>")
-                .append((o instanceof BooleanProperty ? "boolean"
-                    : o instanceof IntegerProperty ? "int"
-                    : o instanceof DoubleProperty ? "double"
-                    : "String"))
-                .append("</Type>").toString();
-            LOGGER.debug(msg);
-            if (o.getDefaultValue() != null) {
-                msg = new StringBuilder("        <Default>")
-                    .append(o.getDefaultValue()).append("</Default").append(">").toString();
+        if (properties1 != null) {
+            for (Field field : properties1.getClass().getFields()) {
+                org.eigenbase.util.property.Property o =
+                    (org.eigenbase.util.property.Property) field.get(properties1);
+                LOGGER.debug("    <PropertyDefinition>");
+                String msg = new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString();
                 LOGGER.debug(msg);
+                msg = new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString();
+                LOGGER.debug(msg);
+                msg = new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString();
+                LOGGER.debug(msg);
+                msg = new StringBuilder("        <Type>")
+                    .append((o instanceof BooleanProperty ? "boolean"
+                        : o instanceof IntegerProperty ? "int"
+                        : o instanceof DoubleProperty ? "double"
+                        : "String"))
+                    .append("</Type>").toString();
+                LOGGER.debug(msg);
+                if (o.getDefaultValue() != null) {
+                    msg = new StringBuilder("        <Default>")
+                        .append(o.getDefaultValue()).append("</Default").append(">").toString();
+                    LOGGER.debug(msg);
+                }
+                LOGGER.debug("    </PropertyDefinition>");
             }
-            LOGGER.debug("    </PropertyDefinition>");
         }
         LOGGER.debug("</PropertyDefinitions>");
     }
