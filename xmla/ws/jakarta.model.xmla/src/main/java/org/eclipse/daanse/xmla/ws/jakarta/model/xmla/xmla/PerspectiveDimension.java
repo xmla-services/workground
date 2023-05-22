@@ -33,7 +33,7 @@ public class PerspectiveDimension {
     @XmlElement(name = "Hierarchies")
     protected PerspectiveDimension.Hierarchies hierarchies;
     @XmlElement(name = "Annotations")
-    protected PerspectiveDimension.Annotations annotations;
+    protected Annotations annotations;
 
     public String getCubeDimensionID() {
         return cubeDimensionID;
@@ -59,28 +59,12 @@ public class PerspectiveDimension {
         this.hierarchies = value;
     }
 
-    public PerspectiveDimension.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(PerspectiveDimension.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

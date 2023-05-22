@@ -29,7 +29,7 @@ public class PerspectiveKpi {
     @XmlElement(name = "KpiID", required = true)
     protected String kpiID;
     @XmlElement(name = "Annotations")
-    protected PerspectiveKpi.Annotations annotations;
+    protected Annotations annotations;
 
     public String getKpiID() {
         return kpiID;
@@ -39,28 +39,12 @@ public class PerspectiveKpi {
         this.kpiID = value;
     }
 
-    public PerspectiveKpi.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(PerspectiveKpi.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

@@ -1753,22 +1753,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AggregationInstance.Annotations }
-     *
-     */
-    public AggregationInstance.Annotations createAggregationInstanceAnnotations() {
-        return new AggregationInstance.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link Partition.Annotations }
-     *
-     */
-    public Partition.Annotations createPartitionAnnotations() {
-        return new Partition.Annotations();
-    }
-
-    /**
      * Create an instance of {@link Partition.StorageMode }
      *
      */
@@ -1809,14 +1793,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AggregationDimension.Annotations }
-     *
-     */
-    public AggregationDimension.Annotations createAggregationDimensionAnnotations() {
-        return new AggregationDimension.Annotations();
-    }
-
-    /**
      * Create an instance of {@link Aggregation.Dimensions }
      *
      */
@@ -1825,11 +1801,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Aggregation.Annotations }
+     * Create an instance of {@link Aggregation }
      *
      */
-    public Aggregation.Annotations createAggregationAnnotations() {
-        return new Aggregation.Annotations();
+    public Annotations createAnnotations() {
+        return new Annotations();
     }
 
     /**
@@ -1846,14 +1822,6 @@ public class ObjectFactory {
      */
     public AggregationDesignDimension.Annotations createAggregationDesignDimensionAnnotations() {
         return new AggregationDesignDimension.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link AggregationDesign.Annotations }
-     *
-     */
-    public AggregationDesign.Annotations createAggregationDesignAnnotations() {
-        return new AggregationDesign.Annotations();
     }
 
     /**
@@ -1929,35 +1897,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RegularMeasureGroupDimension.Annotations }
-     *
-     */
-    public RegularMeasureGroupDimension.Annotations createRegularMeasureGroupDimensionAnnotations() {
-        return new RegularMeasureGroupDimension.Annotations();
-    }
-
-    /**
      * Create an instance of {@link RegularMeasureGroupDimension.Attributes }
      *
      */
     public RegularMeasureGroupDimension.Attributes createRegularMeasureGroupDimensionAttributes() {
         return new RegularMeasureGroupDimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link ManyToManyMeasureGroupDimension.Annotations }
-     *
-     */
-    public ManyToManyMeasureGroupDimension.Annotations createManyToManyMeasureGroupDimensionAnnotations() {
-        return new ManyToManyMeasureGroupDimension.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link MeasureGroup.Annotations }
-     *
-     */
-    public MeasureGroup.Annotations createMeasureGroupAnnotations() {
-        return new MeasureGroup.Annotations();
     }
 
     /**
@@ -2009,22 +1953,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PerspectiveAction.Annotations }
-     *
-     */
-    public PerspectiveAction.Annotations createPerspectiveActionAnnotations() {
-        return new PerspectiveAction.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link PerspectiveKpi.Annotations }
-     *
-     */
-    public PerspectiveKpi.Annotations createPerspectiveKpiAnnotations() {
-        return new PerspectiveKpi.Annotations();
-    }
-
-    /**
      * Create an instance of {@link PerspectiveCalculation.Annotations }
      *
      */
@@ -2033,27 +1961,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PerspectiveMeasure.Annotations }
-     *
-     */
-    public PerspectiveMeasure.Annotations createPerspectiveMeasureAnnotations() {
-        return new PerspectiveMeasure.Annotations();
-    }
-
-    /**
      * Create an instance of {@link PerspectiveMeasureGroup.Measures }
      *
      */
     public PerspectiveMeasureGroup.Measures createPerspectiveMeasureGroupMeasures() {
         return new PerspectiveMeasureGroup.Measures();
-    }
-
-    /**
-     * Create an instance of {@link PerspectiveMeasureGroup.Annotations }
-     *
-     */
-    public PerspectiveMeasureGroup.Annotations createPerspectiveMeasureGroupAnnotations() {
-        return new PerspectiveMeasureGroup.Annotations();
     }
 
     /**
@@ -2086,22 +1998,6 @@ public class ObjectFactory {
      */
     public PerspectiveDimension.Hierarchies createPerspectiveDimensionHierarchies() {
         return new PerspectiveDimension.Hierarchies();
-    }
-
-    /**
-     * Create an instance of {@link PerspectiveDimension.Annotations }
-     *
-     */
-    public PerspectiveDimension.Annotations createPerspectiveDimensionAnnotations() {
-        return new PerspectiveDimension.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Annotations }
-     *
-     */
-    public Perspective.Annotations createPerspectiveAnnotations() {
-        return new Perspective.Annotations();
     }
 
     /**
@@ -2158,14 +2054,6 @@ public class ObjectFactory {
      */
     public CalculationProperty.Translations createCalculationPropertyTranslations() {
         return new CalculationProperty.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MdxScript.Annotations }
-     *
-     */
-    public MdxScript.Annotations createMdxScriptAnnotations() {
-        return new MdxScript.Annotations();
     }
 
     /**
@@ -2321,14 +2209,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Cube.Annotations }
-     *
-     */
-    public Cube.Annotations createCubeAnnotations() {
-        return new Cube.Annotations();
-    }
-
-    /**
      * Create an instance of {@link Cube.Translations }
      *
      */
@@ -2425,22 +2305,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MiningModelColumn.Annotations }
-     *
-     */
-    public MiningModelColumn.Annotations createMiningModelColumnAnnotations() {
-        return new MiningModelColumn.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link MiningModel.Annotations }
-     *
-     */
-    public MiningModel.Annotations createMiningModelAnnotations() {
-        return new MiningModel.Annotations();
-    }
-
-    /**
      * Create an instance of {@link MiningModel.AlgorithmParameters }
      *
      */
@@ -2496,13 +2360,6 @@ public class ObjectFactory {
         return new TableMiningStructureColumn.Translations();
     }
 
-    /**
-     * Create an instance of {@link ScalarMiningStructureColumn.Annotations }
-     *
-     */
-    public ScalarMiningStructureColumn.Annotations createScalarMiningStructureColumnAnnotations() {
-        return new ScalarMiningStructureColumn.Annotations();
-    }
 
     /**
      * Create an instance of {@link ScalarMiningStructureColumn.ModelingFlags }
@@ -2537,14 +2394,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MiningStructure.Annotations }
-     *
-     */
-    public MiningStructure.Annotations createMiningStructureAnnotations() {
-        return new MiningStructure.Annotations();
-    }
-
-    /**
      * Create an instance of {@link MiningStructure.Translations }
      *
      */
@@ -2574,14 +2423,6 @@ public class ObjectFactory {
      */
     public MiningStructure.MiningModels createMiningStructureMiningModels() {
         return new MiningStructure.MiningModels();
-    }
-
-    /**
-     * Create an instance of {@link Database.Annotations }
-     *
-     */
-    public Database.Annotations createDatabaseAnnotations() {
-        return new Database.Annotations();
     }
 
     /**
@@ -2688,22 +2529,6 @@ public class ObjectFactory {
         return new PredLeaf.Global();
     }
 
-    /**
-     * Create an instance of {@link Trace.Annotations }
-     *
-     */
-    public Trace.Annotations createTraceAnnotations() {
-        return new Trace.Annotations();
-    }
-
-    /**
-     * Create an instance of
-     * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations }
-     *
-     */
-    public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations createAssemblyAnnotations() {
-        return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations();
-    }
 
     /**
      * Create an instance of {@link ClrAssembly.Files }
@@ -2711,14 +2536,6 @@ public class ObjectFactory {
      */
     public ClrAssembly.Files createClrAssemblyFiles() {
         return new ClrAssembly.Files();
-    }
-
-    /**
-     * Create an instance of {@link Server.Annotations }
-     *
-     */
-    public Server.Annotations createServerAnnotations() {
-        return new Server.Annotations();
     }
 
     /**
@@ -2769,13 +2586,6 @@ public class ObjectFactory {
         return new Level.Translations();
     }
 
-    /**
-     * Create an instance of {@link Level.Annotations }
-     *
-     */
-    public Level.Annotations createLevelAnnotations() {
-        return new Level.Annotations();
-    }
 
     /**
      * Create an instance of {@link Hierarchy.Translations }
@@ -2799,22 +2609,6 @@ public class ObjectFactory {
      */
     public Hierarchy.Levels createHierarchyLevels() {
         return new Hierarchy.Levels();
-    }
-
-    /**
-     * Create an instance of {@link Hierarchy.Annotations }
-     *
-     */
-    public Hierarchy.Annotations createHierarchyAnnotations() {
-        return new Hierarchy.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link AttributeRelationship.Annotations }
-     *
-     */
-    public AttributeRelationship.Annotations createAttributeRelationshipAnnotations() {
-        return new AttributeRelationship.Annotations();
     }
 
     /**
@@ -2888,22 +2682,6 @@ public class ObjectFactory {
      */
     public DimensionAttribute.NamingTemplateTranslations createDimensionAttributeNamingTemplateTranslations() {
         return new DimensionAttribute.NamingTemplateTranslations();
-    }
-
-    /**
-     * Create an instance of {@link DimensionAttribute.Annotations }
-     *
-     */
-    public DimensionAttribute.Annotations createDimensionAttributeAnnotations() {
-        return new DimensionAttribute.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.Annotations }
-     *
-     */
-    public Dimension.Annotations createDimensionAnnotations() {
-        return new Dimension.Annotations();
     }
 
     /**
@@ -2988,15 +2766,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of
-     * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations }
-     *
-     */
-    public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations createDataSourceAnnotations() {
-        return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.Annotations();
-    }
-
-    /**
-     * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions }
      *
      */
@@ -3047,27 +2816,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Role.Annotations }
-     *
-     */
-    public Role.Annotations createRoleAnnotations() {
-        return new Role.Annotations();
-    }
-
-    /**
      * Create an instance of {@link Role.Members }
      *
      */
     public Role.Members createRoleMembers() {
         return new Role.Members();
-    }
-
-    /**
-     * Create an instance of {@link Permission.Annotations }
-     *
-     */
-    public Permission.Annotations createPermissionAnnotations() {
-        return new Permission.Annotations();
     }
 
     /**
@@ -3092,22 +2845,6 @@ public class ObjectFactory {
      */
     public DimensionPermission.AttributePermissions createDimensionPermissionAttributePermissions() {
         return new DimensionPermission.AttributePermissions();
-    }
-
-    /**
-     * Create an instance of {@link CellPermission.Annotations }
-     *
-     */
-    public CellPermission.Annotations createCellPermissionAnnotations() {
-        return new CellPermission.Annotations();
-    }
-
-    /**
-     * Create an instance of {@link AttributePermission.Annotations }
-     *
-     */
-    public AttributePermission.Annotations createAttributePermissionAnnotations() {
-        return new AttributePermission.Annotations();
     }
 
     /**
@@ -3376,14 +3113,6 @@ public class ObjectFactory {
      */
     public MergePartitions.Sources createMergePartitionsSources() {
         return new MergePartitions.Sources();
-    }
-
-    /**
-     * Create an instance of {@link DataSourceView.Annotations }
-     *
-     */
-    public DataSourceView.Annotations createDataSourceViewAnnotations() {
-        return new DataSourceView.Annotations();
     }
 
     /**

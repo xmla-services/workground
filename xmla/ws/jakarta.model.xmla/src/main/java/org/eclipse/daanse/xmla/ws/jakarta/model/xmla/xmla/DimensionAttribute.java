@@ -106,7 +106,7 @@ public class DimensionAttribute {
     @XmlElement(name = "InstanceSelection")
     protected String instanceSelection;
     @XmlElement(name = "Annotations")
-    protected DimensionAttribute.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "ProcessingState")
     protected String processingState;
     @XmlElement(name = "AttributeHierarchyProcessingState")
@@ -405,11 +405,11 @@ public class DimensionAttribute {
         this.instanceSelection = value;
     }
 
-    public DimensionAttribute.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(DimensionAttribute.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -443,22 +443,6 @@ public class DimensionAttribute {
 
     public void setExtendedType(String value) {
         this.extendedType = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

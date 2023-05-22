@@ -29,6 +29,9 @@ public class AbstractAggregation {
     protected String name;
     @XmlElement(name = "Description")
     protected String description;
+    @XmlElement(name = "Annotations")
+    protected Annotations annotations;
+
 
     public String getID() {
         return id;
@@ -53,4 +56,13 @@ public class AbstractAggregation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Annotations getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(Annotations value) {
+        this.annotations = value;
+    }
+
 }

@@ -33,7 +33,7 @@ public class CellPermission {
     @XmlElement(name = "Expression")
     protected String expression;
     @XmlElement(name = "Annotations")
-    protected CellPermission.Annotations annotations;
+    protected Annotations annotations;
 
     public String getAccess() {
         return access;
@@ -59,27 +59,12 @@ public class CellPermission {
         this.expression = value;
     }
 
-    public CellPermission.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(CellPermission.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
-    }
 }

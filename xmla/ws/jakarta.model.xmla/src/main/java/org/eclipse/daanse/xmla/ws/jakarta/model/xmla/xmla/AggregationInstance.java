@@ -34,8 +34,6 @@ public class AggregationInstance extends AbstractAggregation{
     protected AggregationInstance.Dimensions dimensions;
     @XmlElement(name = "Measures")
     protected AggregationInstance.Measures measures;
-    @XmlElement(name = "Annotations")
-    protected AggregationInstance.Annotations annotations;
 
     public String getAggregationType() {
         return aggregationType;
@@ -71,30 +69,6 @@ public class AggregationInstance extends AbstractAggregation{
 
     public void setMeasures(AggregationInstance.Measures value) {
         this.measures = value;
-    }
-
-    public AggregationInstance.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(AggregationInstance.Annotations value) {
-        this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

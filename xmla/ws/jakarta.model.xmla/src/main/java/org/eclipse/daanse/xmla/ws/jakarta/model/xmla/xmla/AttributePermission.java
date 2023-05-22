@@ -39,7 +39,7 @@ public class AttributePermission {
     @XmlElement(name = "DeniedSet")
     protected String deniedSet;
     @XmlElement(name = "Annotations")
-    protected AttributePermission.Annotations annotations;
+    protected Annotations annotations;
 
     public String getAttributeID() {
         return attributeID;
@@ -89,28 +89,12 @@ public class AttributePermission {
         this.deniedSet = value;
     }
 
-    public AttributePermission.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(AttributePermission.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

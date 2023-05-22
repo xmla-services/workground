@@ -21,7 +21,6 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractItem", propOrder = {})
@@ -44,8 +43,7 @@ public abstract class AbstractItem {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Annotations")
-    protected AbstractItem.Annotations annotations;
-
+    protected Annotations annotations;
 
     public String getName() {
         return name;
@@ -87,28 +85,12 @@ public abstract class AbstractItem {
         this.description = description;
     }
 
-    public AbstractItem.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(AbstractItem.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }
