@@ -71,9 +71,6 @@ public class XmlaUtil implements XmlaConstants {
      * Nmtokens ::= Nmtoken (#x20 Nmtoken)*
      *
      */
-    private static final Pattern LOWERCASE_PATTERN =
-        Pattern.compile(".*[a-z].*");
-
     private static final String VALID_CHARACTERS_EXP = "^[:A-Z_a-z\u00C0\u00D6\u00D8-\u00F6\u00F8-\u02ff\u0370-\u037d"
             + "\u037f-\u1fff\u200c\u200d\u2070-\u218f\u2c00-\u2fef\u3001-\ud7ff"
             + "\uf900-\ufdcf\ufdf0-\ufffd]"
@@ -430,9 +427,7 @@ public class XmlaUtil implements XmlaConstants {
         }
         for (RowsetDefinition.Column colDef : colDefs) {
             String columnName = colDef.name;
-            if (LOWERCASE_PATTERN.matcher(columnName).matches()) {
-                columnName = Util.camelToUpper(columnName);
-            }
+            columnName = Util.camelToUpper(columnName);
             // VALUE is a SQL reserved word
             if (columnName.equals("VALUE")) {
                 columnName = "PROPERTY_VALUE";
