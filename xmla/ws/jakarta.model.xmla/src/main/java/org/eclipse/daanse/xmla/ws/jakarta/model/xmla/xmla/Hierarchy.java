@@ -55,7 +55,7 @@ public class Hierarchy {
     @XmlElement(name = "Levels", required = true)
     protected Hierarchy.Levels levels;
     @XmlElement(name = "Annotations")
-    protected Hierarchy.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "VisualizationProperties")
     protected HierarchyVisualizationProperties visualizationProperties;
 
@@ -163,11 +163,11 @@ public class Hierarchy {
         this.levels = value;
     }
 
-    public Hierarchy.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Hierarchy.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -192,22 +192,6 @@ public class Hierarchy {
 
         public void setAllMemberTranslation(List<Translation> allMemberTranslation) {
             this.allMemberTranslation = allMemberTranslation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
         }
     }
 

@@ -36,7 +36,7 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
     @XmlElement(name = "Type", required = true)
     protected String type;
     @XmlElement(name = "Annotations")
-    protected ScalarMiningStructureColumn.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "IsKey")
     protected Boolean isKey;
     @XmlElement(name = "Source")
@@ -92,11 +92,11 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.type = value;
     }
 
-    public ScalarMiningStructureColumn.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(ScalarMiningStructureColumn.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -186,22 +186,6 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
 
     public void setTranslations(ScalarMiningStructureColumn.Translations value) {
         this.translations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

@@ -28,7 +28,7 @@ public class RegularMeasureGroupDimension extends MeasureGroupDimension {
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
     @XmlElement(name = "Annotations")
-    protected RegularMeasureGroupDimension.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "Source")
     protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "Cardinality")
@@ -44,11 +44,11 @@ public class RegularMeasureGroupDimension extends MeasureGroupDimension {
         this.cubeDimensionID = value;
     }
 
-    public RegularMeasureGroupDimension.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(RegularMeasureGroupDimension.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -74,22 +74,6 @@ public class RegularMeasureGroupDimension extends MeasureGroupDimension {
 
     public void setAttributes(RegularMeasureGroupDimension.Attributes value) {
         this.attributes = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

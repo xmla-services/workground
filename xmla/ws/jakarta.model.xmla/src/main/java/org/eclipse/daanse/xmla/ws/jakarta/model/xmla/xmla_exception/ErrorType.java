@@ -25,29 +25,13 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ErrorType", propOrder = {
 
 })
-public class ErrorType implements Serializable {
+public class ErrorType extends AbstractLogType implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @XmlElement(name = "Location")
-    protected MessageLocation location;
     @XmlElement(name = "Callstack")
     protected String callstack;
     @XmlAttribute(name = "ErrorCode")
     protected Long errorCode;
-    @XmlAttribute(name = "Description")
-    protected String description;
-    @XmlAttribute(name = "Source")
-    protected String source;
-    @XmlAttribute(name = "HelpFile")
-    protected String helpFile;
-
-    public MessageLocation getLocation() {
-        return location;
-    }
-
-    public void setLocation(MessageLocation value) {
-        this.location = value;
-    }
 
     public String getCallstack() {
         return callstack;
@@ -63,30 +47,6 @@ public class ErrorType implements Serializable {
 
     public void setErrorCode(Long value) {
         this.errorCode = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String value) {
-        this.source = value;
-    }
-
-    public String getHelpFile() {
-        return helpFile;
-    }
-
-    public void setHelpFile(String value) {
-        this.helpFile = value;
     }
 
 }

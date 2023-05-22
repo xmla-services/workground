@@ -13,38 +13,26 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.util.List;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PerspectiveAction", propOrder = {
+@XmlType(name = "", propOrder = {"annotation"})
+public class Annotations {
 
-})
-public class PerspectiveAction {
+    @XmlElement(name = "Annotation")
+    protected List<Annotation> annotation;
 
-    @XmlElement(name = "ActionID", required = true)
-    protected String actionID;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
-
-    public String getActionID() {
-        return actionID;
+    public List<Annotation> getAnnotation() {
+        return this.annotation;
     }
 
-    public void setActionID(String value) {
-        this.actionID = value;
+    public void setAnnotation(List<Annotation> annotation) {
+        this.annotation = annotation;
     }
-
-    public Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Annotations value) {
-        this.annotations = value;
-    }
-
 }
+

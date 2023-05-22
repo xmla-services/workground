@@ -45,7 +45,7 @@ public abstract class Assembly {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Annotations")
-    protected Assembly.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "ImpersonationInfo")
     protected ImpersonationInfo impersonationInfo;
 
@@ -89,11 +89,11 @@ public abstract class Assembly {
         this.description = value;
     }
 
-    public Assembly.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Assembly.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -103,22 +103,6 @@ public abstract class Assembly {
 
     public void setImpersonationInfo(ImpersonationInfo value) {
         this.impersonationInfo = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

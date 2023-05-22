@@ -28,7 +28,7 @@ public class ManyToManyMeasureGroupDimension extends MeasureGroupDimension {
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
     @XmlElement(name = "Annotations")
-    protected ManyToManyMeasureGroupDimension.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "Source")
     protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "MeasureGroupID")
@@ -44,11 +44,11 @@ public class ManyToManyMeasureGroupDimension extends MeasureGroupDimension {
         this.cubeDimensionID = value;
     }
 
-    public ManyToManyMeasureGroupDimension.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(ManyToManyMeasureGroupDimension.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -74,22 +74,6 @@ public class ManyToManyMeasureGroupDimension extends MeasureGroupDimension {
 
     public void setDirectSlice(String value) {
         this.directSlice = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

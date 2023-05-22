@@ -29,7 +29,7 @@ public class PerspectiveMeasure {
     @XmlElement(name = "MeasureID", required = true)
     protected String measureID;
     @XmlElement(name = "Annotations")
-    protected PerspectiveMeasure.Annotations annotations;
+    protected Annotations annotations;
 
     public String getMeasureID() {
         return measureID;
@@ -39,28 +39,12 @@ public class PerspectiveMeasure {
         this.measureID = value;
     }
 
-    public PerspectiveMeasure.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(PerspectiveMeasure.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

@@ -18,34 +18,17 @@ import java.io.Serializable;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WarningType", propOrder = {
 
 })
-public class WarningType implements Serializable {
+public class WarningType extends AbstractLogType implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @XmlElement(name = "Location")
-    protected MessageLocation location;
     @XmlAttribute(name = "WarningCode")
     protected Integer warningCode;
-    @XmlAttribute(name = "Description")
-    protected String description;
-    @XmlAttribute(name = "Source")
-    protected String source;
-    @XmlAttribute(name = "HelpFile")
-    protected String helpFile;
-
-    public MessageLocation getLocation() {
-        return location;
-    }
-
-    public void setLocation(MessageLocation value) {
-        this.location = value;
-    }
 
     public int getWarningCode() {
         return warningCode;
@@ -53,30 +36,6 @@ public class WarningType implements Serializable {
 
     public void setWarningCode(Integer value) {
         this.warningCode = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String value) {
-        this.source = value;
-    }
-
-    public String getHelpFile() {
-        return helpFile;
-    }
-
-    public void setHelpFile(String value) {
-        this.helpFile = value;
     }
 
 }

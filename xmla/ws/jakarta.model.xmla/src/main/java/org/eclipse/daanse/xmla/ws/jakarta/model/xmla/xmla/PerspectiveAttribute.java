@@ -33,7 +33,7 @@ public class PerspectiveAttribute {
     @XmlElement(name = "DefaultMember")
     protected String defaultMember;
     @XmlElement(name = "Annotations")
-    protected PerspectiveAttribute.Annotations annotations;
+    protected Annotations annotations;
 
     public String getAttributeID() {
         return attributeID;
@@ -59,11 +59,11 @@ public class PerspectiveAttribute {
         this.defaultMember = value;
     }
 
-    public PerspectiveAttribute.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(PerspectiveAttribute.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 

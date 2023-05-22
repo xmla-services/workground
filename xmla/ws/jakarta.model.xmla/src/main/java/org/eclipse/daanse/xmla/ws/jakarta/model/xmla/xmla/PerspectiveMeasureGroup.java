@@ -31,7 +31,7 @@ public class PerspectiveMeasureGroup {
     @XmlElement(name = "Measures")
     protected PerspectiveMeasureGroup.Measures measures;
     @XmlElement(name = "Annotations")
-    protected PerspectiveMeasureGroup.Annotations annotations;
+    protected Annotations annotations;
 
     public String getMeasureGroupID() {
         return measureGroupID;
@@ -49,28 +49,12 @@ public class PerspectiveMeasureGroup {
         this.measures = value;
     }
 
-    public PerspectiveMeasureGroup.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(PerspectiveMeasureGroup.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
