@@ -16,7 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingState;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingStateXmlEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.DimensionAttributeVisualizationProperties;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -111,7 +111,7 @@ public class DimensionAttribute {
     protected String processingState;
     @XmlElement(name = "AttributeHierarchyProcessingState")
     @XmlSchemaType(name = "string")
-    protected AttributeHierarchyProcessingState attributeHierarchyProcessingState;
+    protected AttributeHierarchyProcessingStateXmlEnum attributeHierarchyProcessingState;
     @XmlElement(name = "VisualizationProperties")
     protected DimensionAttributeVisualizationProperties visualizationProperties;
     @XmlElement(name = "ExtendedType")
@@ -421,11 +421,11 @@ public class DimensionAttribute {
         this.processingState = value;
     }
 
-    public AttributeHierarchyProcessingState getAttributeHierarchyProcessingState() {
+    public AttributeHierarchyProcessingStateXmlEnum getAttributeHierarchyProcessingState() {
         return attributeHierarchyProcessingState;
     }
 
-    public void setAttributeHierarchyProcessingState(AttributeHierarchyProcessingState value) {
+    public void setAttributeHierarchyProcessingState(AttributeHierarchyProcessingStateXmlEnum value) {
         this.attributeHierarchyProcessingState = value;
     }
 

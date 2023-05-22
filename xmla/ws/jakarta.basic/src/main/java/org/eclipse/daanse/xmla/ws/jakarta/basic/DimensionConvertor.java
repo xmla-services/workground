@@ -59,6 +59,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.DimensionPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingStateXmlEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEnd.Attributes.Attribute;
 
 public class DimensionConvertor {
@@ -322,7 +323,8 @@ public class DimensionConvertor {
         return null;
     }
 
-    private static AttributeHierarchyProcessingState convertAttributeHierarchyProcessingState(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingState attributeHierarchyProcessingState) {
+    private static AttributeHierarchyProcessingState convertAttributeHierarchyProcessingState(
+            AttributeHierarchyProcessingStateXmlEnum attributeHierarchyProcessingState) {
         if (attributeHierarchyProcessingState != null) {
             return AttributeHierarchyProcessingState.valueOf(attributeHierarchyProcessingState.value());
         }
