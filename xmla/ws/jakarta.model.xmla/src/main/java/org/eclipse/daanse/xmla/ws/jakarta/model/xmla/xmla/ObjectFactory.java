@@ -881,7 +881,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Discover.Restrictions }
+     * Create an instance of {@link Restrictions }
      *
      */
     public Restrictions createDiscoverRestrictions() {
@@ -1753,14 +1753,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AggregationInstance.Annotations }
-     *
-     */
-    public AggregationInstance.Annotations createAggregationInstanceAnnotations() {
-        return new AggregationInstance.Annotations();
-    }
-
-    /**
      * Create an instance of {@link Partition.Annotations }
      *
      */
@@ -1822,14 +1814,6 @@ public class ObjectFactory {
      */
     public Aggregation.Dimensions createAggregationDimensions() {
         return new Aggregation.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link Aggregation.Annotations }
-     *
-     */
-    public Aggregation.Annotations createAggregationAnnotations() {
-        return new Aggregation.Annotations();
     }
 
     /**

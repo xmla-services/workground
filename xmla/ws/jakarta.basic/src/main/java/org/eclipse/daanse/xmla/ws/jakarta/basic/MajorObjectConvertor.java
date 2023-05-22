@@ -220,8 +220,7 @@ public class MajorObjectConvertor {
             return new AggregationR(Optional.ofNullable(aggregation.getID()),
                 aggregation.getName(),
                 Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
-                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null :
-                    aggregation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
                 Optional.ofNullable(aggregation.getDescription()));
         }
         return null;
