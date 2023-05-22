@@ -30,22 +30,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "Database", propOrder = {
 
 })
-public class Database {
+public class Database extends AbstractItem {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected Database.Annotations annotations;
     @XmlElement(name = "LastUpdate")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastUpdate;
@@ -114,54 +100,6 @@ public class Database {
     @XmlElement(name = "DirectQueryMode", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2011/engine/300/300")
     protected String directQueryMode;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public Database.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Database.Annotations value) {
-        this.annotations = value;
-    }
 
     public XMLGregorianCalendar getLastUpdate() {
         return lastUpdate;
@@ -424,22 +362,6 @@ public class Database {
 
         public void setAccount(List<Account> account) {
             this.account = account;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
         }
     }
 

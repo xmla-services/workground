@@ -13,38 +13,18 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Permission", propOrder = {"name", "id", "createdTimestamp", "lastSchemaUpdate", "description",
-    "annotations", "roleID", "process", "readDefinition", "read", "write"})
+@XmlType(name = "Permission", propOrder = { "roleID", "process", "readDefinition", "read", "write"})
 @XmlSeeAlso({DatabasePermission.class, DataSourcePermission.class, DimensionPermission.class,
     MiningStructurePermission.class, MiningModelPermission.class, CubePermission.class})
-public class Permission {
+public class Permission extends AbstractItem {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected Permission.Annotations annotations;
     @XmlElement(name = "RoleID", required = true)
     protected String roleID;
     @XmlElement(name = "Process")
@@ -55,54 +35,6 @@ public class Permission {
     protected String read;
     @XmlElement(name = "Write")
     protected String write;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public Permission.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Permission.Annotations value) {
-        this.annotations = value;
-    }
 
     public String getRoleID() {
         return roleID;
@@ -142,22 +74,6 @@ public class Permission {
 
     public void setWrite(String write) {
         this.write = write;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

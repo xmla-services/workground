@@ -17,14 +17,12 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.xml.datatype.Duration;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -33,22 +31,8 @@ import jakarta.xml.bind.annotation.XmlType;
 
 })
 @XmlSeeAlso({RelationalDataSource.class, OlapDataSource.class})
-public abstract class DataSource {
+public abstract class DataSource extends AbstractItem {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected DataSource.Annotations annotations;
     @XmlElement(name = "ManagedProvider")
     protected String managedProvider;
     @XmlElement(name = "ConnectionString", required = true)
@@ -70,54 +54,6 @@ public abstract class DataSource {
     protected ImpersonationInfo queryImpersonationInfo;
     @XmlElement(name = "QueryHints", namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300")
     protected String queryHints;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public DataSource.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(DataSource.Annotations value) {
-        this.annotations = value;
-    }
 
     public String getManagedProvider() {
         return managedProvider;
@@ -197,22 +133,6 @@ public abstract class DataSource {
 
     public void setQueryHints(String value) {
         this.queryHints = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

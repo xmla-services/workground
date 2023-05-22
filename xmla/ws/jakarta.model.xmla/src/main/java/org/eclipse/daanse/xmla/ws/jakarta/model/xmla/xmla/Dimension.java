@@ -32,22 +32,8 @@ import jakarta.xml.bind.annotation.XmlValue;
 @XmlType(name = "Dimension", propOrder = {
 
 })
-public class Dimension {
+public class Dimension extends AbstractItem {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected Dimension.Annotations annotations;
     @XmlElement(name = "Source")
     protected Binding source;
     @XmlElement(name = "MiningModelID")
@@ -112,54 +98,6 @@ public class Dimension {
     @XmlElement(name = "CurrentStringStoresCompatibilityLevel", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2011/engine/300")
     protected Integer currentStringStoresCompatibilityLevel;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public Dimension.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Dimension.Annotations value) {
-        this.annotations = value;
-    }
 
     public Binding getSource() {
         return source;
@@ -399,22 +337,6 @@ public class Dimension {
 
     public void setCurrentStringStoresCompatibilityLevel(Integer value) {
         this.currentStringStoresCompatibilityLevel = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
