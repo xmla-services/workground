@@ -162,7 +162,6 @@ public class Util extends XOMUtil {
      * Placeholder which indicates an EMPTY value.
      */
     public static final Object EmptyValue = Double.valueOf(DOUBLE_EMPTY);
-    public static final String EX = "$1_$2";
 
     /**
      * Cumulative time spent accessing the database.
@@ -1398,10 +1397,21 @@ public class Util extends XOMUtil {
      */
     public static String camelToUpper(String s) {
         if (s != null) {
-            return s.replaceAll("([^A-Z])([A-Z0-9])", EX) // standard replace
-                   .replaceAll("([A-Z]+)([A-Z0-9][^A-Z]+)", EX) // last letter after full uppercase.
-                   .replaceAll("([0-9]+)([a-zA-Z]+)", EX)
-                   .toUpperCase();
+            StringBuilder buf = new StringBuilder(s.length() + 10);
+            int prevUpper = -1;
+            for (int i = 0; i < s.length(); ++i) {
+                char c = s.charAt(i);
+                if (Character.isUpperCase(c)) {
+                    if (i > prevUpper + 1) {
+                        buf.append('_');
+                    }
+                    prevUpper = i;
+                } else {
+                    c = Character.toUpperCase(c);
+                }
+                buf.append(c);
+            }
+            return buf.toString();
         }
         return s;
     }

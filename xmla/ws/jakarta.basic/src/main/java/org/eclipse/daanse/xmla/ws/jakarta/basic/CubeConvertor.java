@@ -287,7 +287,8 @@ public class CubeConvertor {
 					aggregationInstance.getAggregationType(), convertTabularBinding(aggregationInstance.getSource()),
 					convertAggregationInstanceDimensions(aggregationInstance.getDimensions()),
 					convertAggregationInstanceMeasures(aggregationInstance.getMeasures()),
-					convertAnnotationList(aggregationInstance.getAnnotations()),
+					convertAnnotationList(aggregationInstance.getAnnotations() == null ? null
+							: aggregationInstance.getAnnotations().getAnnotation()),
 					aggregationInstance.getDescription());
 		}
 		return null;
@@ -522,7 +523,8 @@ public class CubeConvertor {
 		if (aggregation != null) {
 			return new AggregationR(Optional.ofNullable(aggregation.getID()), aggregation.getName(),
 					Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
-					Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
+					Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null
+							: aggregation.getAnnotations().getAnnotation())),
 					Optional.ofNullable(aggregation.getDescription()));
 		}
 		return null;

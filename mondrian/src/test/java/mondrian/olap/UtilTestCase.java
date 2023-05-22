@@ -577,16 +577,16 @@ import mondrian.util.UnionIterator;
             "URL",
             Util.camelToUpper("URL"));
         assertEquals(
-            "URL_TO_CLICK_ON",
+            "URLTO_CLICK_ON",
             Util.camelToUpper("URLToClickOn"));
         assertEquals(
                 "URL_TO_CLICK_ON",
                 Util.camelToUpper("urlToClickOn"));
         assertEquals(
-                "URL_1_TO_2_CLICK_ON",
+                "URL1_TO2_CLICK_ON",
                 Util.camelToUpper("url1To2ClickOn"));
         assertEquals(
-                "URL_1_TO_2_CLICK_3_ON",
+                "URL1TO2CLICK3ON",
                 Util.camelToUpper("url1to2click3on"));
         assertEquals(
             "",

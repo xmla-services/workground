@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -27,22 +25,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "Trace", propOrder = {
 
 })
-public class Trace {
+public class Trace extends AbstractItem{
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected Trace.Annotations annotations;
     @XmlElement(name = "LogFileName")
     protected String logFileName;
     @XmlElement(name = "LogFileAppend")
@@ -62,54 +46,6 @@ public class Trace {
     protected TraceFilter filter;
     @XmlElement(name = "EventType", namespace = "urn:schemas-microsoft-com:xml-analysis", required = true)
     protected EventType eventType;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public Trace.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Trace.Annotations value) {
-        this.annotations = value;
-    }
 
     public String getLogFileName() {
         return logFileName;
@@ -185,22 +121,6 @@ public class Trace {
 
     public boolean isSetEventType() {
         return (this.eventType != null);
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

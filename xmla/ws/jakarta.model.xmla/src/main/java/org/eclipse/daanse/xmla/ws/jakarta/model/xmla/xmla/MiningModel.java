@@ -27,22 +27,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "MiningModel", propOrder = {
 
 })
-public class MiningModel {
+public class MiningModel extends AbstractItem {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElement(name = "Annotations")
-    protected MiningModel.Annotations annotations;
     @XmlElement(name = "Algorithm", required = true)
     protected String algorithm;
     @XmlElement(name = "LastProcessed")
@@ -68,54 +54,6 @@ public class MiningModel {
     protected String language;
     @XmlElement(name = "Collation")
     protected String collation;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public MiningModel.Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(MiningModel.Annotations value) {
-        this.annotations = value;
-    }
 
     public String getAlgorithm() {
         return algorithm;
@@ -226,22 +164,6 @@ public class MiningModel {
 
         public void setAlgorithmParameter(List<AlgorithmParameter> algorithmParameter) {
             this.algorithmParameter = algorithmParameter;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
         }
     }
 
