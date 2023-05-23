@@ -27,10 +27,10 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractItem", propOrder = {})
-@XmlSeeAlso({AggregationDesign.class, Cube.class, DataSourceView.class, MdxScript.class,
-    MiningStructure.class, MiningModel.class, Permission.class, Perspective.class, Role.class, Server.class,
-    Trace.class, Database.class, DataSource.class, Dimension.class, MeasureGroup.class,
-    Partition.class
+@XmlSeeAlso({AggregationDesign.class, Cube.class, DataSource.class,
+    DataSourceView.class, Database.class, Dimension.class, MdxScript.class, MeasureGroup.class,
+    MiningModel.class, MiningStructure.class, Partition.class, Permission.class, Perspective.class,
+    Role.class, Server.class, Trace.class
 })
 public abstract class AbstractItem {
     @XmlElement(name = "Name", required = true)
