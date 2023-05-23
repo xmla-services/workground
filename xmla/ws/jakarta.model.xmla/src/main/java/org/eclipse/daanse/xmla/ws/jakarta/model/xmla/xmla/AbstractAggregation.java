@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractAggregation", propOrder = {})
 @XmlSeeAlso({Aggregation.class, AggregationInstance.class})
-public class AbstractAggregation {
+public abstract class AbstractAggregation {
     @XmlElement(name = "ID")
     protected String id;
     @XmlElement(name = "Name", required = true)

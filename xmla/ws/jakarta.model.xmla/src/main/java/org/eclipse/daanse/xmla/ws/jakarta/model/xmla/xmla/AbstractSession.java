@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractSession")
 @XmlSeeAlso({Session.class, EndSession.class})
-public class AbstractSession {
+public abstract class AbstractSession {
 
     @XmlAttribute(name = "SessionId")
     protected String sessionId;
