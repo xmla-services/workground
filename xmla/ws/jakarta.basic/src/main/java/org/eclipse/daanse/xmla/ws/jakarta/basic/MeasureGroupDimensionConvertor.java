@@ -64,8 +64,7 @@ public class MeasureGroupDimensionConvertor {
 
     private static MeasureGroupDimension convertDataMiningMeasureGroupDimension(DataMiningMeasureGroupDimension dataMiningMeasureGroupDimension) {
         return new DataMiningMeasureGroupDimensionR(dataMiningMeasureGroupDimension.getCubeDimensionID(),
-            convertAnnotationList(dataMiningMeasureGroupDimension.getAnnotations() == null ? null
-                : dataMiningMeasureGroupDimension.getAnnotations().getAnnotation()),
+            convertAnnotationList(dataMiningMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(dataMiningMeasureGroupDimension.getSource()),
             dataMiningMeasureGroupDimension.getCaseCubeDimensionID());
     }
@@ -73,8 +72,7 @@ public class MeasureGroupDimensionConvertor {
     private static MeasureGroupDimension convertDegenerateMeasureGroupDimension(
         DegenerateMeasureGroupDimension degenerateMeasureGroupDimension) {
         return new DegenerateMeasureGroupDimensionR(degenerateMeasureGroupDimension.getCubeDimensionID(),
-            convertAnnotationList(degenerateMeasureGroupDimension.getAnnotations() == null ? null
-                : degenerateMeasureGroupDimension.getAnnotations().getAnnotation()),
+            convertAnnotationList(degenerateMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(degenerateMeasureGroupDimension.getSource()),
             degenerateMeasureGroupDimension.getShareDimensionStorage());
     }
@@ -82,8 +80,7 @@ public class MeasureGroupDimensionConvertor {
     private static MeasureGroupDimension convertReferenceMeasureGroupDimension(
         ReferenceMeasureGroupDimension referenceMeasureGroupDimension) {
         return new ReferenceMeasureGroupDimensionR(referenceMeasureGroupDimension.getCubeDimensionID(),
-            convertAnnotationList(referenceMeasureGroupDimension.getAnnotations() == null ? null
-                : referenceMeasureGroupDimension.getAnnotations().getAnnotation()),
+            convertAnnotationList(referenceMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(referenceMeasureGroupDimension.getSource()),
             referenceMeasureGroupDimension.getIntermediateCubeDimensionID(),
             referenceMeasureGroupDimension.getIntermediateGranularityAttributeID(),
@@ -94,8 +91,7 @@ public class MeasureGroupDimensionConvertor {
     private static MeasureGroupDimension convertRegularMeasureGroupDimension(
         RegularMeasureGroupDimension regularMeasureGroupDimension) {
         return new RegularMeasureGroupDimensionR(regularMeasureGroupDimension.getCubeDimensionID(),
-            convertAnnotationList(regularMeasureGroupDimension.getAnnotations() == null ? null
-                : regularMeasureGroupDimension.getAnnotations().getAnnotation()),
+            convertAnnotationList(regularMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(regularMeasureGroupDimension.getSource()),
             regularMeasureGroupDimension.getCardinality(),
             convertRegularMeasureGroupDimensionAttributes(regularMeasureGroupDimension.getAttributes()));
@@ -104,8 +100,7 @@ public class MeasureGroupDimensionConvertor {
     private static MeasureGroupDimension convertManyToManyMeasureGroupDimension(
         ManyToManyMeasureGroupDimension manyToManyMeasureGroupDimension) {
         return new ManyToManyMeasureGroupDimensionR(manyToManyMeasureGroupDimension.getCubeDimensionID(),
-            convertAnnotationList(manyToManyMeasureGroupDimension.getAnnotations() == null ? null
-                : manyToManyMeasureGroupDimension.getAnnotations().getAnnotation()),
+            convertAnnotationList(manyToManyMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(manyToManyMeasureGroupDimension.getSource()),
             manyToManyMeasureGroupDimension.getMeasureGroupID(),
             manyToManyMeasureGroupDimension.getDirectSlice());
@@ -133,8 +128,7 @@ public class MeasureGroupDimensionConvertor {
 			return new MeasureGroupAttributeR(measureGroupAttribute.getAttributeID(),
 					convertMeasureGroupAttributeKeyColumns(measureGroupAttribute.getKeyColumns()),
 					measureGroupAttribute.getType(),
-					convertAnnotationList(measureGroupAttribute.getAnnotations() == null ? null
-							: measureGroupAttribute.getAnnotations().getAnnotation()));
+					convertAnnotationList(measureGroupAttribute.getAnnotations()));
 		}
 		return null;
 	}

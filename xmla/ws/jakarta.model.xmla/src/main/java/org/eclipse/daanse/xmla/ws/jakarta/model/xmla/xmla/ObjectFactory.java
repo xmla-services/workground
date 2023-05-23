@@ -1786,13 +1786,6 @@ public class ObjectFactory {
         return new Aggregation.Dimensions();
     }
 
-    /**
-     * Create an instance of {@link Aggregation }
-     *
-     */
-    public Annotations createAnnotations() {
-        return new Annotations();
-    }
 
     /**
      * Create an instance of {@link AggregationDesignDimension.Attributes }

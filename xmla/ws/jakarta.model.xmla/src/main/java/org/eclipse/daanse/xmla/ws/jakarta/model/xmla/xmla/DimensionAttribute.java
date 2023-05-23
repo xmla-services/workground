@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import java.math.BigInteger;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingStateXmlEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.DimensionAttributeVisualizationProperties;
 
@@ -105,8 +106,9 @@ public class DimensionAttribute {
     protected String groupingBehavior;
     @XmlElement(name = "InstanceSelection")
     protected String instanceSelection;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
     @XmlElement(name = "ProcessingState")
     protected String processingState;
     @XmlElement(name = "AttributeHierarchyProcessingState")
@@ -405,11 +407,11 @@ public class DimensionAttribute {
         this.instanceSelection = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

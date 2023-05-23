@@ -120,8 +120,7 @@ public class MiningModelConvertor {
                     miningModelColumn.getColumns().getColumn())),
                 Optional.ofNullable(convertMiningModelingFlagList(miningModelColumn.getModelingFlags() == null ? null :
                     miningModelColumn.getModelingFlags().getModelingFlag())),
-                Optional.ofNullable(convertAnnotationList(miningModelColumn.getAnnotations() == null ? null :
-                    miningModelColumn.getAnnotations().getAnnotation())));
+                Optional.ofNullable(convertAnnotationList(miningModelColumn.getAnnotations())));
         }
         return null;
 
@@ -154,8 +153,7 @@ public class MiningModelConvertor {
                 Optional.ofNullable(attributeTranslation.getCaption()),
                 Optional.ofNullable(attributeTranslation.getDescription()),
                 Optional.ofNullable(attributeTranslation.getDisplayFolder()),
-                Optional.ofNullable(convertAnnotationList(attributeTranslation.getAnnotations() == null ? null :
-                    attributeTranslation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(attributeTranslation.getAnnotations())),
                 Optional.ofNullable(convertDataItem(attributeTranslation.getCaptionColumn())),
                 Optional.ofNullable(attributeTranslation.getMembersWithDataCaption()));
         }

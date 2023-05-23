@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.HierarchyVisualizationProperties;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -54,8 +55,9 @@ public class Hierarchy {
     protected Boolean allowDuplicateNames;
     @XmlElement(name = "Levels", required = true)
     protected Hierarchy.Levels levels;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
     @XmlElement(name = "VisualizationProperties")
     protected HierarchyVisualizationProperties visualizationProperties;
 
@@ -163,11 +165,11 @@ public class Hierarchy {
         this.levels = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

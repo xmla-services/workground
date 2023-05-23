@@ -131,7 +131,7 @@ public class MiningStructureConvertor {
             Optional.ofNullable(scalarMiningStructureColumn.getID()),
             Optional.ofNullable(scalarMiningStructureColumn.getDescription()),
             Optional.ofNullable(scalarMiningStructureColumn.getType()),
-            Optional.ofNullable(convertAnnotationList(scalarMiningStructureColumn.getAnnotations() == null ? null : scalarMiningStructureColumn.getAnnotations().getAnnotation())),
+            Optional.ofNullable(convertAnnotationList(scalarMiningStructureColumn.getAnnotations())),
             Optional.ofNullable(scalarMiningStructureColumn.isIsKey()),
             Optional.ofNullable(convertBinding(scalarMiningStructureColumn.getSource())),
             Optional.ofNullable(scalarMiningStructureColumn.getDistribution()),

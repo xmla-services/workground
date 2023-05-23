@@ -287,8 +287,7 @@ public class CubeConvertor {
 					aggregationInstance.getAggregationType(), convertTabularBinding(aggregationInstance.getSource()),
 					convertAggregationInstanceDimensions(aggregationInstance.getDimensions()),
 					convertAggregationInstanceMeasures(aggregationInstance.getMeasures()),
-					convertAnnotationList(aggregationInstance.getAnnotations() == null ? null
-							: aggregationInstance.getAnnotations().getAnnotation()),
+					convertAnnotationList(aggregationInstance.getAnnotations()),
 					aggregationInstance.getDescription());
 		}
 		return null;
@@ -456,7 +455,7 @@ public class CubeConvertor {
 					measure.getFormatString(), measure.getBackColor(), measure.getForeColor(), measure.getFontName(),
 					measure.getFontSize(), measure.getFontFlags(),
 					convertMeasureTranslations(measure.getTranslations()), convertAnnotationList(
-							measure.getAnnotations() == null ? null : measure.getAnnotations().getAnnotation()));
+							measure.getAnnotations()));
 		}
 		return null;
 	}
@@ -523,8 +522,7 @@ public class CubeConvertor {
 		if (aggregation != null) {
 			return new AggregationR(Optional.ofNullable(aggregation.getID()), aggregation.getName(),
 					Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
-					Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null
-							: aggregation.getAnnotations().getAnnotation())),
+					Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
 					Optional.ofNullable(aggregation.getDescription()));
 		}
 		return null;
@@ -551,8 +549,7 @@ public class CubeConvertor {
 		if (aggregationDimension != null) {
 			return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
 					Optional.ofNullable(convertAggregationDimensionAttributes(aggregationDimension.getAttributes())),
-					Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations() == null ? null
-							: aggregationDimension.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations())));
 		}
 		return null;
 	}
@@ -577,8 +574,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute aggregationAttribute) {
 		if (aggregationAttribute != null) {
 			return new AggregationAttributeR(aggregationAttribute.getAttributeID(),
-					Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null
-							: aggregationAttribute.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations())));
 		}
 		return null;
 	}
@@ -605,8 +601,7 @@ public class CubeConvertor {
 			return new AggregationDesignDimensionR(aggregationDesignDimension.getCubeDimensionID(),
 					Optional.ofNullable(
 							convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes())),
-					Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null
-							: aggregationDesignDimension.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations())));
 		}
 		return null;
 	}
@@ -763,7 +758,7 @@ public class CubeConvertor {
 					kpi.getAssociatedMeasureGroupID(), kpi.getValue(), kpi.getGoal(), kpi.getStatus(), kpi.getTrend(),
 					kpi.getWeight(), kpi.getTrendGraphic(), kpi.getStatusGraphic(), kpi.getCurrentTimeMember(),
 					kpi.getParentKpiID(),
-					convertAnnotationList(kpi.getAnnotations() == null ? null : kpi.getAnnotations().getAnnotation()));
+					convertAnnotationList(kpi.getAnnotations()));
 		}
 		return null;
 	}
@@ -841,8 +836,7 @@ public class CubeConvertor {
             Optional.ofNullable(drillThroughAction.getInvocation()),
             Optional.ofNullable(drillThroughAction.getApplication()),
             Optional.ofNullable(drillThroughAction.getDescription()),
-            Optional.ofNullable(convertAnnotationList(drillThroughAction.getAnnotations() == null ? null
-                : drillThroughAction.getAnnotations().getAnnotation())),
+            Optional.ofNullable(convertAnnotationList(drillThroughAction.getAnnotations())),
             Optional.ofNullable(drillThroughAction.isDefault()),
             Optional.ofNullable(convertBindingList(drillThroughAction.getColumns().getColumn())),
             Optional.ofNullable(drillThroughAction.getMaximumRows()));
@@ -859,8 +853,7 @@ public class CubeConvertor {
             TypeEnum.fromValue(reportAction.getType()), Optional.ofNullable(reportAction.getInvocation()),
             Optional.ofNullable(reportAction.getApplication()),
             Optional.ofNullable(reportAction.getDescription()),
-            Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations() == null ? null
-                : reportAction.getAnnotations().getAnnotation())),
+            Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations())),
             reportAction.getReportServer(), Optional.ofNullable(reportAction.getPath()),
             Optional.ofNullable(
                 convertReportParametersList(reportAction.getReportParameters() == null ? null
@@ -883,8 +876,7 @@ public class CubeConvertor {
             Optional.ofNullable(standardAction.getInvocation()),
             Optional.ofNullable(standardAction.getApplication()),
             Optional.ofNullable(standardAction.getDescription()),
-            Optional.ofNullable(convertAnnotationList(standardAction.getAnnotations() == null ? null
-                : standardAction.getAnnotations().getAnnotation())),
+            Optional.ofNullable(convertAnnotationList(standardAction.getAnnotations())),
             standardAction.getExpression());
     }
 
@@ -974,7 +966,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveKpi perspectiveKpi) {
 		if (perspectiveKpi != null) {
 			return new PerspectiveKpiR(perspectiveKpi.getKpiID(), Optional.ofNullable(convertAnnotationList(
-					perspectiveKpi.getAnnotations() == null ? null : perspectiveKpi.getAnnotations().getAnnotation())));
+					perspectiveKpi.getAnnotations())));
 		}
 		return null;
 	}
@@ -999,8 +991,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveCalculation perspectiveCalculation) {
 		if (perspectiveCalculation != null) {
 			return new PerspectiveCalculationR(perspectiveCalculation.getName(), perspectiveCalculation.getType(),
-					Optional.ofNullable(convertAnnotationList(perspectiveCalculation.getAnnotations() == null ? null
-							: perspectiveCalculation.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveCalculation.getAnnotations())));
 		}
 		return null;
 	}
@@ -1025,8 +1016,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveAction perspectiveAction) {
 		if (perspectiveAction != null) {
 			return new PerspectiveActionR(perspectiveAction.getActionID(),
-					Optional.ofNullable(convertAnnotationList(perspectiveAction.getAnnotations() == null ? null
-							: perspectiveAction.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveAction.getAnnotations())));
 		}
 		return null;
 	}
@@ -1052,8 +1042,7 @@ public class CubeConvertor {
 		if (perspectiveMeasureGroup != null) {
 			return new PerspectiveMeasureGroupR(perspectiveMeasureGroup.getMeasureGroupID(),
 					Optional.ofNullable(convertPerspectiveMeasureGroupMeasures(perspectiveMeasureGroup.getMeasures())),
-					Optional.ofNullable(convertAnnotationList(perspectiveMeasureGroup.getAnnotations() == null ? null
-							: perspectiveMeasureGroup.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveMeasureGroup.getAnnotations())));
 		}
 		return null;
 	}
@@ -1078,8 +1067,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveMeasure perspectiveMeasure) {
 		if (perspectiveMeasure != null) {
 			return new PerspectiveMeasureR(perspectiveMeasure.getMeasureID(),
-					convertAnnotationList(perspectiveMeasure.getAnnotations() == null ? null
-							: perspectiveMeasure.getAnnotations().getAnnotation()));
+					convertAnnotationList(perspectiveMeasure.getAnnotations()));
 		}
 		return null;
 	}
@@ -1107,8 +1095,7 @@ public class CubeConvertor {
 			return new PerspectiveDimensionR(perspectiveDimension.getCubeDimensionID(),
 					Optional.ofNullable(convertPerspectiveDimensionAttributes(perspectiveDimension.getAttributes())),
 					Optional.ofNullable(convertPerspectiveDimensionHierarchies(perspectiveDimension.getHierarchies())),
-					Optional.ofNullable(convertAnnotationList(perspectiveDimension.getAnnotations() == null ? null
-							: perspectiveDimension.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveDimension.getAnnotations())));
 		}
 		return null;
 	}
@@ -1134,8 +1121,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveHierarchy perspectiveHierarchy) {
 		if (perspectiveHierarchy != null) {
 			return new PerspectiveHierarchyR(perspectiveHierarchy.getHierarchyID(),
-					Optional.ofNullable(convertAnnotationList(perspectiveHierarchy.getAnnotations() == null ? null
-							: perspectiveHierarchy.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveHierarchy.getAnnotations())));
 		}
 		return null;
 	}
@@ -1162,8 +1148,7 @@ public class CubeConvertor {
 			return new PerspectiveAttributeR(perspectiveAttribute.getAttributeID(),
 					Optional.ofNullable(perspectiveAttribute.isAttributeHierarchyVisible()),
 					Optional.ofNullable(perspectiveAttribute.getDefaultMember()),
-					Optional.ofNullable(convertAnnotationList(perspectiveAttribute.getAnnotations() == null ? null
-							: perspectiveAttribute.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(perspectiveAttribute.getAnnotations())));
 		}
 		return null;
 	}
@@ -1331,8 +1316,7 @@ public class CubeConvertor {
 					Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubeDimensionPermission.getWrite())),
 					Optional.ofNullable(convertCubeDimensionPermissionAttributePermissions(
 							cubeDimensionPermission.getAttributePermissions())),
-					Optional.ofNullable(convertAnnotationList(cubeDimensionPermission.getAnnotations() == null ? null
-							: cubeDimensionPermission.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(cubeDimensionPermission.getAnnotations())));
 		}
 		return null;
 	}
@@ -1362,8 +1346,7 @@ public class CubeConvertor {
 					Optional.ofNullable(attributePermission.getVisualTotals()),
 					Optional.ofNullable(attributePermission.getAllowedSet()),
 					Optional.ofNullable(attributePermission.getDeniedSet()),
-					Optional.ofNullable(convertAnnotationList(attributePermission.getAnnotations() == null ? null
-							: attributePermission.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(attributePermission.getAnnotations())));
 		}
 		return null;
 	}
@@ -1390,8 +1373,7 @@ public class CubeConvertor {
 			return new CellPermissionR(Optional.ofNullable(AccessEnum.fromValue(cellPermission.getAccess())),
 					Optional.ofNullable(cellPermission.getDescription()),
 					Optional.ofNullable(cellPermission.getExpression()),
-					Optional.ofNullable(convertAnnotationList(cellPermission.getAnnotations() == null ? null
-							: cellPermission.getAnnotations().getAnnotation())));
+					Optional.ofNullable(convertAnnotationList(cellPermission.getAnnotations())));
 		}
 		return null;
 	}
@@ -1423,8 +1405,7 @@ public class CubeConvertor {
 					cubeDimension.getMemberUniqueNameStyle(),
 					convertCubeDimensionAttributes(cubeDimension.getAttributes()),
 					convertCubeDimensionHierarchies(cubeDimension.getHierarchies()),
-					convertAnnotationList(cubeDimension.getAnnotations() == null ? null
-							: cubeDimension.getAnnotations().getAnnotation()));
+					convertAnnotationList(cubeDimension.getAnnotations()));
 		}
 		return null;
 	}
@@ -1450,8 +1431,7 @@ public class CubeConvertor {
 		if (cubeHierarchy != null) {
 			return new CubeHierarchyR(cubeHierarchy.getHierarchyID(), cubeHierarchy.getOptimizedState(),
 					cubeHierarchy.isVisible(), cubeHierarchy.isEnabled(),
-					convertAnnotationList(cubeHierarchy.getAnnotations() == null ? null
-							: cubeHierarchy.getAnnotations().getAnnotation()));
+					convertAnnotationList(cubeHierarchy.getAnnotations()));
 		}
 		return null;
 	}
@@ -1479,8 +1459,7 @@ public class CubeConvertor {
 			return new CubeAttributeR(cubeAttribute.getAttributeID(), cubeAttribute.getAggregationUsage(),
 					cubeAttribute.getAttributeHierarchyOptimizedState(), cubeAttribute.isAttributeHierarchyEnabled(),
 					cubeAttribute.isAttributeHierarchyVisible(),
-					convertAnnotationList(cubeAttribute.getAnnotations() == null ? null
-							: cubeAttribute.getAnnotations().getAnnotation()));
+					convertAnnotationList(cubeAttribute.getAnnotations()));
 		}
 		return null;
 	}
@@ -1513,8 +1492,7 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation translation) {
 		if (translation != null) {
 			return new TranslationR(translation.getLanguage(), translation.getCaption(), translation.getDescription(),
-					translation.getDisplayFolder(), convertAnnotationList(translation.getAnnotations() == null ? null
-							: translation.getAnnotations().getAnnotation()));
+					translation.getDisplayFolder(), convertAnnotationList(translation.getAnnotations()));
 		}
 		return null;
 	}

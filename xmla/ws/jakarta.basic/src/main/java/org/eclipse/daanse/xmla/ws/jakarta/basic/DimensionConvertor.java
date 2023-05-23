@@ -140,8 +140,7 @@ public class DimensionConvertor {
                 hierarchy.getMemberKeysUnique(),
                 hierarchy.isAllowDuplicateNames(),
                 convertLevelList(hierarchy.getLevels() == null ? null : hierarchy.getLevels().getLevel()),
-                convertAnnotationList(hierarchy.getAnnotations() == null ? null :
-                    hierarchy.getAnnotations().getAnnotation()),
+                convertAnnotationList(hierarchy.getAnnotations()),
                 convertHierarchyVisualizationProperties(hierarchy.getVisualizationProperties()));
         }
         return null;
@@ -171,7 +170,7 @@ public class DimensionConvertor {
                 level.getHideMemberIf(),
                 convertTranslationList(level.getTranslations() == null ? null :
                     level.getTranslations().getTranslation()),
-                convertAnnotationList(level.getAnnotations() == null ? null : level.getAnnotations().getAnnotation()));
+                convertAnnotationList(level.getAnnotations()));
         }
         return null;
     }
@@ -254,8 +253,7 @@ public class DimensionConvertor {
                 dimensionAttribute.isKeyUniquenessGuarantee(),
                 dimensionAttribute.getGroupingBehavior(),
                 dimensionAttribute.getInstanceSelection(),
-                convertAnnotationList(dimensionAttribute.getAnnotations() == null ? null :
-                    dimensionAttribute.getAnnotations().getAnnotation()),
+                convertAnnotationList(dimensionAttribute.getAnnotations()),
                 dimensionAttribute.getProcessingState(),
                 convertAttributeHierarchyProcessingState(dimensionAttribute.getAttributeHierarchyProcessingState()),
                 convertDimensionAttributeVisualizationProperties(dimensionAttribute.getVisualizationProperties()),
@@ -278,8 +276,7 @@ public class DimensionConvertor {
                 attributeRelationship.getCardinality(),
                 attributeRelationship.getOptionality(),
                 attributeRelationship.getOverrideBehavior(),
-                convertAnnotationList(attributeRelationship.getAnnotations() == null ? null :
-                    attributeRelationship.getAnnotations().getAnnotation()),
+                convertAnnotationList(attributeRelationship.getAnnotations()),
                 attributeRelationship.getName(),
                 attributeRelationship.isVisible(),
                 convertTranslationList(attributeRelationship.getTranslations() == null ? null :
@@ -406,8 +403,7 @@ public class DimensionConvertor {
                 relationshipEndTranslation.getCollectionCaption(),
                 relationshipEndTranslation.getDescription(),
                 relationshipEndTranslation.getDisplayFolder(),
-                convertAnnotationList(relationshipEndTranslation.getAnnotations() == null ? null :
-                    relationshipEndTranslation.getAnnotations().getAnnotation()));
+                convertAnnotationList(relationshipEndTranslation.getAnnotations()));
         }
         return null;
     }

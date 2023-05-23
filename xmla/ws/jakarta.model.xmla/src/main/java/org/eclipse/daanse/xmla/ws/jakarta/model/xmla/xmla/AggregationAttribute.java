@@ -16,7 +16,10 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggregationAttribute", propOrder = {
@@ -26,8 +29,10 @@ public class AggregationAttribute {
 
   @XmlElement(name = "AttributeID", required = true)
   protected String attributeID;
-  @XmlElement(name = "Annotations")
-  protected Annotations annotations;
+
+  @XmlElementWrapper(name = "Annotations")
+  @XmlElement(name = "Annotation", type = Annotation.class)
+  protected List<Annotation> annotations;
 
   public String getAttributeID() {
     return attributeID;
@@ -37,11 +42,11 @@ public class AggregationAttribute {
     this.attributeID = value;
   }
 
-  public Annotations getAnnotations() {
+  public List<Annotation> getAnnotations() {
     return annotations;
   }
 
-  public void setAnnotations(Annotations value) {
+  public void setAnnotations(List<Annotation> value) {
     this.annotations = value;
   }
 
