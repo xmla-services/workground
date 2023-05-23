@@ -31,7 +31,7 @@ public class AggregationDesignDimension {
     @XmlElement(name = "Attributes")
     protected AggregationDesignDimension.Attributes attributes;
     @XmlElement(name = "Annotations")
-    protected AggregationDesignDimension.Annotations annotations;
+    protected Annotations annotations;
 
     public String getCubeDimensionID() {
         return cubeDimensionID;
@@ -49,28 +49,12 @@ public class AggregationDesignDimension {
         this.attributes = value;
     }
 
-    public AggregationDesignDimension.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(AggregationDesignDimension.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

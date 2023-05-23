@@ -51,7 +51,7 @@ public class ReportAction extends Action {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Annotations")
-    protected ReportAction.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "ReportServer", required = true)
     protected String reportServer;
     @XmlElement(name = "Path")
@@ -161,11 +161,11 @@ public class ReportAction extends Action {
         this.description = value;
     }
 
-    public ReportAction.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(ReportAction.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -199,22 +199,6 @@ public class ReportAction extends Action {
 
     public void setReportFormatParameters(ReportAction.ReportFormatParameters value) {
         this.reportFormatParameters = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

@@ -14,15 +14,13 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300;
 
 import java.io.Serializable;
-import java.util.List;
-
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotation;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotations;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RelationshipEndTranslation", propOrder = {
@@ -43,7 +41,7 @@ public class RelationshipEndTranslation implements Serializable {
     @XmlElement(name = "DisplayFolder")
     protected String displayFolder;
     @XmlElement(name = "Annotations")
-    protected RelationshipEndTranslation.Annotations annotations;
+    protected Annotations annotations;
 
     public long getLanguage() {
         return language;
@@ -85,29 +83,12 @@ public class RelationshipEndTranslation implements Serializable {
         this.displayFolder = value;
     }
 
-    public RelationshipEndTranslation.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(RelationshipEndTranslation.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

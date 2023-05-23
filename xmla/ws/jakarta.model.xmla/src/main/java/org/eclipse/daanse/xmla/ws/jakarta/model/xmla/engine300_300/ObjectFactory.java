@@ -100,14 +100,6 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link RelationshipEndTranslation.Annotations }
-   *
-   */
-  public RelationshipEndTranslation.Annotations createRelationshipEndTranslationAnnotations() {
-    return new RelationshipEndTranslation.Annotations();
-  }
-
-  /**
    * Create an instance of {@link RelationshipEnd.Translations }
    *
    */

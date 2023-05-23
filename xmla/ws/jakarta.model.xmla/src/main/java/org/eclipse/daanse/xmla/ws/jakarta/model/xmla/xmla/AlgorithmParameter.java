@@ -15,34 +15,12 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AlgorithmParameter", propOrder = {
 
 })
-public class AlgorithmParameter {
-
-  @XmlElement(name = "Name", required = true)
-  protected String name;
-  @XmlElement(name = "Value", required = true)
-  protected java.lang.Object value;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String value) {
-    this.name = value;
-  }
-
-  public java.lang.Object getValue() {
-    return value;
-  }
-
-  public void setValue(java.lang.Object value) {
-    this.value = value;
-  }
+public class AlgorithmParameter extends AbstractParameter {
 
 }

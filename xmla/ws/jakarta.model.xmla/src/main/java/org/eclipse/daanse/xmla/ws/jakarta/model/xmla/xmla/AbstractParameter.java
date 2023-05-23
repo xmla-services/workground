@@ -19,17 +19,15 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PerspectiveCalculation", propOrder = {
+@XmlType(name = "AbstractParameter", propOrder = {
 
 })
-public class PerspectiveCalculation {
+public class AbstractParameter {
 
     @XmlElement(name = "Name", required = true)
     protected String name;
-    @XmlElement(name = "Type", required = true)
-    protected String type;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElement(name = "Value", required = true)
+    protected java.lang.Object value;
 
     public String getName() {
         return name;
@@ -39,20 +37,12 @@ public class PerspectiveCalculation {
         this.name = value;
     }
 
-    public String getType() {
-        return type;
+    public java.lang.Object getValue() {
+        return value;
     }
 
-    public void setType(String value) {
-        this.type = value;
-    }
-
-    public Annotations getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(Annotations value) {
-        this.annotations = value;
+    public void setValue(java.lang.Object value) {
+        this.value = value;
     }
 
 }

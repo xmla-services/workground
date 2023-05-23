@@ -57,7 +57,7 @@ public class Kpi {
     @XmlElement(name = "ParentKpiID")
     protected String parentKpiID;
     @XmlElement(name = "Annotations")
-    protected Kpi.Annotations annotations;
+    protected Annotations annotations;
 
     public String getName() {
         return name;
@@ -179,28 +179,12 @@ public class Kpi {
         this.parentKpiID = value;
     }
 
-    public Kpi.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Kpi.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

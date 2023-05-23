@@ -33,7 +33,7 @@ public class Account {
     @XmlElement(name = "Aliases")
     protected Account.Aliases aliases;
     @XmlElement(name = "Annotations")
-    protected Account.Annotations annotations;
+    protected Annotations annotations;
 
     public String getAccountType() {
         return accountType;
@@ -59,11 +59,11 @@ public class Account {
         this.aliases = value;
     }
 
-    public Account.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Account.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -83,19 +83,4 @@ public class Account {
         }
     }
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
-    }
 }

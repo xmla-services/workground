@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -28,7 +26,7 @@ public class DegenerateMeasureGroupDimension extends MeasureGroupDimension {
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
     @XmlElement(name = "Annotations")
-    protected DegenerateMeasureGroupDimension.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "Source")
     protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "ShareDimensionStorage", namespace = "http://schemas.microsoft" +
@@ -43,11 +41,11 @@ public class DegenerateMeasureGroupDimension extends MeasureGroupDimension {
         this.cubeDimensionID = value;
     }
 
-    public DegenerateMeasureGroupDimension.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(DegenerateMeasureGroupDimension.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -65,22 +63,6 @@ public class DegenerateMeasureGroupDimension extends MeasureGroupDimension {
 
     public void setShareDimensionStorage(String value) {
         this.shareDimensionStorage = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
 }

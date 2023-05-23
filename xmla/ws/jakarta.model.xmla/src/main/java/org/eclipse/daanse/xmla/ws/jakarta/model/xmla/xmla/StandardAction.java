@@ -50,7 +50,7 @@ public class StandardAction extends Action {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Annotations")
-    protected StandardAction.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "Expression", required = true)
     protected String expression;
 
@@ -150,11 +150,11 @@ public class StandardAction extends Action {
         this.description = value;
     }
 
-    public StandardAction.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(StandardAction.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -164,22 +164,6 @@ public class StandardAction extends Action {
 
     public void setExpression(String value) {
         this.expression = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
