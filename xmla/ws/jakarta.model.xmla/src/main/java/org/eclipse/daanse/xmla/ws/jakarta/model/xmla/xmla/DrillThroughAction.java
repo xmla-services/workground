@@ -51,7 +51,7 @@ public class DrillThroughAction extends Action {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Annotations")
-    protected DrillThroughAction.Annotations annotations;
+    protected Annotations annotations;
     @XmlElement(name = "Default")
     protected Boolean defaultFlag;
     @XmlElement(name = "Columns")
@@ -159,11 +159,11 @@ public class DrillThroughAction extends Action {
         this.description = value;
     }
 
-    public DrillThroughAction.Annotations getAnnotations() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(DrillThroughAction.Annotations value) {
+    public void setAnnotations(Annotations value) {
         this.annotations = value;
     }
 
@@ -189,22 +189,6 @@ public class DrillThroughAction extends Action {
 
     public void setMaximumRows(Integer value) {
         this.maximumRows = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"annotation"})
-    public static class Annotations {
-
-        @XmlElement(name = "Annotation")
-        protected List<Annotation> annotation;
-
-        public List<Annotation> getAnnotation() {
-            return this.annotation;
-        }
-
-        public void setAnnotation(List<Annotation> annotation) {
-            this.annotation = annotation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
