@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -44,8 +45,9 @@ public abstract class Assembly {
     protected XMLGregorianCalendar lastSchemaUpdate;
     @XmlElement(name = "Description")
     protected String description;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
     @XmlElement(name = "ImpersonationInfo")
     protected ImpersonationInfo impersonationInfo;
 
@@ -89,11 +91,11 @@ public abstract class Assembly {
         this.description = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

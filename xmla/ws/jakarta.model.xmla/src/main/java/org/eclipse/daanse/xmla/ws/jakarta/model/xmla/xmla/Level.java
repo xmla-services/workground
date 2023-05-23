@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -38,8 +39,9 @@ public class Level {
     protected String hideMemberIf;
     @XmlElement(name = "Translations")
     protected Level.Translations translations;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
 
     public String getName() {
         return name;
@@ -89,11 +91,11 @@ public class Level {
         this.translations = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

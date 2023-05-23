@@ -119,8 +119,7 @@ public class MajorObjectConvertor {
                 convertToInstant(assembly.getCreatedTimestamp()),
                 convertToInstant(assembly.getLastSchemaUpdate()),
                 assembly.getDescription(),
-                convertAnnotationList(assembly.getAnnotations() == null ? null :
-                    assembly.getAnnotations().getAnnotation()),
+                convertAnnotationList(assembly.getAnnotations()),
                 converImpersonationInfo(assembly.getImpersonationInfo()));
         }
         return null;
@@ -172,8 +171,7 @@ public class MajorObjectConvertor {
             return new AggregationDesignDimensionR(
                 aggregationDesignDimension.getCubeDimensionID(),
                 Optional.ofNullable(convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes())),
-                Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null :
-                    aggregationDesignDimension.getAnnotations().getAnnotation())));
+                Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations())));
         }
         return null;
     }
@@ -220,8 +218,7 @@ public class MajorObjectConvertor {
             return new AggregationR(Optional.ofNullable(aggregation.getID()),
                 aggregation.getName(),
                 Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
-                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null :
-                    aggregation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
                 Optional.ofNullable(aggregation.getDescription()));
         }
         return null;
@@ -245,8 +242,7 @@ public class MajorObjectConvertor {
         if (aggregationDimension != null) {
             return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
                 Optional.ofNullable(convertAggregationDimensionAttributes(aggregationDimension.getAttributes())),
-                Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations() == null ? null :
-                    aggregationDimension.getAnnotations().getAnnotation())));
+                Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations())));
         }
         return null;
     }
@@ -269,8 +265,7 @@ public class MajorObjectConvertor {
         if (aggregationAttribute != null) {
             return new AggregationAttributeR(
                 aggregationAttribute.getAttributeID(),
-                Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null :
-                    aggregationAttribute.getAnnotations().getAnnotation())));
+                Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations())));
         }
         return null;
     }

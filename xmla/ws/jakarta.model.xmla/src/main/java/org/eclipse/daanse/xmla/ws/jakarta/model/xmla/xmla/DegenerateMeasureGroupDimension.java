@@ -16,7 +16,10 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DegenerateMeasureGroupDimension", propOrder = {"cubeDimensionID", "annotations", "source",
@@ -25,8 +28,9 @@ public class DegenerateMeasureGroupDimension extends MeasureGroupDimension {
 
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
     @XmlElement(name = "Source")
     protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "ShareDimensionStorage", namespace = "http://schemas.microsoft" +
@@ -41,11 +45,11 @@ public class DegenerateMeasureGroupDimension extends MeasureGroupDimension {
         this.cubeDimensionID = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

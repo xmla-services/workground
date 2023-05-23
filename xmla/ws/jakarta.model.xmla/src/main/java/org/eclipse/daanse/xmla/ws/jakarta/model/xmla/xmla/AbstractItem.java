@@ -46,6 +46,7 @@ public abstract class AbstractItem {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
 
     public String getName() {

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,8 +45,9 @@ public class MiningModelColumn {
     protected MiningModelColumn.Columns columns;
     @XmlElement(name = "ModelingFlags")
     protected MiningModelColumn.ModelingFlags modelingFlags;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
 
     public String getName() {
         return name;
@@ -119,11 +121,11 @@ public class MiningModelColumn {
         this.modelingFlags = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 

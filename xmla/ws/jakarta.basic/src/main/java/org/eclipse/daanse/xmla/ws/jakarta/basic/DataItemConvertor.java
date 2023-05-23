@@ -48,8 +48,7 @@ public class DataItemConvertor {
                 Optional.ofNullable(source.getCollation()),
                 Optional.ofNullable(DataItemFormatEnum.fromValue(source.getFormat())),
                 Optional.ofNullable(convertBinding(source.getSource())),
-                Optional.ofNullable(convertAnnotationList(source.getAnnotations() == null ? null :
-                    source.getAnnotations().getAnnotation())));
+                Optional.ofNullable(convertAnnotationList(source.getAnnotations())));
         }
         return null;
     }

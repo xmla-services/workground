@@ -19,6 +19,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -35,8 +36,9 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
     protected String description;
     @XmlElement(name = "Type", required = true)
     protected String type;
-    @XmlElement(name = "Annotations")
-    protected Annotations annotations;
+    @XmlElementWrapper(name = "Annotations")
+    @XmlElement(name = "Annotation", type = Annotation.class)
+    protected List<Annotation> annotations;
     @XmlElement(name = "IsKey")
     protected Boolean isKey;
     @XmlElement(name = "Source")
@@ -92,11 +94,11 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.type = value;
     }
 
-    public Annotations getAnnotations() {
+    public List<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(Annotations value) {
+    public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
     }
 
