@@ -20,7 +20,6 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters.LocalDateTimeAdapt
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PreferredQueryPatternsEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -35,29 +34,10 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaCubesResponseRowXml")
-public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
+public class MdSchemaCubesResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 108353317479541549L;
-
-    /**
-     * The catalog name.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = true)
-    private String catalogName;
-
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME")
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME")
-    private String cubeName;
 
     /**
      * The type of the cube.
@@ -190,30 +170,6 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      */
     @XmlElement(name = "PREFERRED_QUERY_PATTERNS")
     private PreferredQueryPatternsEnum preferredQueryPatterns;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public CubeTypeEnum getCubeType() {
         return cubeType;

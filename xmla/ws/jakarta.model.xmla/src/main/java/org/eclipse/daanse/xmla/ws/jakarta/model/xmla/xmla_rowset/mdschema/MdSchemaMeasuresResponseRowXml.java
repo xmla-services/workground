@@ -17,7 +17,6 @@ import java.io.Serializable;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.MeasureAggregatorEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,29 +29,10 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaMeasuresResponseRowXml")
-public class MdSchemaMeasuresResponseRowXml extends Row implements Serializable {
+public class MdSchemaMeasuresResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 5203857212623144228L;
-
-    /**
-     * The name of the database.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = false)
-    private String catalogName;
-
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME", required = false)
-    private String cubeName;
 
     /**
      * The name of the measure.
@@ -223,30 +203,6 @@ public class MdSchemaMeasuresResponseRowXml extends Row implements Serializable 
      */
     @XmlElement(name = "DEFAULT_FORMAT_STRING", required = false)
     private String defaultFormatString;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public String getMeasureName() {
         return measureName;

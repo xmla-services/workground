@@ -17,7 +17,6 @@ import java.io.Serializable;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ScopeEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,29 +29,10 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaMembersResponseRowXml")
-public class MdSchemaMembersResponseRowXml extends Row implements Serializable {
+public class MdSchemaMembersResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 4643755964294078116L;
-
-    /**
-     * The name of the database.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = false)
-    private String catalogName;
-
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME", required = false)
-    private String cubeName;
 
     /**
      * The unique name of the dimension.
@@ -198,30 +178,6 @@ public class MdSchemaMembersResponseRowXml extends Row implements Serializable {
      */
     @XmlElement(name = "SCOPE", required = false)
     private ScopeEnum scope;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public String getDimensionUniqueName() {
         return dimensionUniqueName;
