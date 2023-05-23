@@ -42,7 +42,7 @@ public class TraceConvertor {
                 convertToInstant(trace.getCreatedTimestamp()),
                 convertToInstant(trace.getLastSchemaUpdate()),
                 trace.getDescription(),
-                convertAnnotationList(trace.getAnnotations() == null ? null : trace.getAnnotations().getAnnotation()),
+                convertAnnotationList(trace.getAnnotations() == null ? null : trace.getAnnotations()),
                 trace.getLogFileName(),
                 trace.isLogFileAppend(),
                 trace.getLogFileSize(),

@@ -51,7 +51,7 @@ public class MiningModelConvertor {
                 Optional.ofNullable(convertToInstant(miningModel.getLastSchemaUpdate())),
                 Optional.ofNullable(miningModel.getDescription()),
                 Optional.ofNullable(convertAnnotationList(miningModel.getAnnotations() == null ? null :
-                    miningModel.getAnnotations().getAnnotation())),
+                    miningModel.getAnnotations())),
                 miningModel.getAlgorithm(),
                 Optional.ofNullable(convertToInstant(miningModel.getLastProcessed())),
                 Optional.ofNullable(convertAlgorithmParameterList(miningModel.getAlgorithmParameters() == null ? null :
@@ -89,7 +89,7 @@ public class MiningModelConvertor {
                 Optional.ofNullable(convertToInstant(miningModelPermission.getLastSchemaUpdate())),
                 Optional.ofNullable(miningModelPermission.getDescription()),
                 Optional.ofNullable(convertAnnotationList(miningModelPermission.getAnnotations() == null ? null :
-                    miningModelPermission.getAnnotations().getAnnotation())),
+                    miningModelPermission.getAnnotations())),
                 miningModelPermission.getRoleID(),
                 Optional.ofNullable(miningModelPermission.isProcess()),
                 Optional.ofNullable(ReadDefinitionEnum.fromValue(miningModelPermission.getReadDefinition())),

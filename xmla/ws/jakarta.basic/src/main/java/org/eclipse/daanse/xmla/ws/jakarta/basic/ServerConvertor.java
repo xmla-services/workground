@@ -38,7 +38,7 @@ public class ServerConvertor {
                 convertToInstant(server.getCreatedTimestamp()),
                 convertToInstant(server.getLastSchemaUpdate()),
                 server.getDescription(),
-                convertAnnotationList(server.getAnnotations() == null ? null : server.getAnnotations().getAnnotation()),
+                convertAnnotationList(server.getAnnotations() == null ? null : server.getAnnotations()),
                 server.getProductName(),
                 server.getEdition(),
                 server.getEditionID(),

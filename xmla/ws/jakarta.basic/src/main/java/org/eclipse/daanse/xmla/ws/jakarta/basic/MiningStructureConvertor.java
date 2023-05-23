@@ -51,7 +51,7 @@ public class MiningStructureConvertor {
                 Optional.ofNullable(convertToInstant(miningStructure.getLastSchemaUpdate())),
                 Optional.ofNullable(miningStructure.getDescription()),
                 Optional.ofNullable(convertAnnotationList(miningStructure.getAnnotations() == null ? null :
-                    miningStructure.getAnnotations().getAnnotation())),
+                    miningStructure.getAnnotations())),
                 Optional.ofNullable(convertBinding(miningStructure.getSource())),
                 Optional.ofNullable(convertToInstant(miningStructure.getLastProcessed())),
                 Optional.ofNullable(convertTranslationList(miningStructure.getTranslations() == null ? null :
@@ -97,7 +97,7 @@ public class MiningStructureConvertor {
                 Optional.ofNullable(convertToInstant(miningStructurePermission.getCreatedTimestamp())),
                 Optional.ofNullable(convertToInstant(miningStructurePermission.getLastSchemaUpdate())),
                 Optional.ofNullable(miningStructurePermission.getDescription()),
-                Optional.ofNullable(convertAnnotationList(miningStructurePermission.getAnnotations() == null ? null : miningStructurePermission.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(miningStructurePermission.getAnnotations() == null ? null : miningStructurePermission.getAnnotations())),
                 miningStructurePermission.getRoleID(),
                 Optional.ofNullable(miningStructurePermission.isProcess()),
                 Optional.ofNullable(ReadDefinitionEnum.fromValue(miningStructurePermission.getReadDefinition())),

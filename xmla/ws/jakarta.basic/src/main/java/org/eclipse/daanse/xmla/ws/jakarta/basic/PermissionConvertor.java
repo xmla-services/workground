@@ -34,7 +34,7 @@ public class PermissionConvertor {
                 Optional.ofNullable(convertToInstant(permission.getCreatedTimestamp())),
                 Optional.ofNullable(convertToInstant(permission.getLastSchemaUpdate())),
                 Optional.ofNullable(permission.getDescription()),
-                Optional.ofNullable(convertAnnotationList(permission.getAnnotations() == null ? null : permission.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(permission.getAnnotations() == null ? null : permission.getAnnotations())),
                 permission.getRoleID(),
                 Optional.ofNullable(permission.isProcess()),
                 Optional.ofNullable(ReadDefinitionEnum.fromValue(permission.getReadDefinition())),

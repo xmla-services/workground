@@ -1058,7 +1058,7 @@ public class CommandConvertor {
 					convertToInstant(dataSourceView.getCreatedTimestamp()),
 					convertToInstant(dataSourceView.getLastSchemaUpdate()), dataSourceView.getDescription(),
 					convertAnnotationList(dataSourceView.getAnnotations() == null ? null
-							: dataSourceView.getAnnotations().getAnnotation()),
+							: dataSourceView.getAnnotations()),
 					dataSourceView.getDataSourceID());
 		}
 		return null;
@@ -1071,7 +1071,7 @@ public class CommandConvertor {
 					convertToInstant(dataSource.getCreatedTimestamp()),
 					convertToInstant(dataSource.getLastSchemaUpdate()), dataSource.getDescription(),
 					convertAnnotationList(
-							dataSource.getAnnotations() == null ? null : dataSource.getAnnotations().getAnnotation()),
+							dataSource.getAnnotations() == null ? null : dataSource.getAnnotations()),
 					dataSource.getManagedProvider(), dataSource.getConnectionString(),
 					dataSource.getConnectionStringSecurity(),
 					convertImpersonationInfo(dataSource.getImpersonationInfo()), dataSource.getIsolation(),
@@ -1100,7 +1100,7 @@ public class CommandConvertor {
 					Optional.ofNullable(convertToInstant(dataSourcePermission.getLastSchemaUpdate())),
 					Optional.ofNullable(dataSourcePermission.getDescription()),
 					Optional.ofNullable(convertAnnotationList(dataSourcePermission.getAnnotations() == null ? null
-							: dataSourcePermission.getAnnotations().getAnnotation())),
+							: dataSourcePermission.getAnnotations())),
 					dataSourcePermission.getRoleID(), Optional.ofNullable(dataSourcePermission.isProcess()),
 					Optional.ofNullable(ReadDefinitionEnum.fromValue(dataSourcePermission.getReadDefinition())),
 					Optional.ofNullable(ReadWritePermissionEnum.fromValue(dataSourcePermission.getRead())),
