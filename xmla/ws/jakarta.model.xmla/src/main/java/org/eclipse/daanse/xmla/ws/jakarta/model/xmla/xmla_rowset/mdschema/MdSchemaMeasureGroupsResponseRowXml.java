@@ -15,8 +15,6 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
 import java.io.Serializable;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -28,29 +26,10 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaMeasureGroupsResponseRowXml")
-public class MdSchemaMeasureGroupsResponseRowXml extends Row implements Serializable {
+public class MdSchemaMeasureGroupsResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 6352460080685075397L;
-
-    /**
-     * The name of the database.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = false)
-    private String catalogName;
-
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME", required = false)
-    private String cubeName;
 
     /**
      * The name of the measure group.
@@ -78,30 +57,6 @@ public class MdSchemaMeasureGroupsResponseRowXml extends Row implements Serializ
      */
     @XmlElement(name = "MEASUREGROUP_CAPTION", required = false)
     private String measureGroupCaption;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public String getMeasureGroupName() {
         return measureGroupName;

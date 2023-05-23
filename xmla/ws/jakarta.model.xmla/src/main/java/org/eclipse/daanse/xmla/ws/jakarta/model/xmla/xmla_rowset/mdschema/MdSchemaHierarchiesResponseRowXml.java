@@ -22,7 +22,6 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.HierarchyOriginEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InstanceSelectionEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureTypeEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -35,28 +34,10 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaHierarchiesResponseRowXml")
-public class MdSchemaHierarchiesResponseRowXml extends Row implements Serializable {
+public class MdSchemaHierarchiesResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 7338665487975144070L;
-
-    /**
-     * The name of the database.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = false)
-    private String catalogName;
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME", required = false)
-    private String cubeName;
 
     /**
      * The unique name of the dimension.
@@ -293,30 +274,6 @@ public class MdSchemaHierarchiesResponseRowXml extends Row implements Serializab
      */
     @XmlElement(name = "STRUCTURE_TYPE", required = false)
     private StructureTypeEnum structureType;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public String getDimensionUniqueName() {
         return dimensionUniqueName;

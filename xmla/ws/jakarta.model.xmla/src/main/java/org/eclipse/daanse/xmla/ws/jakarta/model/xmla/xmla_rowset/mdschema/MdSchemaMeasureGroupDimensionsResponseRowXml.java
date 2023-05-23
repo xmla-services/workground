@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -32,29 +31,10 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MdSchemaMeasureGroupDimensionsResponseRowXml")
-public class MdSchemaMeasureGroupDimensionsResponseRowXml extends Row implements Serializable {
+public class MdSchemaMeasureGroupDimensionsResponseRowXml extends AbstractMdSchemaResponseRowXml implements Serializable {
 
     @XmlTransient
     private static final long serialVersionUID = 5622885644407965879L;
-
-    /**
-     * The name of the database.
-     */
-    @XmlElement(name = "CATALOG_NAME", required = false)
-    private String catalogName;
-
-
-    /**
-     * The name of the schema.
-     */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
-    private String schemaName;
-
-    /**
-     * The name of the cube.
-     */
-    @XmlElement(name = "CUBE_NAME", required = false)
-    private String cubeName;
 
     /**
      * The name of the measure group.
@@ -120,30 +100,6 @@ public class MdSchemaMeasureGroupDimensionsResponseRowXml extends Row implements
      */
     @XmlElement(name = "DIMENSION_GRANULARITY", required = false)
     private String dimensionGranularity;
-
-    public String getCatalogName() {
-        return catalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    public String getCubeName() {
-        return cubeName;
-    }
-
-    public void setCubeName(String cubeName) {
-        this.cubeName = cubeName;
-    }
 
     public String getMeasureGroupName() {
         return measureGroupName;
