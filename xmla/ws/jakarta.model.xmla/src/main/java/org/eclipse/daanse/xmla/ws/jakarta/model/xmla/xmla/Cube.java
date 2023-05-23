@@ -87,9 +87,7 @@ public class Cube extends AbstractItem {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastProcessed;
 
-    public boolean isSetAnnotations() {
-        return (this.annotations != null);
-    }
+
 
     public BigInteger getLanguage() {
         return language;

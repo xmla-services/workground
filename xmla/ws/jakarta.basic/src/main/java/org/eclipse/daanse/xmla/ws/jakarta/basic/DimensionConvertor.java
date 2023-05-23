@@ -75,7 +75,7 @@ public class DimensionConvertor {
                 convertToInstant(dimension.getLastSchemaUpdate()),
                 dimension.getDescription(),
                 convertAnnotationList(dimension.getAnnotations() == null ? null :
-                    dimension.getAnnotations().getAnnotation()),
+                    dimension.getAnnotations()),
                 convertBinding(dimension.getSource()),
                 dimension.getMiningModelID(),
                 dimension.getType(),
@@ -195,7 +195,7 @@ public class DimensionConvertor {
                 Optional.ofNullable(convertToInstant(dimensionPermission.getLastSchemaUpdate())),
                 Optional.ofNullable(dimensionPermission.getDescription()),
                 Optional.ofNullable(convertAnnotationList(dimensionPermission.getAnnotations() == null ? null :
-                    dimensionPermission.getAnnotations().getAnnotation())),
+                    dimensionPermission.getAnnotations())),
                 dimensionPermission.getRoleID(),
                 Optional.ofNullable(dimensionPermission.isProcess()),
                 Optional.ofNullable(ReadDefinitionEnum.fromValue(dimensionPermission.getReadDefinition())),

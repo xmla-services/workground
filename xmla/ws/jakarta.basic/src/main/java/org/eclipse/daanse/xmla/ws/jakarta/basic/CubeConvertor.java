@@ -147,7 +147,7 @@ public class CubeConvertor {
 		if (cube != null) {
 			return new CubeR(cube.getName(), cube.getID(), convertToInstant(cube.getCreatedTimestamp()),
 					convertToInstant(cube.getLastSchemaUpdate()), cube.getDescription(),
-					convertAnnotationList(cube.getAnnotations() == null ? null : cube.getAnnotations().getAnnotation()),
+					convertAnnotationList(cube.getAnnotations() == null ? null : cube.getAnnotations()),
 					cube.getLanguage(), cube.getCollation(), convertCubeTranslations(cube.getTranslations()),
 					convertCubeDimensions(cube.getDimensions()), convertCubeCubePermissions(cube.getCubePermissions()),
 					convertCubeMdxScripts(cube.getMdxScripts()), convertCubePerspectives(cube.getPerspectives()),
@@ -195,7 +195,7 @@ public class CubeConvertor {
 					convertToInstant(measureGroup.getCreatedTimestamp()),
 					convertToInstant(measureGroup.getLastSchemaUpdate()), measureGroup.getDescription(),
 					convertAnnotationList(measureGroup.getAnnotations() == null ? null
-							: measureGroup.getAnnotations().getAnnotation()),
+							: measureGroup.getAnnotations()),
 					convertToInstant(measureGroup.getLastProcessed()),
 					convertMeasureGroupTranslations(measureGroup.getTranslations()), measureGroup.getType(),
 					measureGroup.getState(), convertMeasureGroupMeasures(measureGroup.getMeasures()),
@@ -246,7 +246,7 @@ public class CubeConvertor {
 					convertToInstant(partition.getCreatedTimestamp()),
 					convertToInstant(partition.getLastSchemaUpdate()), partition.getDescription(),
 					convertAnnotationList(
-							partition.getAnnotations() == null ? null : partition.getAnnotations().getAnnotation()),
+							partition.getAnnotations() == null ? null : partition.getAnnotations()),
 					convertTabularBinding(partition.getSource()), partition.getProcessingPriority(),
 					partition.getAggregationPrefix(), convertPartitionStorageMode(partition.getStorageMode()),
 					partition.getProcessingMode(), convertErrorConfiguration(partition.getErrorConfiguration()),
@@ -493,7 +493,7 @@ public class CubeConvertor {
 					Optional.ofNullable(convertToInstant(aggregationDesign.getLastSchemaUpdate())),
 					Optional.ofNullable(aggregationDesign.getDescription()),
 					Optional.ofNullable(convertAnnotationList(aggregationDesign.getAnnotations() == null ? null
-							: aggregationDesign.getAnnotations().getAnnotation())),
+							: aggregationDesign.getAnnotations())),
 					Optional.ofNullable(aggregationDesign.getEstimatedRows()),
 					Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
 					Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),
@@ -944,7 +944,7 @@ public class CubeConvertor {
 					convertToInstant(perspective.getCreatedTimestamp()),
 					convertToInstant(perspective.getLastSchemaUpdate()), perspective.getDescription(),
 					convertAnnotationList(
-							perspective.getAnnotations() == null ? null : perspective.getAnnotations().getAnnotation()),
+							perspective.getAnnotations() == null ? null : perspective.getAnnotations()),
 					convertPerspectiveTranslations(perspective.getTranslations()), perspective.getDefaultMeasure(),
 					convertPerspectiveDimensions(perspective.getDimensions()),
 					convertPerspectiveMeasureGroups(perspective.getMeasureGroups()),
@@ -1198,7 +1198,7 @@ public class CubeConvertor {
 					convertToInstant(mdxScript.getCreatedTimestamp()),
 					convertToInstant(mdxScript.getLastSchemaUpdate()), mdxScript.getDescription(),
 					convertAnnotationList(
-							mdxScript.getAnnotations() == null ? null : mdxScript.getAnnotations().getAnnotation()),
+							mdxScript.getAnnotations() == null ? null : mdxScript.getAnnotations()),
 					convertMdxScriptCommands(mdxScript.getCommands()), mdxScript.isDefaultScript(),
 					convertMdxScriptCalculationProperties(mdxScript.getCalculationProperties()));
 		}
@@ -1297,7 +1297,7 @@ public class CubeConvertor {
 					Optional.ofNullable(convertToInstant(cubePermission.getLastSchemaUpdate())),
 					Optional.ofNullable(cubePermission.getDescription()),
 					Optional.ofNullable(convertAnnotationList(cubePermission.getAnnotations() == null ? null
-							: cubePermission.getAnnotations().getAnnotation())),
+							: cubePermission.getAnnotations())),
 					cubePermission.getRoleID(), Optional.ofNullable(cubePermission.isProcess()),
 					Optional.ofNullable(ReadDefinitionEnum.fromValue(cubePermission.getReadDefinition())),
 					Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubePermission.getRead())),

@@ -36,7 +36,7 @@ public class RoleConvertor {
                 Optional.ofNullable(convertToInstant(role.getCreatedTimestamp())),
                 Optional.ofNullable(convertToInstant(role.getLastSchemaUpdate())),
                 Optional.ofNullable(role.getDescription()),
-                Optional.ofNullable(convertAnnotationList(role.getAnnotations() == null ? null : role.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(role.getAnnotations() == null ? null : role.getAnnotations())),
                 Optional.ofNullable(convertMemberList(role.getMembers() == null ? null : role.getMembers().getMember())));
         }
         return null;

@@ -144,7 +144,7 @@ public class MajorObjectConvertor {
                 Optional.ofNullable(convertToInstant(aggregationDesign.getLastSchemaUpdate())),
                 Optional.ofNullable(aggregationDesign.getDescription()),
                 Optional.ofNullable(convertAnnotationList(aggregationDesign.getAnnotations() == null ? null :
-                    aggregationDesign.getAnnotations().getAnnotation())),
+                    aggregationDesign.getAnnotations())),
                 Optional.ofNullable(aggregationDesign.getEstimatedRows()),
                 Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
                 Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),

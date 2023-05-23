@@ -36,7 +36,7 @@ public class DatabaseConvertor {
                 convertToInstant(database.getLastSchemaUpdate()),
                 database.getDescription(),
                 convertAnnotationList(database.getAnnotations() == null ?
-                    null : database.getAnnotations().getAnnotation()),
+                    null : database.getAnnotations()),
                 convertToInstant(database.getLastUpdate()),
                 database.getState(),
                 database.getReadWriteMode(),
@@ -87,7 +87,7 @@ public class DatabaseConvertor {
                 Optional.ofNullable(convertToInstant(databasePermission.getCreatedTimestamp())),
                 Optional.ofNullable(convertToInstant(databasePermission.getLastSchemaUpdate())),
                 Optional.ofNullable(databasePermission.getDescription()),
-                Optional.ofNullable(convertAnnotationList(databasePermission.getAnnotations() == null ? null : databasePermission.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertAnnotationList(databasePermission.getAnnotations() == null ? null : databasePermission.getAnnotations())),
                 databasePermission.getRoleID(),
                 Optional.ofNullable(databasePermission.isProcess()),
                 Optional.ofNullable(ReadDefinitionEnum.fromValue(databasePermission.getReadDefinition())),
