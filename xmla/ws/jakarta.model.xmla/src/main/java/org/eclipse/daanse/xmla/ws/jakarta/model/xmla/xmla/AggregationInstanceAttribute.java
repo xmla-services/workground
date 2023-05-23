@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class AggregationInstanceAttribute {
 
     @XmlElement(name = "AttributeID", required = true)
     protected String attributeID;
-    @XmlElement(name = "KeyColumns", required = true)
-    protected AggregationInstanceAttribute.KeyColumns keyColumns;
+    @XmlElement(name = "KeyColumn", required = true)
+    @XmlElementWrapper(name = "KeyColumns")
+    protected List<DataItem> keyColumns;
 
     public String getAttributeID() {
         return attributeID;
@@ -39,28 +41,12 @@ public class AggregationInstanceAttribute {
         this.attributeID = value;
     }
 
-    public AggregationInstanceAttribute.KeyColumns getKeyColumns() {
+    public List<DataItem> getKeyColumns() {
         return keyColumns;
     }
 
-    public void setKeyColumns(AggregationInstanceAttribute.KeyColumns value) {
+    public void setKeyColumns(List<DataItem> value) {
         this.keyColumns = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"keyColumn"})
-    public static class KeyColumns {
-
-        @XmlElement(name = "KeyColumn")
-        protected List<DataItem> keyColumn;
-
-        public List<DataItem> getKeyColumn() {
-            return this.keyColumn;
-        }
-
-        public void setKeyColumn(List<DataItem> keyColumn) {
-            this.keyColumn = keyColumn;
-        }
     }
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -30,10 +31,12 @@ public class AggregationInstance extends AbstractAggregation{
     protected String aggregationType;
     @XmlElement(name = "Source")
     protected TabularBinding source;
-    @XmlElement(name = "Dimensions")
-    protected AggregationInstance.Dimensions dimensions;
-    @XmlElement(name = "Measures")
-    protected AggregationInstance.Measures measures;
+    @XmlElement(name = "Dimension")
+    @XmlElementWrapper(name = "Dimensions")
+    protected List<AggregationInstanceDimension> dimensions;
+    @XmlElement(name = "Measure")
+    @XmlElementWrapper(name = "Measures")
+    protected List<AggregationInstanceMeasure> measures;
 
     public String getAggregationType() {
         return aggregationType;
@@ -55,52 +58,20 @@ public class AggregationInstance extends AbstractAggregation{
         return (this.source != null);
     }
 
-    public AggregationInstance.Dimensions getDimensions() {
+    public List<AggregationInstanceDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(AggregationInstance.Dimensions value) {
+    public void setDimensions(List<AggregationInstanceDimension> value) {
         this.dimensions = value;
     }
 
-    public AggregationInstance.Measures getMeasures() {
+    public List<AggregationInstanceMeasure> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(AggregationInstance.Measures value) {
+    public void setMeasures(List<AggregationInstanceMeasure> value) {
         this.measures = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension")
-        protected List<AggregationInstanceDimension> dimension;
-
-        public List<AggregationInstanceDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<AggregationInstanceDimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"measure"})
-    public static class Measures {
-
-        @XmlElement(name = "Measure")
-        protected List<AggregationInstanceMeasure> measure;
-
-        public List<AggregationInstanceMeasure> getMeasure() {
-            return this.measure;
-        }
-
-        public void setMeasure(List<AggregationInstanceMeasure> measure) {
-            this.measure = measure;
-        }
     }
 
 }
