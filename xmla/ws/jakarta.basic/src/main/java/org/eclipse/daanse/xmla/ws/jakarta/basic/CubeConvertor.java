@@ -285,20 +285,12 @@ public class CubeConvertor {
 		if (aggregationInstance != null) {
 			return new AggregationInstanceR(aggregationInstance.getID(), aggregationInstance.getName(),
 					aggregationInstance.getAggregationType(), convertTabularBinding(aggregationInstance.getSource()),
-					convertAggregationInstanceDimensions(aggregationInstance.getDimensions()),
-					convertAggregationInstanceMeasures(aggregationInstance.getMeasures()),
+                    convertAggregationInstanceDimensionList(aggregationInstance.getDimensions()),
+					convertAggregationInstanceMeasureList(aggregationInstance.getMeasures()),
 					convertAnnotationList(aggregationInstance.getAnnotations()),
 					aggregationInstance.getDescription());
 		}
 		return null;
-	}
-
-	private static List<AggregationInstanceMeasure> convertAggregationInstanceMeasures(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstance.Measures measures) {
-		if (measures != null) {
-			return convertAggregationInstanceMeasureList(measures.getMeasure());
-		}
-		return List.of();
 	}
 
 	private static List<AggregationInstanceMeasure> convertAggregationInstanceMeasureList(
@@ -326,14 +318,6 @@ public class CubeConvertor {
 		return null;
 	}
 
-	private static List<AggregationInstanceDimension> convertAggregationInstanceDimensions(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstance.Dimensions dimensions) {
-		if (dimensions != null) {
-			return convertAggregationInstanceDimensionList(dimensions.getDimension());
-		}
-		return List.of();
-	}
-
 	private static List<AggregationInstanceDimension> convertAggregationInstanceDimensionList(
 			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceDimension> dimensionList) {
 		if (dimensionList != null) {
@@ -346,18 +330,10 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceDimension aggregationInstanceDimension) {
 		if (aggregationInstanceDimension != null) {
 			return new AggregationInstanceDimensionR(aggregationInstanceDimension.getCubeDimensionID(),
-					Optional.ofNullable(convertAggregationInstanceDimensionAttributes(
+					Optional.ofNullable(convertAggregationInstanceAttributeList(
 							aggregationInstanceDimension.getAttributes())));
 		}
 		return null;
-	}
-
-	private static List<AggregationInstanceAttribute> convertAggregationInstanceDimensionAttributes(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceDimension.Attributes attributes) {
-		if (attributes != null) {
-			return convertAggregationInstanceAttributeList(attributes.getAttribute());
-		}
-		return List.of();
 	}
 
 	private static List<AggregationInstanceAttribute> convertAggregationInstanceAttributeList(
@@ -372,17 +348,9 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceAttribute aggregationInstanceAttribute) {
 		if (aggregationInstanceAttribute != null) {
 			return new AggregationInstanceAttributeR(aggregationInstanceAttribute.getAttributeID(), Optional.ofNullable(
-					convertAggregationInstanceAttributeKeyColumns(aggregationInstanceAttribute.getKeyColumns())));
+                convertDataItemList(aggregationInstanceAttribute.getKeyColumns())));
 		}
 		return null;
-	}
-
-	private static List<DataItem> convertAggregationInstanceAttributeKeyColumns(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceAttribute.KeyColumns keyColumns) {
-		if (keyColumns != null) {
-			return convertDataItemList(keyColumns.getKeyColumn());
-		}
-		return List.of();
 	}
 
 	private static Partition.CurrentStorageMode convertPartitionCurrentStorageMode(
@@ -494,19 +462,11 @@ public class CubeConvertor {
 					Optional.ofNullable(convertAnnotationList(aggregationDesign.getAnnotations() == null ? null
 							: aggregationDesign.getAnnotations())),
 					Optional.ofNullable(aggregationDesign.getEstimatedRows()),
-					Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
-					Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),
+					Optional.ofNullable(convertAggregationDesignDimensionList(aggregationDesign.getDimensions())),
+					Optional.ofNullable(convertAggregationList(aggregationDesign.getAggregations())),
 					Optional.ofNullable(aggregationDesign.getEstimatedPerformanceGain()));
 		}
 		return null;
-	}
-
-	private static List<Aggregation> convertAggregationDesignAggregations(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign.Aggregations aggregations) {
-		if (aggregations != null) {
-			return convertAggregationList(aggregations.getAggregation());
-		}
-		return List.of();
 	}
 
 	private static List<Aggregation> convertAggregationList(
@@ -521,19 +481,11 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation aggregation) {
 		if (aggregation != null) {
 			return new AggregationR(Optional.ofNullable(aggregation.getID()), aggregation.getName(),
-					Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
+					Optional.ofNullable(convertAggregationDimensionList(aggregation.getDimensions())),
 					Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations())),
 					Optional.ofNullable(aggregation.getDescription()));
 		}
 		return null;
-	}
-
-	private static List<AggregationDimension> convertAggregationDimensions(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation.Dimensions dimensions) {
-		if (dimensions != null) {
-			return convertAggregationDimensionList(dimensions.getDimension());
-		}
-		return List.of();
 	}
 
 	private static List<AggregationDimension> convertAggregationDimensionList(
@@ -548,18 +500,10 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension aggregationDimension) {
 		if (aggregationDimension != null) {
 			return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
-					Optional.ofNullable(convertAggregationDimensionAttributes(aggregationDimension.getAttributes())),
+					Optional.ofNullable(convertAggregationAttributList(aggregationDimension.getAttributes())),
 					Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations())));
 		}
 		return null;
-	}
-
-	private static List<AggregationAttribute> convertAggregationDimensionAttributes(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension.Attributes attributes) {
-		if (attributes != null) {
-			return convertAggregationAttributList(attributes.getAttribute());
-		}
-		return List.of();
 	}
 
 	private static List<AggregationAttribute> convertAggregationAttributList(
@@ -579,14 +523,6 @@ public class CubeConvertor {
 		return null;
 	}
 
-	private static List<AggregationDesignDimension> convertAggregationDesignDimensions(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign.Dimensions dimensions) {
-		if (dimensions != null) {
-			return convertAggregationDesignDimensionList(dimensions.getDimension());
-		}
-		return List.of();
-	}
-
 	private static List<AggregationDesignDimension> convertAggregationDesignDimensionList(
 			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignDimension> dimension) {
 		if (dimension != null) {
@@ -600,18 +536,10 @@ public class CubeConvertor {
 		if (aggregationDesignDimension != null) {
 			return new AggregationDesignDimensionR(aggregationDesignDimension.getCubeDimensionID(),
 					Optional.ofNullable(
-							convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes())),
+                        convertAggregationDesignAttributeList(aggregationDesignDimension.getAttributes())),
 					Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations())));
 		}
 		return null;
-	}
-
-	private static List<AggregationDesignAttribute> convertAggregationDesignDimensionAttributes(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignDimension.Attributes attributes) {
-		if (attributes != null) {
-			return convertAggregationDesignAttributeList(attributes.getAttribute());
-		}
-		return List.of();
 	}
 
 	private static List<AggregationDesignAttribute> convertAggregationDesignAttributeList(

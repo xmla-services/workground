@@ -1712,39 +1712,6 @@ public class ObjectFactory {
         return new Account.Aliases();
     }
 
-
-    /**
-     * Create an instance of {@link AggregationInstanceAttribute.KeyColumns }
-     *
-     */
-    public AggregationInstanceAttribute.KeyColumns createAggregationInstanceAttributeKeyColumns() {
-        return new AggregationInstanceAttribute.KeyColumns();
-    }
-
-    /**
-     * Create an instance of {@link AggregationInstanceDimension.Attributes }
-     *
-     */
-    public AggregationInstanceDimension.Attributes createAggregationInstanceDimensionAttributes() {
-        return new AggregationInstanceDimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link AggregationInstance.Dimensions }
-     *
-     */
-    public AggregationInstance.Dimensions createAggregationInstanceDimensions() {
-        return new AggregationInstance.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link AggregationInstance.Measures }
-     *
-     */
-    public AggregationInstance.Measures createAggregationInstanceMeasures() {
-        return new AggregationInstance.Measures();
-    }
-
     /**
      * Create an instance of {@link Partition.StorageMode }
      *
@@ -1767,49 +1734,6 @@ public class ObjectFactory {
      */
     public Partition.AggregationInstances createPartitionAggregationInstances() {
         return new Partition.AggregationInstances();
-    }
-
-
-    /**
-     * Create an instance of {@link AggregationDimension.Attributes }
-     *
-     */
-    public AggregationDimension.Attributes createAggregationDimensionAttributes() {
-        return new AggregationDimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link Aggregation.Dimensions }
-     *
-     */
-    public Aggregation.Dimensions createAggregationDimensions() {
-        return new Aggregation.Dimensions();
-    }
-
-
-    /**
-     * Create an instance of {@link AggregationDesignDimension.Attributes }
-     *
-     */
-    public AggregationDesignDimension.Attributes createAggregationDesignDimensionAttributes() {
-        return new AggregationDesignDimension.Attributes();
-    }
-
-
-    /**
-     * Create an instance of {@link AggregationDesign.Dimensions }
-     *
-     */
-    public AggregationDesign.Dimensions createAggregationDesignDimensions() {
-        return new AggregationDesign.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link AggregationDesign.Aggregations }
-     *
-     */
-    public AggregationDesign.Aggregations createAggregationDesignAggregations() {
-        return new AggregationDesign.Aggregations();
     }
 
     /**

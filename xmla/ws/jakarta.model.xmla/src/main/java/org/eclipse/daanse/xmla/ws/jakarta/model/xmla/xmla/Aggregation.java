@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,31 +27,16 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class Aggregation extends AbstractAggregation {
 
-    @XmlElement(name = "Dimensions")
-    protected Aggregation.Dimensions dimensions;
+    @XmlElement(name = "Dimension")
+    @XmlElementWrapper(name = "Dimensions")
+    protected List<AggregationDimension> dimensions;
 
-    public Aggregation.Dimensions getDimensions() {
+    public List<AggregationDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Aggregation.Dimensions value) {
+    public void setDimensions(List<AggregationDimension> value) {
         this.dimensions = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension")
-        protected List<AggregationDimension> dimension;
-
-        public List<AggregationDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<AggregationDimension> dimension) {
-            this.dimension = dimension;
-        }
     }
 
 }
