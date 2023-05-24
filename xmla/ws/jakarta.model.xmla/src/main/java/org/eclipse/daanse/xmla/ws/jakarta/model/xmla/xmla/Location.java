@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class Location extends LocationBackup {
     protected String dataSourceType;
     @XmlElement(name = "ConnectionString")
     protected String connectionString;
-    @XmlElement(name = "Folders")
-    protected Location.Folders folders;
+    @XmlElement(name = "Folder")
+    @XmlElementWrapper(name = "Folders")
+    protected List<Folder> folders;
 
     public String getDataSourceType() {
         return dataSourceType;
@@ -47,28 +49,12 @@ public class Location extends LocationBackup {
         this.connectionString = value;
     }
 
-    public Location.Folders getFolders() {
+    public List<Folder> getFolders() {
         return folders;
     }
 
-    public void setFolders(Location.Folders value) {
+    public void setFolders(List<Folder> value) {
         this.folders = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"folder"})
-    public static class Folders {
-
-        @XmlElement(name = "Folder")
-        protected List<Folder> folder;
-
-        public List<Folder> getFolder() {
-            return this.folder;
-        }
-
-        public void setFolder(List<Folder> folder) {
-            this.folder = folder;
-        }
     }
 
 }

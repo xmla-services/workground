@@ -22,6 +22,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
@@ -35,14 +36,16 @@ public class MeasureGroup extends AbstractItem {
     @XmlElement(name = "LastProcessed")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastProcessed;
-    @XmlElement(name = "Translations")
-    protected MeasureGroup.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "Type")
     protected String type;
     @XmlElement(name = "State")
     protected String state;
-    @XmlElement(name = "Measures", required = true)
-    protected MeasureGroup.Measures measures;
+    @XmlElement(name = "Measure", required = true)
+    @XmlElementWrapper(name = "Measures", required = true)
+    protected List<Measure> measures;
     @XmlElement(name = "DataAggregation")
     protected String dataAggregation;
     @XmlElement(name = "Source")
@@ -63,16 +66,19 @@ public class MeasureGroup extends AbstractItem {
     protected Long estimatedSize;
     @XmlElement(name = "ProcessingMode")
     protected String processingMode;
-    @XmlElement(name = "Dimensions", required = true)
-    protected MeasureGroup.Dimensions dimensions;
-    @XmlElement(name = "Partitions")
-    protected MeasureGroup.Partitions partitions;
+    @XmlElement(name = "Dimension", required = true)
+    @XmlElementWrapper(name = "Dimensions", required = true)
+    protected List<MeasureGroupDimension> dimensions;
+    @XmlElement(name = "Partition")
+    @XmlElementWrapper(name = "Partitions")
+    protected List<Partition> partitions;
     @XmlElement(name = "AggregationPrefix")
     protected String aggregationPrefix;
     @XmlElement(name = "ProcessingPriority")
     protected BigInteger processingPriority;
-    @XmlElement(name = "AggregationDesigns")
-    protected MeasureGroup.AggregationDesigns aggregationDesigns;
+    @XmlElement(name = "AggregationDesign")
+    @XmlElementWrapper(name = "AggregationDesigns")
+    protected List<AggregationDesign> aggregationDesigns;
 
     public XMLGregorianCalendar getLastProcessed() {
         return lastProcessed;
@@ -82,11 +88,11 @@ public class MeasureGroup extends AbstractItem {
         this.lastProcessed = value;
     }
 
-    public MeasureGroup.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(MeasureGroup.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -106,11 +112,11 @@ public class MeasureGroup extends AbstractItem {
         this.state = value;
     }
 
-    public MeasureGroup.Measures getMeasures() {
+    public List<Measure> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(MeasureGroup.Measures value) {
+    public void setMeasures(List<Measure> value) {
         this.measures = value;
     }
 
@@ -194,19 +200,19 @@ public class MeasureGroup extends AbstractItem {
         this.processingMode = value;
     }
 
-    public MeasureGroup.Dimensions getDimensions() {
+    public List<MeasureGroupDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(MeasureGroup.Dimensions value) {
+    public void setDimensions(List<MeasureGroupDimension> value) {
         this.dimensions = value;
     }
 
-    public MeasureGroup.Partitions getPartitions() {
+    public List<Partition> getPartitions() {
         return partitions;
     }
 
-    public void setPartitions(MeasureGroup.Partitions value) {
+    public void setPartitions(List<Partition> value) {
         this.partitions = value;
     }
 
@@ -226,76 +232,12 @@ public class MeasureGroup extends AbstractItem {
         this.processingPriority = value;
     }
 
-    public MeasureGroup.AggregationDesigns getAggregationDesigns() {
+    public List<AggregationDesign> getAggregationDesigns() {
         return aggregationDesigns;
     }
 
-    public void setAggregationDesigns(MeasureGroup.AggregationDesigns value) {
+    public void setAggregationDesigns(List<AggregationDesign> value) {
         this.aggregationDesigns = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"aggregationDesign"})
-    public static class AggregationDesigns {
-
-        @XmlElement(name = "AggregationDesign")
-        protected List<AggregationDesign> aggregationDesign;
-
-        public List<AggregationDesign> getAggregationDesign() {
-            return this.aggregationDesign;
-        }
-
-        public void setAggregationDesign(List<AggregationDesign> aggregationDesign) {
-            this.aggregationDesign = aggregationDesign;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension", required = true)
-        protected List<MeasureGroupDimension> dimension;
-
-        public List<MeasureGroupDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<MeasureGroupDimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"measure"})
-    public static class Measures {
-
-        @XmlElement(name = "Measure", required = true)
-        protected List<Measure> measure;
-
-        public List<Measure> getMeasure() {
-            return this.measure;
-        }
-
-        public void setMeasure(List<Measure> measure) {
-            this.measure = measure;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"partition"})
-    public static class Partitions {
-
-        @XmlElement(name = "Partition")
-        protected List<Partition> partition;
-
-        public List<Partition> getPartition() {
-            return this.partition;
-        }
-
-        public void setPartition(List<Partition> partition) {
-            this.partition = partition;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -321,22 +263,6 @@ public class MeasureGroup extends AbstractItem {
 
         public void setValuens(String value) {
             this.valuens = value;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
         }
     }
 

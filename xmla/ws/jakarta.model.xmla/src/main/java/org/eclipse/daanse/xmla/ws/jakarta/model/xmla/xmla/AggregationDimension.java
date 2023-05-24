@@ -30,7 +30,7 @@ public class AggregationDimension {
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
     @XmlElementWrapper(name = "Attributes")
-    @XmlElement(name = "Attribute")
+    @XmlElement(name = "Attribute", type = AggregationAttribute.class)
     protected List<AggregationAttribute> attributes;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)

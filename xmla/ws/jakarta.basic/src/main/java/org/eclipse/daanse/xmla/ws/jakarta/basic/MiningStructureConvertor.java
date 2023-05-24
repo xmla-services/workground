@@ -54,8 +54,7 @@ public class MiningStructureConvertor {
                     miningStructure.getAnnotations())),
                 Optional.ofNullable(convertBinding(miningStructure.getSource())),
                 Optional.ofNullable(convertToInstant(miningStructure.getLastProcessed())),
-                Optional.ofNullable(convertTranslationList(miningStructure.getTranslations() == null ? null :
-                    miningStructure.getTranslations().getTranslation())),
+                Optional.ofNullable(convertTranslationList(miningStructure.getTranslations())),
                 Optional.ofNullable(miningStructure.getLanguage()),
                 Optional.ofNullable(miningStructure.getCollation()),
                 Optional.ofNullable(convertErrorConfiguration(miningStructure.getErrorConfiguration())),
@@ -64,13 +63,10 @@ public class MiningStructureConvertor {
                 Optional.ofNullable(miningStructure.getHoldoutMaxCases()),
                 Optional.ofNullable(miningStructure.getHoldoutSeed()),
                 Optional.ofNullable(miningStructure.getHoldoutActualSize()),
-                convertMiningStructureColumnList(miningStructure.getColumns() == null ? null :
-                    miningStructure.getColumns().getColumn()),
+                convertMiningStructureColumnList(miningStructure.getColumns()),
                 Optional.ofNullable(miningStructure.getState()),
-                Optional.ofNullable(convertMiningStructurePermissionList(miningStructure.getMiningStructurePermissions() == null ? null :
-                    miningStructure.getMiningStructurePermissions().getMiningStructurePermission())),
-                Optional.ofNullable(convertMiningModelList(miningStructure.getMiningModels() == null ? null :
-                    miningStructure.getMiningModels().getMiningModel())));
+                Optional.ofNullable(convertMiningStructurePermissionList(miningStructure.getMiningStructurePermissions())),
+                Optional.ofNullable(convertMiningModelList(miningStructure.getMiningModels())));
         }
         return null;
     }

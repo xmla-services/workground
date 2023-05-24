@@ -304,7 +304,7 @@ public class CommandConvertor {
 			return new ImageLoadR(imageLoad.getImagePath(), imageLoad.getImageUrl(), imageLoad.getImageUniqueID(),
 					imageLoad.getImageVersion(), imageLoad.getReadWriteMode(), imageLoad.getDbStorageLocation(),
 					imageLoad.getDatabaseName(), imageLoad.getDatabaseID(),
-					imageLoad.getData() == null ? null : imageLoad.getData().getDataBlock());
+					imageLoad.getData());
 		}
 		return null;
 
@@ -664,8 +664,7 @@ public class CommandConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.NotifyTableChange notifyTableChange) {
 		if (notifyTableChange != null) {
 			return new NotifyTableChangeR(convertObjectReference(notifyTableChange.getObject()),
-					convertTableNotificationList(notifyTableChange.getTableNotifications() == null ? null
-							: notifyTableChange.getTableNotifications().getTableNotification()));
+					convertTableNotificationList(notifyTableChange.getTableNotifications()));
 		}
 		return null;
 
@@ -794,7 +793,7 @@ public class CommandConvertor {
 	private static Insert convertInsert(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Insert insert) {
 		if (insert != null) {
 			return new InsertR(convertObject(insert.getObject()), convertAttributeInsertUpdateList(
-					insert.getAttributes() == null ? null : insert.getAttributes().getAttribute()));
+					insert.getAttributes()));
 		}
 		return null;
 	}
@@ -856,7 +855,7 @@ public class CommandConvertor {
 	private static Location convertLocation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Location location) {
 		if (location != null) {
 			return new LocationR(location.getDataSourceType(), location.getConnectionString(),
-					convertFolderList(location.getFolders() == null ? null : location.getFolders().getFolder()),
+					convertFolderList(location.getFolders()),
 					location.getFile(), location.getDataSourceID());
 		}
 		return null;
@@ -1001,7 +1000,7 @@ public class CommandConvertor {
 		if (mergePartitions != null) {
 			return new MergePartitionsR(
 					convertObjectReferencList(
-							mergePartitions.getSources() == null ? null : mergePartitions.getSources().getSource()),
+							mergePartitions.getSources()),
 					convertObjectReference(mergePartitions.getTarget()));
 		}
 		return null;

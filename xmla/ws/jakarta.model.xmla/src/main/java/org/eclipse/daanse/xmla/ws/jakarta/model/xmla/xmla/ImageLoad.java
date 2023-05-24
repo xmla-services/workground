@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -42,8 +43,9 @@ public class ImageLoad {
   protected String databaseName;
   @XmlElement(name = "DatabaseID", required = true)
   protected String databaseID;
-  @XmlElement(name = "Data")
-  protected ImageLoad.Data data;
+  @XmlElement(name = "DataBlock")
+  @XmlElementWrapper(name = "Data")
+  protected List<String> data;
 
   public String getImagePath() {
     return imagePath;
@@ -109,28 +111,12 @@ public class ImageLoad {
     this.databaseID = value;
   }
 
-  public ImageLoad.Data getData() {
+  public List<String> getData() {
     return data;
   }
 
-  public void setData(ImageLoad.Data value) {
+  public void setData(List<String> value) {
     this.data = value;
-  }
-
-  @XmlAccessorType(XmlAccessType.FIELD)
-  @XmlType(name = "", propOrder = { "dataBlock" })
-  public static class Data {
-
-    @XmlElement(name = "DataBlock")
-    protected List<String> dataBlock;
-
-    public List<String> getDataBlock() {
-      return this.dataBlock;
-    }
-
-      public void setDataBlock(List<String> dataBlock) {
-          this.dataBlock = dataBlock;
-      }
   }
 
 }

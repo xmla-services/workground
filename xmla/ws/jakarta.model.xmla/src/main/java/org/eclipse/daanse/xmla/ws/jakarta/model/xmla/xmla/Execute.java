@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -30,8 +31,9 @@ public class Execute {
   protected Command command;
   @XmlElement(name = "Properties", required = true)
   protected Execute.Properties properties;
-  @XmlElement(name = "Parameters")
-  protected Execute.Parameters parameters;
+  @XmlElement(name = "Parameter")
+  @XmlElementWrapper(name = "Parameters")
+  protected List<ExecuteParameter> parameters;
 
   public Command getCommand() {
     return command;
@@ -49,28 +51,8 @@ public class Execute {
     this.properties = value;
   }
 
-  public Execute.Parameters getParameters() {
+  public List<ExecuteParameter> getParameters() {
     return parameters;
-  }
-
-  public void setParameters(Execute.Parameters value) {
-    this.parameters = value;
-  }
-
-  @XmlAccessorType(XmlAccessType.FIELD)
-  @XmlType(name = "", propOrder = { "parameter" })
-  public static class Parameters {
-
-    @XmlElement(name = "Parameter")
-    protected List<ExecuteParameter> parameter;
-
-    public List<ExecuteParameter> getParameter() {
-      return this.parameter;
-    }
-
-      public void setParameter(List<ExecuteParameter> parameter) {
-          this.parameter = parameter;
-      }
   }
 
   @XmlAccessorType(XmlAccessType.FIELD)

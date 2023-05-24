@@ -202,14 +202,7 @@ public class BindingConvertor {
 		if (group == null) {
 			return null;
 		}
-		return new GroupR(group.getName(), Optional.ofNullable(convertGroupMembers(group.getMembers())));
+		return new GroupR(group.getName(), Optional.ofNullable(group.getMembers() == null ? List.of() : group.getMembers()));
 	}
 
-	private static List<String> convertGroupMembers(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group.Members members) {
-		if (members == null) {
-			return List.of();
-		}
-		return members.getMember();
-	}
 }

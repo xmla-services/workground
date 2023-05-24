@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,16 +27,17 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class MergePartitions {
 
-    @XmlElement(name = "Sources", required = true)
-    protected MergePartitions.Sources sources;
+    @XmlElement(name = "Source", required = true)
+    @XmlElementWrapper(name = "Sources", required = true)
+    protected List<ObjectReference> sources;
     @XmlElement(name = "Target", required = true)
     protected ObjectReference target;
 
-    public MergePartitions.Sources getSources() {
+    public List<ObjectReference> getSources() {
         return sources;
     }
 
-    public void setSources(MergePartitions.Sources value) {
+    public void setSources(List<ObjectReference> value) {
         this.sources = value;
     }
 
@@ -45,22 +47,6 @@ public class MergePartitions {
 
     public void setTarget(ObjectReference value) {
         this.target = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"source"})
-    public static class Sources {
-
-        @XmlElement(name = "Source")
-        protected List<ObjectReference> source;
-
-        public List<ObjectReference> getSource() {
-            return this.source;
-        }
-
-        public void setSource(List<ObjectReference> source) {
-            this.source = source;
-        }
     }
 
 }

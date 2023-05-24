@@ -126,19 +126,11 @@ public class MeasureGroupDimensionConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute measureGroupAttribute) {
 		if (measureGroupAttribute != null) {
 			return new MeasureGroupAttributeR(measureGroupAttribute.getAttributeID(),
-					convertMeasureGroupAttributeKeyColumns(measureGroupAttribute.getKeyColumns()),
+                    convertDataItemList(measureGroupAttribute.getKeyColumns()),
 					measureGroupAttribute.getType(),
 					convertAnnotationList(measureGroupAttribute.getAnnotations()));
 		}
 		return null;
-	}
-
-	private static List<DataItem> convertMeasureGroupAttributeKeyColumns(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute.KeyColumns keyColumns) {
-		if (keyColumns != null) {
-			return convertDataItemList(keyColumns.getKeyColumn());
-		}
-		return List.of();
 	}
 
 	private static MeasureGroupDimensionBinding convertMeasureGroupDimensionBinding(

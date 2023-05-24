@@ -29,10 +29,12 @@ public class PerspectiveDimension {
 
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
-    @XmlElement(name = "Attributes")
-    protected PerspectiveDimension.Attributes attributes;
-    @XmlElement(name = "Hierarchies")
-    protected PerspectiveDimension.Hierarchies hierarchies;
+    @XmlElement(name = "Attribute", type = PerspectiveAttribute.class)
+    @XmlElementWrapper(name = "Attributes")
+    protected List<PerspectiveAttribute> attributes;
+    @XmlElement(name = "Hierarchy")
+    @XmlElementWrapper(name = "Hierarchies")
+    protected List<PerspectiveHierarchy> hierarchies;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -45,19 +47,19 @@ public class PerspectiveDimension {
         this.cubeDimensionID = value;
     }
 
-    public PerspectiveDimension.Attributes getAttributes() {
+    public List<PerspectiveAttribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(PerspectiveDimension.Attributes value) {
+    public void setAttributes(List<PerspectiveAttribute> value) {
         this.attributes = value;
     }
 
-    public PerspectiveDimension.Hierarchies getHierarchies() {
+    public List<PerspectiveHierarchy> getHierarchies() {
         return hierarchies;
     }
 
-    public void setHierarchies(PerspectiveDimension.Hierarchies value) {
+    public void setHierarchies(List<PerspectiveHierarchy> value) {
         this.hierarchies = value;
     }
 
@@ -67,38 +69,6 @@ public class PerspectiveDimension {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attribute"})
-    public static class Attributes {
-
-        @XmlElement(name = "Attribute")
-        protected List<PerspectiveAttribute> attribute;
-
-        public List<PerspectiveAttribute> getAttribute() {
-            return this.attribute;
-        }
-
-        public void setAttribute(List<PerspectiveAttribute> attribute) {
-            this.attribute = attribute;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"hierarchy"})
-    public static class Hierarchies {
-
-        @XmlElement(name = "Hierarchy")
-        protected List<PerspectiveHierarchy> hierarchy;
-
-        public List<PerspectiveHierarchy> getHierarchy() {
-            return this.hierarchy;
-        }
-
-        public void setHierarchy(List<PerspectiveHierarchy> hierarchy) {
-            this.hierarchy = hierarchy;
-        }
     }
 
 }

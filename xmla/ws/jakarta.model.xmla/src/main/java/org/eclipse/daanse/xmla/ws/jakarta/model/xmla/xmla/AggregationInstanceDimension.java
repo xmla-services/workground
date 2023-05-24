@@ -29,7 +29,7 @@ public class AggregationInstanceDimension {
 
     @XmlElement(name = "CubeDimensionID", required = true)
     protected String cubeDimensionID;
-    @XmlElement(name = "Attribute")
+    @XmlElement(name = "Attribute", type = AggregationInstanceAttribute.class)
     @XmlElementWrapper(name = "Attributes")
     protected List<AggregationInstanceAttribute> attributes;
 

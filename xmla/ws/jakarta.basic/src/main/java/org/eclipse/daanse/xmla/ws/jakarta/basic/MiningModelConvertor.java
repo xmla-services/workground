@@ -55,17 +55,15 @@ public class MiningModelConvertor {
                 miningModel.getAlgorithm(),
                 Optional.ofNullable(convertToInstant(miningModel.getLastProcessed())),
                 Optional.ofNullable(convertAlgorithmParameterList(miningModel.getAlgorithmParameters() == null ? null :
-                    miningModel.getAlgorithmParameters().getAlgorithmParameter())),
+                    miningModel.getAlgorithmParameters())),
                 Optional.ofNullable(miningModel.isAllowDrillThrough()),
                 Optional.ofNullable(convertAttributeTranslationList(miningModel.getTranslations() == null ? null :
-                    miningModel.getTranslations().getTranslation())),
-                Optional.ofNullable(convertMiningModelColumnList(miningModel.getColumns() == null ? null :
-                    miningModel.getColumns().getColumn())),
+                    miningModel.getTranslations())),
+                Optional.ofNullable(convertMiningModelColumnList(miningModel.getColumns())),
                 Optional.ofNullable(miningModel.getState()),
                 Optional.ofNullable(convertFoldingParameters(miningModel.getFoldingParameters())),
                 Optional.ofNullable(miningModel.getFilter()),
-                Optional.ofNullable(convertMiningModelPermissionList(miningModel.getMiningModelPermissions() == null ? null :
-                    miningModel.getMiningModelPermissions().getMiningModelPermission())),
+                Optional.ofNullable(convertMiningModelPermissionList(miningModel.getMiningModelPermissions())),
                 Optional.ofNullable(miningModel.getLanguage()),
                 Optional.ofNullable(miningModel.getCollation()));
         }
@@ -114,12 +112,9 @@ public class MiningModelConvertor {
                 Optional.ofNullable(miningModelColumn.getSourceColumnID()),
                 Optional.ofNullable(miningModelColumn.getUsage()),
                 Optional.ofNullable(miningModelColumn.getFilter()),
-                Optional.ofNullable(convertTranslationList(miningModelColumn.getTranslations() == null ? null :
-                    miningModelColumn.getTranslations().getTranslation())),
-                Optional.ofNullable(convertMiningModelColumnList(miningModelColumn.getColumns() == null ? null :
-                    miningModelColumn.getColumns().getColumn())),
-                Optional.ofNullable(convertMiningModelingFlagList(miningModelColumn.getModelingFlags() == null ? null :
-                    miningModelColumn.getModelingFlags().getModelingFlag())),
+                Optional.ofNullable(convertTranslationList(miningModelColumn.getTranslations())),
+                Optional.ofNullable(convertMiningModelColumnList(miningModelColumn.getColumns())),
+                Optional.ofNullable(convertMiningModelingFlagList(miningModelColumn.getModelingFlags())),
                 Optional.ofNullable(convertAnnotationList(miningModelColumn.getAnnotations())));
         }
         return null;

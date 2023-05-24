@@ -41,20 +41,23 @@ public class Hierarchy {
     protected String structureType;
     @XmlElement(name = "DisplayFolder")
     protected String displayFolder;
-    @XmlElement(name = "Translations")
-    protected Hierarchy.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "AllMemberName")
     protected String allMemberName;
-    @XmlElement(name = "AllMemberTranslations")
-    protected Hierarchy.AllMemberTranslations allMemberTranslations;
+    @XmlElement(name = "AllMemberTranslation")
+    @XmlElementWrapper(name = "AllMemberTranslations")
+    protected List<Translation> allMemberTranslations;
     @XmlElement(name = "MemberNamesUnique")
     protected Boolean memberNamesUnique;
     @XmlElement(name = "MemberKeysUnique", namespace = "http://schemas.microsoft.com/analysisservices/2003/engine/2")
     protected String memberKeysUnique;
     @XmlElement(name = "AllowDuplicateNames")
     protected Boolean allowDuplicateNames;
-    @XmlElement(name = "Levels", required = true)
-    protected Hierarchy.Levels levels;
+    @XmlElement(name = "Level", required = true)
+    @XmlElementWrapper(name = "Levels", required = true)
+    protected List<Level> levels;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -109,11 +112,11 @@ public class Hierarchy {
         this.displayFolder = value;
     }
 
-    public Hierarchy.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Hierarchy.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -125,11 +128,11 @@ public class Hierarchy {
         this.allMemberName = value;
     }
 
-    public Hierarchy.AllMemberTranslations getAllMemberTranslations() {
+    public List<Translation> getAllMemberTranslations() {
         return allMemberTranslations;
     }
 
-    public void setAllMemberTranslations(Hierarchy.AllMemberTranslations value) {
+    public void setAllMemberTranslations(List<Translation> value) {
         this.allMemberTranslations = value;
     }
 
@@ -157,11 +160,11 @@ public class Hierarchy {
         this.allowDuplicateNames = value;
     }
 
-    public Hierarchy.Levels getLevels() {
+    public List<Level> getLevels() {
         return levels;
     }
 
-    public void setLevels(Hierarchy.Levels value) {
+    public void setLevels(List<Level> value) {
         this.levels = value;
     }
 
@@ -179,54 +182,6 @@ public class Hierarchy {
 
     public void setVisualizationProperties(HierarchyVisualizationProperties value) {
         this.visualizationProperties = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"allMemberTranslation"})
-    public static class AllMemberTranslations {
-
-        @XmlElement(name = "AllMemberTranslation")
-        protected List<Translation> allMemberTranslation;
-
-        public List<Translation> getAllMemberTranslation() {
-            return this.allMemberTranslation;
-        }
-
-        public void setAllMemberTranslation(List<Translation> allMemberTranslation) {
-            this.allMemberTranslation = allMemberTranslation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"level"})
-    public static class Levels {
-
-        @XmlElement(name = "Level", required = true)
-        protected List<Level> level;
-
-        public List<Level> getLevel() {
-            return this.level;
-        }
-
-        public void setLevel(List<Level> level) {
-            this.level = level;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

@@ -2346,7 +2346,7 @@ public class Convert {
 
 	private static List<ExecuteParameter> parameters(Execute requestWs) {
 		if (requestWs.getParameters() != null) {
-			return requestWs.getParameters().getParameter().stream()
+			return requestWs.getParameters().stream()
 					.map(i -> new ExecuteParameterR(i.getName(), i.getValue())).map(ExecuteParameter.class::cast)
 					.toList();
 		}
