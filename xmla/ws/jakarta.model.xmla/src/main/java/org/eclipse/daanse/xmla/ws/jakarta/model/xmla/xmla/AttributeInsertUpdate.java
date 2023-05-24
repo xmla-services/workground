@@ -19,6 +19,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,10 +32,12 @@ public class AttributeInsertUpdate {
     protected String attributeName;
     @XmlElement(name = "Name")
     protected String name;
-    @XmlElement(name = "Keys")
-    protected AttributeInsertUpdate.Keys keys;
-    @XmlElement(name = "Translations")
-    protected AttributeInsertUpdate.Translations translations;
+    @XmlElement(name = "Key")
+    @XmlElementWrapper(name = "Keys")
+    protected List<java.lang.Object> keys;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<TranslationInsertUpdate> translations;
     @XmlElement(name = "Value")
     protected String value;
     @XmlElement(name = "CUSTOM_ROLLUP")
@@ -62,19 +65,19 @@ public class AttributeInsertUpdate {
         this.name = value;
     }
 
-    public AttributeInsertUpdate.Keys getKeys() {
+    public List<java.lang.Object> getKeys() {
         return keys;
     }
 
-    public void setKeys(AttributeInsertUpdate.Keys value) {
+    public void setKeys(List<java.lang.Object> value) {
         this.keys = value;
     }
 
-    public AttributeInsertUpdate.Translations getTranslations() {
+    public List<TranslationInsertUpdate> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(AttributeInsertUpdate.Translations value) {
+    public void setTranslations(List<TranslationInsertUpdate> value) {
         this.translations = value;
     }
 
@@ -116,38 +119,6 @@ public class AttributeInsertUpdate {
 
     public void setSkippedlevels(BigInteger skippedlevels) {
         this.skippedlevels = skippedlevels;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"key"})
-    public static class Keys {
-
-        @XmlElement(name = "Key")
-        protected List<java.lang.Object> key;
-
-        public List<java.lang.Object> getKey() {
-            return this.key;
-        }
-
-        public void setKey(List<java.lang.Object> key) {
-            this.key = key;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<TranslationInsertUpdate> translation;
-
-        public List<TranslationInsertUpdate> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<TranslationInsertUpdate> translation) {
-            this.translation = translation;
-        }
     }
 
 }

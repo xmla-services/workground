@@ -21,6 +21,7 @@ import javax.xml.datatype.Duration;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -41,8 +42,9 @@ public class DesignAggregations {
     protected Long storage;
     @XmlElement(name = "Materialize")
     protected Boolean materialize;
-    @XmlElement(name = "Queries")
-    protected DesignAggregations.Queries queries;
+    @XmlElement(name = "Query")
+    @XmlElementWrapper(name = "Queries")
+    protected List<String> queries;
 
     public ObjectReference getObject() {
         return object;
@@ -92,28 +94,12 @@ public class DesignAggregations {
         this.materialize = value;
     }
 
-    public DesignAggregations.Queries getQueries() {
+    public List<String> getQueries() {
         return queries;
     }
 
-    public void setQueries(DesignAggregations.Queries value) {
+    public void setQueries(List<String> value) {
         this.queries = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"query"})
-    public static class Queries {
-
-        @XmlElement(name = "Query")
-        protected List<String> query;
-
-        public List<String> getQuery() {
-            return this.query;
-        }
-
-        public void setQuery(List<String> query) {
-            this.query = query;
-        }
     }
 
 }

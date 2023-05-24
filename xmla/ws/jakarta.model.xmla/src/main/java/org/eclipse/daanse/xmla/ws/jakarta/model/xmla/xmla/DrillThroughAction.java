@@ -35,8 +35,9 @@ public class DrillThroughAction extends Action {
     protected String caption;
     @XmlElement(name = "CaptionIsMdx")
     protected Boolean captionIsMdx;
-    @XmlElement(name = "Translations")
-    protected DrillThroughAction.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "TargetType", required = true)
     protected String targetType;
     @XmlElement(name = "Target")
@@ -56,8 +57,9 @@ public class DrillThroughAction extends Action {
     protected List<Annotation> annotations;
     @XmlElement(name = "Default")
     protected Boolean defaultFlag;
-    @XmlElement(name = "Columns")
-    protected DrillThroughAction.Columns columns;
+    @XmlElement(name = "Column")
+    @XmlElementWrapper(name = "Columns")
+    protected List<Binding> columns;
     @XmlElement(name = "MaximumRows")
     protected Integer maximumRows;
 
@@ -97,11 +99,11 @@ public class DrillThroughAction extends Action {
         this.captionIsMdx = value;
     }
 
-    public DrillThroughAction.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(DrillThroughAction.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -177,11 +179,11 @@ public class DrillThroughAction extends Action {
         this.defaultFlag = value;
     }
 
-    public DrillThroughAction.Columns getColumns() {
+    public List<Binding> getColumns() {
         return columns;
     }
 
-    public void setColumns(DrillThroughAction.Columns value) {
+    public void setColumns(List<Binding> value) {
         this.columns = value;
     }
 
@@ -193,35 +195,4 @@ public class DrillThroughAction extends Action {
         this.maximumRows = value;
     }
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"column"})
-    public static class Columns {
-
-        @XmlElement(name = "Column")
-        protected List<Binding> column;
-
-        public List<Binding> getColumn() {
-            return this.column;
-        }
-
-        public void setColumn(List<Binding> column) {
-            this.column = column;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
-    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,10 +27,12 @@ public class CubePermission extends Permission {
 
     @XmlElement(name = "ReadSourceData")
     protected String readSourceData;
-    @XmlElement(name = "DimensionPermissions")
-    protected CubePermission.DimensionPermissions dimensionPermissions;
-    @XmlElement(name = "CellPermissions")
-    protected CubePermission.CellPermissions cellPermissions;
+    @XmlElement(name = "DimensionPermission")
+    @XmlElementWrapper(name = "DimensionPermissions")
+    protected List<CubeDimensionPermission> dimensionPermissions;
+    @XmlElement(name = "CellPermission")
+    @XmlElementWrapper(name = "CellPermissions")
+    protected List<CellPermission> cellPermissions;
 
     public String getReadSourceData() {
         return readSourceData;
@@ -39,52 +42,20 @@ public class CubePermission extends Permission {
         this.readSourceData = value;
     }
 
-    public CubePermission.DimensionPermissions getDimensionPermissions() {
+    public List<CubeDimensionPermission> getDimensionPermissions() {
         return dimensionPermissions;
     }
 
-    public void setDimensionPermissions(CubePermission.DimensionPermissions value) {
+    public void setDimensionPermissions(List<CubeDimensionPermission> value) {
         this.dimensionPermissions = value;
     }
 
-    public CubePermission.CellPermissions getCellPermissions() {
+    public List<CellPermission> getCellPermissions() {
         return cellPermissions;
     }
 
-    public void setCellPermissions(CubePermission.CellPermissions value) {
+    public void setCellPermissions(List<CellPermission> value) {
         this.cellPermissions = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"cellPermission"})
-    public static class CellPermissions {
-
-        @XmlElement(name = "CellPermission")
-        protected List<CellPermission> cellPermission;
-
-        public List<CellPermission> getCellPermission() {
-            return this.cellPermission;
-        }
-
-        public void setCellPermission(List<CellPermission> cellPermission) {
-            this.cellPermission = cellPermission;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimensionPermission"})
-    public static class DimensionPermissions {
-
-        @XmlElement(name = "DimensionPermission")
-        protected List<CubeDimensionPermission> dimensionPermission;
-
-        public List<CubeDimensionPermission> getDimensionPermission() {
-            return this.dimensionPermission;
-        }
-
-        public void setDimensionPermission(List<CubeDimensionPermission> dimensionPermission) {
-            this.dimensionPermission = dimensionPermission;
-        }
     }
 
 }

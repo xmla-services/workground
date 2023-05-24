@@ -929,13 +929,6 @@ public class ObjectFactory {
         return new Return();
     }
 
-    /**
-     * Create an instance of {@link EventType.Events }
-     *
-     */
-    public EventType.Events createEventTypeEvents() {
-        return new EventType.Events();
-    }
 
     /**
      * Create an instance of {@link EventSession }
@@ -1881,14 +1874,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CalculationProperty.Translations }
-     *
-     */
-    public CalculationProperty.Translations createCalculationPropertyTranslations() {
-        return new CalculationProperty.Translations();
-    }
-
-    /**
      * Create an instance of {@link MdxScript.Commands }
      *
      */
@@ -1902,22 +1887,6 @@ public class ObjectFactory {
      */
     public MdxScript.CalculationProperties createMdxScriptCalculationProperties() {
         return new MdxScript.CalculationProperties();
-    }
-
-    /**
-     * Create an instance of {@link DrillThroughAction.Translations }
-     *
-     */
-    public DrillThroughAction.Translations createDrillThroughActionTranslations() {
-        return new DrillThroughAction.Translations();
-    }
-
-    /**
-     * Create an instance of {@link DrillThroughAction.Columns }
-     *
-     */
-    public DrillThroughAction.Columns createDrillThroughActionColumns() {
-        return new DrillThroughAction.Columns();
     }
 
     /**
@@ -1961,99 +1930,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CubeDimension.Translations }
-     *
-     */
-    public CubeDimension.Translations createCubeDimensionTranslations() {
-        return new CubeDimension.Translations();
-    }
-
-    /**
-     * Create an instance of {@link CubeDimension.Attributes }
-     *
-     */
-    public CubeDimension.Attributes createCubeDimensionAttributes() {
-        return new CubeDimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link CubeDimension.Hierarchies }
-     *
-     */
-    public CubeDimension.Hierarchies createCubeDimensionHierarchies() {
-        return new CubeDimension.Hierarchies();
-    }
-
-    /**
-     * Create an instance of {@link Cube.Translations }
-     *
-     */
-    public Cube.Translations createCubeTranslations() {
-        return new Cube.Translations();
-    }
-
-    /**
-     * Create an instance of {@link Cube.Dimensions }
-     *
-     */
-    public Cube.Dimensions createCubeDimensions() {
-        return new Cube.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link Cube.CubePermissions }
-     *
-     */
-    public Cube.CubePermissions createCubeCubePermissions() {
-        return new Cube.CubePermissions();
-    }
-
-    /**
-     * Create an instance of {@link Cube.MdxScripts }
-     *
-     */
-    public Cube.MdxScripts createCubeMdxScripts() {
-        return new Cube.MdxScripts();
-    }
-
-    /**
-     * Create an instance of {@link Cube.Perspectives }
-     *
-     */
-    public Cube.Perspectives createCubePerspectives() {
-        return new Cube.Perspectives();
-    }
-
-    /**
-     * Create an instance of {@link Cube.MeasureGroups }
-     *
-     */
-    public Cube.MeasureGroups createCubeMeasureGroups() {
-        return new Cube.MeasureGroups();
-    }
-
-    /**
      * Create an instance of {@link Cube.StorageMode }
      *
      */
     public Cube.StorageMode createCubeStorageMode() {
         return new Cube.StorageMode();
-    }
-
-    /**
-     * Create an instance of {@link Cube.Kpis }
-     *
-     */
-    public Cube.Kpis createCubeKpis() {
-        return new Cube.Kpis();
-    }
-
-    /**
-     * Create an instance of {@link Cube.Actions }
-     *
-     */
-    public Cube.Actions createCubeActions() {
-        return new Cube.Actions();
     }
 
     /**
@@ -2202,86 +2083,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Database.Accounts }
-     *
-     */
-    public Database.Accounts createDatabaseAccounts() {
-        return new Database.Accounts();
-    }
-
-    /**
-     * Create an instance of {@link Database.DataSources }
-     *
-     */
-    public Database.DataSources createDatabaseDataSources() {
-        return new Database.DataSources();
-    }
-
-    /**
-     * Create an instance of {@link Database.DataSourceViews }
-     *
-     */
-    public Database.DataSourceViews createDatabaseDataSourceViews() {
-        return new Database.DataSourceViews();
-    }
-
-    /**
-     * Create an instance of {@link Database.Dimensions }
-     *
-     */
-    public Database.Dimensions createDatabaseDimensions() {
-        return new Database.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link Database.Cubes }
-     *
-     */
-    public Database.Cubes createDatabaseCubes() {
-        return new Database.Cubes();
-    }
-
-    /**
-     * Create an instance of {@link Database.MiningStructures }
-     *
-     */
-    public Database.MiningStructures createDatabaseMiningStructures() {
-        return new Database.MiningStructures();
-    }
-
-    /**
-     * Create an instance of {@link Database.Roles }
-     *
-     */
-    public Database.Roles createDatabaseRoles() {
-        return new Database.Roles();
-    }
-
-    /**
-     * Create an instance of {@link Database.Assemblies }
-     *
-     */
-    public Database.Assemblies createDatabaseAssemblies() {
-        return new Database.Assemblies();
-    }
-
-    /**
-     * Create an instance of {@link Database.DatabasePermissions }
-     *
-     */
-    public Database.DatabasePermissions createDatabaseDatabasePermissions() {
-        return new Database.DatabasePermissions();
-    }
-
-    /**
-     * Create an instance of {@link Database.Translations }
-     *
-     */
-    public Database.Translations createDatabaseTranslations() {
-        return new Database.Translations();
-    }
-
-    /**
      * Create an instance of {@link PredLeaf.Comparator }
      *
      */
@@ -2303,15 +2104,6 @@ public class ObjectFactory {
      */
     public PredLeaf.Global createPredLeafGlobal() {
         return new PredLeaf.Global();
-    }
-
-
-    /**
-     * Create an instance of {@link ClrAssembly.Files }
-     *
-     */
-    public ClrAssembly.Files createClrAssemblyFiles() {
-        return new ClrAssembly.Files();
     }
 
     /**
@@ -2388,51 +2180,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributeRelationship.Translations }
-     *
-     */
-    public AttributeRelationship.Translations createAttributeRelationshipTranslations() {
-        return new AttributeRelationship.Translations();
-    }
-
-    /**
      * Create an instance of {@link DimensionAttribute.Type }
      *
      */
     public DimensionAttribute.Type createDimensionAttributeType() {
         return new DimensionAttribute.Type();
-    }
-
-    /**
-     * Create an instance of {@link DimensionAttribute.KeyColumns }
-     *
-     */
-    public DimensionAttribute.KeyColumns createDimensionAttributeKeyColumns() {
-        return new DimensionAttribute.KeyColumns();
-    }
-
-    /**
-     * Create an instance of {@link DimensionAttribute.Translations }
-     *
-     */
-    public DimensionAttribute.Translations createDimensionAttributeTranslations() {
-        return new DimensionAttribute.Translations();
-    }
-
-    /**
-     * Create an instance of {@link DimensionAttribute.AttributeRelationships }
-     *
-     */
-    public DimensionAttribute.AttributeRelationships createDimensionAttributeAttributeRelationships() {
-        return new DimensionAttribute.AttributeRelationships();
-    }
-
-    /**
-     * Create an instance of {@link DimensionAttribute.NamingTemplateTranslations }
-     *
-     */
-    public DimensionAttribute.NamingTemplateTranslations createDimensionAttributeNamingTemplateTranslations() {
-        return new DimensionAttribute.NamingTemplateTranslations();
     }
 
     /**
@@ -2444,59 +2196,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Dimension.DimensionPermissions }
-     *
-     */
-    public Dimension.DimensionPermissions createDimensionDimensionPermissions() {
-        return new Dimension.DimensionPermissions();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.UnknownMemberTranslations }
-     *
-     */
-    public Dimension.UnknownMemberTranslations createDimensionUnknownMemberTranslations() {
-        return new Dimension.UnknownMemberTranslations();
-    }
-
-    /**
      * Create an instance of {@link Dimension.CurrentStorageMode }
      *
      */
     public Dimension.CurrentStorageMode createDimensionCurrentStorageMode() {
         return new Dimension.CurrentStorageMode();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.Translations }
-     *
-     */
-    public Dimension.Translations createDimensionTranslations() {
-        return new Dimension.Translations();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.Attributes }
-     *
-     */
-    public Dimension.Attributes createDimensionAttributes() {
-        return new Dimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.AttributeAllMemberTranslations }
-     *
-     */
-    public Dimension.AttributeAllMemberTranslations createDimensionAttributeAllMemberTranslations() {
-        return new Dimension.AttributeAllMemberTranslations();
-    }
-
-    /**
-     * Create an instance of {@link Dimension.Hierarchies }
-     *
-     */
-    public Dimension.Hierarchies createDimensionHierarchies() {
-        return new Dimension.Hierarchies();
     }
 
     /**
@@ -2513,15 +2217,6 @@ public class ObjectFactory {
      */
     public PushedDataSource.EndOfData createPushedDataSourceEndOfData() {
         return new PushedDataSource.EndOfData();
-    }
-
-    /**
-     * Create an instance of
-     * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions }
-     *
-     */
-    public org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions createDataSourceDataSourcePermissions() {
-        return new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions();
     }
 
     /**
@@ -2572,38 +2267,6 @@ public class ObjectFactory {
      */
     public Role.Members createRoleMembers() {
         return new Role.Members();
-    }
-
-    /**
-     * Create an instance of {@link CubePermission.DimensionPermissions }
-     *
-     */
-    public CubePermission.DimensionPermissions createCubePermissionDimensionPermissions() {
-        return new CubePermission.DimensionPermissions();
-    }
-
-    /**
-     * Create an instance of {@link CubePermission.CellPermissions }
-     *
-     */
-    public CubePermission.CellPermissions createCubePermissionCellPermissions() {
-        return new CubePermission.CellPermissions();
-    }
-
-    /**
-     * Create an instance of {@link DimensionPermission.AttributePermissions }
-     *
-     */
-    public DimensionPermission.AttributePermissions createDimensionPermissionAttributePermissions() {
-        return new DimensionPermission.AttributePermissions();
-    }
-
-    /**
-     * Create an instance of {@link CubeDimensionPermission.AttributePermissions }
-     *
-     */
-    public CubeDimensionPermission.AttributePermissions createCubeDimensionPermissionAttributePermissions() {
-        return new CubeDimensionPermission.AttributePermissions();
     }
 
     /**
@@ -2787,22 +2450,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributeInsertUpdate.Keys }
-     *
-     */
-    public AttributeInsertUpdate.Keys createAttributeInsertUpdateKeys() {
-        return new AttributeInsertUpdate.Keys();
-    }
-
-    /**
-     * Create an instance of {@link AttributeInsertUpdate.Translations }
-     *
-     */
-    public AttributeInsertUpdate.Translations createAttributeInsertUpdateTranslations() {
-        return new AttributeInsertUpdate.Translations();
-    }
-
-    /**
      * Create an instance of {@link Insert.Attributes }
      *
      */
@@ -2832,22 +2479,6 @@ public class ObjectFactory {
      */
     public Restore.Locations createRestoreLocations() {
         return new Restore.Locations();
-    }
-
-    /**
-     * Create an instance of {@link Backup.Locations }
-     *
-     */
-    public Backup.Locations createBackupLocations() {
-        return new Backup.Locations();
-    }
-
-    /**
-     * Create an instance of {@link DesignAggregations.Queries }
-     *
-     */
-    public DesignAggregations.Queries createDesignAggregationsQueries() {
-        return new DesignAggregations.Queries();
     }
 
     /**

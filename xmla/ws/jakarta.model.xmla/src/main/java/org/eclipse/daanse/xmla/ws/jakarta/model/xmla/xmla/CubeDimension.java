@@ -33,8 +33,9 @@ public class CubeDimension {
     protected String name;
     @XmlElement(name = "Description")
     protected String description;
-    @XmlElement(name = "Translations")
-    protected CubeDimension.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "DimensionID", required = true)
     protected String dimensionID;
     @XmlElement(name = "Visible")
@@ -45,10 +46,12 @@ public class CubeDimension {
     protected String hierarchyUniqueNameStyle;
     @XmlElement(name = "MemberUniqueNameStyle")
     protected String memberUniqueNameStyle;
-    @XmlElement(name = "Attributes")
-    protected CubeDimension.Attributes attributes;
-    @XmlElement(name = "Hierarchies")
-    protected CubeDimension.Hierarchies hierarchies;
+    @XmlElement(name = "Attribute")
+    @XmlElementWrapper(name = "Attributes")
+    protected List<CubeAttribute> attributes;
+    @XmlElement(name = "Hierarchy")
+    @XmlElementWrapper(name = "Hierarchies")
+    protected List<CubeHierarchy> hierarchies;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -77,11 +80,11 @@ public class CubeDimension {
         this.description = value;
     }
 
-    public CubeDimension.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(CubeDimension.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -125,19 +128,19 @@ public class CubeDimension {
         this.memberUniqueNameStyle = value;
     }
 
-    public CubeDimension.Attributes getAttributes() {
+    public List<CubeAttribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(CubeDimension.Attributes value) {
+    public void setAttributes(List<CubeAttribute> value) {
         this.attributes = value;
     }
 
-    public CubeDimension.Hierarchies getHierarchies() {
+    public List<CubeHierarchy> getHierarchies() {
         return hierarchies;
     }
 
-    public void setHierarchies(CubeDimension.Hierarchies value) {
+    public void setHierarchies(List<CubeHierarchy> value) {
         this.hierarchies = value;
     }
 
@@ -147,54 +150,6 @@ public class CubeDimension {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attribute"})
-    public static class Attributes {
-
-        @XmlElement(name = "Attribute")
-        protected List<CubeAttribute> attribute;
-
-        public List<CubeAttribute> getAttribute() {
-            return this.attribute;
-        }
-
-        public void setAttribute(List<CubeAttribute> attribute) {
-            this.attribute = attribute;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"hierarchy"})
-    public static class Hierarchies {
-
-        @XmlElement(name = "Hierarchy")
-        protected List<CubeHierarchy> hierarchy;
-
-        public List<CubeHierarchy> getHierarchy() {
-            return this.hierarchy;
-        }
-
-        public void setHierarchy(List<CubeHierarchy> hierarchy) {
-            this.hierarchy = hierarchy;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

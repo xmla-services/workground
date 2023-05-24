@@ -123,7 +123,7 @@ public class TraceConvertor {
 
     private static EventType convertEventType(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.EventType eventType) {
         if (eventType != null) {
-            return new EventTypeR(convertEventList(eventType.getEvents() == null ? null : eventType.getEvents().getEvent()),
+            return new EventTypeR(convertEventList(eventType.getEvents()),
                 convertXEvent(eventType.getXEvent()));
         }
         return null;

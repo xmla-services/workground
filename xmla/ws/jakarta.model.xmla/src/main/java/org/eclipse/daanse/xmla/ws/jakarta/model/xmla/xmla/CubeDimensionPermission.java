@@ -35,8 +35,9 @@ public class CubeDimensionPermission {
     protected String read;
     @XmlElement(name = "Write")
     protected String write;
-    @XmlElement(name = "AttributePermissions")
-    protected CubeDimensionPermission.AttributePermissions attributePermissions;
+    @XmlElement(name = "AttributePermission", type = AttributePermission.class)
+    @XmlElementWrapper(name = "AttributePermissions")
+    protected List<AttributePermission> attributePermissions;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -73,11 +74,11 @@ public class CubeDimensionPermission {
         this.write = value;
     }
 
-    public CubeDimensionPermission.AttributePermissions getAttributePermissions() {
+    public List<AttributePermission> getAttributePermissions() {
         return attributePermissions;
     }
 
-    public void setAttributePermissions(CubeDimensionPermission.AttributePermissions value) {
+    public void setAttributePermissions(List<AttributePermission> value) {
         this.attributePermissions = value;
     }
 
@@ -87,22 +88,6 @@ public class CubeDimensionPermission {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attributePermission"})
-    public static class AttributePermissions {
-
-        @XmlElement(name = "AttributePermission")
-        protected List<AttributePermission> attributePermission;
-
-        public List<AttributePermission> getAttributePermission() {
-            return this.attributePermission;
-        }
-
-        public void setAttributePermission(List<AttributePermission> attributePermission) {
-            this.attributePermission = attributePermission;
-        }
     }
 
 }

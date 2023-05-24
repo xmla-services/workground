@@ -18,23 +18,25 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DimensionPermission", propOrder = {"attributePermissions", "allowedRowsExpression"})
 public class DimensionPermission extends Permission {
 
-    @XmlElement(name = "AttributePermissions")
-    protected DimensionPermission.AttributePermissions attributePermissions;
+    @XmlElement(name = "AttributePermission")
+    @XmlElementWrapper(name = "AttributePermissions")
+    protected List<AttributePermission> attributePermissions;
     @XmlElement(name = "AllowedRowsExpression", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2011/engine/300/300")
     protected String allowedRowsExpression;
 
-    public DimensionPermission.AttributePermissions getAttributePermissions() {
+    public List<AttributePermission> getAttributePermissions() {
         return attributePermissions;
     }
 
-    public void setAttributePermissions(DimensionPermission.AttributePermissions value) {
+    public void setAttributePermissions(List<AttributePermission> value) {
         this.attributePermissions = value;
     }
 
@@ -44,22 +46,6 @@ public class DimensionPermission extends Permission {
 
     public void setAllowedRowsExpression(String value) {
         this.allowedRowsExpression = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attributePermission"})
-    public static class AttributePermissions {
-
-        @XmlElement(name = "AttributePermission")
-        protected List<AttributePermission> attributePermission;
-
-        public List<AttributePermission> getAttributePermission() {
-            return this.attributePermission;
-        }
-
-        public void setAttributePermission(List<AttributePermission> attributePermission) {
-            this.attributePermission = attributePermission;
-        }
     }
 
 }

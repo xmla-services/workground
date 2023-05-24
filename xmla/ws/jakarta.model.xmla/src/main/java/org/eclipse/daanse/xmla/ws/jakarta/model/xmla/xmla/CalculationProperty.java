@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import java.math.BigInteger;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.CalculationPropertiesVisualizationProperties;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -33,8 +34,9 @@ public class CalculationProperty {
     protected String calculationReference;
     @XmlElement(name = "CalculationType", required = true)
     protected String calculationType;
-    @XmlElement(name = "Translations")
-    protected CalculationProperty.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Visible")
@@ -80,11 +82,11 @@ public class CalculationProperty {
         this.calculationType = value;
     }
 
-    public CalculationProperty.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(CalculationProperty.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -198,22 +200,6 @@ public class CalculationProperty {
 
     public void setVisualizationProperties(CalculationPropertiesVisualizationProperties value) {
         this.visualizationProperties = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

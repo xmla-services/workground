@@ -22,6 +22,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
@@ -36,24 +37,30 @@ public class Cube extends AbstractItem {
     protected BigInteger language;
     @XmlElement(name = "Collation")
     protected String collation;
-    @XmlElement(name = "Translations")
-    protected Cube.Translations translations;
-    @XmlElement(name = "Dimensions", required = true)
-    protected Cube.Dimensions dimensions;
-    @XmlElement(name = "CubePermissions")
-    protected Cube.CubePermissions cubePermissions;
-    @XmlElement(name = "MdxScripts")
-    protected Cube.MdxScripts mdxScripts;
-    @XmlElement(name = "Perspectives")
-    protected Cube.Perspectives perspectives;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
+    @XmlElement(name = "Dimension", required = true)
+    @XmlElementWrapper(name = "Dimensions", required = true)
+    protected List<CubeDimension> dimensions;
+    @XmlElement(name = "CubePermission")
+    @XmlElementWrapper(name = "CubePermissions")
+    protected List<CubePermission> cubePermissions;
+    @XmlElement(name = "MdxScript")
+    @XmlElementWrapper(name = "MdxScripts")
+    protected List<MdxScript> mdxScripts;
+    @XmlElement(name = "Perspective")
+    @XmlElementWrapper(name = "Perspectives")
+    protected List<Perspective> perspectives;
     @XmlElement(name = "State")
     protected String state;
     @XmlElement(name = "DefaultMeasure")
     protected String defaultMeasure;
     @XmlElement(name = "Visible")
     protected Boolean visible;
-    @XmlElement(name = "MeasureGroups", required = true)
-    protected Cube.MeasureGroups measureGroups;
+    @XmlElement(name = "MeasureGroup", required = true)
+    @XmlElementWrapper(name = "MeasureGroups", required = true)
+    protected List<MeasureGroup> measureGroups;
     @XmlElement(name = "Source")
     protected DataSourceViewBinding source;
     @XmlElement(name = "AggregationPrefix")
@@ -73,12 +80,14 @@ public class Cube extends AbstractItem {
     protected String daxOptimizationMode;
     @XmlElement(name = "ProactiveCaching")
     protected ProactiveCaching proactiveCaching;
-    @XmlElement(name = "Kpis")
-    protected Cube.Kpis kpis;
+    @XmlElement(name = "Kpi")
+    @XmlElementWrapper(name = "Kpis")
+    protected List<Kpi>  kpis;
     @XmlElement(name = "ErrorConfiguration")
     protected ErrorConfiguration errorConfiguration;
-    @XmlElement(name = "Actions")
-    protected Cube.Actions actions;
+    @XmlElement(name = "Action")
+    @XmlElementWrapper(name = "Actions")
+    protected List<Action> actions;
     @XmlElement(name = "StorageLocation")
     protected String storageLocation;
     @XmlElement(name = "EstimatedRows")
@@ -105,43 +114,43 @@ public class Cube extends AbstractItem {
         this.collation = value;
     }
 
-    public Cube.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Cube.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
-    public Cube.Dimensions getDimensions() {
+    public List<CubeDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Cube.Dimensions value) {
+    public void setDimensions(List<CubeDimension> value) {
         this.dimensions = value;
     }
 
-    public Cube.CubePermissions getCubePermissions() {
+    public List<CubePermission> getCubePermissions() {
         return cubePermissions;
     }
 
-    public void setCubePermissions(Cube.CubePermissions value) {
+    public void setCubePermissions(List<CubePermission> value) {
         this.cubePermissions = value;
     }
 
-    public Cube.MdxScripts getMdxScripts() {
+    public List<MdxScript> getMdxScripts() {
         return mdxScripts;
     }
 
-    public void setMdxScripts(Cube.MdxScripts value) {
+    public void setMdxScripts(List<MdxScript> value) {
         this.mdxScripts = value;
     }
 
-    public Cube.Perspectives getPerspectives() {
+    public List<Perspective> getPerspectives() {
         return perspectives;
     }
 
-    public void setPerspectives(Cube.Perspectives value) {
+    public void setPerspectives(List<Perspective> value) {
         this.perspectives = value;
     }
 
@@ -169,11 +178,11 @@ public class Cube extends AbstractItem {
         this.visible = value;
     }
 
-    public Cube.MeasureGroups getMeasureGroups() {
+    public List<MeasureGroup> getMeasureGroups() {
         return measureGroups;
     }
 
-    public void setMeasureGroups(Cube.MeasureGroups value) {
+    public void setMeasureGroups(List<MeasureGroup> value) {
         this.measureGroups = value;
     }
 
@@ -249,11 +258,11 @@ public class Cube extends AbstractItem {
         this.proactiveCaching = value;
     }
 
-    public Cube.Kpis getKpis() {
+    public List<Kpi> getKpis() {
         return kpis;
     }
 
-    public void setKpis(Cube.Kpis value) {
+    public void setKpis(List<Kpi> value) {
         this.kpis = value;
     }
 
@@ -265,11 +274,11 @@ public class Cube extends AbstractItem {
         this.errorConfiguration = value;
     }
 
-    public Cube.Actions getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 
-    public void setActions(Cube.Actions value) {
+    public void setActions(List<Action> value) {
         this.actions = value;
     }
 
@@ -298,118 +307,6 @@ public class Cube extends AbstractItem {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"action"})
-    public static class Actions {
-
-        @XmlElement(name = "Action")
-        protected List<Action> action;
-
-        public List<Action> getAction() {
-            return this.action;
-        }
-
-        public void setAction(List<Action> action) {
-            this.action = action;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"cubePermission"})
-    public static class CubePermissions {
-
-        @XmlElement(name = "CubePermission")
-        protected List<CubePermission> cubePermission;
-
-        public List<CubePermission> getCubePermission() {
-            return this.cubePermission;
-        }
-
-        public void setCubePermission(List<CubePermission> cubePermission) {
-            this.cubePermission = cubePermission;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension", required = true)
-        protected List<CubeDimension> dimension;
-
-        public List<CubeDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<CubeDimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"kpi"})
-    public static class Kpis {
-
-        @XmlElement(name = "Kpi")
-        protected List<Kpi> kpi;
-
-        public List<Kpi> getKpi() {
-            return this.kpi;
-        }
-
-        public void setKpi(List<Kpi> kpi) {
-            this.kpi = kpi;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"mdxScript"})
-    public static class MdxScripts {
-
-        @XmlElement(name = "MdxScript")
-        protected List<MdxScript> mdxScript;
-
-        public List<MdxScript> getMdxScript() {
-            return this.mdxScript;
-        }
-
-        public void setMdxScript(List<MdxScript> mdxScript) {
-            this.mdxScript = mdxScript;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"measureGroup"})
-    public static class MeasureGroups {
-
-        @XmlElement(name = "MeasureGroup")
-        protected List<MeasureGroup> measureGroup;
-
-        public List<MeasureGroup> getMeasureGroup() {
-            return this.measureGroup;
-        }
-
-        public void setMeasureGroup(List<MeasureGroup> measureGroup) {
-            this.measureGroup = measureGroup;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"perspective"})
-    public static class Perspectives {
-
-        @XmlElement(name = "Perspective")
-        protected List<Perspective> perspective;
-
-        public List<Perspective> getPerspective() {
-            return this.perspective;
-        }
-
-        public void setPerspective(List<Perspective> perspective) {
-            this.perspective = perspective;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {"value"})
     public static class StorageMode {
 
@@ -434,21 +331,4 @@ public class Cube extends AbstractItem {
             this.valuens = value;
         }
     }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
-    }
-
 }

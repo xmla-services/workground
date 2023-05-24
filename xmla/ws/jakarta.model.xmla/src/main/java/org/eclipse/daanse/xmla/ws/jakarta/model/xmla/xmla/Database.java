@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -61,26 +62,36 @@ public class Database extends AbstractItem {
     protected String masterDataSourceID;
     @XmlElement(name = "DataSourceImpersonationInfo")
     protected ImpersonationInfo dataSourceImpersonationInfo;
-    @XmlElement(name = "Accounts")
-    protected Database.Accounts accounts;
-    @XmlElement(name = "DataSources")
-    protected Database.DataSources dataSources;
-    @XmlElement(name = "DataSourceViews")
-    protected Database.DataSourceViews dataSourceViews;
-    @XmlElement(name = "Dimensions")
-    protected Database.Dimensions dimensions;
-    @XmlElement(name = "Cubes")
-    protected Database.Cubes cubes;
-    @XmlElement(name = "MiningStructures")
-    protected Database.MiningStructures miningStructures;
-    @XmlElement(name = "Roles")
-    protected Database.Roles roles;
-    @XmlElement(name = "Assemblies")
-    protected Database.Assemblies assemblies;
-    @XmlElement(name = "DatabasePermissions")
-    protected Database.DatabasePermissions databasePermissions;
-    @XmlElement(name = "Translations")
-    protected Database.Translations translations;
+    @XmlElement(name = "Account")
+    @XmlElementWrapper(name = "Accounts")
+    protected List<Account> accounts;
+    @XmlElement(name = "DataSource")
+    @XmlElementWrapper(name = "DataSources")
+    protected List<DataSource> dataSources;
+    @XmlElement(name = "DataSourceView")
+    @XmlElementWrapper(name = "DataSourceViews")
+    protected List<DataSourceView> dataSourceViews;
+    @XmlElement(name = "Dimension")
+    @XmlElementWrapper(name = "Dimensions")
+    protected List<Dimension> dimensions;
+    @XmlElement(name = "Cube")
+    @XmlElementWrapper(name = "Cubes")
+    protected List<Cube> cubes;
+    @XmlElement(name = "MiningStructure")
+    @XmlElementWrapper(name = "MiningStructures")
+    protected List<MiningStructure> miningStructures;
+    @XmlElement(name = "Role")
+    @XmlElementWrapper(name = "Roles")
+    protected List<Role> roles;
+    @XmlElement(name = "Assembly")
+    @XmlElementWrapper(name = "Assemblies")
+    protected List<Assembly>  assemblies;
+    @XmlElement(name = "DatabasePermission")
+    @XmlElementWrapper(name = "DatabasePermissions")
+    protected List<DatabasePermission> databasePermissions;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "StorageEngineUsed", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2010/engine/200/200")
     protected String storageEngineUsed;
@@ -205,83 +216,83 @@ public class Database extends AbstractItem {
         this.dataSourceImpersonationInfo = value;
     }
 
-    public Database.Accounts getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(Database.Accounts value) {
+    public void setAccounts(List<Account> value) {
         this.accounts = value;
     }
 
-    public Database.DataSources getDataSources() {
+    public List<DataSource> getDataSources() {
         return dataSources;
     }
 
-    public void setDataSources(Database.DataSources value) {
+    public void setDataSources(List<DataSource> value) {
         this.dataSources = value;
     }
 
-    public Database.DataSourceViews getDataSourceViews() {
+    public List<DataSourceView> getDataSourceViews() {
         return dataSourceViews;
     }
 
-    public void setDataSourceViews(Database.DataSourceViews value) {
+    public void setDataSourceViews(List<DataSourceView> value) {
         this.dataSourceViews = value;
     }
 
-    public Database.Dimensions getDimensions() {
+    public List<Dimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Database.Dimensions value) {
+    public void setDimensions(List<Dimension> value) {
         this.dimensions = value;
     }
 
-    public Database.Cubes getCubes() {
+    public List<Cube> getCubes() {
         return cubes;
     }
 
-    public void setCubes(Database.Cubes value) {
+    public void setCubes(List<Cube> value) {
         this.cubes = value;
     }
 
-    public Database.MiningStructures getMiningStructures() {
+    public List<MiningStructure> getMiningStructures() {
         return miningStructures;
     }
 
-    public void setMiningStructures(Database.MiningStructures value) {
+    public void setMiningStructures(List<MiningStructure> value) {
         this.miningStructures = value;
     }
 
-    public Database.Roles getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Database.Roles value) {
+    public void setRoles(List<Role> value) {
         this.roles = value;
     }
 
-    public Database.Assemblies getAssemblies() {
+    public List<Assembly> getAssemblies() {
         return assemblies;
     }
 
-    public void setAssemblies(Database.Assemblies value) {
+    public void setAssemblies(List<Assembly> value) {
         this.assemblies = value;
     }
 
-    public Database.DatabasePermissions getDatabasePermissions() {
+    public List<DatabasePermission> getDatabasePermissions() {
         return databasePermissions;
     }
 
-    public void setDatabasePermissions(Database.DatabasePermissions value) {
+    public void setDatabasePermissions(List<DatabasePermission> value) {
         this.databasePermissions = value;
     }
 
-    public Database.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Database.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -347,166 +358,6 @@ public class Database extends AbstractItem {
 
     public void setDirectQueryMode(String value) {
         this.directQueryMode = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"account"})
-    public static class Accounts {
-
-        @XmlElement(name = "Account")
-        protected List<Account> account;
-
-        public List<Account> getAccount() {
-            return this.account;
-        }
-
-        public void setAccount(List<Account> account) {
-            this.account = account;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"assembly"})
-    public static class Assemblies {
-
-        @XmlElement(name = "Assembly")
-        protected List<Assembly> assembly;
-
-        public List<Assembly> getAssembly() {
-            return this.assembly;
-        }
-
-        public void setAssembly(List<Assembly> assembly) {
-            this.assembly = assembly;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"cube"})
-    public static class Cubes {
-
-        @XmlElement(name = "Cube")
-        protected List<Cube> cube;
-
-        public List<Cube> getCube() {
-            return this.cube;
-        }
-
-        public void setCube(List<Cube> cube) {
-            this.cube = cube;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"databasePermission"})
-    public static class DatabasePermissions {
-
-        @XmlElement(name = "DatabasePermission")
-        protected List<DatabasePermission> databasePermission;
-
-        public List<DatabasePermission> getDatabasePermission() {
-            return this.databasePermission;
-        }
-
-        public void setDatabasePermission(List<DatabasePermission> databasePermission) {
-            this.databasePermission = databasePermission;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dataSource"})
-    public static class DataSources {
-
-        @XmlElement(name = "DataSource")
-        protected List<DataSource> dataSource;
-
-        public List<DataSource> getDataSource() {
-            return this.dataSource;
-        }
-
-        public void setDataSource(List<DataSource> dataSource) {
-            this.dataSource = dataSource;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dataSourceView"})
-    public static class DataSourceViews {
-
-        @XmlElement(name = "DataSourceView")
-        protected List<DataSourceView> dataSourceView;
-
-        public List<DataSourceView> getDataSourceView() {
-            return this.dataSourceView;
-        }
-
-        public void setDataSourceView(List<DataSourceView> dataSourceView) {
-            this.dataSourceView = dataSourceView;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension")
-        protected List<Dimension> dimension;
-
-        public List<Dimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<Dimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"miningStructure"})
-    public static class MiningStructures {
-
-        @XmlElement(name = "MiningStructure")
-        protected List<MiningStructure> miningStructure;
-
-        public List<MiningStructure> getMiningStructure() {
-            return this.miningStructure;
-        }
-
-        public void setMiningStructure(List<MiningStructure> miningStructure) {
-            this.miningStructure = miningStructure;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"role"})
-    public static class Roles {
-
-        @XmlElement(name = "Role")
-        protected List<Role> role;
-
-        public List<Role> getRole() {
-            return this.role;
-        }
-
-        public void setRole(List<Role> role) {
-            this.role = role;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

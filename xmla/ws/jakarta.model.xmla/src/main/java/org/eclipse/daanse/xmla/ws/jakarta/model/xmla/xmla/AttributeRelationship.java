@@ -44,8 +44,9 @@ public class AttributeRelationship {
     protected String name;
     @XmlElement(name = "Visible")
     protected Boolean visible;
-    @XmlElement(name = "Translations")
-    protected AttributeRelationship.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
 
     public String getAttributeID() {
         return attributeID;
@@ -111,28 +112,12 @@ public class AttributeRelationship {
         this.visible = value;
     }
 
-    public AttributeRelationship.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(AttributeRelationship.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }
