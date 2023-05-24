@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.Relationships;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -55,8 +56,9 @@ public class Dimension extends AbstractItem {
     @XmlElement(name = "LastProcessed")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastProcessed;
-    @XmlElement(name = "DimensionPermissions")
-    protected Dimension.DimensionPermissions dimensionPermissions;
+    @XmlElement(name = "DimensionPermission")
+    @XmlElementWrapper(name = "DimensionPermissions")
+    protected List<DimensionPermission> dimensionPermissions;
     @XmlElement(name = "DependsOnDimensionID")
     protected String dependsOnDimensionID;
     @XmlElement(name = "Language")
@@ -65,8 +67,9 @@ public class Dimension extends AbstractItem {
     protected String collation;
     @XmlElement(name = "UnknownMemberName")
     protected String unknownMemberName;
-    @XmlElement(name = "UnknownMemberTranslations")
-    protected Dimension.UnknownMemberTranslations unknownMemberTranslations;
+    @XmlElement(name = "UnknownMemberTranslation")
+    @XmlElementWrapper(name = "UnknownMemberTranslations")
+    protected List<Translation> unknownMemberTranslations;
     @XmlElement(name = "State")
     protected String state;
     @XmlElement(name = "ProactiveCaching")
@@ -77,16 +80,20 @@ public class Dimension extends AbstractItem {
     protected String processingGroup;
     @XmlElement(name = "CurrentStorageMode")
     protected Dimension.CurrentStorageMode currentStorageMode;
-    @XmlElement(name = "Translations")
-    protected Dimension.Translations translations;
-    @XmlElement(name = "Attributes")
-    protected Dimension.Attributes attributes;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
+    @XmlElement(name = "Attribute")
+    @XmlElementWrapper(name = "Attributes")
+    protected List<DimensionAttribute> attributes;
     @XmlElement(name = "AttributeAllMemberName")
     protected String attributeAllMemberName;
-    @XmlElement(name = "AttributeAllMemberTranslations")
-    protected Dimension.AttributeAllMemberTranslations attributeAllMemberTranslations;
-    @XmlElement(name = "Hierarchies")
-    protected Dimension.Hierarchies hierarchies;
+    @XmlElement(name = "AttributeAllMemberTranslation")
+    @XmlElementWrapper(name = "AttributeAllMemberTranslations")
+    protected List<Translation> attributeAllMemberTranslations;
+    @XmlElement(name = "Hierarchy")
+    @XmlElementWrapper(name = "Hierarchies")
+    protected List<Hierarchy> hierarchies;
     @XmlElement(name = "ProcessingRecommendation", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2010/engine/200/200")
     protected String processingRecommendation;
@@ -179,11 +186,11 @@ public class Dimension extends AbstractItem {
         this.lastProcessed = value;
     }
 
-    public Dimension.DimensionPermissions getDimensionPermissions() {
+    public List<DimensionPermission> getDimensionPermissions() {
         return dimensionPermissions;
     }
 
-    public void setDimensionPermissions(Dimension.DimensionPermissions value) {
+    public void setDimensionPermissions(List<DimensionPermission> value) {
         this.dimensionPermissions = value;
     }
 
@@ -219,11 +226,11 @@ public class Dimension extends AbstractItem {
         this.unknownMemberName = value;
     }
 
-    public Dimension.UnknownMemberTranslations getUnknownMemberTranslations() {
+    public List<Translation> getUnknownMemberTranslations() {
         return unknownMemberTranslations;
     }
 
-    public void setUnknownMemberTranslations(Dimension.UnknownMemberTranslations value) {
+    public void setUnknownMemberTranslations(List<Translation> value) {
         this.unknownMemberTranslations = value;
     }
 
@@ -267,19 +274,19 @@ public class Dimension extends AbstractItem {
         this.currentStorageMode = value;
     }
 
-    public Dimension.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Dimension.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
-    public Dimension.Attributes getAttributes() {
+    public List<DimensionAttribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Dimension.Attributes value) {
+    public void setAttributes(List<DimensionAttribute> value) {
         this.attributes = value;
     }
 
@@ -291,19 +298,19 @@ public class Dimension extends AbstractItem {
         this.attributeAllMemberName = value;
     }
 
-    public Dimension.AttributeAllMemberTranslations getAttributeAllMemberTranslations() {
+    public List<Translation> getAttributeAllMemberTranslations() {
         return attributeAllMemberTranslations;
     }
 
-    public void setAttributeAllMemberTranslations(Dimension.AttributeAllMemberTranslations value) {
+    public void setAttributeAllMemberTranslations(List<Translation> value) {
         this.attributeAllMemberTranslations = value;
     }
 
-    public Dimension.Hierarchies getHierarchies() {
+    public List<Hierarchy> getHierarchies() {
         return hierarchies;
     }
 
-    public void setHierarchies(Dimension.Hierarchies value) {
+    public void setHierarchies(List<Hierarchy> value) {
         this.hierarchies = value;
     }
 
@@ -340,38 +347,6 @@ public class Dimension extends AbstractItem {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"memberAllMemberTranslation"})
-    public static class AttributeAllMemberTranslations {
-
-        @XmlElement(name = "MemberAllMemberTranslation")
-        protected List<Translation> memberAllMemberTranslation;
-
-        public List<Translation> getMemberAllMemberTranslation() {
-            return this.memberAllMemberTranslation;
-        }
-
-        public void setMemberAllMemberTranslation(List<Translation> memberAllMemberTranslation) {
-            this.memberAllMemberTranslation = memberAllMemberTranslation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attribute"})
-    public static class Attributes {
-
-        @XmlElement(name = "Attribute")
-        protected List<DimensionAttribute> attribute;
-
-        public List<DimensionAttribute> getAttribute() {
-            return this.attribute;
-        }
-
-        public void setAttribute(List<DimensionAttribute> attribute) {
-            this.attribute = attribute;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {"value"})
     public static class CurrentStorageMode {
 
@@ -398,54 +373,6 @@ public class Dimension extends AbstractItem {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimensionPermission"})
-    public static class DimensionPermissions {
-
-        @XmlElement(name = "DimensionPermission")
-        protected List<DimensionPermission> dimensionPermission;
-
-        public List<DimensionPermission> getDimensionPermission() {
-            return this.dimensionPermission;
-        }
-
-        public void setDimensionPermission(List<DimensionPermission> dimensionPermission) {
-            this.dimensionPermission = dimensionPermission;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"hierarchy"})
-    public static class Hierarchies {
-
-        @XmlElement(name = "Hierarchy")
-        protected List<Hierarchy> hierarchy;
-
-        public List<Hierarchy> getHierarchy() {
-            return this.hierarchy;
-        }
-
-        public void setHierarchy(List<Hierarchy> hierarchy) {
-            this.hierarchy = hierarchy;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {"value"})
     public static class UnknownMember {
 
@@ -468,22 +395,6 @@ public class Dimension extends AbstractItem {
 
         public void setValuens(String value) {
             this.valuens = value;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"unknownMemberTranslation"})
-    public static class UnknownMemberTranslations {
-
-        @XmlElement(name = "UnknownMemberTranslation")
-        protected List<Translation> unknownMemberTranslation;
-
-        public List<Translation> getUnknownMemberTranslation() {
-            return this.unknownMemberTranslation;
-        }
-
-        public void setUnknownMemberTranslation(List<Translation> unknownMemberTranslation) {
-            this.unknownMemberTranslation = unknownMemberTranslation;
         }
     }
 

@@ -86,28 +86,22 @@ public class DimensionConvertor {
                 dimension.isWriteEnabled(),
                 dimension.getProcessingPriority(),
                 convertToInstant(dimension.getLastProcessed()),
-                convertDimensionPermissionList(dimension.getDimensionPermissions() == null ? null :
-                    dimension.getDimensionPermissions().getDimensionPermission()),
+                convertDimensionPermissionList(dimension.getDimensionPermissions()),
                 dimension.getDependsOnDimensionID(),
                 dimension.getLanguage(),
                 dimension.getCollation(),
                 dimension.getUnknownMemberName(),
-                convertTranslationList(dimension.getUnknownMemberTranslations() == null ? null :
-                    dimension.getUnknownMemberTranslations().getUnknownMemberTranslation()),
+                convertTranslationList(dimension.getUnknownMemberTranslations()),
                 dimension.getState(),
                 convertProactiveCaching(dimension.getProactiveCaching()),
                 dimension.getProcessingMode(),
                 dimension.getProcessingGroup(),
                 convertDimensionCurrentStorageMode(dimension.getCurrentStorageMode()),
-                convertTranslationList(dimension.getTranslations() == null ? null :
-                    dimension.getTranslations().getTranslation()),
-                convertDimensionAttributeList(dimension.getAttributes() == null ? null :
-                    dimension.getAttributes().getAttribute()),
+                convertTranslationList(dimension.getTranslations()),
+                convertDimensionAttributeList(dimension.getAttributes()),
                 dimension.getAttributeAllMemberName(),
-                convertTranslationList(dimension.getAttributeAllMemberTranslations() == null ? null :
-                    dimension.getAttributeAllMemberTranslations().getMemberAllMemberTranslation()),
-                convertHierarchyList(dimension.getHierarchies() == null ? null :
-                    dimension.getHierarchies().getHierarchy()),
+                convertTranslationList(dimension.getAttributeAllMemberTranslations()),
+                convertHierarchyList(dimension.getHierarchies()),
                 dimension.getProcessingRecommendation(),
                 convertRelationships(dimension.getRelationships()),
                 dimension.getStringStoresCompatibilityLevel(),
@@ -185,8 +179,7 @@ public class DimensionConvertor {
     private static DimensionPermission convertDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionPermission dimensionPermission) {
         if (dimensionPermission != null) {
             return new DimensionPermissionR(
-                Optional.ofNullable(convertAttributePermissionList(dimensionPermission.getAttributePermissions() == null ? null :
-                    dimensionPermission.getAttributePermissions().getAttributePermission())),
+                Optional.ofNullable(convertAttributePermissionList(dimensionPermission.getAttributePermissions())),
                 Optional.ofNullable(dimensionPermission.getAllowedRowsExpression()),
                 dimensionPermission.getName(),
                 Optional.ofNullable(dimensionPermission.getID()),
@@ -220,14 +213,11 @@ public class DimensionConvertor {
                 dimensionAttribute.getUsage(),
                 convertBinding(dimensionAttribute.getSource()),
                 dimensionAttribute.getEstimatedCount(),
-                convertDataItemList(dimensionAttribute.getKeyColumns() == null ? null :
-                    dimensionAttribute.getKeyColumns().getKeyColumn()),
+                convertDataItemList(dimensionAttribute.getKeyColumns()),
                 convertDataItem(dimensionAttribute.getNameColumn()),
                 convertDataItem(dimensionAttribute.getValueColumn()),
-                convertAttributeTranslationList(dimensionAttribute.getTranslations() == null ? null :
-                    dimensionAttribute.getTranslations().getTranslation()),
-                convertAttributeRelationshipList(dimensionAttribute.getAttributeRelationships() == null ? null :
-                    dimensionAttribute.getAttributeRelationships().getAttributeRelationship()),
+                convertAttributeTranslationList(dimensionAttribute.getTranslations()),
+                convertAttributeRelationshipList(dimensionAttribute.getAttributeRelationships()),
                 dimensionAttribute.getDiscretizationMethod(),
                 dimensionAttribute.getDiscretizationBucketCount(),
                 dimensionAttribute.getRootMemberIf(),
@@ -238,8 +228,7 @@ public class DimensionConvertor {
                 dimensionAttribute.getNamingTemplate(),
                 dimensionAttribute.getMembersWithData(),
                 dimensionAttribute.getMembersWithDataCaption(),
-                convertTranslationList(dimensionAttribute.getNamingTemplateTranslations() == null ? null :
-                    dimensionAttribute.getNamingTemplateTranslations().getNamingTemplateTranslation()),
+                convertTranslationList(dimensionAttribute.getNamingTemplateTranslations()),
                 convertDataItem(dimensionAttribute.getCustomRollupColumn()),
                 convertDataItem(dimensionAttribute.getCustomRollupPropertiesColumn()),
                 convertDataItem(dimensionAttribute.getUnaryOperatorColumn()),
@@ -279,8 +268,7 @@ public class DimensionConvertor {
                 convertAnnotationList(attributeRelationship.getAnnotations()),
                 attributeRelationship.getName(),
                 attributeRelationship.isVisible(),
-                convertTranslationList(attributeRelationship.getTranslations() == null ? null :
-                    attributeRelationship.getTranslations().getTranslation()));
+                convertTranslationList(attributeRelationship.getTranslations()));
         }
         return null;
     }

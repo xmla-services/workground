@@ -18,22 +18,24 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ClrAssembly", propOrder = {"files", "permissionSet"})
 public class ClrAssembly extends Assembly {
 
-    @XmlElement(name = "Files", required = true)
-    protected ClrAssembly.Files files;
+    @XmlElement(name = "File", required = true)
+    @XmlElementWrapper(name = "Files", required = true)
+    protected List<ClrAssemblyFile> files;
     @XmlElement(name = "PermissionSet")
     protected String permissionSet;
 
-    public ClrAssembly.Files getFiles() {
+    public List<ClrAssemblyFile> getFiles() {
         return files;
     }
 
-    public void setFiles(ClrAssembly.Files value) {
+    public void setFiles(List<ClrAssemblyFile> value) {
         this.files = value;
     }
 
@@ -43,22 +45,6 @@ public class ClrAssembly extends Assembly {
 
     public void setPermissionSet(String value) {
         this.permissionSet = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"file"})
-    public static class Files {
-
-        @XmlElement(name = "File", required = true)
-        protected List<ClrAssemblyFile> file;
-
-        public List<ClrAssemblyFile> getFile() {
-            return this.file;
-        }
-
-        public void setFile(List<ClrAssemblyFile> file) {
-            this.file = file;
-        }
     }
 
 }

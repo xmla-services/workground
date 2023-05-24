@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.XEvent;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -28,16 +29,17 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "EventType")
 public class EventType {
 
-  @XmlElement(name = "Events")
-  protected EventType.Events events;
+  @XmlElement(name = "Event")
+  @XmlElementWrapper(name = "Events")
+  protected List<Event> events;
   @XmlElement(name = "XEvent", namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300/300")
   protected XEvent xEvent;
 
-  public EventType.Events getEvents() {
+  public List<Event> getEvents() {
     return events;
   }
 
-  public void setEvents(EventType.Events value) {
+  public void setEvents(List<Event> value) {
     this.events = value;
   }
 
@@ -49,19 +51,4 @@ public class EventType {
     this.xEvent = value;
   }
 
-  @XmlAccessorType(XmlAccessType.FIELD)
-  @XmlType(name = "", propOrder = { "event" })
-  public static class Events {
-
-    @XmlElement(name = "Event")
-    protected List<Event> event;
-
-    public List<Event> getEvent() {
-      return this.event;
-    }
-
-      public void setEvent(List<Event> event) {
-          this.event = event;
-      }
-  }
 }

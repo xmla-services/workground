@@ -765,9 +765,8 @@ public class CommandConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeInsertUpdate attributeInsertUpdate) {
 		if (attributeInsertUpdate != null) {
 			return new AttributeInsertUpdateR(attributeInsertUpdate.getAttributeName(), attributeInsertUpdate.getName(),
-					attributeInsertUpdate.getKeys() == null ? null : attributeInsertUpdate.getKeys().getKey(),
-					convertTranslationInsertUpdateList(attributeInsertUpdate.getTranslations() == null ? null
-							: attributeInsertUpdate.getTranslations().getTranslation()),
+					attributeInsertUpdate.getKeys(),
+					convertTranslationInsertUpdateList(attributeInsertUpdate.getTranslations()),
 					attributeInsertUpdate.getValue(), attributeInsertUpdate.getCustomrollup(),
 					attributeInsertUpdate.getCustomrollupproperties(), attributeInsertUpdate.getUnaryoperator(),
 					attributeInsertUpdate.getSkippedlevels());
@@ -883,7 +882,7 @@ public class CommandConvertor {
 			return new BackupR(convertObjectReference(backup.getObject()), backup.getFile(), backup.getSecurity(),
 					backup.isApplyCompression(), backup.isAllowOverwrite(), backup.getPassword(),
 					backup.isBackupRemotePartitions(), convertLocationBackupList(
-							backup.getLocations() == null ? null : backup.getLocations().getLocation()));
+							backup.getLocations()));
 		}
 		return null;
 
@@ -991,7 +990,7 @@ public class CommandConvertor {
 					convertDuration(designAggregations.getTime()), designAggregations.getSteps(),
 					designAggregations.getOptimization(), designAggregations.getStorage(),
 					designAggregations.isMaterialize(),
-					designAggregations.getQueries() == null ? null : designAggregations.getQueries().getQuery());
+					designAggregations.getQueries());
 		}
 		return null;
 
@@ -1076,8 +1075,7 @@ public class CommandConvertor {
 					dataSource.getConnectionStringSecurity(),
 					convertImpersonationInfo(dataSource.getImpersonationInfo()), dataSource.getIsolation(),
 					dataSource.getMaxActiveConnections(), convertDuration(dataSource.getTimeout()),
-					convertDataSourcePermissionList(dataSource.getDataSourcePermissions() == null ? null
-							: dataSource.getDataSourcePermissions().getDataSourcePermission()),
+					convertDataSourcePermissionList(dataSource.getDataSourcePermissions()),
 					convertImpersonationInfo(dataSource.getQueryImpersonationInfo()), dataSource.getQueryHints());
 		}
 		return null;

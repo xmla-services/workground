@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -40,8 +41,9 @@ public class Backup {
     protected String password;
     @XmlElement(name = "BackupRemotePartitions")
     protected Boolean backupRemotePartitions;
-    @XmlElement(name = "Locations")
-    protected Backup.Locations locations;
+    @XmlElement(name = "Location")
+    @XmlElementWrapper(name = "Locations")
+    protected List<LocationBackup> locations;
 
     public ObjectReference getObject() {
         return object;
@@ -99,28 +101,12 @@ public class Backup {
         this.backupRemotePartitions = value;
     }
 
-    public Backup.Locations getLocations() {
+    public List<LocationBackup> getLocations() {
         return locations;
     }
 
-    public void setLocations(Backup.Locations value) {
+    public void setLocations(List<LocationBackup> value) {
         this.locations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"location"})
-    public static class Locations {
-
-        @XmlElement(name = "Location")
-        protected List<LocationBackup> location;
-
-        public List<LocationBackup> getLocation() {
-            return this.location;
-        }
-
-        public void setLocation(List<LocationBackup> location) {
-            this.location = location;
-        }
     }
 
 }

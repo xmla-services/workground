@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.xml.datatype.Duration;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -47,8 +48,9 @@ public abstract class DataSource extends AbstractItem {
     protected BigInteger maxActiveConnections;
     @XmlElement(name = "Timeout")
     protected Duration timeout;
-    @XmlElement(name = "DataSourcePermissions")
-    protected DataSource.DataSourcePermissions dataSourcePermissions;
+    @XmlElement(name = "DataSourcePermission")
+    @XmlElementWrapper(name = "DataSourcePermissions")
+    protected List<DataSourcePermission> dataSourcePermissions;
     @XmlElement(name = "QueryImpersonationInfo", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2011/engine/300")
     protected ImpersonationInfo queryImpersonationInfo;
@@ -111,11 +113,11 @@ public abstract class DataSource extends AbstractItem {
         this.timeout = value;
     }
 
-    public DataSource.DataSourcePermissions getDataSourcePermissions() {
+    public List<DataSourcePermission> getDataSourcePermissions() {
         return dataSourcePermissions;
     }
 
-    public void setDataSourcePermissions(DataSource.DataSourcePermissions value) {
+    public void setDataSourcePermissions(List<DataSourcePermission> value) {
         this.dataSourcePermissions = value;
     }
 
@@ -133,22 +135,6 @@ public abstract class DataSource extends AbstractItem {
 
     public void setQueryHints(String value) {
         this.queryHints = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dataSourcePermission"})
-    public static class DataSourcePermissions {
-
-        @XmlElement(name = "DataSourcePermission")
-        protected List<DataSourcePermission> dataSourcePermission;
-
-        public List<DataSourcePermission> getDataSourcePermission() {
-            return this.dataSourcePermission;
-        }
-
-        public void setDataSourcePermission(List<DataSourcePermission> dataSourcePermission) {
-            this.dataSourcePermission = dataSourcePermission;
-        }
     }
 
 }

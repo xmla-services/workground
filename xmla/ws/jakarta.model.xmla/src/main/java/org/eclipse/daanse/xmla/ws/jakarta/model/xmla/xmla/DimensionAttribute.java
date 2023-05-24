@@ -48,16 +48,19 @@ public class DimensionAttribute {
     protected Binding source;
     @XmlElement(name = "EstimatedCount")
     protected Long estimatedCount;
-    @XmlElement(name = "KeyColumns", required = true)
-    protected DimensionAttribute.KeyColumns keyColumns;
+    @XmlElement(name = "KeyColumn", required = true)
+    @XmlElementWrapper(name = "KeyColumns", required = true)
+    protected List<DataItem> keyColumns;
     @XmlElement(name = "NameColumn")
     protected DataItem nameColumn;
     @XmlElement(name = "ValueColumn")
     protected DataItem valueColumn;
-    @XmlElement(name = "Translations")
-    protected DimensionAttribute.Translations translations;
-    @XmlElement(name = "AttributeRelationships")
-    protected DimensionAttribute.AttributeRelationships attributeRelationships;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<AttributeTranslation>  translations;
+    @XmlElement(name = "AttributeRelationship")
+    @XmlElementWrapper(name = "AttributeRelationships")
+    protected List<AttributeRelationship> attributeRelationships;
     @XmlElement(name = "DiscretizationMethod")
     protected String discretizationMethod;
     @XmlElement(name = "DiscretizationBucketCount")
@@ -78,8 +81,9 @@ public class DimensionAttribute {
     protected String membersWithData;
     @XmlElement(name = "MembersWithDataCaption")
     protected String membersWithDataCaption;
-    @XmlElement(name = "NamingTemplateTranslations")
-    protected DimensionAttribute.NamingTemplateTranslations namingTemplateTranslations;
+    @XmlElement(name = "NamingTemplateTranslation")
+    @XmlElementWrapper(name = "NamingTemplateTranslations")
+    protected List<Translation> namingTemplateTranslations;
     @XmlElement(name = "CustomRollupColumn")
     protected DataItem customRollupColumn;
     @XmlElement(name = "CustomRollupPropertiesColumn")
@@ -175,11 +179,11 @@ public class DimensionAttribute {
         this.estimatedCount = value;
     }
 
-    public DimensionAttribute.KeyColumns getKeyColumns() {
+    public List<DataItem> getKeyColumns() {
         return keyColumns;
     }
 
-    public void setKeyColumns(DimensionAttribute.KeyColumns value) {
+    public void setKeyColumns(List<DataItem> value) {
         this.keyColumns = value;
     }
 
@@ -199,19 +203,19 @@ public class DimensionAttribute {
         this.valueColumn = value;
     }
 
-    public DimensionAttribute.Translations getTranslations() {
+    public List<AttributeTranslation>  getTranslations() {
         return translations;
     }
 
-    public void setTranslations(DimensionAttribute.Translations value) {
+    public void setTranslations(List<AttributeTranslation>  value) {
         this.translations = value;
     }
 
-    public DimensionAttribute.AttributeRelationships getAttributeRelationships() {
+    public List<AttributeRelationship> getAttributeRelationships() {
         return attributeRelationships;
     }
 
-    public void setAttributeRelationships(DimensionAttribute.AttributeRelationships value) {
+    public void setAttributeRelationships(List<AttributeRelationship> value) {
         this.attributeRelationships = value;
     }
 
@@ -295,11 +299,11 @@ public class DimensionAttribute {
         this.membersWithDataCaption = value;
     }
 
-    public DimensionAttribute.NamingTemplateTranslations getNamingTemplateTranslations() {
+    public List<Translation> getNamingTemplateTranslations() {
         return namingTemplateTranslations;
     }
 
-    public void setNamingTemplateTranslations(DimensionAttribute.NamingTemplateTranslations value) {
+    public void setNamingTemplateTranslations(List<Translation> value) {
         this.namingTemplateTranslations = value;
     }
 
@@ -445,70 +449,6 @@ public class DimensionAttribute {
 
     public void setExtendedType(String value) {
         this.extendedType = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attributeRelationship"})
-    public static class AttributeRelationships {
-
-        @XmlElement(name = "AttributeRelationship")
-        protected List<AttributeRelationship> attributeRelationship;
-
-        public List<AttributeRelationship> getAttributeRelationship() {
-            return this.attributeRelationship;
-        }
-
-        public void setAttributeRelationship(List<AttributeRelationship> attributeRelationship) {
-            this.attributeRelationship = attributeRelationship;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"keyColumn"})
-    public static class KeyColumns {
-
-        @XmlElement(name = "KeyColumn")
-        protected List<DataItem> keyColumn;
-
-        public List<DataItem> getKeyColumn() {
-            return this.keyColumn;
-        }
-
-        public void setKeyColumn(List<DataItem> keyColumn) {
-            this.keyColumn = keyColumn;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"namingTemplateTranslation"})
-    public static class NamingTemplateTranslations {
-
-        @XmlElement(name = "NamingTemplateTranslation")
-        protected List<Translation> namingTemplateTranslation;
-
-        public List<Translation> getNamingTemplateTranslation() {
-            return this.namingTemplateTranslation;
-        }
-
-        public void setNamingTemplateTranslation(List<Translation> namingTemplateTranslation) {
-            this.namingTemplateTranslation = namingTemplateTranslation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<AttributeTranslation> translation;
-
-        public List<AttributeTranslation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<AttributeTranslation> translation) {
-            this.translation = translation;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
