@@ -22,6 +22,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
@@ -62,8 +63,9 @@ public class Partition extends AbstractItem {
     protected Partition.CurrentStorageMode currentStorageMode;
     @XmlElement(name = "AggregationDesignID")
     protected String aggregationDesignID;
-    @XmlElement(name = "AggregationInstances")
-    protected Partition.AggregationInstances aggregationInstances;
+    @XmlElement(name = "AggregationInstance")
+    @XmlElementWrapper(name = "AggregationInstances")
+    protected List<AggregationInstance> aggregationInstances;
     @XmlElement(name = "AggregationInstanceSource")
     protected DataSourceViewBinding aggregationInstanceSource;
     @XmlElement(name = "LastProcessed")
@@ -201,11 +203,11 @@ public class Partition extends AbstractItem {
         this.aggregationDesignID = value;
     }
 
-    public Partition.AggregationInstances getAggregationInstances() {
+    public List<AggregationInstance> getAggregationInstances() {
         return aggregationInstances;
     }
 
-    public void setAggregationInstances(Partition.AggregationInstances value) {
+    public void setAggregationInstances(List<AggregationInstance> value) {
         this.aggregationInstances = value;
     }
 
@@ -254,22 +256,6 @@ public class Partition extends AbstractItem {
 
     public void setDirectQueryUsage(String value) {
         this.directQueryUsage = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"aggregationInstance"})
-    public static class AggregationInstances {
-
-        @XmlElement(name = "AggregationInstance")
-        protected List<AggregationInstance> aggregationInstance;
-
-        public List<AggregationInstance> getAggregationInstance() {
-            return this.aggregationInstance;
-        }
-
-        public void setAggregationInstance(List<AggregationInstance> aggregationInstance) {
-            this.aggregationInstance = aggregationInstance;
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

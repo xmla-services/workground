@@ -33,8 +33,9 @@ public class Kpi {
     protected String id;
     @XmlElement(name = "Description")
     protected String description;
-    @XmlElement(name = "Translations")
-    protected Kpi.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "DisplayFolder")
     protected String displayFolder;
     @XmlElement(name = "AssociatedMeasureGroupID")
@@ -85,11 +86,11 @@ public class Kpi {
         this.description = value;
     }
 
-    public Kpi.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Kpi.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -187,22 +188,6 @@ public class Kpi {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

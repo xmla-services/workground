@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class Group {
 
     @XmlElement(name = "Name", required = true)
     protected String name;
-    @XmlElement(name = "Members")
-    protected Group.Members members;
+    @XmlElement(name = "Member")
+    @XmlElementWrapper(name = "Members")
+    protected List<String> members;
 
     public String getName() {
         return name;
@@ -39,28 +41,12 @@ public class Group {
         this.name = value;
     }
 
-    public Group.Members getMembers() {
+    public List<String> getMembers() {
         return members;
     }
 
-    public void setMembers(Group.Members value) {
+    public void setMembers(List<String> value) {
         this.members = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"member"})
-    public static class Members {
-
-        @XmlElement(name = "Member")
-        protected List<String> member;
-
-        public List<String> getMember() {
-            return this.member;
-        }
-
-        public void setMember(List<String> member) {
-            this.member = member;
-        }
     }
 
 }

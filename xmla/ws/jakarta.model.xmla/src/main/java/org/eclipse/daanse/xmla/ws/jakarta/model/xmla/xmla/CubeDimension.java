@@ -46,7 +46,7 @@ public class CubeDimension {
     protected String hierarchyUniqueNameStyle;
     @XmlElement(name = "MemberUniqueNameStyle")
     protected String memberUniqueNameStyle;
-    @XmlElement(name = "Attribute")
+    @XmlElement(name = "Attribute", type = CubeAttribute.class)
     @XmlElementWrapper(name = "Attributes")
     protected List<CubeAttribute> attributes;
     @XmlElement(name = "Hierarchy")

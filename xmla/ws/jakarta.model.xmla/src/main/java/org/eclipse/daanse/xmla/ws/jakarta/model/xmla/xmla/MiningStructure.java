@@ -21,6 +21,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -35,8 +36,9 @@ public class MiningStructure extends AbstractItem {
     @XmlElement(name = "LastProcessed")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar lastProcessed;
-    @XmlElement(name = "Translations")
-    protected MiningStructure.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "Language")
     protected BigInteger language;
     @XmlElement(name = "Collation")
@@ -56,14 +58,17 @@ public class MiningStructure extends AbstractItem {
     @XmlElement(name = "HoldoutActualSize", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2008/engine/100/100")
     protected Integer holdoutActualSize;
-    @XmlElement(name = "Columns", required = true)
-    protected MiningStructure.Columns columns;
+    @XmlElement(name = "Column", required = true)
+    @XmlElementWrapper(name = "Columns", required = true)
+    protected List<MiningStructureColumn> columns;
     @XmlElement(name = "State")
     protected String state;
-    @XmlElement(name = "MiningStructurePermissions")
-    protected MiningStructure.MiningStructurePermissions miningStructurePermissions;
-    @XmlElement(name = "MiningModels")
-    protected MiningStructure.MiningModels miningModels;
+    @XmlElement(name = "MiningStructurePermission")
+    @XmlElementWrapper(name = "MiningStructurePermissions")
+    protected List<MiningStructurePermission> miningStructurePermissions;
+    @XmlElement(name = "MiningModel")
+    @XmlElementWrapper(name = "MiningModels")
+    protected List<MiningModel> miningModels;
 
     public Binding getSource() {
         return source;
@@ -81,11 +86,11 @@ public class MiningStructure extends AbstractItem {
         this.lastProcessed = value;
     }
 
-    public MiningStructure.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(MiningStructure.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -157,11 +162,11 @@ public class MiningStructure extends AbstractItem {
         this.holdoutActualSize = value;
     }
 
-    public MiningStructure.Columns getColumns() {
+    public List<MiningStructureColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(MiningStructure.Columns value) {
+    public void setColumns(List<MiningStructureColumn> value) {
         this.columns = value;
     }
 
@@ -173,88 +178,24 @@ public class MiningStructure extends AbstractItem {
         this.state = value;
     }
 
-    public MiningStructure.MiningStructurePermissions getMiningStructurePermissions() {
+    public List<MiningStructurePermission> getMiningStructurePermissions() {
         return miningStructurePermissions;
     }
 
-    public void setMiningStructurePermissions(MiningStructure.MiningStructurePermissions value) {
+    public void setMiningStructurePermissions(List<MiningStructurePermission> value) {
         this.miningStructurePermissions = value;
     }
 
-    public MiningStructure.MiningModels getMiningModels() {
+    public List<MiningModel> getMiningModels() {
         return miningModels;
     }
 
-    public void setMiningModels(MiningStructure.MiningModels value) {
+    public void setMiningModels(List<MiningModel> value) {
         this.miningModels = value;
     }
 
     public boolean isSetMiningModels() {
         return (this.miningModels != null);
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"column"})
-    public static class Columns {
-
-        @XmlElement(name = "Column", required = true)
-        protected List<MiningStructureColumn> column;
-
-        public List<MiningStructureColumn> getColumn() {
-            return this.column;
-        }
-
-        public void setColumn(List<MiningStructureColumn> column) {
-            this.column = column;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"miningModel"})
-    public static class MiningModels {
-
-        @XmlElement(name = "MiningModel")
-        protected List<MiningModel> miningModel;
-
-        public List<MiningModel> getMiningModel() {
-            return this.miningModel;
-        }
-
-        public void setMiningModel(List<MiningModel> miningModel) {
-            this.miningModel = miningModel;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"miningStructurePermission"})
-    public static class MiningStructurePermissions {
-
-        @XmlElement(name = "MiningStructurePermission")
-        protected List<MiningStructurePermission> miningStructurePermission;
-
-        public List<MiningStructurePermission> getMiningStructurePermission() {
-            return this.miningStructurePermission;
-        }
-
-        public void setMiningStructurePermission(List<MiningStructurePermission> miningStructurePermission) {
-            this.miningStructurePermission = miningStructurePermission;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

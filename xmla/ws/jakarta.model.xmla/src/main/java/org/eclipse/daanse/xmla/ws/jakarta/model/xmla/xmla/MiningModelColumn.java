@@ -39,12 +39,15 @@ public class MiningModelColumn {
     protected String usage;
     @XmlElement(name = "Filter")
     protected String filter;
-    @XmlElement(name = "Translations")
-    protected MiningModelColumn.Translations translations;
-    @XmlElement(name = "Columns")
-    protected MiningModelColumn.Columns columns;
-    @XmlElement(name = "ModelingFlags")
-    protected MiningModelColumn.ModelingFlags modelingFlags;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
+    @XmlElement(name = "Column")
+    @XmlElementWrapper(name = "Columns")
+    protected List<MiningModelColumn> columns;
+    @XmlElement(name = "ModelingFlag")
+    @XmlElementWrapper(name = "ModelingFlags")
+    protected List<MiningModelingFlag> modelingFlags;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -97,27 +100,27 @@ public class MiningModelColumn {
         this.filter = value;
     }
 
-    public MiningModelColumn.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(MiningModelColumn.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
-    public MiningModelColumn.Columns getColumns() {
+    public List<MiningModelColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(MiningModelColumn.Columns value) {
+    public void setColumns(List<MiningModelColumn> value) {
         this.columns = value;
     }
 
-    public MiningModelColumn.ModelingFlags getModelingFlags() {
+    public List<MiningModelingFlag> getModelingFlags() {
         return modelingFlags;
     }
 
-    public void setModelingFlags(MiningModelColumn.ModelingFlags value) {
+    public void setModelingFlags(List<MiningModelingFlag> value) {
         this.modelingFlags = value;
     }
 
@@ -127,54 +130,6 @@ public class MiningModelColumn {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"column"})
-    public static class Columns {
-
-        @XmlElement(name = "Column")
-        protected List<MiningModelColumn> column;
-
-        public List<MiningModelColumn> getColumn() {
-            return this.column;
-        }
-
-        public void setColumn(List<MiningModelColumn> column) {
-            this.column = column;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"modelingFlag"})
-    public static class ModelingFlags {
-
-        @XmlElement(name = "ModelingFlag")
-        protected List<MiningModelingFlag> modelingFlag;
-
-        public List<MiningModelingFlag> getModelingFlag() {
-            return this.modelingFlag;
-        }
-
-        public void setModelingFlag(List<MiningModelingFlag> modelingFlag) {
-            this.modelingFlag = modelingFlag;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

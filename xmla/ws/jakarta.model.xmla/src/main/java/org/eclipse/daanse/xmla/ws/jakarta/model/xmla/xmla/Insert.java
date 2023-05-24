@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class Insert {
 
     @XmlElement(name = "Object", required = true)
     protected XmlaObject object;
-    @XmlElement(name = "Attributes")
-    protected Insert.Attributes attributes;
+    @XmlElement(name = "Attribute", type = AttributeInsertUpdate.class)
+    @XmlElementWrapper(name = "Attributes")
+    protected List<AttributeInsertUpdate> attributes;
 
     public XmlaObject getObject() {
         return object;
@@ -39,28 +41,12 @@ public class Insert {
         this.object = value;
     }
 
-    public Insert.Attributes getAttributes() {
+    public List<AttributeInsertUpdate> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Insert.Attributes value) {
+    public void setAttributes(List<AttributeInsertUpdate> value) {
         this.attributes = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attribute"})
-    public static class Attributes {
-
-        @XmlElement(name = "Attribute")
-        protected List<AttributeInsertUpdate> attribute;
-
-        public List<AttributeInsertUpdate> getAttribute() {
-            return this.attribute;
-        }
-
-        public void setAttribute(List<AttributeInsertUpdate> attribute) {
-            this.attribute = attribute;
-        }
     }
 
 }

@@ -83,7 +83,7 @@ public class Dimension extends AbstractItem {
     @XmlElement(name = "Translation")
     @XmlElementWrapper(name = "Translations")
     protected List<Translation> translations;
-    @XmlElement(name = "Attribute")
+    @XmlElement(name = "Attribute", type = DimensionAttribute.class)
     @XmlElementWrapper(name = "Attributes")
     protected List<DimensionAttribute> attributes;
     @XmlElement(name = "AttributeAllMemberName")

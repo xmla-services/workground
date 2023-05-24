@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,26 +27,32 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class Perspective extends AbstractItem {
 
-    @XmlElement(name = "Translations")
-    protected Perspective.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
     @XmlElement(name = "DefaultMeasure")
     protected String defaultMeasure;
-    @XmlElement(name = "Dimensions")
-    protected Perspective.Dimensions dimensions;
-    @XmlElement(name = "MeasureGroups")
-    protected Perspective.MeasureGroups measureGroups;
-    @XmlElement(name = "Calculations")
-    protected Perspective.Calculations calculations;
-    @XmlElement(name = "Kpis")
-    protected Perspective.Kpis kpis;
-    @XmlElement(name = "Actions")
-    protected Perspective.Actions actions;
+    @XmlElement(name = "Dimension")
+    @XmlElementWrapper(name = "Dimensions")
+    protected List<PerspectiveDimension> dimensions;
+    @XmlElement(name = "MeasureGroup")
+    @XmlElementWrapper(name = "MeasureGroups")
+    protected List<PerspectiveMeasureGroup> measureGroups;
+    @XmlElement(name = "Calculation")
+    @XmlElementWrapper(name = "Calculations")
+    protected List<PerspectiveCalculation> calculations;
+    @XmlElement(name = "Kpi")
+    @XmlElementWrapper(name = "Kpis")
+    protected List<PerspectiveKpi> kpis;
+    @XmlElement(name = "Action")
+    @XmlElementWrapper(name = "Actions")
+    protected List<PerspectiveAction> actions;
 
-    public Perspective.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Perspective.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
     }
 
@@ -57,140 +64,44 @@ public class Perspective extends AbstractItem {
         this.defaultMeasure = value;
     }
 
-    public Perspective.Dimensions getDimensions() {
+    public List<PerspectiveDimension> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(Perspective.Dimensions value) {
+    public void setDimensions(List<PerspectiveDimension> value) {
         this.dimensions = value;
     }
 
-    public Perspective.MeasureGroups getMeasureGroups() {
+    public List<PerspectiveMeasureGroup> getMeasureGroups() {
         return measureGroups;
     }
 
-    public void setMeasureGroups(Perspective.MeasureGroups value) {
+    public void setMeasureGroups(List<PerspectiveMeasureGroup> value) {
         this.measureGroups = value;
     }
 
-    public Perspective.Calculations getCalculations() {
+    public List<PerspectiveCalculation> getCalculations() {
         return calculations;
     }
 
-    public void setCalculations(Perspective.Calculations value) {
+    public void setCalculations(List<PerspectiveCalculation> value) {
         this.calculations = value;
     }
 
-    public Perspective.Kpis getKpis() {
+    public List<PerspectiveKpi> getKpis() {
         return kpis;
     }
 
-    public void setKpis(Perspective.Kpis value) {
+    public void setKpis(List<PerspectiveKpi> value) {
         this.kpis = value;
     }
 
-    public Perspective.Actions getActions() {
+    public List<PerspectiveAction> getActions() {
         return actions;
     }
 
-    public void setActions(Perspective.Actions value) {
+    public void setActions(List<PerspectiveAction> value) {
         this.actions = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"action"})
-    public static class Actions {
-
-        @XmlElement(name = "Action")
-        protected List<PerspectiveAction> action;
-
-        public List<PerspectiveAction> getAction() {
-            return this.action;
-        }
-
-        public void setAction(List<PerspectiveAction> action) {
-            this.action = action;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"calculation"})
-    public static class Calculations {
-
-        @XmlElement(name = "Calculation")
-        protected List<PerspectiveCalculation> calculation;
-
-        public List<PerspectiveCalculation> getCalculation() {
-            return this.calculation;
-        }
-
-        public void setCalculation(List<PerspectiveCalculation> calculation) {
-            this.calculation = calculation;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"dimension"})
-    public static class Dimensions {
-
-        @XmlElement(name = "Dimension")
-        protected List<PerspectiveDimension> dimension;
-
-        public List<PerspectiveDimension> getDimension() {
-            return this.dimension;
-        }
-
-        public void setDimension(List<PerspectiveDimension> dimension) {
-            this.dimension = dimension;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"kpi"})
-    public static class Kpis {
-
-        @XmlElement(name = "Kpi")
-        protected List<PerspectiveKpi> kpi;
-
-        public List<PerspectiveKpi> getKpi() {
-            return this.kpi;
-        }
-
-        public void setKpi(List<PerspectiveKpi> kpi) {
-            this.kpi = kpi;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"measureGroup"})
-    public static class MeasureGroups {
-
-        @XmlElement(name = "MeasureGroup")
-        protected List<PerspectiveMeasureGroup> measureGroup;
-
-        public List<PerspectiveMeasureGroup> getMeasureGroup() {
-            return this.measureGroup;
-        }
-
-        public void setMeasureGroup(List<PerspectiveMeasureGroup> measureGroup) {
-            this.measureGroup = measureGroup;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

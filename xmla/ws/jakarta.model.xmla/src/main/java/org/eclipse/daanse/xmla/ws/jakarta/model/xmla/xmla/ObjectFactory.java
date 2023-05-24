@@ -988,14 +988,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Execute.Parameters }
-     *
-     */
-    public Execute.Parameters createExecuteParameters() {
-        return new Execute.Parameters();
-    }
-
-    /**
      * Create an instance of
      * {@link org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Properties }
      *
@@ -1722,30 +1714,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Partition.AggregationInstances }
-     *
-     */
-    public Partition.AggregationInstances createPartitionAggregationInstances() {
-        return new Partition.AggregationInstances();
-    }
-
-    /**
-     * Create an instance of {@link Measure.Translations }
-     *
-     */
-    public Measure.Translations createMeasureTranslations() {
-        return new Measure.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MeasureGroupAttribute.KeyColumns }
-     *
-     */
-    public MeasureGroupAttribute.KeyColumns createMeasureGroupAttributeKeyColumns() {
-        return new MeasureGroupAttribute.KeyColumns();
-    }
-
-    /**
      * Create an instance of {@link RegularMeasureGroupDimension.Attributes }
      *
      */
@@ -1753,21 +1721,6 @@ public class ObjectFactory {
         return new RegularMeasureGroupDimension.Attributes();
     }
 
-    /**
-     * Create an instance of {@link MeasureGroup.Translations }
-     *
-     */
-    public MeasureGroup.Translations createMeasureGroupTranslations() {
-        return new MeasureGroup.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MeasureGroup.Measures }
-     *
-     */
-    public MeasureGroup.Measures createMeasureGroupMeasures() {
-        return new MeasureGroup.Measures();
-    }
 
     /**
      * Create an instance of {@link MeasureGroup.StorageMode }
@@ -1778,115 +1731,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MeasureGroup.Dimensions }
-     *
-     */
-    public MeasureGroup.Dimensions createMeasureGroupDimensions() {
-        return new MeasureGroup.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link MeasureGroup.Partitions }
-     *
-     */
-    public MeasureGroup.Partitions createMeasureGroupPartitions() {
-        return new MeasureGroup.Partitions();
-    }
-
-    /**
-     * Create an instance of {@link MeasureGroup.AggregationDesigns }
-     *
-     */
-    public MeasureGroup.AggregationDesigns createMeasureGroupAggregationDesigns() {
-        return new MeasureGroup.AggregationDesigns();
-    }
-
-    /**
      * Create an instance of {@link PerspectiveMeasureGroup.Measures }
      *
      */
     public PerspectiveMeasureGroup.Measures createPerspectiveMeasureGroupMeasures() {
         return new PerspectiveMeasureGroup.Measures();
-    }
-
-    /**
-     * Create an instance of {@link PerspectiveDimension.Attributes }
-     *
-     */
-    public PerspectiveDimension.Attributes createPerspectiveDimensionAttributes() {
-        return new PerspectiveDimension.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link PerspectiveDimension.Hierarchies }
-     *
-     */
-    public PerspectiveDimension.Hierarchies createPerspectiveDimensionHierarchies() {
-        return new PerspectiveDimension.Hierarchies();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Translations }
-     *
-     */
-    public Perspective.Translations createPerspectiveTranslations() {
-        return new Perspective.Translations();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Dimensions }
-     *
-     */
-    public Perspective.Dimensions createPerspectiveDimensions() {
-        return new Perspective.Dimensions();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.MeasureGroups }
-     *
-     */
-    public Perspective.MeasureGroups createPerspectiveMeasureGroups() {
-        return new Perspective.MeasureGroups();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Calculations }
-     *
-     */
-    public Perspective.Calculations createPerspectiveCalculations() {
-        return new Perspective.Calculations();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Kpis }
-     *
-     */
-    public Perspective.Kpis createPerspectiveKpis() {
-        return new Perspective.Kpis();
-    }
-
-    /**
-     * Create an instance of {@link Perspective.Actions }
-     *
-     */
-    public Perspective.Actions createPerspectiveActions() {
-        return new Perspective.Actions();
-    }
-
-    /**
-     * Create an instance of {@link MdxScript.Commands }
-     *
-     */
-    public MdxScript.Commands createMdxScriptCommands() {
-        return new MdxScript.Commands();
-    }
-
-    /**
-     * Create an instance of {@link MdxScript.CalculationProperties }
-     *
-     */
-    public MdxScript.CalculationProperties createMdxScriptCalculationProperties() {
-        return new MdxScript.CalculationProperties();
     }
 
     /**
@@ -1922,75 +1771,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Kpi.Translations }
-     *
-     */
-    public Kpi.Translations createKpiTranslations() {
-        return new Kpi.Translations();
-    }
-
-    /**
      * Create an instance of {@link Cube.StorageMode }
      *
      */
     public Cube.StorageMode createCubeStorageMode() {
         return new Cube.StorageMode();
-    }
-
-    /**
-     * Create an instance of {@link MiningModelColumn.Translations }
-     *
-     */
-    public MiningModelColumn.Translations createMiningModelColumnTranslations() {
-        return new MiningModelColumn.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MiningModelColumn.Columns }
-     *
-     */
-    public MiningModelColumn.Columns createMiningModelColumnColumns() {
-        return new MiningModelColumn.Columns();
-    }
-
-    /**
-     * Create an instance of {@link MiningModelColumn.ModelingFlags }
-     *
-     */
-    public MiningModelColumn.ModelingFlags createMiningModelColumnModelingFlags() {
-        return new MiningModelColumn.ModelingFlags();
-    }
-
-    /**
-     * Create an instance of {@link MiningModel.AlgorithmParameters }
-     *
-     */
-    public MiningModel.AlgorithmParameters createMiningModelAlgorithmParameters() {
-        return new MiningModel.AlgorithmParameters();
-    }
-
-    /**
-     * Create an instance of {@link MiningModel.Translations }
-     *
-     */
-    public MiningModel.Translations createMiningModelTranslations() {
-        return new MiningModel.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MiningModel.Columns }
-     *
-     */
-    public MiningModel.Columns createMiningModelColumns() {
-        return new MiningModel.Columns();
-    }
-
-    /**
-     * Create an instance of {@link MiningModel.MiningModelPermissions }
-     *
-     */
-    public MiningModel.MiningModelPermissions createMiningModelMiningModelPermissions() {
-        return new MiningModel.MiningModelPermissions();
     }
 
     /**
@@ -2048,38 +1833,6 @@ public class ObjectFactory {
      */
     public ScalarMiningStructureColumn.Translations createScalarMiningStructureColumnTranslations() {
         return new ScalarMiningStructureColumn.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MiningStructure.Translations }
-     *
-     */
-    public MiningStructure.Translations createMiningStructureTranslations() {
-        return new MiningStructure.Translations();
-    }
-
-    /**
-     * Create an instance of {@link MiningStructure.Columns }
-     *
-     */
-    public MiningStructure.Columns createMiningStructureColumns() {
-        return new MiningStructure.Columns();
-    }
-
-    /**
-     * Create an instance of {@link MiningStructure.MiningStructurePermissions }
-     *
-     */
-    public MiningStructure.MiningStructurePermissions createMiningStructureMiningStructurePermissions() {
-        return new MiningStructure.MiningStructurePermissions();
-    }
-
-    /**
-     * Create an instance of {@link MiningStructure.MiningModels }
-     *
-     */
-    public MiningStructure.MiningModels createMiningStructureMiningModels() {
-        return new MiningStructure.MiningModels();
     }
 
     /**
@@ -2144,39 +1897,6 @@ public class ObjectFactory {
      */
     public Server.ServerProperties createServerServerProperties() {
         return new Server.ServerProperties();
-    }
-
-    /**
-     * Create an instance of {@link Level.Translations }
-     *
-     */
-    public Level.Translations createLevelTranslations() {
-        return new Level.Translations();
-    }
-
-
-    /**
-     * Create an instance of {@link Hierarchy.Translations }
-     *
-     */
-    public Hierarchy.Translations createHierarchyTranslations() {
-        return new Hierarchy.Translations();
-    }
-
-    /**
-     * Create an instance of {@link Hierarchy.AllMemberTranslations }
-     *
-     */
-    public Hierarchy.AllMemberTranslations createHierarchyAllMemberTranslations() {
-        return new Hierarchy.AllMemberTranslations();
-    }
-
-    /**
-     * Create an instance of {@link Hierarchy.Levels }
-     *
-     */
-    public Hierarchy.Levels createHierarchyLevels() {
-        return new Hierarchy.Levels();
     }
 
     /**
@@ -2305,14 +2025,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Group.Members }
-     *
-     */
-    public Group.Members createGroupMembers() {
-        return new Group.Members();
-    }
-
-    /**
      * Create an instance of {@link UserDefinedGroupBinding.Groups }
      *
      */
@@ -2410,27 +2122,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ImageLoad.Data }
-     *
-     */
-    public ImageLoad.Data createImageLoadData() {
-        return new ImageLoad.Data();
-    }
-
-    /**
      * Create an instance of {@link Batch.Parallel }
      *
      */
     public Batch.Parallel createBatchParallel() {
         return new Batch.Parallel();
-    }
-
-    /**
-     * Create an instance of {@link NotifyTableChange.TableNotifications }
-     *
-     */
-    public NotifyTableChange.TableNotifications createNotifyTableChangeTableNotifications() {
-        return new NotifyTableChange.TableNotifications();
     }
 
     /**
@@ -2450,14 +2146,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Insert.Attributes }
-     *
-     */
-    public Insert.Attributes createInsertAttributes() {
-        return new Insert.Attributes();
-    }
-
-    /**
      * Create an instance of {@link Synchronize.Locations }
      *
      */
@@ -2466,27 +2154,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Location.Folders }
-     *
-     */
-    public Location.Folders createLocationFolders() {
-        return new Location.Folders();
-    }
-
-    /**
      * Create an instance of {@link Restore.Locations }
      *
      */
     public Restore.Locations createRestoreLocations() {
         return new Restore.Locations();
-    }
-
-    /**
-     * Create an instance of {@link MergePartitions.Sources }
-     *
-     */
-    public MergePartitions.Sources createMergePartitionsSources() {
-        return new MergePartitions.Sources();
     }
 
     /**

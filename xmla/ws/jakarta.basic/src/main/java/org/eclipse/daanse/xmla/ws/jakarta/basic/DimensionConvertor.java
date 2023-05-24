@@ -125,15 +125,13 @@ public class DimensionConvertor {
                 hierarchy.getProcessingState(),
                 hierarchy.getStructureType(),
                 hierarchy.getDisplayFolder(),
-                convertTranslationList(hierarchy.getTranslations() == null ? null :
-                    hierarchy.getTranslations().getTranslation()),
+                convertTranslationList(hierarchy.getTranslations()),
                 hierarchy.getAllMemberName(),
-                convertTranslationList(hierarchy.getAllMemberTranslations() == null ? null :
-                    hierarchy.getAllMemberTranslations().getAllMemberTranslation()),
+                convertTranslationList(hierarchy.getAllMemberTranslations()),
                 hierarchy.isMemberNamesUnique(),
                 hierarchy.getMemberKeysUnique(),
                 hierarchy.isAllowDuplicateNames(),
-                convertLevelList(hierarchy.getLevels() == null ? null : hierarchy.getLevels().getLevel()),
+                convertLevelList(hierarchy.getLevels()),
                 convertAnnotationList(hierarchy.getAnnotations()),
                 convertHierarchyVisualizationProperties(hierarchy.getVisualizationProperties()));
         }
@@ -162,8 +160,7 @@ public class DimensionConvertor {
                 level.getDescription(),
                 level.getSourceAttributeID(),
                 level.getHideMemberIf(),
-                convertTranslationList(level.getTranslations() == null ? null :
-                    level.getTranslations().getTranslation()),
+                convertTranslationList(level.getTranslations()),
                 convertAnnotationList(level.getAnnotations()));
         }
         return null;

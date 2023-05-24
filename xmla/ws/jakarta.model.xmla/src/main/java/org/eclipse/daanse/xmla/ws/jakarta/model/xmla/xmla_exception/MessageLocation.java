@@ -101,12 +101,11 @@ public class MessageLocation implements Serializable {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
+    @XmlType(name = "AbstractEndStart", propOrder = {
 
     })
-    public static class End implements Serializable {
+    public abstract static class AbstractEndStart {
 
-        private static final long serialVersionUID = 1L;
         @XmlElement(name = "Line")
         protected int line;
         @XmlElement(name = "Column")
@@ -129,34 +128,21 @@ public class MessageLocation implements Serializable {
         }
 
     }
-
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
+    @XmlType(name = "End", propOrder = {
 
     })
-    public static class Start implements Serializable {
+    public static class End extends AbstractEndStart implements Serializable {
+        private static final long serialVersionUID = 1L;
+    }
+
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "Start", propOrder = {
+
+    })
+    public static class Start extends AbstractEndStart implements Serializable {
 
         private static final long serialVersionUID = 1L;
-        @XmlElement(name = "Line")
-        protected int line;
-        @XmlElement(name = "Column")
-        protected int column;
-
-        public int getLine() {
-            return line;
-        }
-
-        public void setLine(int value) {
-            this.line = value;
-        }
-
-        public int getColumn() {
-            return column;
-        }
-
-        public void setColumn(int value) {
-            this.column = value;
-        }
 
     }
 

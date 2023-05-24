@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.List;
@@ -26,18 +27,20 @@ import java.util.List;
 })
 public class MdxScript extends AbstractItem {
 
-    @XmlElement(name = "Commands")
-    protected MdxScript.Commands commands;
+    @XmlElement(name = "Command")
+    @XmlElementWrapper(name = "Commands")
+    protected List<Command> commands;
     @XmlElement(name = "DefaultScript")
     protected Boolean defaultScript;
-    @XmlElement(name = "CalculationProperties")
-    protected MdxScript.CalculationProperties calculationProperties;
+    @XmlElement(name = "CalculationProperty")
+    @XmlElementWrapper(name = "CalculationProperties")
+    protected List<CalculationProperty> calculationProperties;
 
-    public MdxScript.Commands getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
 
-    public void setCommands(MdxScript.Commands value) {
+    public void setCommands(List<Command> value) {
         this.commands = value;
     }
 
@@ -49,44 +52,12 @@ public class MdxScript extends AbstractItem {
         this.defaultScript = value;
     }
 
-    public MdxScript.CalculationProperties getCalculationProperties() {
+    public List<CalculationProperty> getCalculationProperties() {
         return calculationProperties;
     }
 
-    public void setCalculationProperties(MdxScript.CalculationProperties value) {
+    public void setCalculationProperties(List<CalculationProperty> value) {
         this.calculationProperties = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"calculationProperty"})
-    public static class CalculationProperties {
-
-        @XmlElement(name = "CalculationProperty")
-        protected List<CalculationProperty> calculationProperty;
-
-        public List<CalculationProperty> getCalculationProperty() {
-            return this.calculationProperty;
-        }
-
-        public void setCalculationProperty(List<CalculationProperty> calculationProperty) {
-            this.calculationProperty = calculationProperty;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"command"})
-    public static class Commands {
-
-        @XmlElement(name = "Command")
-        protected List<Command> command;
-
-        public List<Command> getCommand() {
-            return this.command;
-        }
-
-        public void setCommand(List<Command> command) {
-            this.command = command;
-        }
     }
 
 }

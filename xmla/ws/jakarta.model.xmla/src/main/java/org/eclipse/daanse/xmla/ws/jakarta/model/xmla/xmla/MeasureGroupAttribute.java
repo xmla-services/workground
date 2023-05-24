@@ -29,8 +29,9 @@ public class MeasureGroupAttribute {
 
     @XmlElement(name = "AttributeID", required = true)
     protected String attributeID;
-    @XmlElement(name = "KeyColumns")
-    protected MeasureGroupAttribute.KeyColumns keyColumns;
+    @XmlElement(name = "KeyColumn")
+    @XmlElementWrapper(name = "KeyColumns")
+    protected List<DataItem> keyColumns;
     @XmlElement(name = "Type")
     protected String type;
     @XmlElementWrapper(name = "Annotations")
@@ -45,11 +46,11 @@ public class MeasureGroupAttribute {
         this.attributeID = value;
     }
 
-    public MeasureGroupAttribute.KeyColumns getKeyColumns() {
+    public List<DataItem> getKeyColumns() {
         return keyColumns;
     }
 
-    public void setKeyColumns(MeasureGroupAttribute.KeyColumns value) {
+    public void setKeyColumns(List<DataItem> value) {
         this.keyColumns = value;
     }
 
@@ -67,23 +68,6 @@ public class MeasureGroupAttribute {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"keyColumn"})
-    public static class KeyColumns {
-
-        @XmlElement(name = "KeyColumn")
-        protected List<DataItem> keyColumn;
-
-        public List<DataItem> getKeyColumn() {
-            return this.keyColumn;
-        }
-
-        public void setKeyColumn(List<DataItem> keyColumn) {
-            this.keyColumn = keyColumn;
-        }
     }
 
 }
