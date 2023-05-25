@@ -285,6 +285,19 @@ public class Query extends QueryPart {
         }
     }
 
+    public Query(Query query) {
+        this(
+            query.statement,
+            query.cube,
+            Formula.cloneArray(query.formulas),
+            query.subcube,
+            QueryAxis.cloneArray(query.axes),
+            (query.slicerAxis == null) ? null : new QueryAxis(query.slicerAxis),
+            query.cellProps,
+            query.parameters.toArray(new Parameter[query.parameters.size()]),
+            query.strictValidation);
+    }
+
     /**
      * Sets the timeout in milliseconds of this Query.
      *
@@ -381,7 +394,7 @@ public class Query extends QueryPart {
         return createValidator(
             statement.getSchema().getFunTable(),
             false,
-            new HashMap<QueryPart, QueryPart>());
+            new HashMap<>());
     }
 
 
@@ -411,7 +424,7 @@ public class Query extends QueryPart {
             functionTable,
             alwaysResolveFunDef,
             Query.this,
-            new HashMap<QueryPart, QueryPart>());
+            new HashMap<>());
     }
 
 
@@ -428,30 +441,12 @@ public class Query extends QueryPart {
     }
 
     /**
-     * @deprecated Please use {@link #clone}; this method will be removed in
+     * @deprecated Please use {@link #Query(Query)}; this method will be removed in
      * mondrian-4.0
      */
     @Deprecated
 	public Query safeClone() {
-        return clone();
-    }
-
-    @Override
-	@SuppressWarnings({
-        "CloneDoesntCallSuperClone",
-        "CloneDoesntDeclareCloneNotSupportedException"
-    })
-    public Query clone() {
-        return new Query(
-            statement,
-            cube,
-            Formula.cloneArray(formulas),
-            subcube,
-            QueryAxis.cloneArray(axes),
-            (slicerAxis == null) ? null : new QueryAxis(slicerAxis),
-            cellProps,
-            parameters.toArray(new Parameter[parameters.size()]),
-            strictValidation);
+        return new Query(this);
     }
 
     public Connection getConnection() {
@@ -619,8 +614,8 @@ public class Query extends QueryPart {
         return resultStyle;
     }
 
-    public HashMap<Hierarchy, Calc> subcubeHierarchyCalcs = new HashMap<>();
-    public HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
+    public Map<Hierarchy, Calc> subcubeHierarchyCalcs = new HashMap<>();
+    public Map<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
 
     /**
      * Generates compiled forms of all expressions.
@@ -698,8 +693,6 @@ public class Query extends QueryPart {
 
                 }
             }
-
-            HashMap<Hierarchy, HashMap<Member, Member>> newSubcubeHierarchies = new HashMap<>();
         }
 
         if (formulas != null) {
@@ -894,7 +887,10 @@ public class Query extends QueryPart {
      * Adds a level to an axis expression.
      */
     public void addLevelToAxis(AxisOrdinal axis, Level level) {
-        assert axis != null;
+        if (axis == null) {
+            throw new IllegalArgumentException("axis should not be null");
+        }
+
         axes[axis.logicalOrdinal()].addLevel(level);
     }
 
@@ -919,11 +915,11 @@ public class Query extends QueryPart {
      */
     private Hierarchy[] collectHierarchies(Exp queryPart) {
         Type exprType = queryPart.getType();
-        if (exprType instanceof SetType) {
-            exprType = ((SetType) exprType).getElementType();
+        if (exprType instanceof SetType setType) {
+            exprType = setType.getElementType();
         }
-        if (exprType instanceof TupleType) {
-            final Type[] types = ((TupleType) exprType).elementTypes;
+        if (exprType instanceof TupleType tupleType) {
+            final Type[] types = tupleType.elementTypes;
             ArrayList<Hierarchy> hierarchyList = new ArrayList<>();
             for (Type type : types) {
                 hierarchyList.add(getTypeHierarchy(type));
@@ -1031,8 +1027,8 @@ public class Query extends QueryPart {
             }
             return value.toString();
         case Category.SET:
-            if (value instanceof String) {
-                value = IdentifierParser.parseIdentifierList((String) value);
+            if (value instanceof String str) {
+                value = IdentifierParser.parseIdentifierList(str);
             }
             if (!(value instanceof List)) {
                 throw Util.newInternal(
@@ -1066,23 +1062,23 @@ public class Query extends QueryPart {
                     value = type.getDimension().getHierarchy().getNullMember();
                 }
             }
-            if (value instanceof String) {
-                value = Util.parseIdentifier((String) value);
+            if (value instanceof String str) {
+                value = Util.parseIdentifier(str);
             }
-            if (value instanceof List
-                && Util.canCast((List) value, Id.Segment.class))
+            if (value instanceof List l
+                && Util.canCast(l, Id.Segment.class))
             {
-                final List<Id.Segment> segmentList = Util.cast((List) value);
+                final List<Id.Segment> segmentList = Util.cast(l);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
                 if (olapElement instanceof Member) {
                     value = olapElement;
                 }
             }
-            if (value instanceof List
-                && Util.canCast((List) value, IdentifierSegment.class))
+            if (value instanceof List l
+                && Util.canCast(l, IdentifierSegment.class))
             {
                 final List<IdentifierSegment> olap4jSegmentList =
-                    Util.cast((List) value);
+                    Util.cast(l);
                 final List<Id.Segment> segmentList =
                     Util.convert(olap4jSegmentList);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
@@ -1090,10 +1086,8 @@ public class Query extends QueryPart {
                     value = olapElement;
                 }
             }
-            if (value instanceof Member) {
-                if (type.isInstance(value)) {
-                    return value;
-                }
+            if (value instanceof Member && type.isInstance(value)) {
+                return value;
             }
             throw Util.newInternal(
                 new StringBuilder("Invalid value '").append(value).append("' for parameter '")
@@ -1295,9 +1289,9 @@ public class Query extends QueryPart {
                                     uniqueName,
                                     ((QueryAxis) parent).getAxisName());
 
-                        } else if (parent instanceof Formula) {
+                        } else if (parent instanceof Formula form) {
                             String parentFormulaType =
-                                ((Formula) parent).isMember()
+                                form.isMember()
                                     ? MondrianResource.instance()
                                           .CalculatedMember.str()
                                     : MondrianResource.instance()
@@ -1305,7 +1299,7 @@ public class Query extends QueryPart {
                             throw MondrianResource.instance()
                                 .MdxCalculatedFormulaUsedInFormula.ex(
                                     formulaType, uniqueName, parentFormulaType,
-                                    ((Formula) parent).getUniqueName());
+                                    form.getUniqueName());
 
                         } else {
                             throw MondrianResource.instance()
@@ -1355,13 +1349,13 @@ public class Query extends QueryPart {
         Walker walker = new Walker(this);
         while (walker.hasMoreElements()) {
             Object queryElement = walker.nextElement();
-            if (queryElement instanceof MemberExpr
-                && ((MemberExpr) queryElement).getMember().equals(mdxElement))
+            if (queryElement instanceof MemberExpr memberExpr
+                && memberExpr.getMember().equals(mdxElement))
             {
                 return false;
             }
-            if (queryElement instanceof NamedSetExpr
-                && ((NamedSetExpr) queryElement).getNamedSet().equals(
+            if (queryElement instanceof NamedSetExpr namedSetExpr
+                && namedSetExpr.getNamedSet().equals(
                     mdxElement))
             {
                 return false;
@@ -1520,10 +1514,8 @@ public class Query extends QueryPart {
      */
     public void addMeasuresMembers(OlapElement olapElement)
     {
-        if (olapElement instanceof Member member) {
-            if (member.isMeasure()) {
-                measuresMembers.add(member);
-            }
+        if (olapElement instanceof Member member && member.isMeasure()) {
+            measuresMembers.add(member);
         }
     }
 
@@ -1629,7 +1621,7 @@ public class Query extends QueryPart {
      *
      * @deprecated This method will be removed in mondrian-4.0.
      */
-    @Deprecated
+    @Deprecated(since = "mondrian-4.0")
 	public void close() {
         if (ownStatement) {
             statement.close();
@@ -1904,24 +1896,16 @@ public class Query extends QueryPart {
                 }
             }
             // First look to ourselves.
-            switch (category) {
-            case Category.UNKNOWN:
-            case Category.MEMBER:
-                if (parent == query.cube) {
-                    final Member calculatedMember = getCalculatedMember(names);
-                    if (calculatedMember != null) {
-                        return calculatedMember;
-                    }
+            if ((Category.UNKNOWN == category || Category.MEMBER == category) && parent == query.cube) {
+                final Member calculatedMember = getCalculatedMember(names);
+                if (calculatedMember != null) {
+                    return calculatedMember;
                 }
             }
-            switch (category) {
-            case Category.UNKNOWN:
-            case Category.SET:
-                if (parent == query.cube) {
-                    final NamedSet namedSet = getNamedSet(names);
-                    if (namedSet != null) {
-                        return namedSet;
-                    }
+            if ((Category.UNKNOWN == category || Category.SET == category) && parent == query.cube) {
+                final NamedSet namedSet = getNamedSet(names);
+                if (namedSet != null) {
+                    return namedSet;
                 }
             }
             // Then delegate to the next reader.
@@ -1934,7 +1918,7 @@ public class Query extends QueryPart {
                     // This is a calculated member defined against the cube.
                     // Create a free-standing formula using the same
                     // expression, then use the member defined in that formula.
-                    final Formula formulaClone = (Formula) formula.clone();
+                    final Formula formulaClone = new Formula(formula);
                     formulaClone.createElement(query);
                     formulaClone.accept(query.createValidator());
                     olapElement = formulaClone.getMdxMember();
@@ -1999,8 +1983,8 @@ public class Query extends QueryPart {
 
             //Must be RolapMember, not LimitedRollupMember
             OlapElement parentOlapElement = parent;
-            if(parent != null && parent instanceof RolapMember) {
-                parentOlapElement = query.getRolapMember((RolapMember)parent);
+            if(parent instanceof RolapMember rolapMember) {
+                parentOlapElement = query.getRolapMember(rolapMember);
             }
             OlapElement child = null;
             for (NameResolver.Namespace namespace : this.getNamespaces()) {
@@ -2012,8 +1996,8 @@ public class Query extends QueryPart {
                 }
             }
 
-            if(child != null && child instanceof RolapMember) {
-                return query.getSubcubeMember((RolapMember)child, true);
+            if(child instanceof RolapMember rolapMember) {
+                return query.getSubcubeMember(rolapMember, true);
             }
 
             return null;
@@ -2167,9 +2151,7 @@ public class Query extends QueryPart {
             int category,
             MatchType matchType)
         {
-            switch (category) {
-            case Category.SET:
-            case Category.UNKNOWN:
+            if ( Category.SET == category || Category.UNKNOWN == category ) {
                 final ScopedNamedSet namedSet =
                     queryValidator.getQuery().lookupScopedNamedSet(
                         names, queryValidator.getScopeStack());
@@ -2280,6 +2262,7 @@ public class Query extends QueryPart {
         }
 
         @Override
+        @SuppressWarnings("java:S4144")
 		public String getUniqueName() {
             return name;
         }
@@ -2410,29 +2393,24 @@ public class Query extends QueryPart {
          * @param exp Expression that may be an "AS"
          */
         private void registerAlias(QueryPart parent, Exp exp) {
-            if (exp instanceof FunCall call2) {
-                if (call2.getSyntax() == Syntax.Infix
-                    && call2.getFunName().equals("AS"))
-                {
-                    // Scope is the function enclosing the 'AS' expression.
-                    // For example, in
-                    //    Filter(Time.Children AS s, x > y)
-                    // the scope of the set 's' is the Filter function.
-                    assert call2.getArgCount() == 2;
-                    if (call2.getArg(1) instanceof Id) {
-                        final Id id = (Id) call2.getArg(1);
-                        createScopedNamedSet(
-                            ((Id.NameSegment) id.getSegments().get(0))
-                                .getName(),
-                            parent,
-                            call2.getArg(0));
-                    } else if (call2.getArg(1) instanceof NamedSetExpr) {
-                        NamedSetExpr set = (NamedSetExpr) call2.getArg(1);
-                        createScopedNamedSet(
-                            set.getNamedSet().getName(),
-                            parent,
-                            call2.getArg(0));
-                    }
+            if (exp instanceof FunCall call2 && call2.getSyntax() == Syntax.Infix
+                && call2.getFunName().equals("AS")) {
+                // Scope is the function enclosing the 'AS' expression.
+                // For example, in
+                //    Filter(Time.Children AS s, x > y)
+                // the scope of the set 's' is the Filter function.
+                assert call2.getArgCount() == 2;
+                if (call2.getArg(1) instanceof Id id) {
+                    createScopedNamedSet(
+                        ((Id.NameSegment) id.getSegments().get(0))
+                            .getName(),
+                        parent,
+                        call2.getArg(0));
+                } else if (call2.getArg(1) instanceof NamedSetExpr set) {
+                    createScopedNamedSet(
+                        set.getNamedSet().getName(),
+                        parent,
+                        call2.getArg(0));
                 }
             }
         }

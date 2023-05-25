@@ -616,7 +616,7 @@ public class ExplicitRules {
          */
         private static void handleNameColumn(AggLevel aggLevel) {
             AggLevelProperty nameProp =
-                new AggLevelPropertyR(Property.NAME.getName(), aggLevel.nameColumn());
+                new AggLevelPropertyR(Property.NAME_PROPERTY.getName(), aggLevel.nameColumn());
             aggLevel.properties().add(nameProp);
         }
 

@@ -216,7 +216,7 @@ public class MdxQueryServlet extends HttpServlet {
             ResultCache.getInstance(
                 request.getSession(), getServletContext(), queryName);
         Query query = rc.getQuery();
-        query = query.clone();
+        query = new Query(query);
         rc.setDirty();
         String operation = request.getParameter("operation");
         if (operation.equals("expand")) {

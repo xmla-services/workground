@@ -142,7 +142,7 @@ public class RolapMemberBase
         {
             // Save memory by only saving the name as a property if it's
             // different from the key.
-            setProperty(Property.NAME.name, name);
+            setProperty(Property.NAME_PROPERTY.name, name);
         } else if (key != null) {
             setUniqueName(key);
         }
@@ -190,7 +190,7 @@ public class RolapMemberBase
         }
 
         // falling back to member name, as it's done in MemberBase
-        Object name = getPropertyValue(Property.NAME.name);
+        Object name = getPropertyValue(Property.NAME_PROPERTY.name);
 
         // falling back to member key, as it's done in #getName()
         return name != null ? name : key;
@@ -310,7 +310,7 @@ public class RolapMemberBase
     @Override
 	public String getName() {
         final Object name =
-            getPropertyValue(Property.NAME.name);
+            getPropertyValue(Property.NAME_PROPERTY.name);
         return (name != null)
             ? String.valueOf(name)
             : keyToString(key);
@@ -340,7 +340,7 @@ public class RolapMemberBase
                 PropertyValueMapFactoryFactory.getPropertyValueMapFactory();
             mapPropertyNameToValue = factory.create(this);
         }
-        if (name.equals(Property.NAME.name)) {
+        if (name.equals(Property.NAME_PROPERTY.name)) {
             if (value == null) {
                 value = RolapUtil.mdxNullLiteral();
             }

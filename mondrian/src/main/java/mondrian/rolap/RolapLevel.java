@@ -402,9 +402,9 @@ public class RolapLevel extends LevelBase {
         if (nameExp != null) {
             list.add(
                 new RolapProperty(
-                    Property.NAME.name, Property.Datatype.TYPE_STRING,
+                    Property.NAME_PROPERTY.name, Property.Datatype.TYPE_STRING,
                     nameExp, null, null, null, true,
-                    Property.NAME.description));
+                    Property.NAME_PROPERTY.description));
         }
         for (int i = 0; i < xmlLevel.properties().size(); i++) {
             org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property xmlProperty = xmlLevel.properties().get(i);

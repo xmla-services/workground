@@ -3524,7 +3524,7 @@ class SchemaTest {
         assertEquals("Measure description", measure.getDescription());
         assertEquals(
             measure.getDescription(),
-            measure.getPropertyValue(Property.DESCRIPTION.name));
+            measure.getPropertyValue(Property.DESCRIPTION_PROPERTY.name));
         assertEquals(
             measure.getCaption(),
             measure.getPropertyValue(Property.CAPTION.name));
@@ -3549,7 +3549,7 @@ class SchemaTest {
         assertEquals("Calc member description", calcMeasure.getDescription());
         assertEquals(
             calcMeasure.getDescription(),
-            calcMeasure.getPropertyValue(Property.DESCRIPTION.name));
+            calcMeasure.getPropertyValue(Property.DESCRIPTION_PROPERTY.name));
         assertEquals(
             calcMeasure.getCaption(),
             calcMeasure.getPropertyValue(Property.CAPTION.name));
@@ -3584,7 +3584,7 @@ class SchemaTest {
         assertEquals("Measure description", measure2.getDescription());
         assertEquals(
             measure2.getDescription(),
-            measure2.getPropertyValue(Property.DESCRIPTION.name));
+            measure2.getPropertyValue(Property.DESCRIPTION_PROPERTY.name));
         assertEquals(
             measure2.getCaption(),
             measure2.getPropertyValue(Property.CAPTION.name));

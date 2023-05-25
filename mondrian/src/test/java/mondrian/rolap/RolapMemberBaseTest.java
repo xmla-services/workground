@@ -163,7 +163,7 @@ class RolapMemberBaseTest {
      */
     @Test
     void testShouldReturnMemberNameIfCaptionValueIsNotPresent() {
-        rolapMemberBase.setProperty(Property.NAME.name, MEMBER_NAME);
+        rolapMemberBase.setProperty(Property.NAME_PROPERTY.name, MEMBER_NAME);
 
         Object captionValue = rolapMemberBase.getCaptionValue();
 

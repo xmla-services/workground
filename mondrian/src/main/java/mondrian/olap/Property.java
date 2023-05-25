@@ -43,7 +43,7 @@ import mondrian.spi.PropertyFormatter;
  * <li>{@link #PARENT_LEVEL}</li>
  * <li>{@link #PARENT_UNIQUE_NAME}</li>
  * <li>{@link #PARENT_COUNT}</li>
- * <li>{@link #DESCRIPTION}</li>
+ * <li>{@link #DESCRIPTION_PROPERTY}</li>
  * </ul>
  *
  * The following propertiess are mandatory for cells:<ul>
@@ -134,7 +134,7 @@ public class Property extends EnumeratedValues.BasicValue {
      * Definition of the internal property which
      * holds a member's name.
      */
-    public static final Property NAME =
+    public static final Property NAME_PROPERTY =
         new Property(
             "$name", Datatype.TYPE_STRING, NAME_ORDINAL, true, false, false,
             null);
@@ -406,7 +406,7 @@ public class Property extends EnumeratedValues.BasicValue {
      * Definition of the property which holds the
      * description of this member.
      */
-    public static final Property DESCRIPTION =
+    public static final Property DESCRIPTION_PROPERTY =
         new Property(
             "DESCRIPTION", Datatype.TYPE_STRING, DESCRIPTION_ORDINAL, false,
             true, false,
@@ -823,7 +823,7 @@ public class Property extends EnumeratedValues.BasicValue {
             new Property[] {
                 FORMAT_EXP_PARSED,
                 AGGREGATION_TYPE,
-                NAME,
+                NAME_PROPERTY,
                 CAPTION,
                 CONTRIBUTING_CHILDREN,
                 FORMULA,
@@ -844,7 +844,7 @@ public class Property extends EnumeratedValues.BasicValue {
                 PARENT_LEVEL,
                 PARENT_UNIQUE_NAME,
                 PARENT_COUNT,
-                DESCRIPTION,
+                DESCRIPTION_PROPERTY,
                 VISIBLE,
                 CELL_FORMATTER,
                 CELL_FORMATTER_SCRIPT,
