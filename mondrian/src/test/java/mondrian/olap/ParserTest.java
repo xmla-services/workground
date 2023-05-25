@@ -556,7 +556,7 @@ class ParserTest {
             + "from [Sales]\n"
             + "where ([Gender].[M])");
 
-        Object queryClone = query.clone();
+        Object queryClone = new Query(query);
         assertTrue(queryClone instanceof Query);
         assertEquals(query.toString(), queryClone.toString());
     }

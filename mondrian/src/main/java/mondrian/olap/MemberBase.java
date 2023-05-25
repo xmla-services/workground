@@ -152,7 +152,7 @@ public MemberType getMemberType() {
 
   @Override
 public String getDescription() {
-    return (String) getPropertyValue( Property.DESCRIPTION.name );
+    return (String) getPropertyValue( Property.DESCRIPTION_PROPERTY.name );
   }
 
   @Override

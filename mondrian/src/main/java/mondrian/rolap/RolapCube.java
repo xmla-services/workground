@@ -1326,7 +1326,7 @@ public class RolapCube extends CubeBase {
             && xmlCalcMember.description().length() > 0)
         {
             member.setProperty(
-                Property.DESCRIPTION.name, xmlCalcMember.description());
+                Property.DESCRIPTION_PROPERTY.name, xmlCalcMember.description());
         }
 
         if (getFormatString(xmlCalcMember) != null

@@ -94,21 +94,19 @@ public class Formula extends QueryPart {
         assert !(isMember && mdxSet != null);
     }
 
-    @Override
-	public Object clone() {
-        return new Formula(
-            isMember,
-            id,
-            exp.cloneExp(),
-            MemberProperty.cloneArray(memberProperties),
-            mdxMember,
-            mdxSet);
+    public Formula(Formula formula) {
+        this(formula.isMember,
+            formula.id,
+            formula.exp.cloneExp(),
+            MemberProperty.cloneArray(formula.memberProperties),
+            formula.mdxMember,
+            formula.mdxSet);
     }
 
     static Formula[] cloneArray(Formula[] x) {
         Formula[] x2 = new Formula[x.length];
         for (int i = 0; i < x.length; i++) {
-            x2[i] = (Formula) x[i].clone();
+            x2[i] = new Formula(x[i]);
         }
         return x2;
     }

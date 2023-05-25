@@ -97,7 +97,7 @@ public class RolapBaseCubeMeasure
         this.expression = expression;
         if (description != null) {
             setProperty(
-                Property.DESCRIPTION.name,
+                Property.DESCRIPTION_PROPERTY.name,
                 description);
         }
         if (formatString == null) {

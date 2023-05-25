@@ -28,15 +28,14 @@ public class MemberProperty extends QueryPart {
         this.exp = exp;
     }
 
-    @Override
-	protected Object clone() {
-        return new MemberProperty(name, exp.cloneExp());
+    public MemberProperty(MemberProperty memberProperty) {
+        this(memberProperty.name, memberProperty.exp.cloneExp());
     }
 
     static MemberProperty[] cloneArray(MemberProperty[] x) {
         MemberProperty[] x2 = new MemberProperty[x.length];
         for (int i = 0; i < x.length; i++) {
-            x2[i] = (MemberProperty) x[i].clone();
+            x2[i] = new MemberProperty(x[i]);
         }
         return x2;
     }
