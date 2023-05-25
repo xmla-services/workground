@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,20 +27,23 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 public class TableMiningStructureColumn extends MiningStructureColumn{
 
-    @XmlElement(name = "ForeignKeyColumns")
-    protected TableMiningStructureColumn.ForeignKeyColumns foreignKeyColumns;
+    @XmlElement(name = "ForeignKeyColumn", type = DataItem.class)
+    @XmlElementWrapper(name = "ForeignKeyColumns")
+    protected List<DataItem> foreignKeyColumns;
     @XmlElement(name = "SourceMeasureGroup")
     protected MeasureGroupBinding sourceMeasureGroup;
-    @XmlElement(name = "Columns")
-    protected TableMiningStructureColumn.Columns columns;
-    @XmlElement(name = "Translations")
-    protected TableMiningStructureColumn.Translations translations;
+    @XmlElement(name = "Column", type = MiningStructureColumn.class)
+    @XmlElementWrapper(name = "Columns")
+    protected List<MiningStructureColumn> columns;
+    @XmlElement(name = "Translation", type = Translation.class)
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
 
-    public TableMiningStructureColumn.ForeignKeyColumns getForeignKeyColumns() {
+    public List<DataItem> getForeignKeyColumns() {
         return foreignKeyColumns;
     }
 
-    public void setForeignKeyColumns(TableMiningStructureColumn.ForeignKeyColumns value) {
+    public void setForeignKeyColumns(List<DataItem> value) {
         this.foreignKeyColumns = value;
     }
 
@@ -51,68 +55,20 @@ public class TableMiningStructureColumn extends MiningStructureColumn{
         this.sourceMeasureGroup = value;
     }
 
-    public TableMiningStructureColumn.Columns getColumns() {
+    public List<MiningStructureColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(TableMiningStructureColumn.Columns value) {
+    public void setColumns(List<MiningStructureColumn> value) {
         this.columns = value;
     }
 
-    public TableMiningStructureColumn.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(TableMiningStructureColumn.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"column"})
-    public static class Columns {
-
-        @XmlElement(name = "Column", required = true)
-        protected List<MiningStructureColumn> column;
-
-        public List<MiningStructureColumn> getColumn() {
-            return this.column;
-        }
-
-        public void setColumn(List<MiningStructureColumn> column) {
-            this.column = column;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"foreignKeyColumn"})
-    public static class ForeignKeyColumns {
-
-        @XmlElement(name = "ForeignKeyColumn")
-        protected List<DataItem> foreignKeyColumn;
-
-        public List<DataItem> getForeignKeyColumn() {
-            return this.foreignKeyColumn;
-        }
-
-        public void setForeignKeyColumn(List<DataItem> foreignKeyColumn) {
-            this.foreignKeyColumn = foreignKeyColumn;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

@@ -19,7 +19,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlType(name = "CubeStorageModeEnumType")
 @XmlEnum
-public enum CubeStorageModeEnumType {
+public enum CubeStorageModeEnumTypeXmlEnum {
 
   @XmlEnumValue("Molap")
   MOLAP("Molap"), @XmlEnumValue("Rolap")
@@ -29,7 +29,7 @@ public enum CubeStorageModeEnumType {
 
   private final String value;
 
-  CubeStorageModeEnumType(String v) {
+  CubeStorageModeEnumTypeXmlEnum(String v) {
     value = v;
   }
 
@@ -37,8 +37,8 @@ public enum CubeStorageModeEnumType {
     return value;
   }
 
-  public static CubeStorageModeEnumType fromValue(String v) {
-    for (CubeStorageModeEnumType c : CubeStorageModeEnumType.values()) {
+  public static CubeStorageModeEnumTypeXmlEnum fromValue(String v) {
+    for (CubeStorageModeEnumTypeXmlEnum c : CubeStorageModeEnumTypeXmlEnum.values()) {
       if (c.value.equals(v)) {
         return c;
       }

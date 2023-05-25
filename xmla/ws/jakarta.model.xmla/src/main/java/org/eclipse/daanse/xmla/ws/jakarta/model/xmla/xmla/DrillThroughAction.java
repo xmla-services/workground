@@ -22,39 +22,10 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DrillThroughAction", propOrder = {"name", "id", "caption", "captionIsMdx", "translations",
-    "targetType", "target", "condition", "type", "invocation", "application", "description", "annotations", "defaultFlag",
+@XmlType(name = "DrillThroughAction", propOrder = {"defaultFlag",
     "columns", "maximumRows"})
 public class DrillThroughAction extends Action {
 
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "Caption")
-    protected String caption;
-    @XmlElement(name = "CaptionIsMdx")
-    protected Boolean captionIsMdx;
-    @XmlElement(name = "Translation")
-    @XmlElementWrapper(name = "Translations")
-    protected List<Translation> translations;
-    @XmlElement(name = "TargetType", required = true)
-    protected String targetType;
-    @XmlElement(name = "Target")
-    protected String target;
-    @XmlElement(name = "Condition")
-    protected String condition;
-    @XmlElement(name = "Type", required = true)
-    protected String type;
-    @XmlElement(name = "Invocation")
-    protected String invocation;
-    @XmlElement(name = "Application")
-    protected String application;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElementWrapper(name = "Annotations")
-    @XmlElement(name = "Annotation", type = Annotation.class)
-    protected List<Annotation> annotations;
     @XmlElement(name = "Default")
     protected Boolean defaultFlag;
     @XmlElement(name = "Column")
@@ -62,114 +33,6 @@ public class DrillThroughAction extends Action {
     protected List<Binding> columns;
     @XmlElement(name = "MaximumRows")
     protected Integer maximumRows;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public boolean isSetID() {
-        return (this.id != null);
-    }
-
-    public String getCaption() {
-        return caption;
-    }
-
-    public void setCaption(String value) {
-        this.caption = value;
-    }
-
-    public Boolean isCaptionIsMdx() {
-        return captionIsMdx;
-    }
-
-    public void setCaptionIsMdx(Boolean value) {
-        this.captionIsMdx = value;
-    }
-
-    public List<Translation> getTranslations() {
-        return translations;
-    }
-
-    public void setTranslations(List<Translation> value) {
-        this.translations = value;
-    }
-
-    public String getTargetType() {
-        return targetType;
-    }
-
-    public void setTargetType(String value) {
-        this.targetType = value;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String value) {
-        this.target = value;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String value) {
-        this.condition = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String value) {
-        this.type = value;
-    }
-
-    public String getInvocation() {
-        return invocation;
-    }
-
-    public void setInvocation(String value) {
-        this.invocation = value;
-    }
-
-    public String getApplication() {
-        return application;
-    }
-
-    public void setApplication(String value) {
-        this.application = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<Annotation> value) {
-        this.annotations = value;
-    }
 
     public Boolean isDefault() {
         return defaultFlag;

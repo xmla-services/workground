@@ -90,7 +90,7 @@ public class BindingConvertor {
 		}
 		if (source instanceof UserDefinedGroupBinding b) {
 			return new UserDefinedGroupBindingR(b.getAttributeID(),
-					Optional.ofNullable(convertUserDefinedGroupBindingGroups(b.getGroups())));
+					Optional.ofNullable(convertGroupList(b.getGroups())));
 
 		}
 		if (source instanceof MeasureBinding b) {
@@ -180,13 +180,6 @@ public class BindingConvertor {
 		}
 		return ordinal.getOrdinal();
 
-	}
-
-	private static List<Group> convertUserDefinedGroupBindingGroups(UserDefinedGroupBinding.Groups groups) {
-		if (groups == null) {
-			return List.of();
-		}
-		return convertGroupList(groups.getGroup());
 	}
 
 	private static List<Group> convertGroupList(

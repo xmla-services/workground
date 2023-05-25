@@ -19,6 +19,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -33,8 +34,9 @@ public class TraceEvent {
     protected String name;
     @XmlElement(name = "Description")
     protected String description;
-    @XmlElement(name = "EventColumnList", required = true)
-    protected TraceEvent.EventColumnList eventColumnList;
+    @XmlElement(name = "EventColumn", required = true, type = EventColumn.class)
+    @XmlElementWrapper(name = "EventColumnList", required = true)
+    protected List<EventColumn> eventColumnList;
 
     public BigInteger getID() {
         return id;
@@ -60,28 +62,12 @@ public class TraceEvent {
         this.description = value;
     }
 
-    public TraceEvent.EventColumnList getEventColumnList() {
+    public List<EventColumn> getEventColumnList() {
         return eventColumnList;
     }
 
-    public void setEventColumnList(TraceEvent.EventColumnList value) {
+    public void setEventColumnList(List<EventColumn> value) {
         this.eventColumnList = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"eventColumn"})
-    public static class EventColumnList {
-
-        @XmlElement(name = "EventColumn")
-        protected List<EventColumn> eventColumn;
-
-        public List<EventColumn> getEventColumn() {
-            return this.eventColumn;
-        }
-
-        public void setEventColumn(List<EventColumn> eventColumn) {
-            this.eventColumn = eventColumn;
-        }
     }
 
 }

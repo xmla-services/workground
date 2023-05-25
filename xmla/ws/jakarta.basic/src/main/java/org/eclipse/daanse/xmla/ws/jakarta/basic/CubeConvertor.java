@@ -532,7 +532,7 @@ public class CubeConvertor {
 
 				return new ProactiveCachingQueryBindingR(
 						Optional.ofNullable(convertDuration(proactiveCachingQueryBinding.getRefreshInterval())),
-						convertProactiveCachingQueryBindingQueryNotifications(
+                        convertQueryNotificationList(
 								proactiveCachingQueryBinding.getQueryNotifications()));
 			}
 			if (source instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingIncrementalProcessingBinding proactiveCachingIncrementalProcessingBinding) {
@@ -540,21 +540,12 @@ public class CubeConvertor {
 				return new ProactiveCachingIncrementalProcessingBindingR(
 						Optional.ofNullable(
 								convertDuration(proactiveCachingIncrementalProcessingBinding.getRefreshInterval())),
-						convertProactiveCachingIncrementalProcessingBindingIncrementalProcessingNotifications(
+                                convertIncrementalProcessingNotificationList(
 								proactiveCachingIncrementalProcessingBinding.getIncrementalProcessingNotifications()));
 			}
 		}
 		return null;
 
-	}
-
-	private static List<IncrementalProcessingNotification> convertProactiveCachingIncrementalProcessingBindingIncrementalProcessingNotifications(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications incrementalProcessingNotifications) {
-		if (incrementalProcessingNotifications != null) {
-			return convertIncrementalProcessingNotificationList(
-					incrementalProcessingNotifications.getIncrementalProcessingNotification());
-		}
-		return List.of();
 	}
 
 	private static List<IncrementalProcessingNotification> convertIncrementalProcessingNotificationList(
@@ -573,14 +564,6 @@ public class CubeConvertor {
 					incrementalProcessingNotification.getProcessingQuery());
 		}
 		return null;
-	}
-
-	private static List<QueryNotification> convertProactiveCachingQueryBindingQueryNotifications(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingQueryBinding.QueryNotifications queryNotifications) {
-		if (queryNotifications != null) {
-			return convertQueryNotificationList(queryNotifications.getQueryNotification());
-		}
-		return List.of();
 	}
 
 	private static List<QueryNotification> convertQueryNotificationList(
@@ -684,8 +667,7 @@ public class CubeConvertor {
         return new ReportActionR(reportAction.getName(), Optional.ofNullable(reportAction.getID()),
             Optional.ofNullable(reportAction.getCaption()),
             Optional.ofNullable(reportAction.isCaptionIsMdx()),
-            Optional.ofNullable(convertTranslationList(reportAction.getTranslations() == null ? null
-                : reportAction.getTranslations().getTranslation())),
+            Optional.ofNullable(convertTranslationList(reportAction.getTranslations())),
             TargetTypeEnum.fromValue(reportAction.getTargetType()),
             Optional.ofNullable(reportAction.getTarget()), Optional.ofNullable(reportAction.getCondition()),
             TypeEnum.fromValue(reportAction.getType()), Optional.ofNullable(reportAction.getInvocation()),
@@ -694,19 +676,16 @@ public class CubeConvertor {
             Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations())),
             reportAction.getReportServer(), Optional.ofNullable(reportAction.getPath()),
             Optional.ofNullable(
-                convertReportParametersList(reportAction.getReportParameters() == null ? null
-                    : reportAction.getReportParameters().getReportParameter())),
+                convertReportParametersList(reportAction.getReportParameters())),
             Optional.ofNullable(
-                convertReportFormatParameterList(reportAction.getReportFormatParameters() == null ? null
-                    : reportAction.getReportFormatParameters().getReportFormatParameter())));
+                convertReportFormatParameterList(reportAction.getReportFormatParameters())));
     }
 
     private static Action convertStandardAction(StandardAction standardAction) {
         return new StandardActionR(standardAction.getName(), Optional.ofNullable(standardAction.getID()),
             Optional.ofNullable(standardAction.getCaption()),
             Optional.ofNullable(standardAction.isCaptionIsMdx()),
-            Optional.ofNullable(convertTranslationList(standardAction.getTranslations() == null ? null
-                : standardAction.getTranslations().getTranslation())),
+            Optional.ofNullable(convertTranslationList(standardAction.getTranslations())),
             TargetTypeEnum.fromValue(standardAction.getTargetType()),
             Optional.ofNullable(standardAction.getTarget()),
             Optional.ofNullable(standardAction.getCondition()),
@@ -840,18 +819,10 @@ public class CubeConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveMeasureGroup perspectiveMeasureGroup) {
 		if (perspectiveMeasureGroup != null) {
 			return new PerspectiveMeasureGroupR(perspectiveMeasureGroup.getMeasureGroupID(),
-					Optional.ofNullable(convertPerspectiveMeasureGroupMeasures(perspectiveMeasureGroup.getMeasures())),
+					Optional.ofNullable(convertPerspectiveMeasureList(perspectiveMeasureGroup.getMeasures())),
 					Optional.ofNullable(convertAnnotationList(perspectiveMeasureGroup.getAnnotations())));
 		}
 		return null;
-	}
-
-	private static List<PerspectiveMeasure> convertPerspectiveMeasureGroupMeasures(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveMeasureGroup.Measures measures) {
-		if (measures != null) {
-			return convertPerspectiveMeasureList(measures.getMeasure());
-		}
-		return List.of();
 	}
 
 	private static List<PerspectiveMeasure> convertPerspectiveMeasureList(

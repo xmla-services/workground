@@ -62,39 +62,10 @@ public class CloneDatabase {
   }
 
   @XmlAccessorType(XmlAccessType.FIELD)
-  @XmlType(name = "", propOrder = { "dbStorageLocation", "databaseName", "databaseID" })
-  public static class Target {
+  @XmlType(name = "", propOrder = {
 
-    @XmlElement(name = "DbStorageLocation", namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100")
-    protected String dbStorageLocation;
-    @XmlElement(name = "DatabaseName", required = true)
-    protected String databaseName;
-    @XmlElement(name = "DatabaseID", required = true)
-    protected String databaseID;
-
-    public String getDbStorageLocation() {
-      return dbStorageLocation;
-    }
-
-    public void setDbStorageLocation(String value) {
-      this.dbStorageLocation = value;
-    }
-
-    public String getDatabaseName() {
-      return databaseName;
-    }
-
-    public void setDatabaseName(String value) {
-      this.databaseName = value;
-    }
-
-    public String getDatabaseID() {
-      return databaseID;
-    }
-
-    public void setDatabaseID(String value) {
-      this.databaseID = value;
-    }
+  })
+  public static class Target extends AbstractTarget {
 
   }
 

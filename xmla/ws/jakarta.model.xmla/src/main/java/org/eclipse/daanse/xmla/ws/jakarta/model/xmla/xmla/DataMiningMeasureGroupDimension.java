@@ -16,49 +16,14 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.util.List;
-
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DataMiningMeasureGroupDimension", propOrder = {"cubeDimensionID", "annotations", "source",
-    "caseCubeDimensionID"})
+@XmlType(name = "DataMiningMeasureGroupDimension", propOrder = {"caseCubeDimensionID"})
 public class DataMiningMeasureGroupDimension extends MeasureGroupDimension {
 
-    @XmlElement(name = "CubeDimensionID", required = true)
-    protected String cubeDimensionID;
-    @XmlElementWrapper(name = "Annotations")
-    @XmlElement(name = "Annotation", type = Annotation.class)
-    protected List<Annotation> annotations;
-    @XmlElement(name = "Source")
-    protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "CaseCubeDimensionID", required = true)
     protected String caseCubeDimensionID;
-
-    public String getCubeDimensionID() {
-        return cubeDimensionID;
-    }
-
-    public void setCubeDimensionID(String value) {
-        this.cubeDimensionID = value;
-    }
-
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<Annotation> value) {
-        this.annotations = value;
-    }
-
-    public MeasureGroupDimensionBinding getSource() {
-        return source;
-    }
-
-    public void setSource(MeasureGroupDimensionBinding value) {
-        this.source = value;
-    }
 
     public String getCaseCubeDimensionID() {
         return caseCubeDimensionID;

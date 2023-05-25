@@ -19,7 +19,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlType(name = "DimensionAttributeTypeEnumType")
 @XmlEnum
-public enum DimensionAttributeTypeEnumType {
+public enum DimensionAttributeTypeEnumTypeXmlEnum {
 
   @XmlEnumValue("Account")
   ACCOUNT("Account"), @XmlEnumValue("AccountName")
@@ -264,7 +264,7 @@ public enum DimensionAttributeTypeEnumType {
 
   private final String value;
 
-  DimensionAttributeTypeEnumType(String v) {
+  DimensionAttributeTypeEnumTypeXmlEnum(String v) {
     value = v;
   }
 
@@ -272,8 +272,8 @@ public enum DimensionAttributeTypeEnumType {
     return value;
   }
 
-  public static DimensionAttributeTypeEnumType fromValue(String v) {
-    for (DimensionAttributeTypeEnumType c : DimensionAttributeTypeEnumType.values()) {
+  public static DimensionAttributeTypeEnumTypeXmlEnum fromValue(String v) {
+    for (DimensionAttributeTypeEnumTypeXmlEnum c : DimensionAttributeTypeEnumTypeXmlEnum.values()) {
       if (c.value.equals(v)) {
         return c;
       }

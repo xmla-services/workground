@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -35,8 +36,9 @@ public class Synchronize {
     @XmlElement(name = "DbStorageLocation", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2008/engine/100/100")
     protected String dbStorageLocation;
-    @XmlElement(name = "Locations")
-    protected Synchronize.Locations locations;
+    @XmlElement(name = "Location", type = Location.class)
+    @XmlElementWrapper(name = "Locations")
+    protected List<Location> locations;
 
     public Source getSource() {
         return source;
@@ -70,28 +72,12 @@ public class Synchronize {
         this.dbStorageLocation = value;
     }
 
-    public Synchronize.Locations getLocations() {
+    public List<Location> getLocations() {
         return locations;
     }
 
-    public void setLocations(Synchronize.Locations value) {
+    public void setLocations(List<Location> value) {
         this.locations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"location"})
-    public static class Locations {
-
-        @XmlElement(name = "Location")
-        protected List<Location> location;
-
-        public List<Location> getLocation() {
-            return this.location;
-        }
-
-        public void setLocation(List<Location> location) {
-            this.location = location;
-        }
     }
 
 }

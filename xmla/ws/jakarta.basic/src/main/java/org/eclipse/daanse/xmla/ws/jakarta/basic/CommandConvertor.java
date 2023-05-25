@@ -736,7 +736,7 @@ public class CommandConvertor {
 			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.WhereAttribute attribute) {
 		if (attribute != null) {
 			return new WhereAttributeR(attribute.getAttributeName(),
-					attribute.getKeys() == null ? null : attribute.getKeys().getKey());
+					attribute.getKeys());
 		}
 		return null;
 	}
@@ -745,7 +745,7 @@ public class CommandConvertor {
 		if (update != null) {
 			return new UpdateR(convertObject(update.getObject()),
 					convertAttributeInsertUpdateList(
-							update.getAttributes() == null ? null : update.getAttributes().getAttribute()),
+							update.getAttributes()),
 					update.isMoveWithDescendants(), update.isMoveToRoot(), convertWhere(update.getWhere()));
 		}
 		return null;
@@ -820,7 +820,7 @@ public class CommandConvertor {
 		if (synchronize != null) {
 			return new SynchronizeR(convertSource(synchronize.getSource()), synchronize.getSynchronizeSecurity(),
 					synchronize.isApplyCompression(), synchronize.getDbStorageLocation(), convertLocationList(
-							synchronize.getLocations() == null ? null : synchronize.getLocations().getLocation()));
+							synchronize.getLocations()));
 		}
 		return null;
 
@@ -838,7 +838,7 @@ public class CommandConvertor {
 			return new RestoreR(restore.getDatabaseName(), restore.getDatabaseID(), restore.getFile(),
 					restore.getSecurity(), restore.isAllowOverwrite(), restore.getPassword(),
 					restore.getDbStorageLocation(), restore.getReadWriteMode(),
-					convertLocationList(restore.getLocations() == null ? null : restore.getLocations().getLocation()));
+					convertLocationList(restore.getLocations()));
 		}
 		return null;
 

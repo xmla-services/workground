@@ -13,91 +13,20 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Assembly", propOrder = {"id", "name", "createdTimestamp", "lastSchemaUpdate", "description",
-    "annotations", "impersonationInfo"})
+@XmlType(name = "Assembly", propOrder = {"impersonationInfo"})
 @XmlSeeAlso({ComAssembly.class, ClrAssembly.class})
-public abstract class Assembly {
+public abstract class Assembly extends AbstractItem {
 
-    @XmlElement(name = "ID")
-    protected String id;
-    @XmlElement(name = "Name", required = true)
-    protected String name;
-    @XmlElement(name = "CreatedTimestamp")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar createdTimestamp;
-    @XmlElement(name = "LastSchemaUpdate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar lastSchemaUpdate;
-    @XmlElement(name = "Description")
-    protected String description;
-    @XmlElementWrapper(name = "Annotations")
-    @XmlElement(name = "Annotation", type = Annotation.class)
-    protected List<Annotation> annotations;
     @XmlElement(name = "ImpersonationInfo")
     protected ImpersonationInfo impersonationInfo;
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String value) {
-        this.id = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    public XMLGregorianCalendar getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(XMLGregorianCalendar value) {
-        this.createdTimestamp = value;
-    }
-
-    public XMLGregorianCalendar getLastSchemaUpdate() {
-        return lastSchemaUpdate;
-    }
-
-    public void setLastSchemaUpdate(XMLGregorianCalendar value) {
-        this.lastSchemaUpdate = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<Annotation> value) {
-        this.annotations = value;
-    }
 
     public ImpersonationInfo getImpersonationInfo() {
         return impersonationInfo;

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,8 +27,9 @@ public class UserDefinedGroupBinding extends Binding {
 
     @XmlElement(name = "AttributeID", required = true)
     protected String attributeID;
-    @XmlElement(name = "Groups")
-    protected UserDefinedGroupBinding.Groups groups;
+    @XmlElement(name = "Group", type = Group.class)
+    @XmlElementWrapper(name = "Groups")
+    protected List<Group> groups;
 
     public String getAttributeID() {
         return attributeID;
@@ -37,28 +39,12 @@ public class UserDefinedGroupBinding extends Binding {
         this.attributeID = value;
     }
 
-    public UserDefinedGroupBinding.Groups getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(UserDefinedGroupBinding.Groups value) {
+    public void setGroups(List<Group> value) {
         this.groups = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"group"})
-    public static class Groups {
-
-        @XmlElement(name = "Group")
-        protected List<Group> group;
-
-        public List<Group> getGroup() {
-            return this.group;
-        }
-
-        public void setGroup(List<Group> group) {
-            this.group = group;
-        }
     }
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class WhereAttribute {
 
     @XmlElement(name = "AttributeName", required = true)
     protected String attributeName;
-    @XmlElement(name = "Keys")
-    protected WhereAttribute.Keys keys;
+    @XmlElement(name = "Key", type = java.lang.Object.class)
+    @XmlElementWrapper(name = "Keys")
+    protected List<java.lang.Object> keys;
 
     public String getAttributeName() {
         return attributeName;
@@ -39,28 +41,12 @@ public class WhereAttribute {
         this.attributeName = value;
     }
 
-    public WhereAttribute.Keys getKeys() {
+    public List<java.lang.Object> getKeys() {
         return keys;
     }
 
-    public void setKeys(WhereAttribute.Keys value) {
+    public void setKeys(List<java.lang.Object> value) {
         this.keys = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"key"})
-    public static class Keys {
-
-        @XmlElement(name = "Key")
-        protected List<java.lang.Object> key;
-
-        public List<java.lang.Object> getKey() {
-            return this.key;
-        }
-
-        public void setKey(List<java.lang.Object> key) {
-            this.key = key;
-        }
     }
 
 }

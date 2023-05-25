@@ -378,13 +378,11 @@ public class MdDataSetConvertor {
         return null;
     }
 
-    private static NormTupleSet.MembersLookup convertMembersLookup(MembersLookup membersLookup) {
+    private static List<TupleType> convertMembersLookup(MembersLookup membersLookup) {
         if (membersLookup != null) {
-            NormTupleSet.MembersLookup res = new NormTupleSet.MembersLookup();
-            res.setMembers(convertTupleTypeList(membersLookup.members()));
-            return res;
+            return convertTupleTypeList(membersLookup.members());
         }
-        return null;
+        return List.of();
     }
 
     private static List<TupleType> convertTupleTypeList(List<org.eclipse.daanse.xmla.api.mddataset.TupleType> tupleTypeList) {

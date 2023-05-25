@@ -157,7 +157,7 @@ public class DatabaseConvertor {
         if (account != null) {
             return new AccountR(account.getAccountType(),
                 account.getAggregationFunction(),
-                account.getAliases() == null ? null : account.getAliases().getAlias(),
+                account.getAliases(),
                 convertAnnotationList(account.getAnnotations()));
         }
         return null;

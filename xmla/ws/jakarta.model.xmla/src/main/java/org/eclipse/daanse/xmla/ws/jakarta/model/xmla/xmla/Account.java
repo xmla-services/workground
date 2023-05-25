@@ -31,8 +31,9 @@ public class Account {
     protected String accountType;
     @XmlElement(name = "AggregationFunction")
     protected String aggregationFunction;
-    @XmlElement(name = "Aliases")
-    protected Account.Aliases aliases;
+    @XmlElement(name = "Alias", type = String.class)
+    @XmlElementWrapper(name = "Aliases")
+    protected List<String> aliases;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -53,11 +54,11 @@ public class Account {
         this.aggregationFunction = value;
     }
 
-    public Account.Aliases getAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 
-    public void setAliases(Account.Aliases value) {
+    public void setAliases(List<String> value) {
         this.aliases = value;
     }
 
@@ -67,22 +68,6 @@ public class Account {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"alias"})
-    public static class Aliases {
-
-        @XmlElement(name = "Alias")
-        protected List<String> alias;
-
-        public List<String> getAlias() {
-            return this.alias;
-        }
-
-        public void setAlias(List<String> alias) {
-            this.alias = alias;
-        }
     }
 
 }

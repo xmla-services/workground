@@ -311,15 +311,15 @@ public class Cube extends AbstractItem {
     public static class StorageMode {
 
         @XmlValue
-        protected CubeStorageModeEnumType value;
+        protected CubeStorageModeEnumTypeXmlEnum value;
         @XmlAttribute(name = "valuens")
         protected String valuens;
 
-        public CubeStorageModeEnumType getValue() {
+        public CubeStorageModeEnumTypeXmlEnum getValue() {
             return value;
         }
 
-        public void setValue(CubeStorageModeEnumType value) {
+        public void setValue(CubeStorageModeEnumTypeXmlEnum value) {
             this.value = value;
         }
 
