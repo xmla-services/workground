@@ -20,6 +20,7 @@ import javax.xml.datatype.Duration;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -29,8 +30,9 @@ public class ProactiveCachingIncrementalProcessingBinding extends ProactiveCachi
 
     @XmlElement(name = "RefreshInterval")
     protected Duration refreshInterval;
-    @XmlElement(name = "IncrementalProcessingNotifications", required = true)
-    protected ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications incrementalProcessingNotifications;
+    @XmlElement(name = "IncrementalProcessingNotification", required = true)
+    @XmlElementWrapper(name = "IncrementalProcessingNotifications", required = true)
+    protected List<IncrementalProcessingNotification> incrementalProcessingNotifications;
 
     public Duration getRefreshInterval() {
         return refreshInterval;
@@ -40,30 +42,13 @@ public class ProactiveCachingIncrementalProcessingBinding extends ProactiveCachi
         this.refreshInterval = value;
     }
 
-    public ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications getIncrementalProcessingNotifications() {
+    public List<IncrementalProcessingNotification> getIncrementalProcessingNotifications() {
         return incrementalProcessingNotifications;
     }
 
     public void setIncrementalProcessingNotifications(
-        ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications value
+        List<IncrementalProcessingNotification> value
     ) {
         this.incrementalProcessingNotifications = value;
     }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"incrementalProcessingNotification"})
-    public static class IncrementalProcessingNotifications {
-
-        @XmlElement(name = "IncrementalProcessingNotification")
-        protected List<IncrementalProcessingNotification> incrementalProcessingNotification;
-
-        public List<IncrementalProcessingNotification> getIncrementalProcessingNotification() {
-            return this.incrementalProcessingNotification;
-        }
-
-        public void setIncrementalProcessingNotification(List<IncrementalProcessingNotification> incrementalProcessingNotification) {
-            this.incrementalProcessingNotification = incrementalProcessingNotification;
-        }
-    }
-
 }

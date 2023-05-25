@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.List;
@@ -26,31 +27,16 @@ import java.util.List;
 })
 public class Role extends AbstractItem {
 
-    @XmlElement(name = "Members")
-    protected Role.Members members;
+    @XmlElement(name = "Member", type = Member.class)
+    @XmlElementWrapper(name = "Members")
+    protected List<Member> members;
 
-    public Role.Members getMembers() {
+    public List<Member> getMembers() {
         return members;
     }
 
-    public void setMembers(Role.Members value) {
+    public void setMembers(List<Member> value) {
         this.members = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"member"})
-    public static class Members {
-
-        @XmlElement(name = "Member")
-        protected List<Member> member;
-
-        public List<Member> getMember() {
-            return this.member;
-        }
-
-        public void setMember(List<Member> member) {
-            this.member = member;
-        }
     }
 
 }

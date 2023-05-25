@@ -456,15 +456,15 @@ public class DimensionAttribute {
     public static class Type {
 
         @XmlValue
-        protected DimensionAttributeTypeEnumType value;
+        protected DimensionAttributeTypeEnumTypeXmlEnum value;
         @XmlAttribute(name = "valuens")
         protected String valuens;
 
-        public DimensionAttributeTypeEnumType getValue() {
+        public DimensionAttributeTypeEnumTypeXmlEnum getValue() {
             return value;
         }
 
-        public void setValue(DimensionAttributeTypeEnumType value) {
+        public void setValue(DimensionAttributeTypeEnumTypeXmlEnum value) {
             this.value = value;
         }
 

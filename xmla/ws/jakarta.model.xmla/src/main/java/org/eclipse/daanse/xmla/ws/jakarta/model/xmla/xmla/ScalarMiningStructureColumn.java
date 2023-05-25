@@ -45,22 +45,26 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
     protected Binding source;
     @XmlElement(name = "Distribution")
     protected String distribution;
-    @XmlElement(name = "ModelingFlags")
-    protected ScalarMiningStructureColumn.ModelingFlags modelingFlags;
+    @XmlElement(name = "ModelingFlag")
+    @XmlElementWrapper(name = "ModelingFlags")
+    protected List<MiningModelingFlag> modelingFlags;
     @XmlElement(name = "Content", required = true)
     protected String content;
-    @XmlElement(name = "ClassifiedColumns")
-    protected ScalarMiningStructureColumn.ClassifiedColumns classifiedColumns;
+    @XmlElement(name = "ClassifiedColumn")
+    @XmlElementWrapper(name = "ClassifiedColumns")
+    protected List<String> classifiedColumns;
     @XmlElement(name = "DiscretizationMethod")
     protected String discretizationMethod;
     @XmlElement(name = "DiscretizationBucketCount")
     protected BigInteger discretizationBucketCount;
-    @XmlElement(name = "KeyColumns")
-    protected ScalarMiningStructureColumn.KeyColumns keyColumns;
+    @XmlElement(name = "KeyColumn")
+    @XmlElementWrapper(name = "KeyColumns")
+    protected List<DataItem> keyColumns;
     @XmlElement(name = "NameColumn")
     protected DataItem nameColumn;
-    @XmlElement(name = "Translations")
-    protected ScalarMiningStructureColumn.Translations translations;
+    @XmlElement(name = "Translation")
+    @XmlElementWrapper(name = "Translations")
+    protected List<Translation> translations;
 
     public String getName() {
         return name;
@@ -126,11 +130,11 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.distribution = value;
     }
 
-    public ScalarMiningStructureColumn.ModelingFlags getModelingFlags() {
+    public List<MiningModelingFlag> getModelingFlags() {
         return modelingFlags;
     }
 
-    public void setModelingFlags(ScalarMiningStructureColumn.ModelingFlags value) {
+    public void setModelingFlags(List<MiningModelingFlag> value) {
         this.modelingFlags = value;
     }
 
@@ -142,11 +146,11 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.content = value;
     }
 
-    public ScalarMiningStructureColumn.ClassifiedColumns getClassifiedColumns() {
+    public List<String> getClassifiedColumns() {
         return classifiedColumns;
     }
 
-    public void setClassifiedColumns(ScalarMiningStructureColumn.ClassifiedColumns value) {
+    public void setClassifiedColumns(List<String> value) {
         this.classifiedColumns = value;
     }
 
@@ -166,11 +170,11 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.discretizationBucketCount = value;
     }
 
-    public ScalarMiningStructureColumn.KeyColumns getKeyColumns() {
+    public List<DataItem> getKeyColumns() {
         return keyColumns;
     }
 
-    public void setKeyColumns(ScalarMiningStructureColumn.KeyColumns value) {
+    public void setKeyColumns(List<DataItem> value) {
         this.keyColumns = value;
     }
 
@@ -182,76 +186,12 @@ public class ScalarMiningStructureColumn extends MiningStructureColumn{
         this.nameColumn = value;
     }
 
-    public ScalarMiningStructureColumn.Translations getTranslations() {
+    public List<Translation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(ScalarMiningStructureColumn.Translations value) {
+    public void setTranslations(List<Translation> value) {
         this.translations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"classifiedColumnID"})
-    public static class ClassifiedColumns {
-
-        @XmlElement(name = "ClassifiedColumnID")
-        protected List<String> classifiedColumnID;
-
-        public List<String> getClassifiedColumnID() {
-            return this.classifiedColumnID;
-        }
-
-        public void setClassifiedColumnID(List<String> classifiedColumnID) {
-            this.classifiedColumnID = classifiedColumnID;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"keyColumn"})
-    public static class KeyColumns {
-
-        @XmlElement(name = "KeyColumn")
-        protected List<DataItem> keyColumn;
-
-        public List<DataItem> getKeyColumn() {
-            return this.keyColumn;
-        }
-
-        public void setKeyColumn(List<DataItem> keyColumn) {
-            this.keyColumn = keyColumn;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"modelingFlag"})
-    public static class ModelingFlags {
-
-        @XmlElement(name = "ModelingFlag")
-        protected List<MiningModelingFlag> modelingFlag;
-
-        public List<MiningModelingFlag> getModelingFlag() {
-            return this.modelingFlag;
-        }
-
-        public void setModelingFlag(List<MiningModelingFlag> modelingFlag) {
-            this.modelingFlag = modelingFlag;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"translation"})
-    public static class Translations {
-
-        @XmlElement(name = "Translation")
-        protected List<Translation> translation;
-
-        public List<Translation> getTranslation() {
-            return this.translation;
-        }
-
-        public void setTranslation(List<Translation> translation) {
-            this.translation = translation;
-        }
     }
 
 }

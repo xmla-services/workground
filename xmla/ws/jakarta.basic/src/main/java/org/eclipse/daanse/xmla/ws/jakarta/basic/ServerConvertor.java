@@ -47,11 +47,11 @@ public class ServerConvertor {
                 server.getProductLevel(),
                 server.getDefaultCompatibilityLevel(),
                 server.getSupportedCompatibilityLevels(),
-                convertDatabaseList(server.getDatabases() == null ? null : server.getDatabases().getDatabase()),
-                convertAssemblyList(server.getAssemblies() == null ? null : server.getAssemblies().getAssembly()),
-                convertTraceList(server.getTraces() == null ? null : server.getTraces().getTrace()),
-                convertRoleList(server.getRoles() == null ? null : server.getRoles().getRole()),
-                convertServerPropertyList(server.getServerProperties() == null ? null : server.getServerProperties().getServerProperty()));
+                convertDatabaseList(server.getDatabases()),
+                convertAssemblyList(server.getAssemblies()),
+                convertTraceList(server.getTraces()),
+                convertRoleList(server.getRoles()),
+                convertServerPropertyList(server.getServerProperties()));
         }
         return null;
     }

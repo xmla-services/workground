@@ -63,14 +63,6 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link NormTupleSet.MembersLookup }
-   *
-   */
-  public NormTupleSet.MembersLookup createNormTupleSetMembersLookup() {
-    return new NormTupleSet.MembersLookup();
-  }
-
-  /**
    * Create an instance of {@link NormTuplesType.NormTuple.MemberRef }
    *
    */

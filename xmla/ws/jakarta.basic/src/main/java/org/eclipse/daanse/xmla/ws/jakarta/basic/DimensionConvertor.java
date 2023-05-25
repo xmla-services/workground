@@ -61,6 +61,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.AttributeHierarchyProcessingStateXmlEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEnd.Attributes.Attribute;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionAttributeTypeEnumTypeXmlEnum;
 
 public class DimensionConvertor {
 
@@ -278,7 +279,8 @@ public class DimensionConvertor {
         return null;
     }
 
-    private static DimensionAttributeTypeEnumType convertDimensionAttributeTypeEnumType(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionAttributeTypeEnumType value) {
+    private static DimensionAttributeTypeEnumType convertDimensionAttributeTypeEnumType(
+            DimensionAttributeTypeEnumTypeXmlEnum value) {
         if (value != null) {
             return DimensionAttributeTypeEnumType.fromValue(value.value());
         }

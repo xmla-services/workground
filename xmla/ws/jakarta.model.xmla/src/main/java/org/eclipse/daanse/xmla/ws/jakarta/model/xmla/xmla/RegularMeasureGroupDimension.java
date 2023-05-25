@@ -22,45 +22,15 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RegularMeasureGroupDimension", propOrder = {"cubeDimensionID", "annotations", "source", "cardinality",
+@XmlType(name = "RegularMeasureGroupDimension", propOrder = {"cardinality",
     "attributes"})
 public class RegularMeasureGroupDimension extends MeasureGroupDimension {
 
-    @XmlElement(name = "CubeDimensionID", required = true)
-    protected String cubeDimensionID;
-    @XmlElementWrapper(name = "Annotations")
-    @XmlElement(name = "Annotation", type = Annotation.class)
-    protected List<Annotation> annotations;
-    @XmlElement(name = "Source")
-    protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "Cardinality")
     protected String cardinality;
-    @XmlElement(name = "Attributes", required = true)
-    protected RegularMeasureGroupDimension.Attributes attributes;
-
-    public String getCubeDimensionID() {
-        return cubeDimensionID;
-    }
-
-    public void setCubeDimensionID(String value) {
-        this.cubeDimensionID = value;
-    }
-
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<Annotation> value) {
-        this.annotations = value;
-    }
-
-    public MeasureGroupDimensionBinding getSource() {
-        return source;
-    }
-
-    public void setSource(MeasureGroupDimensionBinding value) {
-        this.source = value;
-    }
+    @XmlElement(name = "Attribute", required = true, type = MeasureGroupAttribute.class)
+    @XmlElementWrapper(name = "Attributes", required = true)
+    protected List<MeasureGroupAttribute> attributes;
 
     public String getCardinality() {
         return cardinality;
@@ -70,28 +40,12 @@ public class RegularMeasureGroupDimension extends MeasureGroupDimension {
         this.cardinality = value;
     }
 
-    public RegularMeasureGroupDimension.Attributes getAttributes() {
+    public List<MeasureGroupAttribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(RegularMeasureGroupDimension.Attributes value) {
+    public void setAttributes(List<MeasureGroupAttribute> value) {
         this.attributes = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"attribute"})
-    public static class Attributes {
-
-        @XmlElement(name = "Attribute", required = true)
-        protected List<MeasureGroupAttribute> attribute;
-
-        public List<MeasureGroupAttribute> getAttribute() {
-            return this.attribute;
-        }
-
-        public void setAttribute(List<MeasureGroupAttribute> attribute) {
-            this.attribute = attribute;
-        }
     }
 
 }

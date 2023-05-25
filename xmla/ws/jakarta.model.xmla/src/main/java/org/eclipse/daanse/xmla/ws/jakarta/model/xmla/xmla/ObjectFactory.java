@@ -1690,14 +1690,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Account.Aliases }
-     *
-     */
-    public Account.Aliases createAccountAliases() {
-        return new Account.Aliases();
-    }
-
-    /**
      * Create an instance of {@link Partition.StorageMode }
      *
      */
@@ -1714,15 +1706,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RegularMeasureGroupDimension.Attributes }
-     *
-     */
-    public RegularMeasureGroupDimension.Attributes createRegularMeasureGroupDimensionAttributes() {
-        return new RegularMeasureGroupDimension.Attributes();
-    }
-
-
-    /**
      * Create an instance of {@link MeasureGroup.StorageMode }
      *
      */
@@ -1730,45 +1713,6 @@ public class ObjectFactory {
         return new MeasureGroup.StorageMode();
     }
 
-    /**
-     * Create an instance of {@link PerspectiveMeasureGroup.Measures }
-     *
-     */
-    public PerspectiveMeasureGroup.Measures createPerspectiveMeasureGroupMeasures() {
-        return new PerspectiveMeasureGroup.Measures();
-    }
-
-    /**
-     * Create an instance of {@link ReportAction.Translations }
-     *
-     */
-    public ReportAction.Translations createReportActionTranslations() {
-        return new ReportAction.Translations();
-    }
-
-    /**
-     * Create an instance of {@link ReportAction.ReportParameters }
-     *
-     */
-    public ReportAction.ReportParameters createReportActionReportParameters() {
-        return new ReportAction.ReportParameters();
-    }
-
-    /**
-     * Create an instance of {@link ReportAction.ReportFormatParameters }
-     *
-     */
-    public ReportAction.ReportFormatParameters createReportActionReportFormatParameters() {
-        return new ReportAction.ReportFormatParameters();
-    }
-
-    /**
-     * Create an instance of {@link StandardAction.Translations }
-     *
-     */
-    public StandardAction.Translations createStandardActionTranslations() {
-        return new StandardAction.Translations();
-    }
 
     /**
      * Create an instance of {@link Cube.StorageMode }
@@ -1776,63 +1720,6 @@ public class ObjectFactory {
      */
     public Cube.StorageMode createCubeStorageMode() {
         return new Cube.StorageMode();
-    }
-
-    /**
-     * Create an instance of {@link TableMiningStructureColumn.ForeignKeyColumns }
-     *
-     */
-    public TableMiningStructureColumn.ForeignKeyColumns createTableMiningStructureColumnForeignKeyColumns() {
-        return new TableMiningStructureColumn.ForeignKeyColumns();
-    }
-
-    /**
-     * Create an instance of {@link TableMiningStructureColumn.Columns }
-     *
-     */
-    public TableMiningStructureColumn.Columns createTableMiningStructureColumnColumns() {
-        return new TableMiningStructureColumn.Columns();
-    }
-
-    /**
-     * Create an instance of {@link TableMiningStructureColumn.Translations }
-     *
-     */
-    public TableMiningStructureColumn.Translations createTableMiningStructureColumnTranslations() {
-        return new TableMiningStructureColumn.Translations();
-    }
-
-
-    /**
-     * Create an instance of {@link ScalarMiningStructureColumn.ModelingFlags }
-     *
-     */
-    public ScalarMiningStructureColumn.ModelingFlags createScalarMiningStructureColumnModelingFlags() {
-        return new ScalarMiningStructureColumn.ModelingFlags();
-    }
-
-    /**
-     * Create an instance of {@link ScalarMiningStructureColumn.ClassifiedColumns }
-     *
-     */
-    public ScalarMiningStructureColumn.ClassifiedColumns createScalarMiningStructureColumnClassifiedColumns() {
-        return new ScalarMiningStructureColumn.ClassifiedColumns();
-    }
-
-    /**
-     * Create an instance of {@link ScalarMiningStructureColumn.KeyColumns }
-     *
-     */
-    public ScalarMiningStructureColumn.KeyColumns createScalarMiningStructureColumnKeyColumns() {
-        return new ScalarMiningStructureColumn.KeyColumns();
-    }
-
-    /**
-     * Create an instance of {@link ScalarMiningStructureColumn.Translations }
-     *
-     */
-    public ScalarMiningStructureColumn.Translations createScalarMiningStructureColumnTranslations() {
-        return new ScalarMiningStructureColumn.Translations();
     }
 
     /**
@@ -1857,46 +1744,6 @@ public class ObjectFactory {
      */
     public PredLeaf.Global createPredLeafGlobal() {
         return new PredLeaf.Global();
-    }
-
-    /**
-     * Create an instance of {@link Server.Databases }
-     *
-     */
-    public Server.Databases createServerDatabases() {
-        return new Server.Databases();
-    }
-
-    /**
-     * Create an instance of {@link Server.Assemblies }
-     *
-     */
-    public Server.Assemblies createServerAssemblies() {
-        return new Server.Assemblies();
-    }
-
-    /**
-     * Create an instance of {@link Server.Traces }
-     *
-     */
-    public Server.Traces createServerTraces() {
-        return new Server.Traces();
-    }
-
-    /**
-     * Create an instance of {@link Server.Roles }
-     *
-     */
-    public Server.Roles createServerRoles() {
-        return new Server.Roles();
-    }
-
-    /**
-     * Create an instance of {@link Server.ServerProperties }
-     *
-     */
-    public Server.ServerProperties createServerServerProperties() {
-        return new Server.ServerProperties();
     }
 
     /**
@@ -1957,14 +1804,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TraceEvent.EventColumnList }
-     *
-     */
-    public TraceEvent.EventColumnList createTraceEventEventColumnList() {
-        return new TraceEvent.EventColumnList();
-    }
-
-    /**
      * Create an instance of
      * {@link TraceEventCategories.Data.EventCategory.EventList }
      *
@@ -1982,54 +1821,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Role.Members }
-     *
-     */
-    public Role.Members createRoleMembers() {
-        return new Role.Members();
-    }
-
-    /**
-     * Create an instance of
-     * {@link ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications }
-     *
-     */
-    public ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications createProactiveCachingIncrementalProcessingBindingIncrementalProcessingNotifications() {
-        return new ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications();
-    }
-
-    /**
-     * Create an instance of
-     * {@link ProactiveCachingQueryBinding.QueryNotifications }
-     *
-     */
-    public ProactiveCachingQueryBinding.QueryNotifications createProactiveCachingQueryBindingQueryNotifications() {
-        return new ProactiveCachingQueryBinding.QueryNotifications();
-    }
-
-    /**
-     * Create an instance of
-     * {@link ProactiveCachingTablesBinding.TableNotifications }
-     *
-     */
-    public ProactiveCachingTablesBinding.TableNotifications createProactiveCachingTablesBindingTableNotifications() {
-        return new ProactiveCachingTablesBinding.TableNotifications();
-    }
-
-    /**
      * Create an instance of {@link CubeAttributeBinding.Ordinal }
      *
      */
     public CubeAttributeBinding.Ordinal createCubeAttributeBindingOrdinal() {
         return new CubeAttributeBinding.Ordinal();
-    }
-
-    /**
-     * Create an instance of {@link UserDefinedGroupBinding.Groups }
-     *
-     */
-    public UserDefinedGroupBinding.Groups createUserDefinedGroupBindingGroups() {
-        return new UserDefinedGroupBinding.Groups();
     }
 
     /**
@@ -2127,38 +1923,6 @@ public class ObjectFactory {
      */
     public Batch.Parallel createBatchParallel() {
         return new Batch.Parallel();
-    }
-
-    /**
-     * Create an instance of {@link WhereAttribute.Keys }
-     *
-     */
-    public WhereAttribute.Keys createWhereAttributeKeys() {
-        return new WhereAttribute.Keys();
-    }
-
-    /**
-     * Create an instance of {@link Update.Attributes }
-     *
-     */
-    public Update.Attributes createUpdateAttributes() {
-        return new Update.Attributes();
-    }
-
-    /**
-     * Create an instance of {@link Synchronize.Locations }
-     *
-     */
-    public Synchronize.Locations createSynchronizeLocations() {
-        return new Synchronize.Locations();
-    }
-
-    /**
-     * Create an instance of {@link Restore.Locations }
-     *
-     */
-    public Restore.Locations createRestoreLocations() {
-        return new Restore.Locations();
     }
 
     /**

@@ -13,54 +13,19 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.util.List;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ManyToManyMeasureGroupDimension", propOrder = {"cubeDimensionID", "annotations", "source",
-    "measureGroupID", "directSlice"})
+@XmlType(name = "ManyToManyMeasureGroupDimension", propOrder = {"measureGroupID", "directSlice"})
 public class ManyToManyMeasureGroupDimension extends MeasureGroupDimension {
 
-    @XmlElement(name = "CubeDimensionID", required = true)
-    protected String cubeDimensionID;
-    @XmlElementWrapper(name = "Annotations")
-    @XmlElement(name = "Annotation", type = Annotation.class)
-    protected List<Annotation> annotations;
-    @XmlElement(name = "Source")
-    protected MeasureGroupDimensionBinding source;
     @XmlElement(name = "MeasureGroupID")
     protected String measureGroupID;
     @XmlElement(name = "DirectSlice")
     protected String directSlice;
-
-    public String getCubeDimensionID() {
-        return cubeDimensionID;
-    }
-
-    public void setCubeDimensionID(String value) {
-        this.cubeDimensionID = value;
-    }
-
-    public List<Annotation> getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List<Annotation> value) {
-        this.annotations = value;
-    }
-
-    public MeasureGroupDimensionBinding getSource() {
-        return source;
-    }
-
-    public void setSource(MeasureGroupDimensionBinding value) {
-        this.source = value;
-    }
 
     public String getMeasureGroupID() {
         return measureGroupID;

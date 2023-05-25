@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 import java.util.List;
@@ -44,16 +45,21 @@ public class Server extends AbstractItem {
     @XmlElement(name = "SupportedCompatibilityLevels", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2013/engine/600")
     protected String supportedCompatibilityLevels;
-    @XmlElement(name = "Databases")
-    protected Server.Databases databases;
-    @XmlElement(name = "Assemblies")
-    protected Server.Assemblies assemblies;
-    @XmlElement(name = "Traces")
-    protected Server.Traces traces;
-    @XmlElement(name = "Roles")
-    protected Server.Roles roles;
-    @XmlElement(name = "ServerProperties")
-    protected Server.ServerProperties serverProperties;
+    @XmlElement(name = "Database", type = Database.class)
+    @XmlElementWrapper(name = "Databases")
+    protected List<Database> databases;
+    @XmlElement(name = "Assembly", type = Assembly.class)
+    @XmlElementWrapper(name = "Assemblies")
+    protected List<Assembly> assemblies;
+    @XmlElement(name = "Trace", type = Trace.class)
+    @XmlElementWrapper(name = "Traces")
+    protected List<Trace> traces;
+    @XmlElement(name = "Role", type = Role.class)
+    @XmlElementWrapper(name = "Roles")
+    protected List<Role> roles;
+    @XmlElement(name = "ServerProperty", type = ServerProperty.class)
+    @XmlElementWrapper(name = "ServerProperties")
+    protected List<ServerProperty> serverProperties;
 
     public String getProductName() {
         return productName;
@@ -119,123 +125,44 @@ public class Server extends AbstractItem {
         this.supportedCompatibilityLevels = value;
     }
 
-    public Server.Databases getDatabases() {
+    public List<Database> getDatabases() {
         return databases;
     }
 
-    public void setDatabases(Server.Databases value) {
+    public void setDatabases(List<Database> value) {
         this.databases = value;
     }
 
-    public Server.Assemblies getAssemblies() {
+    public List<Assembly> getAssemblies() {
         return assemblies;
     }
 
-    public void setAssemblies(Server.Assemblies value) {
+    public void setAssemblies(List<Assembly> value) {
         this.assemblies = value;
     }
 
-    public Server.Traces getTraces() {
+    public List<Trace> getTraces() {
         return traces;
     }
 
-    public void setTraces(Server.Traces value) {
+    public void setTraces(List<Trace> value) {
         this.traces = value;
     }
 
-    public Server.Roles getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Server.Roles value) {
+    public void setRoles(List<Role> value) {
         this.roles = value;
     }
 
-    public Server.ServerProperties getServerProperties() {
+    public List<ServerProperty> getServerProperties() {
         return serverProperties;
     }
 
-    public void setServerProperties(Server.ServerProperties value) {
+    public void setServerProperties(List<ServerProperty> value) {
         this.serverProperties = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"assembly"})
-    public static class Assemblies {
-
-        @XmlElement(name = "Assembly")
-        protected List<Assembly> assembly;
-
-        public List<Assembly> getAssembly() {
-            return this.assembly;
-        }
-
-        public void setAssembly(List<Assembly> assembly) {
-            this.assembly = assembly;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"database"})
-    public static class Databases {
-
-        @XmlElement(name = "Database")
-        protected List<Database> database;
-        public List<Database> getDatabase() {
-            return this.database;
-        }
-
-        public void setDatabase(List<Database> database) {
-            this.database = database;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"role"})
-    public static class Roles {
-
-        @XmlElement(name = "Role")
-        protected List<Role> role;
-
-        public List<Role> getRole() {
-            return this.role;
-        }
-
-        public void setRole(List<Role> role) {
-            this.role = role;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"serverProperty"})
-    public static class ServerProperties {
-
-        @XmlElement(name = "ServerProperty")
-        protected List<ServerProperty> serverProperty;
-
-        public List<ServerProperty> getServerProperty() {
-            return this.serverProperty;
-        }
-
-        public void setServerProperty(List<ServerProperty> serverProperty) {
-            this.serverProperty = serverProperty;
-        }
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"trace"})
-    public static class Traces {
-
-        @XmlElement(name = "Trace")
-        protected List<Trace> trace;
-
-        public List<Trace> getTrace() {
-            return this.trace;
-        }
-
-        public void setTrace(List<Trace> trace) {
-            this.trace = trace;
-        }
     }
 
 }

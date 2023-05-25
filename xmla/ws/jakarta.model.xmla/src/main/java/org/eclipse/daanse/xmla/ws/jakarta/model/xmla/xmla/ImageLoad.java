@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ImageLoad", propOrder = {
 
 })
-public class ImageLoad {
+public class ImageLoad extends AbstractTarget {
 
   @XmlElement(name = "ImagePath", namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200")
   protected String imagePath;
@@ -37,12 +37,6 @@ public class ImageLoad {
   protected String imageVersion;
   @XmlElement(name = "ReadWriteMode", namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100", required = true)
   protected String readWriteMode;
-  @XmlElement(name = "DbStorageLocation", namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100")
-  protected String dbStorageLocation;
-  @XmlElement(name = "DatabaseName", required = true)
-  protected String databaseName;
-  @XmlElement(name = "DatabaseID", required = true)
-  protected String databaseID;
   @XmlElement(name = "DataBlock")
   @XmlElementWrapper(name = "Data")
   protected List<String> data;
@@ -85,30 +79,6 @@ public class ImageLoad {
 
   public void setReadWriteMode(String value) {
     this.readWriteMode = value;
-  }
-
-  public String getDbStorageLocation() {
-    return dbStorageLocation;
-  }
-
-  public void setDbStorageLocation(String value) {
-    this.dbStorageLocation = value;
-  }
-
-  public String getDatabaseName() {
-    return databaseName;
-  }
-
-  public void setDatabaseName(String value) {
-    this.databaseName = value;
-  }
-
-  public String getDatabaseID() {
-    return databaseID;
-  }
-
-  public void setDatabaseID(String value) {
-    this.databaseID = value;
   }
 
   public List<String> getData() {

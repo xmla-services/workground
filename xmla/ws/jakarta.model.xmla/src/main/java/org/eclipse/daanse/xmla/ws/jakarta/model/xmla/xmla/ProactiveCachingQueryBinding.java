@@ -20,6 +20,7 @@ import javax.xml.datatype.Duration;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,8 +29,9 @@ public class ProactiveCachingQueryBinding extends ProactiveCachingBinding {
 
     @XmlElement(name = "RefreshInterval", required = true)
     protected Duration refreshInterval;
-    @XmlElement(name = "QueryNotifications", required = true)
-    protected ProactiveCachingQueryBinding.QueryNotifications queryNotifications;
+    @XmlElement(name = "QueryNotification", required = true)
+    @XmlElementWrapper(name = "QueryNotifications", required = true)
+    protected List<QueryNotification> queryNotifications;
 
     public Duration getRefreshInterval() {
         return refreshInterval;
@@ -39,28 +41,12 @@ public class ProactiveCachingQueryBinding extends ProactiveCachingBinding {
         this.refreshInterval = value;
     }
 
-    public ProactiveCachingQueryBinding.QueryNotifications getQueryNotifications() {
+    public List<QueryNotification> getQueryNotifications() {
         return queryNotifications;
     }
 
-    public void setQueryNotifications(ProactiveCachingQueryBinding.QueryNotifications value) {
+    public void setQueryNotifications(List<QueryNotification> value) {
         this.queryNotifications = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"queryNotification"})
-    public static class QueryNotifications {
-
-        @XmlElement(name = "QueryNotification")
-        protected List<QueryNotification> queryNotification;
-
-        public List<QueryNotification> getQueryNotification() {
-            return this.queryNotification;
-        }
-
-        public void setQueryNotification(List<QueryNotification> queryNotification) {
-            this.queryNotification = queryNotification;
-        }
     }
 
 }

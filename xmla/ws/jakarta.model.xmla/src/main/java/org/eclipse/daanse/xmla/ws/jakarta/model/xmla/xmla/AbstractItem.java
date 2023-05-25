@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlSeeAlso({AggregationDesign.class, Cube.class, DataSource.class,
     DataSourceView.class, Database.class, Dimension.class, MdxScript.class, MeasureGroup.class,
     MiningModel.class, MiningStructure.class, Partition.class, Permission.class, Perspective.class,
-    Role.class, Server.class, Trace.class
+    Role.class, Server.class, Trace.class, Assembly.class
 })
 public abstract class AbstractItem {
     @XmlElement(name = "Name", required = true)

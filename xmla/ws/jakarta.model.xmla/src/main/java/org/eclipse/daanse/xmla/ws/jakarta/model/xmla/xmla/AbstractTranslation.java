@@ -7,6 +7,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEndTranslation;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @XmlType(name = "AbstractTranslation", propOrder = {
 
 })
-@XmlSeeAlso({AttributeTranslation.class, Translation.class})
+@XmlSeeAlso({AttributeTranslation.class, Translation.class, RelationshipEndTranslation.class })
 public abstract class AbstractTranslation {
 
     @XmlElement(name = "Language")

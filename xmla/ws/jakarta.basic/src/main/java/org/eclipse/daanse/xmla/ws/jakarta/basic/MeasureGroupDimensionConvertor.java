@@ -18,7 +18,6 @@ import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convert
 
 import java.util.List;
 
-import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
@@ -94,7 +93,7 @@ public class MeasureGroupDimensionConvertor {
             convertAnnotationList(regularMeasureGroupDimension.getAnnotations()),
             convertMeasureGroupDimensionBinding(regularMeasureGroupDimension.getSource()),
             regularMeasureGroupDimension.getCardinality(),
-            convertRegularMeasureGroupDimensionAttributes(regularMeasureGroupDimension.getAttributes()));
+            convertMeasureGroupAttributeList(regularMeasureGroupDimension.getAttributes()));
     }
 
     private static MeasureGroupDimension convertManyToManyMeasureGroupDimension(
@@ -105,14 +104,6 @@ public class MeasureGroupDimensionConvertor {
             manyToManyMeasureGroupDimension.getMeasureGroupID(),
             manyToManyMeasureGroupDimension.getDirectSlice());
     }
-
-    private static List<MeasureGroupAttribute> convertRegularMeasureGroupDimensionAttributes(
-			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDimension.Attributes attributes) {
-		if (attributes != null) {
-			return convertMeasureGroupAttributeList(attributes.getAttribute());
-		}
-		return List.of();
-	}
 
 	private static List<MeasureGroupAttribute> convertMeasureGroupAttributeList(
 			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute> attributeList) {

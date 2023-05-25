@@ -131,22 +131,22 @@ public class MiningStructureConvertor {
             Optional.ofNullable(scalarMiningStructureColumn.isIsKey()),
             Optional.ofNullable(convertBinding(scalarMiningStructureColumn.getSource())),
             Optional.ofNullable(scalarMiningStructureColumn.getDistribution()),
-            Optional.ofNullable(convertMiningModelingFlagList(scalarMiningStructureColumn.getModelingFlags() == null ? null : scalarMiningStructureColumn.getModelingFlags().getModelingFlag())),
+            Optional.ofNullable(convertMiningModelingFlagList(scalarMiningStructureColumn.getModelingFlags())),
             scalarMiningStructureColumn.getContent(),
-            Optional.ofNullable(scalarMiningStructureColumn.getClassifiedColumns() == null ? null : scalarMiningStructureColumn.getClassifiedColumns().getClassifiedColumnID()),
+            Optional.ofNullable(scalarMiningStructureColumn.getClassifiedColumns()),
             Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationMethod()),
             Optional.ofNullable(scalarMiningStructureColumn.getDiscretizationBucketCount()),
-            Optional.ofNullable(convertDataItemList(scalarMiningStructureColumn.getKeyColumns() == null ? null : scalarMiningStructureColumn.getKeyColumns().getKeyColumn())),
+            Optional.ofNullable(convertDataItemList(scalarMiningStructureColumn.getKeyColumns())),
             Optional.ofNullable(convertDataItem(scalarMiningStructureColumn.getNameColumn())),
-            Optional.ofNullable(convertTranslationList(scalarMiningStructureColumn.getTranslations() == null ? null : scalarMiningStructureColumn.getTranslations().getTranslation())));
+            Optional.ofNullable(convertTranslationList(scalarMiningStructureColumn.getTranslations())));
     }
 
     private static MiningStructureColumn convertTableMiningStructureColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn tableMiningStructureColumn) {
         return new TableMiningStructureColumnR(
-            Optional.ofNullable(convertDataItemList(tableMiningStructureColumn.getForeignKeyColumns() == null ? null : tableMiningStructureColumn.getForeignKeyColumns().getForeignKeyColumn())),
+            Optional.ofNullable(convertDataItemList(tableMiningStructureColumn.getForeignKeyColumns())),
             Optional.ofNullable(convertMeasureGroupBinding(tableMiningStructureColumn.getSourceMeasureGroup())),
-            Optional.ofNullable(convertMiningStructureColumnList(tableMiningStructureColumn.getColumns() == null ? null : tableMiningStructureColumn.getColumns().getColumn())),
-            Optional.ofNullable(convertTranslationList(tableMiningStructureColumn.getTranslations() == null ? null : tableMiningStructureColumn.getTranslations().getTranslation())));
+            Optional.ofNullable(convertMiningStructureColumnList(tableMiningStructureColumn.getColumns())),
+            Optional.ofNullable(convertTranslationList(tableMiningStructureColumn.getTranslations())));
     }
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -26,8 +27,9 @@ public class ProactiveCachingTablesBinding extends ProactiveCachingObjectNotific
 
     @XmlElement(name = "NotificationTechnique")
     protected String notificationTechnique;
-    @XmlElement(name = "TableNotifications", required = true)
-    protected ProactiveCachingTablesBinding.TableNotifications tableNotifications;
+    @XmlElement(name = "TableNotification", required = true)
+    @XmlElementWrapper(name = "TableNotifications", required = true)
+    protected List<TableNotification> tableNotifications;
 
     public String getNotificationTechnique() {
         return notificationTechnique;
@@ -37,28 +39,12 @@ public class ProactiveCachingTablesBinding extends ProactiveCachingObjectNotific
         this.notificationTechnique = value;
     }
 
-    public ProactiveCachingTablesBinding.TableNotifications getTableNotifications() {
+    public List<TableNotification> getTableNotifications() {
         return tableNotifications;
     }
 
-    public void setTableNotifications(ProactiveCachingTablesBinding.TableNotifications value) {
+    public void setTableNotifications(List<TableNotification> value) {
         this.tableNotifications = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"tableNotification"})
-    public static class TableNotifications {
-
-        @XmlElement(name = "TableNotification")
-        protected List<TableNotification> tableNotification;
-
-        public List<TableNotification> getTableNotification() {
-            return this.tableNotification;
-        }
-
-        public void setTableNotification(List<TableNotification> tableNotification) {
-            this.tableNotification = tableNotification;
-        }
     }
 
 }

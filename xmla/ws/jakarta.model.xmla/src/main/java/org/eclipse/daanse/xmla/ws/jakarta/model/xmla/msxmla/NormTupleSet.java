@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.TupleType;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -32,8 +33,9 @@ public class NormTupleSet implements Serializable {
     private static final long serialVersionUID = 1L;
     @XmlElement(name = "NormTuples", required = true)
     protected NormTuplesType normTuples;
-    @XmlElement(name = "MembersLookup", required = true)
-    protected NormTupleSet.MembersLookup membersLookup;
+    @XmlElement(name = "Members", required = true, type = TupleType.class)
+    @XmlElementWrapper(name = "MembersLookup", required = true)
+    protected List<TupleType> membersLookup;
 
     public NormTuplesType getNormTuples() {
         return normTuples;
@@ -43,29 +45,12 @@ public class NormTupleSet implements Serializable {
         this.normTuples = value;
     }
 
-    public NormTupleSet.MembersLookup getMembersLookup() {
+    public List<TupleType> getMembersLookup() {
         return membersLookup;
     }
 
-    public void setMembersLookup(NormTupleSet.MembersLookup value) {
+    public void setMembersLookup(List<TupleType> value) {
         this.membersLookup = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"members"})
-    public static class MembersLookup implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-        @XmlElement(name = "Members", required = true)
-        private List<TupleType> members;
-
-        public List<TupleType> getMembers() {
-            return this.members;
-        }
-
-        public void setMembers(List<TupleType> members) {
-            this.members = members;
-        }
     }
 
 }

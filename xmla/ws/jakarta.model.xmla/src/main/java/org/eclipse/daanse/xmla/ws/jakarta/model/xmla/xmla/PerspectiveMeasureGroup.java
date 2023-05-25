@@ -29,8 +29,9 @@ public class PerspectiveMeasureGroup {
 
     @XmlElement(name = "MeasureGroupID", required = true)
     protected String measureGroupID;
-    @XmlElement(name = "Measures")
-    protected PerspectiveMeasureGroup.Measures measures;
+    @XmlElement(name = "Measure", type = PerspectiveMeasure.class)
+    @XmlElementWrapper(name = "Measures")
+    protected List<PerspectiveMeasure> measures;
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation", type = Annotation.class)
     protected List<Annotation> annotations;
@@ -43,11 +44,11 @@ public class PerspectiveMeasureGroup {
         this.measureGroupID = value;
     }
 
-    public PerspectiveMeasureGroup.Measures getMeasures() {
+    public List<PerspectiveMeasure> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(PerspectiveMeasureGroup.Measures value) {
+    public void setMeasures(List<PerspectiveMeasure> value) {
         this.measures = value;
     }
 
@@ -57,22 +58,6 @@ public class PerspectiveMeasureGroup {
 
     public void setAnnotations(List<Annotation> value) {
         this.annotations = value;
-    }
-
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"measure"})
-    public static class Measures {
-
-        @XmlElement(name = "Measure")
-        protected List<PerspectiveMeasure> measure;
-
-        public List<PerspectiveMeasure> getMeasure() {
-            return this.measure;
-        }
-
-        public void setMeasure(List<PerspectiveMeasure> measure) {
-            this.measure = measure;
-        }
     }
 
 }
