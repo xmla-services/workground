@@ -113,10 +113,9 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
     private static final LevelR LEVEL41 = LevelRBuilder
         .builder()
         .name("Age")
-        .column("Age")
+        .column("age")
         .description("Age")
         .build();
-
 
     private static final LevelR LEVEL42 = LevelRBuilder
         .builder()
@@ -148,7 +147,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Year")
         .primaryKey("year")
         .description("Year")
-        .table(TABLE1)
+        .relation(TABLE1)
         .levels(List.of(LEVEL1))
         .build();
 
@@ -159,7 +158,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .primaryKey("id")
         .primaryKeyTable(STATE)
         .description(GEOGRAPHICAL)
-        .join(JOIN1)
+        .relation(JOIN1)
         .levels(List.of(LEVEL21, LEVEL22, LEVEL23))
         .build();
 
@@ -169,7 +168,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Gender (m/f/d)")
         .primaryKey(GENDER_ID)
         .description(GENDER)
-        .table(TABLE3)
+        .relation(TABLE3)
         .levels(List.of(LEVEL3))
         .build();
 
@@ -179,7 +178,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Age (single vintages)")
         .primaryKey("age")
         .description("Age (single vintages)")
-        .table(TABLE4)
+        .relation(TABLE4)
         .levels(List.of(LEVEL41))
         .build();
 
@@ -189,7 +188,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Age group (Standard)")
         .primaryKey("age")
         .description("Age group (Standard)")
-        .table(TABLE4)
+        .relation(TABLE4)
         .levels(List.of(LEVEL42, LEVEL41))
         .build();
 
@@ -199,7 +198,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Age group (children)")
         .primaryKey("age")
         .description("Age group (children)")
-        .table(TABLE4)
+        .relation(TABLE4)
         .levels(List.of(LEVEL43, LEVEL41))
         .build();
 
@@ -209,7 +208,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaP
         .name("Age group (10-year groups)")
         .primaryKey("age")
         .description("Age group (10-year groups)")
-        .table(TABLE4)
+        .relation(TABLE4)
         .levels(List.of(LEVEL44, LEVEL41))
         .build();
 
