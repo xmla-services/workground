@@ -13,22 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.basic;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
@@ -42,6 +26,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
@@ -51,6 +36,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +47,21 @@ import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -80,6 +81,7 @@ class DbCreatorServiceImplTest {
     PrivateDimension privateDimension = mock(PrivateDimension.class);
     Hierarchy hierarchy = mock(Hierarchy.class);
     Table table = mock(Table.class);
+    Join join = mock(Join.class);
     Table tableFact = mock(Table.class);
     Level level1 = mock(Level.class);
     Level level2 = mock(Level.class);
@@ -390,8 +392,162 @@ class DbCreatorServiceImplTest {
             .contains("id");
     }
 
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testCreatorForPopulationSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+                                        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider) throws SQLException {
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
+
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("Population");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(7);
+        org.eclipse.daanse.db.jdbc.util.impl.Table t;
+        org.eclipse.daanse.db.jdbc.util.impl.Column c;
+
+        t = getTable(dbStructure.getTables(), "continent");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(2);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("id", "name");
+        c = getColumn(t.getColumns(), "id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "name");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        t = getTable(dbStructure.getTables(), "country");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("id", "name", "continent_id");
+        c = getColumn(t.getColumns(), "id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "name");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "continent_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "gender");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(2);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("gender_id", "name");
+        c = getColumn(t.getColumns(), "gender_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "name");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        t = getTable(dbStructure.getTables(), "year");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(2);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("year", "ordinal");
+        c = getColumn(t.getColumns(), "year");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER); //?
+
+        t = getTable(dbStructure.getTables(), "state");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("id", "name", "contry_id");
+        c = getColumn(t.getColumns(), "id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "name");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "contry_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "ageGroups");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(7);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("age", "H1", "H1_Order", "H2", "H2_Order", "H9", "H9_Order");
+        c = getColumn(t.getColumns(), "age");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "H1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "H1_Order");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "H2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "H2_Order");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "H9");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        c = getColumn(t.getColumns(), "H9_Order");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "population");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(4);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains("year", "state_id", "gender_id", "age");
+        c = getColumn(t.getColumns(), "year");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "state_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "gender_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        c = getColumn(t.getColumns(), "age");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+    }
+
+    private org.eclipse.daanse.db.jdbc.util.impl.Table getTable(
+        List<org.eclipse.daanse.db.jdbc.util.impl.Table> tables,
+        String name) {
+        return tables
+            .stream()
+            .filter(table -> name.equals(table.tableName()))
+            .findAny()
+            .orElse(null);
+    }
+
+    private org.eclipse.daanse.db.jdbc.util.impl.Column getColumn(
+            List<org.eclipse.daanse.db.jdbc.util.impl.Column> columns,
+            String name) {
+            return columns
+                .stream()
+                .filter(column -> name.equals(column.name()))
+                .findAny()
+                .orElse(null);
+    }
+
     private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
-        final List<N> someList = new ArrayList<>(Arrays.asList(values));
+        final List<N> someList = new LinkedList<>(Arrays.asList(values));
 
         Answer<List<N>> answer = new Answer<>() {
             @Override

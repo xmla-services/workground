@@ -175,10 +175,22 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private String processingJoin(Join relation, Map<String, Table> tables, String schemaName) {
+    	String name = null;
         if (relation.relations() != null) {
-            relation.relations().forEach(r -> processingRelation(r, tables, schemaName));
+            for (int i = 0; i < relation.relations().size(); i++) {
+                String tableName = processingRelation(relation.relations().get(i), tables, schemaName);
+                String columnName;
+                if (i == 0) {
+                	name = tableName;
+                	columnName = relation.leftKey();
+                } else {
+                	columnName = relation.rightKey();
+                }
+                Table t = tables.get(tableName);
+                getColumnOrCreateNew(t.getColumns(), columnName, Type.INTEGER);
+            }
         }
-        return null;
+        return name;
     }
 
     private void processingLevel(Level level, Map<String, Table> tables, String tableName, String schema) {
@@ -186,19 +198,19 @@ public class DbCreatorServiceImpl implements DbCreatorService {
         if (tName != null) {
             Table t = getTableOrCreateNew(tables, tName, schema);
             Type type = Type.fromName(level.type() != null ? level.type().name() : null);
-            if (level.column() != null) {
+            if (level.column() != null && !level.column().isBlank()) {
                 getColumnOrCreateNew(t.getColumns(), level.column(), type);
             }
-            if (level.parentColumn() != null) {
+            if (level.parentColumn() != null && !level.parentColumn().isBlank()) {
                 getColumnOrCreateNew(t.getColumns(), level.parentColumn(), type);
             }
-            if (level.nameColumn() != null) {
+            if (level.nameColumn() != null && !level.nameColumn().isBlank()) {
                 getColumnOrCreateNew(t.getColumns(), level.nameColumn(), Type.STRING);
             }
-            if (level.captionColumn() != null) {
+            if (level.captionColumn() != null && !level.captionColumn().isBlank()) {
                 getColumnOrCreateNew(t.getColumns(), level.captionColumn(), Type.STRING);
             }
-            if (level.ordinalColumn() != null) {
+            if (level.ordinalColumn() != null && !level.ordinalColumn().isBlank()) {
                 getColumnOrCreateNew(t.getColumns(), level.ordinalColumn(), Type.INTEGER);
             }
         }
