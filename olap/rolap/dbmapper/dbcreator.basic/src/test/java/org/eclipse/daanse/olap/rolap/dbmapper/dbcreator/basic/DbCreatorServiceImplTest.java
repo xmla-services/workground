@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
@@ -80,6 +82,7 @@ class DbCreatorServiceImplTest {
     PrivateDimension privateDimension = mock(PrivateDimension.class);
     Hierarchy hierarchy = mock(Hierarchy.class);
     Table table = mock(Table.class);
+    Join join = mock(Join.class);
     Table tableFact = mock(Table.class);
     Level level1 = mock(Level.class);
     Level level2 = mock(Level.class);
@@ -390,8 +393,163 @@ class DbCreatorServiceImplTest {
             .contains("id");
     }
 
+    /*
+    	<?xml version="1.0" encoding="UTF-8"?>
+        <Schema name="Bevölkerung">
+            <Cube name="Bevölkerung">
+                <Table name="einwohner"/>
+                    <Dimension name="statistischer Bezirk" foreignKey="STATBEZ">
+                    <Hierarchy hasAll="true" name="Stadt - Planungsraum - statistischer Bezirk" primaryKey="gid" primaryKeyTable="statbez">
+                        <Join leftKey="plraum" rightKey="gid">
+                            <Table name="statbez"/>
+                            <Join leftKey="townid" rightKey="id">
+                                <Table name="plraum"/>
+                                <Table name="town"/>
+                            </Join>
+                        </Join>
+                        <Level name="Stadt" column="name"  table="town"/>
+                        <Level name="Planungsraum" column="gid" captionColumn="" nameColumn="plraum" type="Integer" table="plraum">
+                            <Property name="uuid" column="uuid"/>
+                            <Property name="GeoJson" column="geojson" type="String"/>
+                        </Level>
+                        <Level name="Statistischer Bezirk" column="gid" nameColumn="statbez_name" type="Integer"  table="statbez">
+                            <Property name="uuid" column="uuid"/>
+                            <Property name="GeoJson" column="geojson" type="String"/>
+                        </Level>
+                    </Hierarchy>
+                    </Dimension>
+        	</Cube>
+    	</Schema>
+     */
+    @Test
+    void testJoinTables(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
+        Join join1 = mock(Join.class);
+        Table table1 = mock(Table.class);
+        Table table2 = mock(Table.class);
+        Level level3 = mock(Level.class);
+        Property property2 = mock(Property.class);
+        Property property22 = mock(Property.class);
+        when(schema.name()).thenReturn("population");
+        when(schema.cubes()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.name()).thenReturn("Bevölkerung");
+        when(cube.fact()).thenReturn(tableFact);
+        when(tableFact.name()).thenReturn("einwohner");
+        when(cube.dimensionUsageOrDimensions()).thenAnswer(setupDummyListAnswer(privateDimension));
+        when(privateDimension.name()).thenReturn("statistical district");
+        when(privateDimension.foreignKey()).thenReturn("STATBEZ");
+        when(privateDimension.hierarchies()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.hasAll()).thenReturn(true);
+        when(hierarchy.name()).thenReturn("Stadt - Planungsraum - statistischer Bezirk");
+        when(hierarchy.primaryKey()).thenReturn("gid");
+        when(hierarchy.primaryKeyTable()).thenReturn("statbez");
+        when(hierarchy.relation()).thenReturn(join);
+        when(join.leftKey()).thenReturn("plraum");
+        when(join.rightKey()).thenReturn("gid");
+        when(join.relations()).thenAnswer(setupDummyListAnswer(table, join1));
+        when(table.name()).thenReturn("statbez");
+        when(join1.leftKey()).thenReturn("townid");
+        when(join1.rightKey()).thenReturn("id");
+        when(join1.relations()).thenAnswer(setupDummyListAnswer(table1, table2));
+        when(table1.name()).thenReturn("plraum");
+        when(table2.name()).thenReturn("town");
+        when(hierarchy.levels()).thenAnswer(setupDummyListAnswer(level1, level2, level3));
+        when(level1.name()).thenReturn("Stadt");
+        when(level1.column()).thenReturn("name");
+        when(level1.table()).thenReturn("town");
+
+        when(level2.name()).thenReturn("Planungsraum");
+        when(level2.column()).thenReturn("gid");
+        when(level2.captionColumn()).thenReturn("");
+        when(level2.nameColumn()).thenReturn("plraum");
+        when(level2.type()).thenReturn(TypeEnum.INTEGER);
+        when(level2.table()).thenReturn("plraum");
+        when(level2.properties()).thenAnswer(setupDummyListAnswer(property1, property2));
+        when(property1.name()).thenReturn("uuid");
+        when(property1.column()).thenReturn("uuid");
+        when(property2.name()).thenReturn("GeoJson");
+        when(property2.column()).thenReturn("geojson");
+        when(property2.type()).thenReturn(PropertyTypeEnum.STRING);
+
+        when(level3.name()).thenReturn("Statistischer Bezirk");
+        when(level3.column()).thenReturn("gid");
+        when(level3.nameColumn()).thenReturn("statbez_name");
+        when(level3.type()).thenReturn(TypeEnum.INTEGER);
+        when(level3.table()).thenReturn("statbez");
+        when(level3.properties()).thenAnswer(setupDummyListAnswer(property11, property22));
+        when(property11.name()).thenReturn("uuid");
+        when(property11.column()).thenReturn("uuid");
+        when(property22.name()).thenReturn("GeoJson");
+        when(property22.column()).thenReturn("geojson");
+        when(property22.type()).thenReturn(PropertyTypeEnum.STRING);
+
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(schema);
+
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("population");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(4);
+        assertThat(dbStructure.getTables())
+            .extracting(org.eclipse.daanse.db.jdbc.util.impl.Table::getTableName)
+            .contains("einwohner", "town", "plraum", "statbez");
+        org.eclipse.daanse.db.jdbc.util.impl.Table t;
+        t = getTable(dbStructure.getTables(), "einwohner");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(1);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains("STATBEZ");
+        assertThat(t.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "town");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(2);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains("id","name");
+        assertThat(t.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.STRING);
+
+        t = getTable(dbStructure.getTables(), "plraum");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(5);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains("geojson", "gid", "plraum", "townid", "uuid");
+        assertThat(t.getColumns())
+            .extracting(Column::type)
+            .contains(Type.STRING)
+            .contains(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "statbez");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(5);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains("geojson", "gid", "plraum", "statbez_name", "uuid");
+        assertThat(t.getColumns())
+            .extracting(Column::type)
+            .contains(Type.STRING)
+            .contains(Type.INTEGER);
+
+    }
+
+    private org.eclipse.daanse.db.jdbc.util.impl.Table getTable(
+        List<org.eclipse.daanse.db.jdbc.util.impl.Table> tables,
+        String name) {
+        return tables
+            .stream()
+            .filter(table -> name.equals(table.tableName()))
+            .findAny()
+            .orElse(null);
+    }
+
     private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
-        final List<N> someList = new ArrayList<>(Arrays.asList(values));
+        final List<N> someList = new LinkedList<>(Arrays.asList(values));
 
         Answer<List<N>> answer = new Answer<>() {
             @Override
