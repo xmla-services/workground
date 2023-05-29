@@ -29,6 +29,8 @@
     <module>provider.sample.foodmart.record</module>
     <module>provider.sample.steelwheels.xml</module>
     <module>provider.sample.steelwheels.record</module>
+    <module>provider.sample.population.xml</module>
+    <module>provider.sample.population.record</module>
     <module>verifyer.api</module>
     <module>verifyer.basic</module>
     <module>dbcreator.api</module>
