@@ -53,8 +53,8 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.xml;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.xml-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.xml;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.xml-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;version='[0.0.1,0.0.2)',\
 	org.glassfish.hk2.osgi-resource-locator;version='[2.4.0,2.4.1)',\
 	org.objectweb.asm;version='[9.4.0,9.4.1)',\
