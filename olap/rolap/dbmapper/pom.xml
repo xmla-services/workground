@@ -35,5 +35,6 @@
     <module>verifyer.basic</module>
     <module>dbcreator.api</module>
     <module>dbcreator.basic</module>
+    <module>schemacreator.api</module>
   </modules>
 </project>
