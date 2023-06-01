@@ -4,11 +4,17 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JdbcMetaDataServiceLiveImpl implements JdbcMetaDataService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger( JdbcMetaDataServiceLiveImpl.class );
 
     private DatabaseMetaData metadata;
     private String catalogName;
@@ -48,6 +54,30 @@ public class JdbcMetaDataServiceLiveImpl implements JdbcMetaDataService {
         try (ResultSet rs = metadata.getSchemas(catalogName, schemaName);) {
             return rs.next();
         }
+    }
+
+    @Override
+    public List<ForeignKey> getForeignKeys(String schemaName, String tableName) {
+        List<ForeignKey> result = new ArrayList<>();
+        try (ResultSet rs = metadata.getImportedKeys(catalogName, schemaName, tableName)) {
+            if (rs == null) {
+                return List.of();
+            }
+            while (rs.next()) {
+                String pkTableName =
+                rs.getString("PKTABLE_NAME");
+                String pkColumnName =
+                    rs.getString("PKCOLUMN_NAME");
+                String fkTableName =
+                    rs.getString("FKTABLE_NAME");
+                String fkColumnName =
+                    rs.getString("FKCOLUMN_NAME");
+                result.add(new ForeignKey(pkTableName, pkColumnName, fkTableName, fkColumnName));
+            }
+        } catch (Exception e) {
+            LOGGER.error("getForeignKeys", e);
+        }
+        return result;
     }
 
 }
