@@ -18,4 +18,6 @@ public interface JdbcMetaDataService {
     boolean doesSchemaExist(String schemaName) throws SQLException;
 
     List<ForeignKey> getForeignKeys(String schemaName, String tableName);
+
+    Optional<String> getColumnDataTypeName(String schemaName, String tableName, String columnName) throws SQLException;
 }

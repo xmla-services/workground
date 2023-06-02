@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
@@ -29,12 +30,16 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -47,6 +52,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SchemaCreatorServiceImpl implements SchemaCreatorService {
@@ -161,7 +167,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 null,
                 null,
                 null,
-                getHierarchyLevels(relation, fk, jmds),
+                getHierarchyLevels(schemaName, relation, fk.getPkTableName(), fk.getPkColumnName(), jmds),
                 List.of(),
                 true,
                 null,
@@ -200,12 +206,151 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             }
             return result;
         }
-        return List.of( new TableR(fk.getPkTableName()));
+        return List.of(new TableR(fk.getPkTableName()));
     }
 
-    private List<Level> getHierarchyLevels(RelationOrJoin relation, ForeignKey fk, JdbcMetaDataService jmds) {
+    private List<Level> getHierarchyLevels(
+        String schemaName,
+        RelationOrJoin relation,
+        String tableName,
+        String columnName,
+        JdbcMetaDataService jmds
+    ) {
+        List<Level> result = new ArrayList<>();
+        if (relation instanceof Join join) {
+            if (join.relations() != null && join.relations().size() > 1) {
+                if (join.relations().get(1) instanceof Table t) {
+                    List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
+                    ForeignKey key =
+                        listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
+                    if (key != null) {
+                        result.addAll(getHierarchyLevels(schemaName, t, key.getPkTableName(), key.getPkColumnName(),
+                            jmds));
+                    }
+                } else if (join.relations().get(1) instanceof Join j) {
+                    Table t = getFistTable(j);
+                    if (t != null) {
+                        List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
+                        ForeignKey key =
+                            listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
+                        if (key != null) {
+                            result.addAll(getHierarchyLevels(schemaName, j, key.getPkTableName(),
+                                key.getPkColumnName(), jmds));
+                        }
+                    }
+                }
+                if (join.relations().get(0) instanceof Table t) {
+                    result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
+                }
+            }
+        }
+        if (relation instanceof Table table) {
+            Level l = new LevelR(getLevelName(tableName),
+                tableName,
+                columnName,
+                getColumnNameByPostfix(schemaName, table.name(), columnName, "name", jmds),
+                getLevelOrdinalName(table.name(), columnName),
+                getLevelParentColumn(table.name(), columnName),
+                getLevelNullParentValue(table.name(), columnName),
+                getLevelColumnType(schemaName, table.name(), columnName, jmds),
+                getLevelApproxRowCount(table.name(), columnName),
+                true,
+                getLevelType(table.name(), columnName),
+                null,
+                null,
+                getLevelCaption(table.name(), columnName),
+                getLevelDescription(table.name()),
+                getLevelCaptionColumn(table.name(), columnName),
+                List.of(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                List.of(),
+                true,
+                null,
+                null);
+            result.add(l);
+        }
+        return result;
+    }
+
+    private String getLevelName(String tableName) {
+        return capitalize(tableName);
+    }
+
+    private Table getFistTable(Join j) {
+        if (j.relations().get(0) instanceof Table t) {
+            return t;
+        }
+        if (j.relations().get(1) instanceof Table t) {
+            return t;
+        }
+        if (j.relations().get(0) instanceof Join join) {
+            return getFistTable(join);
+        }
+        return null;
+    }
+
+    private String getLevelCaptionColumn(String table, String columnName) {
         //TODO
-        return List.of();
+        return null;
+    }
+
+    private String getLevelDescription(String table) {
+        return capitalize(table);
+    }
+
+    private String getLevelCaption(String table, String columnName) {
+        return null;
+    }
+
+    private LevelTypeEnum getLevelType(String table, String columnName) {
+        return null;
+    }
+
+    private String getLevelApproxRowCount(String table, String columnName) {
+        return null;
+    }
+
+    private TypeEnum getLevelColumnType(String schemaName, String table, String columnName, JdbcMetaDataService jmds) {
+        try {
+            Optional<String> type = jmds.getColumnDataTypeName(schemaName, table, columnName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getLevelNullParentValue(String table, String columnName) {
+        return null;
+    }
+
+    private String getLevelParentColumn(String table, String columnName) {
+        return null;
+    }
+
+    private String getLevelOrdinalName(String table, String columnName) {
+        return null;
+    }
+
+    private String getColumnNameByPostfix(
+        String schemaName, String tableName, String columnName, String postfix, JdbcMetaDataService jmds
+    ) {
+        try {
+            if (jmds.doesColumnExist(schemaName, tableName, postfix)) {
+                return postfix;
+            }
+            String cName = new StringBuilder(columnName).append("_").append(postfix).toString();
+            if (jmds.doesColumnExist(schemaName, tableName, cName)) {
+                return cName;
+            }
+        } catch (SQLException e) {
+            throw new SchemaCreatorException("ColumnExist error", e);
+        }
+        return null;
     }
 
     private String getHierarchyDescription(ForeignKey fk) {
@@ -229,7 +374,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     }
 
     private String getDimensionName(ForeignKey fk) {
-        return new StringBuilder("Dimension ").append(fk.getPkTableName()).toString();
+        return new StringBuilder("Dimension ").append(capitalize(fk.getPkTableName())).toString();
     }
 
     private List<Cube> getCubes(List<String> tables, JdbcMetaDataService jmds) {
@@ -280,4 +425,11 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return List.of();
     }
 
+    private String capitalize(String str) {
+        if (str != null && !str.isBlank()) {
+            return new StringBuilder(str.substring(0, 1).toUpperCase())
+                .append(str.substring(1)).toString();
+        }
+        return str;
+    }
 }

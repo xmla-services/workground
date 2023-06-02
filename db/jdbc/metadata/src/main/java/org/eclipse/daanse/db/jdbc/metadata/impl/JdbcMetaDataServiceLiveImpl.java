@@ -36,6 +36,17 @@ public class JdbcMetaDataServiceLiveImpl implements JdbcMetaDataService {
     }
 
     @Override
+    public Optional<String> getColumnDataTypeName(String schemaName, String tableName, String columnName)
+            throws SQLException {
+        try (ResultSet rs = metadata.getColumns(catalogName, schemaName, tableName, columnName);) {
+            while (rs.next()) {
+                return Optional.ofNullable(rs.getString("TYPE_NAME"));
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public boolean doesColumnExist(String schemaName, String tableName, String columnName) throws SQLException {
         try (ResultSet rs = metadata.getColumns(catalogName, schemaName, tableName, columnName);) {
             return rs.next();
