@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorService;
@@ -54,9 +55,79 @@ class SchemaCreatorServiceImplTest {
         Schema s = schemaCreatorService.createSchema(schemaInitData);
         assertThat(s).isNotNull();
         assertThat(s.dimensions()).isNotNull().hasSize(4);
-        PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension state");
+
+        PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension State");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        List <Level> levels = d.hierarchies().get(0).levels();
+        assertThat(levels).isNotNull().hasSize(3);
+        // check level0
+        Level level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Continent");
+        assertThat(level.column()).isEqualTo("id");
+        assertThat(level.table()).isEqualTo("continent");
+        assertThat(level.nameColumn()).isEqualTo("name");
+        assertThat(level.description()).isEqualTo("Continent");
+        // check level1
+        level = levels.get(1);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Country");
+        assertThat(level.column()).isEqualTo("id");
+        assertThat(level.table()).isEqualTo("country");
+        assertThat(level.nameColumn()).isEqualTo("name");
+        assertThat(level.description()).isEqualTo("Country");
+        // check level2
+        level = levels.get(2);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("State");
+        assertThat(level.column()).isEqualTo("id");
+        assertThat(level.table()).isEqualTo("state");
+        assertThat(level.nameColumn()).isEqualTo("name");
+        assertThat(level.description()).isEqualTo("State");
+
+        d = getPrivateDimension(s.dimensions(), "Dimension Gender");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        levels = d.hierarchies().get(0).levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Gender");
+        assertThat(level.column()).isEqualTo("gender_id");
+        assertThat(level.table()).isEqualTo("gender");
+        assertThat(level.nameColumn()).isEqualTo("name");
+        assertThat(level.description()).isEqualTo("Gender");
+
+        d = getPrivateDimension(s.dimensions(), "Dimension Year");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        levels = d.hierarchies().get(0).levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Year");
+        assertThat(level.column()).isEqualTo("year");
+        assertThat(level.table()).isEqualTo("year");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Year");
+
+        d = getPrivateDimension(s.dimensions(), "Dimension AgeGroups");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        levels = d.hierarchies().get(0).levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("AgeGroups");
+        assertThat(level.column()).isEqualTo("age");
+        assertThat(level.table()).isEqualTo("ageGroups");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("AgeGroups");
+
     }
 
     private PrivateDimension getPrivateDimension(List<PrivateDimension> dimensions, String name) {
