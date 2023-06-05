@@ -18,4 +18,8 @@ public class SchemaCreatorException extends RuntimeException {
     public SchemaCreatorException(String msg, Exception e) {
         super(msg, e);
     }
+
+    public SchemaCreatorException(String msg) {
+        super(msg);
+    }
 }

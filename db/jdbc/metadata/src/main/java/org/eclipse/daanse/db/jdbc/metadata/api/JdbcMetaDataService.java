@@ -1,5 +1,6 @@
 package org.eclipse.daanse.db.jdbc.metadata.api;
 
+import org.eclipse.daanse.db.jdbc.metadata.impl.Column;
 import org.eclipse.daanse.db.jdbc.metadata.impl.ForeignKey;
 
 import java.sql.SQLException;
@@ -19,5 +20,5 @@ public interface JdbcMetaDataService {
 
     List<ForeignKey> getForeignKeys(String schemaName, String tableName);
 
-    Optional<String> getColumnDataTypeName(String schemaName, String tableName, String columnName) throws SQLException;
+    List<Column> getColumns(String schemaName, String tableName);
 }

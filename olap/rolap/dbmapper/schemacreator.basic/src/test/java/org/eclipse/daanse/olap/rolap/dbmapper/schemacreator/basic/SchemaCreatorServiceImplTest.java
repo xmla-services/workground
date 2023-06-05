@@ -13,9 +13,12 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaInitData;
@@ -29,6 +32,7 @@ import org.sqlite.SQLiteDataSource;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,6 +73,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("continent");
         assertThat(level.nameColumn()).isEqualTo("name");
         assertThat(level.description()).isEqualTo("Continent");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
         // check level1
         level = levels.get(1);
         assertThat(level).isNotNull();
@@ -77,6 +82,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("country");
         assertThat(level.nameColumn()).isEqualTo("name");
         assertThat(level.description()).isEqualTo("Country");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
         // check level2
         level = levels.get(2);
         assertThat(level).isNotNull();
@@ -85,6 +91,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("state");
         assertThat(level.nameColumn()).isEqualTo("name");
         assertThat(level.description()).isEqualTo("State");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
 
         d = getPrivateDimension(s.dimensions(), "Dimension Gender");
         assertThat(d).isNotNull();
@@ -99,6 +106,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("gender");
         assertThat(level.nameColumn()).isEqualTo("name");
         assertThat(level.description()).isEqualTo("Gender");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
 
         d = getPrivateDimension(s.dimensions(), "Dimension Year");
         assertThat(d).isNotNull();
@@ -113,6 +121,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("year");
         assertThat(level.nameColumn()).isNull();
         assertThat(level.description()).isEqualTo("Year");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
 
         d = getPrivateDimension(s.dimensions(), "Dimension AgeGroups");
         assertThat(d).isNotNull();
@@ -127,10 +136,48 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.table()).isEqualTo("ageGroups");
         assertThat(level.nameColumn()).isNull();
         assertThat(level.description()).isEqualTo("AgeGroups");
+        assertThat(level.type()).isEqualTo(TypeEnum.INTEGER);
 
+        // check cubes
+        assertThat(s.cubes()).isNotNull().hasSize(1);
+        Cube c = s.cubes().get(0);
+        assertThat(c.name()).isEqualTo("Population");
+        assertThat(c.description()).isEqualTo("Population");
+        assertThat(c.caption()).isEqualTo("Population");
+        assertThat(c.dimensionUsageOrDimensions()).isNotNull().hasSize(4);
+        List<DimensionUsage> dimensionUsageList = c.dimensionUsageOrDimensions()
+            .stream().filter(du -> (du instanceof DimensionUsage))
+            .map(du -> (DimensionUsage) du).collect(Collectors.toList());
+        assertThat(dimensionUsageList).hasSize(4);
+
+        DimensionUsage du = getDimensionUsage(dimensionUsageList, "Dimension State");
+        assertThat(du).isNotNull();
+        assertThat(du.source()).isEqualTo("Dimension State");
+        assertThat(du.foreignKey()).isEqualTo("state_id");
+
+        du = getDimensionUsage(dimensionUsageList, "Dimension Gender");
+        assertThat(du).isNotNull();
+        assertThat(du.source()).isEqualTo("Dimension Gender");
+        assertThat(du.foreignKey()).isEqualTo("gender_id");
+
+        du = getDimensionUsage(dimensionUsageList, "Dimension Year");
+        assertThat(du).isNotNull();
+        assertThat(du.source()).isEqualTo("Dimension Year");
+        assertThat(du.foreignKey()).isEqualTo("year");
+
+        du = getDimensionUsage(dimensionUsageList, "Dimension AgeGroups");
+        assertThat(du).isNotNull();
+        assertThat(du.source()).isEqualTo("Dimension AgeGroups");
+        assertThat(du.foreignKey()).isEqualTo("age");
     }
 
     private PrivateDimension getPrivateDimension(List<PrivateDimension> dimensions, String name) {
+        return dimensions.stream().filter(d -> name.equals(d.name()))
+            .findAny()
+            .orElse(null);
+    }
+
+    private DimensionUsage getDimensionUsage(List<DimensionUsage> dimensions, String name) {
         return dimensions.stream().filter(d -> name.equals(d.name()))
             .findAny()
             .orElse(null);

@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
+import org.eclipse.daanse.db.jdbc.metadata.impl.Column;
 import org.eclipse.daanse.db.jdbc.metadata.impl.ForeignKey;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
@@ -37,6 +38,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
@@ -45,10 +47,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaInitData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +61,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SchemaCreatorServiceImpl implements SchemaCreatorService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchemaCreatorServiceImpl.class);
 
     private final JdbcMetaDataServiceFactory jmdsf;
     private final DataSource dataSource;
@@ -76,8 +83,10 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             String defaultRole = null;
             List<Annotation> annotations = List.of();
             List<Parameter> parameters = List.of();
-            List<PrivateDimension> sharedDimensions = getSharedDimensions(schemaName, sid.getFactTables(), jmds);
-            List<Cube> cubes = getCubes(sid.getFactTables(), jmds);
+            Map<String, PrivateDimension> sharedDimensionsMap = getSharedDimensions(schemaName, sid.getFactTables(),
+                jmds);
+            List<PrivateDimension> sharedDimensions = new ArrayList<>(sharedDimensionsMap.values());
+            List<Cube> cubes = getCubes(schemaName, sid.getFactTables(), sharedDimensionsMap, jmds);
             List<VirtualCube> virtualCubes = List.of();
             List<NamedSet> namedSets = List.of();
             List<Role> roles = List.of();
@@ -97,12 +106,13 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 userDefinedFunctions);
 
         } catch (SQLException e) {
+            LOGGER.error("createSchema error");
             throw new SchemaCreatorException("createSchema error", e);
         }
         return schema;
     }
 
-    private List<PrivateDimension> getSharedDimensions(
+    private Map<String, PrivateDimension> getSharedDimensions(
         String schemaName,
         List<String> factTables,
         JdbcMetaDataService jmds
@@ -120,13 +130,15 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     )
                 );
                 return foreignKeyMap.values()
-                    .stream()
-                    .map(fk -> getSharedDimensions(schemaName, fk, jmds))
-                    .toList();
+                    .stream().collect(
+                        Collectors.toMap(ForeignKey::getPkTableName, fk -> getSharedDimensions(schemaName, fk, jmds),
+                            (oldValue, newValue) -> oldValue)
+                    );
+
             }
 
         }
-        return List.of();
+        return Map.of();
     }
 
     private String getKey(ForeignKey fk) {
@@ -217,31 +229,30 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         JdbcMetaDataService jmds
     ) {
         List<Level> result = new ArrayList<>();
-        if (relation instanceof Join join) {
-            if (join.relations() != null && join.relations().size() > 1) {
-                if (join.relations().get(1) instanceof Table t) {
+        if (relation instanceof Join join && join.relations() != null && join.relations().size() > 1) {
+
+            if (join.relations().get(1) instanceof Table t) {
+                List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
+                ForeignKey key =
+                    listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
+                if (key != null) {
+                    result.addAll(getHierarchyLevels(schemaName, t, key.getPkTableName(), key.getPkColumnName(),
+                        jmds));
+                }
+            } else if (join.relations().get(1) instanceof Join j) {
+                Table t = getFistTable(j);
+                if (t != null) {
                     List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
                     ForeignKey key =
                         listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
                     if (key != null) {
-                        result.addAll(getHierarchyLevels(schemaName, t, key.getPkTableName(), key.getPkColumnName(),
-                            jmds));
-                    }
-                } else if (join.relations().get(1) instanceof Join j) {
-                    Table t = getFistTable(j);
-                    if (t != null) {
-                        List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
-                        ForeignKey key =
-                            listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
-                        if (key != null) {
-                            result.addAll(getHierarchyLevels(schemaName, j, key.getPkTableName(),
-                                key.getPkColumnName(), jmds));
-                        }
+                        result.addAll(getHierarchyLevels(schemaName, j, key.getPkTableName(),
+                            key.getPkColumnName(), jmds));
                     }
                 }
-                if (join.relations().get(0) instanceof Table t) {
-                    result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
-                }
+            }
+            if (join.relations().get(0) instanceof Table t) {
+                result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
             }
         }
         if (relation instanceof Table table) {
@@ -317,11 +328,13 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private TypeEnum getLevelColumnType(String schemaName, String table, String columnName, JdbcMetaDataService jmds) {
         try {
-            Optional<String> type = jmds.getColumnDataTypeName(schemaName, table, columnName);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            Optional<Integer> type = jmds.getColumnDataType(schemaName, table, columnName);
+            return getDatatype(
+                type.orElseThrow(() -> new SchemaCreatorException("getLevelColumnType error type is absent"))
+            );
+        } catch (SQLException e) {
+            throw new SchemaCreatorException("getLevelColumnType error", e);
         }
-        return null;
     }
 
     private String getLevelNullParentValue(String table, String columnName) {
@@ -377,21 +390,32 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return new StringBuilder("Dimension ").append(capitalize(fk.getPkTableName())).toString();
     }
 
-    private List<Cube> getCubes(List<String> tables, JdbcMetaDataService jmds) {
+    private List<Cube> getCubes(
+        String schemaName,
+        List<String> tables,
+        Map<String, PrivateDimension> sharedDimensionsMap,
+        JdbcMetaDataService jmds
+    ) {
         if (tables != null) {
-            return tables.stream().map(t -> getCube(t, jmds)).toList();
+            return tables.stream().map(t -> getCube(schemaName, t, sharedDimensionsMap, jmds)).toList();
         }
         return List.of();
     }
 
-    private Cube getCube(String tableName, JdbcMetaDataService jmds) {
-        String name = tableName;
-        String caption = tableName;
-        String description = tableName;
+    private Cube getCube(
+        String schemaName,
+        String tableName,
+        Map<String, PrivateDimension> sharedDimensionsMap,
+        JdbcMetaDataService jmds
+    ) {
+        String name = getCubName(tableName);
+        String caption = getCubCaption(tableName);
+        String description = getCubDescription(tableName);
         String defaultMeasure = null;
-        List<CubeDimension> dimensionUsageOrDimensions = getCubeDimensions(tableName, jmds);
+        List<CubeDimension> dimensionUsageOrDimensions = getCubeDimensions(schemaName, tableName, sharedDimensionsMap
+            , jmds);
         List<Measure> measures = getMeasures(tableName, jmds);
-        Relation fact = getRelation(tableName, jmds);
+        Relation fact = new TableR(tableName);
         return new CubeR(name,
             caption,
             description,
@@ -410,9 +434,16 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             List.of());
     }
 
-    private Relation getRelation(String tableName, JdbcMetaDataService jmds) {
-        //TODO
-        return null;
+    private String getCubDescription(String tableName) {
+        return capitalize(tableName);
+    }
+
+    private String getCubName(String tableName) {
+        return capitalize(tableName);
+    }
+
+    private String getCubCaption(String tableName) {
+        return capitalize(tableName);
     }
 
     private List<Measure> getMeasures(String tableName, JdbcMetaDataService jmds) {
@@ -420,9 +451,52 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return List.of();
     }
 
-    private List<CubeDimension> getCubeDimensions(String tableName, JdbcMetaDataService jmds) {
-        //TODO
-        return List.of();
+    private List<CubeDimension> getCubeDimensions(
+        String schemaName,
+        String tableName,
+        Map<String, PrivateDimension> sharedDimensionsMap,
+        JdbcMetaDataService jmds
+    ) {
+        List<CubeDimension> result = new ArrayList<>();
+        List<ForeignKey> list = jmds.getForeignKeys(schemaName, tableName);
+        if (list != null && !list.isEmpty()) {
+            for (ForeignKey foreignKey : list) {
+                if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
+                    PrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
+                    result.add(new DimensionUsageR(getDimensionName(foreignKey),
+                        privateDimension.name(),
+                        null,
+                        privateDimension.usagePrefix(),
+                        foreignKey.getFkColumnName(),
+                        privateDimension.highCardinality(),
+                        privateDimension.annotations(),
+                        privateDimension.caption(),
+                        privateDimension.visible(),
+                        privateDimension.description()));
+                }
+            }
+        }
+        List<Column> columns = jmds.getColumns(schemaName, tableName);
+
+        if (columns != null && !columns.isEmpty()) {
+            for (Column column : columns) {
+                if (!isNumericType(column.getType())
+                    && (list == null || list.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
+                    result.add(new PrivateDimensionR(column.getName(), DimensionTypeEnum.STANDARD_DIMENSION,
+                        column.getName(),
+                        column.getName(),
+                        column.getName(),
+                        true,
+                        List.of(),
+                        List.of(),
+                        true,
+                        List.of(),
+                        null));
+                }
+            }
+        }
+
+        return result;
     }
 
     private String capitalize(String str) {
@@ -431,5 +505,36 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 .append(str.substring(1)).toString();
         }
         return str;
+    }
+
+    private TypeEnum getDatatype(int javaType) {
+        switch (javaType) {
+            case Types.TINYINT, Types.SMALLINT, Types.INTEGER:
+                return TypeEnum.INTEGER;
+            case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL, Types.BIGINT:
+                return TypeEnum.NUMERIC;
+            case Types.BOOLEAN:
+                return TypeEnum.BOOLEAN;
+            case Types.DATE:
+                return TypeEnum.DATE;
+            case Types.TIME:
+                return TypeEnum.TIME;
+            case Types.TIMESTAMP:
+                return TypeEnum.TIMESTAMP;
+            case Types.CHAR, Types.VARCHAR:
+            default:
+                return TypeEnum.STRING;
+        }
+    }
+
+    private boolean isNumericType(int javaType) {
+        switch (javaType) {
+            case Types.TINYINT, Types.SMALLINT, Types.INTEGER:
+                return true;
+            case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL, Types.BIGINT:
+                return true;
+            default:
+                return false;
+        }
     }
 }

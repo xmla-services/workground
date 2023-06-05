@@ -36,17 +36,6 @@ public class JdbcMetaDataServiceLiveImpl implements JdbcMetaDataService {
     }
 
     @Override
-    public Optional<String> getColumnDataTypeName(String schemaName, String tableName, String columnName)
-            throws SQLException {
-        try (ResultSet rs = metadata.getColumns(catalogName, schemaName, tableName, columnName);) {
-            while (rs.next()) {
-                return Optional.ofNullable(rs.getString("TYPE_NAME"));
-            }
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public boolean doesColumnExist(String schemaName, String tableName, String columnName) throws SQLException {
         try (ResultSet rs = metadata.getColumns(catalogName, schemaName, tableName, columnName);) {
             return rs.next();
@@ -84,6 +73,22 @@ public class JdbcMetaDataServiceLiveImpl implements JdbcMetaDataService {
                 String fkColumnName =
                     rs.getString("FKCOLUMN_NAME");
                 result.add(new ForeignKey(pkTableName, pkColumnName, fkTableName, fkColumnName));
+            }
+        } catch (Exception e) {
+            LOGGER.error("getForeignKeys", e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Column> getColumns(String schemaName, String tableName) {
+        List<Column> result = new ArrayList<>();
+        try (ResultSet rs = metadata.getColumns(catalogName, schemaName, tableName, null)) {
+            if (rs == null) {
+                return List.of();
+            }
+            while (rs.next()) {
+                result.add(new Column(rs.getString("COLUMN_NAME"), rs.getInt("DATA_TYPE")));
             }
         } catch (Exception e) {
             LOGGER.error("getForeignKeys", e);
