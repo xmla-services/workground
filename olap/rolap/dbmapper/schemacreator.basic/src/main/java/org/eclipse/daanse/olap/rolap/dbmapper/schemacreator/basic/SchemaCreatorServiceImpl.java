@@ -36,12 +36,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.CubeR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.DimensionUsageR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.SchemaR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -131,7 +133,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 );
                 return foreignKeyMap.values()
                     .stream().collect(
-                        Collectors.toMap(ForeignKey::getPkTableName, fk -> getSharedDimensions(schemaName, fk, jmds),
+                        Collectors.toMap(ForeignKey::getPkTableName, fk -> getSharedDimensions(schemaName, fk, jmds, List.of(fk.getFkTableName())),
                             (oldValue, newValue) -> oldValue)
                     );
 
@@ -148,8 +150,8 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             .toString();
     }
 
-    private PrivateDimension getSharedDimensions(String schemaName, ForeignKey fk, JdbcMetaDataService jmds) {
-        List<Hierarchy> hierarchies = getHierarchies(schemaName, fk, jmds);
+    private PrivateDimension getSharedDimensions(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+        List<Hierarchy> hierarchies = getHierarchies(schemaName, fk, jmds, ignoreTables);
         String description = new StringBuilder("Dimension for ").append(fk.getFkColumnName()).toString();
         return new PrivateDimensionR(getDimensionName(fk), DimensionTypeEnum.STANDARD_DIMENSION,
             getDimensionCaption(fk),
@@ -167,8 +169,8 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return new StringBuilder().append(fk.getPkTableName()).toString();
     }
 
-    private List<Hierarchy> getHierarchies(String schemaName, ForeignKey fk, JdbcMetaDataService jmds) {
-        List<RelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds);
+    private List<Hierarchy> getHierarchies(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+        List<RelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds, ignoreTables);
         List<Hierarchy> result = new ArrayList<>();
         for (RelationOrJoin relation : relationList) {
             Hierarchy hierarchy = new HierarchyR(getHierarchyName(fk),
@@ -199,22 +201,31 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return result;
     }
 
-    private List<RelationOrJoin> getHierarchyRelation(String schemaName, ForeignKey fk, JdbcMetaDataService jmds) {
-        List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, fk.getPkTableName());
+    private List<RelationOrJoin> getHierarchyRelation(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+
+        List<ForeignKey> listFKAll = jmds.getForeignKeys(schemaName, fk.getPkTableName());
+        List<ForeignKey> listFK = null;
+        if (listFKAll != null &&  !listFKAll.isEmpty()) {
+            listFK = listFKAll.stream()
+                .filter(k -> ignoreTables.stream().noneMatch(t -> t.equals(k.getPkTableName())))
+                .collect(Collectors.toList());
+        }
         if (listFK != null && !listFK.isEmpty()) {
             List<RelationOrJoin> result = new ArrayList<>();
             for (ForeignKey foreignKey : listFK) {
-                List<RelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds);
-                for (RelationOrJoin relationOrJoin : rightRelations) {
-                    List<RelationOrJoin> relations = List.of(
-                        new TableR(fk.getPkTableName()),
-                        relationOrJoin);
-                    result.add(new JoinR(relations,
-                        null,
-                        listFK.get(0).getFkColumnName(),
-                        null,
-                        foreignKey.getPkColumnName()));
-                }
+                    List<String> ignoreTab = new ArrayList<>(ignoreTables);
+                    ignoreTab.add(foreignKey.getFkTableName());
+                    List<RelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds, ignoreTab);
+                    for (RelationOrJoin relationOrJoin : rightRelations) {
+                        List<RelationOrJoin> relations = List.of(
+                            new TableR(fk.getPkTableName()),
+                            relationOrJoin);
+                        result.add(new JoinR(relations,
+                            null,
+                            listFK.get(0).getFkColumnName(),
+                            null,
+                            foreignKey.getPkColumnName()));
+                    }
             }
             return result;
         }
@@ -414,7 +425,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         String defaultMeasure = null;
         List<CubeDimension> dimensionUsageOrDimensions = getCubeDimensions(schemaName, tableName, sharedDimensionsMap
             , jmds);
-        List<Measure> measures = getMeasures(tableName, jmds);
+        List<Measure> measures = getMeasures(schemaName, tableName, jmds);
         Relation fact = new TableR(tableName);
         return new CubeR(name,
             caption,
@@ -446,9 +457,59 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return capitalize(tableName);
     }
 
-    private List<Measure> getMeasures(String tableName, JdbcMetaDataService jmds) {
+    private List<Measure> getMeasures(String schemaName, String tableName, JdbcMetaDataService jmds) {
         //TODO
-        return List.of();
+        List<Measure> result = new ArrayList<>();
+        List<Column> columns = jmds.getColumns(schemaName, tableName);
+        // cub Measures for numeric fields sum and count
+        List<ForeignKey> foreignKeyList = jmds.getForeignKeys(schemaName, tableName);
+        if (columns != null && !columns.isEmpty()) {
+            for (Column column : columns) {
+                if (isNumericType(column.getType())
+                    && (foreignKeyList == null ||
+                    foreignKeyList.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
+                    //<Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard"/>
+                    result.add(new MeasureR(getMeasureName(column.getName()),
+                        column.getName(),
+                        getMeasureDataType(column.getType()),
+                        "Standard",
+                        "sum",
+                        null,
+                        column.getName(),
+                        getMeasureDescription(column.getName()),
+                        true,
+                        null,
+                        List.of(),
+                        null,
+                        List.of(),
+                        null,
+                        null,
+                        List.of())
+                    );
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private MeasureDataTypeEnum getMeasureDataType(Integer type) {
+        switch (type) {
+            case Types.TINYINT, Types.SMALLINT, Types.INTEGER:
+                return MeasureDataTypeEnum.INTEGER;
+            case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL, Types.BIGINT:
+                return MeasureDataTypeEnum.NUMERIC;
+            default:
+                return MeasureDataTypeEnum.STRING;
+        }
+    }
+
+    private String getMeasureDescription(String columnName) {
+        return columnName;
+    }
+
+    private String getMeasureName(String columnName) {
+        return columnName;
     }
 
     private List<CubeDimension> getCubeDimensions(
@@ -458,9 +519,10 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         JdbcMetaDataService jmds
     ) {
         List<CubeDimension> result = new ArrayList<>();
-        List<ForeignKey> list = jmds.getForeignKeys(schemaName, tableName);
-        if (list != null && !list.isEmpty()) {
-            for (ForeignKey foreignKey : list) {
+        List<ForeignKey> foreignKeyList = jmds.getForeignKeys(schemaName, tableName);
+        if (foreignKeyList != null && !foreignKeyList.isEmpty()) {
+            // cub dimension usage for fields with foreign keys
+            for (ForeignKey foreignKey : foreignKeyList) {
                 if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
                     PrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
                     result.add(new DimensionUsageR(getDimensionName(foreignKey),
@@ -477,11 +539,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             }
         }
         List<Column> columns = jmds.getColumns(schemaName, tableName);
-
+        // cub dimension for not numeric fields
         if (columns != null && !columns.isEmpty()) {
             for (Column column : columns) {
                 if (!isNumericType(column.getType())
-                    && (list == null || list.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
+                    && (foreignKeyList == null ||
+                    foreignKeyList.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
                     result.add(new PrivateDimensionR(column.getName(), DimensionTypeEnum.STANDARD_DIMENSION,
                         column.getName(),
                         column.getName(),

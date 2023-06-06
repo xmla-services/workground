@@ -15,6 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
@@ -41,18 +42,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SchemaCreatorServiceImplTest {
 
     public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic.SchemaCreatorServiceFactoryImpl";
-    SQLiteDataSource dataSource;
-
-
-    @BeforeEach
-    void beforeEach() throws SQLException {
-        dataSource = new SQLiteDataSource();
-        //dataSource.setUrl("jdbc:sqlite:/home/oem/repod/deMondrian/olap/rolap/dbmapper/schemacreator.basic/src/test/resources/population.sqlite");
-        dataSource.setUrl("jdbc:sqlite:../../../../src/test/resources/population.sqlite");
-    }
 
     @Test
-    void testPrivateDimension(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") SchemaCreatorServiceFactory schemaCreatorServiceFactory) throws SQLException {
+    void testPopulationDatabase(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") SchemaCreatorServiceFactory schemaCreatorServiceFactory) throws SQLException {
+        SQLiteDataSource dataSource = new SQLiteDataSource();
+        //dataSource.setUrl("jdbc:sqlite:/home/oem/repod/deMondrian/olap/rolap/dbmapper/schemacreator.basic/src/test/resources/population.sqlite");
+        dataSource.setUrl("jdbc:sqlite:../../../../src/test/resources/population.sqlite");
         SchemaCreatorService schemaCreatorService = schemaCreatorServiceFactory.create(dataSource);
         SchemaInitData schemaInitData = new SchemaInitData();
         schemaInitData.setFactTables(List.of("population"));
@@ -63,7 +58,8 @@ class SchemaCreatorServiceImplTest {
         PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension State");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
-        List <Level> levels = d.hierarchies().get(0).levels();
+        Hierarchy h =  d.hierarchies().get(0);
+        List <Level> levels = h.levels();
         assertThat(levels).isNotNull().hasSize(3);
         // check level0
         Level level = levels.get(0);
@@ -169,8 +165,92 @@ class SchemaCreatorServiceImplTest {
         assertThat(du).isNotNull();
         assertThat(du.source()).isEqualTo("Dimension AgeGroups");
         assertThat(du.foreignKey()).isEqualTo("age");
+
     }
 
+    @Test
+    void testEmployeesDatabase(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") SchemaCreatorServiceFactory schemaCreatorServiceFactory) throws SQLException {
+        SQLiteDataSource dataSource = new SQLiteDataSource();
+        dataSource.setUrl("jdbc:sqlite:../../../../src/test/resources/employees.sqlite");
+        SchemaCreatorService schemaCreatorService = schemaCreatorServiceFactory.create(dataSource);
+        SchemaInitData schemaInitData = new SchemaInitData();
+        schemaInitData.setFactTables(List.of("employees"));
+        Schema s = schemaCreatorService.createSchema(schemaInitData);
+        assertThat(s).isNotNull();
+        assertThat(s.dimensions()).isNotNull().hasSize(3);
+
+        PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension Jobs");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        Hierarchy h =  d.hierarchies().get(0);
+        List <Level> levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        Level level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Jobs");
+        assertThat(level.column()).isEqualTo("job_id");
+        assertThat(level.table()).isEqualTo("jobs");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Jobs");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+
+        d = getPrivateDimension(s.dimensions(), "Dimension Departments");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(1);
+        h =  d.hierarchies().get(0);
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(4);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Regions");
+        assertThat(level.column()).isEqualTo("region_id");
+        assertThat(level.table()).isEqualTo("regions");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Regions");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        // check level1
+        level = levels.get(1);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Countries");
+        assertThat(level.column()).isEqualTo("country_id");
+        assertThat(level.table()).isEqualTo("countries");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Countries");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        // check level2
+        level = levels.get(2);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Locations");
+        assertThat(level.column()).isEqualTo("location_id");
+        assertThat(level.table()).isEqualTo("locations");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Locations");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        // check level3
+        level = levels.get(3);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Departments");
+        assertThat(level.column()).isEqualTo("department_id");
+        assertThat(level.table()).isEqualTo("departments");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Departments");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+
+        d = getPrivateDimension(s.dimensions(), "Dimension Employees");
+        assertThat(d).isNotNull();
+        assertThat(d.hierarchies()).isNotNull().hasSize(2);
+
+        h =  d.hierarchies().get(0);
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(5);
+
+        h =  d.hierarchies().get(1);
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(2);
+
+    }
     private PrivateDimension getPrivateDimension(List<PrivateDimension> dimensions, String name) {
         return dimensions.stream().filter(d -> name.equals(d.name()))
             .findAny()
