@@ -25,4 +25,13 @@ public class InternalTypeAdaptor extends Adaptor<InternalTypeEnum> {
     public Enum<InternalTypeEnum> unmarshal(String v) {
         return InternalTypeEnum.fromValue(v);
     }
+
+    @Override
+    public String marshal(Enum<InternalTypeEnum> e) throws Exception {
+        if (e != null) {
+            return e.toString();
+        }
+        return null;
+    }
+
 }

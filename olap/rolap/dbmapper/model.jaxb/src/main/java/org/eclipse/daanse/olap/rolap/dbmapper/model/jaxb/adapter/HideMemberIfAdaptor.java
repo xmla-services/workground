@@ -26,4 +26,12 @@ public class HideMemberIfAdaptor extends Adaptor<HideMemberIfEnum> {
         return HideMemberIfEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<HideMemberIfEnum> e) throws Exception {
+        if (e != null) {
+            return e.toString();
+        }
+        return null;
+    }
+
 }

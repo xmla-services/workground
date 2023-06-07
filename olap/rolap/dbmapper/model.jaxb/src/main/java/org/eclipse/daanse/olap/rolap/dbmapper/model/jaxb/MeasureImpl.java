@@ -199,4 +199,15 @@ public class MeasureImpl implements Measure {
         this.displayFolder = value;
     }
 
+    public void setCalculatedMemberProperties(List<CalculatedMemberProperty> calculatedMemberProperties) {
+        this.calculatedMemberProperties = calculatedMemberProperties;
+    }
+
+    public void setCellFormatter(CellFormatterImpl cellFormatter) {
+        this.cellFormatter = cellFormatter;
+    }
+
+    public void setBackColor(String backColor) {
+        this.backColor = backColor;
+    }
 }

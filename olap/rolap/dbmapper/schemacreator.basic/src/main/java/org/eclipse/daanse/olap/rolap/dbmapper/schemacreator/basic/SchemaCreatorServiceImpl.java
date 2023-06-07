@@ -57,6 +57,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -133,7 +134,8 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 );
                 return foreignKeyMap.values()
                     .stream().collect(
-                        Collectors.toMap(ForeignKey::getPkTableName, fk -> getSharedDimensions(schemaName, fk, jmds, List.of(fk.getFkTableName())),
+                        Collectors.toMap(ForeignKey::getPkTableName, fk -> getSharedDimensions(schemaName, fk, jmds,
+                            List.of(fk.getFkTableName())),
                             (oldValue, newValue) -> oldValue)
                     );
 
@@ -150,7 +152,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             .toString();
     }
 
-    private PrivateDimension getSharedDimensions(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+    private PrivateDimension getSharedDimensions(
+        String schemaName,
+        ForeignKey fk,
+        JdbcMetaDataService jmds,
+        List<String> ignoreTables
+    ) {
         List<Hierarchy> hierarchies = getHierarchies(schemaName, fk, jmds, ignoreTables);
         String description = new StringBuilder("Dimension for ").append(fk.getFkColumnName()).toString();
         return new PrivateDimensionR(getDimensionName(fk), DimensionTypeEnum.STANDARD_DIMENSION,
@@ -169,7 +176,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return new StringBuilder().append(fk.getPkTableName()).toString();
     }
 
-    private List<Hierarchy> getHierarchies(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+    private List<Hierarchy> getHierarchies(
+        String schemaName,
+        ForeignKey fk,
+        JdbcMetaDataService jmds,
+        List<String> ignoreTables
+    ) {
         List<RelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds, ignoreTables);
         List<Hierarchy> result = new ArrayList<>();
         for (RelationOrJoin relation : relationList) {
@@ -201,31 +213,36 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return result;
     }
 
-    private List<RelationOrJoin> getHierarchyRelation(String schemaName, ForeignKey fk, JdbcMetaDataService jmds, List<String> ignoreTables) {
+    private List<RelationOrJoin> getHierarchyRelation(
+        String schemaName,
+        ForeignKey fk,
+        JdbcMetaDataService jmds,
+        List<String> ignoreTables
+    ) {
 
         List<ForeignKey> listFKAll = jmds.getForeignKeys(schemaName, fk.getPkTableName());
         List<ForeignKey> listFK = null;
-        if (listFKAll != null &&  !listFKAll.isEmpty()) {
+        if (listFKAll != null && !listFKAll.isEmpty()) {
             listFK = listFKAll.stream()
                 .filter(k -> ignoreTables.stream().noneMatch(t -> t.equals(k.getPkTableName())))
-                .collect(Collectors.toList());
+                .toList();
         }
         if (listFK != null && !listFK.isEmpty()) {
             List<RelationOrJoin> result = new ArrayList<>();
             for (ForeignKey foreignKey : listFK) {
-                    List<String> ignoreTab = new ArrayList<>(ignoreTables);
-                    ignoreTab.add(foreignKey.getFkTableName());
-                    List<RelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds, ignoreTab);
-                    for (RelationOrJoin relationOrJoin : rightRelations) {
-                        List<RelationOrJoin> relations = List.of(
-                            new TableR(fk.getPkTableName()),
-                            relationOrJoin);
-                        result.add(new JoinR(relations,
-                            null,
-                            listFK.get(0).getFkColumnName(),
-                            null,
-                            foreignKey.getPkColumnName()));
-                    }
+                List<String> ignoreTab = new ArrayList<>(ignoreTables);
+                ignoreTab.add(foreignKey.getFkTableName());
+                List<RelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds, ignoreTab);
+                for (RelationOrJoin relationOrJoin : rightRelations) {
+                    List<RelationOrJoin> relations = List.of(
+                        new TableR(fk.getPkTableName()),
+                        relationOrJoin);
+                    result.add(new JoinR(relations,
+                        null,
+                        listFK.get(0).getFkColumnName(),
+                        null,
+                        foreignKey.getPkColumnName()));
+                }
             }
             return result;
         }
@@ -240,32 +257,20 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         JdbcMetaDataService jmds
     ) {
         List<Level> result = new ArrayList<>();
-        if (relation instanceof Join join && join.relations() != null && join.relations().size() > 1) {
+        result.addAll(getHierarchyLevelsForJoin(schemaName, relation,
+            tableName, columnName, jmds));
+        result.addAll(getHierarchyLevelsForTable(schemaName, relation,
+            tableName, columnName, jmds));
+        return result;
+    }
 
-            if (join.relations().get(1) instanceof Table t) {
-                List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
-                ForeignKey key =
-                    listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
-                if (key != null) {
-                    result.addAll(getHierarchyLevels(schemaName, t, key.getPkTableName(), key.getPkColumnName(),
-                        jmds));
-                }
-            } else if (join.relations().get(1) instanceof Join j) {
-                Table t = getFistTable(j);
-                if (t != null) {
-                    List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
-                    ForeignKey key =
-                        listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
-                    if (key != null) {
-                        result.addAll(getHierarchyLevels(schemaName, j, key.getPkTableName(),
-                            key.getPkColumnName(), jmds));
-                    }
-                }
-            }
-            if (join.relations().get(0) instanceof Table t) {
-                result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
-            }
-        }
+    private Collection<? extends Level> getHierarchyLevelsForTable(String schemaName,
+                                                                   RelationOrJoin relation,
+                                                                   String tableName,
+                                                                   String columnName,
+                                                                   JdbcMetaDataService jmds
+    ) {
+        List<Level> result = new ArrayList<>();
         if (relation instanceof Table table) {
             Level l = new LevelR(getLevelName(tableName),
                 tableName,
@@ -295,6 +300,57 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 null,
                 null);
             result.add(l);
+        }
+
+        return result;
+    }
+
+    private Collection<? extends Level> getHierarchyLevelsForJoin(
+        String schemaName,
+        RelationOrJoin relation,
+        String tableName,
+        String columnName,
+        JdbcMetaDataService jmds
+    ) {
+        List<Level> result = new ArrayList<>();
+        if (relation instanceof Join join && join.relations() != null && join.relations().size() > 1) {
+            result.addAll(getHierarchyLevelsForJoinRight(schemaName,
+                join.relations().get(1),
+                tableName,
+                jmds));
+            if (join.relations().get(0) instanceof Table t) {
+                result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
+            }
+        }
+        return result;
+    }
+
+    private Collection<? extends Level> getHierarchyLevelsForJoinRight(
+        String schemaName,
+        RelationOrJoin relationRight,
+        String tableName,
+        JdbcMetaDataService jmds
+    ) {
+        List<Level> result = new ArrayList<>();
+        if (relationRight instanceof Table t) {
+            List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
+            ForeignKey key =
+                listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
+            if (key != null) {
+                result.addAll(getHierarchyLevels(schemaName, t, key.getPkTableName(), key.getPkColumnName(),
+                    jmds));
+            }
+        } else if (relationRight instanceof Join j) {
+            Table t = getFistTable(j);
+            if (t != null) {
+                List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
+                ForeignKey key =
+                    listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
+                if (key != null) {
+                    result.addAll(getHierarchyLevels(schemaName, j, key.getPkTableName(),
+                        key.getPkColumnName(), jmds));
+                }
+            }
         }
         return result;
     }
@@ -522,24 +578,19 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         List<ForeignKey> foreignKeyList = jmds.getForeignKeys(schemaName, tableName);
         if (foreignKeyList != null && !foreignKeyList.isEmpty()) {
             // cub dimension usage for fields with foreign keys
-            for (ForeignKey foreignKey : foreignKeyList) {
-                if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
-                    PrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
-                    result.add(new DimensionUsageR(getDimensionName(foreignKey),
-                        privateDimension.name(),
-                        null,
-                        privateDimension.usagePrefix(),
-                        foreignKey.getFkColumnName(),
-                        privateDimension.highCardinality(),
-                        privateDimension.annotations(),
-                        privateDimension.caption(),
-                        privateDimension.visible(),
-                        privateDimension.description()));
-                }
-            }
+            result.addAll(getCubDimensionUsage(foreignKeyList, sharedDimensionsMap));
         }
         List<Column> columns = jmds.getColumns(schemaName, tableName);
         // cub dimension for not numeric fields
+        result.addAll(getCubDimensionForNotNumericFields(columns, foreignKeyList));
+
+        return result;
+    }
+
+    private Collection<? extends CubeDimension> getCubDimensionForNotNumericFields(
+        List<Column> columns, List<ForeignKey> foreignKeyList
+    ) {
+        List<CubeDimension> result = new ArrayList<>();
         if (columns != null && !columns.isEmpty()) {
             for (Column column : columns) {
                 if (!isNumericType(column.getType())
@@ -558,7 +609,29 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 }
             }
         }
+        return result;
+    }
 
+    private Collection<? extends CubeDimension> getCubDimensionUsage(
+        List<ForeignKey> foreignKeyList,
+        Map<String, PrivateDimension> sharedDimensionsMap
+    ) {
+        List<CubeDimension> result = new ArrayList<>();
+        for (ForeignKey foreignKey : foreignKeyList) {
+            if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
+                PrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
+                result.add(new DimensionUsageR(getDimensionName(foreignKey),
+                    privateDimension.name(),
+                    null,
+                    privateDimension.usagePrefix(),
+                    foreignKey.getFkColumnName(),
+                    privateDimension.highCardinality(),
+                    privateDimension.annotations(),
+                    privateDimension.caption(),
+                    privateDimension.visible(),
+                    privateDimension.description()));
+            }
+        }
         return result;
     }
 

@@ -67,5 +67,18 @@
       <version>3.36.0.3</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+          <groupId>org.eclipse.daanse</groupId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
+          <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
   </dependencies>
 </project>

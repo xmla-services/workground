@@ -354,4 +354,12 @@ public class LevelImpl implements Level {
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
+
+    public void setInternalType(InternalTypeEnum internalType) {
+        this.internalType = internalType;
+    }
+
+    public void setMemberFormatter(ElementFormatterImpl memberFormatter) {
+        this.memberFormatter = memberFormatter;
+    }
 }

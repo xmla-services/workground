@@ -218,4 +218,12 @@ public class SchemaImpl implements Schema {
         this.virtualCubes = virtualCubs;
     }
 
+    public void setDimensions(List<PrivateDimension> dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    public void setCubes(List<Cube> cubes) {
+        this.cubes = cubes;
+    }
+
 }
