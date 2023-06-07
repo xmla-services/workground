@@ -37,8 +37,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Cube", propOrder = { "annotations", "dimensionUsageOrDimensions", "measures",
-        "calculatedMembers", "namedSets", "drillThroughActions", "writebackTables", "fact", "actions"})
+@XmlType(name = "Cube", propOrder = { "fact", "dimensionUsageOrDimensions", "measures", "annotations",
+        "calculatedMembers", "namedSets", "drillThroughActions", "writebackTables", "actions"})
 @XmlRootElement(name = "Cube")
 public class CubeImpl implements Cube {
 
@@ -217,5 +217,37 @@ public class CubeImpl implements Cube {
             actions = new ArrayList<>();
         }
         return actions;
+    }
+
+    public void setDimensionUsageOrDimensions(List<CubeDimension> dimensionUsageOrDimensions) {
+        this.dimensionUsageOrDimensions = dimensionUsageOrDimensions;
+    }
+
+    public void setMeasures(List<Measure> measures) {
+        this.measures = measures;
+    }
+
+    public void setCalculatedMembers(List<CalculatedMember> calculatedMembers) {
+        this.calculatedMembers = calculatedMembers;
+    }
+
+    public void setNamedSets(List<NamedSet> namedSets) {
+        this.namedSets = namedSets;
+    }
+
+    public void setDrillThroughActions(List<DrillThroughAction> drillThroughActions) {
+        this.drillThroughActions = drillThroughActions;
+    }
+
+    public void setWritebackTables(List<WritebackTable> writebackTables) {
+        this.writebackTables = writebackTables;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
     }
 }

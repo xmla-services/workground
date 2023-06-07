@@ -32,8 +32,8 @@ import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Hierarchy", propOrder = { "annotations", "levels",
-        "memberReaderParameters", "relation" })
+@XmlType(name = "Hierarchy", propOrder = { "relation", "levels", "annotations",
+        "memberReaderParameters" })
 public class HierarchyImpl implements Hierarchy {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
@@ -239,11 +239,21 @@ public class HierarchyImpl implements Hierarchy {
         this.uniqueKeyLevelName = value;
     }
 
-    public void setLevel(List<Level> levels) {
+    public void setLevels(List<Level> levels) {
         this.levels = levels;
     }
 
     public void setRelation(RelationOrJoin relation) {
         this.relation = relation;
     }
+
+    public void setMemberReaderParameters(List<MemberReaderParameter> memberReaderParameters) {
+        this.memberReaderParameters = memberReaderParameters;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+
 }

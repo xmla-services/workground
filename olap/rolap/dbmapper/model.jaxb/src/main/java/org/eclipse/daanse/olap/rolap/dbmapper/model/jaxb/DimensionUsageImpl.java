@@ -136,4 +136,19 @@ public class DimensionUsageImpl implements DimensionUsage {
         this.highCardinality = value;
     }
 
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

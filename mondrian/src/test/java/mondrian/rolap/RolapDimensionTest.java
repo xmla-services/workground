@@ -62,7 +62,7 @@ class RolapDimensionTest {
 
     hierarchy.setVisible(true);
     hierarchy.setHasAll(false);
-    hierarchy.setLevel(List.of(level));
+    hierarchy.setLevels(List.of(level));
 
     level.setVisible(true);
     level.setProperties(List.of());
@@ -77,7 +77,7 @@ class RolapDimensionTest {
     propSaver.reset();
   }
 
-  @Disabled //disabled for CI build
+  @Disabled("disabled for CI build") //disabled for CI build
   @Test
   void testHierarchyRelation() {
     Relation hierarchyTable = Mockito
@@ -92,7 +92,7 @@ class RolapDimensionTest {
   /**
    * Check that hierarchy.relation is not set to cube.fact
    */
-  @Disabled //disabled for CI build
+  @Disabled("disabled for CI build") //disabled for CI build
   @Test
   void testHierarchyRelationNotSet() {
     new RolapDimension(schema, cube, xmlDimension, xmlCubeDimension);

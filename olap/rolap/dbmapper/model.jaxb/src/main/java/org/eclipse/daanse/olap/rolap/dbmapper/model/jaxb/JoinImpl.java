@@ -91,4 +91,7 @@ public class JoinImpl implements Join {
         this.rightKey = value;
     }
 
+    public void setRelations(List<RelationOrJoin> relations) {
+        this.relations = relations;
+    }
 }

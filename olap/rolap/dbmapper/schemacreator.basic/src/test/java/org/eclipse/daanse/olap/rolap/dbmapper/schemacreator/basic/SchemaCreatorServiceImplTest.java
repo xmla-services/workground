@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
@@ -20,10 +23,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.util.SchemaTransformer;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaInitData;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.test.common.annotation.InjectService;
@@ -36,6 +39,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -44,10 +48,12 @@ class SchemaCreatorServiceImplTest {
     public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic.SchemaCreatorServiceFactoryImpl";
 
     @Test
+    @SuppressWarnings("java:S5961")
     void testPopulationDatabase(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") SchemaCreatorServiceFactory schemaCreatorServiceFactory) throws SQLException {
         SQLiteDataSource dataSource = new SQLiteDataSource();
         //dataSource.setUrl("jdbc:sqlite:/home/oem/repod/deMondrian/olap/rolap/dbmapper/schemacreator.basic/src/test/resources/population.sqlite");
         dataSource.setUrl("jdbc:sqlite:../../../../src/test/resources/population.sqlite");
+        dataSource.setDatabaseName("population");
         SchemaCreatorService schemaCreatorService = schemaCreatorServiceFactory.create(dataSource);
         SchemaInitData schemaInitData = new SchemaInitData();
         schemaInitData.setFactTables(List.of("population"));
@@ -165,10 +171,11 @@ class SchemaCreatorServiceImplTest {
         assertThat(du).isNotNull();
         assertThat(du.source()).isEqualTo("Dimension AgeGroups");
         assertThat(du.foreignKey()).isEqualTo("age");
-
+        marshallSchema(s);
     }
 
     @Test
+    @SuppressWarnings("java:S5961")
     void testEmployeesDatabase(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") SchemaCreatorServiceFactory schemaCreatorServiceFactory) throws SQLException {
         SQLiteDataSource dataSource = new SQLiteDataSource();
         dataSource.setUrl("jdbc:sqlite:../../../../src/test/resources/employees.sqlite");
@@ -250,7 +257,21 @@ class SchemaCreatorServiceImplTest {
         levels = h.levels();
         assertThat(levels).isNotNull().hasSize(2);
 
+        marshallSchema(s);
+
     }
+
+    private void marshallSchema(Schema s) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(SchemaTransformer.transformSchema(s), System.out);
+        } catch (JAXBException e) {
+            fail("marshalling error");
+        }
+    }
+
     private PrivateDimension getPrivateDimension(List<PrivateDimension> dimensions, String name) {
         return dimensions.stream().filter(d -> name.equals(d.name()))
             .findAny()
@@ -262,5 +283,4 @@ class SchemaCreatorServiceImplTest {
             .findAny()
             .orElse(null);
     }
-
 }
