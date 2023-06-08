@@ -26,4 +26,12 @@ public class MemberGrantAccessAdaptor extends Adaptor<MemberGrantAccessEnum> {
         return MemberGrantAccessEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<MemberGrantAccessEnum> e) throws Exception {
+        if (e != null) {
+            return MemberGrantAccessEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
+
 }

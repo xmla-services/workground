@@ -26,4 +26,12 @@ public class AccessAdaptor extends Adaptor<AccessEnum> {
         return AccessEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<AccessEnum> e) throws Exception {
+        if (e != null) {
+            return AccessEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
+
 }
