@@ -26,4 +26,11 @@ public class PropertyTypeAdaptor extends Adaptor<PropertyTypeEnum> {
         return PropertyTypeEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<PropertyTypeEnum> e) throws Exception {
+        if (e != null) {
+            return PropertyTypeEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
 }

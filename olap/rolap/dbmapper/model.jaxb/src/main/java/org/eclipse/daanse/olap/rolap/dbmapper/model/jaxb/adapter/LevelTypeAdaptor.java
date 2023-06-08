@@ -29,7 +29,7 @@ public class LevelTypeAdaptor extends Adaptor<LevelTypeEnum> {
     @Override
     public String marshal(Enum<LevelTypeEnum> e) throws Exception {
         if (e != null) {
-            return e.toString();
+            return LevelTypeEnum.valueOf(e.name()).getValue();
         }
         return null;
     }

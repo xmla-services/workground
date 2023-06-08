@@ -28,7 +28,10 @@ public class Adaptor<T extends Enum<T>> extends XmlAdapter<String,  Enum<T>> {
 
     @Override
     public String marshal(Enum<T> e) throws Exception {
-        return e.toString();
+        if (e != null) {
+            return e.toString();
+        }
+        return null;
     }
 
     @Override

@@ -26,4 +26,12 @@ public class TypeAdaptor extends Adaptor<TypeEnum> {
         return TypeEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<TypeEnum> e) throws Exception {
+        if (e != null) {
+            return TypeEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
+
 }

@@ -20,8 +20,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.util.SchemaTransformer;
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorService;
@@ -171,6 +174,11 @@ class SchemaCreatorServiceImplTest {
         assertThat(du).isNotNull();
         assertThat(du.source()).isEqualTo("Dimension AgeGroups");
         assertThat(du.foreignKey()).isEqualTo("age");
+
+        assertThat(s.cubes()).hasSize(1);
+        Table t = (Table)c.fact();
+        assertThat(t.name()).isEqualTo("population");
+
         marshallSchema(s);
     }
 
@@ -186,6 +194,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(s).isNotNull();
         assertThat(s.dimensions()).isNotNull().hasSize(3);
 
+        // check Dimension Jobs
         PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension Jobs");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
@@ -202,6 +211,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.description()).isEqualTo("Jobs");
         assertThat(level.type()).isEqualTo(TypeEnum.STRING);
 
+        // check Dimension Departments
         d = getPrivateDimension(s.dimensions(), "Dimension Departments");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
@@ -250,15 +260,312 @@ class SchemaCreatorServiceImplTest {
         assertThat(d.hierarchies()).isNotNull().hasSize(2);
 
         h =  d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_employee_id");
+        assertThat(h.hasAll()).isTrue();
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_employee_id");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_employee_id");
         levels = h.levels();
         assertThat(levels).isNotNull().hasSize(5);
 
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Regions");
+        assertThat(level.column()).isEqualTo("region_id");
+        assertThat(level.table()).isEqualTo("regions");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Regions");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
+        level = levels.get(1);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Countries");
+        assertThat(level.column()).isEqualTo("country_id");
+        assertThat(level.table()).isEqualTo("countries");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Countries");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
+        level = levels.get(2);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Locations");
+        assertThat(level.column()).isEqualTo("location_id");
+        assertThat(level.table()).isEqualTo("locations");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Locations");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
+        level = levels.get(3);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Departments");
+        assertThat(level.column()).isEqualTo("department_id");
+        assertThat(level.table()).isEqualTo("departments");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Departments");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
+        level = levels.get(4);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("employee_id");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
         h =  d.hierarchies().get(1);
         levels = h.levels();
+        assertThat(h.name()).isEqualTo("employees_employee_id_1");
+        assertThat(h.hasAll()).isTrue();
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_employee_id");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_employee_id");
         assertThat(levels).isNotNull().hasSize(2);
 
-        marshallSchema(s);
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Jobs");
+        assertThat(level.column()).isEqualTo("job_id");
+        assertThat(level.table()).isEqualTo("jobs");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Jobs");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
 
+        level = levels.get(1);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("employee_id");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.NUMERIC);
+        assertThat(level.visible()).isTrue();
+        assertThat(level.uniqueMembers()).isTrue();
+
+        assertThat(s.cubes()).hasSize(1);
+        Cube c = s.cubes().get(0);
+        assertThat(c.name()).isEqualTo("Employees");
+        assertThat(c.caption()).isEqualTo("Employees");
+        assertThat(c.description()).isEqualTo("Employees");
+        assertThat(c.cache()).isTrue();
+        assertThat(c.enabled()).isTrue();
+        assertThat(c.visible()).isTrue();
+        assertThat(c.fact()).isNotNull();
+        assertThat(c.fact()).isInstanceOf(Table.class);
+        Table t = (Table)c.fact();
+        assertThat(t.name()).isEqualTo("employees");
+        assertThat(c.dimensionUsageOrDimensions()).hasSize(8);
+        assertThat(c.dimensionUsageOrDimensions().get(0)).isInstanceOf(DimensionUsage.class);
+        assertThat(c.dimensionUsageOrDimensions().get(1)).isInstanceOf(DimensionUsage.class);
+        assertThat(c.dimensionUsageOrDimensions().get(2)).isInstanceOf(DimensionUsage.class);
+
+        assertThat(c.dimensionUsageOrDimensions().get(3)).isInstanceOf(PrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(4)).isInstanceOf(PrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(5)).isInstanceOf(PrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(6)).isInstanceOf(PrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(7)).isInstanceOf(PrivateDimension.class);
+
+        DimensionUsage du = (DimensionUsage) c.dimensionUsageOrDimensions().get(0);
+        assertThat(du.name()).isEqualTo("Dimension Departments");
+        assertThat(du.source()).isEqualTo("Dimension Departments");
+        assertThat(du.foreignKey()).isEqualTo("department_id");
+        assertThat(du.caption()).isEqualTo("departments");
+        assertThat(du.description()).isEqualTo("Dimension for department_id");
+        assertThat(du.visible()).isTrue();
+
+        du = (DimensionUsage) c.dimensionUsageOrDimensions().get(1);
+        assertThat(du.name()).isEqualTo("Dimension Employees");
+        assertThat(du.source()).isEqualTo("Dimension Employees");
+        assertThat(du.foreignKey()).isEqualTo("manager_id");
+        assertThat(du.caption()).isEqualTo("employees");
+        assertThat(du.description()).isEqualTo("Dimension for manager_id");
+        assertThat(du.visible()).isTrue();
+
+        du = (DimensionUsage) c.dimensionUsageOrDimensions().get(2);
+        assertThat(du.name()).isEqualTo("Dimension Jobs");
+        assertThat(du.source()).isEqualTo("Dimension Jobs");
+        assertThat(du.foreignKey()).isEqualTo("job_id");
+        assertThat(du.caption()).isEqualTo("jobs");
+        assertThat(du.description()).isEqualTo("Dimension for job_id");
+        assertThat(du.visible()).isTrue();
+
+        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(3);
+        assertThat(d.name()).isEqualTo("first_name");
+        assertThat(d.caption()).isEqualTo("first_name");
+        assertThat(d.description()).isEqualTo("first_name");
+        assertThat(d.foreignKey()).isEqualTo("first_name");
+        assertThat(d.visible()).isTrue();
+        assertThat(d.hierarchies()).hasSize(1);
+        h = d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_first_name");
+        assertThat(h.primaryKey()).isEqualTo("first_name");
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_first_name");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_first_name");
+        assertThat(h.visible()).isTrue();
+
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("first_name");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+
+        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(4);
+        assertThat(d.name()).isEqualTo("last_name");
+        assertThat(d.caption()).isEqualTo("last_name");
+        assertThat(d.description()).isEqualTo("last_name");
+        assertThat(d.foreignKey()).isEqualTo("last_name");
+        assertThat(d.visible()).isTrue();
+        assertThat(d.hierarchies()).hasSize(1);
+        h = d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_last_name");
+        assertThat(h.primaryKey()).isEqualTo("last_name");
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_last_name");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_last_name");
+        assertThat(h.visible()).isTrue();
+
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("last_name");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+
+        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(5);
+        assertThat(d.name()).isEqualTo("email");
+        assertThat(d.caption()).isEqualTo("email");
+        assertThat(d.description()).isEqualTo("email");
+        assertThat(d.foreignKey()).isEqualTo("email");
+        assertThat(d.visible()).isTrue();
+        assertThat(d.hierarchies()).hasSize(1);
+        h = d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_email");
+        assertThat(h.primaryKey()).isEqualTo("email");
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_email");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_email");
+        assertThat(h.visible()).isTrue();
+
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("email");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+
+        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(6);
+        assertThat(d.name()).isEqualTo("phone_number");
+        assertThat(d.caption()).isEqualTo("phone_number");
+        assertThat(d.description()).isEqualTo("phone_number");
+        assertThat(d.foreignKey()).isEqualTo("phone_number");
+        assertThat(d.visible()).isTrue();
+        assertThat(d.hierarchies()).hasSize(1);
+        h = d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_phone_number");
+        assertThat(h.primaryKey()).isEqualTo("phone_number");
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_phone_number");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_phone_number");
+        assertThat(h.visible()).isTrue();
+
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("phone_number");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+
+        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(7);
+        assertThat(d.name()).isEqualTo("hire_date");
+        assertThat(d.caption()).isEqualTo("hire_date");
+        assertThat(d.description()).isEqualTo("hire_date");
+        assertThat(d.foreignKey()).isEqualTo("hire_date");
+        assertThat(d.visible()).isTrue();
+        assertThat(d.hierarchies()).hasSize(1);
+        h = d.hierarchies().get(0);
+        assertThat(h.name()).isEqualTo("employees_hire_date");
+        assertThat(h.primaryKey()).isEqualTo("hire_date");
+        assertThat(h.caption()).isEqualTo("Caption for hierarchyemployees_hire_date");
+        assertThat(h.description()).isEqualTo("Description for hierarchyemployees_hire_date");
+        assertThat(h.visible()).isTrue();
+
+        levels = h.levels();
+        assertThat(levels).isNotNull().hasSize(1);
+        // check level0
+        level = levels.get(0);
+        assertThat(level).isNotNull();
+        assertThat(level.name()).isEqualTo("Employees");
+        assertThat(level.column()).isEqualTo("hire_date");
+        assertThat(level.table()).isEqualTo("employees");
+        assertThat(level.nameColumn()).isNull();
+        assertThat(level.description()).isEqualTo("Employees");
+        assertThat(level.type()).isEqualTo(TypeEnum.STRING);
+        assertThat(level.visible()).isTrue();
+
+        assertThat(c.measures()).hasSize(3);
+        Measure m = c.measures().get(0);
+        assertThat(m.name()).isEqualTo("employee_id");
+        assertThat(m.column()).isEqualTo("employee_id");
+        assertThat(m.caption()).isEqualTo("employee_id");
+        assertThat(m.description()).isEqualTo("employee_id");
+        assertThat(m.datatype()).isEqualTo(MeasureDataTypeEnum.NUMERIC);
+        assertThat(m.formatString()).isEqualTo("Standard");
+        assertThat(m.aggregator()).isEqualTo("sum");
+        assertThat(m.visible()).isTrue();
+
+        m = c.measures().get(1);
+        assertThat(m.name()).isEqualTo("salary");
+        assertThat(m.column()).isEqualTo("salary");
+        assertThat(m.caption()).isEqualTo("salary");
+        assertThat(m.description()).isEqualTo("salary");
+        assertThat(m.datatype()).isEqualTo(MeasureDataTypeEnum.NUMERIC);
+        assertThat(m.formatString()).isEqualTo("Standard");
+        assertThat(m.aggregator()).isEqualTo("sum");
+        assertThat(m.visible()).isTrue();
+
+        m = c.measures().get(2);
+        assertThat(m.name()).isEqualTo("commission_pct");
+        assertThat(m.column()).isEqualTo("commission_pct");
+        assertThat(m.caption()).isEqualTo("commission_pct");
+        assertThat(m.description()).isEqualTo("commission_pct");
+        assertThat(m.datatype()).isEqualTo(MeasureDataTypeEnum.NUMERIC);
+        assertThat(m.formatString()).isEqualTo("Standard");
+        assertThat(m.aggregator()).isEqualTo("sum");
+        assertThat(m.visible()).isTrue();
+
+        marshallSchema(s);
     }
 
     private void marshallSchema(Schema s) {

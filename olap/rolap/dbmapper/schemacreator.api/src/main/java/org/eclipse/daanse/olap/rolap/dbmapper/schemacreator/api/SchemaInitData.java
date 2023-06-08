@@ -18,7 +18,6 @@ import java.util.List;
 public class SchemaInitData {
 
     private List<String> factTables;
-    private List<DimensionData> dimensionData;
 
     public List<String> getFactTables() {
         return factTables;
@@ -28,11 +27,4 @@ public class SchemaInitData {
         this.factTables = factTables;
     }
 
-    public List<DimensionData> getDimensionData() {
-        return dimensionData;
-    }
-
-    public void setDimensionData(List<DimensionData> dimensionData) {
-        this.dimensionData = dimensionData;
-    }
 }

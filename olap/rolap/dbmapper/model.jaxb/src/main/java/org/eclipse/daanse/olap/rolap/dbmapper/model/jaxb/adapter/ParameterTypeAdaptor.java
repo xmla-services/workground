@@ -26,4 +26,12 @@ public class ParameterTypeAdaptor  extends Adaptor<ParameterTypeEnum> {
         return ParameterTypeEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<ParameterTypeEnum> e) throws Exception {
+        if (e != null) {
+            return ParameterTypeEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
+
 }

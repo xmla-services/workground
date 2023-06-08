@@ -26,4 +26,11 @@ public class MeasureDataTypeAdaptor extends Adaptor<MeasureDataTypeEnum> {
         return MeasureDataTypeEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<MeasureDataTypeEnum> e) throws Exception {
+        if (e != null) {
+            return MeasureDataTypeEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
 }

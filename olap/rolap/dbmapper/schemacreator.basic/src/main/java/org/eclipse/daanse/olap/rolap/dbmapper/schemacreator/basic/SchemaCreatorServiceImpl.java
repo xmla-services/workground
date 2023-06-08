@@ -58,6 +58,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -66,6 +67,20 @@ import java.util.stream.Collectors;
 public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SchemaCreatorServiceImpl.class);
+    private final Map<String, LevelTypeEnum> dateTypeMap =
+        Map.of(
+            "second", LevelTypeEnum.TIME_SECONDS,
+            "minute", LevelTypeEnum.TIME_MINUTES,
+            "day", LevelTypeEnum.TIME_DAYS,
+            "week", LevelTypeEnum.TIME_WEEKS,
+            "quarter", LevelTypeEnum.TIME_QUARTERS,
+            "month", LevelTypeEnum.TIME_MONTHS,
+            "year", LevelTypeEnum.TIME_YEARS
+            );
+    private final List<String> dateColumnNameList = List.of(
+        "second", "minute", "day",
+        "week", "quarter", "month", "year");
+
 
     private final JdbcMetaDataServiceFactory jmdsf;
     private final DataSource dataSource;
@@ -77,7 +92,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     @Override
     public Schema createSchema(SchemaInitData sid) {
-        Schema schema = null;
         try (Connection connection = dataSource.getConnection()) {
             JdbcMetaDataService jmds = jmdsf.create(connection);
             String schemaName = connection.getSchema();
@@ -95,7 +109,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             List<Role> roles = List.of();
             List<UserDefinedFunction> userDefinedFunctions = List.of();
 
-            schema = new SchemaR(schemaName,
+            return new SchemaR(schemaName,
                 description,
                 measuresCaption,
                 defaultRole,
@@ -112,7 +126,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             LOGGER.error("createSchema error");
             throw new SchemaCreatorException("createSchema error", e);
         }
-        return schema;
     }
 
     private Map<String, PrivateDimension> getSharedDimensions(
@@ -160,16 +173,38 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     ) {
         List<Hierarchy> hierarchies = getHierarchies(schemaName, fk, jmds, ignoreTables);
         String description = new StringBuilder("Dimension for ").append(fk.getFkColumnName()).toString();
-        return new PrivateDimensionR(getDimensionName(fk), DimensionTypeEnum.STANDARD_DIMENSION,
+        return new PrivateDimensionR(getDimensionName(fk), getDimensionType(schemaName, fk.getPkTableName(), fk.getPkColumnName(), jmds),
             getDimensionCaption(fk),
             description,
-            fk.getPkColumnName(),
+            null, //key is null for share dimension PkColumnName
             true,
             List.of(),
             hierarchies,
             true,
             List.of(),
             null);
+    }
+
+    private DimensionTypeEnum getDimensionType(String schemaName, String tableName, String columnName,  JdbcMetaDataService jmds) {
+        try {
+            Optional<Integer> optionalType = jmds.getColumnDataType(schemaName, tableName, columnName);
+            TypeEnum type = getDatatype(optionalType);
+            if (TypeEnum.TIME.equals(type)
+                || TypeEnum.TIMESTAMP.equals(type)
+                || TypeEnum.DATE.equals(type)) {
+                return DimensionTypeEnum.TIME_DIMENSION;
+            }
+            if (TypeEnum.INTEGER.equals(type) && isFromDateColumnName(columnName)) {
+                return DimensionTypeEnum.TIME_DIMENSION;
+            }
+            return  DimensionTypeEnum.STANDARD_DIMENSION;
+        } catch (SQLException e) {
+            throw new SchemaCreatorException("getDimensionType error", e);
+        }
+    }
+
+    private boolean isFromDateColumnName(String columnName) {
+        return dateColumnNameList.stream().anyMatch(c -> c.equals(columnName));
     }
 
     private String getDimensionCaption(ForeignKey fk) {
@@ -184,31 +219,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     ) {
         List<RelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds, ignoreTables);
         List<Hierarchy> result = new ArrayList<>();
+        Map<String, Integer> hierarchyNamesMap = new HashMap<>();
         for (RelationOrJoin relation : relationList) {
-            Hierarchy hierarchy = new HierarchyR(getHierarchyName(fk),
-                getHierarchyCaption(fk),
-                getHierarchyDescription(fk),
-                List.of(),
-                null,
-                null,
-                null,
-                null,
-                getHierarchyLevels(schemaName, relation, fk.getPkTableName(), fk.getPkColumnName(), jmds),
-                List.of(),
-                true,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                true,
-                null,
-                relation,
-                null);
-            result.add(hierarchy);
+            result.add(
+                getHierarchy(schemaName, fk.getPkTableName(), fk.getPkColumnName(),
+                    relation, hierarchyNamesMap, jmds)
+            );
         }
         return result;
     }
@@ -276,18 +292,18 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 tableName,
                 columnName,
                 getColumnNameByPostfix(schemaName, table.name(), columnName, "name", jmds),
-                getLevelOrdinalName(table.name(), columnName),
-                getLevelParentColumn(table.name(), columnName),
-                getLevelNullParentValue(table.name(), columnName),
+                getLevelOrdinalName(),
+                getLevelParentColumn(),
+                getLevelNullParentValue(),
                 getLevelColumnType(schemaName, table.name(), columnName, jmds),
-                getLevelApproxRowCount(table.name(), columnName),
+                getLevelApproxRowCount(),
                 true,
-                getLevelType(table.name(), columnName),
+                getLevelType(schemaName, table.name(), columnName, jmds),
                 null,
                 null,
-                getLevelCaption(table.name(), columnName),
+                getLevelCaption(),
                 getLevelDescription(table.name()),
-                getLevelCaptionColumn(table.name(), columnName),
+                getLevelCaptionColumn(),
                 List.of(),
                 null,
                 null,
@@ -372,8 +388,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return null;
     }
 
-    private String getLevelCaptionColumn(String table, String columnName) {
-        //TODO
+    private String getLevelCaptionColumn() {
         return null;
     }
 
@@ -381,38 +396,47 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return capitalize(table);
     }
 
-    private String getLevelCaption(String table, String columnName) {
+    private String getLevelCaption() {
         return null;
     }
 
-    private LevelTypeEnum getLevelType(String table, String columnName) {
+    private LevelTypeEnum getLevelType(String schemaName, String tableName, String columnName, JdbcMetaDataService jmds) {
+        try {
+            TypeEnum type = getDatatype(jmds.getColumnDataType(schemaName, tableName, columnName));
+            if (TypeEnum.DATE.equals(type)) {
+                return LevelTypeEnum.TIME_DAYS;
+            }
+            if (TypeEnum.INTEGER.equals(type) && isFromDateColumnName(columnName)) {
+                return dateTypeMap.get(columnName);
+            }
+        } catch (SQLException e) {
+            throw new SchemaCreatorException("getLevelType error", e);
+        }
         return null;
     }
 
-    private String getLevelApproxRowCount(String table, String columnName) {
+    private String getLevelApproxRowCount() {
         return null;
     }
 
     private TypeEnum getLevelColumnType(String schemaName, String table, String columnName, JdbcMetaDataService jmds) {
         try {
             Optional<Integer> type = jmds.getColumnDataType(schemaName, table, columnName);
-            return getDatatype(
-                type.orElseThrow(() -> new SchemaCreatorException("getLevelColumnType error type is absent"))
-            );
+            return getDatatype(type);
         } catch (SQLException e) {
             throw new SchemaCreatorException("getLevelColumnType error", e);
         }
     }
 
-    private String getLevelNullParentValue(String table, String columnName) {
+    private String getLevelNullParentValue() {
         return null;
     }
 
-    private String getLevelParentColumn(String table, String columnName) {
+    private String getLevelParentColumn() {
         return null;
     }
 
-    private String getLevelOrdinalName(String table, String columnName) {
+    private String getLevelOrdinalName() {
         return null;
     }
 
@@ -433,24 +457,32 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return null;
     }
 
-    private String getHierarchyDescription(ForeignKey fk) {
+    private String getHierarchyDescription(String tableName, String columnName) {
         return new StringBuilder("Description for hierarchy")
-            .append(fk.getPkTableName())
+            .append(tableName)
             .append("_")
-            .append(fk.getPkColumnName()).toString();
+            .append(columnName).toString();
     }
 
-    private String getHierarchyCaption(ForeignKey fk) {
+    private String getHierarchyCaption(String tableName, String columnName) {
         return new StringBuilder("Caption for hierarchy")
-            .append(fk.getPkTableName())
+            .append(tableName)
             .append("_")
-            .append(fk.getPkColumnName()).toString();
+            .append(columnName).toString();
     }
 
-    private String getHierarchyName(ForeignKey fk) {
-        return new StringBuilder(fk.getPkTableName())
+    private String getHierarchyName(String tableName, String columnName, Map<String, Integer> hierarchyNamesMap) {
+        String name = new StringBuilder(tableName)
             .append("_")
-            .append(fk.getPkColumnName()).toString();
+            .append(columnName).toString();
+        Integer index  = hierarchyNamesMap.computeIfAbsent(name, k -> 0);
+        if (index > 0) {
+            hierarchyNamesMap.put(name, index + 1);
+            return new StringBuilder(name).append("_")
+                .append(index).toString();
+        }
+        hierarchyNamesMap.put(name, index + 1);
+        return name;
     }
 
     private String getDimensionName(ForeignKey fk) {
@@ -514,7 +546,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     }
 
     private List<Measure> getMeasures(String schemaName, String tableName, JdbcMetaDataService jmds) {
-        //TODO
         List<Measure> result = new ArrayList<>();
         List<Column> columns = jmds.getColumns(schemaName, tableName);
         // cub Measures for numeric fields sum and count
@@ -582,27 +613,32 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         }
         List<Column> columns = jmds.getColumns(schemaName, tableName);
         // cub dimension for not numeric fields
-        result.addAll(getCubDimensionForNotNumericFields(columns, foreignKeyList));
+        result.addAll(getCubDimensionForNotNumericFields(schemaName, tableName, columns, foreignKeyList, jmds));
 
         return result;
     }
 
     private Collection<? extends CubeDimension> getCubDimensionForNotNumericFields(
-        List<Column> columns, List<ForeignKey> foreignKeyList
+        String schemaName, String tableName,
+        List<Column> columns, List<ForeignKey> foreignKeyList, JdbcMetaDataService jmds
     ) {
         List<CubeDimension> result = new ArrayList<>();
         if (columns != null && !columns.isEmpty()) {
+            Map<String, Integer> hierarchyNamesMap = new HashMap<>();
             for (Column column : columns) {
                 if (!isNumericType(column.getType())
                     && (foreignKeyList == null ||
                     foreignKeyList.stream().noneMatch(fk -> fk.getFkColumnName().equals(column.getName())))) {
-                    result.add(new PrivateDimensionR(column.getName(), DimensionTypeEnum.STANDARD_DIMENSION,
+                    List<Hierarchy> hierarchyList = List.of(getHierarchy(schemaName, tableName,
+                        column.getName(), new TableR(tableName), hierarchyNamesMap, jmds));
+                    result.add(new PrivateDimensionR(column.getName(),
+                        getDimensionType(schemaName, tableName, column.getName(), jmds),
                         column.getName(),
                         column.getName(),
                         column.getName(),
                         true,
                         List.of(),
-                        List.of(),
+                        hierarchyList,
                         true,
                         List.of(),
                         null));
@@ -610,6 +646,35 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             }
         }
         return result;
+    }
+
+    private Hierarchy getHierarchy(String schemaName, String tableName,
+                                   String columnName, RelationOrJoin relation,
+                                   Map<String, Integer> hierarchyNamesMap, JdbcMetaDataService jmds) {
+
+        return new HierarchyR(getHierarchyName(tableName, columnName, hierarchyNamesMap),
+            getHierarchyCaption(tableName, columnName),
+            getHierarchyDescription(tableName, columnName),
+            List.of(),
+            null,
+            null,
+            null,
+            null,
+            getHierarchyLevels(schemaName, relation, tableName, columnName, jmds),
+            List.of(),
+            true,
+            null,
+            null,
+            null,
+            columnName,
+            null,
+            null,
+            null,
+            null,
+            true,
+            null,
+            relation,
+            null);
     }
 
     private Collection<? extends CubeDimension> getCubDimensionUsage(
@@ -643,8 +708,11 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return str;
     }
 
-    private TypeEnum getDatatype(int javaType) {
-        switch (javaType) {
+    private TypeEnum getDatatype(Optional<Integer> optionalType) {
+        Integer type = optionalType.orElseThrow(
+            () -> new SchemaCreatorException("getLevelColumnType error type is absent")
+        );
+        switch (type) {
             case Types.TINYINT, Types.SMALLINT, Types.INTEGER:
                 return TypeEnum.INTEGER;
             case Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL, Types.BIGINT:

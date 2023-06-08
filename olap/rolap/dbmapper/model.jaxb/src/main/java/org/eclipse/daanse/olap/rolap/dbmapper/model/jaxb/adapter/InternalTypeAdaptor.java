@@ -29,7 +29,7 @@ public class InternalTypeAdaptor extends Adaptor<InternalTypeEnum> {
     @Override
     public String marshal(Enum<InternalTypeEnum> e) throws Exception {
         if (e != null) {
-            return e.toString();
+            return InternalTypeEnum.valueOf(e.name()).getValue();
         }
         return null;
     }

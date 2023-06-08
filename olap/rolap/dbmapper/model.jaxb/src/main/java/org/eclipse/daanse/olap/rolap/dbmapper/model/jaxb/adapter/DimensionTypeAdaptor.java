@@ -26,4 +26,11 @@ public class DimensionTypeAdaptor  extends Adaptor<DimensionTypeEnum> {
         return DimensionTypeEnum.fromValue(v);
     }
 
+    @Override
+    public String marshal(Enum<DimensionTypeEnum> e) throws Exception {
+        if (e != null) {
+            return DimensionTypeEnum.valueOf(e.name()).getValue();
+        }
+        return null;
+    }
 }
