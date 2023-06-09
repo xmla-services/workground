@@ -18,5 +18,6 @@
   <modules>
     <module>api</module>
     <module>csv</module>
+    <module>ods</module>
   </modules>
 </project>
