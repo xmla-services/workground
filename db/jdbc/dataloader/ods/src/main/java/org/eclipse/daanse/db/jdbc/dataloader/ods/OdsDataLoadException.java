@@ -19,4 +19,7 @@ public class OdsDataLoadException extends RuntimeException{
         super(msg, e);
     }
 
+    public OdsDataLoadException(String msg) {
+        super(msg);
+    }
 }
