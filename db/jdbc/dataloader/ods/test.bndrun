@@ -46,6 +46,7 @@
 	org.eclipse.daanse.db.jdbc.dataloader.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.ods;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.dataloader.ods-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.jdbc.metadata;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.jdbc.util;version='[0.0.1,0.0.2)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\
 	org.objectweb.asm;version='[9.4.0,9.4.1)',\
