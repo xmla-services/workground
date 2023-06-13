@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.xmla.client.soapmessage;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
+import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
@@ -34,6 +34,7 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesIn
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRequest;
@@ -72,11 +73,28 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
-
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_AUTHENTICATION_MODE;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_DESCRIPTION;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_INFO;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_NAME;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_NAME;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_TYPE;
+import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_URL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DISCOVER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DISCOVER_DATASOURCES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTIES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REQUEST_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTION_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SOAP_ACTION_DISCOVER;
 
 public class DiscoverServiceImpl implements DiscoverService {
 
@@ -173,14 +191,55 @@ public class DiscoverServiceImpl implements DiscoverService {
                 @Override
                 public void accept(SOAPMessage message) {
                     try {
-                        message.getSOAPBody()
-                                .addChildElement("dummy");
+                        DiscoverDataSourcesRestrictions dr = requestApi.restrictions();
+                        Properties properties = requestApi.properties();
+                        SOAPElement discover =  message.getSOAPBody()
+                                .addChildElement(DISCOVER);
+                        discover.addChildElement(REQUEST_TYPE).setTextContent(DISCOVER_DATASOURCES);
+                        SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
+                            .addChildElement(RESTRICTION_LIST);
+                        restrictionList.addChildElement(RESTRICTIONS_DATA_SOURCE_NAME).setTextContent(dr.dataSourceName());
+                        if (dr.dataSourceDescription().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_DATA_SOURCE_DESCRIPTION)
+                                .setTextContent(dr.dataSourceDescription().get());
+                        }
+                        if (dr.dataSourceDescription().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_DATA_SOURCE_DESCRIPTION)
+                                .setTextContent(dr.dataSourceDescription().get());
+                        }
+                        if (dr.url().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_URL)
+                                .setTextContent(dr.url().get());
+                        }
+                        if (dr.dataSourceInfo().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_DATA_SOURCE_INFO)
+                                .setTextContent(dr.dataSourceInfo().get());
+                        }
+                        if (dr.providerName() != null) {
+                            restrictionList.addChildElement(RESTRICTIONS_PROVIDER_NAME)
+                                .setTextContent(dr.providerName());
+                        }
+                        if (dr.providerType().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_PROVIDER_TYPE)
+                                .setTextContent(dr.providerType().get().name());
+                        }
+                        if (dr.authenticationMode().isPresent()) {
+                            restrictionList.addChildElement(RESTRICTIONS_AUTHENTICATION_MODE)
+                                .setTextContent(dr.authenticationMode().get().name());
+                        }
+
+                        SOAPElement propertyList = discover.addChildElement(PROPERTIES)
+                            .addChildElement(PROPERTY_LIST);
+                        setPropertyList(propertyList, properties);
+
                     } catch (SOAPException e) {
                         LOGGER.error("DiscoverService accept error", e);
                     }
                 }
             };
-            soapClient.callSoapWebService(Optional.empty(), msg);
+            SOAPMessage message = soapClient.callSoapWebService(Optional.of(SOAP_ACTION_DISCOVER), msg);
+            //TODO SOAPMessage to response
+
         } catch (SOAPException e) {
             LOGGER.error("DiscoverService dataSources error", e);
         }
@@ -267,4 +326,29 @@ public class DiscoverServiceImpl implements DiscoverService {
         return null;
     }
 
+    private void setPropertyList(SOAPElement propertyList, Properties properties) throws SOAPException {
+        if (properties.localeIdentifier().isPresent()) {
+            propertyList.addChildElement("LocaleIdentifier").setTextContent(properties.localeIdentifier().get().toString());
+        }
+
+        if (properties.dataSourceInfo().isPresent()) {
+            propertyList.addChildElement("DataSourceInfo").setTextContent(properties.axisFormat().get().getValue());
+        }
+
+        if (properties.content().isPresent()) {
+            propertyList.addChildElement("Content").setTextContent(properties.content().get().getValue());
+        }
+
+        if (properties.format().isPresent()) {
+            propertyList.addChildElement("Format").setTextContent(properties.format().get().getValue());
+        }
+
+        if (properties.catalog().isPresent()) {
+            propertyList.addChildElement("Catalog").setTextContent(properties.catalog().get());
+        }
+
+        if (properties.axisFormat().isPresent()) {
+            propertyList.addChildElement("AxisFormat").setTextContent(properties.axisFormat().get().getValue());
+        }
+    }
 }
