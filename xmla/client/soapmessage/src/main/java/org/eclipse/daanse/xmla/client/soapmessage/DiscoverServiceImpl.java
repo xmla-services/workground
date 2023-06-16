@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.xmla.client.soapmessage;
 
-
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
@@ -33,11 +32,13 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRe
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
@@ -76,6 +77,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarc
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRestrictions;
@@ -84,6 +86,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSc
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRestrictions;
@@ -110,6 +113,7 @@ import static org.eclipse.daanse.xmla.api.discover.discover.datasources.Discover
 import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_NAME;
 import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_TYPE;
 import static org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions.RESTRICTIONS_URL;
+import static org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRestrictions.RESTRICTIONS_KPI_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.AXIS_FORMAT;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CATALOG;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CONTENT;
@@ -118,6 +122,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_CATA
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_COLUMNS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_PROVIDER_TYPES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_SCHEMATA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_SOURCE_TABLES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_TABLES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DBSCHEMA_TABLES_INFO;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DISCOVER;
@@ -135,7 +140,9 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_CUBE
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_DIMENSIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_FUNCTIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_HIERARCHIES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_KPIS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_LEVELS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEASUREGROUPS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEASUREGROUP_DIMENSIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEASURES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEMBERS;
@@ -223,6 +230,8 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSc
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaColumnsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaProviderTypesResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaSchemataResponseRow;
+import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaSourceTablesResponseRow;
+import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaTablesInfoResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaTablesResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDiscoverDataSourcesResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDiscoverEnumeratorsResponseRow;
@@ -236,8 +245,10 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSc
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaDimensionsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaFunctionsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaHierarchiesResponseRow;
+import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaKpisResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaLevelsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaMeasureGroupDimensionsResponseRow;
+import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaMeasureGroupsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaMeasuresResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaMembersResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaPropertiesResponseRow;
@@ -537,22 +548,158 @@ public class DiscoverServiceImpl implements DiscoverService {
 
     @Override
     public List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest requestApi) {
-        return null;
+        try {
+            Consumer<SOAPMessage> msg = getConsumer(requestApi);
+            SOAPMessage message = soapClient.callSoapWebService(Optional.of(SOAP_ACTION_DISCOVER), msg);
+            return convertToMdSchemaKpisResponseRow(message.getSOAPBody());
+        } catch (SOAPException e) {
+            LOGGER.error("DiscoverService mdSchemaKpis error", e);
+        }
+        return List.of();
     }
 
     @Override
     public List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest requestApi) {
-        return null;
+        try {
+            Consumer<SOAPMessage> msg = getConsumer(requestApi);
+            SOAPMessage message = soapClient.callSoapWebService(Optional.of(SOAP_ACTION_DISCOVER), msg);
+            return convertToMdSchemaMeasureGroupsResponseRow(message.getSOAPBody());
+        } catch (SOAPException e) {
+            LOGGER.error("DiscoverService mdSchemaMeasureGroups error", e);
+        }
+        return List.of();
     }
 
     @Override
     public List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest requestApi) {
-        return null;
+        try {
+            Consumer<SOAPMessage> msg = getConsumer(requestApi);
+            SOAPMessage message = soapClient.callSoapWebService(Optional.of(SOAP_ACTION_DISCOVER), msg);
+            return convertToDbSchemaSourceTablesResponseRow(message.getSOAPBody());
+        } catch (SOAPException e) {
+            LOGGER.error("DiscoverService dbSchemaSourceTables error", e);
+        }
+        return List.of();
+
     }
 
     @Override
     public List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest requestApi) {
-        return null;
+        try {
+            Consumer<SOAPMessage> msg = getConsumer(requestApi);
+            SOAPMessage message = soapClient.callSoapWebService(Optional.of(SOAP_ACTION_DISCOVER), msg);
+            return convertToDbSchemaTablesInfoResponseRow(message.getSOAPBody());
+        } catch (SOAPException e) {
+            LOGGER.error("DiscoverService dbSchemaTablesInfo error", e);
+        }
+        return List.of();
+    }
+
+    private Consumer<SOAPMessage> getConsumer(DbSchemaTablesInfoRequest requestApi) {
+        return message -> {
+            try {
+                DbSchemaTablesInfoRestrictions dr = requestApi.restrictions();
+                Properties properties = requestApi.properties();
+                SOAPElement discover = message.getSOAPBody()
+                    .addChildElement(DISCOVER);
+                discover.addChildElement(REQUEST_TYPE).setTextContent(DBSCHEMA_TABLES_INFO);
+                SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
+                    .addChildElement(RESTRICTION_LIST);
+
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                addChildElement(restrictionList, RESTRICTIONS_TABLE_NAME, dr.tableName());
+                addChildElement(restrictionList, RESTRICTIONS_TABLE_TYPE, dr.tableType().getValue());
+
+                SOAPElement propertyList = discover.addChildElement(PROPERTIES)
+                    .addChildElement(PROPERTY_LIST);
+                setPropertyList(propertyList, properties);
+
+            } catch (SOAPException e) {
+                LOGGER.error("DiscoverService DbSchemaTablesInfoRequest accept error", e);
+            }
+        };
+    }
+
+    private Consumer<SOAPMessage> getConsumer(DbSchemaSourceTablesRequest requestApi) {
+        return message -> {
+            try {
+                DbSchemaSourceTablesRestrictions dr = requestApi.restrictions();
+                Properties properties = requestApi.properties();
+                SOAPElement discover = message.getSOAPBody()
+                    .addChildElement(DISCOVER);
+                discover.addChildElement(REQUEST_TYPE).setTextContent(DBSCHEMA_SOURCE_TABLES);
+                SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
+                    .addChildElement(RESTRICTION_LIST);
+
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_CATALOG, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                addChildElement(restrictionList, RESTRICTIONS_TABLE_NAME, dr.tableName());
+                addChildElement(restrictionList, RESTRICTIONS_TABLE_TYPE, dr.tableType().getValue());
+
+                SOAPElement propertyList = discover.addChildElement(PROPERTIES)
+                    .addChildElement(PROPERTY_LIST);
+                setPropertyList(propertyList, properties);
+
+            } catch (SOAPException e) {
+                LOGGER.error("DiscoverService DbSchemaSourceTablesRequest accept error", e);
+            }
+        };
+    }
+
+    private Consumer<SOAPMessage> getConsumer(MdSchemaMeasureGroupsRequest requestApi) {
+        return message -> {
+            try {
+                MdSchemaMeasureGroupsRestrictions dr = requestApi.restrictions();
+                Properties properties = requestApi.properties();
+                SOAPElement discover = message.getSOAPBody()
+                    .addChildElement(DISCOVER);
+                discover.addChildElement(REQUEST_TYPE).setTextContent(MDSCHEMA_MEASUREGROUPS);
+                SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
+                    .addChildElement(RESTRICTION_LIST);
+
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_CATALOG, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
+                dr.measureGroupName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEASUREGROUP_NAME,
+                    v));
+
+                SOAPElement propertyList = discover.addChildElement(PROPERTIES)
+                    .addChildElement(PROPERTY_LIST);
+                setPropertyList(propertyList, properties);
+
+            } catch (SOAPException e) {
+                LOGGER.error("DiscoverService MdSchemaMeasureGroupsRequest accept error", e);
+            }
+        };
+    }
+
+    private Consumer<SOAPMessage> getConsumer(MdSchemaKpisRequest requestApi) {
+        return message -> {
+            try {
+                MdSchemaKpisRestrictions dr = requestApi.restrictions();
+                Properties properties = requestApi.properties();
+                SOAPElement discover = message.getSOAPBody()
+                    .addChildElement(DISCOVER);
+                discover.addChildElement(REQUEST_TYPE).setTextContent(MDSCHEMA_KPIS);
+                SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
+                    .addChildElement(RESTRICTION_LIST);
+
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
+                dr.kpiName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_KPI_NAME, v));
+                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE,
+                    String.valueOf(v.getValue())));
+
+                SOAPElement propertyList = discover.addChildElement(PROPERTIES)
+                    .addChildElement(PROPERTY_LIST);
+                setPropertyList(propertyList, properties);
+
+            } catch (SOAPException e) {
+                LOGGER.error("DiscoverService MdSchemaMeasureGroupsRequest accept error", e);
+            }
+        };
     }
 
     private Consumer<SOAPMessage> getConsumer(MdSchemaSetsRequest requestApi) {
@@ -570,9 +717,12 @@ public class DiscoverServiceImpl implements DiscoverService {
                 dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
                 dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
                 dr.setName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SET_NAME, v));
-                dr.scope().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCOPE, String.valueOf(v.getValue())));
-                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE, String.valueOf(v.getValue())));
-                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
+                dr.scope().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCOPE,
+                    String.valueOf(v.getValue())));
+                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE,
+                    String.valueOf(v.getValue())));
+                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
@@ -598,15 +748,23 @@ public class DiscoverServiceImpl implements DiscoverService {
                 dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
                 dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
                 dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
-                dr.dimensionUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_DIMENSION_UNIQUE_NAME, v));
-                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
-                dr.levelUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_UNIQUE_NAME, v));
-                dr.memberUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_UNIQUE_NAME, v));
-                dr.propertyType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_TYPE, String.valueOf(v.getValue())));
+                dr.dimensionUniqueName().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_DIMENSION_UNIQUE_NAME, v));
+                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
+                dr.levelUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_UNIQUE_NAME,
+                    v));
+                dr.memberUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_UNIQUE_NAME
+                    , v));
+                dr.propertyType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_TYPE,
+                    String.valueOf(v.getValue())));
                 dr.propertyName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_NAME, v));
-                dr.propertyOrigin().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_ORIGIN, String.valueOf(v.getValue())));
-                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE, String.valueOf(v.getValue())));
-                dr.propertyVisibility().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_VISIBILITY, String.valueOf(v)));
+                dr.propertyOrigin().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_ORIGIN,
+                    String.valueOf(v.getValue())));
+                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE,
+                    String.valueOf(v.getValue())));
+                dr.propertyVisibility().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_PROPERTY_VISIBILITY, String.valueOf(v)));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
@@ -632,16 +790,24 @@ public class DiscoverServiceImpl implements DiscoverService {
                 dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
                 dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
                 dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
-                dr.dimensionUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_DIMENSION_UNIQUE_NAME, v));
-                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
-                dr.levelUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_UNIQUE_NAME, v));
-                dr.levelNumber().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_NUMBER, String.valueOf(v)));
+                dr.dimensionUniqueName().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_DIMENSION_UNIQUE_NAME, v));
+                dr.hierarchyUniqueName().ifPresent(v -> addChildElement(restrictionList,
+                    RESTRICTIONS_HIERARCHY_UNIQUE_NAME, v));
+                dr.levelUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_UNIQUE_NAME,
+                    v));
+                dr.levelNumber().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_LEVEL_NUMBER,
+                    String.valueOf(v)));
                 dr.memberName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_NAME, v));
-                dr.memberUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_UNIQUE_NAME, v));
-                dr.memberType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_TYPE, String.valueOf(v.getValue())));
+                dr.memberUniqueName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_UNIQUE_NAME
+                    , v));
+                dr.memberType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_TYPE,
+                    String.valueOf(v.getValue())));
                 dr.memberCaption().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEMBER_CAPTION, v));
-                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE, String.valueOf(v.getValue())));
-                dr.treeOp().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TREE_OP, String.valueOf(v.getValue())));
+                dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE,
+                    String.valueOf(v.getValue())));
+                dr.treeOp().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TREE_OP,
+                    String.valueOf(v.getValue())));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);

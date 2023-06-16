@@ -51,12 +51,15 @@ import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRow;
@@ -70,9 +73,11 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensio
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.ParameterInfo;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
@@ -83,7 +88,9 @@ import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaC
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.keywords.DiscoverKeywordsResponseRowR;
@@ -96,8 +103,10 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCube
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis.MdSchemaKpisResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
@@ -211,9 +220,87 @@ public class Convertor {
     public static final String DATE_CREATED = "DATE_CREATED";
     public static final String KEYWORD = "Keyword";
     public static final String SCHEMA_OWNER = "SCHEMA_OWNER";
+    public static final String SET_NAME = "SET_NAME";
+    public static final String SCOPE = "SCOPE";
 
     private Convertor() {
         //constructor
+    }
+
+    public static List<DbSchemaTablesInfoResponseRow> convertToDbSchemaTablesInfoResponseRow(SOAPBody b) {
+        List<Map<String, String>> l = getMapValuesList(b);
+        return l.stream().map(m ->
+            new DbSchemaTablesInfoResponseRowR(
+                Optional.ofNullable(m.get(TABLE_CATALOG)),
+                Optional.ofNullable(m.get(TABLE_SCHEMA)),
+                m.get(TABLE_NAME),
+                m.get(TABLE_TYPE),
+                Optional.ofNullable(getInt(m.get(TABLE_GUID))),
+                Optional.ofNullable(getBoolean(m.get("BOOKMARKS"))),
+                Optional.ofNullable(getInt(m.get("BOOKMARK_TYPE"))),
+                Optional.ofNullable(getInt(m.get("BOOKMARK_DATA_TYPE"))),
+                Optional.ofNullable(getInt(m.get("BOOKMARK_MAXIMUM_LENGTH"))),
+                Optional.ofNullable(getInt(m.get("BOOKMARK_INFORMATION"))),
+                Optional.ofNullable(getLong(m.get("TABLE_VERSION"))),
+                Optional.ofNullable(getLong(m.get("CARDINALITY"))),
+                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(getInt(m.get(TABLE_PROP_ID)))
+            )
+        ).collect(toList());
+    }
+
+    public static List<DbSchemaSourceTablesResponseRow> convertToDbSchemaSourceTablesResponseRow(SOAPBody b) {
+        List<Map<String, String>> l = getMapValuesList(b);
+        return l.stream().map(m ->
+            new DbSchemaSourceTablesResponseRowR(
+                Optional.ofNullable(m.get("TABLE_CATALOG")),
+                Optional.ofNullable(m.get("TABLE_SCHEMA")),
+                m.get("TABLE_NAME"),
+                TableTypeEnum.fromValue(m.get("TABLE_TYPE"))
+            )
+        ).collect(toList());
+    }
+
+    public static List<MdSchemaKpisResponseRow> convertToMdSchemaKpisResponseRow(SOAPBody b) {
+        List<Map<String, String>> l = getMapValuesList(b);
+        return l.stream().map(m ->
+            new MdSchemaKpisResponseRowR(
+                Optional.ofNullable(m.get(CATALOG_NAME)),
+                Optional.ofNullable(m.get(SCHEMA_NAME)),
+                Optional.ofNullable(m.get(CUBE_NAME)),
+                Optional.ofNullable(m.get("MEASUREGROUP_NAME")),
+                Optional.ofNullable(m.get("KPI_NAME")),
+                Optional.ofNullable(m.get("KPI_CAPTION")),
+                Optional.ofNullable(m.get("KPI_DESCRIPTION")),
+                Optional.ofNullable(m.get("KPI_DISPLAY_FOLDER")),
+                Optional.ofNullable(m.get("KPI_VALUE")),
+                Optional.ofNullable(m.get("KPI_GOAL")),
+                Optional.ofNullable(m.get("KPI_STATUS")),
+                Optional.ofNullable(m.get("KPI_TREND")),
+                Optional.ofNullable(m.get("KPI_STATUS_GRAPHIC")),
+                Optional.ofNullable(m.get("KPI_TREND_GRAPHIC")),
+                Optional.ofNullable(m.get("KPI_WEIGHT")),
+                Optional.ofNullable(m.get("KPI_CURRENT_TIME_MEMBER")),
+                Optional.ofNullable(m.get("KPI_PARENT_KPI_NAME")),
+                Optional.ofNullable(m.get("ANNOTATIONS")),
+                Optional.ofNullable(ScopeEnum.fromValue(m.get("SCOPE")))
+            )
+        ).collect(toList());
+    }
+
+    public static List<MdSchemaMeasureGroupsResponseRow> convertToMdSchemaMeasureGroupsResponseRow(SOAPBody b) {
+        List<Map<String, String>> l = getMapValuesList(b);
+        return l.stream().map(m ->
+            new MdSchemaMeasureGroupsResponseRowR(
+                Optional.ofNullable(m.get(CATALOG_NAME)),
+                Optional.ofNullable(m.get(SCHEMA_NAME)),
+                Optional.ofNullable(m.get(CUBE_NAME)),
+                Optional.ofNullable(m.get("MEASUREGROUP_NAME")),
+                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(getBoolean(m.get("isWriteEnabled"))),
+                Optional.ofNullable(m.get("MEASUREGROUP_CAPTION"))
+            )
+        ).collect(toList());
     }
 
     public static List<MdSchemaSetsResponseRow> convertToMdSchemaSetsResponseRow(SOAPBody b) {
@@ -223,8 +310,8 @@ public class Convertor {
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
-                Optional.ofNullable(m.get("SET_NAME")),
-                Optional.ofNullable(ScopeEnum.fromValue(m.get("SCOPE"))),
+                Optional.ofNullable(m.get(SET_NAME)),
+                Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE))),
                 Optional.ofNullable(m.get(DESCRIPTION)),
                 Optional.ofNullable(m.get("EXPRESSION")),
                 Optional.ofNullable(m.get("DIMENSIONS")),
@@ -326,7 +413,9 @@ public class Convertor {
         ).collect(toList());
     }
 
-    public static List<MdSchemaMeasureGroupDimensionsResponseRow> convertToMdSchemaMeasureGroupDimensionsResponseRow(SOAPBody b) {
+    public static List<MdSchemaMeasureGroupDimensionsResponseRow> convertToMdSchemaMeasureGroupDimensionsResponseRow(
+        SOAPBody b
+    ) {
         List<MdSchemaMeasureGroupDimensionsResponseRow> result = new ArrayList<>();
         NodeList nodeList = b.getElementsByTagName(ROW);
         if (nodeList != null) {
@@ -380,7 +469,7 @@ public class Convertor {
                 Optional.ofNullable(m.get("LEVEL_ATTRIBUTE_HIERARCHY_NAME")),
                 Optional.ofNullable(getInt(m.get("LEVEL_KEY_CARDINALITY"))),
                 Optional.ofNullable(LevelOriginEnum.fromValue(m.get("LEVEL_ORIGIN")))
-                )
+            )
         ).collect(toList());
     }
 
@@ -423,7 +512,6 @@ public class Convertor {
             )
         ).collect(toList());
     }
-
 
     public static List<DbSchemaColumnsResponseRow> convertToDbSchemaColumnsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
@@ -558,7 +646,6 @@ public class Convertor {
         ).collect(toList());
     }
 
-
     public static List<DiscoverKeywordsResponseRow> convertToDiscoverKeywordsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
@@ -571,35 +658,35 @@ public class Convertor {
     public static List<MdSchemaHierarchiesResponseRow> convertToMdSchemaHierarchiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-        new MdSchemaHierarchiesResponseRowR(
-            Optional.ofNullable(m.get(CATALOG_NAME)),
-            Optional.ofNullable(m.get(SCHEMA_NAME)),
-            Optional.ofNullable(m.get(CUBE_NAME)),
-            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
-            Optional.ofNullable(m.get(HIERARCHY_NAME)),
-            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
-            Optional.ofNullable(getInt(m.get(HIERARCHY_GUID))),
-            Optional.ofNullable(m.get(HIERARCHY_CAPTION)),
-            Optional.ofNullable(DimensionTypeEnum.fromValue(getInt(m.get(DIMENSION_TYPE)))),
-            Optional.ofNullable(getInt(m.get(HIERARCHY_CARDINALITY))),
-            Optional.ofNullable(m.get(DEFAULT_MEMBER)),
-            Optional.ofNullable(m.get(ALL_MEMBER)),
-            Optional.ofNullable(m.get(DESCRIPTION)),
-            Optional.ofNullable(StructureEnum.fromValue(m.get(STRUCTURE))),
-            Optional.ofNullable(getBoolean(m.get(IS_VIRTUAL))),
-            Optional.ofNullable(getBoolean(m.get(IS_READWRITE))),
-            Optional.ofNullable(DimensionUniqueSettingEnum.fromValue(m.get(DIMENSION_UNIQUE_SETTINGS))),
-            Optional.ofNullable(m.get(DIMENSION_MASTER_UNIQUE_NAME)),
-            Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_VISIBLE))),
-            Optional.ofNullable(getInt(m.get(HIERARCHY_ORDINAL))),
-            Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_SHARED))),
-            Optional.ofNullable(getBoolean(m.get(IERARCHY_IS_VISIBLE))),
-            Optional.ofNullable(HierarchyOriginEnum.fromValue(m.get(HIERARCHY_ORIGIN))),
-            Optional.ofNullable(m.get(HIERARCHY_DISPLAY_FOLDER)),
-            Optional.ofNullable(InstanceSelectionEnum.fromValue(m.get(INSTANCE_SELECTION))),
-            Optional.ofNullable(GroupingBehaviorEnum.fromValue(m.get(GROUPING_BEHAVIOR))),
-            Optional.ofNullable(StructureTypeEnum.fromValue(m.get(STRUCTURE_TYPE)))
-        )
+            new MdSchemaHierarchiesResponseRowR(
+                Optional.ofNullable(m.get(CATALOG_NAME)),
+                Optional.ofNullable(m.get(SCHEMA_NAME)),
+                Optional.ofNullable(m.get(CUBE_NAME)),
+                Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+                Optional.ofNullable(m.get(HIERARCHY_NAME)),
+                Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
+                Optional.ofNullable(getInt(m.get(HIERARCHY_GUID))),
+                Optional.ofNullable(m.get(HIERARCHY_CAPTION)),
+                Optional.ofNullable(DimensionTypeEnum.fromValue(getInt(m.get(DIMENSION_TYPE)))),
+                Optional.ofNullable(getInt(m.get(HIERARCHY_CARDINALITY))),
+                Optional.ofNullable(m.get(DEFAULT_MEMBER)),
+                Optional.ofNullable(m.get(ALL_MEMBER)),
+                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(StructureEnum.fromValue(m.get(STRUCTURE))),
+                Optional.ofNullable(getBoolean(m.get(IS_VIRTUAL))),
+                Optional.ofNullable(getBoolean(m.get(IS_READWRITE))),
+                Optional.ofNullable(DimensionUniqueSettingEnum.fromValue(m.get(DIMENSION_UNIQUE_SETTINGS))),
+                Optional.ofNullable(m.get(DIMENSION_MASTER_UNIQUE_NAME)),
+                Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_VISIBLE))),
+                Optional.ofNullable(getInt(m.get(HIERARCHY_ORDINAL))),
+                Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_SHARED))),
+                Optional.ofNullable(getBoolean(m.get(IERARCHY_IS_VISIBLE))),
+                Optional.ofNullable(HierarchyOriginEnum.fromValue(m.get(HIERARCHY_ORIGIN))),
+                Optional.ofNullable(m.get(HIERARCHY_DISPLAY_FOLDER)),
+                Optional.ofNullable(InstanceSelectionEnum.fromValue(m.get(INSTANCE_SELECTION))),
+                Optional.ofNullable(GroupingBehaviorEnum.fromValue(m.get(GROUPING_BEHAVIOR))),
+                Optional.ofNullable(StructureTypeEnum.fromValue(m.get(STRUCTURE_TYPE)))
+            )
         ).collect(toList());
     }
 
@@ -702,6 +789,7 @@ public class Convertor {
             )
         ).collect(toList());
     }
+
     public static List<DbSchemaCatalogsResponseRow> convertToDbSchemaCatalogsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
@@ -722,7 +810,6 @@ public class Convertor {
             )
         ).collect(toList());
     }
-
 
     private static List<MeasureGroupDimension> convertToMeasureGroupDimensionList(Node node) {
         List<MeasureGroupDimension> result = new ArrayList<>();
@@ -817,7 +904,6 @@ public class Convertor {
         }
         return null;
     }
-
 
     private static List<Map<String, String>> getMapValuesList(SOAPBody b) {
         List<Map<String, String>> result = new ArrayList<>();
