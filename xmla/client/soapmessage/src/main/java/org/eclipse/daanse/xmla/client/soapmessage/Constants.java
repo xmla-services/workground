@@ -128,6 +128,8 @@ public class Constants {
     public static final String RESTRICTIONS_SET_NAME = "SET_NAME";
     public static final String RESTRICTIONS_SCOPE = "SCOPE";
 
+    public static final String RESTRICTIONS_KPI_NAME = "KPI_NAME";
+
     public static final String MDSCHEMA_FUNCTIONS = "MDSCHEMA_FUNCTIONS";
     public static final String MDSCHEMA_DIMENSIONS = "MDSCHEMA_DIMENSIONS";
     public static final String MDSCHEMA_CUBES = "MDSCHEMA_CUBES";
