@@ -67,6 +67,67 @@ public class Constants {
 
     public static final String RESTRICTIONS_ENUM_NAME = "EnumName";
 
+    public static final String RESTRICTIONS_KEYWORD = "Keyword";
+
+    public static final String RESTRICTIONS_LITERAL_NAME = "LiteralName";
+
+    public static final String RESTRICTIONS_PROPERTY_NAME = "PropertyName";
+
+    public static final String RESTRICTIONS_SCHEMA_OWNER = "SCHEMA_OWNER";
+
+    public static final String RESTRICTIONS_MEASUREGROUP_NAME = "MEASUREGROUP_NAME";
+
+    public static final String RESTRICTIONS_DATABASE_ID = "DatabaseID";
+    public static final String RESTRICTIONS_DIMENSION_ID = "DimensionID";
+    public static final String RESTRICTIONS_CUBE_ID = "CubeID";
+    public static final String RESTRICTIONS_MEASURE_GROUP_ID = "MeasureGroupID";
+    public static final String RESTRICTIONS_PARTITION_ID = "PartitionID";
+    public static final String RESTRICTIONS_PERSPECTIVE_ID = "PerspectiveID";
+    public static final String RESTRICTIONS_PERMISSION_ID = "DimensionPermissionID";
+    public static final String RESTRICTIONS_ROLE_ID = "RoleID";
+    public static final String RESTRICTIONS_DATABASE_PERMISSION_ID = "DatabasePermissionID";
+    public static final String RESTRICTIONS_MINING_MODEL_ID = "MiningModelID";
+    public static final String RESTRICTIONS_MINING_MODEL_PERMISSION_ID = "MiningModelPermissionID";
+    public static final String RESTRICTIONS_DATA_SOURCE_ID = "DataSourceID";
+    public static final String RESTRICTIONS_MINING_STRUCTURE_ID = "MiningStructureID";
+    public static final String RESTRICTIONS_AGGREGATION_DESIGN_ID = "AggregationDesignID";
+    public static final String RESTRICTIONS_TRACE_ID = "TraceID";
+    public static final String RESTRICTIONS_MINING_STRUCTURE_PERMISSION_ID = "MiningStructurePermissionID";
+    public static final String RESTRICTIONS_CUBE_PERMISSION_ID = "CubePermissionID";
+    public static final String RESTRICTIONS_ASSEMBLY_ID = "AssemblyID";
+    public static final String RESTRICTIONS_MDX_SCRIPT_ID = "MdxScriptID";
+    public static final String RESTRICTIONS_DATA_SOURCE_VIEW_ID = "DataSourceViewID";
+    public static final String RESTRICTIONS_DATA_SOURCE_PERMISSION_ID = "DataSourcePermissionID";
+    public static final String RESTRICTIONS_OBJECT_EXPANSION = "ObjectExpansion";
+
+    public static final String RESTRICTIONS_COLUMN_NAME = "COLUMN_NAME";
+    public static final String RESTRICTIONS_COLUMN_OLAP_TYPE = "COLUMN_OLAP_TYPE";
+
+    public static final String RESTRICTIONS_DATA_TYPE = "DATA_TYPE";
+    public static final String RESTRICTIONS_BEST_MATCH = "BEST_MATCH";
+
+    public static final String RESTRICTIONS_LEVEL_NAME = "LEVEL_NAME";
+    public static final String RESTRICTIONS_LEVEL_UNIQUE_NAME = "LEVEL_UNIQUE_NAME";
+    public static final String RESTRICTIONS_LEVEL_VISIBILITY = "LEVEL_VISIBILITY";
+
+    public static final String RESTRICTIONS_MEASURE_NAME = "MEASURE_NAME";
+    public static final String RESTRICTIONS_MEASURE_UNIQUE_NAME = "MEASURE_UNIQUE_NAME";
+    public static final String RESTRICTIONS_MEASURE_VISIBILITY = "MEASURE_VISIBILITY";
+
+    public static final String RESTRICTIONS_LEVEL_NUMBER = "LEVEL_NUMBER";
+    public static final String RESTRICTIONS_MEMBER_NAME = "MEMBER_NAME";
+    public static final String RESTRICTIONS_MEMBER_UNIQUE_NAME = "MEMBER_UNIQUE_NAME";
+    public static final String RESTRICTIONS_MEMBER_TYPE = "MEMBER_TYPE";
+    public static final String RESTRICTIONS_MEMBER_CAPTION = "MEMBER_CAPTION";
+    public static final String RESTRICTIONS_TREE_OP = "TREE_OP";
+
+    public static final String RESTRICTIONS_PROPERTY_TYPE = "PROPERTY_TYPE";
+    public static final String RESTRICTIONS_PROPERTY_ORIGIN = "PROPERTY_ORIGIN";
+    public static final String RESTRICTIONS_PROPERTY_VISIBILITY = "PROPERTY_VISIBILITY";
+
+    public static final String RESTRICTIONS_SET_NAME = "SET_NAME";
+    public static final String RESTRICTIONS_SCOPE = "SCOPE";
+
     public static final String MDSCHEMA_FUNCTIONS = "MDSCHEMA_FUNCTIONS";
     public static final String MDSCHEMA_DIMENSIONS = "MDSCHEMA_DIMENSIONS";
     public static final String MDSCHEMA_CUBES = "MDSCHEMA_CUBES";
