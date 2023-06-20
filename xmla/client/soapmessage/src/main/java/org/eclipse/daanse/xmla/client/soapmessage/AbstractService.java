@@ -39,7 +39,9 @@ public abstract class AbstractService {
 
     protected void addChildElement(SOAPElement element, String childElementName, String value) {
         try {
-            element.addChildElement(childElementName).setTextContent(value);
+            if (value != null) {
+                element.addChildElement(childElementName).setTextContent(value);
+            }
         } catch (SOAPException e) {
             LOGGER.error("addChildElement {} error", childElementName);
             throw new SoapClientException("addChildElement error", e);

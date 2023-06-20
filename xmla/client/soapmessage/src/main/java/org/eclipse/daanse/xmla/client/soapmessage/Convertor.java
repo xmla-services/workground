@@ -82,10 +82,13 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRe
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Axis;
 import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
+import org.eclipse.daanse.xmla.api.mddataset.CellType;
+import org.eclipse.daanse.xmla.api.mddataset.CellTypeError;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
@@ -119,8 +122,15 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaM
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.engine200.WarningColumnR;
+import org.eclipse.daanse.xmla.model.record.engine200.WarningLocationObjectR;
+import org.eclipse.daanse.xmla.model.record.engine200.WarningMeasureR;
+import org.eclipse.daanse.xmla.model.record.exception.ErrorTypeR;
 import org.eclipse.daanse.xmla.model.record.exception.ExceptionR;
+import org.eclipse.daanse.xmla.model.record.exception.MessageLocationR;
 import org.eclipse.daanse.xmla.model.record.exception.MessagesR;
+import org.eclipse.daanse.xmla.model.record.exception.StartEndR;
+import org.eclipse.daanse.xmla.model.record.exception.WarningTypeR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR;
 import org.eclipse.daanse.xmla.model.record.mddataset.AxesInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.AxesR;
@@ -129,6 +139,9 @@ import org.eclipse.daanse.xmla.model.record.mddataset.AxisR;
 import org.eclipse.daanse.xmla.model.record.mddataset.CellDataR;
 import org.eclipse.daanse.xmla.model.record.mddataset.CellInfoItemR;
 import org.eclipse.daanse.xmla.model.record.mddataset.CellInfoR;
+import org.eclipse.daanse.xmla.model.record.mddataset.CellSetTypeR;
+import org.eclipse.daanse.xmla.model.record.mddataset.CellTypeErrorR;
+import org.eclipse.daanse.xmla.model.record.mddataset.CellTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.CubeInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.HierarchyInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.MddatasetR;
@@ -136,10 +149,12 @@ import org.eclipse.daanse.xmla.model.record.mddataset.MemberTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.MembersTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoCubeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoR;
+import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -1010,19 +1025,263 @@ public class Convertor {
         );
         return new StatementResponseR(mdDataSet);
     }
+    public static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
+        return null;
+    }
 
     private static MessagesR getMessages(NodeList nl) {
-        //TODO
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i).getChildNodes().item(i);
+                if (node != null && "Messages".equals(node.getNodeName())) {
+                    return new MessagesR(getTypeList(node.getChildNodes()));
+                }
+            }
+        }
+        return null;
+    }
+
+    private static List<org.eclipse.daanse.xmla.api.exception.Type> getTypeList(NodeList nl) {
+        if (nl != null) {
+            List<org.eclipse.daanse.xmla.api.exception.Type> list = new ArrayList<>();
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null && "Error".equals(node.getNodeName())) {
+                    list.add(getErrorType(node));
+                }
+                if (node != null && "Warning".equals(node.getNodeName())) {
+                    list.add(getWarningType(node));
+                }
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private static org.eclipse.daanse.xmla.api.exception.Type getWarningType(Node node) {
+        if (node != null) {
+            MessageLocationR location = getMessageLocation(node.getChildNodes());
+            NamedNodeMap nm = node.getAttributes();
+
+            return new WarningTypeR(location,
+                getInt(getAttribute(nm, "WarningCode")),
+                getAttribute(nm, DESCRIPTION1),
+                getAttribute(nm, "Source"),
+                getAttribute(nm, "HelpFile"));
+        }
+        return null;
+    }
+
+    private static org.eclipse.daanse.xmla.api.exception.Type getErrorType(Node node) {
+        if (node != null) {
+            MessageLocationR location = getMessageLocation(node.getChildNodes());
+            String callstack = getCallstack(node.getChildNodes());
+            NamedNodeMap nm = node.getAttributes();
+            return new ErrorTypeR(location,
+                callstack,
+                getLong(getAttribute(nm, "ErrorCode")),
+                getAttribute(nm, DESCRIPTION1),
+                getAttribute(nm, "Source"),
+                getAttribute(nm, "HelpFile"));
+        }
+        return null;
+    }
+
+    private static MessageLocationR getMessageLocation(NodeList nl) {
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null && "Location".equals(node.getNodeName())) {
+                    StartEndR start = null;
+                    StartEndR end = null;
+                    Integer lineOffset = null;
+                    Integer textLength = null;
+                    WarningLocationObjectR sourceObject = null;
+                    WarningLocationObjectR dependsOnObject = null;
+                    Integer rowNumber = null;
+                    NodeList nodeList = node.getChildNodes();
+                    if (nodeList != null) {
+                        for (int j = 0; j < nodeList.getLength(); j++) {
+                            Node n = nodeList.item(j);
+                            if (n != null) {
+                                if ("Start".equals(n.getNodeName())) {
+                                    start = getStartEnd(n.getChildNodes());
+                                }
+                                if ("End".equals(n.getNodeName())) {
+                                    end = getStartEnd(n.getChildNodes());
+                                }
+                                if ("LineOffset".equals(n.getNodeName())) {
+                                    lineOffset = getInt(n.getTextContent());
+                                }
+                                if ("TextLength".equals(n.getNodeName())) {
+                                    textLength = getInt(n.getTextContent());
+                                }
+                                if ("SourceObject".equals(n.getNodeName())) {
+                                    sourceObject = getWarningLocationObject(n.getChildNodes());
+                                }
+                                if ("DependsOnObject".equals(n.getNodeName())) {
+                                    dependsOnObject = getWarningLocationObject(n.getChildNodes());
+                                }
+                                if ("RowNumber".equals(n.getNodeName())) {
+                                    rowNumber = getInt(n.getTextContent());
+                                }
+                            }
+                        }
+                    }
+                    return new MessageLocationR(
+                        start,
+                        end,
+                        lineOffset,
+                        textLength,
+                        sourceObject,
+                        dependsOnObject,
+                        rowNumber);
+                }
+            }
+
+        }
+        return null;
+    }
+
+    private static WarningLocationObjectR getWarningLocationObject(NodeList nl) {
+        if (nl != null) {
+            WarningColumnR warningColumn = null;
+            WarningMeasureR warningMeasure = null;
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null) {
+                    if ("WarningColumn".equals(node.getNodeName())) {
+                        warningColumn = getWarningColumn(node.getChildNodes());
+                    }
+                    if ("WarningMeasure".equals(node.getNodeName()) && node.getNodeValue() != null) {
+                        warningMeasure = getWarningMeasure(node.getChildNodes());
+                    }
+                }
+            }
+            return new WarningLocationObjectR(warningColumn, warningMeasure);
+        }
+        return null;
+    }
+
+    private static WarningMeasureR getWarningMeasure(NodeList nl) {
+        Map<String, String> map = getMapValues(nl);
+        return new WarningMeasureR(
+            map.get("Cube"),
+            map.get("MeasureGroup"),
+            map.get("MeasureName")
+        );
+    }
+
+    private static WarningColumnR getWarningColumn(NodeList nl) {
+        Map<String, String> map = getMapValues(nl);
+        return new WarningColumnR(
+            map.get("Dimension"),
+            map.get("Attribute")
+        );
+    }
+
+
+
+    private static StartEndR getStartEnd(NodeList nl) {
+        if (nl != null) {
+            int line = 0;
+            int column = 0;
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null) {
+                    if ("Line".equals(node.getNodeName()) && node.getNodeValue() != null) {
+                        line = getInt(node.getNodeValue());
+                    }
+                    if ("Column".equals(node.getNodeName()) && node.getNodeValue() != null) {
+                        column = getInt(node.getNodeValue());
+                    }
+                }
+            }
+            return new StartEndR(line, column);
+        }
+
+        return null;
+    }
+
+    private static String getCallstack(NodeList nl) {
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null && "Callstack".equals(node.getNodeName())) {
+                    return node.getNodeValue();
+                }
+            }
+
+        }
         return null;
     }
 
     private static ExceptionR getException(NodeList nl) {
-        //TODO
+        if (nl != null) {
+            return new ExceptionR();
+        }
         return null;
     }
 
     private static CellDataR getCellData(NodeList nl) {
-        //TODO
+        if (nl != null) {
+            List<CellType> list = new ArrayList<>();
+            CellSetTypeR cellSetType = null;
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null) {
+                    if ("Cell".equals(node.getNodeName())) {
+                        NodeList nodeList = node.getChildNodes();
+                        list.add(new CellTypeR(getValue(nodeList), getCellInfoItem(nodeList), getLong(getAttribute(node.getAttributes(), "CellOrdinal"))));
+                    }
+                    if ("CellSetType".equals(node.getNodeName())) {
+                        cellSetType = new CellSetTypeR(getDataList(node.getChildNodes()));
+                    }
+                }
+            }
+            return new CellDataR(list, cellSetType);
+        }
+        return null;
+    }
+
+    private static List<byte[]> getDataList(NodeList nl) {
+        if (nl != null) {
+            List<byte[]> result = new ArrayList<>();
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i).getChildNodes().item(i);
+                if (node != null && "Data".equals(node.getNodeName()) && node.getNodeValue() != null) {
+                    result.add(node.getNodeValue().getBytes(StandardCharsets.UTF_8));
+                }
+            }
+            return result;
+        }
+        return null;
+    }
+
+    private static ValueR getValue(NodeList nl) {
+        if (nl != null) {
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i).getChildNodes().item(i);
+                if (node != null && "Value".equals(node.getNodeName())) {
+                    return new ValueR(getCellTypeErrorList(node.getChildNodes()));
+                }
+            }
+        }
+        return null;
+    }
+
+    private static List<CellTypeError> getCellTypeErrorList(NodeList nl) {
+        if (nl != null) {
+            List<CellTypeError> list = new ArrayList<>();
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node node = nl.item(i);
+                if (node != null && "Error".equals(node.getNodeName())) {
+                    NamedNodeMap nm = node.getAttributes();
+                    list.add(new CellTypeErrorR(getLong(getAttribute(nm, "ErrorCode")), getAttribute(nm, "Description")));
+                }
+            }
+            return list;
+        }
         return null;
     }
 
@@ -1032,7 +1291,7 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Axis".equals(node.getNodeName())) {
-                    list.add(new AxisR(getMembers(node.getChildNodes()), getAttribute(node.getAttributes(), "name")));
+                    list.add(new AxisR(getMembersList(node.getChildNodes()), getAttribute(node.getAttributes(), "name")));
                 }
             }
             return new AxesR(list);
@@ -1040,14 +1299,14 @@ public class Convertor {
         return null;
     }
 
-    private static List<Type> getMembers(NodeList nl) {
+    private static List<Type> getMembersList(NodeList nl) {
 
         if (nl != null) {
             List<Type> list = new ArrayList<>();
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Members".equals(node.getNodeName())) {
-                    list.add(new MembersTypeR(getMember(node.getChildNodes()), getAttribute(node.getAttributes(), "Hierarchy")));
+                    list.add(new MembersTypeR(getMemberList(node.getChildNodes()), getAttribute(node.getAttributes(), "Hierarchy")));
                 }
             }
             return list;
@@ -1055,7 +1314,7 @@ public class Convertor {
         return null;
     }
 
-    private static List<MemberType> getMember(NodeList nl) {
+    private static List<MemberType> getMemberList(NodeList nl) {
         if (nl != null) {
             List<MemberType> list = new ArrayList<>();
             for (int i = 0; i < nl.getLength(); i++) {
@@ -1115,7 +1374,7 @@ public class Convertor {
             if (nl != null && n.getChildNodes().getLength() > 0) {
                 List<AxisInfo> list = new ArrayList<>();
                 for (int i = 0; i < nl.getLength(); i++) {
-                    Node node = n.getChildNodes().item(0);
+                    Node node = n.getChildNodes().item(i);
 
                     if ("AxisInfo".equals(node.getNodeName())) {
                         String name = getAttribute(node.getAttributes(), "name");
