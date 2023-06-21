@@ -48,4 +48,13 @@ public abstract class AbstractService {
         }
     }
 
+    protected SOAPElement addChildElement(SOAPElement element, String childElementName) {
+        try {
+            return element.addChildElement(childElementName);
+        } catch (SOAPException e) {
+            LOGGER.error("addChildElement {} error", childElementName);
+            throw new SoapClientException("addChildElement error", e);
+        }
+    }
+
 }
