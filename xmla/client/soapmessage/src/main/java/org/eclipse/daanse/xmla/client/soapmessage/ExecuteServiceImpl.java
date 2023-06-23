@@ -17,9 +17,17 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.discover.Properties;
+import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.engine200_200.ExpressionBinding;
 import org.eclipse.daanse.xmla.api.engine200_200.RowNumberBinding;
 import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
+import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEnd;
+import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
+import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
@@ -42,18 +50,30 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
 import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
 import org.eclipse.daanse.xmla.api.xmla.Alter;
+import org.eclipse.daanse.xmla.api.xmla.AndOrType;
+import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Attach;
 import org.eclipse.daanse.xmla.api.xmla.AttributeBinding;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
+import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
+import org.eclipse.daanse.xmla.api.xmla.Backup;
+import org.eclipse.daanse.xmla.api.xmla.Batch;
+import org.eclipse.daanse.xmla.api.xmla.BeginTransaction;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
+import org.eclipse.daanse.xmla.api.xmla.BoolBinop;
 import org.eclipse.daanse.xmla.api.xmla.CalculatedMeasureBinding;
 import org.eclipse.daanse.xmla.api.xmla.CalculationProperty;
+import org.eclipse.daanse.xmla.api.xmla.Cancel;
 import org.eclipse.daanse.xmla.api.xmla.CellPermission;
+import org.eclipse.daanse.xmla.api.xmla.ClearCache;
+import org.eclipse.daanse.xmla.api.xmla.CloneDatabase;
 import org.eclipse.daanse.xmla.api.xmla.ColumnBinding;
 import org.eclipse.daanse.xmla.api.xmla.Command;
+import org.eclipse.daanse.xmla.api.xmla.CommitTransaction;
+import org.eclipse.daanse.xmla.api.xmla.Create;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
 import org.eclipse.daanse.xmla.api.xmla.CubeAttribute;
 import org.eclipse.daanse.xmla.api.xmla.CubeAttributeBinding;
@@ -62,33 +82,62 @@ import org.eclipse.daanse.xmla.api.xmla.CubeDimensionBinding;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeHierarchy;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
+import org.eclipse.daanse.xmla.api.xmla.DBCC;
 import org.eclipse.daanse.xmla.api.xmla.DSVTableBinding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
+import org.eclipse.daanse.xmla.api.xmla.DataMiningMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
+import org.eclipse.daanse.xmla.api.xmla.DataSourcePermission;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
 import org.eclipse.daanse.xmla.api.xmla.Database;
+import org.eclipse.daanse.xmla.api.xmla.DegenerateMeasureGroupDimension;
+import org.eclipse.daanse.xmla.api.xmla.Delete;
+import org.eclipse.daanse.xmla.api.xmla.DesignAggregations;
+import org.eclipse.daanse.xmla.api.xmla.Detach;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
+import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DimensionBinding;
+import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.DrillThroughAction;
+import org.eclipse.daanse.xmla.api.xmla.Drop;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
+import org.eclipse.daanse.xmla.api.xmla.Event;
+import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
+import org.eclipse.daanse.xmla.api.xmla.EventSession;
+import org.eclipse.daanse.xmla.api.xmla.EventType;
 import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 import org.eclipse.daanse.xmla.api.xmla.Group;
+import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
+import org.eclipse.daanse.xmla.api.xmla.ImageLoad;
+import org.eclipse.daanse.xmla.api.xmla.ImageSave;
 import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
 import org.eclipse.daanse.xmla.api.xmla.InheritedBinding;
+import org.eclipse.daanse.xmla.api.xmla.Insert;
 import org.eclipse.daanse.xmla.api.xmla.Kpi;
+import org.eclipse.daanse.xmla.api.xmla.Level;
+import org.eclipse.daanse.xmla.api.xmla.Lock;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
+import org.eclipse.daanse.xmla.api.xmla.ManyToManyMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
+import org.eclipse.daanse.xmla.api.xmla.Measure;
 import org.eclipse.daanse.xmla.api.xmla.MeasureBinding;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
+import org.eclipse.daanse.xmla.api.xmla.Member;
+import org.eclipse.daanse.xmla.api.xmla.MergePartitions;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
+import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
+import org.eclipse.daanse.xmla.api.xmla.NotType;
+import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.Permission;
@@ -107,20 +156,35 @@ import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBin
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingQueryBinding;
 import org.eclipse.daanse.xmla.api.xmla.QueryBinding;
 import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
+import org.eclipse.daanse.xmla.api.xmla.ReferenceMeasureGroupDimension;
+import org.eclipse.daanse.xmla.api.xmla.RegularMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.ReportAction;
 import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
 import org.eclipse.daanse.xmla.api.xmla.ReportParameter;
+import org.eclipse.daanse.xmla.api.xmla.Restore;
 import org.eclipse.daanse.xmla.api.xmla.Role;
+import org.eclipse.daanse.xmla.api.xmla.RollbackTransaction;
 import org.eclipse.daanse.xmla.api.xmla.RowBinding;
+import org.eclipse.daanse.xmla.api.xmla.ScalarMiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.Server;
+import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
+import org.eclipse.daanse.xmla.api.xmla.SetAuthContext;
 import org.eclipse.daanse.xmla.api.xmla.StandardAction;
 import org.eclipse.daanse.xmla.api.xmla.Statement;
+import org.eclipse.daanse.xmla.api.xmla.Subscribe;
+import org.eclipse.daanse.xmla.api.xmla.Synchronize;
 import org.eclipse.daanse.xmla.api.xmla.TableBinding;
+import org.eclipse.daanse.xmla.api.xmla.TableMiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 import org.eclipse.daanse.xmla.api.xmla.TimeAttributeBinding;
 import org.eclipse.daanse.xmla.api.xmla.TimeBinding;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
+import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
+import org.eclipse.daanse.xmla.api.xmla.Unlock;
+import org.eclipse.daanse.xmla.api.xmla.Unsubscribe;
+import org.eclipse.daanse.xmla.api.xmla.Update;
+import org.eclipse.daanse.xmla.api.xmla.UpdateCells;
 import org.eclipse.daanse.xmla.api.xmla.UserDefinedGroupBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,21 +297,239 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     }
 
     private void setTrace(SOAPElement element, Trace it) {
-        //TODO
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Trace");
+            addChildElement(chElement, "LogFileName", it.logFileName());
+            addChildElement(chElement, "LogFileAppend", String.valueOf(it.logFileAppend()));
+            addChildElement(chElement, "LogFileSize", String.valueOf(it.logFileSize()));
+            addChildElement(chElement, "Audit", String.valueOf(it.audit()));
+            addChildElement(chElement, "LogFileRollover", String.valueOf(it.logFileRollover()));
+            addChildElement(chElement, "AutoRestart", String.valueOf(it.autoRestart()));
+            addChildElement(chElement, "StopTime", convertInstant(it.stopTime()));
+            setTraceFilter(chElement, it.filter());
+            setEventType(chElement, it.eventType());
+        }
+    }
+
+    private void setEventType(SOAPElement element, EventType it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "EventType");
+            setEventList(chElement, it.events());
+            setXEvent(chElement, it.xEvent());
+        }
+    }
+
+    private void setXEvent(SOAPElement element, XEvent it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "XEvent");
+            setEventSession(chElement, it.eventSession());
+        }
+    }
+
+    private void setEventSession(SOAPElement element, EventSession it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "event_session");
+            addChildElement(chElement, "name", it.name());
+            addChildElement(chElement, "maxMemory", String.valueOf(it.maxMemory()));
+            addChildElement(chElement, "eventRetentionMode", it.eventRetentionMode() == null ? null :
+                it.eventRetentionMode().value());
+            addChildElement(chElement, "dispatchLatency", String.valueOf(it.dispatchLatency()));
+            addChildElement(chElement, "maxEventSize", String.valueOf(it.maxEventSize()));
+            addChildElement(chElement, "memoryPartitionMode", it.eventRetentionMode() == null ? null :
+                it.eventRetentionMode().value());
+            addChildElement(chElement, "trackCausality", String.valueOf(it.trackCausality()));
+        }
+    }
+
+    private void setEventList(SOAPElement element, List<Event> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Events");
+            list.forEach(it -> setEvent(chElement, it));
+        }
+    }
+
+    private void setEvent(SOAPElement element, Event it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Event");
+            addChildElement(chElement, "EventID", it.eventID());
+            setEventColumnID(chElement, it.columns());
+        }
+    }
+
+    private void setEventColumnID(SOAPElement element, EventColumnID it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Columns");
+            setColumnID(chElement, it.columnID());
+        }
+
+    }
+
+    private void setColumnID(SOAPElement element, List<String> list) {
+        if (list != null) {
+            list.forEach(it -> addChildElement(element, "ColumnID").setTextContent(it));
+        }
+    }
+
+    private void setTraceFilter(SOAPElement element, TraceFilter it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Filter");
+            setNotType(chElement, "Not", it.not());
+            setAndOrType(chElement, "Or", it.or());
+            setAndOrType(chElement, "And", it.and());
+            setBoolBinop(chElement, "Equal", it.isEqual());
+            setBoolBinop(chElement, "NotEqual", it.notEqual());
+            setBoolBinop(chElement, "Less", it.less());
+            setBoolBinop(chElement, "LessOrEqual", it.lessOrEqual());
+            setBoolBinop(chElement, "Greater", it.greater());
+            setBoolBinop(chElement, "GreaterOrEqual", it.greaterOrEqual());
+            setBoolBinop(chElement, "Like", it.like());
+            setBoolBinop(chElement, "NotLike", it.notLike());
+        }
+    }
+
+    private void setBoolBinop(SOAPElement element, String nodeName, BoolBinop it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, nodeName);
+            addChildElement(chElement, "ColumnID", it.columnID());
+            addChildElement(chElement, "Value", it.value());
+        }
+    }
+
+    private void setAndOrType(SOAPElement element, String nodeName, AndOrType it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, nodeName);
+            setAndOrTypeEnumList(chElement, it.notOrOrOrAnd());
+        }
+    }
+
+    private void setAndOrTypeEnumList(SOAPElement element, List<AndOrTypeEnum> list) {
+        if (list != null) {
+            list.forEach(it -> addChildElement(element, it.name()));
+        }
+    }
+
+    private void setNotType(SOAPElement element, String nodeName, NotType it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, nodeName);
+            setNotType(chElement, "Not", it.not());
+            setAndOrType(chElement, "Or", it.or());
+            setAndOrType(chElement, "And", it.and());
+            setBoolBinop(chElement, "Equal", it.isEqual());
+            setBoolBinop(chElement, "NotEqual", it.notEqual());
+            setBoolBinop(chElement, "Less", it.less());
+            setBoolBinop(chElement, "LessOrEqual", it.lessOrEqual());
+            setBoolBinop(chElement, "Greater", it.greater());
+            setBoolBinop(chElement, "GreaterOrEqual", it.greaterOrEqual());
+            setBoolBinop(chElement, "Like", it.like());
+            setBoolBinop(chElement, "NotLike", it.notLike());
+        }
     }
 
     private void setServer(SOAPElement element, Server it) {
-        //TODO
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Server");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "CreatedTimestamp", String.valueOf(it.createdTimestamp()));
+            addChildElement(chElement, "LastSchemaUpdate", String.valueOf(it.lastSchemaUpdate()));
+            addChildElement(chElement, "Description", it.description());
+            setAnnotationList(chElement, it.annotations());
+            addChildElement(chElement, "ProductName", it.productName());
+            addChildElement(chElement, "Edition", it.edition());
+            addChildElement(chElement, "EditionID", String.valueOf(it.editionID()));
+            addChildElement(chElement, "Version", it.version());
+            addChildElement(chElement, "ServerMode", it.serverMode());
+            addChildElement(chElement, "ProductLevel", it.productLevel());
+            addChildElement(chElement, "DefaultCompatibilityLevel", String.valueOf(it.defaultCompatibilityLevel()));
+            addChildElement(chElement, "SupportedCompatibilityLevels", it.supportedCompatibilityLevels());
+            setDatabaseList(chElement, it.databases());
+            setAssemblyList(chElement, it.assemblies());
+            setTraceList(chElement, it.traces());
+            setRoleList(chElement, it.roles());
+            setServerPropertyList(chElement, it.serverProperties());
+        }
+    }
+
+    private void setServerPropertyList(SOAPElement element, List<ServerProperty> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "ServerProperties");
+            list.forEach(it -> setServerProperty(chElement, it));
+        }
+    }
+
+    private void setServerProperty(SOAPElement element, ServerProperty it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "ServerProperty");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "Value", it.value());
+            addChildElement(chElement, "RequiresRestart", String.valueOf(it.requiresRestart()));
+            addChildElement(chElement, "PendingValue", it.pendingValue().toString());
+            addChildElement(chElement, "DefaultValue", it.defaultValue().toString());
+            addChildElement(chElement, "DisplayFlag", String.valueOf(it.displayFlag()));
+            addChildElement(chElement, "Type", it.type());
+        }
+    }
+
+    private void setRoleList(SOAPElement element, List<Role> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Roles");
+            list.forEach(it -> setRole(chElement, it));
+        }
+    }
+
+    private void setTraceList(SOAPElement element, List<Trace> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Traces");
+            list.forEach(it -> setTrace(chElement, it));
+        }
+    }
+
+    private void setAssemblyList(SOAPElement element, List<Assembly> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Assemblies");
+            list.forEach(it -> setAssembly(chElement, it));
+        }
+    }
+
+    private void setDatabaseList(SOAPElement element, List<Database> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Databases");
+            list.forEach(it -> setDatabase(chElement, it));
+        }
     }
 
     private void setRole(SOAPElement element, Role it) {
-        //TODO
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Role");
+            addChildElement(chElement, "Name", it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, "CreatedTimestamp", convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, "LastSchemaUpdate", convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, "Description", v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
+            it.members().ifPresent(v -> setMemberList(chElement, v));
+        }
+    }
+
+    private void setMemberList(SOAPElement element, List<Member> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Members");
+            list.forEach(it -> setMember(chElement, it));
+        }
+    }
+
+    private void setMember(SOAPElement element, Member it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Member");
+            it.name().ifPresent(v -> addChildElement(chElement, "Name", v));
+            it.sid().ifPresent(v -> addChildElement(chElement, "Sid", v));
+        }
     }
 
     private void setPerspective(SOAPElement element, Perspective it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Perspective");
-            setTranslationList(chElement, it.translations());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
             addChildElement(chElement, "DefaultMeasure", it.defaultMeasure());
             setPerspectiveDimensionList(chElement, it.dimensions());
             setPerspectiveMeasureGroupList(chElement, it.measureGroups());
@@ -262,7 +544,6 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             SOAPElement chElement = addChildElement(element, "Actions");
             list.forEach(it -> setPerspectiveAction(chElement, it));
         }
-
     }
 
     private void setPerspectiveAction(SOAPElement element, PerspectiveAction it) {
@@ -380,13 +661,15 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Attribute");
             addChildElement(chElement, "AttributeID", it.attributeID());
-            it.attributeHierarchyVisible().ifPresent(v -> addChildElement(chElement, "AttributeHierarchyVisible", String.valueOf(v)));
+            it.attributeHierarchyVisible().ifPresent(v -> addChildElement(chElement, "AttributeHierarchyVisible",
+             String.valueOf(v)));
             it.defaultMember().ifPresent(v -> addChildElement(chElement, "DefaultMember", v));
             it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
         }
     }
 
     private void setPermission(SOAPElement element, Permission it) {
+        //TODO instanceof
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Permission");
             addChildElement(chElement, "RoleID", it.roleID());
@@ -419,8 +702,10 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             setDataSourceViewBinding(chElement, it.aggregationInstanceSource());
             addChildElement(chElement, "LastProcessed", convertInstant(it.lastProcessed()));
             addChildElement(chElement, "State", it.state());
-            addChildElement(chElement, "StringStoresCompatibilityLevel", String.valueOf(it.stringStoresCompatibilityLevel()));
-            addChildElement(chElement, "CurrentStringStoresCompatibilityLevel", String.valueOf(it.currentStringStoresCompatibilityLevel()));
+            addChildElement(chElement, "StringStoresCompatibilityLevel",
+                String.valueOf(it.stringStoresCompatibilityLevel()));
+            addChildElement(chElement, "CurrentStringStoresCompatibilityLevel",
+             String.valueOf(it.currentStringStoresCompatibilityLevel()));
             addChildElement(chElement, "DirectQueryUsage", it.directQueryUsage());
         }
     }
@@ -491,20 +776,20 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Attribute");
             addChildElement(chElement, "AttributeID", it.attributeID());
-            it.keyColumns().ifPresent(v -> setDataItemList(chElement, v));
+            it.keyColumns().ifPresent(v -> setDataItemList(chElement, "KeyColumns", "KeyColumn", v));
         }
     }
 
-    private void setDataItemList(SOAPElement element, List<DataItem> list) {
+    private void setDataItemList(SOAPElement element, String wrapperName, String tagName, List<DataItem> list) {
         if (list != null) {
-            SOAPElement chElement = addChildElement(element, "KeyColumns");
-            list.forEach(it -> setDataItem(chElement, it));
+            SOAPElement chElement = addChildElement(element, wrapperName);
+            list.forEach(it -> setDataItem(chElement, tagName, it));
         }
     }
 
-    private void setDataItem(SOAPElement element, DataItem it) {
+    private void setDataItem(SOAPElement element, String tagName, DataItem it) {
         if (it != null) {
-            SOAPElement chElement = addChildElement(element, "KeyColumn");
+            SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, "DataType", it.dataType());
             it.dataSize().ifPresent(v -> addChildElement(chElement, "DataSize", String.valueOf(v)));
             it.mimeType().ifPresent(v -> addChildElement(chElement, "MimeType", v));
@@ -559,7 +844,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             SOAPElement chElement = addChildElement(element, "MiningStructure");
             it.source().ifPresent(v -> setBinding(chElement, v));
             it.lastProcessed().ifPresent(v -> addChildElement(chElement, "LastProcessed", convertInstant(v)));
-            it.translations().ifPresent(v -> setTranslationList(chElement, v));
+            it.translations().ifPresent(v -> setTranslationList(chElement, "Translations", "Translation", v));
             it.language().ifPresent(v -> addChildElement(chElement, "Language", String.valueOf(v)));
             it.collation().ifPresent(v -> addChildElement(chElement, "Collation", v));
             it.errorConfiguration().ifPresent(v -> setErrorConfiguration(chElement, v));
@@ -603,9 +888,76 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     }
 
     private void setMiningStructureColumnList(SOAPElement element, List<MiningStructureColumn> list) {
-        //            @XmlElement(name = "Column", required = true)
-        //            @XmlElementWrapper(name = "Columns", required = true)
-        //            protected List<MiningStructureColumn> columns;
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Columns");
+            list.forEach(it -> setMiningStructureColumn(chElement, it));
+        }
+    }
+
+    private void setMiningStructureColumn(SOAPElement element, MiningStructureColumn it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Column");
+            if (it instanceof ScalarMiningStructureColumn smsc) {
+                addChildElement(chElement, "Name", smsc.name());
+                smsc.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+                smsc.description().ifPresent(v -> addChildElement(chElement, "Description", v));
+                smsc.type().ifPresent(v -> addChildElement(chElement, "Type", v));
+                smsc.annotations().ifPresent(v -> setAnnotationList(chElement, v));
+                smsc.isKey().ifPresent(v -> addChildElement(chElement, "IsKey", String.valueOf(v)));
+                smsc.source().ifPresent(v -> setBinding(chElement, v));
+                smsc.description().ifPresent(v -> addChildElement(chElement, "Distribution", v));
+                smsc.modelingFlags().ifPresent(v -> setMiningModelingFlagList(chElement, v));
+                addChildElement(chElement, "Content", smsc.content());
+                smsc.classifiedColumns().ifPresent(v -> setClassifiedColumnList(chElement, v));
+                smsc.discretizationMethod().ifPresent(v -> addChildElement(chElement, "DiscretizationMethod", v));
+                smsc.discretizationBucketCount().ifPresent(v -> addChildElement(chElement, "DiscretizationBucketCount"
+                , String.valueOf(v)));
+                smsc.keyColumns().ifPresent(v -> setDataItemList(chElement, "KeyColumns", "KeyColumn", v));
+                smsc.nameColumn().ifPresent(v -> setDataItem(chElement, "NameColumn", v));
+                smsc.translations().ifPresent(v -> setTranslationList(chElement, "Translations", "Translation", v));
+            }
+            if (it instanceof TableMiningStructureColumn tmsc) {
+                tmsc.foreignKeyColumns().ifPresent(v -> setDataItemList(chElement, "ForeignKeyColumns",
+"ForeignKeyColumn", v));
+                tmsc.sourceMeasureGroup().ifPresent(v -> setMeasureGroupBinding(chElement, v));
+                tmsc.columns().ifPresent(v -> setMiningStructureColumnList(chElement, v));
+                tmsc.translations().ifPresent(v -> setTranslationList(chElement, "Translations", "Translation", v));
+            }
+        }
+    }
+
+    private void setMeasureGroupBinding(SOAPElement element, MeasureGroupBinding it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "SourceMeasureGroup");
+            addChildElement(chElement, "DataSourceID", it.dataSourceID());
+            addChildElement(chElement, "CubeID", it.cubeID());
+            addChildElement(chElement, "MeasureGroupID", it.measureGroupID());
+            it.persistence().ifPresent(v -> addChildElement(chElement, "Persistence", v.getValue()));
+            it.refreshPolicy().ifPresent(v -> addChildElement(chElement, "RefreshPolicy", v.getValue()));
+            it.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval", convertDuration(v)));
+            it.filter().ifPresent(v -> addChildElement(chElement, "Filter", v));
+        }
+    }
+
+    private void setClassifiedColumnList(SOAPElement element, List<String> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "ClassifiedColumns");
+            list.forEach(it -> addChildElement(chElement, "ClassifiedColumn").setTextContent(it));
+        }
+    }
+
+    private void setMiningModelingFlagList(SOAPElement element, List<MiningModelingFlag> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "ModelingFlags");
+            list.forEach(it -> setMiningModelingFlag(chElement, it));
+        }
+    }
+
+    private void setMiningModelingFlag(SOAPElement element, MiningModelingFlag it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "ModelingFlags");
+            it.modelingFlag().ifPresent(v -> addChildElement(chElement, "ModelingFlag", v));
+        }
     }
 
     private void setMiningModel(SOAPElement element, MiningModel it) {
@@ -627,36 +979,253 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     }
 
     private void setMiningModelPermissionList(SOAPElement element, List<MiningModelPermission> list) {
-        //            @XmlElement(name = "MiningModelPermission")
-        //            @XmlElementWrapper(name = "MiningModelPermissions")
-        //            protected List<MiningModelPermission> miningModelPermissions;
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "MiningModelPermissions");
+            list.forEach(it -> setMiningModelPermission(chElement, it));
+        }
+    }
+
+    private void setMiningModelPermission(SOAPElement element, MiningModelPermission it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "MiningModelPermission");
+            addChildElement(chElement, "RoleID", it.roleID());
+            it.process().ifPresent(v -> addChildElement(chElement, "Process", String.valueOf(v)));
+            it.readDefinition().ifPresent(v -> addChildElement(chElement, "ReadDefinition", v.getValue()));
+            it.read().ifPresent(v -> addChildElement(chElement, "Read", v.getValue()));
+            it.write().ifPresent(v -> addChildElement(chElement, "Write", v.getValue()));
+            it.allowDrillThrough().ifPresent(v -> addChildElement(chElement, "AllowDrillThrough", String.valueOf(v)));
+            it.allowBrowsing().ifPresent(v -> addChildElement(chElement, "AllowBrowsing", String.valueOf(v)));
+        }
     }
 
     private void setFoldingParameters(SOAPElement element, FoldingParameters it) {
-        //            @XmlElement(name = "FoldingParameters")
-        //            protected FoldingParameters foldingParameters;
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "FoldingParameters");
+            addChildElement(chElement, "FoldIndex", String.valueOf(it.foldIndex()));
+            addChildElement(chElement, "FoldCount", String.valueOf(it.foldCount()));
+            it.foldMaxCases().ifPresent(v -> addChildElement(chElement, "FoldMaxCases", String.valueOf(v)));
+            it.foldTargetAttribute().ifPresent(v -> addChildElement(chElement, "FoldTargetAttribute", v));
+        }
     }
 
     private void setMiningModelColumnList(SOAPElement element, List<MiningModelColumn> list) {
-        //            @XmlElement(name = "Column", required = true)
-        //            @XmlElementWrapper(name = "Columns", required = true)
-        //            protected List<MiningModelColumn> columns;
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Columns");
+            list.forEach(it -> setMiningModelColumn(chElement, it));
+        }
     }
 
-    private void setAttributeTranslationList(SOAPElement element, List<AttributeTranslation> v) {
-        //            @XmlElement(name = "Translation")
-        //            @XmlElementWrapper(name = "Translations")
-        //            protected List<AttributeTranslation> translations;
+    private void setMiningModelColumn(SOAPElement element, MiningModelColumn it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Column");
+            addChildElement(chElement, "Name", it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            it.description().ifPresent(v -> addChildElement(chElement, "Description", v));
+            it.sourceColumnID().ifPresent(v -> addChildElement(chElement, "SourceColumnID", v));
+            it.usage().ifPresent(v -> addChildElement(chElement, "Usage", v));
+            it.filter().ifPresent(v -> addChildElement(chElement, "Filter", v));
+            it.translations().ifPresent(v -> setTranslationList(chElement, "Translations", "Translation", v));
+            it.columns().ifPresent(v -> setMiningModelColumnList(chElement, v));
+            it.modelingFlags().ifPresent(v -> setMiningModelingFlagList(chElement, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
+        }
+    }
+
+    private void setAttributeTranslationList(SOAPElement element, List<AttributeTranslation> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Translations");
+            list.forEach(it -> setAttributeTranslation(chElement, it));
+        }
+    }
+
+    private void setAttributeTranslation(SOAPElement element, AttributeTranslation it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Translation");
+            addChildElement(chElement, "Language", String.valueOf(it.language()));
+            it.caption().ifPresent(v -> addChildElement(chElement, "Caption", v));
+            it.description().ifPresent(v -> addChildElement(chElement, "Description", v));
+            it.displayFolder().ifPresent(v -> addChildElement(chElement, "DisplayFolder", v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
+            it.captionColumn().ifPresent(v -> setDataItem(chElement, "CaptionColumn", v));
+            it.membersWithDataCaption().ifPresent(v -> addChildElement(chElement, "MembersWithDataCaption", v));
+        }
     }
 
     private void setAlgorithmParameterList(SOAPElement element, List<AlgorithmParameter> list) {
-        //            @XmlElement(name = "AlgorithmParameter")
-        //            @XmlElementWrapper(name = "AlgorithmParameters")
-        //            protected List<AlgorithmParameter> algorithmParameters;
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "AlgorithmParameters");
+            list.forEach(it -> setAlgorithmParameter(chElement, it));
+        }
+    }
+
+    private void setAlgorithmParameter(SOAPElement element, AlgorithmParameter it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "AlgorithmParameter");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "Value", it.value().toString());
+        }
     }
 
     private void setMeasureGroup(SOAPElement element, MeasureGroup it) {
-        //TODO
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "MeasureGroup");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "CreatedTimestamp", String.valueOf(it.createdTimestamp()));
+            addChildElement(chElement, "LastSchemaUpdate", String.valueOf(it.lastSchemaUpdate()));
+            addChildElement(chElement, "Description", it.description());
+            setAnnotationList(chElement, it.annotations());
+            addChildElement(chElement, "LastProcessed", String.valueOf(it.lastProcessed()));
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            addChildElement(chElement, "Type", it.type());
+            addChildElement(chElement, "State", it.state());
+            setMeasureList(chElement, it.measures());
+            addChildElement(chElement, "DataAggregation", it.dataAggregation());
+            setMeasureGroupBinding(chElement, it.source());
+            setMeasureGroupStorageMode(chElement, it.storageMode());
+            addChildElement(chElement, "StorageLocation", it.storageLocation());
+            addChildElement(chElement, "IgnoreUnrelatedDimensions", String.valueOf(it.ignoreUnrelatedDimensions()));
+            setProactiveCaching(chElement, it.proactiveCaching());
+            addChildElement(chElement, "EstimatedRows", String.valueOf(it.estimatedRows()));
+            setErrorConfiguration(chElement, it.errorConfiguration());
+            addChildElement(chElement, "EstimatedSize", String.valueOf(it.estimatedSize()));
+            addChildElement(chElement, "ProcessingMode", it.processingMode());
+            setMeasureGroupDimensionList(chElement, it.dimensions());
+            setPartitionList(chElement, it.partitions());
+            addChildElement(chElement, "AggregationPrefix", it.aggregationPrefix());
+            addChildElement(chElement, "ProcessingPriority", String.valueOf(it.processingPriority()));
+            setAggregationDesignList(chElement, it.aggregationDesigns());
+        }
+    }
+
+    private void setAggregationDesignList(SOAPElement element, List<AggregationDesign> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "AggregationDesigns");
+            list.forEach(it -> setAggregationDesign(chElement, it));
+        }
+    }
+
+    private void setPartitionList(SOAPElement element, List<Partition> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Partitions");
+            list.forEach(it -> setPartition(chElement, it));
+        }
+    }
+
+    private void setMeasureGroupDimensionList(SOAPElement element, List<MeasureGroupDimension> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Dimensions");
+            list.forEach(it -> setMeasureGroupDimension(chElement, it));
+        }
+    }
+
+    private void setMeasureGroupDimension(SOAPElement element, MeasureGroupDimension it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Dimension");
+            if (it instanceof ManyToManyMeasureGroupDimension d) {
+                addChildElement(chElement, "MeasureGroupID", String.valueOf(d.measureGroupID()));
+                addChildElement(chElement, "DirectSlice", String.valueOf(d.directSlice()));
+                addChildElement(chElement, "CubeDimensionID", String.valueOf(d.cubeDimensionID()));
+                setAnnotationList(chElement, d.annotations());
+                setMeasureGroupDimensionBinding(chElement, d.source());
+            }
+            if (it instanceof RegularMeasureGroupDimension d) {
+                addChildElement(chElement, "Cardinality", d.cardinality());
+                setMeasureGroupAttributeList(chElement, d.attributes());
+                addChildElement(chElement, "CubeDimensionID", String.valueOf(d.cubeDimensionID()));
+                setAnnotationList(chElement, d.annotations());
+                setMeasureGroupDimensionBinding(chElement, d.source());
+
+            }
+            if (it instanceof ReferenceMeasureGroupDimension d) {
+                addChildElement(chElement, "IntermediateCubeDimensionID", d.intermediateCubeDimensionID());
+                addChildElement(chElement, "IntermediateGranularityAttributeID",
+                    d.intermediateGranularityAttributeID());
+                addChildElement(chElement, "Materialization", d.materialization());
+                addChildElement(chElement, "ProcessingState", d.processingState());
+                addChildElement(chElement, "CubeDimensionID", String.valueOf(d.cubeDimensionID()));
+                setAnnotationList(chElement, d.annotations());
+                setMeasureGroupDimensionBinding(chElement, d.source());
+
+            }
+            if (it instanceof DegenerateMeasureGroupDimension d) {
+                addChildElement(chElement, "ShareDimensionStorage", d.shareDimensionStorage());
+                addChildElement(chElement, "CubeDimensionID", String.valueOf(d.cubeDimensionID()));
+                setAnnotationList(chElement, d.annotations());
+                setMeasureGroupDimensionBinding(chElement, d.source());
+            }
+            if (it instanceof DataMiningMeasureGroupDimension d) {
+                addChildElement(chElement, "CaseCubeDimensionID", d.caseCubeDimensionID());
+                addChildElement(chElement, "CubeDimensionID", String.valueOf(d.cubeDimensionID()));
+                setAnnotationList(chElement, d.annotations());
+                setMeasureGroupDimensionBinding(chElement, d.source());
+            }
+        }
+    }
+
+    private void setMeasureGroupAttributeList(SOAPElement element, List<MeasureGroupAttribute> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Attributes");
+            list.forEach(it -> setMeasureGroupAttribute(chElement, it));
+        }
+    }
+
+    private void setMeasureGroupAttribute(SOAPElement element, MeasureGroupAttribute it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Attribute");
+            addChildElement(chElement, "AttributeID", it.attributeID());
+            setDataItemList(chElement, "KeyColumns", "KeyColumn", it.keyColumns());
+            addChildElement(chElement, "Type", it.type());
+            setAnnotationList(chElement, it.annotations());
+        }
+    }
+
+    private void setMeasureGroupDimensionBinding(SOAPElement element, MeasureGroupDimensionBinding it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Source");
+            addChildElement(chElement, "CubeDimensionID", it.cubeDimensionID());
+        }
+    }
+
+    private void setMeasureGroupStorageMode(SOAPElement element, MeasureGroup.StorageMode it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "StorageMode");
+            addChildElement(chElement, "valuens", it.valuens());
+            addChildElement(chElement, "value", it.value() == null ? null : it.value().value());
+        }
+
+    }
+
+    private void setMeasureList(SOAPElement element, List<Measure> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Measures");
+            list.forEach(it -> setMeasure(chElement, it));
+        }
+
+    }
+
+    private void setMeasure(SOAPElement element, Measure it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Measure");
+
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "Description", it.description());
+            addChildElement(chElement, "AggregateFunction", it.aggregateFunction());
+            addChildElement(chElement, "DataType", it.dataType());
+            setDataItem(chElement, "Source", it.source());
+            addChildElement(chElement, "Visible", String.valueOf(it.visible()));
+            addChildElement(chElement, "MeasureExpression", it.measureExpression());
+            addChildElement(chElement, "DisplayFolder", it.displayFolder());
+            addChildElement(chElement, "FormatString", it.formatString());
+            addChildElement(chElement, "BackColor", it.backColor());
+            addChildElement(chElement, "ForeColor", it.foreColor());
+            addChildElement(chElement, "FontName", it.fontName());
+            addChildElement(chElement, "FontSize", it.fontSize());
+            addChildElement(chElement, "FontFlags", it.fontFlags());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            setAnnotationList(chElement, it.annotations());
+        }
     }
 
     private void setMdxScript(SOAPElement element, MdxScript it) {
@@ -680,7 +1249,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             SOAPElement chElement = addChildElement(element, "CalculationProperty");
             addChildElement(chElement, "CalculationReference", it.calculationReference());
             addChildElement(chElement, "CalculationType", it.calculationType());
-            setTranslationList(chElement, it.translations());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
             addChildElement(chElement, "Description", it.description());
             addChildElement(chElement, "Visible", String.valueOf(it.visible()));
             addChildElement(chElement, "SolveOrder", String.valueOf(it.solveOrder()));
@@ -698,7 +1267,10 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         }
     }
 
-    private void setCalculationPropertiesVisualizationProperties(SOAPElement element, CalculationPropertiesVisualizationProperties it) {
+    private void setCalculationPropertiesVisualizationProperties(
+        SOAPElement element,
+        CalculationPropertiesVisualizationProperties it
+    ) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "VisualizationProperties");
             addChildElement(chElement, "IsDefaultMeasure", String.valueOf(it.isDefaultMeasure()));
@@ -722,23 +1294,478 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             if (it instanceof Attach) {
 
             }
-            //Backup, Batch, BeginTransaction, Cancel, ClearCache,
-            //    CloneDatabase, CommitTransaction, Create, DBCC, Delete, DesignAggregations, Detach, Drop, ImageLoad, ImageSave,
-            //    Insert, Lock, MergePartitions, NotifyTableChange, Process, Restore, RollbackTransaction, SetAuthContext,
-            //    Statement, Subscribe, Synchronize, Unlock, Unsubscribe, Update, UpdateCells
+            if (it instanceof Backup) {
+
+            }
+            if (it instanceof Batch) {
+
+            }
+            if (it instanceof BeginTransaction) {
+
+            }
+            if (it instanceof Cancel) {
+
+            }
+            if (it instanceof ClearCache) {
+
+            }
+            if (it instanceof CloneDatabase) {
+
+            }
+            if (it instanceof CommitTransaction) {
+
+            }
+            if (it instanceof Create) {
+
+            }
+            if (it instanceof DBCC) {
+
+            }
+            if (it instanceof Delete) {
+
+            }
+            if (it instanceof DesignAggregations) {
+
+            }
+            if (it instanceof Detach) {
+
+            }
+            if (it instanceof Drop) {
+
+            }
+            if (it instanceof ImageLoad) {
+
+            }
+            if (it instanceof ImageSave) {
+
+            }
+            if (it instanceof Insert) {
+
+            }
+            if (it instanceof Lock) {
+
+            }
+            if (it instanceof MergePartitions) {
+
+            }
+            if (it instanceof NotifyTableChange) {
+
+            }
+            if (it instanceof Process) {
+
+            }
+            if (it instanceof Restore) {
+
+            }
+            if (it instanceof RollbackTransaction) {
+
+            }
+            if (it instanceof SetAuthContext) {
+
+            }
+            if (it instanceof Statement) {
+
+            }
+            if (it instanceof Subscribe) {
+
+            }
+            if (it instanceof Synchronize) {
+
+            }
+            if (it instanceof Unlock) {
+
+            }
+            if (it instanceof Unsubscribe) {
+
+            }
+            if (it instanceof Update) {
+
+            }
+            if (it instanceof UpdateCells) {
+
+            }
+
         }
     }
 
-    private void setDimension(SOAPElement element, Dimension dimension) {
-        //TODO
+    private void setDimension(SOAPElement element, Dimension it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Dimension");
+            setBinding(chElement, it.source());
+            addChildElement(chElement, "MiningModelID", it.miningModelID());
+            addChildElement(chElement, "Type", it.type());
+            setDimensionUnknownMember(chElement, it.unknownMember());
+            addChildElement(chElement, "MdxMissingMemberMode", it.mdxMissingMemberMode());
+            setErrorConfiguration(chElement, it.errorConfiguration());
+            addChildElement(chElement, "StorageMode", it.storageMode());
+            addChildElement(chElement, "WriteEnabled", String.valueOf(it.writeEnabled()));
+            addChildElement(chElement, "ProcessingPriority", String.valueOf(it.processingPriority()));
+            addChildElement(chElement, "LastProcessed", convertInstant(it.lastProcessed()));
+            setDimensionPermissionList(chElement, it.dimensionPermissions());
+            addChildElement(chElement, "DependsOnDimensionID", it.dependsOnDimensionID());
+            addChildElement(chElement, "Language", String.valueOf(it.language()));
+            addChildElement(chElement, "Collation", it.collation());
+            addChildElement(chElement, "UnknownMemberName", it.unknownMemberName());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            addChildElement(chElement, "State", it.state());
+            setProactiveCaching(chElement, it.proactiveCaching());
+            addChildElement(chElement, "ProcessingMode", it.processingMode());
+            addChildElement(chElement, "ProcessingGroup", it.processingGroup());
+            setDimensionCurrentStorageMode(chElement, it.currentStorageMode());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            setDimensionAttributeList(chElement, it.attributes());
+            addChildElement(chElement, "AttributeAllMemberName", it.attributeAllMemberName());
+            setTranslationList(chElement, "AttributeAllMemberTranslations", "AttributeAllMemberTranslation",
+                it.translations());
+            setHierarchyList(chElement, it.hierarchies());
+            addChildElement(chElement, "ProcessingRecommendation", it.processingRecommendation());
+            setRelationships(chElement, it.relationships());
+            addChildElement(chElement, "StringStoresCompatibilityLevel",
+                String.valueOf(it.stringStoresCompatibilityLevel()));
+            addChildElement(chElement, "CurrentStringStoresCompatibilityLevel",
+                String.valueOf(it.currentStringStoresCompatibilityLevel()));
+        }
     }
 
-    private void setDataSourceView(SOAPElement objectDefinitionElement, DataSourceView it) {
-        //TODO
+    private void setRelationships(SOAPElement element, Relationships it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Relationships");
+            setRelationshipList(chElement, it.relationship());
+        }
     }
 
-    private void setDataSource(SOAPElement objectDefinitionElement, DataSource it) {
-        //TODO
+    private void setRelationshipList(SOAPElement element, List<Relationship> list) {
+        if (list != null) {
+            list.forEach(it -> setRelationship(element, it));
+        }
+    }
+
+    private void setRelationship(SOAPElement element, Relationship it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Relationship");
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "Visible", String.valueOf(it.visible()));
+            setRelationshipEnd(chElement, "FromRelationshipEnd", it.fromRelationshipEnd());
+            setRelationshipEnd(chElement, "ToRelationshipEnd", it.toRelationshipEnd());
+        }
+    }
+
+    private void setRelationshipEnd(SOAPElement element, String nodeName, RelationshipEnd it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, nodeName);
+            addChildElement(chElement, "Role", it.role());
+            addChildElement(chElement, "Multiplicity", it.multiplicity());
+            addChildElement(chElement, "DimensionID", it.dimensionID());
+            setRelationshipEndAttributes(chElement, it.attributes());
+            setRelationshipEndTranslations(chElement, it.translations());
+            setRelationshipEndVisualizationProperties(chElement, it.visualizationProperties());
+        }
+    }
+
+    private void setRelationshipEndVisualizationProperties(
+        SOAPElement element,
+        RelationshipEndVisualizationProperties it
+    ) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "VisualizationProperties");
+            addChildElement(chElement, "FolderPosition", String.valueOf(it.folderPosition()));
+            addChildElement(chElement, "ContextualNameRule", it.contextualNameRule());
+            addChildElement(chElement, "DefaultDetailsPosition", String.valueOf(it.defaultDetailsPosition()));
+            addChildElement(chElement, "DisplayKeyPosition", String.valueOf(it.displayKeyPosition()));
+            addChildElement(chElement, "CommonIdentifierPosition", String.valueOf(it.commonIdentifierPosition()));
+            addChildElement(chElement, "IsDefaultMeasure", String.valueOf(it.isDefaultMeasure()));
+            addChildElement(chElement, "IsDefaultImage", String.valueOf(it.isDefaultImage()));
+            addChildElement(chElement, "SortPropertiesPosition", String.valueOf(it.sortPropertiesPosition()));
+        }
+    }
+
+    private void setRelationshipEndTranslations(SOAPElement element, List<RelationshipEndTranslation> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Translations");
+            list.forEach(it -> setRelationshipEndTranslation(chElement, it));
+        }
+
+    }
+
+    private void setRelationshipEndTranslation(SOAPElement element, RelationshipEndTranslation it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Translation");
+            addChildElement(chElement, "Language", String.valueOf(it.language()));
+            addChildElement(chElement, "Caption", it.caption());
+            addChildElement(chElement, "Description", it.description());
+            addChildElement(chElement, "DisplayFolder", it.displayFolder());
+            setAnnotationList(chElement, it.annotations());
+            addChildElement(chElement, "CollectionCaption", it.collectionCaption());
+        }
+    }
+
+    private void setRelationshipEndAttributes(SOAPElement element, List<String> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Attributes");
+            list.forEach(it -> setRelationshipEndAttribute(chElement, it));
+        }
+    }
+
+    private void setRelationshipEndAttribute(SOAPElement element, String it) {
+        if (it != null) {
+            addChildElement(addChildElement(element, "Attribute"), "AttributeID", it);
+        }
+    }
+
+    private void setHierarchyList(SOAPElement element, List<Hierarchy> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Hierarchies");
+            list.forEach(it -> setHierarchy(chElement, it));
+        }
+    }
+
+    private void setHierarchy(SOAPElement element, Hierarchy it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Hierarchy");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "Description", it.description());
+            addChildElement(chElement, "ProcessingState", it.processingState());
+            addChildElement(chElement, "StructureType", it.structureType());
+            addChildElement(chElement, "DisplayFolder", it.displayFolder());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            addChildElement(chElement, "AllMemberName", it.allMemberName());
+            setAnnotationList(chElement, it.annotations());
+            setTranslationList(chElement, "AllMemberTranslations", "AllMemberTranslations", it.allMemberTranslations());
+            addChildElement(chElement, "MemberNamesUnique", String.valueOf(it.memberNamesUnique()));
+            addChildElement(chElement, "MemberKeysUnique", String.valueOf(it.memberKeysUnique()));
+            addChildElement(chElement, "AllowDuplicateNames", String.valueOf(it.allowDuplicateNames()));
+            setLevelList(chElement, it.levels());
+            setAnnotationList(chElement, it.annotations());
+            setHierarchyVisualizationProperties(chElement, it.visualizationProperties());
+        }
+    }
+
+    private void setHierarchyVisualizationProperties(SOAPElement element, HierarchyVisualizationProperties it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "VisualizationProperties");
+            addChildElement(chElement, "ContextualNameRule", it.contextualNameRule());
+            addChildElement(chElement, "FolderPosition", String.valueOf(it.folderPosition()));
+        }
+    }
+
+    private void setLevelList(SOAPElement element, List<Level> list) {
+        //            @XmlElement(name = "Level", required = true)
+        //            @XmlElementWrapper(name = "Levels", required = true)
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Levels");
+            list.forEach(it -> setLevel(chElement, it));
+        }
+
+    }
+
+    private void setLevel(SOAPElement element, Level it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Level");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "Description", it.description());
+            addChildElement(chElement, "SourceAttributeID", it.sourceAttributeID());
+            addChildElement(chElement, "HideMemberIf", it.hideMemberIf());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+            setAnnotationList(chElement, it.annotations());
+        }
+    }
+
+    private void setDimensionAttributeList(SOAPElement element, List<DimensionAttribute> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "Attributes");
+            list.forEach(it -> setDimensionAttribute(chElement, it));
+        }
+    }
+
+    private void setDimensionAttribute(SOAPElement element, DimensionAttribute it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Attribute");
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "Description", it.description());
+            setDimensionAttributeType(chElement, it.type());
+            addChildElement(chElement, "Usage", it.usage());
+            setBinding(chElement, it.source());
+            addChildElement(chElement, "EstimatedCount", String.valueOf(it.estimatedCount()));
+            setDataItemList(chElement, "KeyColumns", "KeyColumn", it.keyColumns());
+            setDataItem(chElement, "NameColumn", it.nameColumn());
+            setDataItem(chElement, "ValueColumn", it.valueColumn());
+            setAttributeTranslationList(chElement, it.translations());
+            setAttributeRelationshipList(chElement, it.attributeRelationships());
+            addChildElement(chElement, "DiscretizationMethod", it.discretizationMethod());
+            addChildElement(chElement, "DiscretizationBucketCount", String.valueOf(it.discretizationBucketCount()));
+            addChildElement(chElement, "RootMemberIf", it.rootMemberIf());
+            addChildElement(chElement, "OrderBy", it.orderBy());
+            addChildElement(chElement, "DefaultMember", it.defaultMember());
+            addChildElement(chElement, "OrderByAttributeID", it.orderByAttributeID());
+            setDataItem(chElement, "SkippedLevelsColumn", it.skippedLevelsColumn());
+            addChildElement(chElement, "NamingTemplate", it.namingTemplate());
+            addChildElement(chElement, "MembersWithData", it.membersWithData());
+            addChildElement(chElement, "MembersWithDataCaption", it.membersWithDataCaption());
+            setTranslationList(chElement, "NamingTemplateTranslations", "NamingTemplateTranslation",
+                it.namingTemplateTranslations());
+            setDataItem(chElement, "CustomRollupColumn", it.customRollupColumn());
+            setDataItem(chElement, "CustomRollupPropertiesColumn", it.customRollupPropertiesColumn());
+            setDataItem(chElement, "UnaryOperatorColumn", it.unaryOperatorColumn());
+            addChildElement(chElement, "AttributeHierarchyOrdered", String.valueOf(it.attributeHierarchyOrdered()));
+            addChildElement(chElement, "MemberNamesUnique", String.valueOf(it.memberNamesUnique()));
+            addChildElement(chElement, "IsAggregatable", String.valueOf(it.isAggregatable()));
+            addChildElement(chElement, "AttributeHierarchyEnabled", String.valueOf(it.attributeHierarchyEnabled()));
+            addChildElement(chElement, "AttributeHierarchyOptimizedState", it.attributeHierarchyOptimizedState());
+            addChildElement(chElement, "AttributeHierarchyVisible", String.valueOf(it.attributeHierarchyVisible()));
+            addChildElement(chElement, "AttributeHierarchyDisplayFolder", it.attributeHierarchyDisplayFolder());
+            addChildElement(chElement, "KeyUniquenessGuarantee", String.valueOf(it.keyUniquenessGuarantee()));
+            addChildElement(chElement, "GroupingBehavior", it.groupingBehavior());
+            addChildElement(chElement, "InstanceSelection", it.instanceSelection());
+            setAnnotationList(chElement, it.annotations());
+            addChildElement(chElement, "ProcessingState", it.processingState());
+            addChildElement(chElement, "AttributeHierarchyProcessingState",
+             it.attributeHierarchyProcessingState() == null ? null : it.attributeHierarchyProcessingState().value());
+            addChildElement(chElement, "ExtendedType", it.extendedType());
+        }
+    }
+
+    private void setAttributeRelationshipList(SOAPElement element, List<AttributeRelationship> list) {
+        //            @XmlElement(name = "AttributeRelationship")
+        //            @XmlElementWrapper(name = "AttributeRelationships")
+        //            protected List<AttributeRelationship> attributeRelationships;
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "AttributeRelationships");
+            list.forEach(it -> setAttributeRelationship(chElement, it));
+        }
+
+    }
+
+    private void setAttributeRelationship(SOAPElement element, AttributeRelationship it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "AttributeRelationship");
+            addChildElement(chElement, "AttributeID", it.attributeID());
+            addChildElement(chElement, "RelationshipType", it.relationshipType());
+            addChildElement(chElement, "Cardinality", it.cardinality());
+            addChildElement(chElement, "Optionality", it.optionality());
+            addChildElement(chElement, "OverrideBehavior", it.overrideBehavior());
+            setAnnotationList(chElement, it.annotations());
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "Visible", String.valueOf(it.visible()));
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
+        }
+    }
+
+    private void setDimensionAttributeType(SOAPElement element, DimensionAttribute.Type it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Type");
+            addChildElement(chElement, "valuens", it.valuens());
+            addChildElement(chElement, "value", it.value() == null ? null : it.value().value());
+        }
+    }
+
+    private void setDimensionCurrentStorageMode(SOAPElement element, Dimension.CurrentStorageMode it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "CurrentStorageMode");
+            addChildElement(chElement, "valuens", it.valuens());
+            addChildElement(chElement, "value", it.value() == null ? null : it.value().value());
+        }
+    }
+
+    private void setDimensionPermissionList(SOAPElement element, List<DimensionPermission> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "DimensionPermissions");
+            list.forEach(it -> setDimensionPermission(chElement, it));
+        }
+
+    }
+
+    private void setDimensionPermission(SOAPElement element, DimensionPermission it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "DimensionPermission");
+            addChildElement(chElement, "RoleID", it.roleID());
+            it.process().ifPresent(v -> addChildElement(chElement, "Process", String.valueOf(v)));
+            it.readDefinition().ifPresent(v -> addChildElement(chElement, "ReadDefinition", v.getValue()));
+            it.read().ifPresent(v -> addChildElement(chElement, "Read", v.getValue()));
+            it.write().ifPresent(v -> addChildElement(chElement, "Write", v.getValue()));
+
+            addChildElement(chElement, "Name", it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, "CreatedTimestamp", convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, "LastSchemaUpdate", convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, "Description", v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
+            it.attributePermissions().ifPresent(v -> setAttributePermissionList(chElement, v));
+
+            it.allowedRowsExpression().ifPresent(v -> addChildElement(chElement, "AllowedRowsExpression", v));
+        }
+    }
+
+    private void setDimensionUnknownMember(SOAPElement element, Dimension.UnknownMember it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "UnknownMember");
+            addChildElement(chElement, "valuens", it.valuens());
+            addChildElement(chElement, "value", it.value() == null ? null : it.value().value());
+        }
+    }
+
+    private void setDataSourceView(SOAPElement element, DataSourceView it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "DataSourceView");
+            addChildElement(chElement, "DataSourceID", it.dataSourceID());
+
+            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, "CreatedTimestamp", convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, "LastSchemaUpdate", convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, "Description", it.description());
+            setAnnotationList(chElement, it.annotations());
+        }
+    }
+
+
+    private void setDataSource(SOAPElement element, DataSource it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "DataSource");
+            addChildElement(chElement, "ManagedProvider", it.managedProvider());
+            addChildElement(chElement, "ConnectionString", it.connectionString());
+            addChildElement(chElement, "ConnectionStringSecurity", it.connectionStringSecurity());
+            setImpersonationInfo(chElement, "ImpersonationInfo", it.impersonationInfo());
+            addChildElement(chElement, "Isolation", it.isolation());
+            addChildElement(chElement, "MaxActiveConnections", String.valueOf(it.maxActiveConnections()));
+            addChildElement(chElement, "Timeout", convertDuration(it.timeout()));
+            setDataSourcePermissionList(chElement, it.dataSourcePermissions());
+            setImpersonationInfo(chElement, "QueryImpersonationInfo", it.queryImpersonationInfo());
+            addChildElement(chElement, "QueryHints", it.queryHints());
+        }
+    }
+
+    private void setDataSourcePermissionList(SOAPElement element, List<DataSourcePermission> list) {
+        if (list != null) {
+            SOAPElement chElement = addChildElement(element, "DataSourcePermissions");
+            list.forEach(it -> setDataSourcePermission(chElement, it));
+        }
+    }
+
+    private void setDataSourcePermission(SOAPElement element, DataSourcePermission it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "DataSourcePermission");
+            addChildElement(chElement, "RoleID", it.roleID());
+            it.process().ifPresent(v -> addChildElement(chElement, "Process", String.valueOf(v)));
+            it.readDefinition().ifPresent(v -> addChildElement(chElement, "ReadDefinition", v.getValue()));
+            it.read().ifPresent(v -> addChildElement(chElement, "Read", v.getValue()));
+            it.write().ifPresent(v -> addChildElement(chElement, "Write", v.getValue()));
+        }
+    }
+
+    private void setImpersonationInfo(SOAPElement element, String tagName, ImpersonationInfo it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, tagName);
+            addChildElement(chElement, "ImpersonationMode", it.impersonationMode());
+            it.account().ifPresent(v -> addChildElement(chElement, "Account", v));
+            addChildElement(chElement, "ImpersonationMode", it.impersonationMode());
+            it.account().ifPresent(v -> addChildElement(chElement, "Account", v));
+            it.password().ifPresent(v -> addChildElement(chElement, "Password", v));
+            it.impersonationInfoSecurity().ifPresent(v -> addChildElement(chElement, "ImpersonationInfoSecurity", v));
+        }
     }
 
     private void setDatabase(SOAPElement objectDefinitionElement, Database it) {
@@ -750,7 +1777,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             SOAPElement cubeelement = objectDefinitionElement.addChildElement("Cube");
             addChildElement(cubeelement, "Language", String.valueOf(cube.language()));
             addChildElement(cubeelement, "Collation", String.valueOf(cube.collation()));
-            setTranslationList(cubeelement, cube.translations());
+            setTranslationList(cubeelement, "Translations", "Translation", cube.translations());
             setCubeDimensionsList(cubeelement, cube.dimensions());
             setCubePermissionList(cubeelement, cube.cubePermissions());
             setMdxScriptList(cubeelement, cube.mdxScripts());
@@ -791,7 +1818,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
             it.caption().ifPresent(v -> addChildElement(chElement, "Caption", v));
             it.captionIsMdx().ifPresent(v -> addChildElement(chElement, "CaptionIsMdx", String.valueOf(v)));
-            it.translations().ifPresent(v -> setTranslationList(chElement, v));
+            it.translations().ifPresent(v -> setTranslationList(chElement, "Translations", "Translation", v));
             addChildElement(chElement, "TargetType", it.targetType().getValue());
             it.target().ifPresent(v -> addChildElement(chElement, "Target", v));
             it.condition().ifPresent(v -> addChildElement(chElement, "Condition", v));
@@ -858,36 +1885,30 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
 
     private void setBinding(SOAPElement element, Binding it) {
         if (it != null) {
+            SOAPElement chElement = addChildElement(element, "Source");
             if (it instanceof ColumnBinding cb) {
-                SOAPElement chElement = addChildElement(element, "ColumnBinding");
                 addChildElement(chElement, "TableID", cb.tableID());
                 addChildElement(chElement, "ColumnID", cb.columnID());
             }
             if (it instanceof RowBinding rb) {
-                SOAPElement chElement = addChildElement(element, "RowBinding");
                 addChildElement(chElement, "TableID", rb.tableID());
             }
             if (it instanceof DataSourceViewBinding dsvb) {
-                SOAPElement chElement = addChildElement(element, "DataSourceViewBinding");
                 addChildElement(chElement, "DataSourceViewID", dsvb.dataSourceViewID());
             }
             if (it instanceof AttributeBinding ab) {
-                SOAPElement chElement = addChildElement(element, "AttributeBinding");
                 addChildElement(chElement, "AttributeID", ab.attributeID());
                 addChildElement(chElement, "Type", ab.type() == null ? null : ab.type().getValue());
                 addChildElement(chElement, "Ordinal", String.valueOf(ab.ordinal()));
             }
             if (it instanceof UserDefinedGroupBinding udgb) {
-                SOAPElement chElement = addChildElement(element, "UserDefinedGroupBinding");
                 addChildElement(chElement, "AttributeID", udgb.attributeID());
                 udgb.groups().ifPresent(v -> setGroupList(chElement, v));
             }
             if (it instanceof MeasureBinding mb) {
-                SOAPElement chElement = addChildElement(element, "MeasureBinding");
                 addChildElement(chElement, "MeasureID", mb.measureID());
             }
             if (it instanceof CubeAttributeBinding cab) {
-                SOAPElement chElement = addChildElement(element, "CubeAttributeBinding");
                 addChildElement(chElement, "CubeID", cab.cubeID());
                 addChildElement(chElement, "CubeDimensionID", cab.cubeDimensionID());
                 addChildElement(chElement, "AttributeID", cab.attributeID());
@@ -895,7 +1916,6 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
                 cab.ordinal().ifPresent(v -> setCubeAttributeBindingOrdinalList(chElement, v));
             }
             if (it instanceof DimensionBinding db) {
-                SOAPElement chElement = addChildElement(element, "DimensionBinding");
                 addChildElement(chElement, "DataSourceID", db.dataSourceID());
                 addChildElement(chElement, "DimensionID", db.dimensionID());
                 db.persistence().ifPresent(v -> addChildElement(chElement, "Persistence", v.getValue()));
@@ -903,14 +1923,12 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
                 db.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval", String.valueOf(v)));
             }
             if (it instanceof CubeDimensionBinding cdb) {
-                SOAPElement chElement = addChildElement(element, "CubeDimensionBinding");
                 addChildElement(chElement, "DataSourceID", cdb.dataSourceID());
                 addChildElement(chElement, "CubeID", cdb.cubeID());
                 addChildElement(chElement, "CubeDimensionID", cdb.cubeDimensionID());
                 cdb.filter().ifPresent(v -> addChildElement(chElement, "Filter", v));
             }
             if (it instanceof MeasureGroupBinding mgb) {
-                SOAPElement chElement = addChildElement(element, "MeasureGroupBinding");
                 addChildElement(chElement, "DataSourceID", mgb.dataSourceID());
                 addChildElement(chElement, "CubeID", mgb.cubeID());
                 addChildElement(chElement, "MeasureGroupID", mgb.measureGroupID());
@@ -920,41 +1938,40 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
                 mgb.filter().ifPresent(v -> addChildElement(chElement, "Filter", v));
             }
             if (it instanceof MeasureGroupDimensionBinding mgdb) {
-                SOAPElement chElement = addChildElement(element, "MeasureGroupDimensionBinding");
                 addChildElement(chElement, "CubeDimensionID", mgdb.cubeDimensionID());
             }
             if (it instanceof TimeBinding tb) {
-                SOAPElement chElement = addChildElement(element, "TimeBinding");
                 addChildElement(chElement, "CalendarStartDate", convertInstant(tb.calendarStartDate()));
                 addChildElement(chElement, "CalendarEndDate", convertInstant(tb.calendarEndDate()));
                 tb.firstDayOfWeek().ifPresent(v -> addChildElement(chElement, "FirstDayOfWeek", String.valueOf(v)));
                 tb.calendarLanguage().ifPresent(v -> addChildElement(chElement, "CalendarLanguage", String.valueOf(v)));
                 tb.fiscalFirstMonth().ifPresent(v -> addChildElement(chElement, "FiscalFirstMonth", String.valueOf(v)));
-                tb.fiscalFirstDayOfMonth().ifPresent(v -> addChildElement(chElement, "FiscalFirstDayOfMonth", String.valueOf(v)));
+                tb.fiscalFirstDayOfMonth().ifPresent(v -> addChildElement(chElement, "FiscalFirstDayOfMonth",
+                 String.valueOf(v)));
                 tb.fiscalYearName().ifPresent(v -> addChildElement(chElement, "FiscalYearName", v.getValue()));
-                tb.reportingFirstMonth().ifPresent(v -> addChildElement(chElement, "ReportingFirstMonth", String.valueOf(v)));
-                tb.reportingFirstWeekOfMonth().ifPresent(v -> addChildElement(chElement, "ReportingFirstWeekOfMonth", v));
-                tb.reportingWeekToMonthPattern().ifPresent(v -> addChildElement(chElement, "ReportingWeekToMonthPattern", v.getValue()));
-                tb.manufacturingFirstMonth().ifPresent(v -> addChildElement(chElement, "ManufacturingFirstMonth", String.valueOf(v)));
-                tb.manufacturingFirstWeekOfMonth().ifPresent(v -> addChildElement(chElement, "ManufacturingFirstWeekOfMonth", String.valueOf(v)));
-                tb.manufacturingExtraMonthQuarter().ifPresent(v -> addChildElement(chElement, "ManufacturingExtraMonthQuarter", String.valueOf(v)));
+                tb.reportingFirstMonth().ifPresent(v -> addChildElement(chElement, "ReportingFirstMonth",
+                 String.valueOf(v)));
+                tb.reportingFirstWeekOfMonth().ifPresent(v -> addChildElement(chElement, "ReportingFirstWeekOfMonth",
+                    v));
+                tb.reportingWeekToMonthPattern().ifPresent(v -> addChildElement(chElement,
+                    "ReportingWeekToMonthPattern", v.getValue()));
+                tb.manufacturingFirstMonth().ifPresent(v -> addChildElement(chElement, "ManufacturingFirstMonth",
+                 String.valueOf(v)));
+                tb.manufacturingFirstWeekOfMonth().ifPresent(v -> addChildElement(chElement,
+                "ManufacturingFirstWeekOfMonth", String.valueOf(v)));
+                tb.manufacturingExtraMonthQuarter().ifPresent(v -> addChildElement(chElement,
+                "ManufacturingExtraMonthQuarter", String.valueOf(v)));
             }
             if (it instanceof TimeAttributeBinding) {
-                SOAPElement chElement = addChildElement(element, "TimeAttributeBinding");
             }
             if (it instanceof InheritedBinding) {
-                SOAPElement chElement = addChildElement(element, "InheritedBinding");
-
             }
             if (it instanceof CalculatedMeasureBinding cmb) {
-                SOAPElement chElement = addChildElement(element, "CalculatedMeasureBinding");
                 addChildElement(chElement, "MeasureName", cmb.measureName());
             }
             if (it instanceof RowNumberBinding) {
-                SOAPElement chElement = addChildElement(element, "RowNumberBinding");
             }
             if (it instanceof ExpressionBinding eb) {
-                SOAPElement chElement = addChildElement(element, "ExpressionBinding");
                 addChildElement(chElement, "Expression", eb.expression());
             }
         }
@@ -1022,7 +2039,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             addChildElement(chElement, "Name", it.name());
             addChildElement(chElement, "ID", it.id());
             addChildElement(chElement, "Description", it.description());
-            setTranslationList(chElement, it.translations());
+            setTranslationList(chElement, "Translations", "Translation", it.translations());
             addChildElement(chElement, "DisplayFolder", it.displayFolder());
             addChildElement(chElement, "AssociatedMeasureGroupID", it.associatedMeasureGroupID());
             addChildElement(chElement, "Value", it.value());
@@ -1044,10 +2061,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             proactiveCaching.onlineMode().ifPresent(v -> addChildElement(chElement, "OnlineMode", v));
             proactiveCaching.aggregationStorage().ifPresent(v -> addChildElement(chElement, "AggregationStorage", v));
             proactiveCaching.source().ifPresent(v -> setProactiveCachingBinding(chElement, v));
-            proactiveCaching.silenceInterval().ifPresent(v -> addChildElement(chElement, "SilenceInterval", convertDuration1(v)));
+            proactiveCaching.silenceInterval().ifPresent(v -> addChildElement(chElement, "SilenceInterval",
+             convertDuration1(v)));
             proactiveCaching.latency().ifPresent(v -> addChildElement(chElement, "Latency", convertDuration1(v)));
-            proactiveCaching.silenceOverrideInterval().ifPresent(v -> addChildElement(chElement, "SilenceOverrideInterval", convertDuration1(v)));
-            proactiveCaching.forceRebuildInterval().ifPresent(v -> addChildElement(chElement, "ForceRebuildInterval", convertDuration1(v)));
+            proactiveCaching.silenceOverrideInterval().ifPresent(v -> addChildElement(chElement,
+"SilenceOverrideInterval", convertDuration1(v)));
+            proactiveCaching.forceRebuildInterval().ifPresent(v -> addChildElement(chElement, "ForceRebuildInterval",
+                convertDuration1(v)));
             proactiveCaching.enabled().ifPresent(v -> addChildElement(chElement, "Enabled", String.valueOf(v)));
         }
     }
@@ -1056,11 +2076,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         if (source != null) {
             SOAPElement chElement = addChildElement(element, "Source");
             if (source instanceof ProactiveCachingIncrementalProcessingBinding pcipb) {
-                pcipb.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval", convertDuration(v)));
+                pcipb.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval",
+                    convertDuration(v)));
                 setIncrementalProcessingNotificationList(chElement, pcipb.incrementalProcessingNotifications());
             }
             if (source instanceof ProactiveCachingQueryBinding pcqb) {
-                pcqb.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval", convertDuration(v)));
+                pcqb.refreshInterval().ifPresent(v -> addChildElement(chElement, "RefreshInterval",
+                    convertDuration(v)));
                 setQueryNotificationList(chElement, pcqb.queryNotifications());
             }
 
@@ -1081,7 +2103,10 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         }
     }
 
-    private void setIncrementalProcessingNotificationList(SOAPElement element, List<IncrementalProcessingNotification> list) {
+    private void setIncrementalProcessingNotificationList(
+        SOAPElement element,
+        List<IncrementalProcessingNotification> list
+    ) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "IncrementalProcessingNotifications");
             list.forEach(it -> setIncrementalProcessingNotification(chElement, it));
@@ -1102,7 +2127,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     }
 
     private String convertDuration1(Duration v) {
-        //TODO
+        //TODO investigate why use different Duration
         return null;
     }
 
@@ -1220,7 +2245,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         addChildElement(dimensionElement, "ID", cubeDimension.id());
         addChildElement(dimensionElement, "Name", cubeDimension.name());
         addChildElement(dimensionElement, "Description", cubeDimension.description());
-        setTranslationList(dimensionElement, cubeDimension.translations());
+        setTranslationList(dimensionElement, "Translations", "Translation", cubeDimension.translations());
         addChildElement(dimensionElement, "DimensionID", cubeDimension.dimensionID());
         addChildElement(dimensionElement, "Visible", String.valueOf(cubeDimension.visible()));
         addChildElement(dimensionElement, "AllMemberAggregationUsage", cubeDimension.allMemberAggregationUsage());
@@ -1240,10 +2265,10 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
 
     private void setCubeHierarchy(SOAPElement element, CubeHierarchy v) {
         SOAPElement hierarchyElement = addChildElement(element, "Hierarchy");
-        addChildElement(hierarchyElement, "HierarchyID",  v.hierarchyID());
-        addChildElement(hierarchyElement, "OptimizedState",  v.optimizedState());
-        addChildElement(hierarchyElement, "Visible",  String.valueOf(v.visible()));
-        addChildElement(hierarchyElement, "Enabled",  String.valueOf(v.enabled()));
+        addChildElement(hierarchyElement, "HierarchyID", v.hierarchyID());
+        addChildElement(hierarchyElement, "OptimizedState", v.optimizedState());
+        addChildElement(hierarchyElement, "Visible", String.valueOf(v.visible()));
+        addChildElement(hierarchyElement, "Enabled", String.valueOf(v.enabled()));
         setAnnotationList(hierarchyElement, v.annotations());
     }
 
@@ -1264,20 +2289,27 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         setAnnotationList(attributeElement, v.annotations());
     }
 
-    private void setTranslationList(SOAPElement cubeElement, List<Translation> translations) {
+    private void setTranslationList(
+        SOAPElement cubeElement,
+        String wrapperName,
+        String tagName,
+        List<Translation> translations
+    ) {
         if (translations != null) {
-            SOAPElement translationsElement = addChildElement(cubeElement, "Translations");
-            translations.forEach(it -> setTranslation(translationsElement, it));
+            SOAPElement translationsElement = addChildElement(cubeElement, wrapperName);
+            translations.forEach(it -> setTranslation(translationsElement, tagName, it));
         }
     }
 
-    private void setTranslation(SOAPElement translationsElement, Translation translation) {
-        SOAPElement translationElement = addChildElement(translationsElement, "Translation");
-        addChildElement(translationElement, "Language", String.valueOf(translation.language()));
-        addChildElement(translationElement, "Caption", String.valueOf(translation.caption()));
-        addChildElement(translationElement, "Description", String.valueOf(translation.description()));
-        addChildElement(translationElement, "DisplayFolder", String.valueOf(translation.displayFolder()));
-        setAnnotationList(translationElement, translation.annotations());
+    private void setTranslation(SOAPElement translationsElement, String tagName, Translation it) {
+        if (it != null) {
+            SOAPElement translationElement = addChildElement(translationsElement, tagName);
+            addChildElement(translationElement, "Language", String.valueOf(it.language()));
+            addChildElement(translationElement, "Caption", String.valueOf(it.caption()));
+            addChildElement(translationElement, "Description", String.valueOf(it.description()));
+            addChildElement(translationElement, "DisplayFolder", String.valueOf(it.displayFolder()));
+            setAnnotationList(translationElement, it.annotations());
+        }
     }
 
     private void setAssembly(SOAPElement objectDefinitionElement, Assembly assembly) {
@@ -1310,7 +2342,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
 
     private void setAggregationDesign(
         SOAPElement objectDefinitionElement,
-        AggregationDesign aggregationDesign)  {
+        AggregationDesign aggregationDesign
+    ) {
         if (aggregationDesign != null) {
             SOAPElement aggregationDesignEl = addChildElement(objectDefinitionElement, "AggregationDesign");
             aggregationDesign.estimatedRows().ifPresent(v -> addChildElement(aggregationDesignEl, "EstimatedRows",
