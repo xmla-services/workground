@@ -83,6 +83,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResp
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
+import org.eclipse.daanse.xmla.api.execute.cancel.CancelResponse;
+import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Axis;
 import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
@@ -93,6 +95,7 @@ import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 import org.eclipse.daanse.xmla.api.mddataset.Type;
+import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.MeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.discover.ParameterInfoR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsResponseRowR;
@@ -131,6 +134,9 @@ import org.eclipse.daanse.xmla.model.record.exception.MessageLocationR;
 import org.eclipse.daanse.xmla.model.record.exception.MessagesR;
 import org.eclipse.daanse.xmla.model.record.exception.StartEndR;
 import org.eclipse.daanse.xmla.model.record.exception.WarningTypeR;
+import org.eclipse.daanse.xmla.model.record.execute.alter.AlterResponseR;
+import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelResponseR;
+import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheResponseR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementResponseR;
 import org.eclipse.daanse.xmla.model.record.mddataset.AxesInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.AxesR;
@@ -150,6 +156,7 @@ import org.eclipse.daanse.xmla.model.record.mddataset.MembersTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoCubeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoR;
 import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
+import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -1026,8 +1033,32 @@ public class Convertor {
         return new StatementResponseR(mdDataSet);
     }
     public static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
-        return null;
+        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
+        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        ExceptionR exception = getException(exceptionNl);
+        MessagesR messages = getMessages(messagesNl);
+        Emptyresult emptyresult = new EmptyresultR(exception, messages);
+        return new AlterResponseR(emptyresult);
     }
+
+    public static ClearCacheResponse convertToClearCacheResponse(SOAPBody soapBody) {
+        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
+        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        ExceptionR exception = getException(exceptionNl);
+        MessagesR messages = getMessages(messagesNl);
+        Emptyresult emptyresult = new EmptyresultR(exception, messages);
+        return new ClearCacheResponseR(emptyresult);
+    }
+
+    public static CancelResponse convertToCancelResponse(SOAPBody soapBody) {
+        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
+        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        ExceptionR exception = getException(exceptionNl);
+        MessagesR messages = getMessages(messagesNl);
+        Emptyresult emptyresult = new EmptyresultR(exception, messages);
+        return new CancelResponseR(emptyresult);
+    }
+
 
     private static MessagesR getMessages(NodeList nl) {
         if (nl != null) {
@@ -1277,7 +1308,7 @@ public class Convertor {
                 Node node = nl.item(i);
                 if (node != null && "Error".equals(node.getNodeName())) {
                     NamedNodeMap nm = node.getAttributes();
-                    list.add(new CellTypeErrorR(getLong(getAttribute(nm, "ErrorCode")), getAttribute(nm, "Description")));
+                    list.add(new CellTypeErrorR(getLong(getAttribute(nm, "ErrorCode")), getAttribute(nm, DESCRIPTION1)));
                 }
             }
             return list;
