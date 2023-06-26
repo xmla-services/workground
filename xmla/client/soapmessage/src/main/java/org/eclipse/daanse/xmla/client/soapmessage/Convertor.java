@@ -171,256 +171,255 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ALL_MEMBER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ANNOTATIONS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.APPLICATION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.AUTO_UNIQUE_VALUE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BASE_CUBE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BEST_MATCH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BOOKMARKS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BOOKMARK_DATA_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BOOKMARK_INFORMATION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BOOKMARK_MAXIMUM_LENGTH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.BOOKMARK_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CAPTION_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CASE_SENSITIVE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CATALOG_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHARACTER_MAXIMUM_LENGTH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHARACTER_OCTET_LENGTH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHARACTER_SET_CATALOG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHARACTER_SET_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHARACTER_SET_SCHEMA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CHILDREN_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CLIENTCACHEREFRESHPOLICY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLLATION_CATALOG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLLATION_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLLATION_SCHEMA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_DEFAULT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_FLAG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_HAS_DEFAULT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_OLAP_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_PROPID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_SIZE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COMPATIBILITY_LEVEL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CONTENT_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COORDINATE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COORDINATE_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CREATED_ON;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CREATE_PARAMS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_SOURCE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CURRENTLY_USED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUSTOM_ROLLUP_SETTINGS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATABASE_ID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATA_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATA_UPDATED_BY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATETIME_PRECISION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATE_CREATED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATE_MODIFIED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATE_QUERIED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DEFAULT_FORMAT_STRING;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DEFAULT_HIERARCHY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DEFAULT_MEMBER_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DESCRIPTION1;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DESCRIPTION_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSIONS_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_GRANULARITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_IS_FACT_DIMENSION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_IS_SHARED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_MASTER_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_MASTER_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_ORDINAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_PATH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION_UNIQUE_SETTINGS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIRECTQUERY_PUSHABLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DLL_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DOMAIN_CATALOG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DOMAIN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DOMAIN_SCHEMA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ELEMENT_DESCRIPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ELEMENT_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ELEMENT_VALUE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ENUM_DESCRIPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ENUM_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ENUM_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.EXCEPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.EXPRESSION_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FIXED_PREC_SCALE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FUNCTION_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.GROUPING_BEHAVIOR;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HELP_CONTEXT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HELP_FILE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_DISPLAY_FOLDER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORDINAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORIGIN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IERARCHY_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INSTANCE_SELECTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INTERFACE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INVOCATION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_DATAMEMBER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_DRILLTHROUGH_ENABLED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_FIXEDLENGTH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_LINKABLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_LONG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_NULLABLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_PLACEHOLDERMEMBER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_READWRITE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_SQL_ENABLED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_VIRTUAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IS_WRITE_ENABLED;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KEYWORD;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_CURRENT_TIME_MEMBER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_DESCRIPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_DISPLAY_FOLDER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_GOAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_PARENT_KPI_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_STATUS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_STATUS_GRAPHIC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_TREND;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_TREND_GRAPHIC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_VALUE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KPI_WEIGHT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LANGUAGE_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LAST_DATA_UPDATE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LAST_SCHEMA_UPDATE_UC;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVELS_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_ATTRIBUTE_HIERARCHY_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_DBTYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_KEY_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_KEY_SQL_COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_MASTER_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_NAME_SQL_COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_NUMBER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_ORDERING_PROPERTY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_ORIGIN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LEVEL_UNIQUE_SETTINGS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LIBRARY_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_INVALID_CHARS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_INVALID_STARTING_CHARS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_MAX_LENGTH;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_NAME_VALUE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_PREFIX;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_SUFFIX;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LITERAL_VALUE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LOCAL_TYPE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MAXIMUM_SCALE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASUREGROUP_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASUREGROUP_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASUREGROUP_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_AGGREGATOR;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_GROUP_DIMENSION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_NAME_SQL_COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_UNITS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_UNQUALIFIED_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_KEY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_ORDINAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEMBER_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MESSAGES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MIME_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MINIMUM_SCALE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NUMERIC_PRECISION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NUMERIC_SCALE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.OBJECT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.OPTIONAL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ORDINAL_POSITION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ORIGIN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARAMETERINFO;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARAMETER_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_COUN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_LEVEL;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.POPULARITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PREFERRED_QUERY_PATTERNS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_ATTRIBUTE_HIERARCHY_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_CARDINALITY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_CONTENT_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_NAME1;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REPEATABLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REPEATGROUP;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_MASK;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RETURN_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROLES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROPERTY_ORIGIN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROW;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME1;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_OWNER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_UPDATED_BY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCOPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SEARCHABLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SET_CAPTION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SET_DISPLAY_FOLDER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SET_EVALUATION_CONTEXT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SET_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SQL_COLUMN_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.STRUCTURE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.STRUCTURE_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_CATALOG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_PROP_ID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_SCHEMA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_VERSION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_LIB;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TYPE_NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.UNSIGNED_ATTRIBUTE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.VERSION;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.WEIGHTEDPOPULARITY;
 
 public class Convertor {
-
-    private static final String MESSAGES = "Messages";
-	private static final String EXCEPTION = "Exception";
-	public static final String ROW = "row";
-    public static final String CATALOG_NAME = "CATALOG_NAME";
-    public static final String SCHEMA_NAME = "SCHEMA_NAME";
-    public static final String CUBE_NAME = "CUBE_NAME";
-    public static final String DIMENSION_UNIQUE_NAME = "DIMENSION_UNIQUE_NAME";
-    public static final String HIERARCHY_NAME = "HIERARCHY_NAME";
-    public static final String HIERARCHY_UNIQUE_NAME = "HIERARCHY_UNIQUE_NAME";
-    public static final String HIERARCHY_GUID = "HIERARCHY_GUID";
-    public static final String HIERARCHY_CAPTION = "HIERARCHY_CAPTION";
-    public static final String DIMENSION_TYPE = "DIMENSION_TYPE";
-    public static final String HIERARCHY_CARDINALITY = "HIERARCHY_CARDINALITY";
-    public static final String DEFAULT_MEMBER = "DEFAULT_MEMBER";
-    public static final String ALL_MEMBER = "ALL_MEMBER";
-    public static final String DESCRIPTION = "DESCRIPTION";
-    public static final String STRUCTURE = "STRUCTURE";
-    public static final String IS_VIRTUAL = "IS_VIRTUAL";
-    public static final String IS_READWRITE = "IS_READWRITE";
-    public static final String DIMENSION_UNIQUE_SETTINGS = "DIMENSION_UNIQUE_SETTINGS";
-    public static final String DIMENSION_MASTER_UNIQUE_NAME = "DIMENSION_MASTER_UNIQUE_NAME";
-    public static final String DIMENSION_IS_VISIBLE = "DIMENSION_IS_VISIBLE";
-    public static final String HIERARCHY_ORDINAL = "HIERARCHY_ORDINAL";
-    public static final String DIMENSION_IS_SHARED = "DIMENSION_IS_SHARED";
-    public static final String IERARCHY_IS_VISIBLE = "IERARCHY_IS_VISIBLE";
-    public static final String HIERARCHY_ORIGIN = "HIERARCHY_ORIGIN";
-    public static final String HIERARCHY_DISPLAY_FOLDER = "HIERARCHY_DISPLAY_FOLDER";
-    public static final String INSTANCE_SELECTION = "INSTANCE_SELECTION";
-    public static final String GROUPING_BEHAVIOR = "GROUPING_BEHAVIOR";
-    public static final String STRUCTURE_TYPE = "STRUCTURE_TYPE";
-    public static final String FUNCTION_NAME = "FUNCTION_NAME";
-    public static final String PARAMETER_LIST = "PARAMETER_LIST";
-    public static final String RETURN_TYPE = "RETURN_TYPE";
-    public static final String ORIGIN = "ORIGIN";
-    public static final String INTERFACE_NAME = "INTERFACE_NAME";
-    public static final String LIBRARY_NAME = "LIBRARY_NAME";
-    public static final String DLL_NAME = "DLL_NAME";
-    public static final String HELP_FILE = "HELP_FILE";
-    public static final String HELP_CONTEXT = "HELP_CONTEXT";
-    public static final String OBJECT = "OBJECT";
-    public static final String CAPTION = "CAPTION";
-    public static final String DIRECTQUERY_PUSHABLE = "DIRECTQUERY_PUSHABLE";
-    public static final String PARAMETERINFO = "PARAMETERINFO";
-    public static final String NAME = "NAME";
-    public static final String OPTIONAL = "OPTIONAL";
-    public static final String REPEATABLE = "REPEATABLE";
-    public static final String REPEATGROUP = "REPEATGROUP";
-    public static final String DIMENSION_NAME = "DIMENSION_NAME";
-    public static final String DIMENSION_GUID = "DIMENSION_GUID";
-    public static final String DIMENSION_CAPTION = "DIMENSION_CAPTION";
-    public static final String DIMENSION_ORDINAL = "DIMENSION_ORDINAL";
-    public static final String DIMENSION_CARDINALITY = "DIMENSION_CARDINALITY";
-    public static final String DEFAULT_HIERARCHY = "DEFAULT_HIERARCHY";
-    public static final String DIMENSION_MASTER_NAME = "DIMENSION_MASTER_NAME";
-    public static final String ACTION_NAME = "ACTION_NAME";
-    public static final String ACTION_TYPE = "ACTION_TYPE";
-    public static final String COORDINATE = "COORDINATE";
-    public static final String COORDINATE_TYPE = "COORDINATE_TYPE";
-    public static final String ACTION_CAPTION = "ACTION_CAPTION";
-    public static final String CONTENT = "CONTENT";
-    public static final String APPLICATION = "APPLICATION";
-    public static final String INVOCATION = "INVOCATION";
-    public static final String CUBE_TYPE = "CUBE_TYPE";
-    public static final String CUBE_GUID = "CUBE_GUID";
-    public static final String CREATED_ON = "CREATED_ON";
-    public static final String LAST_SCHEMA_UPDATE = "LAST_SCHEMA_UPDATE";
-    public static final String SCHEMA_UPDATED_BY = "SCHEMA_UPDATED_BY";
-    public static final String LAST_DATA_UPDATE = "LAST_DATA_UPDATE";
-    public static final String DATA_UPDATED_BY = "DATA_UPDATED_BY";
-    public static final String IS_DRILLTHROUGH_ENABLED = "IS_DRILLTHROUGH_ENABLED";
-    public static final String IS_LINKABLE = "IS_LINKABLE";
-    public static final String IS_WRITE_ENABLED = "IS_WRITE_ENABLED";
-    public static final String IS_SQL_ENABLED = "IS_SQL_ENABLED";
-    public static final String CUBE_CAPTION = "CUBE_CAPTION";
-    public static final String BASE_CUBE_NAME = "BASE_CUBE_NAME";
-    public static final String CUBE_SOURCE = "CUBE_SOURCE";
-    public static final String PREFERRED_QUERY_PATTERNS = "PREFERRED_QUERY_PATTERNS";
-    public static final String ROLES = "ROLES";
-    public static final String DATE_MODIFIED = "DATE_MODIFIED";
-    public static final String COMPATIBILITY_LEVEL = "COMPATIBILITY_LEVEL";
-    public static final String TYPE = "TYPE";
-    public static final String VERSION = "VERSION";
-    public static final String DATABASE_ID = "DATABASE_ID";
-    public static final String DATE_QUERIED = "DATE_QUERIED";
-    public static final String CURRENTLY_USED = "CURRENTLY_USED";
-    public static final String POPULARITY = "POPULARITY";
-    public static final String WEIGHTEDPOPULARITY = "WEIGHTEDPOPULARITY";
-    public static final String CLIENTCACHEREFRESHPOLICY = "CLIENTCACHEREFRESHPOLICY";
-    public static final String TABLE_CATALOG = "TABLE_CATALOG";
-    public static final String TABLE_SCHEMA = "TABLE_SCHEMA";
-    public static final String TABLE_NAME = "TABLE_NAME";
-    public static final String TABLE_TYPE = "TABLE_TYPE";
-    public static final String TABLE_GUID = "TABLE_GUID";
-    public static final String TABLE_PROP_ID = "TABLE_PROP_ID";
-    public static final String DATE_CREATED = "DATE_CREATED";
-    public static final String KEYWORD = "Keyword";
-    public static final String SCHEMA_OWNER = "SCHEMA_OWNER";
-    public static final String SET_NAME = "SET_NAME";
-    public static final String SCOPE = "SCOPE";
-    public static final String BOOKMARKS = "BOOKMARKS";
-    public static final String BOOKMARK_TYPE = "BOOKMARK_TYPE";
-    public static final String BOOKMARK_DATA_TYPE = "BOOKMARK_DATA_TYPE";
-    public static final String BOOKMARK_MAXIMUM_LENGTH = "BOOKMARK_MAXIMUM_LENGTH";
-    public static final String BOOKMARK_INFORMATION = "BOOKMARK_INFORMATION";
-    public static final String TABLE_VERSION = "TABLE_VERSION";
-    public static final String CARDINALITY = "CARDINALITY";
-    public static final String MEASUREGROUP_NAME = "MEASUREGROUP_NAME";
-    public static final String KPI_NAME = "KPI_NAME";
-    public static final String KPI_CAPTION = "KPI_CAPTION";
-    public static final String KPI_DESCRIPTION = "KPI_DESCRIPTION";
-    public static final String KPI_DISPLAY_FOLDER = "KPI_DISPLAY_FOLDER";
-    public static final String KPI_VALUE = "KPI_VALUE";
-    public static final String KPI_GOAL = "KPI_GOAL";
-    public static final String KPI_STATUS = "KPI_STATUS";
-    public static final String KPI_TREND = "KPI_TREND";
-    public static final String KPI_STATUS_GRAPHIC = "KPI_STATUS_GRAPHIC";
-    public static final String KPI_TREND_GRAPHIC = "KPI_TREND_GRAPHIC";
-    public static final String KPI_WEIGHT = "KPI_WEIGHT";
-    public static final String KPI_CURRENT_TIME_MEMBER = "KPI_CURRENT_TIME_MEMBER";
-    public static final String KPI_PARENT_KPI_NAME = "KPI_PARENT_KPI_NAME";
-    public static final String ANNOTATIONS = "ANNOTATIONS";
-    public static final String MEASUREGROUP_CAPTION = "MEASUREGROUP_CAPTION";
-    public static final String EXPRESSION = "EXPRESSION";
-    public static final String DIMENSIONS = "DIMENSIONS";
-    public static final String SET_CAPTION = "SET_CAPTION";
-    public static final String SET_DISPLAY_FOLDER = "SET_DISPLAY_FOLDER";
-    public static final String SET_EVALUATION_CONTEXT = "SET_EVALUATION_CONTEXT";
-    public static final String LEVEL_UNIQUE_NAME = "LEVEL_UNIQUE_NAME";
-    public static final String MEMBER_UNIQUE_NAME = "MEMBER_UNIQUE_NAME";
-    public static final String PROPERTY_TYPE = "PROPERTY_TYPE";
-    public static final String PROPERTY_NAME = "PROPERTY_NAME";
-    public static final String PROPERTY_CAPTION = "PROPERTY_CAPTION";
-    public static final String DATA_TYPE = "DATA_TYPE";
-    public static final String CHARACTER_MAXIMUM_LENGTH = "CHARACTER_MAXIMUM_LENGTH";
-    public static final String CHARACTER_OCTET_LENGTH = "CHARACTER_OCTET_LENGTH";
-    public static final String NUMERIC_PRECISION = "NUMERIC_PRECISION";
-    public static final String NUMERIC_SCALE = "NUMERIC_SCALE";
-    public static final String PROPERTY_CONTENT_TYPE = "PROPERTY_CONTENT_TYPE";
-    public static final String SQL_COLUMN_NAME = "SQL_COLUMN_NAME";
-    public static final String LANGUAGE = "LANGUAGE";
-    public static final String ROPERTY_ORIGIN = "ROPERTY_ORIGIN";
-    public static final String PROPERTY_ATTRIBUTE_HIERARCHY_NAME = "PROPERTY_ATTRIBUTE_HIERARCHY_NAME";
-    public static final String PROPERTY_CARDINALITY = "PROPERTY_CARDINALITY";
-    public static final String MIME_TYPE = "MIME_TYPE";
-    public static final String PROPERTY_IS_VISIBLE = "PROPERTY_IS_VISIBLE";
-    public static final String LEVEL_NUMBER = "LEVEL_NUMBER";
-    public static final String MEMBER_ORDINAL = "MEMBER_ORDINAL";
-    public static final String MEMBER_NAME = "MEMBER_NAME";
-    public static final String MEMBER_TYPE = "MEMBER_TYPE";
-    public static final String MEMBER_GUID = "MEMBER_GUID";
-    public static final String MEMBER_CAPTION = "MEMBER_CAPTION";
-    public static final String CHILDREN_CARDINALITY = "CHILDREN_CARDINALITY";
-    public static final String PARENT_LEVEL = "PARENT_LEVEL";
-    public static final String PARENT_UNIQUE_NAME = "PARENT_UNIQUE_NAME";
-    public static final String PARENT_COUN = "PARENT_COUN";
-    public static final String MEMBER_KEY = "MEMBER_KEY";
-    public static final String IS_PLACEHOLDERMEMBER = "IS_PLACEHOLDERMEMBER";
-    public static final String IS_DATAMEMBER = "IS_DATAMEMBER";
-    public static final String MEASURE_NAME = "MEASURE_NAME";
-    public static final String MEASURE_UNIQUE_NAME = "MEASURE_UNIQUE_NAME";
-    public static final String MEASURE_CAPTION = "MEASURE_CAPTION";
-    public static final String MEASURE_GUID = "MEASURE_GUID";
-    public static final String MEASURE_AGGREGATOR = "MEASURE_AGGREGATOR";
-    public static final String MEASURE_UNITS = "MEASURE_UNITS";
-    public static final String MEASURE_IS_VISIBLE = "MEASURE_IS_VISIBLE";
-    public static final String LEVELS_LIST = "LEVELS_LIST";
-    public static final String MEASURE_NAME_SQL_COLUMN_NAME = "MEASURE_NAME_SQL_COLUMN_NAME";
-    public static final String MEASURE_UNQUALIFIED_CAPTION = "MEASURE_UNQUALIFIED_CAPTION";
-    public static final String DEFAULT_FORMAT_STRING = "DEFAULT_FORMAT_STRING";
-    public static final String MEASUREGROUP_CARDINALITY = "MEASUREGROUP_CARDINALITY";
-    public static final String DIMENSION_IS_FACT_DIMENSION = "DIMENSION_IS_FACT_DIMENSION";
-    public static final String DIMENSION_GRANULARITY = "DIMENSION_GRANULARITY";
-    public static final String MEASURE_GROUP_DIMENSION = "MeasureGroupDimension";
-    public static final String LEVEL_NAME = "LEVEL_NAME";
-    public static final String LEVEL_GUID = "LEVEL_GUID";
-    public static final String LEVEL_CAPTION = "LEVEL_CAPTION";
-    public static final String LEVEL_CARDINALITY = "LEVEL_CARDINALITY";
-    public static final String LEVEL_TYPE = "LEVEL_TYPE";
-    public static final String CUSTOM_ROLLUP_SETTINGS = "CUSTOM_ROLLUP_SETTINGS";
-    public static final String LEVEL_UNIQUE_SETTINGS = "LEVEL_UNIQUE_SETTINGS";
-    public static final String LEVEL_IS_VISIBLE = "LEVEL_IS_VISIBLE";
-    public static final String LEVEL_ORDERING_PROPERTY = "LEVEL_ORDERING_PROPERTY";
-    public static final String LEVEL_DBTYPE = "LEVEL_DBTYPE";
-    public static final String LEVEL_MASTER_UNIQUE_NAME = "LEVEL_MASTER_UNIQUE_NAME";
-    public static final String LEVEL_NAME_SQL_COLUMN_NAME = "LEVEL_NAME_SQL_COLUMN_NAME";
-    public static final String LEVEL_KEY_SQL_COLUMN_NAME = "LEVEL_KEY_SQL_COLUMN_NAME";
-    public static final String LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME = "LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME";
-    public static final String LEVEL_ATTRIBUTE_HIERARCHY_NAME = "LEVEL_ATTRIBUTE_HIERARCHY_NAME";
-    public static final String LEVEL_KEY_CARDINALITY = "LEVEL_KEY_CARDINALITY";
-    public static final String LEVEL_ORIGIN = "LEVEL_ORIGIN";
-    public static final String TYPE_NAME = "TYPE_NAME";
-    public static final String COLUMN_SIZE = "COLUMN_SIZE";
-    public static final String LITERAL_PREFIX = "LITERAL_PREFIX";
-    public static final String LITERAL_SUFFIX = "LITERAL_SUFFIX";
-    public static final String CREATE_PARAMS = "CREATE_PARAMS";
-    public static final String IS_NULLABLE = "IS_NULLABLE";
-    public static final String CASE_SENSITIVE = "CASE_SENSITIVE";
-    public static final String SEARCHABLE = "SEARCHABLE";
-    public static final String UNSIGNED_ATTRIBUTE = "UNSIGNED_ATTRIBUTE";
-    public static final String FIXED_PREC_SCALE = "FIXED_PREC_SCALE";
-    public static final String AUTO_UNIQUE_VALUE = "AUTO_UNIQUE_VALUE";
-    public static final String LOCAL_TYPE_NAME = "LOCAL_TYPE_NAME";
-    public static final String MINIMUM_SCALE = "MINIMUM_SCALE";
-    public static final String MAXIMUM_SCALE = "MAXIMUM_SCALE";
-    public static final String GUID = "GUID";
-    public static final String TYPE_LIB = "TYPE_LIB";
-    public static final String IS_LONG = "IS_LONG";
-    public static final String BEST_MATCH = "BEST_MATCH";
-    public static final String IS_FIXEDLENGTH = "IS_FIXEDLENGTH";
-    public static final String DIMENSION_PATH = "DIMENSION_PATH";
-    public static final String TYPE_GUID = "TYPE_GUID";
-    public static final String COLUMN_NAME = "COLUMN_NAME";
-    public static final String COLUMN_GUID = "COLUMN_GUID";
-    public static final String COLUMN_PROPID = "COLUMN_PROPID";
-    public static final String ORDINAL_POSITION = "ORDINAL_POSITION";
-    public static final String COLUMN_HAS_DEFAULT = "COLUMN_HAS_DEFAULT";
-    public static final String COLUMN_DEFAULT = "COLUMN_DEFAULT";
-    public static final String COLUMN_FLAG = "COLUMN_FLAG";
-    public static final String DATETIME_PRECISION = "DATETIME_PRECISION";
-    public static final String CHARACTER_SET_CATALOG = "CHARACTER_SET_CATALOG";
-    public static final String CHARACTER_SET_SCHEMA = "CHARACTER_SET_SCHEMA";
-    public static final String CHARACTER_SET_NAME = "CHARACTER_SET_NAME";
-    public static final String COLLATION_CATALOG = "COLLATION_CATALOG";
-    public static final String COLLATION_SCHEMA = "COLLATION_SCHEMA";
-    public static final String COLLATION_NAME = "COLLATION_NAME";
-    public static final String DOMAIN_CATALOG = "DOMAIN_CATALOG";
-    public static final String DOMAIN_SCHEMA = "DOMAIN_SCHEMA";
-    public static final String DOMAIN_NAME = "DOMAIN_NAME";
-    public static final String COLUMN_OLAP_TYPE = "COLUMN_OLAP_TYPE";
-    public static final String ENUM_NAME = "EnumName";
-    public static final String ENUM_DESCRIPTION = "EnumDescription";
-    public static final String ENUM_TYPE = "EnumType";
-    public static final String ELEMENT_NAME = "ElementName";
-    public static final String ELEMENT_DESCRIPTION = "ElementDescription";
-    public static final String ELEMENT_VALUE = "ElementValue";
-    public static final String PROPERTY_NAME1 = "PropertyName";
-    public static final String SCHEMA_NAME1 = "SchemaName";
-    public static final String SCHEMA_GUID = "SchemaGuid";
-    public static final String RESTRICTIONS = "Restrictions";
-    public static final String DESCRIPTION1 = "Description";
-    public static final String RESTRICTIONS_MASK = "RestrictionsMask";
-    public static final String LITERAL_NAME = "LiteralName";
-    public static final String LITERAL_VALUE = "LiteralValue";
-    public static final String LITERAL_INVALID_CHARS = "LiteralInvalidChars";
-    public static final String LITERAL_INVALID_STARTING_CHARS = "LiteralInvalidStartingChars";
-    public static final String LITERAL_MAX_LENGTH = "LiteralMaxLength";
-    public static final String LITERAL_NAME_VALUE = "LiteralNameValue";
 
     private Convertor() {
         //constructor
@@ -443,7 +442,7 @@ public class Convertor {
                 Optional.ofNullable(getLong(m.get(TABLE_VERSION))),
 
                 Optional.ofNullable(getLong(m.get(CARDINALITY))),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getInt(m.get(TABLE_PROP_ID)))
             )
         ).collect(toList());
@@ -496,7 +495,7 @@ public class Convertor {
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
                 Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getBoolean(m.get(IS_WRITE_ENABLED))),
                 Optional.ofNullable(m.get(MEASUREGROUP_CAPTION))
             )
@@ -512,9 +511,9 @@ public class Convertor {
                 Optional.ofNullable(m.get(CUBE_NAME)),
                 Optional.ofNullable(m.get(SET_NAME)),
                 Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE))),
-                Optional.ofNullable(m.get(DESCRIPTION)),
-                Optional.ofNullable(m.get(EXPRESSION)),
-                Optional.ofNullable(m.get(DIMENSIONS)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
+                Optional.ofNullable(m.get(EXPRESSION_UC)),
+                Optional.ofNullable(m.get(DIMENSIONS_UC)),
                 Optional.ofNullable(m.get(SET_CAPTION)),
                 Optional.ofNullable(m.get(SET_DISPLAY_FOLDER)),
                 Optional.ofNullable(SetEvaluationContextEnum.fromValue(m.get(SET_EVALUATION_CONTEXT)))
@@ -541,10 +540,10 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(CHARACTER_OCTET_LENGTH))),
                 Optional.ofNullable(getInt(m.get(NUMERIC_PRECISION))),
                 Optional.ofNullable(getInt(m.get(NUMERIC_SCALE))),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(PropertyContentTypeEnum.fromValue(m.get(PROPERTY_CONTENT_TYPE))),
                 Optional.ofNullable(m.get(SQL_COLUMN_NAME)),
-                Optional.ofNullable(getInt(m.get(LANGUAGE))),
+                Optional.ofNullable(getInt(m.get(LANGUAGE_UC))),
                 Optional.ofNullable(PropertyOriginEnum.fromValue(m.get(ROPERTY_ORIGIN))),
                 Optional.ofNullable(m.get(PROPERTY_ATTRIBUTE_HIERARCHY_NAME)),
                 Optional.ofNullable(PropertyCardinalityEnum.fromValue(m.get(PROPERTY_CARDINALITY))),
@@ -575,12 +574,12 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(PARENT_LEVEL))),
                 Optional.ofNullable(m.get(PARENT_UNIQUE_NAME)),
                 Optional.ofNullable(getInt(m.get(PARENT_COUN))),
-                Optional.ofNullable(m.get(DESCRIPTION)),
-                Optional.ofNullable(m.get(EXPRESSION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
+                Optional.ofNullable(m.get(EXPRESSION_UC)),
                 Optional.ofNullable(m.get(MEMBER_KEY)),
                 Optional.ofNullable(getBoolean(m.get(IS_PLACEHOLDERMEMBER))),
                 Optional.ofNullable(getBoolean(m.get(IS_DATAMEMBER))),
-                Optional.ofNullable(ScopeEnum.fromValue(m.get(DESCRIPTION)))
+                Optional.ofNullable(ScopeEnum.fromValue(m.get(DESCRIPTION_UC)))
             )
         ).collect(toList());
     }
@@ -601,8 +600,8 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(NUMERIC_PRECISION))),
                 Optional.ofNullable(getInt(m.get(NUMERIC_SCALE))),
                 Optional.ofNullable(m.get(MEASURE_UNITS)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
-                Optional.ofNullable(m.get(EXPRESSION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
+                Optional.ofNullable(m.get(EXPRESSION_UC)),
                 Optional.ofNullable(getBoolean(m.get(MEASURE_IS_VISIBLE))),
                 Optional.ofNullable(m.get(LEVELS_LIST)),
                 Optional.ofNullable(m.get(MEASURE_NAME_SQL_COLUMN_NAME)),
@@ -656,7 +655,7 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(LEVEL_NUMBER))),
                 Optional.ofNullable(getInt(m.get(LEVEL_CARDINALITY))),
                 Optional.ofNullable(LevelTypeEnum.fromValue(m.get(LEVEL_TYPE))),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(CustomRollupSettingEnum.fromValue(m.get(CUSTOM_ROLLUP_SETTINGS))),
                 Optional.ofNullable(LevelUniqueSettingsEnum.fromValue(m.get(LEVEL_UNIQUE_SETTINGS))),
                 Optional.ofNullable(getBoolean(m.get(LEVEL_IS_VISIBLE))),
@@ -744,7 +743,7 @@ public class Convertor {
                 Optional.ofNullable(m.get(DOMAIN_CATALOG)),
                 Optional.ofNullable(m.get(DOMAIN_SCHEMA)),
                 Optional.ofNullable(m.get(DOMAIN_NAME)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(ColumnOlapTypeEnum.fromValue(m.get(COLUMN_OLAP_TYPE)))
             )
         ).collect(toList());
@@ -783,7 +782,7 @@ public class Convertor {
                 Optional.ofNullable(m.get(TABLE_NAME)),
                 Optional.ofNullable(m.get(TABLE_TYPE)),
                 Optional.ofNullable(m.get(TABLE_GUID)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getInt(m.get(TABLE_PROP_ID))),
                 Optional.ofNullable(getLocalDateTime(m.get(DATE_CREATED))),
                 Optional.ofNullable(getLocalDateTime(m.get(DATE_MODIFIED)))
@@ -869,9 +868,9 @@ public class Convertor {
                 Optional.ofNullable(m.get(HIERARCHY_CAPTION)),
                 Optional.ofNullable(DimensionTypeEnum.fromValue(getInt(m.get(DIMENSION_TYPE)))),
                 Optional.ofNullable(getInt(m.get(HIERARCHY_CARDINALITY))),
-                Optional.ofNullable(m.get(DEFAULT_MEMBER)),
+                Optional.ofNullable(m.get(DEFAULT_MEMBER_UC)),
                 Optional.ofNullable(m.get(ALL_MEMBER)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(StructureEnum.fromValue(m.get(STRUCTURE))),
                 Optional.ofNullable(getBoolean(m.get(IS_VIRTUAL))),
                 Optional.ofNullable(getBoolean(m.get(IS_READWRITE))),
@@ -899,7 +898,7 @@ public class Convertor {
                 Map<String, String> m = getMapValues(nl);
                 new MdSchemaFunctionsResponseRowR(
                     Optional.ofNullable(m.get(FUNCTION_NAME)),
-                    Optional.ofNullable(m.get(DESCRIPTION)),
+                    Optional.ofNullable(m.get(DESCRIPTION_UC)),
                     m.get(PARAMETER_LIST),
                     Optional.ofNullable(getInt(m.get(RETURN_TYPE))),
                     Optional.ofNullable(OriginEnum.fromValue(m.get(ORIGIN))),
@@ -909,7 +908,7 @@ public class Convertor {
                     Optional.ofNullable(m.get(HELP_FILE)),
                     Optional.ofNullable(m.get(HELP_CONTEXT)),
                     Optional.ofNullable(m.get(OBJECT)),
-                    Optional.ofNullable(m.get(CAPTION)),
+                    Optional.ofNullable(m.get(CAPTION_UC)),
                     Optional.ofNullable(convertToParameterInfoList(nodeList.item(i))),
                     Optional.ofNullable(DirectQueryPushableEnum.fromValue(m.get(DIRECTQUERY_PUSHABLE))));
             }
@@ -932,7 +931,7 @@ public class Convertor {
                 Optional.ofNullable(DimensionTypeEnum.fromValue(getInt(m.get(DIMENSION_TYPE)))),
                 Optional.ofNullable(getInt(m.get(DIMENSION_CARDINALITY))),
                 Optional.ofNullable(m.get(DEFAULT_HIERARCHY)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getBoolean(m.get(IS_VIRTUAL))),
                 Optional.ofNullable(getBoolean(m.get(IS_READWRITE))),
                 Optional.ofNullable(DimensionUniqueSettingEnum.fromValue(m.get(DIMENSION_UNIQUE_SETTINGS))),
@@ -954,8 +953,8 @@ public class Convertor {
                 m.get(COORDINATE),
                 CoordinateTypeEnum.fromValue(m.get(COORDINATE_TYPE)),
                 Optional.ofNullable(m.get(ACTION_CAPTION)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
-                Optional.ofNullable(m.get(CONTENT)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
+                Optional.ofNullable(m.get(CONTENT_UC)),
                 Optional.ofNullable(m.get(APPLICATION)),
                 Optional.ofNullable(InvocationEnum.fromValue(m.get(INVOCATION)))
             )
@@ -973,11 +972,11 @@ public class Convertor {
                 Optional.ofNullable(CubeTypeEnum.fromValue(m.get(CUBE_TYPE))),
                 Optional.ofNullable(getInt(m.get(CUBE_GUID))),
                 Optional.ofNullable(getLocalDateTime(m.get(CREATED_ON))),
-                Optional.ofNullable(getLocalDateTime(m.get(LAST_SCHEMA_UPDATE))),
+                Optional.ofNullable(getLocalDateTime(m.get(LAST_SCHEMA_UPDATE_UC))),
                 Optional.ofNullable(m.get(SCHEMA_UPDATED_BY)),
                 Optional.ofNullable(getLocalDateTime(m.get(LAST_DATA_UPDATE))),
                 Optional.ofNullable(m.get(DATA_UPDATED_BY)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getBoolean(m.get(IS_DRILLTHROUGH_ENABLED))),
                 Optional.ofNullable(getBoolean(m.get(IS_LINKABLE))),
                 Optional.ofNullable(getBoolean(m.get(IS_WRITE_ENABLED))),
@@ -995,7 +994,7 @@ public class Convertor {
         return l.stream().map(m ->
             new DbSchemaCatalogsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
-                Optional.ofNullable(m.get(DESCRIPTION)),
+                Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(m.get(ROLES)),
                 Optional.ofNullable(getLocalDateTime(m.get(DATE_MODIFIED))),
                 Optional.ofNullable(getInt(m.get(COMPATIBILITY_LEVEL))),
@@ -1034,6 +1033,7 @@ public class Convertor {
         );
         return new StatementResponseR(mdDataSet);
     }
+
     public static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
         NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
         NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
@@ -1060,7 +1060,6 @@ public class Convertor {
         Emptyresult emptyresult = new EmptyresultR(exception, messages);
         return new CancelResponseR(emptyresult);
     }
-
 
     private static MessagesR getMessages(NodeList nl) {
         if (nl != null) {
@@ -1213,8 +1212,6 @@ public class Convertor {
         );
     }
 
-
-
     private static StartEndR getStartEnd(NodeList nl) {
         if (nl != null) {
             int line = 0;
@@ -1265,7 +1262,8 @@ public class Convertor {
                 if (node != null) {
                     if ("Cell".equals(node.getNodeName())) {
                         NodeList nodeList = node.getChildNodes();
-                        list.add(new CellTypeR(getValue(nodeList), getCellInfoItem(nodeList), getLong(getAttribute(node.getAttributes(), "CellOrdinal"))));
+                        list.add(new CellTypeR(getValue(nodeList), getCellInfoItem(nodeList),
+                            getLong(getAttribute(node.getAttributes(), "CellOrdinal"))));
                     }
                     if ("CellSetType".equals(node.getNodeName())) {
                         cellSetType = new CellSetTypeR(getDataList(node.getChildNodes()));
@@ -1310,7 +1308,8 @@ public class Convertor {
                 Node node = nl.item(i);
                 if (node != null && "Error".equals(node.getNodeName())) {
                     NamedNodeMap nm = node.getAttributes();
-                    list.add(new CellTypeErrorR(getLong(getAttribute(nm, "ErrorCode")), getAttribute(nm, DESCRIPTION1)));
+                    list.add(new CellTypeErrorR(getLong(getAttribute(nm, "ErrorCode")), getAttribute(nm,
+                        DESCRIPTION1)));
                 }
             }
             return list;
@@ -1324,7 +1323,8 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Axis".equals(node.getNodeName())) {
-                    list.add(new AxisR(getMembersList(node.getChildNodes()), getAttribute(node.getAttributes(), "name")));
+                    list.add(new AxisR(getMembersList(node.getChildNodes()), getAttribute(node.getAttributes(), "name"
+                    )));
                 }
             }
             return new AxesR(list);
@@ -1339,7 +1339,8 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Members".equals(node.getNodeName())) {
-                    list.add(new MembersTypeR(getMemberList(node.getChildNodes()), getAttribute(node.getAttributes(), "Hierarchy")));
+                    list.add(new MembersTypeR(getMemberList(node.getChildNodes()), getAttribute(node.getAttributes(),
+                        "Hierarchy")));
                 }
             }
             return list;
@@ -1353,7 +1354,8 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Member".equals(node.getNodeName())) {
-                    list.add(new MemberTypeR(getCellInfoItem(node.getChildNodes()), getAttribute(node.getAttributes(), "Hierarchy")));
+                    list.add(new MemberTypeR(getCellInfoItem(node.getChildNodes()), getAttribute(node.getAttributes()
+                        , "Hierarchy")));
                 }
             }
             return list;
@@ -1432,7 +1434,7 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
                 if (node != null && "HierarchyInfo".equals(node.getNodeName())) {
-                    NamedNodeMap namedNodeMap =  node.getAttributes();
+                    NamedNodeMap namedNodeMap = node.getAttributes();
                     String name = getAttribute(namedNodeMap, "name");
                     list.add(new HierarchyInfoR(getCellInfoItem(node.getChildNodes()), name));
                 }
@@ -1447,7 +1449,7 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
                 if (node != null) {
-                    NamedNodeMap namedNodeMap =  node.getAttributes();
+                    NamedNodeMap namedNodeMap = node.getAttributes();
                     String name = getAttribute(namedNodeMap, "name");
                     String type = getAttribute(namedNodeMap, "type");
                     list.add(new CellInfoItemR(
@@ -1534,7 +1536,7 @@ public class Convertor {
                     Map<String, String> m = getMapValues(n.getChildNodes());
                     result.add(
                         new ParameterInfoR(m.get(NAME),
-                            m.get(DESCRIPTION),
+                            m.get(DESCRIPTION_UC),
                             getBoolean(m.get(OPTIONAL)),
                             getBoolean(m.get(REPEATABLE)),
                             getInt(m.get(REPEATGROUP)))
@@ -1595,7 +1597,6 @@ public class Convertor {
         }
         return null;
     }
-
 
     private static List<Map<String, String>> getMapValuesList(SOAPBody b) {
         List<Map<String, String>> result = new ArrayList<>();
