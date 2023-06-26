@@ -174,7 +174,9 @@ import static java.util.stream.Collectors.toList;
 
 public class Convertor {
 
-    public static final String ROW = "row";
+    private static final String MESSAGES = "Messages";
+	private static final String EXCEPTION = "Exception";
+	public static final String ROW = "row";
     public static final String CATALOG_NAME = "CATALOG_NAME";
     public static final String SCHEMA_NAME = "SCHEMA_NAME";
     public static final String CUBE_NAME = "CUBE_NAME";
@@ -1014,8 +1016,8 @@ public class Convertor {
         NodeList olapInfoNl = soapBody.getElementsByTagName("OlapInfo");
         NodeList axesNl = soapBody.getElementsByTagName("Axes");
         NodeList cellDataNl = soapBody.getElementsByTagName("CellData");
-        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
-        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
+        NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
 
         OlapInfoR olapInfo = getOlapInfo(olapInfoNl);
         AxesR axes = getAxes(axesNl);
@@ -1033,8 +1035,8 @@ public class Convertor {
         return new StatementResponseR(mdDataSet);
     }
     public static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
-        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
-        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
+        NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);
         MessagesR messages = getMessages(messagesNl);
         Emptyresult emptyresult = new EmptyresultR(exception, messages);
@@ -1042,8 +1044,8 @@ public class Convertor {
     }
 
     public static ClearCacheResponse convertToClearCacheResponse(SOAPBody soapBody) {
-        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
-        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
+        NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);
         MessagesR messages = getMessages(messagesNl);
         Emptyresult emptyresult = new EmptyresultR(exception, messages);
@@ -1051,8 +1053,8 @@ public class Convertor {
     }
 
     public static CancelResponse convertToCancelResponse(SOAPBody soapBody) {
-        NodeList exceptionNl = soapBody.getElementsByTagName("Exception");
-        NodeList messagesNl = soapBody.getElementsByTagName("Messages");
+        NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
+        NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);
         MessagesR messages = getMessages(messagesNl);
         Emptyresult emptyresult = new EmptyresultR(exception, messages);
@@ -1064,7 +1066,7 @@ public class Convertor {
         if (nl != null) {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
-                if (node != null && "Messages".equals(node.getNodeName())) {
+                if (node != null && MESSAGES.equals(node.getNodeName())) {
                     return new MessagesR(getTypeList(node.getChildNodes()));
                 }
             }

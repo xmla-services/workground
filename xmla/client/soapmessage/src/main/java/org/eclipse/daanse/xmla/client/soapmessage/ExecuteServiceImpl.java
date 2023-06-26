@@ -1444,17 +1444,16 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
                 setAlter(chElement, a);
             }
             if (it instanceof Attach) {
-
-
+                throw new UnsupportedOperationException("Attach operation doesn't supported");
             }
             if (it instanceof Backup) {
-
+                throw new UnsupportedOperationException("Backup operation doesn't supported");
             }
             if (it instanceof Batch) {
-
+                throw new UnsupportedOperationException("Batch operation doesn't supported");
             }
             if (it instanceof BeginTransaction) {
-
+                throw new UnsupportedOperationException("BeginTransaction operation doesn't supported");
             }
             if (it instanceof Cancel c) {
                 setCancel(chElement, c);
@@ -1463,79 +1462,79 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
                 setClearCache(chElement, c);
             }
             if (it instanceof CloneDatabase) {
-
+                throw new UnsupportedOperationException("CloneDatabase operation doesn't supported");
             }
             if (it instanceof CommitTransaction) {
-
+                throw new UnsupportedOperationException("CommitTransaction operation doesn't supported");
             }
             if (it instanceof Create) {
-
+                throw new UnsupportedOperationException("Create operation doesn't supported");
             }
             if (it instanceof DBCC) {
-
+                throw new UnsupportedOperationException("DBCC operation doesn't supported");
             }
             if (it instanceof Delete) {
-
+                throw new UnsupportedOperationException("Delete operation doesn't supported");
             }
             if (it instanceof DesignAggregations) {
-
+                throw new UnsupportedOperationException("DesignAggregations operation doesn't supported");
             }
             if (it instanceof Detach) {
-
+                throw new UnsupportedOperationException("Detach operation doesn't supported");
             }
             if (it instanceof Drop) {
-
+                throw new UnsupportedOperationException("Drop operation doesn't supported");
             }
             if (it instanceof ImageLoad) {
-
+                throw new UnsupportedOperationException("ImageLoad operation doesn't supported");
             }
             if (it instanceof ImageSave) {
-
+                throw new UnsupportedOperationException("ImageSave operation doesn't supported");
             }
             if (it instanceof Insert) {
-
+                throw new UnsupportedOperationException("Insert operation doesn't supported");
             }
             if (it instanceof Lock) {
-
+                throw new UnsupportedOperationException("Lock operation doesn't supported");
             }
             if (it instanceof MergePartitions) {
-
+                throw new UnsupportedOperationException("MergePartitions operation doesn't supported");
             }
             if (it instanceof NotifyTableChange) {
-
+                throw new UnsupportedOperationException("NotifyTableChange operation doesn't supported");
             }
             if (it instanceof Process) {
-
+                throw new UnsupportedOperationException("Process operation doesn't supported");
             }
             if (it instanceof Restore) {
-
+                throw new UnsupportedOperationException("Restore operation doesn't supported");
             }
             if (it instanceof RollbackTransaction) {
-
+                throw new UnsupportedOperationException("RollbackTransaction operation doesn't supported");
             }
             if (it instanceof SetAuthContext) {
-
+                throw new UnsupportedOperationException("SetAuthContext operation doesn't supported");
             }
             if (it instanceof Statement) {
-
+                throw new UnsupportedOperationException("Statement operation doesn't supported");
             }
             if (it instanceof Subscribe) {
-
+                throw new UnsupportedOperationException("Subscribe operation doesn't supported");
             }
             if (it instanceof Synchronize) {
-
+                throw new UnsupportedOperationException("Synchronize operation doesn't supported");
             }
             if (it instanceof Unlock) {
-
+                throw new UnsupportedOperationException("Unlock operation doesn't supported");
             }
             if (it instanceof Unsubscribe) {
-
+                throw new UnsupportedOperationException("Unsubscribe operation doesn't supported");
             }
             if (it instanceof Update) {
-
+                throw new UnsupportedOperationException("Update operation doesn't supported");
             }
             if (it instanceof UpdateCells) {
-
+                throw new UnsupportedOperationException("UpdateCells operation doesn't supported");
             }
         }
     }
