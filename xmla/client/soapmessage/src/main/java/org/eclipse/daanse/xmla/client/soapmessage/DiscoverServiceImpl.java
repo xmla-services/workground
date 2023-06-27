@@ -219,6 +219,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_TRACE_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_TREE_OP;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTION_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME1;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SOAP_ACTION_DISCOVER;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaCatalogsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaColumnsResponseRow;
@@ -1012,7 +1013,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 dr.dimensionPermissionId().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PERMISSION_ID
                     , v));
                 dr.roleId().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_ROLE_ID, v));
-                dr.dataSourcePermissionId().ifPresent(v -> addChildElement(restrictionList,
+                dr.databasePermissionId().ifPresent(v -> addChildElement(restrictionList,
                     RESTRICTIONS_DATABASE_PERMISSION_ID, v));
                 dr.miningModelId().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MINING_MODEL_ID, v));
                 dr.miningModelPermissionId().ifPresent(v -> addChildElement(restrictionList,
@@ -1057,7 +1058,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
                     .addChildElement(RESTRICTION_LIST);
 
-                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, SCHEMA_NAME1, v));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);

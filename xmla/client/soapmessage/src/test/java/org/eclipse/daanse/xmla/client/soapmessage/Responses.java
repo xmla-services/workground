@@ -40,4 +40,142 @@ public class Responses {
           </return>
         </DiscoverResponse>
         """;
+    public static String ENUMERARORS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <EnumName>EnumName</EnumName>
+                <EnumDescription>EnumDescription</EnumDescription>
+                <EnumType>EnumType</EnumType>
+                <ElementName>ElementName</ElementName>
+                <ElementDescription>ElementDescription</ElementDescription>
+                <ElementValue>ElementValue</ElementValue>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String KEYWORDS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <Keyword>Keyword</Keyword>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String LITERALS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <LiteralName>LiteralName</LiteralName>
+                <LiteralValue>LiteralValue</LiteralValue>
+                <LiteralInvalidChars>LiteralInvalidChars</LiteralInvalidChars>
+                <LiteralInvalidStartingChars>LiteralInvalidStartingChars</LiteralInvalidStartingChars>
+                <LiteralMaxLength>100</LiteralMaxLength>
+                <LiteralNameValue>1</LiteralNameValue>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String PROPERTIES = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <PropertyName>PropertyName</PropertyName>
+                <PropertyDescription>PropertyDescription</PropertyDescription>
+                <PropertyType>PropertyType</PropertyType>
+                <PropertyAccessType>PropertyAccessType</PropertyAccessType>
+                <IsRequired>true</IsRequired>
+                <Value>Value</Value>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String SCHEMAROWSETS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <SchemaName>SchemaName</SchemaName>
+                <SchemaGuid>SchemaGuid</SchemaGuid>
+                <Restrictions>Restrictions</Restrictions>
+                <Description>Description</Description>
+                <RestrictionsMask>100</RestrictionsMask>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String XML_META_DATA = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <MetaData>MetaData</MetaData>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
 }
