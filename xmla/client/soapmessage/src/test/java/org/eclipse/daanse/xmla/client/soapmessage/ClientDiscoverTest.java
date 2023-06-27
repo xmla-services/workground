@@ -13,14 +13,12 @@
  */
 package org.eclipse.daanse.xmla.client.soapmessage;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.ws.Provider;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
+import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.api.common.properties.PropertyListElementDefinition;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
@@ -39,8 +37,13 @@ import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.xmlunit.assertj3.XmlAssert;
 
-import jakarta.xml.soap.SOAPMessage;
-import jakarta.xml.ws.Provider;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RequireSoapWhiteboard
 @ExtendWith(ConfigurationExtension.class)
@@ -68,11 +71,19 @@ class ClientDiscoverTest {
     }
 
     @Test
-    void testdataSources_simple() throws Exception {
-
+    void testDataSources() throws Exception {
         PropertiesR properties = new PropertiesR();
-        DiscoverDataSourcesRestrictionsR restrictions = new DiscoverDataSourcesRestrictionsR(null, null, null, null,
-                null, null, null);
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DiscoverDataSourcesRestrictionsR restrictions = new DiscoverDataSourcesRestrictionsR(
+            "dataSourceName",
+            Optional.of("dataSourceDescription"),
+            Optional.of("url"), Optional.of("dataSourceInfo"),
+            "providerName",
+            Optional.of(ProviderTypeEnum.DMP),
+            Optional.of(AuthenticationModeEnum.AUTHENTICATED)
+        );
+
         DiscoverDataSourcesRequest dataSourcesRequest = new DiscoverDataSourcesRequestR(properties, restrictions);
 
         List<DiscoverDataSourcesResponseRow> rows = client.discover()
@@ -85,8 +96,35 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/dummy")
-                .exist();
-
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_DATASOURCES");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceName")
+            .isEqualTo("dataSourceName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceDescription")
+            .isEqualTo("dataSourceDescription");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/URL")
+            .isEqualTo("url");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceInfo")
+            .isEqualTo("dataSourceInfo");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ProviderName")
+            .isEqualTo("providerName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ProviderType")
+            .isEqualTo("DMP");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/AuthenticationMode")
+            .isEqualTo("Authenticated");
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
     }
+
 }

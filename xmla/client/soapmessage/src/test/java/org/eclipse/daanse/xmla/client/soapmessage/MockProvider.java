@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.client.soapmessage;
 
 import java.io.IOException;
 
+import jakarta.xml.soap.MessageFactory;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
 
 import jakarta.xml.soap.SOAPException;
@@ -31,14 +32,16 @@ public class MockProvider implements Provider<SOAPMessage> {
 
     @Override
     public SOAPMessage invoke(SOAPMessage request) {
+        SOAPMessage soapMessage = null;
         try {
             request.writeTo(System.out);
+            MessageFactory mf = MessageFactory.newInstance();
+            soapMessage = mf.createMessage();
         } catch (SOAPException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        return null;
+        return soapMessage;
     }
 
 }
