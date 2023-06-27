@@ -1402,7 +1402,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 dr.providerType()
                     .ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROVIDER_TYPE, v.name()));
                 dr.authenticationMode()
-                    .ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_AUTHENTICATION_MODE, v.name()));
+                    .ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_AUTHENTICATION_MODE, v.getValue()));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);

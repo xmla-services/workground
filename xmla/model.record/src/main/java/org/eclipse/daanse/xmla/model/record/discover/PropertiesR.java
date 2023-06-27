@@ -265,7 +265,7 @@ public class PropertiesR implements Properties {
 
         switch (property) {
         case CONTENT: {
-            content = Optional.of(Content.valueOf(value));
+            content = Optional.of(Content.fromValue(value));
         }
             break;
         case DATA_SOURCE_INFO: {
@@ -273,7 +273,7 @@ public class PropertiesR implements Properties {
         }
             break;
         case FORMAT: {
-            format = Optional.of(Format.valueOf(value));
+            format = Optional.of(Format.fromValue(value));
         }
             break;
         case LOCALE_IDENTIFIER: {
