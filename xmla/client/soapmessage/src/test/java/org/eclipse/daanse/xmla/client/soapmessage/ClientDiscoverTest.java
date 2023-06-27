@@ -41,9 +41,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.DATA_SOURCES;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RequireSoapWhiteboard
 @ExtendWith(ConfigurationExtension.class)
@@ -56,22 +58,16 @@ class ClientDiscoverTest {
     @InjectBundleContext
     BundleContext bc;
 
-    public Provider<SOAPMessage> provider = spy(new MockProvider());
-
     private ArgumentCaptor<SOAPMessage> requestMessageCaptor;
 
     @BeforeEach
     void beforeEach() throws InterruptedException {
         requestMessageCaptor = ArgumentCaptor.forClass(SOAPMessage.class);
-
-        bc.registerService(Provider.class, provider, Dictionaries.dictionaryOf("osgi.soap.endpoint.contextpath",
-                "/xmla", "osgi.soap.endpoint.implementor", "true"));
-        TimeUnit.SECONDS.sleep(2);
-
     }
 
     @Test
     void testDataSources() throws Exception {
+        Provider<SOAPMessage> provider = registerService(DATA_SOURCES);
         PropertiesR properties = new PropertiesR();
         properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
         properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
@@ -88,6 +84,16 @@ class ClientDiscoverTest {
 
         List<DiscoverDataSourcesResponseRow> rows = client.discover()
                 .dataSources(dataSourcesRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DiscoverDataSourcesResponseRow r = rows.get(0);
+        assertThat(r.dataSourceName()).isEqualTo("FoodMart");
+        assertThat(r.dataSourceDescription()).isPresent().contains("Foodmart 2000 on local machine");
+        assertThat(r.url()).isPresent().contains("http://localhost/xmla/msxisapi.dll");
+        assertThat(r.dataSourceInfo()).isPresent().contains("Foodmart 2000");
+        assertThat(r.providerType()).isPresent().contains(ProviderTypeEnum.TDP);
+        assertThat(r.authenticationMode()).isPresent().contains(AuthenticationModeEnum.UNAUTHENTICATED);
 
         verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
 
@@ -125,6 +131,14 @@ class ClientDiscoverTest {
             .isEqualTo("FoodMart");
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
             .isEqualTo("SchemaData");
+    }
+
+    private Provider<SOAPMessage> registerService(String data_sources) throws InterruptedException {
+        Provider<SOAPMessage> provider = spy(new MockProvider(DATA_SOURCES));
+        bc.registerService(Provider.class, provider, Dictionaries.dictionaryOf("osgi.soap.endpoint.contextpath",
+            "/xmla", "osgi.soap.endpoint.implementor", "true"));
+        TimeUnit.SECONDS.sleep(2);
+        return provider;
     }
 
 }
