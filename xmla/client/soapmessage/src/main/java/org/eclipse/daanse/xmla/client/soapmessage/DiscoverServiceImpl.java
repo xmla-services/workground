@@ -1160,7 +1160,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 setPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
-                LOGGER.error("DiscoverService MdSchemaActionsRequest accept error", e);
+                LOGGER.error("DiscoverService DiscoverEnumeratorsRequest accept error", e);
             }
         };
     }

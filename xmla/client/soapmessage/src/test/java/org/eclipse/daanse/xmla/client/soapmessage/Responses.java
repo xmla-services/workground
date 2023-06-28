@@ -407,4 +407,74 @@ public class Responses {
         </DiscoverResponse>
         """;
 
+    public static String ACTIONS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <CATALOG_NAME>CatalogName</CATALOG_NAME>
+                <SCHEMA_NAME>SchemaName</SCHEMA_NAME>
+                <CUBE_NAME>CubeName</CUBE_NAME>
+                <ACTION_NAME>ActionName</ACTION_NAME>
+                <ACTION_TYPE>0x01</ACTION_TYPE>
+                <COORDINATE>Coordinate</COORDINATE>
+                <COORDINATE_TYPE>1</COORDINATE_TYPE>
+                <ACTION_CAPTION>ActionCaption</ACTION_CAPTION>
+                <DESCRIPTION>Description</DESCRIPTION>
+                <CONTENT>Content</CONTENT>
+                <APPLICATION>Application</APPLICATION>
+                <INVOCATION>1</INVOCATION>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
+    public static String CUBES = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <CATALOG_NAME>CatalogName</CATALOG_NAME>
+                <SCHEMA_NAME>SchemaName</SCHEMA_NAME>
+                <CUBE_NAME>CubeName</CUBE_NAME>
+                <CUBE_TYPE>CUBE</CUBE_TYPE>
+                <CUBE_GUID>10</CUBE_GUID>
+                <CREATED_ON>10</CREATED_ON>
+                <CREATED_ON>2023-01-10T10:45:00</CREATED_ON>
+                <LAST_SCHEMA_UPDATE>2024-01-10T10:45:00</LAST_SCHEMA_UPDATE>
+                <SCHEMA_UPDATED_BY>SchemaUpdatedBy</SCHEMA_UPDATED_BY>
+                <LAST_DATA_UPDATE>2025-01-10T10:45:00</LAST_DATA_UPDATE>
+                <DATA_UPDATED_BY>DataUpdatedBy</DATA_UPDATED_BY>
+                <DESCRIPTION>Description</DESCRIPTION>
+                <IS_DRILLTHROUGH_ENABLED>true</IS_DRILLTHROUGH_ENABLED>
+                <IS_LINKABLE>true</IS_LINKABLE>
+                <IS_WRITE_ENABLED>true</IS_WRITE_ENABLED>
+                <IS_SQL_ENABLED>true</IS_SQL_ENABLED>
+                <CUBE_CAPTION>CubeCaption</CUBE_CAPTION>
+                <BASE_CUBE_NAME>BaseCubeName</BASE_CUBE_NAME>
+                <CUBE_SOURCE>1</CUBE_SOURCE>
+                <PREFERRED_QUERY_PATTERNS>0</PREFERRED_QUERY_PATTERNS>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
+
 }

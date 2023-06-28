@@ -16,13 +16,19 @@ package org.eclipse.daanse.xmla.client.soapmessage;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.Provider;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
+import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LiteralNameEnumValueEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
@@ -56,6 +62,10 @@ import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchem
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -85,6 +95,10 @@ import org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets.Disc
 import org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets.DiscoverSchemaRowsetsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.actions.MdSchemaActionsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.actions.MdSchemaActionsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesRestrictionsR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,7 +119,9 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.ACTIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.CATALOGS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.CUBES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.DATA_SOURCES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.ENUMERARORS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.KEYWORDS;
@@ -1000,6 +1016,171 @@ class ClientDiscoverTest {
             .isEqualTo("TableName");
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
             .isEqualTo("TABLE");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testActions() throws Exception {
+        Provider<SOAPMessage> provider = registerService(ACTIONS);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        MdSchemaActionsRestrictionsR restrictions = new MdSchemaActionsRestrictionsR(
+            Optional.of("CatalogName"),
+            Optional.of("SchemaName"),
+            "CubeName",
+            Optional.of("ActionName"),
+            Optional.of(ActionTypeEnum.URL),
+            Optional.of("Coordinate"),
+            CoordinateTypeEnum.CUBE,
+            InvocationEnum.NORMAL_OPERATION,
+            Optional.of(CubeSourceEnum.CUBE)
+        );
+
+        MdSchemaActionsRequest mdSchemaActionsRequest = new MdSchemaActionsRequestR(properties, restrictions);
+
+        List<MdSchemaActionsResponseRow> rows = client.discover()
+            .mdSchemaActions(mdSchemaActionsRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        MdSchemaActionsResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isPresent().contains("CatalogName");
+        assertThat(r.schemaName()).isPresent().contains("SchemaName");
+        assertThat(r.cubeName()).isEqualTo("CubeName");
+        assertThat(r.actionType()).isPresent().contains(ActionTypeEnum.URL);
+        assertThat(r.coordinate()).isEqualTo("Coordinate");
+        assertThat(r.coordinateType()).isEqualTo(CoordinateTypeEnum.CUBE);
+        assertThat(r.actionCaption()).isPresent().contains("ActionCaption");
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.schemaName()).isPresent().contains("SchemaName");
+        assertThat(r.content()).isPresent().contains("Content");
+        assertThat(r.application()).isPresent().contains("Application");
+        assertThat(r.invocation()).isPresent().contains(InvocationEnum.NORMAL_OPERATION);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_ACTIONS");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+            .isEqualTo("CatalogName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+            .isEqualTo("SchemaName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+            .isEqualTo("CubeName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ACTION_NAME")
+            .isEqualTo("ActionName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ACTION_TYPE")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COORDINATE")
+            .isEqualTo("Coordinate");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COORDINATE_TYPE")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/INVOCATION")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+            .isEqualTo("1");
+
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testCubes() throws Exception {
+        Provider<SOAPMessage> provider = registerService(CUBES);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        MdSchemaCubesRestrictionsR restrictions = new MdSchemaCubesRestrictionsR(
+            "CatalogName",
+            Optional.of("SchemaName"),
+            Optional.of("CubeName"),
+            Optional.of("BaseCubeName"),
+            Optional.of(CubeSourceEnum.CUBE)
+        );
+
+        MdSchemaCubesRequest mdSchemaCubesRequest = new MdSchemaCubesRequestR(properties, restrictions);
+
+        List<MdSchemaCubesResponseRow> rows = client.discover()
+            .mdSchemaCubes(mdSchemaCubesRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        MdSchemaCubesResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isEqualTo("CatalogName");
+        assertThat(r.schemaName()).isPresent().contains("SchemaName");
+        assertThat(r.cubeName()).isPresent().contains("CubeName");
+        assertThat(r.cubeType()).isPresent().contains(CubeTypeEnum.CUBE);
+        assertThat(r.cubeGuid()).isPresent().contains(10);
+        assertThat(r.createdOn()).isPresent().contains(LocalDateTime.of(2023, Month.JANUARY, 10, 10, 45));
+        assertThat(r.lastSchemaUpdate()).isPresent().contains(LocalDateTime.of(2024, Month.JANUARY, 10, 10, 45));
+        assertThat(r.schemaUpdatedBy()).isPresent().contains("SchemaUpdatedBy");
+        assertThat(r.lastDataUpdate()).isPresent().contains(LocalDateTime.of(2025, Month.JANUARY, 10, 10, 45));
+        assertThat(r.dataUpdateDBy()).isPresent().contains("DataUpdatedBy");
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.isDrillThroughEnabled()).isPresent().contains(true);
+        assertThat(r.isLinkable()).isPresent().contains(true);
+        assertThat(r.isWriteEnabled()).isPresent().contains(true);
+        assertThat(r.isSqlEnabled()).isPresent().contains(true);
+        assertThat(r.cubeCaption()).isPresent().contains("CubeCaption");
+        assertThat(r.baseCubeName()).isPresent().contains("BaseCubeName");
+        assertThat(r.cubeSource()).isPresent().contains(CubeSourceEnum.CUBE);
+        assertThat(r.preferredQueryPatterns()).isPresent().contains(PreferredQueryPatternsEnum.CROSS_JOIN);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_CUBES");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+            .isEqualTo("CatalogName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+            .isEqualTo("SchemaName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+            .isEqualTo("CubeName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/BASE_CUBE_NAME")
+            .isEqualTo("BaseCubeName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+            .isEqualTo("1");
 
         // Properties
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
