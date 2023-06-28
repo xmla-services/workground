@@ -61,7 +61,7 @@ public class Constants {
     public static final String RESTRICTIONS_INVOCATION = "INVOCATION";
 
     public static final String RESTRICTIONS_TABLE_CATALOG = "TABLE_CATALOG";
-    public static final String RESTRICTIONS_TABLE_SCHEMA = "RESTRICTIONS_TABLE_SCHEMA";
+    public static final String RESTRICTIONS_TABLE_SCHEMA = "TABLE_SCHEMA";
     public static final String RESTRICTIONS_TABLE_NAME = "TABLE_NAME";
     public static final String RESTRICTIONS_TABLE_TYPE = "TABLE_TYPE";
 

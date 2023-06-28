@@ -442,7 +442,7 @@ class DiscoverRequestTest {
                 <Restrictions>
                   <RestrictionList>
                     <TABLE_CATALOG>tableCatalog</TABLE_CATALOG>
-                    <RESTRICTIONS_TABLE_SCHEMA>tableSchema</RESTRICTIONS_TABLE_SCHEMA>
+                    <TABLE_SCHEMA>tableSchema</TABLE_SCHEMA>
                     <TABLE_NAME>tableName</TABLE_NAME>
                     <TABLE_TYPE>tableType</TABLE_TYPE>
                   </RestrictionList>

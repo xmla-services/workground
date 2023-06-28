@@ -17,10 +17,31 @@ import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.Provider;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LiteralNameEnumValueEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
 import org.eclipse.daanse.xmla.api.common.properties.PropertyListElementDefinition;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -36,6 +57,20 @@ import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchem
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsRequestR;
@@ -63,21 +98,29 @@ import org.osgi.test.common.dictionary.Dictionaries;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.xmlunit.assertj3.XmlAssert;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.CATALOGS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.DATA_SOURCES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.ENUMERARORS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.KEYWORDS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.LITERALS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.PROPERTIES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.PROVIDER_TYPES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.SCHEMAROWSETS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.SCHEMATA;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.SOURCE_TABLES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.TABLES;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.TABLES_INFO;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.XML_META_DATA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RequireSoapWhiteboard
 @ExtendWith(ConfigurationExtension.class)
@@ -489,7 +532,474 @@ class ClientDiscoverTest {
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourcePermissionID").isEqualTo("DataSourcePermissionId");
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ObjectExpansion").isEqualTo("ExpandObject");
 
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
 
+    @Test
+    void testCatalogs() throws Exception {
+        Provider<SOAPMessage> provider = registerService(CATALOGS);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaCatalogsRestrictionsR restrictions = new DbSchemaCatalogsRestrictionsR(Optional.of("CatalogName"));
+
+        DbSchemaCatalogsRequest dbSchemaCatalogsRequest = new DbSchemaCatalogsRequestR(properties, restrictions);
+
+        List<DbSchemaCatalogsResponseRow> rows = client.discover()
+            .dbSchemaCatalogs(dbSchemaCatalogsRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaCatalogsResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isPresent().contains("CatalogName");
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.roles()).isPresent().contains("Roles");
+        assertThat(r.dateModified()).isPresent().contains(LocalDateTime.of(2023, Month.JANUARY, 10, 10, 45));
+        assertThat(r.compatibilityLevel()).isPresent().contains(10);
+        assertThat(r.type()).isPresent().contains(TypeEnum.MULTIDIMENSIONAL);
+        assertThat(r.version()).isPresent().contains(10);
+        assertThat(r.databaseId()).isPresent().contains("DatabaseId");
+        assertThat(r.dateQueried()).isPresent().contains(LocalDateTime.of(2024, Month.JANUARY, 10, 10, 45));
+        assertThat(r.currentlyUsed()).isPresent().contains(true);
+        assertThat(r.popularity()).isPresent().contains(2.25);
+        assertThat(r.weightedPopularity()).isPresent().contains(2.26);
+        assertThat(r.clientCacheRefreshPolicy()).isPresent().contains(ClientCacheRefreshPolicyEnum.REFRESH_NEWER_DATA);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_CATALOGS");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+            .isEqualTo("CatalogName");
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testColumns() throws Exception {
+        Provider<SOAPMessage> provider = registerService(Responses.COLUMNS);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaColumnsRestrictionsR restrictions = new DbSchemaColumnsRestrictionsR(
+            Optional.of("TableCatalog"),
+            Optional.of("TableSchema"),
+            Optional.of("TableName"),
+            Optional.of("ColumnName"),
+            Optional.of(ColumnOlapTypeEnum.ATTRIBUTE)
+        );
+
+        DbSchemaColumnsRequest dbSchemaColumnsRequest = new DbSchemaColumnsRequestR(properties, restrictions);
+
+        List<DbSchemaColumnsResponseRow> rows = client.discover()
+            .dbSchemaColumns(dbSchemaColumnsRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaColumnsResponseRow r = rows.get(0);
+
+        assertThat(r.tableCatalog()).isPresent().contains("TableCatalog");
+        assertThat(r.tableSchema()).isPresent().contains("TableSchema");
+        assertThat(r.tableName()).isPresent().contains("TableName");
+        assertThat(r.columnName()).isPresent().contains("ColumnName");
+        assertThat(r.columnGuid()).isPresent().contains(10);
+        assertThat(r.columnPropId()).isPresent().contains(11);
+        assertThat(r.ordinalPosition()).isPresent().contains(12);
+        assertThat(r.columnHasDefault()).isPresent().contains(true);
+        assertThat(r.columnDefault()).isPresent().contains("ColumnDefault");
+        assertThat(r.columnFlags()).isPresent().contains(ColumnFlagsEnum.DBCOLUMNFLAGS_ISBOOKMARK);
+        assertThat(r.dataType()).isPresent().contains(10);
+        assertThat(r.typeGuid()).isPresent().contains(11);
+        assertThat(r.characterMaximum()).isPresent().contains(12);
+        assertThat(r.characterOctetLength()).isPresent().contains(14);
+        assertThat(r.numericPrecision()).isPresent().contains(15);
+        assertThat(r.numericScale()).isPresent().contains(16);
+        assertThat(r.dateTimePrecision()).isPresent().contains(17);
+        assertThat(r.characterSetCatalog()).isPresent().contains("CharacterSetCatalog");
+        assertThat(r.characterSetSchema()).isPresent().contains("CharacterSetSchema");
+        assertThat(r.characterSetName()).isPresent().contains("CharacterSetName");
+        assertThat(r.collationCatalog()).isPresent().contains("CollationCatalog");
+        assertThat(r.collationSchema()).isPresent().contains("CollationSchema");
+        assertThat(r.collationName()).isPresent().contains("CollationName");
+        assertThat(r.domainCatalog()).isPresent().contains("DomainCatalog");
+        assertThat(r.domainSchema()).isPresent().contains("DomainSchema");
+        assertThat(r.domainName()).isPresent().contains("DomainName");
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.columnOlapType()).isPresent().contains(ColumnOlapTypeEnum.ATTRIBUTE);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_COLUMNS");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+            .isEqualTo("TableCatalog");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+            .isEqualTo("TableSchema");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+            .isEqualTo("TableName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COLUMN_NAME")
+            .isEqualTo("ColumnName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COLUMN_OLAP_TYPE")
+            .isEqualTo("ATTRIBUTE");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testProviderTypes() throws Exception {
+        Provider<SOAPMessage> provider = registerService(PROVIDER_TYPES);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaProviderTypesRestrictionsR restrictions = new DbSchemaProviderTypesRestrictionsR(
+            Optional.of(LevelDbTypeEnum.DBTYPE_EMPTY),
+            Optional.of(true)
+        );
+
+        DbSchemaProviderTypesRequest dbSchemaProviderTypesRequest = new DbSchemaProviderTypesRequestR(properties, restrictions);
+
+        List<DbSchemaProviderTypesResponseRow> rows = client.discover()
+            .dbSchemaProviderTypes(dbSchemaProviderTypesRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaProviderTypesResponseRow r = rows.get(0);
+
+        assertThat(r.typeName()).isPresent().contains("TypeName");
+        assertThat(r.dataType()).isPresent().contains(LevelDbTypeEnum.DBTYPE_EMPTY);
+        assertThat(r.columnSize()).isPresent().contains(10);
+        assertThat(r.literalPrefix()).isPresent().contains("LiteralPrefix");
+        assertThat(r.literalSuffix()).isPresent().contains("LiteralSuffix");
+        assertThat(r.createParams()).isPresent().contains("CreateParams");
+        assertThat(r.isNullable()).isPresent().contains(true);
+        assertThat(r.caseSensitive()).isPresent().contains(true);
+        assertThat(r.searchable()).isPresent().contains(SearchableEnum.DB_UNSEARCHABLE);
+        assertThat(r.unsignedAttribute()).isPresent().contains(true);
+        assertThat(r.fixedPrecScale()).isPresent().contains(true);
+        assertThat(r.autoUniqueValue()).isPresent().contains(true);
+        assertThat(r.localTypeName()).isPresent().contains("LocalTypeName");
+        assertThat(r.minimumScale()).isPresent().contains(10);
+        assertThat(r.maximumScale()).isPresent().contains(11);
+        assertThat(r.guid()).isPresent().contains(12);
+        assertThat(r.typeLib()).isPresent().contains("TypeLib");
+        assertThat(r.version()).isPresent().contains("Version");
+        assertThat(r.isLong()).isPresent().contains(true);
+        assertThat(r.bestMatch()).isPresent().contains(true);
+        assertThat(r.isFixedLength()).isPresent().contains(true);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_PROVIDER_TYPES");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DATA_TYPE")
+            .isEqualTo("0");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/BEST_MATCH")
+            .isEqualTo("true");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    void testSchemata() throws Exception {
+        Provider<SOAPMessage> provider = registerService(SCHEMATA);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaSchemataRestrictionsR restrictions = new DbSchemaSchemataRestrictionsR(
+            "CatalogName",
+            "SchemaName",
+            "SchemaOwner"
+        );
+
+        DbSchemaSchemataRequest dbSchemaSchemataRequest = new DbSchemaSchemataRequestR(properties, restrictions);
+
+        List<DbSchemaSchemataResponseRow> rows = client.discover()
+            .dbSchemaSchemata(dbSchemaSchemataRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaSchemataResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isEqualTo("CatalogName");
+        assertThat(r.schemaName()).isEqualTo("SchemaName");
+        assertThat(r.schemaOwner()).isEqualTo("SchemaOwner");
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_SCHEMATA");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+            .isEqualTo("CatalogName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+            .isEqualTo("SchemaName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_OWNER")
+            .isEqualTo("SchemaOwner");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    void testSourceTables() throws Exception {
+        Provider<SOAPMessage> provider = registerService(SOURCE_TABLES);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaSourceTablesRestrictionsR restrictions = new DbSchemaSourceTablesRestrictionsR(
+            Optional.of("CatalogName"),
+            Optional.of("SchemaName"),
+            "TableName",
+            TableTypeEnum.TABLE
+        );
+
+        DbSchemaSourceTablesRequest dbSchemaSourceTablesRequest = new DbSchemaSourceTablesRequestR(properties, restrictions);
+
+        List<DbSchemaSourceTablesResponseRow> rows = client.discover()
+            .dbSchemaSourceTables(dbSchemaSourceTablesRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaSourceTablesResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isPresent().contains("CatalogName");
+        assertThat(r.schemaName()).isPresent().contains("SchemaName");
+        assertThat(r.tableName()).isEqualTo("TableName");
+        assertThat(r.tableType()).isEqualTo(TableTypeEnum.TABLE);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_SOURCE_TABLES");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+            .isEqualTo("CatalogName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+            .isEqualTo("SchemaName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+            .isEqualTo("TableName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+            .isEqualTo("TABLE");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    void testTables() throws Exception {
+        Provider<SOAPMessage> provider = registerService(TABLES);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaTablesRestrictionsR restrictions = new DbSchemaTablesRestrictionsR(
+            Optional.of("TableCatalog"),
+            Optional.of("TableSchema"),
+            Optional.of("TableName"),
+            Optional.of("TableType")
+        );
+
+        DbSchemaTablesRequest dbSchemaTablesRequest = new DbSchemaTablesRequestR(properties, restrictions);
+
+        List<DbSchemaTablesResponseRow> rows = client.discover()
+            .dbSchemaTables(dbSchemaTablesRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaTablesResponseRow r = rows.get(0);
+
+        assertThat(r.tableCatalog()).isPresent().contains("TableCatalog");
+        assertThat(r.tableSchema()).isPresent().contains("TableSchema");
+        assertThat(r.tableName()).isPresent().contains("TableName");
+        assertThat(r.tableType()).isPresent().contains("TableType");
+        assertThat(r.tableGuid()).isPresent().contains("TableGuid");
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.tablePropId()).isPresent().contains(10);
+        assertThat(r.dateCreated()).isPresent().contains(LocalDateTime.of(2023, Month.JANUARY, 10, 10, 45));
+        assertThat(r.dateModified()).isPresent().contains(LocalDateTime.of(2024, Month.JANUARY, 10, 10, 45));
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_TABLES");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+            .isEqualTo("TableCatalog");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+            .isEqualTo("TableSchema");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+            .isEqualTo("TableName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+            .isEqualTo("TableType");
+
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+            .isEqualTo("SchemaData");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testTablesInfo() throws Exception {
+        Provider<SOAPMessage> provider = registerService(TABLES_INFO);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.CONTENT, "SchemaData");
+        DbSchemaTablesInfoRestrictionsR restrictions = new DbSchemaTablesInfoRestrictionsR(
+            Optional.of("CatalogName"),
+            Optional.of("TableSchema"),
+            "TableName",
+            TableTypeEnum.TABLE
+        );
+
+        DbSchemaTablesInfoRequest dbSchemaTablesInfoRequest = new DbSchemaTablesInfoRequestR(properties, restrictions);
+
+        List<DbSchemaTablesInfoResponseRow> rows = client.discover()
+            .dbSchemaTablesInfo(dbSchemaTablesInfoRequest);
+
+        assertThat(rows).isNotNull().hasSize(1);
+        assertThat(rows.get(0)).isNotNull();
+        DbSchemaTablesInfoResponseRow r = rows.get(0);
+
+        assertThat(r.catalogName()).isPresent().contains("CatalogName");
+        assertThat(r.schemaName()).isPresent().contains("SchemaName");
+        assertThat(r.tableName()).isEqualTo("TableName");
+        assertThat(r.tableType()).isEqualTo("TableType");
+        assertThat(r.tableGuid()).isPresent().contains(10);
+        assertThat(r.bookmarks()).isPresent().contains(true);
+        assertThat(r.bookmarkType()).isPresent().contains(10);
+        assertThat(r.bookmarkDataType()).isPresent().contains(11);
+        assertThat(r.bookmarkMaximumLength()).isPresent().contains(12);
+        assertThat(r.bookmarkInformation()).isPresent().contains(14);
+        assertThat(r.tableVersion()).isPresent().contains(15l);
+        assertThat(r.cardinality()).isPresent().contains(16l);
+        assertThat(r.description()).isPresent().contains("Description");
+        assertThat(r.tablePropId()).isPresent().contains(17);
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_TABLES_INFO");
+        // Restrictions
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+            .isEqualTo("CatalogName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+            .isEqualTo("TableSchema");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+            .isEqualTo("TableName");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+            .isEqualTo("TABLE");
 
         // Properties
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
