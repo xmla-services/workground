@@ -221,6 +221,8 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTION_LIST;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME1;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SOAP_ACTION_DISCOVER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_CATALOG;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.TABLE_SCHEMA;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaCatalogsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaColumnsResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToDbSchemaProviderTypesResponseRow;
@@ -601,8 +603,8 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
                     .addChildElement(RESTRICTION_LIST);
 
-                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
-                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, TABLE_CATALOG, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, TABLE_SCHEMA, v));
                 addChildElement(restrictionList, RESTRICTIONS_TABLE_NAME, dr.tableName());
                 addChildElement(restrictionList, RESTRICTIONS_TABLE_TYPE, dr.tableType().getValue());
 
@@ -628,7 +630,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                     .addChildElement(RESTRICTION_LIST);
 
                 dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_CATALOG, v));
-                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
+                dr.schemaName().ifPresent(v -> addChildElement(restrictionList, TABLE_SCHEMA, v));
                 addChildElement(restrictionList, RESTRICTIONS_TABLE_NAME, dr.tableName());
                 addChildElement(restrictionList, RESTRICTIONS_TABLE_TYPE, dr.tableType().getValue());
 
@@ -980,8 +982,8 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 dr.tableCatalog().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_CATALOG, v));
                 dr.tableSchema().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_SCHEMA, v));
                 dr.tableName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_NAME, v));
-                dr.tableName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_COLUMN_NAME, v));
-                dr.tableName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_COLUMN_OLAP_TYPE, v));
+                dr.columnName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_COLUMN_NAME, v));
+                dr.columnOlapType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_COLUMN_OLAP_TYPE, v.name()));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
