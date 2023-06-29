@@ -275,7 +275,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_NAM
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORDINAL;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
-import static org.eclipse.daanse.xmla.client.soapmessage.Constants.IERARCHY_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_IS_VISIBLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INSTANCE_SELECTION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INTERFACE_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INVOCATION;
@@ -369,7 +369,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ORDINAL_POSIT
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARAMETERINFO;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARAMETER_LIST;
-import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_COUN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_COUNT;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_LEVEL;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PARENT_UNIQUE_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.POPULARITY;
@@ -388,7 +388,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_MASK;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RETURN_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROLES;
-import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROPERTY_ORIGIN;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROW;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_GUID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME;
@@ -544,7 +544,7 @@ public class Convertor {
                 Optional.ofNullable(PropertyContentTypeEnum.fromValue(m.get(PROPERTY_CONTENT_TYPE))),
                 Optional.ofNullable(m.get(SQL_COLUMN_NAME)),
                 Optional.ofNullable(getInt(m.get(LANGUAGE_UC))),
-                Optional.ofNullable(PropertyOriginEnum.fromValue(m.get(ROPERTY_ORIGIN))),
+                Optional.ofNullable(PropertyOriginEnum.fromValue(m.get(PROPERTY_ORIGIN))),
                 Optional.ofNullable(m.get(PROPERTY_ATTRIBUTE_HIERARCHY_NAME)),
                 Optional.ofNullable(PropertyCardinalityEnum.fromValue(m.get(PROPERTY_CARDINALITY))),
                 Optional.ofNullable(m.get(MIME_TYPE)),
@@ -573,13 +573,13 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(CHILDREN_CARDINALITY))),
                 Optional.ofNullable(getInt(m.get(PARENT_LEVEL))),
                 Optional.ofNullable(m.get(PARENT_UNIQUE_NAME)),
-                Optional.ofNullable(getInt(m.get(PARENT_COUN))),
+                Optional.ofNullable(getInt(m.get(PARENT_COUNT))),
                 Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(m.get(EXPRESSION_UC)),
                 Optional.ofNullable(m.get(MEMBER_KEY)),
                 Optional.ofNullable(getBoolean(m.get(IS_PLACEHOLDERMEMBER))),
                 Optional.ofNullable(getBoolean(m.get(IS_DATAMEMBER))),
-                Optional.ofNullable(ScopeEnum.fromValue(m.get(DESCRIPTION_UC)))
+                Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE)))
             )
         ).collect(toList());
     }
@@ -636,7 +636,7 @@ public class Convertor {
                 ));
             }
         }
-        return List.of();
+        return result;
     }
 
     public static List<MdSchemaLevelsResponseRow> convertToMdSchemaLevelsResponseRow(SOAPBody b) {
@@ -879,7 +879,7 @@ public class Convertor {
                 Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_VISIBLE))),
                 Optional.ofNullable(getInt(m.get(HIERARCHY_ORDINAL))),
                 Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_SHARED))),
-                Optional.ofNullable(getBoolean(m.get(IERARCHY_IS_VISIBLE))),
+                Optional.ofNullable(getBoolean(m.get(HIERARCHY_IS_VISIBLE))),
                 Optional.ofNullable(HierarchyOriginEnum.fromValue(m.get(HIERARCHY_ORIGIN))),
                 Optional.ofNullable(m.get(HIERARCHY_DISPLAY_FOLDER)),
                 Optional.ofNullable(InstanceSelectionEnum.fromValue(m.get(INSTANCE_SELECTION))),
@@ -896,7 +896,7 @@ public class Convertor {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 NodeList nl = nodeList.item(i).getChildNodes();
                 Map<String, String> m = getMapValues(nl);
-                new MdSchemaFunctionsResponseRowR(
+                result.add(new MdSchemaFunctionsResponseRowR(
                     Optional.ofNullable(m.get(FUNCTION_NAME)),
                     Optional.ofNullable(m.get(DESCRIPTION_UC)),
                     m.get(PARAMETER_LIST),
@@ -910,7 +910,8 @@ public class Convertor {
                     Optional.ofNullable(m.get(OBJECT)),
                     Optional.ofNullable(m.get(CAPTION_UC)),
                     Optional.ofNullable(convertToParameterInfoList(nodeList.item(i))),
-                    Optional.ofNullable(DirectQueryPushableEnum.fromValue(m.get(DIRECTQUERY_PUSHABLE))));
+                    Optional.ofNullable(DirectQueryPushableEnum.fromValue(m.get(DIRECTQUERY_PUSHABLE))))
+                );
             }
         }
         return result;
@@ -1508,7 +1509,7 @@ public class Convertor {
                 }
             }
         }
-        return List.of();
+        return result;
     }
 
     private static List<MeasureGroupDimension> convertToMeasureGroupDimensionList(NodeList nl) {
@@ -1518,12 +1519,12 @@ public class Convertor {
                 Node n = nl.item(i);
                 if (MEASURE_GROUP_DIMENSION.equals(n.getNodeName())) {
                     result.add(
-                        new MeasureGroupDimensionR(n.getNodeValue())
+                        new MeasureGroupDimensionR(n.getTextContent())
                     );
                 }
             }
         }
-        return List.of();
+        return result;
     }
 
     private static List<ParameterInfo> convertToParameterInfoList(Node node) {
@@ -1544,7 +1545,7 @@ public class Convertor {
                 }
             }
         }
-        return List.of();
+        return result;
     }
 
     private static Map<String, String> getMapValues(NodeList nl) {

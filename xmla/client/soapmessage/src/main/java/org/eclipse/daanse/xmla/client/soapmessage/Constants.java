@@ -250,7 +250,7 @@ public class Constants {
     public static final String DIMENSION_IS_VISIBLE = "DIMENSION_IS_VISIBLE";
     public static final String HIERARCHY_ORDINAL = "HIERARCHY_ORDINAL";
     public static final String DIMENSION_IS_SHARED = "DIMENSION_IS_SHARED";
-    public static final String IERARCHY_IS_VISIBLE = "IERARCHY_IS_VISIBLE";
+    public static final String HIERARCHY_IS_VISIBLE = "HIERARCHY_IS_VISIBLE";
     public static final String HIERARCHY_ORIGIN = "HIERARCHY_ORIGIN";
     public static final String HIERARCHY_DISPLAY_FOLDER = "HIERARCHY_DISPLAY_FOLDER";
     public static final String INSTANCE_SELECTION = "INSTANCE_SELECTION";
@@ -366,7 +366,7 @@ public class Constants {
     public static final String PROPERTY_CONTENT_TYPE = "PROPERTY_CONTENT_TYPE";
     public static final String SQL_COLUMN_NAME = "SQL_COLUMN_NAME";
     public static final String LANGUAGE_UC = "LANGUAGE";
-    public static final String ROPERTY_ORIGIN = "ROPERTY_ORIGIN";
+    public static final String PROPERTY_ORIGIN = "PROPERTY_ORIGIN";
     public static final String PROPERTY_ATTRIBUTE_HIERARCHY_NAME = "PROPERTY_ATTRIBUTE_HIERARCHY_NAME";
     public static final String PROPERTY_CARDINALITY = "PROPERTY_CARDINALITY";
     public static final String MIME_TYPE = "MIME_TYPE";
@@ -380,7 +380,7 @@ public class Constants {
     public static final String CHILDREN_CARDINALITY = "CHILDREN_CARDINALITY";
     public static final String PARENT_LEVEL = "PARENT_LEVEL";
     public static final String PARENT_UNIQUE_NAME = "PARENT_UNIQUE_NAME";
-    public static final String PARENT_COUN = "PARENT_COUN";
+    public static final String PARENT_COUNT = "PARENT_COUNT";
     public static final String MEMBER_KEY = "MEMBER_KEY";
     public static final String IS_PLACEHOLDERMEMBER = "IS_PLACEHOLDERMEMBER";
     public static final String IS_DATAMEMBER = "IS_DATAMEMBER";

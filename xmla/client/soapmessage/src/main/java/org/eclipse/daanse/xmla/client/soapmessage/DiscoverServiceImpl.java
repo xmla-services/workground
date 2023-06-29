@@ -140,9 +140,11 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEAS
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEASUREGROUP_DIMENSIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEASURES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_MEMBERS;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_PROPERTIES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MDSCHEMA_SETS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTIES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_LIST;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REQUEST_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_ACTION_NAME;
@@ -655,7 +657,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
                     .addChildElement(RESTRICTION_LIST);
 
-                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_TABLE_CATALOG, v));
+                dr.catalogName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CATALOG_NAME, v));
                 dr.schemaName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_SCHEMA_NAME, v));
                 dr.cubeName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_NAME, v));
                 dr.measureGroupName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_MEASUREGROUP_NAME,
@@ -738,7 +740,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                 Properties properties = requestApi.properties();
                 SOAPElement discover = message.getSOAPBody()
                     .addChildElement(DISCOVER);
-                discover.addChildElement(REQUEST_TYPE).setTextContent(DBSCHEMA_TABLES_INFO);
+                discover.addChildElement(REQUEST_TYPE).setTextContent(MDSCHEMA_PROPERTIES);
                 SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
                     .addChildElement(RESTRICTION_LIST);
 
@@ -755,13 +757,13 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
                     , v));
                 dr.propertyType().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_TYPE,
                     String.valueOf(v.getValue())));
-                dr.propertyName().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_NAME, v));
+                dr.propertyName().ifPresent(v -> addChildElement(restrictionList, PROPERTY_NAME, v));
                 dr.propertyOrigin().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_PROPERTY_ORIGIN,
                     String.valueOf(v.getValue())));
                 dr.cubeSource().ifPresent(v -> addChildElement(restrictionList, RESTRICTIONS_CUBE_SOURCE,
                     String.valueOf(v.getValue())));
                 dr.propertyVisibility().ifPresent(v -> addChildElement(restrictionList,
-                    RESTRICTIONS_PROPERTY_VISIBILITY, String.valueOf(v)));
+                    RESTRICTIONS_PROPERTY_VISIBILITY, String.valueOf(v.getValue())));
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
