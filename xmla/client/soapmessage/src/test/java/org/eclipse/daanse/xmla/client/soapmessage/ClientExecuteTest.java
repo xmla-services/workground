@@ -31,16 +31,30 @@ import org.eclipse.daanse.xmla.api.execute.cancel.CancelRequest;
 import org.eclipse.daanse.xmla.api.execute.cancel.CancelResponse;
 import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheRequest;
 import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheResponse;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
+import org.eclipse.daanse.xmla.api.mddataset.AxesInfo;
+import org.eclipse.daanse.xmla.api.mddataset.AxisInfo;
+import org.eclipse.daanse.xmla.api.mddataset.CellInfo;
+import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
+import org.eclipse.daanse.xmla.api.mddataset.CubeInfo;
+import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
+import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
+import org.eclipse.daanse.xmla.api.mddataset.OlapInfo;
+import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
 import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
+import org.eclipse.daanse.xmla.api.xmla.Statement;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheRequestR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
 import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
 import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
+import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,6 +69,9 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.xmlunit.assertj3.XmlAssert;
 
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -62,6 +79,7 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.CANCEL;
 import static org.eclipse.daanse.xmla.client.soapmessage.Responses.CLEAR_CACHE;
+import static org.eclipse.daanse.xmla.client.soapmessage.Responses.STATEMENT;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -265,6 +283,106 @@ class ClientExecuteTest {
             .isEqualTo("Tabular");
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList/AxisFormat")
             .isEqualTo("TupleFormat");
+    }
+
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testStatement() throws Exception {
+        Provider<SOAPMessage> provider = registerService(STATEMENT);
+        PropertiesR properties = new PropertiesR();
+        properties.addProperty(PropertyListElementDefinition.DATA_SOURCE_INFO, "FoodMart");
+        properties.addProperty(PropertyListElementDefinition.FORMAT, "Tabular");
+        properties.setAxisFormat(Optional.of(AxisFormat.TUPLE_FORMAT));
+        properties.setCatalog(Optional.of("FoodMart"));
+        List<ExecuteParameter> parameters = List.of();
+        StatementR command = new StatementR("select [Measures].[Sales Count] on 0, non empty [Store].[Store State].members on 1 from [Sales]");
+
+        StatementRequest statementRequest = new StatementRequestR(properties, parameters, command);
+
+        StatementResponse response = client.execute()
+            .statement(statementRequest);
+        assertThat(response).isNotNull();
+        assertThat(response.mdDataSet()).isNotNull();
+        Mddataset mddataset = response.mdDataSet();
+        assertThat(mddataset.olapInfo()).isNotNull();
+        assertThat(mddataset.messages()).isNotNull();
+        checkOlapInfo(mddataset.olapInfo());
+        Messages messages = mddataset.messages();
+
+
+
+        verify(provider, (times(1))).invoke(requestMessageCaptor.capture());
+
+        SOAPMessage request = requestMessageCaptor.getValue();
+
+        request.writeTo(System.out);
+        XmlAssert xmlAssert = XMLUtil.createAssert(request);
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Execute")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Execute/Command")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Execute/Command/Statement")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Command/Statement")
+            .isEqualTo("select [Measures].[Sales Count] on 0, non empty [Store].[Store State].members on 1 from [Sales]");
+        // Properties
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList")
+            .exist();
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList/DataSourceInfo")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList/Catalog")
+            .isEqualTo("FoodMart");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList/Format")
+            .isEqualTo("Tabular");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Execute/Properties/PropertyList/AxisFormat")
+            .isEqualTo("TupleFormat");
+    }
+
+    private void checkOlapInfo(OlapInfo olapInfo) {
+        assertThat(olapInfo.cubeInfo()).isNotNull();
+        assertThat(olapInfo.axesInfo()).isNotNull();
+        assertThat(olapInfo.cellInfo()).isNotNull();;
+        checkCubeInfo(olapInfo.cubeInfo());
+        checkAxesInfo(olapInfo.axesInfo());
+        checkCellInfo(olapInfo.cellInfo());
+    }
+
+    private void checkCellInfo(CellInfo cellInfo) {
+        assertThat(cellInfo.any()).isNotNull().hasSize(1);
+        assertThat(cellInfo.any().get(0)).isNotNull();
+        checkCellInfoItem(cellInfo.any().get(0));
+    }
+
+    private void checkAxesInfo(AxesInfo axesInfo) {
+        assertThat(axesInfo.axisInfo()).isNotNull().hasSize(1);
+        assertThat(axesInfo.axisInfo().get(0)).isNotNull();
+        AxisInfo axisInfo = axesInfo.axisInfo().get(0);
+        assertThat(axisInfo.name()).isEqualTo("name");
+        assertThat(axisInfo.hierarchyInfo()).hasSize(1);
+        HierarchyInfo hierarchyInfo = axisInfo.hierarchyInfo().get(0);
+        assertThat(hierarchyInfo.name()).isEqualTo("name");
+        assertThat(hierarchyInfo.any()).hasSize(1);
+        assertThat(hierarchyInfo.any().get(0)).isNotNull();
+        checkCellInfoItem(hierarchyInfo.any().get(0));
+    }
+
+    private void checkCellInfoItem(CellInfoItem cellInfoItem) {
+        assertThat(cellInfoItem.name()).isEqualTo("name");
+        assertThat(cellInfoItem.type()).isPresent().contains("value");
+    }
+
+    private void checkCubeInfo(CubeInfo cubeInfo) {
+        assertThat(cubeInfo.cube()).hasSize(1);
+        checkOlapInfoCube(cubeInfo.cube().get(0));
+    }
+
+    private void checkOlapInfoCube(OlapInfoCube olapInfoCube) {
+        assertThat(olapInfoCube.lastSchemaUpdate())
+            .isEqualTo(Instant.parse("2024-01-10T10:45:00.00Z"));
+        assertThat(olapInfoCube.lastDataUpdate())
+            .isEqualTo(Instant.parse("2024-01-10T10:45:00.00Z"));
+        assertThat(olapInfoCube.cubeName()).isEqualTo("cubeName");
     }
 
     private void checkMessages(Messages messages) {
