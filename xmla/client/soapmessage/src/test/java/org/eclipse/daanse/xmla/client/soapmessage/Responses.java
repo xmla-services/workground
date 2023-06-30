@@ -870,4 +870,33 @@ public class Responses {
         </DiscoverResponse>
         """;
 
+    public static String SETS = """
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <row
+                xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+                <CATALOG_NAME>CatalogName</CATALOG_NAME>
+                <SCHEMA_NAME>SchemaName</SCHEMA_NAME>
+                <CUBE_NAME>CubeName</CUBE_NAME>
+                <SET_NAME>SetName</SET_NAME>
+                <SCOPE>1</SCOPE>
+                <DESCRIPTION>Description</DESCRIPTION>
+                <EXPRESSION>Expression</EXPRESSION>
+                <DIMENSIONS>Dimension</DIMENSIONS>
+                <SET_CAPTION>SetCaption</SET_CAPTION>
+                <SET_DISPLAY_FOLDER>SetDisplayFolder</SET_DISPLAY_FOLDER>
+                <SET_EVALUATION_CONTEXT>1</SET_EVALUATION_CONTEXT>
+              </row>
+            </root>
+          </return>
+        </DiscoverResponse>
+        """;
 }
