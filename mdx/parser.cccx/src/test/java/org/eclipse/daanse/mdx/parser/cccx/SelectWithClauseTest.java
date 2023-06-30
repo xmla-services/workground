@@ -26,7 +26,6 @@ import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
-import org.eclipse.daanse.mdx.parser.cccx.MdxParserWrapper;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

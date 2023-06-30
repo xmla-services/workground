@@ -18,12 +18,12 @@ import java.util.List;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 
-public non-sealed interface CreateMemberBodyClause extends SelectWithClause {
+public /*non-sealed*/ interface CreateMemberBodyClause extends SelectWithClause {
 
     CompoundId compoundId();
 
     Expression expression();
 
-    List<MemberPropertyDefinition> memberPropertyDefinitions();
+    List<? extends MemberPropertyDefinition> memberPropertyDefinitions();
 
 }
