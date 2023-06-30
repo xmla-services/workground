@@ -1009,4 +1009,101 @@ public class Responses {
           </return>
         </ExecuteResponse>
         """;
+
+    public static String STATEMENT = """
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <OlapInfo>
+                <CubeInfo>
+                    <Cube>
+                        <CubeName>cubeName</CubeName>
+                        <LastDataUpdate>2024-01-10T10:45:00.00Z</LastDataUpdate>
+                        <LastSchemaUpdate>2024-01-10T10:45:00.00Z</LastSchemaUpdate>
+                    </Cube>
+                </CubeInfo>
+                <AxesInfo>
+                    <AxisInfo name="name">
+                        <HierarchyInfo name="name">
+                            <tagName name="name" type="value">
+                            </tagName>
+                        </HierarchyInfo>
+                    </AxisInfo>
+                </AxesInfo>
+                <CellInfo>
+                    <tagName name="name" type="value">
+                    </tagName>
+                </CellInfo>
+              </OlapInfo>
+              <Axes>
+                <Axis name="name">
+                    <Members Hierarchy="hierarchy">
+                        <Member Hierarchy="hierarchy">
+                        <tagName name="name" type="value">
+                        </tagName>
+                        </Member>
+                    </Members>
+                </Axis>
+              </Axes>
+              <CellData>
+                <Cell CellOrdinal="1">
+                    <Value>
+                        <Error Description="description" ErrorCode="1" />
+                    </Value>
+                    <tagName name="name" type="value">
+                    </tagName>
+                </Cell>
+              </CellData>
+              <Exception>
+              </Exception>
+              <Messages>
+              <Error Description="description" ErrorCode="1" HelpFile="helpFile" Source="source">
+                <Location>
+                    <Start>
+                        <Line>1</Line>
+                        <Column>2</Column>
+                    </Start>
+                    <End>
+                        <Line>3</Line>
+                        <Column>4</Column>
+                    </End>
+                    <LineOffset>1</LineOffset>
+                    <TextLength>2</TextLength>
+                    <SourceObject>
+                        <WarningColumn>
+                            <Dimension>dimension</Dimension>
+                            <Attribute>attribute</Attribute>
+                        </WarningColumn>
+                        <WarningMeasure>
+                            <Cube>cube</Cube>
+                            <MeasureGroup>measureGroup</MeasureGroup>
+                            <MeasureName>measureName</MeasureName>
+                        </WarningMeasure>
+                    </SourceObject>
+                    <DependsOnObject>
+                        <WarningColumn>
+                            <Dimension>dimension</Dimension>
+                            <Attribute>attribute</Attribute>
+                        </WarningColumn>
+                        <WarningMeasure>
+                            <Cube>cube</Cube>
+                            <MeasureGroup>measureGroup</MeasureGroup>
+                            <MeasureName>measureName</MeasureName>
+                        </WarningMeasure>
+                    </DependsOnObject>
+                    <RowNumber>3</RowNumber>
+                </Location>
+                <Callstack>callstack</Callstack>
+              </Error>
+              </Messages>
+            </root>
+          </return>
+        </ExecuteResponse>
+        """;
+
+
 }

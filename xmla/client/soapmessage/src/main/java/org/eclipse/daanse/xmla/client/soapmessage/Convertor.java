@@ -1433,13 +1433,14 @@ public class Convertor {
         if (nl != null) {
             List<HierarchyInfo> list = new ArrayList<>();
             for (int i = 0; i < nl.getLength(); i++) {
-                Node node = nl.item(i).getChildNodes().item(i);
+                Node node = nl.item(i);
                 if (node != null && "HierarchyInfo".equals(node.getNodeName())) {
                     NamedNodeMap namedNodeMap = node.getAttributes();
                     String name = getAttribute(namedNodeMap, "name");
                     list.add(new HierarchyInfoR(getCellInfoItem(node.getChildNodes()), name));
                 }
             }
+            return list;
         }
         return null;
     }
@@ -1448,8 +1449,8 @@ public class Convertor {
         if (nl != null) {
             List<CellInfoItem> list = new ArrayList<>();
             for (int i = 0; i < nl.getLength(); i++) {
-                Node node = nl.item(i).getChildNodes().item(i);
-                if (node != null) {
+                Node node = nl.item(i);
+                if (node != null && !node.getNodeName().equals("#text")) {
                     NamedNodeMap namedNodeMap = node.getAttributes();
                     String name = getAttribute(namedNodeMap, "name");
                     String type = getAttribute(namedNodeMap, "type");
@@ -1460,6 +1461,7 @@ public class Convertor {
                     ));
                 }
             }
+            return list;
         }
         return null;
     }
