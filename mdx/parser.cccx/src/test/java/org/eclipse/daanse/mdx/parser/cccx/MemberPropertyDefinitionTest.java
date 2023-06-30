@@ -1,7 +1,7 @@
-package org.eclipse.daanse.mdx.parser.ccc;
+package org.eclipse.daanse.mdx.parser.cccx;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.ExpressionTest.CallExpressionTest.checkArgument;
+import static org.eclipse.daanse.mdx.parser.cccx.ExpressionTest.CallExpressionTest.checkArgument;
 
 import java.math.BigDecimal;
 

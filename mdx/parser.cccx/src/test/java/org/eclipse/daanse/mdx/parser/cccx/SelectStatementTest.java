@@ -11,12 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.mdx.parser.ccc;
+package org.eclipse.daanse.mdx.parser.cccx;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkAxis;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkSelectSubcubeClauseName;
+import static org.eclipse.daanse.mdx.parser.cccx.MdxTestUtils.checkAxis;
+import static org.eclipse.daanse.mdx.parser.cccx.MdxTestUtils.checkNameObjectIdentifiers;
+import static org.eclipse.daanse.mdx.parser.cccx.MdxTestUtils.checkSelectSubcubeClauseName;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
