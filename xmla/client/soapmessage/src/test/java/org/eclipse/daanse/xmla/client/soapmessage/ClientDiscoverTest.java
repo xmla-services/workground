@@ -225,7 +225,7 @@ class ClientDiscoverTest {
     private ArgumentCaptor<SOAPMessage> requestMessageCaptor;
 
     @BeforeEach
-    void beforeEach() throws InterruptedException {
+    void beforeEach() {
         requestMessageCaptor = ArgumentCaptor.forClass(SOAPMessage.class);
     }
 

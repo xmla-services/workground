@@ -899,4 +899,114 @@ public class Responses {
           </return>
         </DiscoverResponse>
         """;
+
+    public static String CANCEL = """
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <Exception>
+              </Exception>
+              <Messages>
+                <Error Description="description" ErrorCode="1" HelpFile="helpFile" Source="source">
+                    <Location>
+                        <Start>
+                            <Line>1</Line>
+                            <Column>2</Column>
+                        </Start>
+                        <End>
+                            <Line>3</Line>
+                            <Column>4</Column>
+                        </End>
+                        <LineOffset>1</LineOffset>
+                        <TextLength>2</TextLength>
+                        <SourceObject>
+                            <WarningColumn>
+                                <Dimension>Dimension</Dimension>
+                                <Attribute>Attribute</Attribute>
+                            </WarningColumn>
+                            <WarningMeasure>
+                                <Cube>Cube</Cube>
+                                <MeasureGroup>MeasureGroup</MeasureGroup>
+                                <MeasureName>MeasureName</MeasureName>
+                            </WarningMeasure>
+                        </SourceObject>
+                        <DependsOnObject>
+                            <WarningColumn>
+                                <Dimension>Dimension</Dimension>
+                                <Attribute>Attribute</Attribute>
+                            </WarningColumn>
+                            <WarningMeasure>
+                                <Cube>Cube</Cube>
+                                <MeasureGroup>MeasureGroup</MeasureGroup>
+                                <MeasureName>MeasureName</MeasureName>
+                            </WarningMeasure>
+                        </DependsOnObject>
+                        <RowNumber>3</RowNumber>
+                    </Location>
+                    <Callstack>callstack</Callstack>
+                </Error>
+              </Messages>
+            </root>
+          </return>
+        </ExecuteResponse>
+        """;
+
+    public static String CLEAR_CACHE = """
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+          <return>
+            <root
+              xmlns="urn:schemas-microsoft-com:xml-analysis:rowset"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception">
+              <Exception>
+              </Exception>
+              <Messages>
+                <Error Description="description" ErrorCode="1" HelpFile="helpFile" Source="source">
+                    <Location>
+                        <Start>
+                            <Line>1</Line>
+                            <Column>2</Column>
+                        </Start>
+                        <End>
+                            <Line>3</Line>
+                            <Column>4</Column>
+                        </End>
+                        <LineOffset>1</LineOffset>
+                        <TextLength>2</TextLength>
+                        <SourceObject>
+                            <WarningColumn>
+                                <Dimension>Dimension</Dimension>
+                                <Attribute>Attribute</Attribute>
+                            </WarningColumn>
+                            <WarningMeasure>
+                                <Cube>Cube</Cube>
+                                <MeasureGroup>MeasureGroup</MeasureGroup>
+                                <MeasureName>MeasureName</MeasureName>
+                            </WarningMeasure>
+                        </SourceObject>
+                        <DependsOnObject>
+                            <WarningColumn>
+                                <Dimension>Dimension</Dimension>
+                                <Attribute>Attribute</Attribute>
+                            </WarningColumn>
+                            <WarningMeasure>
+                                <Cube>Cube</Cube>
+                                <MeasureGroup>MeasureGroup</MeasureGroup>
+                                <MeasureName>MeasureName</MeasureName>
+                            </WarningMeasure>
+                        </DependsOnObject>
+                        <RowNumber>3</RowNumber>
+                    </Location>
+                    <Callstack>callstack</Callstack>
+                </Error>
+              </Messages>
+            </root>
+          </return>
+        </ExecuteResponse>
+        """;
 }
