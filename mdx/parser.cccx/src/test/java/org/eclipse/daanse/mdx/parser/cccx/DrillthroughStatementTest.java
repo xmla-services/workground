@@ -1,4 +1,4 @@
-package org.eclipse.daanse.mdx.parser.ccc;
+package org.eclipse.daanse.mdx.parser.cccx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

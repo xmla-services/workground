@@ -1,7 +1,7 @@
-package org.eclipse.daanse.mdx.parser.ccc;
+package org.eclipse.daanse.mdx.parser.cccx;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.MdxTestUtils.checkNameObjectIdentifiers;
+import static org.eclipse.daanse.mdx.parser.cccx.MdxTestUtils.checkNameObjectIdentifiers;
 
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
