@@ -1065,7 +1065,7 @@ public class Convertor {
     private static MessagesR getMessages(NodeList nl) {
         if (nl != null) {
             for (int i = 0; i < nl.getLength(); i++) {
-                Node node = nl.item(i).getChildNodes().item(i);
+                Node node = nl.item(i);
                 if (node != null && MESSAGES.equals(node.getNodeName())) {
                     return new MessagesR(getTypeList(node.getChildNodes()));
                 }
@@ -1186,7 +1186,7 @@ public class Convertor {
                     if ("WarningColumn".equals(node.getNodeName())) {
                         warningColumn = getWarningColumn(node.getChildNodes());
                     }
-                    if ("WarningMeasure".equals(node.getNodeName()) && node.getNodeValue() != null) {
+                    if ("WarningMeasure".equals(node.getNodeName()) && node.getTextContent() != null) {
                         warningMeasure = getWarningMeasure(node.getChildNodes());
                     }
                 }
@@ -1220,11 +1220,11 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null) {
-                    if ("Line".equals(node.getNodeName()) && node.getNodeValue() != null) {
-                        line = getInt(node.getNodeValue());
+                    if ("Line".equals(node.getNodeName()) && node.getTextContent() != null) {
+                        line = getInt(node.getTextContent());
                     }
-                    if ("Column".equals(node.getNodeName()) && node.getNodeValue() != null) {
-                        column = getInt(node.getNodeValue());
+                    if ("Column".equals(node.getNodeName()) && node.getTextContent() != null) {
+                        column = getInt(node.getTextContent());
                     }
                 }
             }
@@ -1239,7 +1239,7 @@ public class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
                 if (node != null && "Callstack".equals(node.getNodeName())) {
-                    return node.getNodeValue();
+                    return node.getTextContent();
                 }
             }
 
@@ -1281,8 +1281,8 @@ public class Convertor {
             List<byte[]> result = new ArrayList<>();
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
-                if (node != null && "Data".equals(node.getNodeName()) && node.getNodeValue() != null) {
-                    result.add(node.getNodeValue().getBytes(StandardCharsets.UTF_8));
+                if (node != null && "Data".equals(node.getNodeName()) && node.getTextContent() != null) {
+                    result.add(node.getTextContent().getBytes(StandardCharsets.UTF_8));
                 }
             }
             return result;
@@ -1468,7 +1468,7 @@ public class Convertor {
         if (namedNodeMap != null) {
             Node nameNode = namedNodeMap.getNamedItem(name);
             if (nameNode != null) {
-                return nameNode.getNodeValue();
+                return nameNode.getTextContent();
             }
         }
         return null;

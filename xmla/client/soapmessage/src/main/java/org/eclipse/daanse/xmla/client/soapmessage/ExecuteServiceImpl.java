@@ -2781,10 +2781,10 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             addChildElement(chElement, "CubePermissionID", reference.cubePermissionID());
             addChildElement(chElement, "MdxScriptID", reference.mdxScriptID());
             addChildElement(chElement, "PartitionID", reference.partitionID());
-            addChildElement(chElement, AGGREGATION_DESIGN_ID, reference.partitionID());
+            addChildElement(chElement, AGGREGATION_DESIGN_ID, reference.aggregationDesignID());
             addChildElement(chElement, MINING_MODEL_ID, reference.miningModelID());
             addChildElement(chElement, "MiningModelPermissionID", reference.miningModelPermissionID());
-            addChildElement(chElement, "MiningStructurePermissionID", reference.miningStructureID());
+            addChildElement(chElement, "MiningStructurePermissionID", reference.miningStructurePermissionID());
         }
     }
 
