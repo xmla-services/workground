@@ -25,9 +25,7 @@ import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.record.SelectStatementR;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
-import org.eclipse.daanse.mdx.parser.cccx.MdxParserWrapper;
 import org.junit.jupiter.api.Test;
 
 class MdxStatementTest {
@@ -43,7 +41,7 @@ class MdxStatementTest {
             """;
 
         MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
-        assertThat(clause).isNotNull().isInstanceOf(SelectStatementR.class);
+        assertThat(clause).isNotNull().isInstanceOf(SelectStatement.class);
         SelectStatement selectStatement = (SelectStatement) clause;
 
         assertThat(selectStatement.selectWithClauses()).isNotNull().isEmpty();
@@ -82,7 +80,7 @@ class MdxStatementTest {
                //comment test
             """;
         MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
-        assertThat(clause).isNotNull().isInstanceOf(SelectStatementR.class);
+        assertThat(clause).isNotNull().isInstanceOf(SelectStatement.class);
         SelectStatement selectStatement = (SelectStatement) clause;
 
         assertThat(selectStatement.selectWithClauses()).isNotNull().isEmpty();

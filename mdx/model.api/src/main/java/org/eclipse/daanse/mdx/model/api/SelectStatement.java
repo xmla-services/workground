@@ -22,9 +22,9 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 
-public non-sealed interface SelectStatement extends MdxStatement {
+public /*non-sealed*/ interface SelectStatement extends MdxStatement {
 
-    List<SelectWithClause> selectWithClauses();
+    List<? extends SelectWithClause> selectWithClauses();
 
     SelectQueryClause selectQueryClause();
 

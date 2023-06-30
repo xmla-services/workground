@@ -9,14 +9,13 @@ import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
-import org.eclipse.daanse.mdx.parser.cccx.MdxParserWrapper;
 import org.junit.jupiter.api.Test;
 
 class ReturnItemTest {
 
 	@Test
 	void test() throws MdxParserException {
-		List<ReturnItem> clauseList = new MdxParserWrapper("[a].[b]").parseReturnItems();
+		List<? extends ReturnItem> clauseList = new MdxParserWrapper("[a].[b]").parseReturnItems();
 		assertThat(clauseList).isNotNull().hasSize(1);
 		CompoundId compoundId = clauseList.get(0).compoundId();
 		assertThat(compoundId.objectIdentifiers()).hasSize(2);

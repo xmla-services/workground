@@ -15,8 +15,8 @@ package org.eclipse.daanse.mdx.model.api.expression;
 
 import java.util.List;
 
-public non-sealed interface CompoundId extends Expression {
+public /*non-sealed*/ interface CompoundId extends Expression {
 
-    List<ObjectIdentifier> objectIdentifiers();
+    List<? extends ObjectIdentifier> objectIdentifiers();
 
 }

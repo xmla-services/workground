@@ -15,8 +15,8 @@ package org.eclipse.daanse.mdx.model.api.select;
 
 import java.util.List;
 
-public non-sealed interface SelectQueryAxesClause extends SelectQueryClause {
+public /*non-sealed*/ interface SelectQueryAxesClause extends SelectQueryClause {
 
-    List<SelectQueryAxisClause> selectQueryAxisClauses();
+    List<? extends SelectQueryAxisClause> selectQueryAxisClauses();
 
 }

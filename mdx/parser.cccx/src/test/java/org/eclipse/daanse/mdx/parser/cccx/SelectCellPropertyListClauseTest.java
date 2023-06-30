@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.data.Index;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
-import org.eclipse.daanse.mdx.parser.cccx.MdxParserWrapper;
 import org.junit.jupiter.api.Test;
 
 class SelectCellPropertyListClauseTest {
