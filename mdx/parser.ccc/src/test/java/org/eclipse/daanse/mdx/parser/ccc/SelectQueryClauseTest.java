@@ -18,9 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
-import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryEmptyClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -53,14 +51,14 @@ class SelectQueryClauseTest {
 					         [Customer].[Customer].[Abigail Clark]} ON ROWS
 					""";
 			SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
-			assertThat(clause).isNotNull().isInstanceOf(SelectQueryAxesClauseR.class);
+			assertThat(clause).isNotNull().isInstanceOf(SelectQueryAxesClause.class);
 		}
 
 		@Test
 		void testInClauseSingle() throws MdxParserException {
 			String mdx = "[Customer] ON COLUMNS";
 			SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
-			assertThat(clause).isNotNull().isInstanceOf(SelectQueryAxesClauseR.class);
+			assertThat(clause).isNotNull().isInstanceOf(SelectQueryAxesClause.class);
 		}
 	}
 
@@ -72,7 +70,7 @@ class SelectQueryClauseTest {
 
 			SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
 			assertThat(selectStatement).isNotNull();
-			assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryEmptyClauseR.class);
+			assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryEmptyClause.class);
 
 		}
 	}
@@ -86,7 +84,7 @@ class SelectQueryClauseTest {
 
 			SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
 			assertThat(selectStatement).isNotNull();
-			assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryAsteriskClauseR.class);
+			assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryAsteriskClause.class);
 
 		}
 
