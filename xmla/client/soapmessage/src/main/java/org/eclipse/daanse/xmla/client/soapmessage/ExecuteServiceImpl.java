@@ -231,6 +231,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.EXPRESSION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FILTER;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHIES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KEY_COLUMN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.KEY_COLUMNS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.LANGUAGE;
@@ -241,6 +242,8 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_GROUP_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MEASURE_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.MINING_MODEL_ID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NAME;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.NAME_LC;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ORDINAL;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PERSISTENCE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROCESS;
@@ -275,7 +278,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToStat
 
 public class ExecuteServiceImpl extends AbstractService implements ExecuteService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteServiceImpl.class);
     private SoapClient soapClient;
 
     public ExecuteServiceImpl(SoapClient soapClient) {
@@ -421,7 +424,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setExecuteParameter(SOAPElement element, ExecuteParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Parameter");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VALUE2, it.value() == null ? null : it.value().toString());
         }
     }
@@ -429,6 +432,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setTrace(SOAPElement element, Trace it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Trace");
+            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             addChildElement(chElement, "LogFileName", it.logFileName());
             addChildElement(chElement, "LogFileAppend", String.valueOf(it.logFileAppend()));
             addChildElement(chElement, "LogFileSize", String.valueOf(it.logFileSize()));
@@ -558,8 +568,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setServer(SOAPElement element, Server it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Server");
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, CREATED_TIMESTAMP, String.valueOf(it.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, String.valueOf(it.lastSchemaUpdate()));
             addChildElement(chElement, DESCRIPTION, it.description());
@@ -590,7 +600,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setServerProperty(SOAPElement element, ServerProperty it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ServerProperty");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VALUE2, it.value());
             addChildElement(chElement, "RequiresRestart", String.valueOf(it.requiresRestart()));
             addChildElement(chElement, "PendingValue", it.pendingValue().toString());
@@ -631,8 +641,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setRole(SOAPElement element, Role it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Role");
-            addChildElement(chElement, "Name", it.name());
-            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            addChildElement(chElement, NAME_LC, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
             it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
             it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
@@ -651,7 +661,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMember(SOAPElement element, Member it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Member");
-            it.name().ifPresent(v -> addChildElement(chElement, "Name", v));
+            it.name().ifPresent(v -> addChildElement(chElement, NAME_LC, v));
             it.sid().ifPresent(v -> addChildElement(chElement, "Sid", v));
         }
     }
@@ -659,6 +669,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setPerspective(SOAPElement element, Perspective it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Perspective");
+            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             setTranslationList(chElement, TRANSLATIONS, TRANSLATION, it.translations());
             addChildElement(chElement, "DefaultMeasure", it.defaultMeasure());
             setPerspectiveDimensionList(chElement, it.dimensions());
@@ -709,7 +726,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setPerspectiveCalculation(SOAPElement element, PerspectiveCalculation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Calculation");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, "Type", it.type());
             it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
         }
@@ -801,6 +818,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setPermission(SOAPElement element, String tagName, Permission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
+            addChildElement(chElement, NAME, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             addChildElement(chElement, ROLE_ID, it.roleID());
             it.process().ifPresent(v -> addChildElement(chElement, PROCESS, String.valueOf(v)));
             it.readDefinition().ifPresent(v -> addChildElement(chElement, READ_DEFINITION, v.getValue()));
@@ -835,6 +859,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setPartition(SOAPElement element, Partition it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Partition");
+            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             setTabularBinding(chElement, it.source());
             addChildElement(chElement, PROCESSING_PRIORITY, String.valueOf(it.processingPriority()));
             addChildElement(chElement, AGGREGATION_PREFIX, it.aggregationPrefix());
@@ -994,6 +1025,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMiningStructure(SOAPElement element, MiningStructure it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructure");
+            addChildElement(chElement, NAME, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             it.source().ifPresent(v -> setBinding(chElement, v));
             it.lastProcessed().ifPresent(v -> addChildElement(chElement, LAST_PROCESSED, convertInstant(v)));
             it.translations().ifPresent(v -> setTranslationList(chElement, TRANSLATIONS, TRANSLATION, v));
@@ -1031,6 +1069,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMiningStructurePermission(SOAPElement element, MiningStructurePermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructurePermission");
+            addChildElement(chElement, NAME, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             addChildElement(chElement, ROLE_ID, it.roleID());
             it.process().ifPresent(v -> addChildElement(chElement, PROCESS, String.valueOf(v)));
             it.readDefinition().ifPresent(v -> addChildElement(chElement, READ_DEFINITION, v.getValue()));
@@ -1050,8 +1095,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Column");
             if (it instanceof ScalarMiningStructureColumn smsc) {
-                addChildElement(chElement, "Name", smsc.name());
-                smsc.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+                addChildElement(chElement, NAME_LC, smsc.name());
+                smsc.id().ifPresent(v -> addChildElement(chElement, ID, v));
                 smsc.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
                 smsc.type().ifPresent(v -> addChildElement(chElement, "Type", v));
                 smsc.annotations().ifPresent(v -> setAnnotationList(chElement, v));
@@ -1115,6 +1160,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMiningModel(SOAPElement element, MiningModel it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningModel");
+            addChildElement(chElement, NAME, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             addChildElement(chElement, "Algorithm", it.algorithm());
             it.lastProcessed().ifPresent(v -> addChildElement(chElement, LAST_PROCESSED, convertInstant(v)));
             it.algorithmParameters().ifPresent(v -> setAlgorithmParameterList(chElement, v));
@@ -1140,6 +1192,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMiningModelPermission(SOAPElement element, MiningModelPermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningModelPermission");
+            addChildElement(chElement, NAME, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             addChildElement(chElement, ROLE_ID, it.roleID());
             it.process().ifPresent(v -> addChildElement(chElement, PROCESS, String.valueOf(v)));
             it.readDefinition().ifPresent(v -> addChildElement(chElement, READ_DEFINITION, v.getValue()));
@@ -1170,8 +1229,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMiningModelColumn(SOAPElement element, MiningModelColumn it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Column");
-            addChildElement(chElement, "Name", it.name());
-            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            addChildElement(chElement, NAME_LC, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
             it.sourceColumnID().ifPresent(v -> addChildElement(chElement, "SourceColumnID", v));
             it.usage().ifPresent(v -> addChildElement(chElement, "Usage", v));
@@ -1213,7 +1272,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setAlgorithmParameter(SOAPElement element, AlgorithmParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "AlgorithmParameter");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VALUE2, it.value().toString());
         }
     }
@@ -1221,8 +1280,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMeasureGroup(SOAPElement element, MeasureGroup it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MeasureGroup");
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, CREATED_TIMESTAMP, String.valueOf(it.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, String.valueOf(it.lastSchemaUpdate()));
             addChildElement(chElement, DESCRIPTION, it.description());
@@ -1360,8 +1419,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
         if (it != null) {
             SOAPElement chElement = addChildElement(element, MEASURE);
 
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, DESCRIPTION, it.description());
             addChildElement(chElement, "AggregateFunction", it.aggregateFunction());
             addChildElement(chElement, "DataType", it.dataType());
@@ -1383,6 +1442,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setMdxScript(SOAPElement element, MdxScript it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MdxScript");
+            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             setCommandList(chElement, it.commands());
             addChildElement(chElement, "DefaultScript", String.valueOf(it.defaultScript()));
             setCalculationPropertyList(chElement, it.calculationProperties());
@@ -1623,6 +1689,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setDimension(SOAPElement element, String tagName,  Dimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             setBinding(chElement, it.source());
             addChildElement(chElement, MINING_MODEL_ID, it.miningModelID());
             addChildElement(chElement, "Type", it.type());
@@ -1675,7 +1748,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setRelationship(SOAPElement element, Relationship it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Relationship");
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, VISIBLE, String.valueOf(it.visible()));
             setRelationshipEnd(chElement, "FromRelationshipEnd", it.fromRelationshipEnd());
             setRelationshipEnd(chElement, "ToRelationshipEnd", it.toRelationshipEnd());
@@ -1753,8 +1826,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setHierarchy(SOAPElement element, Hierarchy it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, HIERARCHY);
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, DESCRIPTION, it.description());
             addChildElement(chElement, PROCESSING_STATE, it.processingState());
             addChildElement(chElement, "StructureType", it.structureType());
@@ -1790,9 +1863,9 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setLevel(SOAPElement element, Level it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Level");
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, DESCRIPTION, it.description());
             addChildElement(chElement, "SourceAttributeID", it.sourceAttributeID());
             addChildElement(chElement, "HideMemberIf", it.hideMemberIf());
@@ -1811,8 +1884,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setDimensionAttribute(SOAPElement element, DimensionAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, DESCRIPTION, it.description());
             setDimensionAttributeType(chElement, it.type());
             addChildElement(chElement, "Usage", it.usage());
@@ -1873,7 +1946,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             addChildElement(chElement, "Optionality", it.optionality());
             addChildElement(chElement, "OverrideBehavior", it.overrideBehavior());
             setAnnotationList(chElement, it.annotations());
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VISIBLE, String.valueOf(it.visible()));
             setTranslationList(chElement, TRANSLATIONS, TRANSLATION, it.translations());
         }
@@ -1912,8 +1985,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             it.read().ifPresent(v -> addChildElement(chElement, "Read", v.getValue()));
             it.write().ifPresent(v -> addChildElement(chElement, WRITE, v.getValue()));
 
-            addChildElement(chElement, "Name", it.name());
-            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            addChildElement(chElement, NAME_LC, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
             it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
             it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
@@ -1937,8 +2010,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
             SOAPElement chElement = addChildElement(element, "DataSourceView");
             addChildElement(chElement, DATA_SOURCE_ID, it.dataSourceID());
 
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
             addChildElement(chElement, DESCRIPTION, it.description());
@@ -1996,6 +2069,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setDatabase(SOAPElement element, Database it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Database");
+            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, ID, it.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, it.description());
+            addChildElement(chElement, DESCRIPTION, it.description());
+            setAnnotationList(chElement, it.annotations());
             addChildElement(chElement, "LastUpdate", convertInstant(it.lastUpdate()));
             addChildElement(chElement, STATE, it.state());
             addChildElement(chElement, "ReadWriteMode", it.readWriteMode());
@@ -2099,6 +2179,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setCube(SOAPElement element, Cube cube) {
         if (cube != null) {
             SOAPElement chElement = addChildElement(element, "Cube");
+            addChildElement(chElement, NAME, cube.name());
+            addChildElement(chElement, ID, cube.id());
+            addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(cube.createdTimestamp()));
+            addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(cube.lastSchemaUpdate()));
+            addChildElement(chElement, DESCRIPTION, cube.description());
+            addChildElement(chElement, DESCRIPTION, cube.description());
+            setAnnotationList(chElement, cube.annotations());
             addChildElement(chElement, LANGUAGE, String.valueOf(cube.language()));
             addChildElement(chElement, COLLATION, String.valueOf(cube.collation()));
             setTranslationList(chElement, TRANSLATIONS, TRANSLATION, cube.translations());
@@ -2138,8 +2225,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setAction(SOAPElement element, Action it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Action");
-            addChildElement(chElement, "Name", it.name());
-            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
+            addChildElement(chElement, NAME_LC, it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.caption().ifPresent(v -> addChildElement(chElement, CAPTION, v));
             it.captionIsMdx().ifPresent(v -> addChildElement(chElement, "CaptionIsMdx", String.valueOf(v)));
             it.translations().ifPresent(v -> setTranslationList(chElement, TRANSLATIONS, TRANSLATION, v));
@@ -2179,7 +2266,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setReportFormatParameter(SOAPElement element, ReportFormatParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ReportFormatParameter");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VALUE2, it.value());
         }
     }
@@ -2194,7 +2281,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setReportParameter(SOAPElement element, ReportParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ReportParameter");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, VALUE2, it.value());
         }
     }
@@ -2330,7 +2417,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setGroup(SOAPElement element, Group it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Group");
-            addChildElement(chElement, "Name", it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             SOAPElement membersElement = addChildElement(chElement, "Members");
             it.members().ifPresent(v -> v.forEach(m -> addChildElement(membersElement, "Member", m)));
         }
@@ -2361,8 +2448,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setKpi(SOAPElement element, Kpi it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Kpi");
-            addChildElement(chElement, "Name", it.name());
-            addChildElement(chElement, "ID", it.id());
+            addChildElement(chElement, NAME_LC, it.name());
+            addChildElement(chElement, ID, it.id());
             addChildElement(chElement, DESCRIPTION, it.description());
             setTranslationList(chElement, TRANSLATIONS, TRANSLATION, it.translations());
             addChildElement(chElement, DISPLAY_FOLDER, it.displayFolder());
@@ -2500,6 +2587,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
 
     private void setCubePermission(SOAPElement element, CubePermission cubePermission) {
         SOAPElement dimensionElement = addChildElement(element, "CubePermission");
+        addChildElement(dimensionElement, NAME, cubePermission.name());
+        cubePermission.id().ifPresent(v -> addChildElement(dimensionElement, ID, v));
+        cubePermission.createdTimestamp().ifPresent(v -> addChildElement(dimensionElement, CREATED_TIMESTAMP, convertInstant(v)));
+        cubePermission.lastSchemaUpdate().ifPresent(v -> addChildElement(dimensionElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+        cubePermission.description().ifPresent(v -> addChildElement(dimensionElement, DESCRIPTION, v));
+        cubePermission.description().ifPresent(v -> addChildElement(dimensionElement, DESCRIPTION, v));
+        cubePermission.annotations().ifPresent(v -> setAnnotationList(dimensionElement, v));
         cubePermission.readSourceData().ifPresent(v -> addChildElement(dimensionElement, "ReadSourceData", v));
         cubePermission.dimensionPermissions().ifPresent(v -> setCubeDimensionPermissionList(dimensionElement, v));
         cubePermission.cellPermissions().ifPresent(v -> setCellPermissionList(dimensionElement, v));
@@ -2564,8 +2658,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
 
     private void setCubeDimension(SOAPElement dimensionsElement, CubeDimension cubeDimension) {
         SOAPElement dimensionElement = addChildElement(dimensionsElement, DIMENSION);
-        addChildElement(dimensionElement, "ID", cubeDimension.id());
-        addChildElement(dimensionElement, "Name", cubeDimension.name());
+        addChildElement(dimensionElement, ID, cubeDimension.id());
+        addChildElement(dimensionElement, NAME_LC, cubeDimension.name());
         addChildElement(dimensionElement, DESCRIPTION, cubeDimension.description());
         setTranslationList(dimensionElement, TRANSLATIONS, TRANSLATION, cubeDimension.translations());
         addChildElement(dimensionElement, DIMENSION_ID, cubeDimension.dimensionID());
@@ -2637,8 +2731,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setAssembly(SOAPElement objectDefinitionElement, Assembly assembly) {
         if (assembly != null) {
             SOAPElement assemblyElement = addChildElement(objectDefinitionElement, "Assembly");
-            addChildElement(assemblyElement, "Name", assembly.name());
-            addChildElement(assemblyElement, "ID", assembly.id());
+            addChildElement(assemblyElement, NAME_LC, assembly.name());
+            addChildElement(assemblyElement, ID, assembly.id());
             addChildElement(assemblyElement, CREATED_TIMESTAMP, assembly.createdTimestamp().toString());
             addChildElement(assemblyElement, LAST_SCHEMA_UPDATE, assembly.lastSchemaUpdate().toString());
             addChildElement(assemblyElement, DESCRIPTION, assembly.description());
@@ -2656,7 +2750,7 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setAnnotation(SOAPElement annotationsElement, Annotation annotation) {
         if (annotation != null) {
             SOAPElement annotationElement = addChildElement(annotationsElement, "Annotation");
-            addChildElement(annotationElement, "Name", annotation.name());
+            addChildElement(annotationElement, NAME_LC, annotation.name());
             annotation.visibility().ifPresent(v -> addChildElement(annotationElement, "Visibility", v));
             addChildElement(annotationElement, VALUE2, annotation.value().toString());
         }
@@ -2668,6 +2762,13 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     ) {
         if (aggregationDesign != null) {
             SOAPElement aggregationDesignEl = addChildElement(objectDefinitionElement, "AggregationDesign");
+            addChildElement(aggregationDesignEl, NAME, aggregationDesign.name());
+            aggregationDesign.id().ifPresent(v -> addChildElement(aggregationDesignEl, ID, v));
+            aggregationDesign.createdTimestamp().ifPresent(v -> addChildElement(aggregationDesignEl, CREATED_TIMESTAMP, convertInstant(v)));
+            aggregationDesign.lastSchemaUpdate().ifPresent(v -> addChildElement(aggregationDesignEl, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            aggregationDesign.description().ifPresent(v -> addChildElement(aggregationDesignEl, DESCRIPTION, v));
+            aggregationDesign.description().ifPresent(v ->addChildElement(aggregationDesignEl, DESCRIPTION, v));
+            aggregationDesign.annotations().ifPresent(v -> setAnnotationList(aggregationDesignEl, v));
             aggregationDesign.estimatedRows().ifPresent(v -> addChildElement(aggregationDesignEl, ESTIMATED_ROWS,
                 String.valueOf(v)));
             aggregationDesign.dimensions().ifPresent(v -> setAggregationDesignDimensionList(aggregationDesignEl, v));
@@ -2720,8 +2821,8 @@ public class ExecuteServiceImpl extends AbstractService implements ExecuteServic
     private void setAggregation(SOAPElement element, Aggregation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Aggregation");
-            it.id().ifPresent(v -> addChildElement(chElement, "ID", v));
-            addChildElement(chElement, "Name", it.name());
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            addChildElement(chElement, NAME_LC, it.name());
             it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
             it.annotations().ifPresent(v -> setAnnotationList(chElement, v));
             it.dimensions().ifPresent(v -> setAggregationDimensionList(chElement, v));

@@ -472,5 +472,7 @@ public class Constants {
     public static final String LITERAL_INVALID_STARTING_CHARS = "LiteralInvalidStartingChars";
     public static final String LITERAL_MAX_LENGTH = "LiteralMaxLength";
     public static final String LITERAL_NAME_VALUE = "LiteralNameValue";
+    public static final String ID = "ID";
+    public static final String NAME_LC = "Name";
 
 }

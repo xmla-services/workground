@@ -1105,5 +1105,53 @@ public class Responses {
         </ExecuteResponse>
         """;
 
-
+    public static String ALTER = """
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+        <return>
+                    <root>
+                       <Exception />
+                       <Messages>
+                          <Error Description="description" ErrorCode="1" HelpFile="helpFile" Source="source">
+                             <Location>
+                                <Start>
+                                   <Line>1</Line>
+                                   <Column>2</Column>
+                                </Start>
+                                <End>
+                                   <Line>3</Line>
+                                   <Column>4</Column>
+                                </End>
+                                <LineOffset>1</LineOffset>
+                                <TextLength>2</TextLength>
+                                <SourceObject>
+                                   <WarningColumn>
+                                      <Dimension>dimension</Dimension>
+                                      <Attribute>attribute</Attribute>
+                                   </WarningColumn>
+                                   <WarningMeasure>
+                                      <Cube>cube</Cube>
+                                      <MeasureGroup>measureGroup</MeasureGroup>
+                                      <MeasureName>measureName</MeasureName>
+                                   </WarningMeasure>
+                                </SourceObject>
+                                <DependsOnObject>
+                                   <WarningColumn>
+                                      <Dimension>dimension</Dimension>
+                                      <Attribute>attribute</Attribute>
+                                   </WarningColumn>
+                                   <WarningMeasure>
+                                      <Cube>cube</Cube>
+                                      <MeasureGroup>measureGroup</MeasureGroup>
+                                      <MeasureName>measureName</MeasureName>
+                                   </WarningMeasure>
+                                </DependsOnObject>
+                                <RowNumber>3</RowNumber>
+                             </Location>
+                             <Callstack>callstack</Callstack>
+                          </Error>
+                       </Messages>
+                    </root>
+                 </return>
+                 </ExecuteResponse>
+        """;
 }
