@@ -418,13 +418,13 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.UNSIGNED_ATTR
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.VERSION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.WEIGHTEDPOPULARITY;
 
-public class Convertor {
+class Convertor {
 
     private Convertor() {
         //constructor
     }
 
-    public static List<DbSchemaTablesInfoResponseRow> convertToDbSchemaTablesInfoResponseRow(SOAPBody b) {
+    static List<DbSchemaTablesInfoResponseRow> convertToDbSchemaTablesInfoResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaTablesInfoResponseRow) new DbSchemaTablesInfoResponseRowR(
@@ -447,7 +447,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaSourceTablesResponseRow> convertToDbSchemaSourceTablesResponseRow(SOAPBody b) {
+    static List<DbSchemaSourceTablesResponseRow> convertToDbSchemaSourceTablesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaSourceTablesResponseRow) new DbSchemaSourceTablesResponseRowR(
@@ -459,7 +459,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaKpisResponseRow> convertToMdSchemaKpisResponseRow(SOAPBody b) {
+    static List<MdSchemaKpisResponseRow> convertToMdSchemaKpisResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaKpisResponseRow) new MdSchemaKpisResponseRowR(
@@ -486,7 +486,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaMeasureGroupsResponseRow> convertToMdSchemaMeasureGroupsResponseRow(SOAPBody b) {
+    static List<MdSchemaMeasureGroupsResponseRow> convertToMdSchemaMeasureGroupsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaMeasureGroupsResponseRow) new MdSchemaMeasureGroupsResponseRowR(
@@ -501,7 +501,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaSetsResponseRow> convertToMdSchemaSetsResponseRow(SOAPBody b) {
+    static List<MdSchemaSetsResponseRow> convertToMdSchemaSetsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaSetsResponseRow) new MdSchemaSetsResponseRowR(
@@ -520,7 +520,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaPropertiesResponseRow> convertToMdSchemaPropertiesResponseRow(SOAPBody b) {
+    static List<MdSchemaPropertiesResponseRow> convertToMdSchemaPropertiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaPropertiesResponseRow) new MdSchemaPropertiesResponseRowR(
@@ -552,7 +552,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaMembersResponseRow> convertToMdSchemaMembersResponseRow(SOAPBody b) {
+    static List<MdSchemaMembersResponseRow> convertToMdSchemaMembersResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaMembersResponseRow) new MdSchemaMembersResponseRowR(
@@ -583,7 +583,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaMeasuresResponseRow> convertToMdSchemaMeasuresResponseRow(SOAPBody b) {
+    static List<MdSchemaMeasuresResponseRow> convertToMdSchemaMeasuresResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaMeasuresResponseRow) new MdSchemaMeasuresResponseRowR(
@@ -611,7 +611,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaMeasureGroupDimensionsResponseRow> convertToMdSchemaMeasureGroupDimensionsResponseRow(
+    static List<MdSchemaMeasureGroupDimensionsResponseRow> convertToMdSchemaMeasureGroupDimensionsResponseRow(
         SOAPBody b
     ) {
         List<MdSchemaMeasureGroupDimensionsResponseRow> result = new ArrayList<>();
@@ -638,7 +638,7 @@ public class Convertor {
         return result;
     }
 
-    public static List<MdSchemaLevelsResponseRow> convertToMdSchemaLevelsResponseRow(SOAPBody b) {
+    static List<MdSchemaLevelsResponseRow> convertToMdSchemaLevelsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaLevelsResponseRow) new MdSchemaLevelsResponseRowR(
@@ -671,7 +671,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaSchemataResponseRow> convertToDbSchemaSchemataResponseRow(SOAPBody b) {
+    static List<DbSchemaSchemataResponseRow> convertToDbSchemaSchemataResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaSchemataResponseRow) new DbSchemaSchemataResponseRowR(
@@ -682,7 +682,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaProviderTypesResponseRow> convertToDbSchemaProviderTypesResponseRow(SOAPBody b) {
+    static List<DbSchemaProviderTypesResponseRow> convertToDbSchemaProviderTypesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaProviderTypesResponseRow) new DbSchemaProviderTypesResponseRowR(
@@ -711,7 +711,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaColumnsResponseRow> convertToDbSchemaColumnsResponseRow(SOAPBody b) {
+    static List<DbSchemaColumnsResponseRow> convertToDbSchemaColumnsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaColumnsResponseRow) new DbSchemaColumnsResponseRowR(
@@ -748,7 +748,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverXmlMetaDataResponseRow> convertToDiscoverXmlMetaDataResponseRow(SOAPBody b) {
+    static List<DiscoverXmlMetaDataResponseRow> convertToDiscoverXmlMetaDataResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverXmlMetaDataResponseRow) new DiscoverXmlMetaDataResponseRowR(
@@ -757,7 +757,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverDataSourcesResponseRow> convertToDiscoverDataSourcesResponseRow(SOAPBody b) {
+    static List<DiscoverDataSourcesResponseRow> convertToDiscoverDataSourcesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverDataSourcesResponseRow) new DiscoverDataSourcesResponseRowR(
@@ -772,7 +772,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaTablesResponseRow> convertToDbSchemaTablesResponseRow(SOAPBody b) {
+    static List<DbSchemaTablesResponseRow> convertToDbSchemaTablesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaTablesResponseRow) new DbSchemaTablesResponseRowR(
@@ -789,7 +789,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverEnumeratorsResponseRow> convertToDiscoverEnumeratorsResponseRow(SOAPBody b) {
+    static List<DiscoverEnumeratorsResponseRow> convertToDiscoverEnumeratorsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverEnumeratorsResponseRow) new DiscoverEnumeratorsResponseRowR(
@@ -803,7 +803,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverPropertiesResponseRow> convertToDiscoverPropertiesResponseRow(SOAPBody b) {
+    static List<DiscoverPropertiesResponseRow> convertToDiscoverPropertiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverPropertiesResponseRow) new DiscoverPropertiesResponseRowR(
@@ -817,7 +817,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverSchemaRowsetsResponseRow> convertToDiscoverSchemaRowsetsResponseRow(SOAPBody b) {
+    static List<DiscoverSchemaRowsetsResponseRow> convertToDiscoverSchemaRowsetsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverSchemaRowsetsResponseRow) new DiscoverSchemaRowsetsResponseRowR(
@@ -830,7 +830,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverLiteralsResponseRow> convertToDiscoverLiteralsResponseRow(SOAPBody b) {
+    static List<DiscoverLiteralsResponseRow> convertToDiscoverLiteralsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverLiteralsResponseRow) new DiscoverLiteralsResponseRowR(
@@ -844,7 +844,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DiscoverKeywordsResponseRow> convertToDiscoverKeywordsResponseRow(SOAPBody b) {
+    static List<DiscoverKeywordsResponseRow> convertToDiscoverKeywordsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DiscoverKeywordsResponseRow)new DiscoverKeywordsResponseRowR(
@@ -853,7 +853,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaHierarchiesResponseRow> convertToMdSchemaHierarchiesResponseRow(SOAPBody b) {
+    static List<MdSchemaHierarchiesResponseRow> convertToMdSchemaHierarchiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaHierarchiesResponseRow) new MdSchemaHierarchiesResponseRowR(
@@ -888,7 +888,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaFunctionsResponseRow> convertToMdSchemaFunctionsResponseRow(SOAPBody b) {
+    static List<MdSchemaFunctionsResponseRow> convertToMdSchemaFunctionsResponseRow(SOAPBody b) {
         List<MdSchemaFunctionsResponseRow> result = new ArrayList<>();
         NodeList nodeList = b.getElementsByTagName(ROW);
         if (nodeList != null) {
@@ -916,7 +916,7 @@ public class Convertor {
         return result;
     }
 
-    public static List<MdSchemaDimensionsResponseRow> convertToMdSchemaDimensionsResponseRow(SOAPBody b) {
+    static List<MdSchemaDimensionsResponseRow> convertToMdSchemaDimensionsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaDimensionsResponseRow) new MdSchemaDimensionsResponseRowR(
@@ -941,7 +941,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<MdSchemaActionsResponseRow> convertToMdSchemaActionsResponseRow(SOAPBody b) {
+    static List<MdSchemaActionsResponseRow> convertToMdSchemaActionsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaActionsResponseRow) new MdSchemaActionsResponseRowR(
@@ -962,7 +962,7 @@ public class Convertor {
 
     }
 
-    public static List<MdSchemaCubesResponseRow> convertToMdSchemaCubesResponseRow(SOAPBody b) {
+    static List<MdSchemaCubesResponseRow> convertToMdSchemaCubesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (MdSchemaCubesResponseRow) new MdSchemaCubesResponseRowR(
@@ -989,7 +989,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static List<DbSchemaCatalogsResponseRow> convertToDbSchemaCatalogsResponseRow(SOAPBody b) {
+    static List<DbSchemaCatalogsResponseRow> convertToDbSchemaCatalogsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
             (DbSchemaCatalogsResponseRow) new DbSchemaCatalogsResponseRowR(
@@ -1010,7 +1010,7 @@ public class Convertor {
         ).toList();
     }
 
-    public static StatementResponse convertToStatementResponse(SOAPBody soapBody) {
+    static StatementResponse convertToStatementResponse(SOAPBody soapBody) {
 
         NodeList olapInfoNl = soapBody.getElementsByTagName("OlapInfo");
         NodeList axesNl = soapBody.getElementsByTagName("Axes");
@@ -1034,7 +1034,7 @@ public class Convertor {
         return new StatementResponseR(mdDataSet);
     }
 
-    public static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
+    static AlterResponse convertToAlterResponse(SOAPBody soapBody) {
         NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
         NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);
@@ -1043,7 +1043,7 @@ public class Convertor {
         return new AlterResponseR(emptyresult);
     }
 
-    public static ClearCacheResponse convertToClearCacheResponse(SOAPBody soapBody) {
+    static ClearCacheResponse convertToClearCacheResponse(SOAPBody soapBody) {
         NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
         NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);
@@ -1052,7 +1052,7 @@ public class Convertor {
         return new ClearCacheResponseR(emptyresult);
     }
 
-    public static CancelResponse convertToCancelResponse(SOAPBody soapBody) {
+    static CancelResponse convertToCancelResponse(SOAPBody soapBody) {
         NodeList exceptionNl = soapBody.getElementsByTagName(EXCEPTION);
         NodeList messagesNl = soapBody.getElementsByTagName(MESSAGES);
         ExceptionR exception = getException(exceptionNl);

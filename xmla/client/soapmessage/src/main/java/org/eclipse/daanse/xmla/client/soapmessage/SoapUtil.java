@@ -262,7 +262,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.VISIBLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.VISUALIZATION_PROPERTIES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.WRITE;
 
-public class SoapUtil {
+class SoapUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
 
@@ -270,7 +270,7 @@ public class SoapUtil {
         // constructor
     }
 
-    public static void addChildElementCancel(SOAPElement element, Cancel cancel) {
+    static void addChildElementCancel(SOAPElement element, Cancel cancel) {
         SOAPElement cancelElement = addChildElement(element, "Cancel");
         addChildElement(cancelElement, "ConnectionID", String.valueOf(cancel.connectionID()));
         addChildElement(cancelElement, "SessionID", cancel.sessionID());
@@ -279,14 +279,14 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementParameterList(SOAPElement element, List<ExecuteParameter> list) {
+    static void addChildElementParameterList(SOAPElement element, List<ExecuteParameter> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Parameters");
             list.forEach(it -> addChildElementExecuteParameter(chElement, it));
         }
     }
 
-    public static void addChildElementExecuteParameter(SOAPElement element, ExecuteParameter it) {
+    static void addChildElementExecuteParameter(SOAPElement element, ExecuteParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Parameter");
             addChildElement(chElement, NAME_LC, it.name());
@@ -294,7 +294,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementTrace(SOAPElement element, Trace it) {
+    static void addChildElementTrace(SOAPElement element, Trace it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Trace");
             addChildElement(chElement, NAME, it.name());
@@ -316,7 +316,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementEventType(SOAPElement element, EventType it) {
+    static void addChildElementEventType(SOAPElement element, EventType it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "EventType");
             addChildElementEventList(chElement, it.events());
@@ -324,14 +324,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementXEvent(SOAPElement element, XEvent it) {
+    static void addChildElementXEvent(SOAPElement element, XEvent it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "XEvent");
             addChildElementEventSession(chElement, it.eventSession());
         }
     }
 
-    public static void addChildElementEventSession(SOAPElement element, EventSession it) {
+    static void addChildElementEventSession(SOAPElement element, EventSession it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "event_session");
             addChildElement(chElement, "name", it.name());
@@ -346,14 +346,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementEventList(SOAPElement element, List<Event> list) {
+    static void addChildElementEventList(SOAPElement element, List<Event> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Events");
             list.forEach(it -> addChildElementEvent(chElement, it));
         }
     }
 
-    public static void addChildElementEvent(SOAPElement element, Event it) {
+    static void addChildElementEvent(SOAPElement element, Event it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Event");
             addChildElement(chElement, "EventID", it.eventID());
@@ -361,7 +361,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementEventColumnID(SOAPElement element, EventColumnID it) {
+    static void addChildElementEventColumnID(SOAPElement element, EventColumnID it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, COLUMNS);
             addChildElementColumnID(chElement, it.columnID());
@@ -369,13 +369,13 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementColumnID(SOAPElement element, List<String> list) {
+    static void addChildElementColumnID(SOAPElement element, List<String> list) {
         if (list != null) {
             list.forEach(it -> addChildElement(element, COLUMN_ID).setTextContent(it));
         }
     }
 
-    public static void addChildElementTraceFilter(SOAPElement element, TraceFilter it) {
+    static void addChildElementTraceFilter(SOAPElement element, TraceFilter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, FILTER);
             addChildElementNotType(chElement, "Not", it.not());
@@ -392,7 +392,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementBoolBinop(SOAPElement element, String nodeName, BoolBinop it) {
+    static void addChildElementBoolBinop(SOAPElement element, String nodeName, BoolBinop it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, nodeName);
             addChildElement(chElement, COLUMN_ID, it.columnID());
@@ -400,20 +400,20 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAndOrType(SOAPElement element, String nodeName, AndOrType it) {
+    static void addChildElementAndOrType(SOAPElement element, String nodeName, AndOrType it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, nodeName);
             addChildElementAndOrTypeEnumList(chElement, it.notOrOrOrAnd());
         }
     }
 
-    public static void addChildElementAndOrTypeEnumList(SOAPElement element, List<AndOrTypeEnum> list) {
+    static void addChildElementAndOrTypeEnumList(SOAPElement element, List<AndOrTypeEnum> list) {
         if (list != null) {
             list.forEach(it -> addChildElement(element, it.name()));
         }
     }
 
-    public static void addChildElementNotType(SOAPElement element, String nodeName, NotType it) {
+    static void addChildElementNotType(SOAPElement element, String nodeName, NotType it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, nodeName);
             addChildElementNotType(chElement, "Not", it.not());
@@ -430,7 +430,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementServer(SOAPElement element, Server it) {
+    static void addChildElementServer(SOAPElement element, Server it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Server");
             addChildElement(chElement, NAME_LC, it.name());
@@ -455,14 +455,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementServerPropertyList(SOAPElement element, List<ServerProperty> list) {
+    static void addChildElementServerPropertyList(SOAPElement element, List<ServerProperty> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "ServerProperties");
             list.forEach(it -> addChildElementServerProperty(chElement, it));
         }
     }
 
-    public static void addChildElementServerProperty(SOAPElement element, ServerProperty it) {
+    static void addChildElementServerProperty(SOAPElement element, ServerProperty it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ServerProperty");
             addChildElement(chElement, NAME_LC, it.name());
@@ -475,35 +475,35 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRoleList(SOAPElement element, List<Role> list) {
+    static void addChildElementRoleList(SOAPElement element, List<Role> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Roles");
             list.forEach(it -> addChildElementRole(chElement, it));
         }
     }
 
-    public static void addChildElementTraceList(SOAPElement element, List<Trace> list) {
+    static void addChildElementTraceList(SOAPElement element, List<Trace> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Traces");
             list.forEach(it -> addChildElementTrace(chElement, it));
         }
     }
 
-    public static void addChildElementAssemblyList(SOAPElement element, List<Assembly> list) {
+    static void addChildElementAssemblyList(SOAPElement element, List<Assembly> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Assemblies");
             list.forEach(it -> addChildElementAssembly(chElement, it));
         }
     }
 
-    public static void addChildElementDatabaseList(SOAPElement element, List<Database> list) {
+    static void addChildElementDatabaseList(SOAPElement element, List<Database> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Databases");
             list.forEach(it -> addChildElementDatabase(chElement, it));
         }
     }
 
-    public static void addChildElementRole(SOAPElement element, Role it) {
+    static void addChildElementRole(SOAPElement element, Role it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Role");
             addChildElement(chElement, NAME_LC, it.name());
@@ -516,14 +516,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMemberList(SOAPElement element, List<Member> list) {
+    static void addChildElementMemberList(SOAPElement element, List<Member> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Members");
             list.forEach(it -> addChildElementMember(chElement, it));
         }
     }
 
-    public static void addChildElementMember(SOAPElement element, Member it) {
+    static void addChildElementMember(SOAPElement element, Member it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Member");
             it.name().ifPresent(v -> addChildElement(chElement, NAME_LC, v));
@@ -531,7 +531,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspective(SOAPElement element, Perspective it) {
+    static void addChildElementPerspective(SOAPElement element, Perspective it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Perspective");
             addChildElement(chElement, NAME, it.name());
@@ -551,14 +551,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveActionList(SOAPElement element, List<PerspectiveAction> list) {
+    static void addChildElementPerspectiveActionList(SOAPElement element, List<PerspectiveAction> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Actions");
             list.forEach(it -> addChildElementPerspectiveAction(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveAction(SOAPElement element, PerspectiveAction it) {
+    static void addChildElementPerspectiveAction(SOAPElement element, PerspectiveAction it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Action");
             addChildElement(chElement, "ActionID", it.actionID());
@@ -566,14 +566,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveKpiList(SOAPElement element, List<PerspectiveKpi> list) {
+    static void addChildElementPerspectiveKpiList(SOAPElement element, List<PerspectiveKpi> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Kpis");
             list.forEach(it -> addChildElementPerspectiveKpi(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveKpi(SOAPElement element, PerspectiveKpi it) {
+    static void addChildElementPerspectiveKpi(SOAPElement element, PerspectiveKpi it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Kpi");
             addChildElement(chElement, "KpiID", it.kpiID());
@@ -581,14 +581,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveCalculationList(SOAPElement element, List<PerspectiveCalculation> list) {
+    static void addChildElementPerspectiveCalculationList(SOAPElement element, List<PerspectiveCalculation> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Calculations");
             list.forEach(it -> addChildElementPerspectiveCalculation(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveCalculation(SOAPElement element, PerspectiveCalculation it) {
+    static void addChildElementPerspectiveCalculation(SOAPElement element, PerspectiveCalculation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Calculation");
             addChildElement(chElement, NAME_LC, it.name());
@@ -597,7 +597,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveMeasureGroupList(SOAPElement element, List<PerspectiveMeasureGroup> list) {
+    static void addChildElementPerspectiveMeasureGroupList(SOAPElement element, List<PerspectiveMeasureGroup> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MeasureGroups");
             list.forEach(it -> addChildElementPerspectiveMeasureGroup(chElement, it));
@@ -605,7 +605,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementPerspectiveMeasureGroup(SOAPElement element, PerspectiveMeasureGroup it) {
+    static void addChildElementPerspectiveMeasureGroup(SOAPElement element, PerspectiveMeasureGroup it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MeasureGroup");
             addChildElement(chElement, MEASURE_GROUP_ID, it.measureGroupID());
@@ -614,7 +614,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveMeasureList(SOAPElement element, List<PerspectiveMeasure> list) {
+    static void addChildElementPerspectiveMeasureList(SOAPElement element, List<PerspectiveMeasure> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, MEASURES);
             list.forEach(it -> addChildElementPerspectiveMeasure(chElement, it));
@@ -622,7 +622,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementPerspectiveMeasure(SOAPElement element, PerspectiveMeasure it) {
+    static void addChildElementPerspectiveMeasure(SOAPElement element, PerspectiveMeasure it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, MEASURE);
             addChildElement(chElement, MEASURE_ID, it.measureID());
@@ -630,14 +630,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveDimensionList(SOAPElement element, List<PerspectiveDimension> list) {
+    static void addChildElementPerspectiveDimensionList(SOAPElement element, List<PerspectiveDimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementPerspectiveDimension(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveDimension(SOAPElement element, PerspectiveDimension it) {
+    static void addChildElementPerspectiveDimension(SOAPElement element, PerspectiveDimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, DIMENSION);
             addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
@@ -647,14 +647,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveHierarchyList(SOAPElement element, List<PerspectiveHierarchy> list) {
+    static void addChildElementPerspectiveHierarchyList(SOAPElement element, List<PerspectiveHierarchy> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, HIERARCHIES);
             list.forEach(it -> addChildElementPerspectiveHierarchy(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveHierarchy(SOAPElement element, PerspectiveHierarchy it) {
+    static void addChildElementPerspectiveHierarchy(SOAPElement element, PerspectiveHierarchy it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, HIERARCHY);
             addChildElement(chElement, "HierarchyID", it.hierarchyID());
@@ -662,14 +662,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPerspectiveAttributeList(SOAPElement element, List<PerspectiveAttribute> list) {
+    static void addChildElementPerspectiveAttributeList(SOAPElement element, List<PerspectiveAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementPerspectiveAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementPerspectiveAttribute(SOAPElement element, PerspectiveAttribute it) {
+    static void addChildElementPerspectiveAttribute(SOAPElement element, PerspectiveAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -680,7 +680,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPermission(SOAPElement element, String tagName, Permission it) {
+    static void addChildElementPermission(SOAPElement element, String tagName, Permission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, NAME, it.name());
@@ -721,7 +721,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPartition(SOAPElement element, Partition it) {
+    static void addChildElementPartition(SOAPElement element, Partition it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Partition");
             addChildElement(chElement, NAME, it.name());
@@ -758,14 +758,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationInstanceList(SOAPElement element, List<AggregationInstance> list) {
+    static void addChildElementAggregationInstanceList(SOAPElement element, List<AggregationInstance> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "AggregationInstances");
             list.forEach(it -> addChildElementAggregationInstance(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationInstance(SOAPElement element, AggregationInstance it) {
+    static void addChildElementAggregationInstance(SOAPElement element, AggregationInstance it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "AggregationInstance");
             addChildElement(chElement, "AggregationType", it.aggregationType());
@@ -775,14 +775,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationInstanceMeasureList(SOAPElement element, List<AggregationInstanceMeasure> list) {
+    static void addChildElementAggregationInstanceMeasureList(SOAPElement element, List<AggregationInstanceMeasure> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, MEASURES);
             list.forEach(it -> addChildElementAggregationInstanceMeasure(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationInstanceMeasure(SOAPElement element, AggregationInstanceMeasure it) {
+    static void addChildElementAggregationInstanceMeasure(SOAPElement element, AggregationInstanceMeasure it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, MEASURE);
             addChildElement(chElement, MEASURE_ID, it.measureID());
@@ -790,7 +790,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementColumnBinding(SOAPElement element, ColumnBinding it) {
+    static void addChildElementColumnBinding(SOAPElement element, ColumnBinding it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             addChildElement(chElement, TABLE_ID, it.tableID());
@@ -798,14 +798,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationInstanceDimensionList(SOAPElement element, List<AggregationInstanceDimension> list) {
+    static void addChildElementAggregationInstanceDimensionList(SOAPElement element, List<AggregationInstanceDimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementAggregationInstanceDimension(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationInstanceDimension(SOAPElement element, AggregationInstanceDimension it) {
+    static void addChildElementAggregationInstanceDimension(SOAPElement element, AggregationInstanceDimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, DIMENSION);
             addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
@@ -813,14 +813,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationInstanceAttributeList(SOAPElement element, List<AggregationInstanceAttribute> list) {
+    static void addChildElementAggregationInstanceAttributeList(SOAPElement element, List<AggregationInstanceAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementAggregationInstanceAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationInstanceAttribute(SOAPElement element, AggregationInstanceAttribute it) {
+    static void addChildElementAggregationInstanceAttribute(SOAPElement element, AggregationInstanceAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -828,14 +828,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDataItemList(SOAPElement element, String wrapperName, String tagName, List<DataItem> list) {
+    static void addChildElementDataItemList(SOAPElement element, String wrapperName, String tagName, List<DataItem> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, wrapperName);
             list.forEach(it -> addChildElementDataItem(chElement, tagName, it));
         }
     }
 
-    public static void addChildElementDataItem(SOAPElement element, String tagName, DataItem it) {
+    static void addChildElementDataItem(SOAPElement element, String tagName, DataItem it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, "DataType", it.dataType());
@@ -851,7 +851,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPartitionCurrentStorageMode(SOAPElement element, Partition.CurrentStorageMode it) {
+    static void addChildElementPartitionCurrentStorageMode(SOAPElement element, Partition.CurrentStorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "CurrentStorageMode");
             chElement.setTextContent(it.value().value());
@@ -859,7 +859,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPartitionStorageMode(SOAPElement element, Partition.StorageMode it) {
+    static void addChildElementPartitionStorageMode(SOAPElement element, Partition.StorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, STORAGE_MODE);
             chElement.setTextContent(it.value().value());
@@ -867,7 +867,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementTabularBinding(SOAPElement element, TabularBinding it) {
+    static void addChildElementTabularBinding(SOAPElement element, TabularBinding it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             if (it instanceof TableBinding tb) {
@@ -887,7 +887,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMiningStructure(SOAPElement element, MiningStructure it) {
+    static void addChildElementMiningStructure(SOAPElement element, MiningStructure it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructure");
             addChildElement(chElement, NAME, it.name());
@@ -915,14 +915,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMiningModelList(SOAPElement element, List<MiningModel> list) {
+    static void addChildElementMiningModelList(SOAPElement element, List<MiningModel> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MiningModels");
             list.forEach(it -> addChildElementMiningModel(chElement, it));
         }
     }
 
-    public static void addChildElementMiningStructurePermissionList(SOAPElement element, List<MiningStructurePermission> list) {
+    static void addChildElementMiningStructurePermissionList(SOAPElement element, List<MiningStructurePermission> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructurePermissions");
             list.forEach(it -> addChildElementMiningStructurePermission(chElement, it));
@@ -931,7 +931,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementMiningStructurePermission(SOAPElement element, MiningStructurePermission it) {
+    static void addChildElementMiningStructurePermission(SOAPElement element, MiningStructurePermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructurePermission");
             addChildElement(chElement, NAME, it.name());
@@ -949,14 +949,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMiningStructureColumnList(SOAPElement element, List<MiningStructureColumn> list) {
+    static void addChildElementMiningStructureColumnList(SOAPElement element, List<MiningStructureColumn> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, COLUMNS);
             list.forEach(it -> addChildElementMiningStructureColumn(chElement, it));
         }
     }
 
-    public static void addChildElementMiningStructureColumn(SOAPElement element, MiningStructureColumn it) {
+    static void addChildElementMiningStructureColumn(SOAPElement element, MiningStructureColumn it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Column");
             if (it instanceof ScalarMiningStructureColumn smsc) {
@@ -988,7 +988,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMeasureGroupBinding(SOAPElement element, MeasureGroupBinding it) {
+    static void addChildElementMeasureGroupBinding(SOAPElement element, MeasureGroupBinding it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "SourceMeasureGroup");
             addChildElement(chElement, DATA_SOURCE_ID, it.dataSourceID());
@@ -1001,28 +1001,28 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementClassifiedColumnList(SOAPElement element, List<String> list) {
+    static void addChildElementClassifiedColumnList(SOAPElement element, List<String> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "ClassifiedColumns");
             list.forEach(it -> addChildElement(chElement, "ClassifiedColumn").setTextContent(it));
         }
     }
 
-    public static void addChildElementMiningModelingFlagList(SOAPElement element, List<MiningModelingFlag> list) {
+    static void addChildElementMiningModelingFlagList(SOAPElement element, List<MiningModelingFlag> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "ModelingFlags");
             list.forEach(it -> addChildElementMiningModelingFlag(chElement, it));
         }
     }
 
-    public static void addChildElementMiningModelingFlag(SOAPElement element, MiningModelingFlag it) {
+    static void addChildElementMiningModelingFlag(SOAPElement element, MiningModelingFlag it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ModelingFlags");
             it.modelingFlag().ifPresent(v -> addChildElement(chElement, "ModelingFlag", v));
         }
     }
 
-    public static void addChildElementMiningModel(SOAPElement element, MiningModel it) {
+    static void addChildElementMiningModel(SOAPElement element, MiningModel it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningModel");
             addChildElement(chElement, NAME, it.name());
@@ -1047,14 +1047,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMiningModelPermissionList(SOAPElement element, List<MiningModelPermission> list) {
+    static void addChildElementMiningModelPermissionList(SOAPElement element, List<MiningModelPermission> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MiningModelPermissions");
             list.forEach(it -> addChildElementMiningModelPermission(chElement, it));
         }
     }
 
-    public static void addChildElementMiningModelPermission(SOAPElement element, MiningModelPermission it) {
+    static void addChildElementMiningModelPermission(SOAPElement element, MiningModelPermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningModelPermission");
             addChildElement(chElement, NAME, it.name());
@@ -1074,7 +1074,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementFoldingParameters(SOAPElement element, FoldingParameters it) {
+    static void addChildElementFoldingParameters(SOAPElement element, FoldingParameters it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "FoldingParameters");
             addChildElement(chElement, "FoldIndex", String.valueOf(it.foldIndex()));
@@ -1084,14 +1084,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMiningModelColumnList(SOAPElement element, List<MiningModelColumn> list) {
+    static void addChildElementMiningModelColumnList(SOAPElement element, List<MiningModelColumn> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, COLUMNS);
             list.forEach(it -> addChildElementMiningModelColumn(chElement, it));
         }
     }
 
-    public static void addChildElementMiningModelColumn(SOAPElement element, MiningModelColumn it) {
+    static void addChildElementMiningModelColumn(SOAPElement element, MiningModelColumn it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Column");
             addChildElement(chElement, NAME_LC, it.name());
@@ -1107,14 +1107,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAttributeTranslationList(SOAPElement element, List<AttributeTranslation> list) {
+    static void addChildElementAttributeTranslationList(SOAPElement element, List<AttributeTranslation> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, TRANSLATIONS);
             list.forEach(it -> addChildElementAttributeTranslation(chElement, it));
         }
     }
 
-    public static void addChildElementAttributeTranslation(SOAPElement element, AttributeTranslation it) {
+    static void addChildElementAttributeTranslation(SOAPElement element, AttributeTranslation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, TRANSLATION);
             addChildElement(chElement, LANGUAGE, String.valueOf(it.language()));
@@ -1127,14 +1127,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAlgorithmParameterList(SOAPElement element, List<AlgorithmParameter> list) {
+    static void addChildElementAlgorithmParameterList(SOAPElement element, List<AlgorithmParameter> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "AlgorithmParameters");
             list.forEach(it -> addChildElementAlgorithmParameter(chElement, it));
         }
     }
 
-    public static void addChildElementAlgorithmParameter(SOAPElement element, AlgorithmParameter it) {
+    static void addChildElementAlgorithmParameter(SOAPElement element, AlgorithmParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "AlgorithmParameter");
             addChildElement(chElement, NAME_LC, it.name());
@@ -1142,7 +1142,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMeasureGroup(SOAPElement element, MeasureGroup it) {
+    static void addChildElementMeasureGroup(SOAPElement element, MeasureGroup it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MeasureGroup");
             addChildElement(chElement, NAME_LC, it.name());
@@ -1174,28 +1174,28 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationDesignList(SOAPElement element, List<AggregationDesign> list) {
+    static void addChildElementAggregationDesignList(SOAPElement element, List<AggregationDesign> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "AggregationDesigns");
             list.forEach(it -> addChildElementAggregationDesign(chElement, it));
         }
     }
 
-    public static void addChildElementPartitionList(SOAPElement element, List<Partition> list) {
+    static void addChildElementPartitionList(SOAPElement element, List<Partition> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Partitions");
             list.forEach(it -> addChildElementPartition(chElement, it));
         }
     }
 
-    public static void addChildElementMeasureGroupDimensionList(SOAPElement element, List<MeasureGroupDimension> list) {
+    static void addChildElementMeasureGroupDimensionList(SOAPElement element, List<MeasureGroupDimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementMeasureGroupDimension(chElement, it));
         }
     }
 
-    public static void addChildElementMeasureGroupDimension(SOAPElement element, MeasureGroupDimension it) {
+    static void addChildElementMeasureGroupDimension(SOAPElement element, MeasureGroupDimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, DIMENSION);
             if (it instanceof ManyToManyMeasureGroupDimension d) {
@@ -1239,14 +1239,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMeasureGroupAttributeList(SOAPElement element, List<MeasureGroupAttribute> list) {
+    static void addChildElementMeasureGroupAttributeList(SOAPElement element, List<MeasureGroupAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementMeasureGroupAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementMeasureGroupAttribute(SOAPElement element, MeasureGroupAttribute it) {
+    static void addChildElementMeasureGroupAttribute(SOAPElement element, MeasureGroupAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -1256,14 +1256,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMeasureGroupDimensionBinding(SOAPElement element, MeasureGroupDimensionBinding it) {
+    static void addChildElementMeasureGroupDimensionBinding(SOAPElement element, MeasureGroupDimensionBinding it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
         }
     }
 
-    public static void addChildElementMeasureGroupStorageMode(SOAPElement element, MeasureGroup.StorageMode it) {
+    static void addChildElementMeasureGroupStorageMode(SOAPElement element, MeasureGroup.StorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, STORAGE_MODE);
             addChildElement(chElement, VALUENS, it.valuens());
@@ -1272,7 +1272,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementMeasureList(SOAPElement element, List<Measure> list) {
+    static void addChildElementMeasureList(SOAPElement element, List<Measure> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, MEASURES);
             list.forEach(it -> addChildElementMeasure(chElement, it));
@@ -1280,7 +1280,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementMeasure(SOAPElement element, Measure it) {
+    static void addChildElementMeasure(SOAPElement element, Measure it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, MEASURE);
 
@@ -1304,7 +1304,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementMdxScript(SOAPElement element, MdxScript it) {
+    static void addChildElementMdxScript(SOAPElement element, MdxScript it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MdxScript");
             addChildElement(chElement, NAME, it.name());
@@ -1320,14 +1320,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementCalculationPropertyList(SOAPElement element, List<CalculationProperty> list) {
+    static void addChildElementCalculationPropertyList(SOAPElement element, List<CalculationProperty> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "CalculationProperties");
             list.forEach(it -> addChildElementCalculationProperty(chElement, it));
         }
     }
 
-    public static void addChildElementCalculationProperty(SOAPElement element, CalculationProperty it) {
+    static void addChildElementCalculationProperty(SOAPElement element, CalculationProperty it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "CalculationProperty");
             addChildElement(chElement, "CalculationReference", it.calculationReference());
@@ -1350,7 +1350,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementCalculationPropertiesVisualizationProperties(
+    static void addChildElementCalculationPropertiesVisualizationProperties(
         SOAPElement element,
         CalculationPropertiesVisualizationProperties it
     ) {
@@ -1361,14 +1361,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementCommandList(SOAPElement element, List<Command> list) {
+    static void addChildElementCommandList(SOAPElement element, List<Command> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Commands");
             list.forEach(it -> addChildElementCommand(chElement, it));
         }
     }
 
-    public static void addChildElementCommand(SOAPElement element, Command it) {
+    static void addChildElementCommand(SOAPElement element, Command it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, COMMAND);
             if (it instanceof Alter a) {
@@ -1470,7 +1470,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAlter(SOAPElement element, Alter a) {
+    static void addChildElementAlter(SOAPElement element, Alter a) {
         if (a != null) {
             SOAPElement chElement = addChildElement(element, "Alter");
             addChildElementObjectReference(chElement, a.object());
@@ -1481,26 +1481,26 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementClearCache(SOAPElement element, ClearCache it) {
+    static void addChildElementClearCache(SOAPElement element, ClearCache it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ClearCache");
             addChildElementObject(chElement, it.object());
         }
     }
 
-    public static void addChildElementObjectExpansion(SOAPElement element, ObjectExpansion it) {
+    static void addChildElementObjectExpansion(SOAPElement element, ObjectExpansion it) {
         if (it != null) {
             addChildElement(element, "ObjectExpansion", it.value());
         }
     }
 
-    public static void addChildElementScope(SOAPElement element, Scope it) {
+    static void addChildElementScope(SOAPElement element, Scope it) {
         if (it != null) {
             addChildElement(element, "Scope", it.value());
         }
     }
 
-    public static void addChildElementMajorObject(SOAPElement element, MajorObject it) {
+    static void addChildElementMajorObject(SOAPElement element, MajorObject it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ObjectDefinition");
             addChildElementAggregationDesign(chElement, it.aggregationDesign());
@@ -1523,7 +1523,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementObjectReference(SOAPElement element, ObjectReference it) {
+    static void addChildElementObjectReference(SOAPElement element, ObjectReference it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Object");
             addChildElement(chElement, SERVER_ID, it.serverID());
@@ -1551,7 +1551,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimension(SOAPElement element, String tagName, Dimension it) {
+    static void addChildElementDimension(SOAPElement element, String tagName, Dimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, NAME_LC, it.name());
@@ -1597,20 +1597,20 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRelationships(SOAPElement element, Relationships it) {
+    static void addChildElementRelationships(SOAPElement element, Relationships it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Relationships");
             addChildElementRelationshipList(chElement, it.relationship());
         }
     }
 
-    public static void addChildElementRelationshipList(SOAPElement element, List<Relationship> list) {
+    static void addChildElementRelationshipList(SOAPElement element, List<Relationship> list) {
         if (list != null) {
             list.forEach(it -> addChildElementRelationship(element, it));
         }
     }
 
-    public static void addChildElementRelationship(SOAPElement element, Relationship it) {
+    static void addChildElementRelationship(SOAPElement element, Relationship it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Relationship");
             addChildElement(chElement, ID, it.id());
@@ -1620,7 +1620,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRelationshipEnd(SOAPElement element, String nodeName, RelationshipEnd it) {
+    static void addChildElementRelationshipEnd(SOAPElement element, String nodeName, RelationshipEnd it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, nodeName);
             addChildElement(chElement, "Role", it.role());
@@ -1632,7 +1632,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRelationshipEndVisualizationProperties(
+    static void addChildElementRelationshipEndVisualizationProperties(
         SOAPElement element,
         RelationshipEndVisualizationProperties it
     ) {
@@ -1649,14 +1649,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRelationshipEndTranslations(SOAPElement element, List<RelationshipEndTranslation> list) {
+    static void addChildElementRelationshipEndTranslations(SOAPElement element, List<RelationshipEndTranslation> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, TRANSLATIONS);
             list.forEach(it -> addChildElementRelationshipEndTranslation(chElement, it));
         }
     }
 
-    public static void addChildElementRelationshipEndTranslation(SOAPElement element, RelationshipEndTranslation it) {
+    static void addChildElementRelationshipEndTranslation(SOAPElement element, RelationshipEndTranslation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, TRANSLATION);
             addChildElement(chElement, LANGUAGE, String.valueOf(it.language()));
@@ -1668,27 +1668,27 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementRelationshipEndAttributes(SOAPElement element, List<String> list) {
+    static void addChildElementRelationshipEndAttributes(SOAPElement element, List<String> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementRelationshipEndAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementRelationshipEndAttribute(SOAPElement element, String it) {
+    static void addChildElementRelationshipEndAttribute(SOAPElement element, String it) {
         if (it != null) {
             addChildElement(addChildElement(element, ATTRIBUTE), ATTRIBUTE_ID, it);
         }
     }
 
-    public static void addChildElementHierarchyList(SOAPElement element, List<Hierarchy> list) {
+    static void addChildElementHierarchyList(SOAPElement element, List<Hierarchy> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, HIERARCHIES);
             list.forEach(it -> addChildElementHierarchy(chElement, it));
         }
     }
 
-    public static void addChildElementHierarchy(SOAPElement element, Hierarchy it) {
+    static void addChildElementHierarchy(SOAPElement element, Hierarchy it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, HIERARCHY);
             addChildElement(chElement, NAME_LC, it.name());
@@ -1710,7 +1710,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementHierarchyVisualizationProperties(SOAPElement element, HierarchyVisualizationProperties it) {
+    static void addChildElementHierarchyVisualizationProperties(SOAPElement element, HierarchyVisualizationProperties it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, VISUALIZATION_PROPERTIES);
             addChildElement(chElement, "ContextualNameRule", it.contextualNameRule());
@@ -1718,14 +1718,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementLevelList(SOAPElement element, List<Level> list) {
+    static void addChildElementLevelList(SOAPElement element, List<Level> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Levels");
             list.forEach(it -> addChildElementLevel(chElement, it));
         }
     }
 
-    public static void addChildElementLevel(SOAPElement element, Level it) {
+    static void addChildElementLevel(SOAPElement element, Level it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Level");
             addChildElement(chElement, NAME_LC, it.name());
@@ -1739,14 +1739,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimensionAttributeList(SOAPElement element, List<DimensionAttribute> list) {
+    static void addChildElementDimensionAttributeList(SOAPElement element, List<DimensionAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementDimensionAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementDimensionAttribute(SOAPElement element, DimensionAttribute it) {
+    static void addChildElementDimensionAttribute(SOAPElement element, DimensionAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, NAME_LC, it.name());
@@ -1794,7 +1794,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAttributeRelationshipList(SOAPElement element, List<AttributeRelationship> list) {
+    static void addChildElementAttributeRelationshipList(SOAPElement element, List<AttributeRelationship> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "AttributeRelationships");
             list.forEach(it -> addChildElementAttributeRelationship(chElement, it));
@@ -1802,7 +1802,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementAttributeRelationship(SOAPElement element, AttributeRelationship it) {
+    static void addChildElementAttributeRelationship(SOAPElement element, AttributeRelationship it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "AttributeRelationship");
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -1817,7 +1817,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimensionAttributeType(SOAPElement element, DimensionAttribute.Type it) {
+    static void addChildElementDimensionAttributeType(SOAPElement element, DimensionAttribute.Type it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Type");
             addChildElement(chElement, VALUENS, it.valuens());
@@ -1825,7 +1825,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimensionCurrentStorageMode(SOAPElement element, Dimension.CurrentStorageMode it) {
+    static void addChildElementDimensionCurrentStorageMode(SOAPElement element, Dimension.CurrentStorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "CurrentStorageMode");
             addChildElement(chElement, VALUENS, it.valuens());
@@ -1833,7 +1833,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimensionPermissionList(SOAPElement element, List<DimensionPermission> list) {
+    static void addChildElementDimensionPermissionList(SOAPElement element, List<DimensionPermission> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "DimensionPermissions");
             list.forEach(it -> addChildElementDimensionPermission(chElement, it));
@@ -1841,7 +1841,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementDimensionPermission(SOAPElement element, DimensionPermission it) {
+    static void addChildElementDimensionPermission(SOAPElement element, DimensionPermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "DimensionPermission");
             addChildElement(chElement, ROLE_ID, it.roleID());
@@ -1862,7 +1862,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDimensionUnknownMember(SOAPElement element, Dimension.UnknownMember it) {
+    static void addChildElementDimensionUnknownMember(SOAPElement element, Dimension.UnknownMember it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "UnknownMember");
             addChildElement(chElement, VALUENS, it.valuens());
@@ -1870,7 +1870,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDataSourceView(SOAPElement element, DataSourceView it) {
+    static void addChildElementDataSourceView(SOAPElement element, DataSourceView it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "DataSourceView");
             addChildElement(chElement, DATA_SOURCE_ID, it.dataSourceID());
@@ -1885,7 +1885,7 @@ public class SoapUtil {
     }
 
 
-    public static void addChildElementDataSource(SOAPElement element, DataSource it) {
+    static void addChildElementDataSource(SOAPElement element, DataSource it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "DataSource");
             addChildElement(chElement, "ManagedProvider", it.managedProvider());
@@ -1901,14 +1901,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDataSourcePermissionList(SOAPElement element, List<DataSourcePermission> list) {
+    static void addChildElementDataSourcePermissionList(SOAPElement element, List<DataSourcePermission> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "DataSourcePermissions");
             list.forEach(it -> addChildElementDataSourcePermission(chElement, it));
         }
     }
 
-    public static void addChildElementDataSourcePermission(SOAPElement element, DataSourcePermission it) {
+    static void addChildElementDataSourcePermission(SOAPElement element, DataSourcePermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "DataSourcePermission");
             addChildElement(chElement, ROLE_ID, it.roleID());
@@ -1919,7 +1919,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementImpersonationInfo(SOAPElement element, String tagName, ImpersonationInfo it) {
+    static void addChildElementImpersonationInfo(SOAPElement element, String tagName, ImpersonationInfo it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, "ImpersonationMode", it.impersonationMode());
@@ -1931,7 +1931,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDatabase(SOAPElement element, Database it) {
+    static void addChildElementDatabase(SOAPElement element, Database it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Database");
             addChildElement(chElement, NAME, it.name());
@@ -1975,56 +1975,56 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementDatabasePermissionList(SOAPElement element, List<DatabasePermission> list) {
+    static void addChildElementDatabasePermissionList(SOAPElement element, List<DatabasePermission> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "DatabasePermissions");
             list.forEach(it -> addChildElementPermission(chElement, "DatabasePermission", it));
         }
     }
 
-    public static void addChildElementMiningStructureList(SOAPElement element, List<Dimension> list) {
+    static void addChildElementMiningStructureList(SOAPElement element, List<Dimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructures");
             list.forEach(it -> addChildElementDimension(chElement, "MiningStructure", it));
         }
     }
 
-    public static void addChildElementCubeList(SOAPElement element, List<Cube> list) {
+    static void addChildElementCubeList(SOAPElement element, List<Cube> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Cubes");
             list.forEach(it -> addChildElementCube(chElement, it));
         }
     }
 
-    public static void addChildElementDimensionList(SOAPElement element, List<Dimension> list) {
+    static void addChildElementDimensionList(SOAPElement element, List<Dimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementDimension(chElement, DIMENSION, it));
         }
     }
 
-    public static void addChildElementDataSourceViewList(SOAPElement element, List<DataSourceView> list) {
+    static void addChildElementDataSourceViewList(SOAPElement element, List<DataSourceView> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "DataSourceViews");
             list.forEach(it -> addChildElementDataSourceView(chElement, it));
         }
     }
 
-    public static void addChildElementDataSourceList(SOAPElement element, List<DataSource> list) {
+    static void addChildElementDataSourceList(SOAPElement element, List<DataSource> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "DataSources");
             list.forEach(it -> addChildElementDataSource(chElement, it));
         }
     }
 
-    public static void addChildElementAccountList(SOAPElement element, List<Account> list) {
+    static void addChildElementAccountList(SOAPElement element, List<Account> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Accounts");
             list.forEach(it -> addChildElementAccount(chElement, it));
         }
     }
 
-    public static void addChildElementAccount(SOAPElement element, Account it) {
+    static void addChildElementAccount(SOAPElement element, Account it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ACCOUNT);
             addChildElement(chElement, "AccountType", it.accountType());
@@ -2034,14 +2034,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAliasList(SOAPElement element, List<String> list) {
+    static void addChildElementAliasList(SOAPElement element, List<String> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Aliases");
             list.forEach(it -> addChildElement(chElement, "Alias", it));
         }
     }
 
-    public static void addChildElementCube(SOAPElement element, Cube cube) {
+    static void addChildElementCube(SOAPElement element, Cube cube) {
         if (cube != null) {
             SOAPElement chElement = addChildElement(element, "Cube");
             addChildElement(chElement, NAME, cube.name());
@@ -2080,14 +2080,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementActionList(SOAPElement element, List<Action> list) {
+    static void addChildElementActionList(SOAPElement element, List<Action> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Actions");
             list.forEach(it -> addChildElementAction(chElement, it));
         }
     }
 
-    public static void addChildElementAction(SOAPElement element, Action it) {
+    static void addChildElementAction(SOAPElement element, Action it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Action");
             addChildElement(chElement, NAME_LC, it.name());
@@ -2121,14 +2121,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementReportFormatParameterList(SOAPElement element, List<ReportFormatParameter> list) {
+    static void addChildElementReportFormatParameterList(SOAPElement element, List<ReportFormatParameter> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "ReportFormatParameters");
             list.forEach(it -> addChildElementReportFormatParameter(chElement, it));
         }
     }
 
-    public static void addChildElementReportFormatParameter(SOAPElement element, ReportFormatParameter it) {
+    static void addChildElementReportFormatParameter(SOAPElement element, ReportFormatParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ReportFormatParameter");
             addChildElement(chElement, NAME_LC, it.name());
@@ -2136,14 +2136,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementReportParameterList(SOAPElement element, List<ReportParameter> list) {
+    static void addChildElementReportParameterList(SOAPElement element, List<ReportParameter> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "ReportParameters");
             list.forEach(it -> addChildElementReportParameter(chElement, it));
         }
     }
 
-    public static void addChildElementReportParameter(SOAPElement element, ReportParameter it) {
+    static void addChildElementReportParameter(SOAPElement element, ReportParameter it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ReportParameter");
             addChildElement(chElement, NAME_LC, it.name());
@@ -2151,14 +2151,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementBindingList(SOAPElement element, List<Binding> list) {
+    static void addChildElementBindingList(SOAPElement element, List<Binding> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, COLUMNS);
             list.forEach(it -> addChildElementBinding(chElement, it));
         }
     }
 
-    public static void addChildElementBinding(SOAPElement element, Binding it) {
+    static void addChildElementBinding(SOAPElement element, Binding it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             if (it instanceof ColumnBinding cb) {
@@ -2259,27 +2259,27 @@ public class SoapUtil {
         return null;
     }
 
-    public static void addChildElementCubeAttributeBindingOrdinalList(SOAPElement element, List<BigInteger> list) {
+    static void addChildElementCubeAttributeBindingOrdinalList(SOAPElement element, List<BigInteger> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ORDINAL);
             list.forEach(it -> addChildElementCubeAttributeBindingOrdinal(chElement, it));
         }
     }
 
-    public static void addChildElementCubeAttributeBindingOrdinal(SOAPElement element, BigInteger it) {
+    static void addChildElementCubeAttributeBindingOrdinal(SOAPElement element, BigInteger it) {
         if (it != null) {
             addChildElement(element, ORDINAL, String.valueOf(it));
         }
     }
 
-    public static void addChildElementGroupList(SOAPElement element, List<Group> list) {
+    static void addChildElementGroupList(SOAPElement element, List<Group> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Groups");
             list.forEach(it -> addChildElementGroup(chElement, it));
         }
     }
 
-    public static void addChildElementGroup(SOAPElement element, Group it) {
+    static void addChildElementGroup(SOAPElement element, Group it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Group");
             addChildElement(chElement, NAME_LC, it.name());
@@ -2288,7 +2288,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementErrorConfiguration(SOAPElement element, ErrorConfiguration it) {
+    static void addChildElementErrorConfiguration(SOAPElement element, ErrorConfiguration it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "ErrorConfiguration");
             it.keyErrorLimit().ifPresent(v -> addChildElement(chElement, "KeyErrorLimit", String.valueOf(v)));
@@ -2303,14 +2303,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementKpiList(SOAPElement element, List<Kpi> list) {
+    static void addChildElementKpiList(SOAPElement element, List<Kpi> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Kpis");
             list.forEach(it -> addChildElementKpi(chElement, it));
         }
     }
 
-    public static void addChildElementKpi(SOAPElement element, Kpi it) {
+    static void addChildElementKpi(SOAPElement element, Kpi it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Kpi");
             addChildElement(chElement, NAME_LC, it.name());
@@ -2332,7 +2332,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementProactiveCaching(SOAPElement element, ProactiveCaching proactiveCaching) {
+    static void addChildElementProactiveCaching(SOAPElement element, ProactiveCaching proactiveCaching) {
         if (proactiveCaching != null) {
             SOAPElement chElement = addChildElement(element, "ProactiveCaching");
             proactiveCaching.onlineMode().ifPresent(v -> addChildElement(chElement, "OnlineMode", v));
@@ -2349,7 +2349,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementProactiveCachingBinding(SOAPElement element, ProactiveCachingBinding source) {
+    static void addChildElementProactiveCachingBinding(SOAPElement element, ProactiveCachingBinding source) {
         if (source != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             if (source instanceof ProactiveCachingIncrementalProcessingBinding pcipb) {
@@ -2366,21 +2366,21 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementQueryNotificationList(SOAPElement element, List<QueryNotification> list) {
+    static void addChildElementQueryNotificationList(SOAPElement element, List<QueryNotification> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "QueryNotifications");
             list.forEach(it -> addChildElementQueryNotification(chElement, it));
         }
     }
 
-    public static void addChildElementQueryNotification(SOAPElement element, QueryNotification it) {
+    static void addChildElementQueryNotification(SOAPElement element, QueryNotification it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "QueryNotification");
             it.query().ifPresent(v -> addChildElement(chElement, "Query", v));
         }
     }
 
-    public static void addChildElementIncrementalProcessingNotificationList(
+    static void addChildElementIncrementalProcessingNotificationList(
         SOAPElement element,
         List<IncrementalProcessingNotification> list
     ) {
@@ -2390,7 +2390,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementIncrementalProcessingNotification(SOAPElement element, IncrementalProcessingNotification it) {
+    static void addChildElementIncrementalProcessingNotification(SOAPElement element, IncrementalProcessingNotification it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "IncrementalProcessingNotification");
             addChildElement(chElement, TABLE_ID, it.tableID());
@@ -2405,7 +2405,7 @@ public class SoapUtil {
         return null;
     }
 
-    public static void addChildElementCubeStorageMode(SOAPElement element, Cube.StorageMode storageMode) {
+    static void addChildElementCubeStorageMode(SOAPElement element, Cube.StorageMode storageMode) {
         if (storageMode != null) {
             SOAPElement chElement = addChildElement(element, STORAGE_MODE);
             addChildElement(chElement, VALUENS, storageMode.valuens());
@@ -2414,35 +2414,35 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementDataSourceViewBinding(SOAPElement element, DataSourceViewBinding source) {
+    static void addChildElementDataSourceViewBinding(SOAPElement element, DataSourceViewBinding source) {
         if (source != null) {
             SOAPElement chElement = addChildElement(element, SOURCE);
             addChildElement(chElement, DATA_SOURCE_VIEW_ID, source.dataSourceViewID());
         }
     }
 
-    public static void addChildElementPerspectiveList(SOAPElement element, List<Perspective> list) {
+    static void addChildElementPerspectiveList(SOAPElement element, List<Perspective> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Perspectives");
             list.forEach(it -> addChildElementPerspective(chElement, it));
         }
     }
 
-    public static void addChildElementMdxScriptList(SOAPElement element, List<MdxScript> list) {
+    static void addChildElementMdxScriptList(SOAPElement element, List<MdxScript> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MdxScripts");
             list.forEach(it -> addChildElementMdxScript(chElement, it));
         }
     }
 
-    public static void addChildElementMeasureGroupList(SOAPElement element, List<MeasureGroup> measureGroups) {
+    static void addChildElementMeasureGroupList(SOAPElement element, List<MeasureGroup> measureGroups) {
         if (measureGroups != null) {
             SOAPElement chElement = addChildElement(element, "MeasureGroups");
             measureGroups.forEach(it -> addChildElementMeasureGroup(chElement, it));
         }
     }
 
-    public static void addChildElementCubePermissionList(SOAPElement element, List<CubePermission> cubePermissions) {
+    static void addChildElementCubePermissionList(SOAPElement element, List<CubePermission> cubePermissions) {
         if (cubePermissions != null) {
             SOAPElement chElement = addChildElement(element, "CubePermissions");
             cubePermissions.forEach(it -> addChildElementCubePermission(chElement, it));
@@ -2450,7 +2450,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementCubePermission(SOAPElement element, CubePermission cubePermission) {
+    static void addChildElementCubePermission(SOAPElement element, CubePermission cubePermission) {
         SOAPElement dimensionElement = addChildElement(element, "CubePermission");
         addChildElement(dimensionElement, NAME, cubePermission.name());
         cubePermission.id().ifPresent(v -> addChildElement(dimensionElement, ID, v));
@@ -2464,14 +2464,14 @@ public class SoapUtil {
         cubePermission.cellPermissions().ifPresent(v -> addChildElementCellPermissionList(dimensionElement, v));
     }
 
-    public static void addChildElementCellPermissionList(SOAPElement element, List<CellPermission> v) {
+    static void addChildElementCellPermissionList(SOAPElement element, List<CellPermission> v) {
         if (v != null) {
             SOAPElement chElement = addChildElement(element, "CellPermissions");
             v.forEach(it -> addChildElementCellPermission(chElement, it));
         }
     }
 
-    public static void addChildElementCellPermission(SOAPElement element, CellPermission it) {
+    static void addChildElementCellPermission(SOAPElement element, CellPermission it) {
         SOAPElement chElement = addChildElement(element, "CellPermission");
         it.access().ifPresent(v -> addChildElement(chElement, "Access", v.getValue()));
         it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
@@ -2479,14 +2479,14 @@ public class SoapUtil {
         it.annotations().ifPresent(v -> addChildElementAnnotationList(chElement, v));
     }
 
-    public static void addChildElementCubeDimensionPermissionList(SOAPElement element, List<CubeDimensionPermission> v) {
+    static void addChildElementCubeDimensionPermissionList(SOAPElement element, List<CubeDimensionPermission> v) {
         if (v != null) {
             SOAPElement chElement = addChildElement(element, "DimensionPermissions");
             v.forEach(it -> addChildElementCubeDimensionPermission(chElement, it));
         }
     }
 
-    public static void addChildElementCubeDimensionPermission(SOAPElement element, CubeDimensionPermission it) {
+    static void addChildElementCubeDimensionPermission(SOAPElement element, CubeDimensionPermission it) {
         SOAPElement chElement = addChildElement(element, "DimensionPermission");
         addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
         it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
@@ -2496,14 +2496,14 @@ public class SoapUtil {
         it.annotations().ifPresent(v -> addChildElementAnnotationList(chElement, v));
     }
 
-    public static void addChildElementAttributePermissionList(SOAPElement element, List<AttributePermission> v) {
+    static void addChildElementAttributePermissionList(SOAPElement element, List<AttributePermission> v) {
         if (v != null) {
             SOAPElement chElement = addChildElement(element, "AttributePermissions");
             v.forEach(it -> addChildElementAttributePermission(chElement, it));
         }
     }
 
-    public static void addChildElementAttributePermission(SOAPElement element, AttributePermission it) {
+    static void addChildElementAttributePermission(SOAPElement element, AttributePermission it) {
         SOAPElement chElement = addChildElement(element, "AttributePermission");
         addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
         it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
@@ -2514,14 +2514,14 @@ public class SoapUtil {
         it.annotations().ifPresent(v -> addChildElementAnnotationList(chElement, v));
     }
 
-    public static void addChildElementCubeDimensionsList(SOAPElement cubeElement, List<CubeDimension> dimensions) {
+    static void addChildElementCubeDimensionsList(SOAPElement cubeElement, List<CubeDimension> dimensions) {
         if (dimensions != null) {
             SOAPElement dimensionsElement = addChildElement(cubeElement, DIMENSIONS);
             dimensions.forEach(it -> addChildElementCubeDimension(dimensionsElement, it));
         }
     }
 
-    public static void addChildElementCubeDimension(SOAPElement dimensionsElement, CubeDimension cubeDimension) {
+    static void addChildElementCubeDimension(SOAPElement dimensionsElement, CubeDimension cubeDimension) {
         SOAPElement dimensionElement = addChildElement(dimensionsElement, DIMENSION);
         addChildElement(dimensionElement, ID, cubeDimension.id());
         addChildElement(dimensionElement, NAME_LC, cubeDimension.name());
@@ -2537,14 +2537,14 @@ public class SoapUtil {
         addChildElementAnnotationList(dimensionElement, cubeDimension.annotations());
     }
 
-    public static void addChildElementCubeHierarchyList(SOAPElement element, List<CubeHierarchy> hierarchies) {
+    static void addChildElementCubeHierarchyList(SOAPElement element, List<CubeHierarchy> hierarchies) {
         if (hierarchies != null) {
             SOAPElement hierarchiesElement = addChildElement(element, HIERARCHIES);
             hierarchies.forEach(v -> addChildElementCubeHierarchy(hierarchiesElement, v));
         }
     }
 
-    public static void addChildElementCubeHierarchy(SOAPElement element, CubeHierarchy v) {
+    static void addChildElementCubeHierarchy(SOAPElement element, CubeHierarchy v) {
         SOAPElement hierarchyElement = addChildElement(element, HIERARCHY);
         addChildElement(hierarchyElement, "HierarchyID", v.hierarchyID());
         addChildElement(hierarchyElement, "OptimizedState", v.optimizedState());
@@ -2553,14 +2553,14 @@ public class SoapUtil {
         addChildElementAnnotationList(hierarchyElement, v.annotations());
     }
 
-    public static void addChildElementCubeAttributeList(SOAPElement element, List<CubeAttribute> attributes) {
+    static void addChildElementCubeAttributeList(SOAPElement element, List<CubeAttribute> attributes) {
         if (attributes != null) {
             SOAPElement attributesElement = addChildElement(element, ATTRIBUTES);
             attributes.forEach(v -> addChildElementCubeAttribute(attributesElement, v));
         }
     }
 
-    public static void addChildElementCubeAttribute(SOAPElement element, CubeAttribute v) {
+    static void addChildElementCubeAttribute(SOAPElement element, CubeAttribute v) {
         SOAPElement attributeElement = addChildElement(element, ATTRIBUTE);
         addChildElement(attributeElement, ATTRIBUTE_ID, v.attributeID());
         addChildElement(attributeElement, "AggregationUsage", v.aggregationUsage());
@@ -2570,7 +2570,7 @@ public class SoapUtil {
         addChildElementAnnotationList(attributeElement, v.annotations());
     }
 
-    public static void addChildElementTranslationList(
+    static void addChildElementTranslationList(
         SOAPElement cubeElement,
         String wrapperName,
         String tagName,
@@ -2582,7 +2582,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementTranslation(SOAPElement translationsElement, String tagName, Translation it) {
+    static void addChildElementTranslation(SOAPElement translationsElement, String tagName, Translation it) {
         if (it != null) {
             SOAPElement translationElement = addChildElement(translationsElement, tagName);
             addChildElement(translationElement, LANGUAGE, String.valueOf(it.language()));
@@ -2593,7 +2593,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAssembly(SOAPElement objectDefinitionElement, Assembly assembly) {
+    static void addChildElementAssembly(SOAPElement objectDefinitionElement, Assembly assembly) {
         if (assembly != null) {
             SOAPElement assemblyElement = addChildElement(objectDefinitionElement, "Assembly");
             addChildElement(assemblyElement, NAME_LC, assembly.name());
@@ -2605,14 +2605,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAnnotationList(SOAPElement element, List<Annotation> annotations) {
+    static void addChildElementAnnotationList(SOAPElement element, List<Annotation> annotations) {
         if (annotations != null) {
             SOAPElement annotationsElement = addChildElement(element, "Annotations");
             annotations.forEach(it -> addChildElementAnnotation(annotationsElement, it));
         }
     }
 
-    public static void addChildElementAnnotation(SOAPElement annotationsElement, Annotation annotation) {
+    static void addChildElementAnnotation(SOAPElement annotationsElement, Annotation annotation) {
         if (annotation != null) {
             SOAPElement annotationElement = addChildElement(annotationsElement, "Annotation");
             addChildElement(annotationElement, NAME_LC, annotation.name());
@@ -2621,7 +2621,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationDesign(
+    static void addChildElementAggregationDesign(
         SOAPElement objectDefinitionElement,
         AggregationDesign aggregationDesign
     ) {
@@ -2643,7 +2643,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationDesignDimensionList(SOAPElement element, List<AggregationDesignDimension> list) {
+    static void addChildElementAggregationDesignDimensionList(SOAPElement element, List<AggregationDesignDimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementAggregationDesignDimension(chElement, it));
@@ -2651,7 +2651,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementAggregationDesignDimension(SOAPElement element, AggregationDesignDimension it) {
+    static void addChildElementAggregationDesignDimension(SOAPElement element, AggregationDesignDimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, DIMENSION);
             addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
@@ -2660,7 +2660,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationDesignAttributeList(SOAPElement element, List<AggregationDesignAttribute> list) {
+    static void addChildElementAggregationDesignAttributeList(SOAPElement element, List<AggregationDesignAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementAggregationDesignAttribute(chElement, it));
@@ -2668,7 +2668,7 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementAggregationDesignAttribute(SOAPElement element, AggregationDesignAttribute it) {
+    static void addChildElementAggregationDesignAttribute(SOAPElement element, AggregationDesignAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -2676,14 +2676,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationList(SOAPElement element, List<Aggregation> list) {
+    static void addChildElementAggregationList(SOAPElement element, List<Aggregation> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "Aggregations");
             list.forEach(it -> addChildElementAggregation(chElement, it));
         }
     }
 
-    public static void addChildElementAggregation(SOAPElement element, Aggregation it) {
+    static void addChildElementAggregation(SOAPElement element, Aggregation it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Aggregation");
             it.id().ifPresent(v -> addChildElement(chElement, ID, v));
@@ -2695,14 +2695,14 @@ public class SoapUtil {
 
     }
 
-    public static void addChildElementAggregationDimensionList(SOAPElement element, List<AggregationDimension> list) {
+    static void addChildElementAggregationDimensionList(SOAPElement element, List<AggregationDimension> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, DIMENSIONS);
             list.forEach(it -> addChildElementAggregationDimension(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationDimension(SOAPElement element, AggregationDimension it) {
+    static void addChildElementAggregationDimension(SOAPElement element, AggregationDimension it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, DIMENSION);
             addChildElement(chElement, CUBE_DIMENSION_ID, it.cubeDimensionID());
@@ -2711,14 +2711,14 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementAggregationAttributeList(SOAPElement element, List<AggregationAttribute> list) {
+    static void addChildElementAggregationAttributeList(SOAPElement element, List<AggregationAttribute> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTES);
             list.forEach(it -> addChildElementAggregationAttribute(chElement, it));
         }
     }
 
-    public static void addChildElementAggregationAttribute(SOAPElement element, AggregationAttribute it) {
+    static void addChildElementAggregationAttribute(SOAPElement element, AggregationAttribute it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, ATTRIBUTE);
             addChildElement(chElement, ATTRIBUTE_ID, it.attributeID());
@@ -2726,7 +2726,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementObject(SOAPElement element, ObjectReference reference) {
+    static void addChildElementObject(SOAPElement element, ObjectReference reference) {
         if (reference != null) {
             SOAPElement chElement = addChildElement(element, "Object");
             addChildElement(chElement, SERVER_ID, reference.serverID());
@@ -2754,7 +2754,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElement(SOAPElement element, String childElementName, String value) {
+    static void addChildElement(SOAPElement element, String childElementName, String value) {
         try {
             if (value != null) {
                 element.addChildElement(childElementName).setTextContent(value);
@@ -2774,7 +2774,7 @@ public class SoapUtil {
         }
     }
 
-    public static void addChildElementPropertyList(SOAPElement propertyList, Properties properties) {
+    static void addChildElementPropertyList(SOAPElement propertyList, Properties properties) {
         properties.localeIdentifier().ifPresent(v -> addChildElement(propertyList, LOCALE_IDENTIFIER, v.toString()));
         properties.dataSourceInfo().ifPresent(v -> addChildElement(propertyList, DATA_SOURCE_INFO, v));
         properties.content().ifPresent(v -> addChildElement(propertyList, CONTENT, v.getValue()));
