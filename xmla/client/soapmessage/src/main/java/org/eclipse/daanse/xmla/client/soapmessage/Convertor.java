@@ -170,7 +170,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_CAPTION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ACTION_TYPE;
@@ -271,11 +270,11 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_CAP
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_CARDINALITY;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_DISPLAY_FOLDER;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_GUID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_IS_VISIBLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORDINAL;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
-import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY_IS_VISIBLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INSTANCE_SELECTION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INTERFACE_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.INVOCATION;
@@ -381,6 +380,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_CONT
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_IS_VISIBLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_NAME;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_NAME1;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REPEATABLE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REPEATGROUP;
@@ -388,7 +388,6 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RESTRICTIONS_MASK;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.RETURN_TYPE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROLES;
-import static org.eclipse.daanse.xmla.client.soapmessage.Constants.PROPERTY_ORIGIN;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROW;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_GUID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SCHEMA_NAME;
@@ -428,7 +427,7 @@ public class Convertor {
     public static List<DbSchemaTablesInfoResponseRow> convertToDbSchemaTablesInfoResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaTablesInfoResponseRowR(
+            (DbSchemaTablesInfoResponseRow) new DbSchemaTablesInfoResponseRowR(
                 Optional.ofNullable(m.get(TABLE_CATALOG)),
                 Optional.ofNullable(m.get(TABLE_SCHEMA)),
                 m.get(TABLE_NAME),
@@ -445,25 +444,25 @@ public class Convertor {
                 Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(getInt(m.get(TABLE_PROP_ID)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaSourceTablesResponseRow> convertToDbSchemaSourceTablesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaSourceTablesResponseRowR(
+            (DbSchemaSourceTablesResponseRow) new DbSchemaSourceTablesResponseRowR(
                 Optional.ofNullable(m.get(TABLE_CATALOG)),
                 Optional.ofNullable(m.get(TABLE_SCHEMA)),
                 m.get(TABLE_NAME),
                 TableTypeEnum.fromValue(m.get(TABLE_TYPE))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaKpisResponseRow> convertToMdSchemaKpisResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaKpisResponseRowR(
+            (MdSchemaKpisResponseRow) new MdSchemaKpisResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -484,13 +483,13 @@ public class Convertor {
                 Optional.ofNullable(m.get(ANNOTATIONS)),
                 Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaMeasureGroupsResponseRow> convertToMdSchemaMeasureGroupsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaMeasureGroupsResponseRowR(
+            (MdSchemaMeasureGroupsResponseRow) new MdSchemaMeasureGroupsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -499,13 +498,13 @@ public class Convertor {
                 Optional.ofNullable(getBoolean(m.get(IS_WRITE_ENABLED))),
                 Optional.ofNullable(m.get(MEASUREGROUP_CAPTION))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaSetsResponseRow> convertToMdSchemaSetsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaSetsResponseRowR(
+            (MdSchemaSetsResponseRow) new MdSchemaSetsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -518,13 +517,13 @@ public class Convertor {
                 Optional.ofNullable(m.get(SET_DISPLAY_FOLDER)),
                 Optional.ofNullable(SetEvaluationContextEnum.fromValue(m.get(SET_EVALUATION_CONTEXT)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaPropertiesResponseRow> convertToMdSchemaPropertiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaPropertiesResponseRowR(
+            (MdSchemaPropertiesResponseRow) new MdSchemaPropertiesResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -550,13 +549,13 @@ public class Convertor {
                 Optional.ofNullable(m.get(MIME_TYPE)),
                 Optional.ofNullable(getBoolean(m.get(PROPERTY_IS_VISIBLE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaMembersResponseRow> convertToMdSchemaMembersResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaMembersResponseRowR(
+            (MdSchemaMembersResponseRow) new MdSchemaMembersResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -581,13 +580,13 @@ public class Convertor {
                 Optional.ofNullable(getBoolean(m.get(IS_DATAMEMBER))),
                 Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaMeasuresResponseRow> convertToMdSchemaMeasuresResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaMeasuresResponseRowR(
+            (MdSchemaMeasuresResponseRow) new MdSchemaMeasuresResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -609,7 +608,7 @@ public class Convertor {
                 Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
                 Optional.ofNullable(m.get(DEFAULT_FORMAT_STRING))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaMeasureGroupDimensionsResponseRow> convertToMdSchemaMeasureGroupDimensionsResponseRow(
@@ -642,7 +641,7 @@ public class Convertor {
     public static List<MdSchemaLevelsResponseRow> convertToMdSchemaLevelsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaLevelsResponseRowR(
+            (MdSchemaLevelsResponseRow) new MdSchemaLevelsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -669,24 +668,24 @@ public class Convertor {
                 Optional.ofNullable(getInt(m.get(LEVEL_KEY_CARDINALITY))),
                 Optional.ofNullable(LevelOriginEnum.fromValue(m.get(LEVEL_ORIGIN)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaSchemataResponseRow> convertToDbSchemaSchemataResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaSchemataResponseRowR(
+            (DbSchemaSchemataResponseRow) new DbSchemaSchemataResponseRowR(
                 m.get(CATALOG_NAME),
                 m.get(SCHEMA_NAME),
                 m.get(SCHEMA_OWNER)
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaProviderTypesResponseRow> convertToDbSchemaProviderTypesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaProviderTypesResponseRowR(
+            (DbSchemaProviderTypesResponseRow) new DbSchemaProviderTypesResponseRowR(
                 Optional.ofNullable(m.get(TYPE_NAME)),
                 Optional.ofNullable(LevelDbTypeEnum.fromValue(m.get(DATA_TYPE))),
                 Optional.ofNullable(getInt(m.get(COLUMN_SIZE))),
@@ -709,13 +708,13 @@ public class Convertor {
                 Optional.ofNullable(getBoolean(m.get(BEST_MATCH))),
                 Optional.ofNullable(getBoolean(m.get(IS_FIXEDLENGTH)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaColumnsResponseRow> convertToDbSchemaColumnsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaColumnsResponseRowR(
+            (DbSchemaColumnsResponseRow) new DbSchemaColumnsResponseRowR(
                 Optional.ofNullable(m.get(TABLE_CATALOG)),
                 Optional.ofNullable(m.get(TABLE_SCHEMA)),
                 Optional.ofNullable(m.get(TABLE_NAME)),
@@ -746,22 +745,22 @@ public class Convertor {
                 Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(ColumnOlapTypeEnum.fromValue(m.get(COLUMN_OLAP_TYPE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverXmlMetaDataResponseRow> convertToDiscoverXmlMetaDataResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverXmlMetaDataResponseRowR(
+            (DiscoverXmlMetaDataResponseRow) new DiscoverXmlMetaDataResponseRowR(
                 m.get("MetaData")
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverDataSourcesResponseRow> convertToDiscoverDataSourcesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverDataSourcesResponseRowR(
+            (DiscoverDataSourcesResponseRow) new DiscoverDataSourcesResponseRowR(
                 m.get("DataSourceName"),
                 Optional.ofNullable(m.get("DataSourceDescription")),
                 Optional.ofNullable(m.get("URL")),
@@ -770,13 +769,13 @@ public class Convertor {
                 Optional.ofNullable(ProviderTypeEnum.fromValue(m.get("ProviderType"))),
                 Optional.ofNullable(AuthenticationModeEnum.fromValue(m.get("AuthenticationMode")))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaTablesResponseRow> convertToDbSchemaTablesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaTablesResponseRowR(
+            (DbSchemaTablesResponseRow) new DbSchemaTablesResponseRowR(
                 Optional.ofNullable(m.get(TABLE_CATALOG)),
                 Optional.ofNullable(m.get(TABLE_SCHEMA)),
                 Optional.ofNullable(m.get(TABLE_NAME)),
@@ -787,13 +786,13 @@ public class Convertor {
                 Optional.ofNullable(getLocalDateTime(m.get(DATE_CREATED))),
                 Optional.ofNullable(getLocalDateTime(m.get(DATE_MODIFIED)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverEnumeratorsResponseRow> convertToDiscoverEnumeratorsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverEnumeratorsResponseRowR(
+            (DiscoverEnumeratorsResponseRow) new DiscoverEnumeratorsResponseRowR(
                 m.get(ENUM_NAME),
                 Optional.ofNullable(m.get(ENUM_DESCRIPTION)),
                 m.get(ENUM_TYPE),
@@ -801,13 +800,13 @@ public class Convertor {
                 Optional.ofNullable(m.get(ELEMENT_DESCRIPTION)),
                 Optional.ofNullable(m.get(ELEMENT_VALUE))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverPropertiesResponseRow> convertToDiscoverPropertiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverPropertiesResponseRowR(
+            (DiscoverPropertiesResponseRow) new DiscoverPropertiesResponseRowR(
                 m.get(PROPERTY_NAME1),
                 Optional.ofNullable(m.get("PropertyDescription")),
                 Optional.ofNullable(m.get("PropertyType")),
@@ -815,26 +814,26 @@ public class Convertor {
                 Optional.ofNullable(getBoolean(m.get("IsRequired"))),
                 Optional.ofNullable(m.get("Value"))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverSchemaRowsetsResponseRow> convertToDiscoverSchemaRowsetsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverSchemaRowsetsResponseRowR(
+            (DiscoverSchemaRowsetsResponseRow) new DiscoverSchemaRowsetsResponseRowR(
                 m.get(SCHEMA_NAME1),
                 Optional.ofNullable(m.get(SCHEMA_GUID)),
                 Optional.ofNullable(m.get(RESTRICTIONS)),
                 Optional.ofNullable(m.get(DESCRIPTION1)),
                 Optional.ofNullable(getLong(m.get(RESTRICTIONS_MASK)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverLiteralsResponseRow> convertToDiscoverLiteralsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverLiteralsResponseRowR(
+            (DiscoverLiteralsResponseRow) new DiscoverLiteralsResponseRowR(
                 m.get(LITERAL_NAME),
                 m.get(LITERAL_VALUE),
                 m.get(LITERAL_INVALID_CHARS),
@@ -842,22 +841,22 @@ public class Convertor {
                 getInt(m.get(LITERAL_MAX_LENGTH)),
                 LiteralNameEnumValueEnum.fromValue(getInt(m.get(LITERAL_NAME_VALUE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DiscoverKeywordsResponseRow> convertToDiscoverKeywordsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DiscoverKeywordsResponseRowR(
+            (DiscoverKeywordsResponseRow)new DiscoverKeywordsResponseRowR(
                 m.get(KEYWORD)
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaHierarchiesResponseRow> convertToMdSchemaHierarchiesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaHierarchiesResponseRowR(
+            (MdSchemaHierarchiesResponseRow) new MdSchemaHierarchiesResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -886,7 +885,7 @@ public class Convertor {
                 Optional.ofNullable(GroupingBehaviorEnum.fromValue(m.get(GROUPING_BEHAVIOR))),
                 Optional.ofNullable(StructureTypeEnum.fromValue(m.get(STRUCTURE_TYPE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaFunctionsResponseRow> convertToMdSchemaFunctionsResponseRow(SOAPBody b) {
@@ -920,7 +919,7 @@ public class Convertor {
     public static List<MdSchemaDimensionsResponseRow> convertToMdSchemaDimensionsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaDimensionsResponseRowR(
+            (MdSchemaDimensionsResponseRow) new MdSchemaDimensionsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -939,13 +938,13 @@ public class Convertor {
                 Optional.ofNullable(m.get(DIMENSION_MASTER_NAME)),
                 Optional.ofNullable(getBoolean(m.get(DIMENSION_IS_VISIBLE)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<MdSchemaActionsResponseRow> convertToMdSchemaActionsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaActionsResponseRowR(
+            (MdSchemaActionsResponseRow) new MdSchemaActionsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 m.get(CUBE_NAME),
@@ -959,14 +958,14 @@ public class Convertor {
                 Optional.ofNullable(m.get(APPLICATION)),
                 Optional.ofNullable(InvocationEnum.fromValue(m.get(INVOCATION)))
             )
-        ).collect(toList());
+        ).toList();
 
     }
 
     public static List<MdSchemaCubesResponseRow> convertToMdSchemaCubesResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new MdSchemaCubesResponseRowR(
+            (MdSchemaCubesResponseRow) new MdSchemaCubesResponseRowR(
                 m.get(CATALOG_NAME),
                 Optional.ofNullable(m.get(SCHEMA_NAME)),
                 Optional.ofNullable(m.get(CUBE_NAME)),
@@ -987,13 +986,13 @@ public class Convertor {
                 Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
                 Optional.ofNullable(PreferredQueryPatternsEnum.fromValue(getInt(m.get(PREFERRED_QUERY_PATTERNS))))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static List<DbSchemaCatalogsResponseRow> convertToDbSchemaCatalogsResponseRow(SOAPBody b) {
         List<Map<String, String>> l = getMapValuesList(b);
         return l.stream().map(m ->
-            new DbSchemaCatalogsResponseRowR(
+            (DbSchemaCatalogsResponseRow) new DbSchemaCatalogsResponseRowR(
                 Optional.ofNullable(m.get(CATALOG_NAME)),
                 Optional.ofNullable(m.get(DESCRIPTION_UC)),
                 Optional.ofNullable(m.get(ROLES)),
@@ -1008,7 +1007,7 @@ public class Convertor {
                 Optional.ofNullable(getDouble(m.get(WEIGHTEDPOPULARITY))),
                 Optional.ofNullable(ClientCacheRefreshPolicyEnum.fromValue(m.get(CLIENTCACHEREFRESHPOLICY)))
             )
-        ).collect(toList());
+        ).toList();
     }
 
     public static StatementResponse convertToStatementResponse(SOAPBody soapBody) {
@@ -1219,11 +1218,11 @@ public class Convertor {
             int column = 0;
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i);
-                if (node != null) {
-                    if ("Line".equals(node.getNodeName()) && node.getTextContent() != null) {
+                if (node != null && node.getTextContent() != null) {
+                    if ("Line".equals(node.getNodeName()) ) {
                         line = getInt(node.getTextContent());
                     }
-                    if ("Column".equals(node.getNodeName()) && node.getTextContent() != null) {
+                    if ("Column".equals(node.getNodeName())) {
                         column = getInt(node.getTextContent());
                     }
                 }
