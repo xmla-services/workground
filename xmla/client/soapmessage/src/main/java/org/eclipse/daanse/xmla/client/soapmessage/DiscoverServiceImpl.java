@@ -252,8 +252,10 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSc
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaMembersResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaPropertiesResponseRow;
 import static org.eclipse.daanse.xmla.client.soapmessage.Convertor.convertToMdSchemaSetsResponseRow;
+import static org.eclipse.daanse.xmla.client.soapmessage.SoapUtil.addChildElement;
+import static org.eclipse.daanse.xmla.client.soapmessage.SoapUtil.addChildElementPropertyList;
 
-public class DiscoverServiceImpl extends AbstractService implements DiscoverService {
+public class DiscoverServiceImpl implements DiscoverService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscoverServiceImpl.class);
     private SoapClient soapClient;
@@ -612,7 +614,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaTablesInfoRequest accept error", e);
@@ -638,7 +640,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaSourceTablesRequest accept error", e);
@@ -665,7 +667,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaMeasureGroupsRequest accept error", e);
@@ -693,7 +695,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaMeasureGroupsRequest accept error", e);
@@ -725,7 +727,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaPropertiesRequest accept error", e);
@@ -767,7 +769,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaPropertiesRequest accept error", e);
@@ -810,7 +812,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaMeasuresRequest accept error", e);
@@ -844,7 +846,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaMeasuresRequest accept error", e);
@@ -875,7 +877,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaLevelsRequest accept error", e);
@@ -911,7 +913,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaLevelsRequest accept error", e);
@@ -936,7 +938,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaSchemataRequest accept error", e);
@@ -962,7 +964,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaColumnsRequest accept error", e);
@@ -989,7 +991,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaColumnsRequest accept error", e);
@@ -1043,7 +1045,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverSchemaRowsetsRequest accept error", e);
@@ -1066,7 +1068,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverSchemaRowsetsRequest accept error", e);
@@ -1089,7 +1091,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverLiteralsRequest accept error", e);
@@ -1113,7 +1115,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverKeywordsRequest accept error", e);
@@ -1136,7 +1138,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverKeywordsRequest accept error", e);
@@ -1159,7 +1161,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverEnumeratorsRequest accept error", e);
@@ -1185,7 +1187,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaTablesRequest accept error", e);
@@ -1208,7 +1210,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DbSchemaCatalogsRequest accept error", e);
@@ -1249,7 +1251,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaActionsRequest accept error", e);
@@ -1279,7 +1281,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaCubesRequest accept error", e);
@@ -1311,7 +1313,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaDimensionsRequest accept error", e);
@@ -1338,7 +1340,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaFunctionsRequest accept error", e);
@@ -1374,7 +1376,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService MdSchemaHierarchiesRequest accept error", e);
@@ -1411,7 +1413,7 @@ public class DiscoverServiceImpl extends AbstractService implements DiscoverServ
 
                 SOAPElement propertyList = discover.addChildElement(PROPERTIES)
                     .addChildElement(PROPERTY_LIST);
-                setPropertyList(propertyList, properties);
+                addChildElementPropertyList(propertyList, properties);
 
             } catch (SOAPException e) {
                 LOGGER.error("DiscoverService DiscoverDataSourcesRequest accept error", e);
