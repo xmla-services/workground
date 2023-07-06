@@ -30,10 +30,15 @@ import jakarta.xml.bind.annotation.XmlType;
 public class EventSession implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @XmlAttribute(name = "templateCategory")
     protected String templateCategory;
+    @XmlAttribute(name = "templateName")
     protected String templateName;
+    @XmlAttribute(name = "templateDescription")
     protected String templateDescription;
+    @XmlAttribute(name = "event")
     protected List<java.lang.Object> event;
+    @XmlAttribute(name = "target")
     protected List<java.lang.Object> target;
     @XmlAttribute(name = "name", required = true)
     protected String name;

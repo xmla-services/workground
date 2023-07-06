@@ -334,6 +334,11 @@ class SoapUtil {
     static void addChildElementEventSession(SOAPElement element, EventSession it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "event_session");
+            addChildElement(chElement, "templateCategory", it.templateCategory());
+            addChildElement(chElement, "templateName", it.templateName());
+            addChildElement(chElement, "templateDescription", it.templateDescription());
+            addChildElementObjectList(chElement, "event", it.event());
+            addChildElementObjectList(chElement, "target", it.target());
             addChildElement(chElement, "name", it.name());
             addChildElement(chElement, "maxMemory", String.valueOf(it.maxMemory()));
             addChildElement(chElement, "eventRetentionMode", it.eventRetentionMode() == null ? null :
@@ -343,6 +348,12 @@ class SoapUtil {
             addChildElement(chElement, "memoryPartitionMode", it.eventRetentionMode() == null ? null :
                 it.eventRetentionMode().value());
             addChildElement(chElement, "trackCausality", String.valueOf(it.trackCausality()));
+        }
+    }
+
+    private static void addChildElementObjectList(SOAPElement element, String tagName, List<Object> list) {
+        if (list != null) {
+            list.forEach(it -> addChildElement(element, tagName).setTextContent(it.toString()));
         }
     }
 
@@ -2617,7 +2628,7 @@ class SoapUtil {
             SOAPElement annotationElement = addChildElement(annotationsElement, "Annotation");
             addChildElement(annotationElement, NAME_LC, annotation.name());
             annotation.visibility().ifPresent(v -> addChildElement(annotationElement, "Visibility", v));
-            addChildElement(annotationElement, VALUE2, annotation.value().toString());
+            annotation.value().ifPresent(v -> addChildElement(annotationElement, VALUE2, v.toString()));
         }
     }
 
