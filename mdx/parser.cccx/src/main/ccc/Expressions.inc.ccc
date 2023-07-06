@@ -84,10 +84,30 @@ KeyObjectIdentifier :
 ;
 
 
-INJECT CompoundId : implements Expression, org.eclipse.daanse.mdx.model.api.expression.CompoundId
+INJECT CompoundId : 
+    import static PARSER_PACKAGE.PARSER_CLASS.stripQuotes;
+    implements Expression, 
+               org.eclipse.daanse.mdx.model.api.expression.CompoundId,
+               org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
     public java.util.List<ObjectIdentifier> objectIdentifiers() {
        return childrenOfType(ObjectIdentifier.class);
+    }
+
+    public Type type() {
+        String lastChild = getLastChild().getSource();
+        if (lastChild.startsWith("[&")) return Type.PROPERTY_AMPERS_AND_QUOTED;
+        char firstChar = lastChild.charAt(0);
+        return firstChar == '[' ? Type.PROPERTY_QUOTED : Type.PROPERTY;
+    }
+
+    public String name() {
+        String image = getLastChild().getSource();
+        return switch (type()) {
+           case PROPERTY_AMPERS_AND_QUOTED -> stripQuotes(image).substring(1);
+           case PROPERTY_QUOTED -> stripQuotes(image);
+           default -> image;
+        };
     }
 }  
 
@@ -260,11 +280,14 @@ INJECT PrimaryExpression : extends Expression
 PrimaryExpression#interface :
     PrimaryPrefix
     (
-      SCAN 1 {!(peekNode() instanceof CompoundId || peekNode() instanceof QualifiedIdentifier)}
+      SCAN 1 {!(peekNode() instanceof CompoundId || peekNode() instanceof ObjectIdentifier || peekNode() instanceof QualifiedIdentifier)}
       => 
       <DOT> ObjectIdentifier #DotName(3)
       |
-      SCAN 1 {peekNode() instanceof CompoundId || peekNode() instanceof QualifiedIdentifier || peekNode() instanceof DotName}
+      SCAN 1 {peekNode() instanceof CompoundId 
+              || peekNode() instanceof ObjectIdentifier 
+              || peekNode() instanceof QualifiedIdentifier 
+              || peekNode() instanceof DotName}
       =>
       (
           < LPAREN > 
@@ -289,6 +312,14 @@ PrimaryPrefix#void :
       QualifiedIdentifier
       |
       CompoundId
+      {
+        // If the CompoundId object has only
+        // one child (which is a NameObjectIdentifier)
+        // then just replace it with that in the tree.
+        if (peekNode().getChildCount() ==1) {
+          pokeNode(peekNode().getChild(0));
+        }
+      }
 ;
 
 INJECT DotName : 
@@ -309,14 +340,24 @@ INJECT DotName :
 }    
   
 INJECT FunctionCall : 
+    import java.util.List;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
     public String name() {
-        return getChild(2) instanceof NameObjectIdentifier noi ? noi.name() : null;
+        if (getChild(0) instanceof NameObjectIdentifier noi) return noi.name(); 
+        if (getChild(0) instanceof CompoundId ci) return ci.getLastChild().toString();
+        return null;
     }
 
     public Type type() {
-       return expressions().size() > 1 ? Type.FUNCTION : Type.METHOD;
+       return getChild(0) instanceof NameObjectIdentifier noi ? Type.FUNCTION : Type.METHOD;
+    }
+    
+    public List<Expression> expressions() {
+       List<Expression> result = childrenOfType(Expression.class);
+       // This is not supposed to include the LHS.
+       result.remove(0);
+       return result;
     }
 }    
       
