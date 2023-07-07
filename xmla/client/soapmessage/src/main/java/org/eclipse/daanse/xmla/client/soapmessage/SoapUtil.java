@@ -2613,6 +2613,7 @@ class SoapUtil {
             addChildElement(assemblyElement, LAST_SCHEMA_UPDATE, assembly.lastSchemaUpdate().toString());
             addChildElement(assemblyElement, DESCRIPTION, assembly.description());
             addChildElementAnnotationList(assemblyElement, assembly.annotations());
+            addChildElementImpersonationInfo(assemblyElement, "ImpersonationInfo", assembly.impersonationInfo());
         }
     }
 
