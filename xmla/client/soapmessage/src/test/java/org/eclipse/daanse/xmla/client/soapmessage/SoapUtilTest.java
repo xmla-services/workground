@@ -18,8 +18,18 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
+import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
+import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
+import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEnd;
+import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.xmla.AccessEnum;
 import org.eclipse.daanse.xmla.api.xmla.Account;
 import org.eclipse.daanse.xmla.api.xmla.Action;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
@@ -28,52 +38,93 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
+import org.eclipse.daanse.xmla.api.xmla.Alter;
 import org.eclipse.daanse.xmla.api.xmla.AndOrType;
 import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
+import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
+import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
+import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.BoolBinop;
+import org.eclipse.daanse.xmla.api.xmla.CalculationProperty;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
+import org.eclipse.daanse.xmla.api.xmla.CellPermission;
 import org.eclipse.daanse.xmla.api.xmla.ClearCache;
+import org.eclipse.daanse.xmla.api.xmla.ColumnBinding;
+import org.eclipse.daanse.xmla.api.xmla.Command;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
+import org.eclipse.daanse.xmla.api.xmla.CubeAttribute;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
+import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
+import org.eclipse.daanse.xmla.api.xmla.CubeHierarchy;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
+import org.eclipse.daanse.xmla.api.xmla.DataItem;
+import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
+import org.eclipse.daanse.xmla.api.xmla.DataSourcePermission;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
 import org.eclipse.daanse.xmla.api.xmla.Database;
 import org.eclipse.daanse.xmla.api.xmla.DatabasePermission;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
+import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
+import org.eclipse.daanse.xmla.api.xmla.DimensionAttributeTypeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.DimensionCurrentStorageModeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Event;
 import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
 import org.eclipse.daanse.xmla.api.xmla.EventSession;
 import org.eclipse.daanse.xmla.api.xmla.EventType;
+import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
+import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
 import org.eclipse.daanse.xmla.api.xmla.Kpi;
+import org.eclipse.daanse.xmla.api.xmla.Level;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.Member;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.NotType;
+import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionModes;
+import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Permission;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveDimension;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveKpi;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBinding;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Server;
 import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
+import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
 import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
+import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.assertj3.XmlAssert;
@@ -509,31 +560,152 @@ class SoapUtilTest {
 
     private DataSourceViewBinding createDataSourceViewBinding() {
         DataSourceViewBinding it = mock(DataSourceViewBinding.class);
-        //TODO
+        when(it.dataSourceViewID()).thenReturn("dataSourceViewID");
         return it;
     }
 
     private CubePermission createCubePermission() {
         CubePermission it = mock(CubePermission.class);
-        //TODO
+        when(it.readSourceData()).thenReturn(Optional.of("readSourceData"));
+        Optional<List<CubeDimensionPermission>> dimensionPermissions = Optional.of(List.of(createCubeDimensionPermission()));
+        when(it.dimensionPermissions()).thenReturn(dimensionPermissions);
+        Optional<List<CellPermission>> cellPermissions = Optional.of(List.of(createCellPermission()));
+        when(it.cellPermissions()).thenReturn(cellPermissions);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        return it;
+    }
+
+    private CellPermission createCellPermission() {
+        CellPermission it = mock(CellPermission.class);
+        when(it.access()).thenReturn(Optional.of(AccessEnum.READ));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.expression()).thenReturn(Optional.of("expression"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private CubeDimensionPermission createCubeDimensionPermission() {
+        CubeDimensionPermission it = mock(CubeDimensionPermission.class);
+        when(it.cubeDimensionID()).thenReturn("cubeDimensionID");
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        Optional<List<AttributePermission>> attributePermissions = Optional.of(List.of(createAttributePermission()));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private AttributePermission createAttributePermission() {
+        AttributePermission it = mock(AttributePermission.class);
+        when(it.attributeID()).thenReturn("attributeID");
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.defaultMember()).thenReturn(Optional.of("defaultMember"));
+        when(it.visualTotals()).thenReturn(Optional.of("visualTotals"));
+        when(it.allowedSet()).thenReturn(Optional.of("allowedSet"));
+        when(it.deniedSet()).thenReturn(Optional.of("deniedSet"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
         return it;
     }
 
     private CubeDimension createCubeDimension() {
         CubeDimension it = mock(CubeDimension.class);
-        //TODO
+        when(it.id()).thenReturn("id");
+        when(it.name()).thenReturn("name");
+        when(it.description()).thenReturn("description");
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.dimensionID()).thenReturn("dimensionID");
+        when(it.visible()).thenReturn(true);
+        when(it.allMemberAggregationUsage()).thenReturn("allMemberAggregationUsage");
+        when(it.hierarchyUniqueNameStyle()).thenReturn("hierarchyUniqueNameStyle");
+        when(it.memberUniqueNameStyle()).thenReturn("memberUniqueNameStyle");
+        List<CubeAttribute> attributes = List.of(createCubeAttribute());
+        when(it.attributes()).thenReturn(attributes);
+        List<CubeHierarchy> hierarchies = List.of(createCubeHierarchy());
+        when(it.hierarchies()).thenReturn(hierarchies);
+        List<Annotation> annotations = createAnnotationList();
+        when(it.annotations()).thenReturn(annotations);
+        return it;
+    }
+
+    private CubeHierarchy createCubeHierarchy() {
+        CubeHierarchy it = mock(CubeHierarchy.class);
+        when(it.hierarchyID()).thenReturn("hierarchyID");
+        when(it.optimizedState()).thenReturn("optimizedState");
+        when(it.visible()).thenReturn(true);
+        when(it.enabled()).thenReturn(true);
+        when(it.annotations()).thenReturn(annotations);
+        return it;
+    }
+
+    private CubeAttribute createCubeAttribute() {
+        CubeAttribute it = mock(CubeAttribute.class);
+        when(it.attributeID()).thenReturn("attributeID");
+        when(it.aggregationUsage()).thenReturn("aggregationUsage");
+        when(it.attributeHierarchyOptimizedState()).thenReturn("attributeHierarchyOptimizedState");
+        when(it.attributeHierarchyEnabled()).thenReturn(true);
+        when(it.attributeHierarchyVisible()).thenReturn(true);
+        when(it.annotations()).thenReturn(annotations);
         return it;
     }
 
     private Translation createTranslation() {
         Translation it = mock(Translation.class);
-        //TODO
+        when(it.language()).thenReturn(10l);
+        when(it.caption()).thenReturn("caption");
+        when(it.description()).thenReturn("description");
+        when(it.displayFolder()).thenReturn("displayFolder");
+        when(it.annotations()).thenReturn(annotations);
         return it;
     }
 
     private DataSource createDataSource() {
         DataSource it = mock(DataSource.class);
-        //TODO
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(annotations);
+        when(it.managedProvider()).thenReturn("managedProvider");
+        when(it.connectionString()).thenReturn("connectionString");
+        when(it.connectionStringSecurity()).thenReturn("connectionStringSecurity");
+        ImpersonationInfo impersonationInfo = createImpersonationInfo();
+        when(it.impersonationInfo()).thenReturn(impersonationInfo);
+        when(it.isolation()).thenReturn("isolation");
+        when(it.maxActiveConnections()).thenReturn(BigInteger.ONE);
+        when(it.timeout()).thenReturn(Duration.ofDays(2));
+        List<DataSourcePermission> dataSourcePermissions = List.of(createDataSourcePermission());
+        when(it.dataSourcePermissions()).thenReturn(dataSourcePermissions);
+        ImpersonationInfo queryImpersonationInfo = createImpersonationInfo();
+        when(it.queryImpersonationInfo()).thenReturn(queryImpersonationInfo);
+        when(it.queryHints()).thenReturn("queryHints");
+        return it;
+    }
+
+    private DataSourcePermission createDataSourcePermission() {
+        DataSourcePermission it = mock(DataSourcePermission.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
         return it;
     }
 
@@ -551,12 +723,373 @@ class SoapUtilTest {
 
     private Dimension createDimension() {
         Dimension it = mock(Dimension.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(this.annotations);
+        Binding source = createBinding();
+        when(it.source()).thenReturn(source);
+        when(it.miningModelID()).thenReturn("miningModelID");
+        when(it.type()).thenReturn("type");
+        when(it.miningModelID()).thenReturn("miningModelID");
+        when(it.type()).thenReturn("type");
+        Dimension.UnknownMember unknownMember = createDimensionUnknownMember();
+        when(it.unknownMember()).thenReturn(unknownMember);
+        when(it.mdxMissingMemberMode()).thenReturn("mdxMissingMemberMode");
+        ErrorConfiguration errorConfiguration = createErrorConfiguration();
+        when(it.errorConfiguration()).thenReturn(errorConfiguration);
+        when(it.storageMode()).thenReturn("storageMode");
+        when(it.writeEnabled()).thenReturn(true);
+        when(it.processingPriority()).thenReturn(BigInteger.TEN);
+        when(it.lastProcessed()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        List<DimensionPermission> dimensionPermissions = List.of(createDimensionPermission());
+        when(it.dependsOnDimensionID()).thenReturn("dependsOnDimensionID");
+        when(it.language()).thenReturn(BigInteger.TWO);
+        when(it.collation()).thenReturn("collation");
+        when(it.unknownMemberName()).thenReturn("unknownMemberName");
+        List<Translation> unknownMemberTranslations = List.of(createTranslation());
+        when(it.state()).thenReturn("state");
+        ProactiveCaching proactiveCaching = createProactiveCaching();
+        when(it.proactiveCaching()).thenReturn(proactiveCaching);
+        when(it.processingMode()).thenReturn("processingMode");
+        when(it.processingGroup()).thenReturn("processingGroup");
+        Dimension.CurrentStorageMode currentStorageMode = createDimensionCurrentStorageMode();
+        when(it.currentStorageMode()).thenReturn(currentStorageMode);
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        List<DimensionAttribute> attributes = List.of(createDimensionAttribute());
+        when(it.attributes()).thenReturn(attributes);
+        when(it.attributeAllMemberName()).thenReturn("attributeAllMemberName");
+        List<Translation> attributeAllMemberTranslations = List.of(createTranslation());
+        when(it.attributeAllMemberTranslations()).thenReturn(attributeAllMemberTranslations);
+        List<Hierarchy> hierarchies = List.of(createHierarchy());
+        when(it.processingRecommendation()).thenReturn("processingRecommendation");
+        Relationships relationships = createRelationships();
+        when(it.relationships()).thenReturn(relationships);
+        when(it.stringStoresCompatibilityLevel()).thenReturn(10);
+        when(it.currentStringStoresCompatibilityLevel()).thenReturn(11);
+        return it;
+    }
+
+    private DimensionPermission createDimensionPermission() {
+        DimensionPermission it = mock(DimensionPermission.class);
+
+        Optional<List<AttributePermission>> attributePermissions = Optional.of(List.of(createAttributePermission()));
+        when(it.attributePermissions()).thenReturn(attributePermissions);
+        when(it.allowedRowsExpression()).thenReturn(Optional.of("allowedRowsExpression"));
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        return it;
+
+    }
+
+    private Dimension.UnknownMember createDimensionUnknownMember() {
+        Dimension.UnknownMember it = mock(Dimension.UnknownMember.class);
+        when(it.value()).thenReturn(UnknownMemberEnumType.NONE);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+
+    }
+
+    private Relationships createRelationships() {
+        Relationships it = mock(Relationships.class);
+        List<Relationship> relationship = List.of(createRelationship());
+        when(it.relationship()).thenReturn(relationship);
+        return it;
+    }
+
+    private Relationship createRelationship() {
+        Relationship it = mock(Relationship.class);
+        when(it.id()).thenReturn("id");
+        when(it.visible()).thenReturn(true);
+        RelationshipEnd fromRelationshipEnd = createRelationshipEnd();
+        when(it.fromRelationshipEnd()).thenReturn(fromRelationshipEnd);
+        RelationshipEnd toRelationshipEnd = createRelationshipEnd();
+        when(it.toRelationshipEnd()).thenReturn(toRelationshipEnd);
+        return it;
+    }
+
+    private RelationshipEnd createRelationshipEnd() {
+        RelationshipEnd it = mock(RelationshipEnd.class);
+        when(it.role()).thenReturn("role");
+        when(it.multiplicity()).thenReturn("multiplicity");
+        when(it.dimensionID()).thenReturn("dimensionID");
+        List<String> attributes = List.of("attribute");
+        when(it.attributes()).thenReturn(attributes);
+        List<RelationshipEndTranslation> translations = List.of(createRelationshipEndTranslation());
+        RelationshipEndVisualizationProperties visualizationProperties = createRelationshipEndVisualizationProperties();
+        return it;
+    }
+
+    private RelationshipEndVisualizationProperties createRelationshipEndVisualizationProperties() {
+        RelationshipEndVisualizationProperties it = mock(RelationshipEndVisualizationProperties.class);
+        when(it.folderPosition()).thenReturn(BigInteger.ONE);
+        when(it.contextualNameRule()).thenReturn("contextualNameRule");
+        when(it.defaultDetailsPosition()).thenReturn(BigInteger.TWO);
+        when(it.displayKeyPosition()).thenReturn(BigInteger.TEN);
+        when(it.commonIdentifierPosition()).thenReturn(BigInteger.ZERO);
+        when(it.isDefaultMeasure()).thenReturn(true);
+        when(it.isDefaultImage()).thenReturn(true);
+        when(it.sortPropertiesPosition()).thenReturn(BigInteger.ONE);
+        return it;
+    }
+
+    private RelationshipEndTranslation createRelationshipEndTranslation() {
+        RelationshipEndTranslation it = mock(RelationshipEndTranslation.class);
+        when(it.language()).thenReturn(10l);
+        when(it.caption()).thenReturn("caption");
+        when(it.collectionCaption()).thenReturn("collectionCaption");
+        when(it.description()).thenReturn("description");
+        when(it.displayFolder()).thenReturn("displayFolder");
+        when(it.annotations()).thenReturn(annotations);
+        return it;
+    }
+
+    private Hierarchy createHierarchy() {
+        Hierarchy it = mock(Hierarchy.class);
+
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.description()).thenReturn("description");
+        when(it.processingState()).thenReturn("processingState");
+        when(it.structureType()).thenReturn("structureType");
+        when(it.displayFolder()).thenReturn("displayFolder");
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.allMemberName()).thenReturn("allMemberName");
+        List<Translation> allMemberTranslations = List.of(createTranslation());
+        when(it.allMemberTranslations()).thenReturn(translations);
+        when(it.memberNamesUnique()).thenReturn(true);
+        when(it.memberKeysUnique()).thenReturn("memberKeysUnique");
+        when(it.allowDuplicateNames()).thenReturn(true);
+        List<Level> levels = List.of(createLevel());
+        when(it.levels()).thenReturn(levels);
+        when(it.annotations()).thenReturn(annotations);
+        HierarchyVisualizationProperties visualizationProperties = createHierarchyVisualizationProperties();
+        when(it.visualizationProperties()).thenReturn(visualizationProperties);
+        return it;
+    }
+
+    private Level createLevel() {
+        Level it = mock(Level.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.description()).thenReturn("description");
+        when(it.sourceAttributeID()).thenReturn("sourceAttributeID");
+        when(it.hideMemberIf()).thenReturn("hideMemberIf");
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.annotations()).thenReturn(annotations);
+        return it;
+    }
+
+    private HierarchyVisualizationProperties createHierarchyVisualizationProperties() {
+        HierarchyVisualizationProperties it = mock(HierarchyVisualizationProperties.class);
+        when(it.contextualNameRule()).thenReturn("contextualNameRule");
+        when(it.folderPosition()).thenReturn(BigInteger.ONE);
+        return it;
+
+    }
+
+    private DimensionAttribute createDimensionAttribute() {
+        DimensionAttribute it = mock(DimensionAttribute.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.description()).thenReturn("description");
+        DimensionAttribute.Type type = createDimensionAttributeType();
+        when(it.type()).thenReturn(type);
+        when(it.usage()).thenReturn("usage");
+        Binding source = createBinding();
+        when(it.source()).thenReturn(source);
+        when(it.estimatedCount()).thenReturn(10l);
+        List<DataItem> keyColumns = List.of(createDataItem());
+        when(it.keyColumns()).thenReturn(keyColumns);
+        DataItem nameColumn = createDataItem();
+        when(it.nameColumn()).thenReturn(nameColumn);
+        DataItem valueColumn = createDataItem();
+        when(it.valueColumn()).thenReturn(valueColumn);
+        List<AttributeTranslation> translations = List.of(createAttributeTranslation());
+        when(it.translations()).thenReturn(translations);
+        List<AttributeRelationship> attributeRelationships = List.of(createAttributeRelationship());
+        when(it.attributeRelationships()).thenReturn(attributeRelationships);
+        when(it.discretizationMethod()).thenReturn("discretizationMethod");
+        when(it.discretizationBucketCount()).thenReturn(BigInteger.ONE);
+        when(it.rootMemberIf()).thenReturn("rootMemberIf");
+        when(it.orderBy()).thenReturn("orderBy");
+        when(it.defaultMember()).thenReturn("defaultMember");
+        when(it.orderByAttributeID()).thenReturn("orderByAttributeID");
+        DataItem skippedLevelsColumn = createDataItem();
+        when(it.skippedLevelsColumn()).thenReturn(skippedLevelsColumn);
+        when(it.namingTemplate()).thenReturn("namingTemplate");
+        when(it.membersWithData()).thenReturn("membersWithData");
+        when(it.membersWithDataCaption()).thenReturn("membersWithDataCaption");
+        List<Translation> namingTemplateTranslations = List.of(createTranslation());
+        when(it.namingTemplateTranslations()).thenReturn(namingTemplateTranslations);
+        DataItem dataItem = createDataItem();
+        when(it.customRollupColumn()).thenReturn(dataItem);
+        when(it.customRollupPropertiesColumn()).thenReturn(dataItem);
+        when(it.unaryOperatorColumn()).thenReturn(dataItem);
+        when(it.attributeHierarchyOrdered()).thenReturn(true);
+        when(it.memberNamesUnique()).thenReturn(true);
+        when(it.isAggregatable()).thenReturn(true);
+        when(it.attributeHierarchyEnabled()).thenReturn(true);
+        when(it.attributeHierarchyOptimizedState()).thenReturn("attributeHierarchyOptimizedState");
+        when(it.attributeHierarchyVisible()).thenReturn(true);
+        when(it.attributeHierarchyDisplayFolder()).thenReturn("attributeHierarchyDisplayFolder");
+        when(it.keyUniquenessGuarantee()).thenReturn(true);
+        when(it.groupingBehavior()).thenReturn("groupingBehavior");
+        when(it.instanceSelection()).thenReturn("instanceSelection");
+        when(it.annotations()).thenReturn(annotations);
+        when(it.processingState()).thenReturn("processingState");
+        when(it.attributeHierarchyProcessingState()).thenReturn(AttributeHierarchyProcessingState.PROCESSED);
+        DimensionAttributeVisualizationProperties visualizationProperties = createDimensionAttributeVisualizationProperties();
+        when(it.visualizationProperties()).thenReturn(visualizationProperties);
+        when(it.extendedType()).thenReturn("extendedType");
+        return it;
+    }
+
+    private DimensionAttributeVisualizationProperties createDimensionAttributeVisualizationProperties() {
+        DimensionAttributeVisualizationProperties it = mock(DimensionAttributeVisualizationProperties.class);
+        when(it.folderPosition()).thenReturn(BigInteger.ONE);
+        when(it.contextualNameRule()).thenReturn("contextualNameRule");
+        when(it.alignment()).thenReturn("alignment");
+        when(it.isFolderDefault()).thenReturn(true);
+        when(it.isRightToLeft()).thenReturn(true);
+        when(it.sortDirection()).thenReturn("sortDirection");
+        when(it.units()).thenReturn("units");
+        when(it.width()).thenReturn(BigInteger.ONE);
+        when(it.defaultDetailsPosition()).thenReturn(BigInteger.TWO);
+        when(it.commonIdentifierPosition()).thenReturn(BigInteger.TEN);
+        when(it.sortPropertiesPosition()).thenReturn(BigInteger.ZERO);
+        when(it.displayKeyPosition()).thenReturn(BigInteger.TWO);
+        when(it.isDefaultImage()).thenReturn(true);
+        when(it.defaultAggregateFunction()).thenReturn("defaultAggregateFunction");
+        return it;
+
+    }
+
+    private AttributeRelationship createAttributeRelationship() {
+        AttributeRelationship it = mock(AttributeRelationship.class);
+        when(it.attributeID()).thenReturn("attributeID");
+        when(it.relationshipType()).thenReturn("relationshipType");
+        when(it.cardinality()).thenReturn("cardinality");
+        when(it.optionality()).thenReturn("optionality");
+        when(it.overrideBehavior()).thenReturn("overrideBehavior");
+        when(it.annotations()).thenReturn(annotations);
+        when(it.name()).thenReturn("name");
+        when(it.visible()).thenReturn(true);
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        return it;
+
+    }
+
+    private AttributeTranslation createAttributeTranslation() {
+        AttributeTranslation it = mock(AttributeTranslation.class);
+        when(it.language()).thenReturn(10l);
+        when(it.caption()).thenReturn(Optional.of("caption"));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.displayFolder()).thenReturn(Optional.of("displayFolder"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        Optional<DataItem> captionColumn = Optional.of(createDataItem());
+        when(it.captionColumn()).thenReturn(captionColumn);
+        when(it.membersWithDataCaption()).thenReturn(Optional.of("membersWithDataCaption"));
+        return it;
+    }
+
+    private DataItem createDataItem() {
+        DataItem it = mock(DataItem.class);
+        when(it.dataType()).thenReturn("dataType");
+        when(it.dataSize()).thenReturn(Optional.of(10));
+        when(it.mimeType()).thenReturn(Optional.of("mimeType"));
+        when(it.nullProcessing()).thenReturn(Optional.of(NullProcessingEnum.AUTOMATIC));
+        when(it.trimming()).thenReturn(Optional.of("trimming"));
+        when(it.invalidXmlCharacters()).thenReturn(Optional.of(InvalidXmlCharacterEnum.PRESERVE));
+        when(it.collation()).thenReturn(Optional.of("collation"));
+        when(it.format()).thenReturn(Optional.of(DataItemFormatEnum.TRIM_ALL));
+        Optional<Binding> source = Optional.of(createBinding());
+        when(it.source()).thenReturn(source);
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private DimensionAttribute.Type createDimensionAttributeType() {
+        DimensionAttribute.Type it = mock(DimensionAttribute.Type.class);
+        when(it.value()).thenReturn(DimensionAttributeTypeEnumType.ACCOUNT);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+    }
+
+    private Dimension.CurrentStorageMode createDimensionCurrentStorageMode() {
+        Dimension.CurrentStorageMode it = mock(Dimension.CurrentStorageMode.class);
+        when(it.value()).thenReturn(DimensionCurrentStorageModeEnumType.ROLAP);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+    }
+
+    private Binding createBinding() {
+        Binding it = mock(Binding.class);
         //TODO
         return it;
     }
 
     private MdxScript createMdxScript() {
         MdxScript it = mock(MdxScript.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(annotations);
+        List<Command> commands = List.of(createCommand());
+        when(it.commands()).thenReturn(commands);
+        when(it.defaultScript()).thenReturn(true);
+        List<CalculationProperty> calculationProperties = List.of(createCalculationProperty());
+        return it;
+    }
+
+    private CalculationProperty createCalculationProperty() {
+        CalculationProperty it = mock(CalculationProperty.class);
+        when(it.calculationReference()).thenReturn("calculationReference");
+        when(it.calculationType()).thenReturn("calculationType");
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.description()).thenReturn("description");
+        when(it.visible()).thenReturn(true);
+        when(it.solveOrder()).thenReturn(BigInteger.ONE);
+        when(it.formatString()).thenReturn("formatString");
+        when(it.foreColor()).thenReturn("foreColor");
+        when(it.backColor()).thenReturn("backColor");
+        when(it.fontName()).thenReturn("fontName");
+        when(it.fontSize()).thenReturn("fontSize");
+        when(it.fontFlags()).thenReturn("fontFlags");
+        when(it.nonEmptyBehavior()).thenReturn("nonEmptyBehavior");
+        when(it.associatedMeasureGroupID()).thenReturn("associatedMeasureGroupID");
+        when(it.displayFolder()).thenReturn("displayFolder");
+        when(it.language()).thenReturn(BigInteger.TEN);
+        CalculationPropertiesVisualizationProperties visualizationProperties = createCalculationPropertiesVisualizationProperties();
+        return it;
+    }
+
+    private CalculationPropertiesVisualizationProperties createCalculationPropertiesVisualizationProperties() {
+        CalculationPropertiesVisualizationProperties it = mock(CalculationPropertiesVisualizationProperties.class);
+        //TODO
+        return it;
+    }
+
+    private Command createCommand() {
+    	Alter it = mock(Alter.class);
         //TODO
         return it;
     }
@@ -581,6 +1114,97 @@ class SoapUtilTest {
 
     private Partition createPartition() {
         Partition it = mock(Partition.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(annotations);
+        TabularBinding source = createTabularBinding();
+        when(it.source()).thenReturn(source);
+        when(it.processingPriority()).thenReturn(BigInteger.ONE);
+        when(it.aggregationPrefix()).thenReturn("aggregationPrefix");
+        Partition.StorageMode storageMode = createPartitionStorageMode();
+        when(it.storageMode()).thenReturn(storageMode);
+        when(it.processingMode()).thenReturn("processingMode");
+        ErrorConfiguration errorConfiguration = createErrorConfiguration();
+        when(it.errorConfiguration()).thenReturn(errorConfiguration);
+        when(it.storageLocation()).thenReturn("storageLocation");
+        when(it.remoteDatasourceID()).thenReturn("remoteDatasourceID");
+        when(it.slice()).thenReturn("slice");
+        ProactiveCaching proactiveCaching = createProactiveCaching();
+        when(it.proactiveCaching()).thenReturn(proactiveCaching);
+        when(it.type()).thenReturn("type");
+        when(it.estimatedSize()).thenReturn(10l);
+        when(it.estimatedRows()).thenReturn(11l);
+        Partition.CurrentStorageMode currentStorageMode = createPartitionCurrentStorageMode();
+        when(it.currentStorageMode()).thenReturn(currentStorageMode);
+        when(it.aggregationDesignID()).thenReturn("aggregationDesignID");
+        List<AggregationInstance> aggregationInstances = List.of(createAggregationInstance());
+        when(it.aggregationInstances()).thenReturn(aggregationInstances);
+        DataSourceViewBinding aggregationInstanceSource = createDataSourceViewBinding();
+        when(it.aggregationInstanceSource()).thenReturn(aggregationInstanceSource);
+        when(it.lastProcessed()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.state()).thenReturn("state");
+        when(it.stringStoresCompatibilityLevel()).thenReturn(12);
+        when(it.currentStringStoresCompatibilityLevel()).thenReturn(14);
+        when(it.directQueryUsage()).thenReturn("directQueryUsage");
+        return it;
+    }
+
+    private Partition.StorageMode createPartitionStorageMode() {
+        Partition.StorageMode it = mock(Partition.StorageMode.class);
+        when(it.value()).thenReturn(PartitionStorageModeEnumType.ROLAP);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+
+    }
+
+    private AggregationInstance createAggregationInstance() {
+        AggregationInstance it = mock(AggregationInstance.class);
+        when(it.id()).thenReturn("id");
+        when(it.name()).thenReturn("name");
+        when(it.aggregationType()).thenReturn("aggregationType");
+        TabularBinding source = createTabularBinding();
+        when(it.source()).thenReturn(source);
+        List<AggregationInstanceDimension> dimensions = List.of(createAggregationInstanceDimension());
+        when(it.dimensions()).thenReturn(dimensions);
+        List<AggregationInstanceMeasure> measures = List.of(createAggregationInstanceMeasure());
+        when(it.measures()).thenReturn(measures);
+        when(it.annotations()).thenReturn(annotations);
+        when(it.description()).thenReturn("description");
+        return it;
+    }
+
+    private AggregationInstanceMeasure createAggregationInstanceMeasure() {
+        AggregationInstanceMeasure it = mock(AggregationInstanceMeasure.class);
+        when(it.measureID()).thenReturn("measureID");
+        ColumnBinding source = createColumnBinding();
+        when(it.source()).thenReturn(source);
+        return it;
+    }
+
+    private ColumnBinding createColumnBinding() {
+        ColumnBinding it = mock(ColumnBinding.class);
+        //TODO
+        return it;
+    }
+
+    private AggregationInstanceDimension createAggregationInstanceDimension() {
+        AggregationInstanceDimension it = mock(AggregationInstanceDimension.class);
+        //TODO
+        return it;
+    }
+
+    private Partition.CurrentStorageMode createPartitionCurrentStorageMode() {
+        Partition.CurrentStorageMode it = mock(Partition.CurrentStorageMode.class);
+        when(it.value()).thenReturn(PartitionCurrentStorageModeEnumType.ROLAP);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+    }
+
+    private TabularBinding createTabularBinding() {
+        TabularBinding it = mock(TabularBinding.class);
         //TODO
         return it;
     }
@@ -593,7 +1217,90 @@ class SoapUtilTest {
 
     private Perspective createPerspective() {
         Perspective it = mock(Perspective.class);
-        //TODO
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(annotations);
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.defaultMeasure()).thenReturn("defaultMeasure");
+        List<PerspectiveDimension> dimensions = List.of(createPerspectiveDimension());
+        when(it.dimensions()).thenReturn(dimensions);
+        List<PerspectiveMeasureGroup> measureGroups = List.of(createPerspectiveMeasureGroup());
+        when(it.measureGroups()).thenReturn(measureGroups);
+        List<PerspectiveCalculation> calculations = List.of(createPerspectiveCalculation());
+        when(it.calculations()).thenReturn(calculations);
+        List<PerspectiveKpi> kpis = List.of(createPerspectiveKpi());
+        when(it.kpis()).thenReturn(kpis);
+        List<PerspectiveAction> actions = List.of(createPerspectiveAction());
+        when(it.actions()).thenReturn(actions);
+        return it;
+    }
+
+    private PerspectiveAction createPerspectiveAction() {
+        PerspectiveAction it = mock(PerspectiveAction.class);
+        when(it.actionID()).thenReturn("actionID");
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveKpi createPerspectiveKpi() {
+        PerspectiveKpi it = mock(PerspectiveKpi.class);
+        when(it.kpiID()).thenReturn("kpiID");
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveCalculation createPerspectiveCalculation() {
+        PerspectiveCalculation it = mock(PerspectiveCalculation.class);
+        when(it.name()).thenReturn("name");
+        when(it.type()).thenReturn("type");
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveMeasureGroup createPerspectiveMeasureGroup() {
+        PerspectiveMeasureGroup it = mock(PerspectiveMeasureGroup.class);
+        when(it.measureGroupID()).thenReturn("measureGroupID");
+        Optional<List<PerspectiveMeasure>> measures = Optional.of(List.of(createPerspectiveMeasure()));
+        when(it.measures()).thenReturn(measures);
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveMeasure createPerspectiveMeasure() {
+        PerspectiveMeasure it = mock(PerspectiveMeasure.class);
+        when(it.measureID()).thenReturn("measureID");
+        when(it.annotations()).thenReturn(annotations);
+        return it;
+    }
+
+    private PerspectiveDimension createPerspectiveDimension() {
+        PerspectiveDimension it = mock(PerspectiveDimension.class);
+        when(it.cubeDimensionID()).thenReturn("cubeDimensionID");
+        Optional<List<PerspectiveAttribute>> attributes = Optional.of(List.of(createPerspectiveAttribute()));
+        when(it.attributes()).thenReturn(attributes);
+        Optional<List<PerspectiveHierarchy>> hierarchies = Optional.of(List.of(createPerspectiveHierarchy()));
+        when(it.hierarchies()).thenReturn(hierarchies);
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveHierarchy createPerspectiveHierarchy() {
+        PerspectiveHierarchy it = mock(PerspectiveHierarchy.class);
+        when(it.hierarchyID()).thenReturn("hierarchyID");
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private PerspectiveAttribute createPerspectiveAttribute() {
+        PerspectiveAttribute it = mock(PerspectiveAttribute.class);
+        when(it.attributeID()).thenReturn("attributeID");
+        when(it.attributeHierarchyVisible()).thenReturn(Optional.of(true));
+        when(it.defaultMember()).thenReturn(Optional.of("defaultMember"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
         return it;
     }
 
@@ -610,9 +1317,23 @@ class SoapUtilTest {
     }
 
     private Role createRole() {
-        Role role = mock(Role.class);
-        //TODO
-        return role;
+        Role it = mock(Role.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        Optional<List<Member>> members = Optional.of(List.of(createMember()));
+        when(it.members()).thenReturn(members);
+        return it;
+    }
+
+    private Member createMember() {
+        Member it = mock(Member.class);
+        when(it.name()).thenReturn(Optional.of("name"));
+        when(it.sid()).thenReturn(Optional.of("sid"));
+        return it;
     }
 
     private Assembly createAssembly() {
@@ -693,7 +1414,18 @@ class SoapUtilTest {
 
     private DatabasePermission createDatabasePermission() {
         DatabasePermission it = mock(DatabasePermission.class);
-        //TODO
+        when(it.administer()).thenReturn(Optional.of(true));
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.id()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.NONE));
         return it;
     }
 
@@ -1127,7 +1859,371 @@ class SoapUtilTest {
         String p = new StringBuilder(path).append("/Cube").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
+        checkAbstractItem(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Language")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath(p + "/Collation")
+            .isEqualTo("collation");
+        checkTranslationList(xmlAssert, p);
+        checkCubeDimensionList(xmlAssert, p);
+        checkCubePermissionList(xmlAssert, p);
+        checkMdxScriptList(xmlAssert, p);
+        checkPerspectiveList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/State")
+            .isEqualTo("state");
+        xmlAssert.valueByXPath(p + "/DefaultMeasure")
+            .isEqualTo("defaultMeasure");
+        xmlAssert.valueByXPath(p + "/Visible")
+            .isEqualTo("true");
+        checkMeasureGroupList(xmlAssert, p);
+        checkDataSourceViewBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/AggregationPrefix")
+            .isEqualTo("aggregationPrefix");
+        xmlAssert.valueByXPath(p + "/ProcessingPriority")
+            .isEqualTo("10");
+        checkCubeStorageMode(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/ProcessingMode")
+            .isEqualTo("processingMode");
+        xmlAssert.valueByXPath(p + "/ScriptCacheProcessingMode")
+            .isEqualTo("scriptCacheProcessingMode");
+        xmlAssert.valueByXPath(p + "/ScriptErrorHandlingMode")
+            .isEqualTo("scriptErrorHandlingMode");
+        xmlAssert.valueByXPath(p + "/DaxOptimizationMode")
+            .isEqualTo("daxOptimizationMode");
+        checkProactiveCaching(xmlAssert, p);
+        checkKpiList(xmlAssert, p);
+        checkErrorConfiguration(xmlAssert, p);
+        checkActionList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/StorageLocation")
+            .isEqualTo("storageLocation");
+        xmlAssert.valueByXPath(p + "/EstimatedRows")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/LastProcessed")
+            .isEqualTo("2024-01-10T10:45:00Z");
+    }
+
+    private void checkActionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Actions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAction(xmlAssert, p);
+    }
+
+    private void checkAction(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Action").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Caption")
+            .isEqualTo("caption");
+        xmlAssert.valueByXPath(p + "/CaptionIsMdx")
+            .isEqualTo("true");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/TargetType")
+            .isEqualTo("Cube");
+        xmlAssert.valueByXPath(p + "/Target")
+            .isEqualTo("target");
+        xmlAssert.valueByXPath(p + "/Condition")
+            .isEqualTo("condition");
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("Report");
+        xmlAssert.valueByXPath(p + "/Invocation")
+            .isEqualTo("invocation");
+        xmlAssert.valueByXPath(p + "/Application")
+            .isEqualTo("application");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkErrorConfiguration(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ErrorConfiguration").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/KeyErrorLimit")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/KeyErrorLogFile")
+            .isEqualTo("keyErrorLogFile");
+        xmlAssert.valueByXPath(p + "/KeyErrorAction")
+            .isEqualTo("keyErrorAction");
+        xmlAssert.valueByXPath(p + "/KeyErrorLimitAction")
+            .isEqualTo("keyErrorLimitAction");
+        xmlAssert.valueByXPath(p + "/KeyNotFound")
+            .isEqualTo("keyNotFound");
+        xmlAssert.valueByXPath(p + "/KeyDuplicate")
+            .isEqualTo("keyDuplicate");
+        xmlAssert.valueByXPath(p + "/NullKeyConvertedToUnknown")
+            .isEqualTo("nullKeyConvertedToUnknown");
+        xmlAssert.valueByXPath(p + "/NullKeyNotAllowed")
+            .isEqualTo("nullKeyNotAllowed");
+        xmlAssert.valueByXPath(p + "/CalculationError")
+            .isEqualTo("calculationError");
+    }
+
+    private void checkKpiList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Kpis").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkKpi(xmlAssert, p);
+    }
+
+    private void checkKpi(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Kpi").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DisplayFolder")
+            .isEqualTo("displayFolder");
+        xmlAssert.valueByXPath(p + "/AssociatedMeasureGroupID")
+            .isEqualTo("associatedMeasureGroupID");
+        xmlAssert.valueByXPath(p + "/Value")
+            .isEqualTo("value");
+        xmlAssert.valueByXPath(p + "/Goal")
+            .isEqualTo("goal");
+        xmlAssert.valueByXPath(p + "/Status")
+            .isEqualTo("status");
+        xmlAssert.valueByXPath(p + "/Trend")
+            .isEqualTo("trend");
+        xmlAssert.valueByXPath(p + "/Weight")
+            .isEqualTo("weight");
+        xmlAssert.valueByXPath(p + "/TrendGraphic")
+            .isEqualTo("trendGraphic");
+        xmlAssert.valueByXPath(p + "/StatusGraphic")
+            .isEqualTo("statusGraphic");
+        xmlAssert.valueByXPath(p + "/CurrentTimeMember")
+            .isEqualTo("currentTimeMember");
+        xmlAssert.valueByXPath(p + "/ParentKpiID")
+            .isEqualTo("parentKpiID");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkProactiveCaching(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ProactiveCaching").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/OnlineMode")
+            .isEqualTo("onlineMode");
+        xmlAssert.valueByXPath(p + "/AggregationStorage")
+            .isEqualTo("aggregationStorage");
+        xmlAssert.valueByXPath(p + "/AggregationStorage")
+            .isEqualTo("aggregationStorage");
+        checkProactiveCachingBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/SilenceInterval")
+            .isEqualTo("PT240H");
+        xmlAssert.valueByXPath(p + "/Latency")
+            .isEqualTo("PT264H");
+        xmlAssert.valueByXPath(p + "/SilenceOverrideInterval")
+            .isEqualTo("PT288H");
+        xmlAssert.valueByXPath(p + "/ForceRebuildInterval")
+            .isEqualTo("PT336H");
+        xmlAssert.valueByXPath(p + "/Enabled")
+            .isEqualTo("true");
+    }
+
+    private void checkProactiveCachingBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
         //TODO
+    }
+
+    private void checkCubeStorageMode(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/StorageMode").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p)
+            .isEqualTo("");
+    }
+
+    private void checkDataSourceViewBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/DataSourceViewID")
+            .isEqualTo("dataSourceViewID");
+    }
+
+    private void checkMeasureGroupList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MeasureGroups").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMeasureGroup(xmlAssert, p);
+    }
+
+    private void checkPerspectiveList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Perspectives").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspective(xmlAssert, p);
+    }
+
+    private void checkMdxScriptList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MdxScripts").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMdxScript(xmlAssert, p);
+    }
+
+    private void checkCubePermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CubePermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCubePermission(xmlAssert, p);
+    }
+
+    private void checkCubePermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CubePermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/ReadSourceData")
+            .isEqualTo("readSourceData");
+        checkCubeDimensionPermissionList(xmlAssert, p);
+        checkCellPermissionList(xmlAssert, p);
+    }
+
+    private void checkCellPermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CellPermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCellPermission(xmlAssert, p);
+    }
+
+    private void checkCellPermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CellPermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Access")
+            .isEqualTo("Read");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/Expression")
+            .isEqualTo("expression");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkCubeDimensionPermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/DimensionPermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCubeDimensionPermission(xmlAssert, p);
+    }
+
+    private void checkCubeDimensionPermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/DimensionPermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        //TODO
+    }
+
+    private void checkCubeDimensionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimensions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCubeDimension(xmlAssert, p);
+    }
+
+    private void checkCubeDimension(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimension").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DimensionID")
+            .isEqualTo("dimensionID");
+        xmlAssert.valueByXPath(p + "/Visible")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/AllMemberAggregationUsage")
+            .isEqualTo("allMemberAggregationUsage");
+        xmlAssert.valueByXPath(p + "/HierarchyUniqueNameStyle")
+            .isEqualTo("hierarchyUniqueNameStyle");
+        xmlAssert.valueByXPath(p + "/MemberUniqueNameStyle")
+            .isEqualTo("memberUniqueNameStyle");
+        checkCubeAttributeList(xmlAssert, p);
+        checkCubeHierarchyList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkCubeHierarchyList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Hierarchies").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCubeHierarchy(xmlAssert, p);
+    }
+
+    private void checkCubeHierarchy(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Hierarchy").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/HierarchyID")
+            .isEqualTo("hierarchyID");
+        xmlAssert.valueByXPath(p + "/OptimizedState")
+            .isEqualTo("optimizedState");
+        xmlAssert.valueByXPath(p + "/Visible")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/Enabled")
+            .isEqualTo("true");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkCubeAttributeList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attributes").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCubeAttribute(xmlAssert, p);
+    }
+
+    private void checkCubeAttribute(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attribute").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/AttributeID")
+            .isEqualTo("attributeID");
+        xmlAssert.valueByXPath(p + "/AggregationUsage")
+            .isEqualTo("aggregationUsage");
+        xmlAssert.valueByXPath(p + "/AttributeHierarchyOptimizedState")
+            .isEqualTo("attributeHierarchyOptimizedState");
+        xmlAssert.valueByXPath(p + "/AttributeHierarchyEnabled")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/AttributeHierarchyVisible")
+            .isEqualTo(true);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkTranslationList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Translations").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkTranslation(xmlAssert, p);
+    }
+
+    private void checkTranslation(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Translation").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Language")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/Caption")
+            .isEqualTo("caption");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/DisplayFolder")
+            .isEqualTo("displayFolder");
+        checkAnnotationList(xmlAssert, p);
     }
 
     private void checkAssembly(XmlAssert xmlAssert, String path) {
@@ -1157,6 +2253,10 @@ class SoapUtilTest {
             .isEqualTo("id");
         xmlAssert.valueByXPath(p + "/Name")
             .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/CreatedTimestamp")
+            .isEqualTo("2024-01-10T10:45:00Z");
+        xmlAssert.valueByXPath(p + "/LastSchemaUpdate")
+            .isEqualTo("2024-01-10T10:45:00Z");
         xmlAssert.valueByXPath(p + "/Description")
             .isEqualTo("description");
         checkAnnotationList(xmlAssert, p);
