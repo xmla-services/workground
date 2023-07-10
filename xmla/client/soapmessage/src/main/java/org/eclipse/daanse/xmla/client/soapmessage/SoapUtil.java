@@ -1570,7 +1570,6 @@ class SoapUtil {
             addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
             addChildElement(chElement, DESCRIPTION, it.description());
-            addChildElement(chElement, DESCRIPTION, it.description());
             addChildElementAnnotationList(chElement, it.annotations());
             addChildElementBinding(chElement, it.source());
             addChildElement(chElement, MINING_MODEL_ID, it.miningModelID());
@@ -2055,7 +2054,7 @@ class SoapUtil {
     static void addChildElementCube(SOAPElement element, Cube cube) {
         if (cube != null) {
             SOAPElement chElement = addChildElement(element, "Cube");
-            addChildElement(chElement, NAME, cube.name());
+            addChildElement(chElement, NAME_LC, cube.name());
             addChildElement(chElement, ID, cube.id());
             addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(cube.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(cube.lastSchemaUpdate()));
