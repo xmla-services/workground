@@ -694,7 +694,7 @@ class SoapUtil {
     static void addChildElementPermission(SOAPElement element, String tagName, Permission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, tagName);
-            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
             it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
@@ -758,7 +758,7 @@ class SoapUtil {
             addChildElementPartitionCurrentStorageMode(chElement, it.currentStorageMode());
             addChildElement(chElement, AGGREGATION_DESIGN_ID, it.aggregationDesignID());
             addChildElementAggregationInstanceList(chElement, it.aggregationInstances());
-            addChildElementDataSourceViewBinding(chElement, it.aggregationInstanceSource());
+            addChildElementDataSourceViewBinding(chElement, "AggregationInstanceSource", it.aggregationInstanceSource());
             addChildElement(chElement, LAST_PROCESSED, convertInstant(it.lastProcessed()));
             addChildElement(chElement, STATE, it.state());
             addChildElement(chElement, "StringStoresCompatibilityLevel",
@@ -917,8 +917,8 @@ class SoapUtil {
             it.cacheMode().ifPresent(v -> addChildElement(chElement, "CacheMode", v));
             it.holdoutMaxPercent().ifPresent(v -> addChildElement(chElement, "HoldoutMaxPercent", String.valueOf(v)));
             it.holdoutMaxCases().ifPresent(v -> addChildElement(chElement, "HoldoutMaxCases", String.valueOf(v)));
-            it.holdoutMaxCases().ifPresent(v -> addChildElement(chElement, "HoldoutSeed", String.valueOf(v)));
-            it.holdoutMaxCases().ifPresent(v -> addChildElement(chElement, "HoldoutActualSize", String.valueOf(v)));
+            it.holdoutSeed().ifPresent(v -> addChildElement(chElement, "HoldoutSeed", String.valueOf(v)));
+            it.holdoutActualSize().ifPresent(v -> addChildElement(chElement, "HoldoutActualSize", String.valueOf(v)));
             addChildElementMiningStructureColumnList(chElement, it.columns());
             it.state().ifPresent(v -> addChildElement(chElement, STATE, v));
             it.miningStructurePermissions().ifPresent(v -> addChildElementMiningStructurePermissionList(chElement, v));
@@ -945,7 +945,7 @@ class SoapUtil {
     static void addChildElementMiningStructurePermission(SOAPElement element, MiningStructurePermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructurePermission");
-            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
             it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
@@ -957,6 +957,7 @@ class SoapUtil {
             it.readDefinition().ifPresent(v -> addChildElement(chElement, READ_DEFINITION, v.getValue()));
             it.read().ifPresent(v -> addChildElement(chElement, "Read", v.getValue()));
             it.write().ifPresent(v -> addChildElement(chElement, WRITE, v.getValue()));
+            it.allowDrillThrough().ifPresent(v -> addChildElement(chElement, "AllowDrillThrough", String.valueOf(v)));
         }
     }
 
@@ -978,7 +979,7 @@ class SoapUtil {
                 smsc.annotations().ifPresent(v -> addChildElementAnnotationList(chElement, v));
                 smsc.isKey().ifPresent(v -> addChildElement(chElement, "IsKey", String.valueOf(v)));
                 smsc.source().ifPresent(v -> addChildElementBinding(chElement, v));
-                smsc.description().ifPresent(v -> addChildElement(chElement, "Distribution", v));
+                smsc.distribution().ifPresent(v -> addChildElement(chElement, "Distribution", v));
                 smsc.modelingFlags().ifPresent(v -> addChildElementMiningModelingFlagList(chElement, v));
                 addChildElement(chElement, "Content", smsc.content());
                 smsc.classifiedColumns().ifPresent(v -> addChildElementClassifiedColumnList(chElement, v));
@@ -992,16 +993,16 @@ class SoapUtil {
             if (it instanceof TableMiningStructureColumn tmsc) {
                 tmsc.foreignKeyColumns().ifPresent(v -> addChildElementDataItemList(chElement, "ForeignKeyColumns",
                     "ForeignKeyColumn", v));
-                tmsc.sourceMeasureGroup().ifPresent(v -> addChildElementMeasureGroupBinding(chElement, v));
+                tmsc.sourceMeasureGroup().ifPresent(v -> addChildElementMeasureGroupBinding(chElement, "SourceMeasureGroup", v));
                 tmsc.columns().ifPresent(v -> addChildElementMiningStructureColumnList(chElement, v));
                 tmsc.translations().ifPresent(v -> addChildElementTranslationList(chElement, TRANSLATIONS, TRANSLATION, v));
             }
         }
     }
 
-    static void addChildElementMeasureGroupBinding(SOAPElement element, MeasureGroupBinding it) {
+    static void addChildElementMeasureGroupBinding(SOAPElement element, String tagName,  MeasureGroupBinding it) {
         if (it != null) {
-            SOAPElement chElement = addChildElement(element, "SourceMeasureGroup");
+            SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, DATA_SOURCE_ID, it.dataSourceID());
             addChildElement(chElement, CUBE_ID, it.cubeID());
             addChildElement(chElement, MEASURE_GROUP_ID, it.measureGroupID());
@@ -1028,8 +1029,7 @@ class SoapUtil {
 
     static void addChildElementMiningModelingFlag(SOAPElement element, MiningModelingFlag it) {
         if (it != null) {
-            SOAPElement chElement = addChildElement(element, "ModelingFlags");
-            it.modelingFlag().ifPresent(v -> addChildElement(chElement, "ModelingFlag", v));
+            it.modelingFlag().ifPresent(v -> addChildElement(element, "ModelingFlag", v));
         }
     }
 
@@ -1068,7 +1068,7 @@ class SoapUtil {
     static void addChildElementMiningModelPermission(SOAPElement element, MiningModelPermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MiningModelPermission");
-            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             it.id().ifPresent(v -> addChildElement(chElement, ID, v));
             it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
             it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
@@ -1168,7 +1168,7 @@ class SoapUtil {
             addChildElement(chElement, STATE, it.state());
             addChildElementMeasureList(chElement, it.measures());
             addChildElement(chElement, "DataAggregation", it.dataAggregation());
-            addChildElementMeasureGroupBinding(chElement, it.source());
+            addChildElementMeasureGroupBinding(chElement, "Source", it.source());
             addChildElementMeasureGroupStorageMode(chElement, it.storageMode());
             addChildElement(chElement, STORAGE_LOCATION, it.storageLocation());
             addChildElement(chElement, "IgnoreUnrelatedDimensions", String.valueOf(it.ignoreUnrelatedDimensions()));
@@ -1318,7 +1318,7 @@ class SoapUtil {
     static void addChildElementMdxScript(SOAPElement element, MdxScript it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "MdxScript");
-            addChildElement(chElement, NAME, it.name());
+            addChildElement(chElement, NAME_LC, it.name());
             addChildElement(chElement, ID, it.id());
             addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(it.createdTimestamp()));
             addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(it.lastSchemaUpdate()));
@@ -2072,7 +2072,7 @@ class SoapUtil {
             addChildElement(chElement, "DefaultMeasure", cube.defaultMeasure());
             addChildElement(chElement, VISIBLE, String.valueOf(cube.visible()));
             addChildElementMeasureGroupList(chElement, cube.measureGroups());
-            addChildElementDataSourceViewBinding(chElement, cube.source());
+            addChildElementDataSourceViewBinding(chElement, SOURCE, cube.source());
             addChildElement(chElement, AGGREGATION_PREFIX, cube.aggregationPrefix());
             addChildElement(chElement, PROCESSING_PRIORITY, String.valueOf(cube.processingPriority()));
             addChildElementCubeStorageMode(chElement, cube.storageMode());
@@ -2424,9 +2424,9 @@ class SoapUtil {
 
     }
 
-    static void addChildElementDataSourceViewBinding(SOAPElement element, DataSourceViewBinding source) {
+    static void addChildElementDataSourceViewBinding(SOAPElement element, String tagName, DataSourceViewBinding source) {
         if (source != null) {
-            SOAPElement chElement = addChildElement(element, SOURCE);
+            SOAPElement chElement = addChildElement(element, tagName);
             addChildElement(chElement, DATA_SOURCE_VIEW_ID, source.dataSourceViewID());
         }
     }
@@ -2462,7 +2462,7 @@ class SoapUtil {
 
     static void addChildElementCubePermission(SOAPElement element, CubePermission cubePermission) {
         SOAPElement dimensionElement = addChildElement(element, "CubePermission");
-        addChildElement(dimensionElement, NAME, cubePermission.name());
+        addChildElement(dimensionElement, NAME_LC, cubePermission.name());
         cubePermission.id().ifPresent(v -> addChildElement(dimensionElement, ID, v));
         cubePermission.createdTimestamp().ifPresent(v -> addChildElement(dimensionElement, CREATED_TIMESTAMP, convertInstant(v)));
         cubePermission.lastSchemaUpdate().ifPresent(v -> addChildElement(dimensionElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
