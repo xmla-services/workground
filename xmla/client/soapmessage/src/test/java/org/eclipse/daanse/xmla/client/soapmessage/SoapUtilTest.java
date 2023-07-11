@@ -39,8 +39,10 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
+import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
 import org.eclipse.daanse.xmla.api.xmla.Alter;
 import org.eclipse.daanse.xmla.api.xmla.AndOrType;
 import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
@@ -63,6 +65,7 @@ import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeHierarchy;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
+import org.eclipse.daanse.xmla.api.xmla.CubeStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
@@ -81,25 +84,39 @@ import org.eclipse.daanse.xmla.api.xmla.Event;
 import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
 import org.eclipse.daanse.xmla.api.xmla.EventSession;
 import org.eclipse.daanse.xmla.api.xmla.EventType;
+import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
 import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
 import org.eclipse.daanse.xmla.api.xmla.Kpi;
 import org.eclipse.daanse.xmla.api.xmla.Level;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
+import org.eclipse.daanse.xmla.api.xmla.ManyToManyMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
+import org.eclipse.daanse.xmla.api.xmla.Measure;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Member;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
+import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
+import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
+import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
+import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
+import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
 import org.eclipse.daanse.xmla.api.xmla.NotType;
 import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
+import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionModes;
 import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Permission;
+import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
@@ -112,10 +129,14 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBinding;
+import org.eclipse.daanse.xmla.api.xmla.QueryBinding;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
+import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
 import org.eclipse.daanse.xmla.api.xmla.Role;
+import org.eclipse.daanse.xmla.api.xmla.ScalarMiningStructureColumn;
+import org.eclipse.daanse.xmla.api.xmla.Scope;
 import org.eclipse.daanse.xmla.api.xmla.Server;
 import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
@@ -202,52 +223,7 @@ class SoapUtilTest {
         xmlAssert.hasXPath("/SOAP:Envelope");
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/ClearCache")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object")
-            .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/ServerID")
-            .isEqualTo("serverID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DatabaseID")
-            .isEqualTo("databaseID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/RoleID")
-            .isEqualTo("roleID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/TraceID")
-            .isEqualTo("traceID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/AssemblyID")
-            .isEqualTo("assemblyID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DimensionID")
-            .isEqualTo("dimensionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DimensionPermissionID")
-            .isEqualTo("dimensionPermissionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DataSourceID")
-            .isEqualTo("dataSourceID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DataSourcePermissionID")
-            .isEqualTo("dataSourcePermissionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DatabasePermissionID")
-            .isEqualTo("databasePermissionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/DataSourceViewID")
-            .isEqualTo("dataSourceViewID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/CubeID")
-            .isEqualTo("cubeID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MiningStructureID")
-            .isEqualTo("miningStructureID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MeasureGroupID")
-            .isEqualTo("measureGroupID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/PerspectiveID")
-            .isEqualTo("perspectiveID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/CubePermissionID")
-            .isEqualTo("cubePermissionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MdxScriptID")
-            .isEqualTo("mdxScriptID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/PartitionID")
-            .isEqualTo("partitionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/AggregationDesignID")
-            .isEqualTo("aggregationDesignID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MiningModelID")
-            .isEqualTo("miningModelID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MiningModelPermissionID")
-            .isEqualTo("miningModelPermissionID");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/ClearCache/Object/MiningStructurePermissionID")
-            .isEqualTo("miningStructurePermissionID");
+        checkObjectReference(xmlAssert, "/SOAP:Envelope/SOAP:Body/ClearCache");
     }
 
     @Test
@@ -554,7 +530,8 @@ class SoapUtilTest {
 
     private Cube.StorageMode createCubeStorageMode() {
         Cube.StorageMode it = mock(Cube.StorageMode.class);
-        //TODO
+        when(it.value()).thenReturn(CubeStorageModeEnumType.ROLAP);
+        when(it.valuens()).thenReturn("valuens");
         return it;
     }
 
@@ -601,6 +578,7 @@ class SoapUtilTest {
         when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
         when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
         Optional<List<AttributePermission>> attributePermissions = Optional.of(List.of(createAttributePermission()));
+        when(it.attributePermissions()).thenReturn(attributePermissions);
         when(it.annotations()).thenReturn(Optional.of(annotations));
         return it;
     }
@@ -828,7 +806,9 @@ class SoapUtilTest {
         List<String> attributes = List.of("attribute");
         when(it.attributes()).thenReturn(attributes);
         List<RelationshipEndTranslation> translations = List.of(createRelationshipEndTranslation());
+        when(it.translations()).thenReturn(translations);
         RelationshipEndVisualizationProperties visualizationProperties = createRelationshipEndVisualizationProperties();
+        when(it.visualizationProperties()).thenReturn(visualizationProperties);
         return it;
     }
 
@@ -1039,8 +1019,9 @@ class SoapUtilTest {
     }
 
     private Binding createBinding() {
-        Binding it = mock(Binding.class);
-        //TODO
+        ColumnBinding it = mock(ColumnBinding.class);
+        when(it.tableID()).thenReturn("tableID");
+        when(it.columnID()).thenReturn("columnID");
         return it;
     }
 
@@ -1052,10 +1033,11 @@ class SoapUtilTest {
         when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
         when(it.description()).thenReturn("description");
         when(it.annotations()).thenReturn(annotations);
-        List<Command> commands = List.of(createCommand());
-        when(it.commands()).thenReturn(commands);
+        //List<Command> commands = List.of(createCommand()); //StackOverflow
+        when(it.commands()).thenReturn(null);
         when(it.defaultScript()).thenReturn(true);
         List<CalculationProperty> calculationProperties = List.of(createCalculationProperty());
+        when(it.calculationProperties()).thenReturn(calculationProperties);
         return it;
     }
 
@@ -1079,36 +1061,298 @@ class SoapUtilTest {
         when(it.displayFolder()).thenReturn("displayFolder");
         when(it.language()).thenReturn(BigInteger.TEN);
         CalculationPropertiesVisualizationProperties visualizationProperties = createCalculationPropertiesVisualizationProperties();
+        when(it.visualizationProperties()).thenReturn(visualizationProperties);
         return it;
     }
 
     private CalculationPropertiesVisualizationProperties createCalculationPropertiesVisualizationProperties() {
         CalculationPropertiesVisualizationProperties it = mock(CalculationPropertiesVisualizationProperties.class);
-        //TODO
+        when(it.folderPosition()).thenReturn(BigInteger.ONE);
+        when(it.contextualNameRule()).thenReturn("contextualNameRule");
+        when(it.alignment()).thenReturn("alignment");
+        when(it.isFolderDefault()).thenReturn(true);
+        when(it.isRightToLeft()).thenReturn(true);
+        when(it.sortDirection()).thenReturn("sortDirection");
+        when(it.units()).thenReturn("units");
+        when(it.width()).thenReturn(BigInteger.TWO);
+        when(it.isDefaultMeasure()).thenReturn(true);
+        when(it.defaultDetailsPosition()).thenReturn(BigInteger.TEN);
+        when(it.sortPropertiesPosition()).thenReturn(BigInteger.ZERO);
+        when(it.isSimpleMeasure()).thenReturn(true);
         return it;
     }
 
     private Command createCommand() {
     	Alter it = mock(Alter.class);
-        //TODO
+        ObjectReference object = createObjectReference();
+        when(it.object()).thenReturn(object);
+        MajorObject objectDefinition = createMajorObject();
+        when(it.objectDefinition()).thenReturn(objectDefinition);
+        when(it.scope()).thenReturn(Scope.SESSION);
+        when(it.allowCreate()).thenReturn(true);
+        when(it.objectExpansion()).thenReturn(ObjectExpansion.EXPAND_FULL);
         return it;
     }
 
     private MeasureGroup createMeasureGroup() {
         MeasureGroup it = mock(MeasureGroup.class);
-        //TODO
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.createdTimestamp()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.lastSchemaUpdate()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        when(it.description()).thenReturn("description");
+        when(it.annotations()).thenReturn(annotations);
+        when(it.lastProcessed()).thenReturn(Instant.parse("2024-01-10T10:45:00Z"));
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.type()).thenReturn("type");
+        when(it.state()).thenReturn("state");
+        List<Measure> measures = List.of(createMeasure());
+        when(it.measures()).thenReturn(measures);
+        when(it.dataAggregation()).thenReturn("dataAggregation");
+        MeasureGroupBinding source = createMeasureGroupBinding();
+        when(it.source()).thenReturn(source);
+        MeasureGroup.StorageMode storageMode = createMeasureGroupStorageMode();
+        when(it.storageMode()).thenReturn(storageMode);
+        when(it.storageLocation()).thenReturn("storageLocation");
+        when(it.ignoreUnrelatedDimensions()).thenReturn(true);
+        ProactiveCaching proactiveCaching = createProactiveCaching();
+        when(it.proactiveCaching()).thenReturn(proactiveCaching);
+        when(it.estimatedRows()).thenReturn(10l);
+        ErrorConfiguration errorConfiguration = createErrorConfiguration();
+        when(it.errorConfiguration()).thenReturn(errorConfiguration);
+        when(it.estimatedSize()).thenReturn(11l);
+        when(it.processingMode()).thenReturn("processingMode");
+        List<MeasureGroupDimension> dimensions = List.of(createMeasureGroupDimension());
+        when(it.dimensions()).thenReturn(dimensions);
+        List<Partition> partitions = List.of(createPartition());
+        when(it.partitions()).thenReturn(partitions);
+        when(it.aggregationPrefix()).thenReturn("aggregationPrefix");
+        when(it.processingPriority()).thenReturn(BigInteger.ONE);
+        List<AggregationDesign> aggregationDesigns = List.of(createAggregationDesign());
+        when(it.aggregationDesigns()).thenReturn(aggregationDesigns);
+        return it;
+    }
+
+    private MeasureGroupDimension createMeasureGroupDimension() {
+        ManyToManyMeasureGroupDimension it = mock(ManyToManyMeasureGroupDimension.class);
+        when(it.cubeDimensionID()).thenReturn("cubeDimensionID");
+        when(it.annotations()).thenReturn(annotations);
+        MeasureGroupDimensionBinding source = createMeasureGroupDimensionBinding();
+        when(it.source()).thenReturn(source);
+        when(it.measureGroupID()).thenReturn("measureGroupID");
+        when(it.directSlice()).thenReturn("directSlice");
+        return it;
+    }
+
+    private MeasureGroupDimensionBinding createMeasureGroupDimensionBinding() {
+        MeasureGroupDimensionBinding it = mock(MeasureGroupDimensionBinding.class);
+        when(it.cubeDimensionID()).thenReturn("cubeDimensionID");
+        return it;
+    }
+
+    private MeasureGroup.StorageMode createMeasureGroupStorageMode() {
+        MeasureGroup.StorageMode it = mock(MeasureGroup.StorageMode.class);
+        when(it.value()).thenReturn(MeasureGroupStorageModeEnumType.ROLAP);
+        when(it.valuens()).thenReturn("valuens");
+        return it;
+    }
+
+    private MeasureGroupBinding createMeasureGroupBinding() {
+        MeasureGroupBinding it = mock(MeasureGroupBinding.class);
+        when(it.dataSourceID()).thenReturn("dataSourceID");
+        when(it.cubeID()).thenReturn("cubeID");
+        when(it.measureGroupID()).thenReturn("measureGroupID");
+        when(it.persistence()).thenReturn(Optional.of(PersistenceEnum.METADATA));
+        when(it.refreshPolicy()).thenReturn(Optional.of(RefreshPolicyEnum.BY_QUERY));
+        when(it.refreshInterval()).thenReturn(Optional.of(Duration.ofDays(2l)));
+        when(it.filter()).thenReturn(Optional.of("filter"));
+        return it;
+    }
+
+    private Measure createMeasure() {
+        Measure it = mock(Measure.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn("id");
+        when(it.description()).thenReturn("description");
+        when(it.aggregateFunction()).thenReturn("aggregateFunction");
+        when(it.dataType()).thenReturn("dataType");
+        DataItem source = createDataItem();
+        when(it.source()).thenReturn(source);
+        when(it.visible()).thenReturn(true);
+        when(it.measureExpression()).thenReturn("measureExpression");
+        when(it.displayFolder()).thenReturn("displayFolder");
+        when(it.formatString()).thenReturn("formatString");
+        when(it.backColor()).thenReturn("backColor");
+        when(it.foreColor()).thenReturn("foreColor");
+        when(it.fontName()).thenReturn("fontName");
+        when(it.fontSize()).thenReturn("fontSize");
+        when(it.fontFlags()).thenReturn("fontFlags");
+        List<Translation> translations = List.of(createTranslation());
+        when(it.translations()).thenReturn(translations);
+        when(it.annotations()).thenReturn(annotations);
         return it;
     }
 
     private MiningModel createMiningModel() {
         MiningModel it = mock(MiningModel.class);
-        //TODO
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.algorithm()).thenReturn("algorithm");
+        when(it.lastProcessed()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        Optional<List<AlgorithmParameter>> algorithmParameters = Optional.of(List.of(createAlgorithmParameter()));
+        when(it.algorithmParameters()).thenReturn(algorithmParameters);
+        when(it.allowDrillThrough()).thenReturn(Optional.of(true));
+        Optional<List<AttributeTranslation>> translations = Optional.of(List.of(createAttributeTranslation()));
+        when(it.translations()).thenReturn(translations);
+        Optional<List<MiningModelColumn>> columns = Optional.of(List.of(createMiningModelColumn()));
+        when(it.columns()).thenReturn(columns);
+        when(it.state()).thenReturn(Optional.of("state"));
+        Optional<FoldingParameters> foldingParameters = Optional.of(createFoldingParameters());
+        when(it.foldingParameters()).thenReturn(foldingParameters);
+        when(it.filter()).thenReturn(Optional.of("filter"));
+        Optional<List<MiningModelPermission>> miningModelPermissions = Optional.of(List.of(createMiningModelPermission()));
+        when(it.miningModelPermissions()).thenReturn(miningModelPermissions);
+        when(it.language()).thenReturn(Optional.of("language"));
+        when(it.collation()).thenReturn(Optional.of("collation"));
+        return it;
+    }
+
+    private MiningModelPermission createMiningModelPermission() {
+        MiningModelPermission it = mock(MiningModelPermission.class);
+        when(it.allowDrillThrough()).thenReturn(Optional.of(true));
+        when(it.allowBrowsing()).thenReturn(Optional.of(true));
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.ALLOWED));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        return it;
+    }
+
+    private FoldingParameters createFoldingParameters() {
+        FoldingParameters it = mock(FoldingParameters.class);
+        when(it.foldIndex()).thenReturn(10);
+        when(it.foldCount()).thenReturn(11);
+        when(it.foldMaxCases()).thenReturn(Optional.of(12l));
+        when(it.foldTargetAttribute()).thenReturn(Optional.of("foldTargetAttribute"));
+        return it;
+    }
+
+    private MiningModelColumn createMiningModelColumn() {
+        MiningModelColumn it = mock(MiningModelColumn.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.sourceColumnID()).thenReturn(Optional.of("sourceColumnID"));
+        when(it.usage()).thenReturn(Optional.of("usage"));
+        when(it.filter()).thenReturn(Optional.of("filter"));
+        Optional<List<Translation>> translations = Optional.of(List.of(createTranslation()));
+        when(it.translations()).thenReturn(translations);
+        Optional<List<MiningModelColumn>> columns = Optional.empty();
+        when(it.columns()).thenReturn(columns);
+        Optional<List<MiningModelingFlag>> modelingFlags = Optional.of(List.of(createMiningModelingFlag()));
+        when(it.modelingFlags()).thenReturn(modelingFlags);
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        return it;
+    }
+
+    private MiningModelingFlag createMiningModelingFlag() {
+        MiningModelingFlag it = mock(MiningModelingFlag.class);
+        when(it.modelingFlag()).thenReturn(Optional.of("modelingFlag"));
+        return it;
+    }
+
+    private AlgorithmParameter createAlgorithmParameter() {
+        AlgorithmParameter it = mock(AlgorithmParameter.class);
+        when(it.name()).thenReturn("name");
+        when(it.value()).thenReturn("value");
         return it;
     }
 
     private MiningStructure createMiningStructure() {
         MiningStructure it = mock(MiningStructure.class);
-        //TODO
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        Optional<Binding> source = Optional.of(createBinding());
+        when(it.source()).thenReturn(source);
+        when(it.lastProcessed()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        Optional<List<Translation>> translations = Optional.of(List.of(createTranslation()));
+        when(it.translations()).thenReturn(translations);
+        when(it.language()).thenReturn(Optional.of(BigInteger.ONE));
+        when(it.collation()).thenReturn(Optional.of("collation"));
+        Optional<ErrorConfiguration> errorConfiguration = Optional.of(createErrorConfiguration());
+        when(it.errorConfiguration()).thenReturn(errorConfiguration);
+        when(it.cacheMode()).thenReturn(Optional.of("cacheMode"));
+        when(it.holdoutMaxPercent()).thenReturn(Optional.of(10));
+        when(it.holdoutMaxCases()).thenReturn(Optional.of(11));
+        when(it.holdoutSeed()).thenReturn(Optional.of(12));
+        when(it.holdoutActualSize()).thenReturn(Optional.of(14));
+        List<MiningStructureColumn> columns = List.of(createMiningStructureColumn());
+        when(it.columns()).thenReturn(columns);
+        when(it.state()).thenReturn(Optional.of("state"));
+        Optional<List<MiningStructurePermission>> miningStructurePermissions = Optional.of(List.of(createMiningStructurePermission()));
+        when(it.miningStructurePermissions()).thenReturn(miningStructurePermissions);
+        Optional<List<MiningModel>> miningModels = Optional.of(List.of(createMiningModel()));
+        when(it.miningModels()).thenReturn(miningModels);
+        return it;
+    }
+
+    private MiningStructurePermission createMiningStructurePermission() {
+        MiningStructurePermission it = mock(MiningStructurePermission.class);
+        when(it.allowDrillThrough()).thenReturn(Optional.of(true));
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        return it;
+    }
+
+    private MiningStructureColumn createMiningStructureColumn() {
+        ScalarMiningStructureColumn it = mock(ScalarMiningStructureColumn.class);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.type()).thenReturn(Optional.of("type"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.isKey()).thenReturn(Optional.of(true));
+        Optional<Binding> source = Optional.of(createBinding());
+        when(it.source()).thenReturn(source);
+        when(it.distribution()).thenReturn(Optional.of("distribution"));
+        Optional<List<MiningModelingFlag>> modelingFlags = Optional.of(List.of(createMiningModelingFlag()));
+        when(it.modelingFlags()).thenReturn(modelingFlags);
+        when(it.content()).thenReturn("content");
+        Optional<List<String>> classifiedColumns = Optional.of(List.of("classifiedColumn"));
+        when(it.classifiedColumns()).thenReturn(classifiedColumns);
+        when(it.discretizationMethod()).thenReturn(Optional.of("discretizationMethod"));
+        when(it.discretizationBucketCount()).thenReturn(Optional.of(BigInteger.ONE));
+        Optional<List<DataItem>> keyColumns = Optional.of(List.of(createDataItem()));
+        when(it.keyColumns()).thenReturn(keyColumns);
+        Optional<DataItem> nameColumn = Optional.of(createDataItem());
+        when(it.nameColumn()).thenReturn(nameColumn);
+        Optional<List<Translation>> translations = Optional.of(List.of(createTranslation()));
+        when(it.translations()).thenReturn(translations);
         return it;
     }
 
@@ -1186,13 +1430,24 @@ class SoapUtilTest {
 
     private ColumnBinding createColumnBinding() {
         ColumnBinding it = mock(ColumnBinding.class);
-        //TODO
+        when(it.tableID()).thenReturn("tableID");
+        when(it.columnID()).thenReturn("columnID");
         return it;
     }
 
     private AggregationInstanceDimension createAggregationInstanceDimension() {
         AggregationInstanceDimension it = mock(AggregationInstanceDimension.class);
-        //TODO
+        when(it.cubeDimensionID()).thenReturn("cubeDimensionID");
+        Optional<List<AggregationInstanceAttribute>> attributes = Optional.of(List.of(createAggregationInstanceAttribute()));
+        when(it.attributes()).thenReturn(attributes);
+        return it;
+    }
+
+    private AggregationInstanceAttribute createAggregationInstanceAttribute() {
+        AggregationInstanceAttribute it = mock(AggregationInstanceAttribute.class);
+        when(it.attributeID()).thenReturn("attributeID");
+        Optional<List<DataItem>> keyColumns = Optional.of(List.of(createDataItem()));
+        when(it.keyColumns()).thenReturn(keyColumns);
         return it;
     }
 
@@ -1204,14 +1459,32 @@ class SoapUtilTest {
     }
 
     private TabularBinding createTabularBinding() {
-        TabularBinding it = mock(TabularBinding.class);
-        //TODO
+        QueryBinding it = mock(QueryBinding.class);
+        when(it.dataSourceID()).thenReturn(Optional.of("dataSourceID"));
+        when(it.queryDefinition()).thenReturn("queryDefinition");
         return it;
     }
 
     private Permission createPermission() {
-        Permission it = mock(Permission.class);
-        //TODO
+        CubePermission it = mock(CubePermission.class);
+
+        when(it.roleID()).thenReturn("roleID");
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readSourceData()).thenReturn(Optional.of("readSourceData"));
+        Optional<List<CubeDimensionPermission>> dimensionPermissions = Optional.of(List.of(createCubeDimensionPermission()));
+        when(it.dimensionPermissions()).thenReturn(dimensionPermissions);
+        Optional<List<CellPermission>> cellPermissions = Optional.of(List.of(createCellPermission()));
+        when(it.cellPermissions()).thenReturn(cellPermissions);
+        when(it.name()).thenReturn("name");
+        when(it.id()).thenReturn(Optional.of("id"));
+        when(it.createdTimestamp()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.lastSchemaUpdate()).thenReturn(Optional.of(Instant.parse("2024-01-10T10:45:00Z")));
+        when(it.description()).thenReturn(Optional.of("description"));
+        when(it.annotations()).thenReturn(Optional.of(annotations));
+        when(it.process()).thenReturn(Optional.of(true));
+        when(it.readDefinition()).thenReturn(Optional.of(ReadDefinitionEnum.BASIC));
+        when(it.read()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
+        when(it.write()).thenReturn(Optional.of(ReadWritePermissionEnum.ALLOWED));
         return it;
     }
 
@@ -1766,63 +2039,1011 @@ class SoapUtilTest {
         String p = new StringBuilder(path).append("/Server").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        xmlAssert.valueByXPath(p + "/ProductName")
+            .isEqualTo("productName");
+        xmlAssert.valueByXPath(p + "/Edition")
+            .isEqualTo("edition");
+        xmlAssert.valueByXPath(p + "/EditionID")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/Version")
+            .isEqualTo("version");
+        xmlAssert.valueByXPath(p + "/ServerMode")
+            .isEqualTo("serverMode");
+        xmlAssert.valueByXPath(p + "/ProductLevel")
+            .isEqualTo("productLevel");
+        xmlAssert.valueByXPath(p + "/DefaultCompatibilityLevel")
+            .isEqualTo("11");
+        xmlAssert.valueByXPath(p + "/SupportedCompatibilityLevels")
+            .isEqualTo("supportedCompatibilityLevels");
+        checkDatabaseList(xmlAssert, p);
+        checkAssemblyList(xmlAssert, p);
+        checkTraceList(xmlAssert, p);
+        checkRoleList(xmlAssert, p);
+        checkServerPropertyList(xmlAssert, p);
+    }
+
+    private void checkServerPropertyList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ServerProperties").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkServerProperty(xmlAssert, p);
+    }
+
+    private void checkServerProperty(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ServerProperty").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/Value")
+            .isEqualTo("value");
+        xmlAssert.valueByXPath(p + "/RequiresRestart")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/PendingValue")
+            .isEqualTo("pendingValue");
+        xmlAssert.valueByXPath(p + "/DefaultValue")
+            .isEqualTo("defaultValue");
+        xmlAssert.valueByXPath(p + "/DisplayFlag")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("type");
+    }
+
+    private void checkRoleList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Roles").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkRole(xmlAssert, p);
+    }
+
+    private void checkTraceList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Traces").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkTrace(xmlAssert, p);
+    }
+
+    private void checkAssemblyList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Assemblies").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAssembly(xmlAssert, p);
+    }
+
+    private void checkDatabaseList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Databases").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkDatabase(xmlAssert, p);
     }
 
     private void checkRole(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/Role").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        checkAbstractItem(xmlAssert, p);
+        checkMemberList(xmlAssert, p);
+    }
+
+    private void checkMemberList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Members").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMember(xmlAssert, p);
+    }
+
+    private void checkMember(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Member").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/Sid")
+            .isEqualTo("sid");
     }
 
     private void checkPerspective(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/Perspective").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DefaultMeasure")
+            .isEqualTo("defaultMeasure");
+        checkPerspectiveDimensionList(xmlAssert, p);
+        checkPerspectiveMeasureGroupList(xmlAssert, p);
+        checkPerspectiveCalculationList(xmlAssert, p);
+        checkPerspectiveKpiList(xmlAssert, p);
+        checkPerspectiveActionList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveActionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Actions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveAction(xmlAssert, p);
+    }
+
+    private void checkPerspectiveAction(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Action").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/ActionID")
+            .isEqualTo("actionID");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveKpiList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Kpis").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveKpi(xmlAssert, p);
+    }
+
+    private void checkPerspectiveKpi(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Kpi").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/KpiID")
+            .isEqualTo("kpiID");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveCalculationList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Calculations").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveCalculation(xmlAssert, p);
+    }
+
+    private void checkPerspectiveCalculation(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Calculation").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("type");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveMeasureGroupList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MeasureGroups").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveMeasureGroup(xmlAssert, p);
+    }
+
+    private void checkPerspectiveMeasureGroup(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MeasureGroup").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/MeasureGroupID")
+            .isEqualTo("measureGroupID");
+        checkPerspectiveMeasureList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveMeasureList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measures").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveMeasure(xmlAssert, p);
+    }
+
+    private void checkPerspectiveMeasure(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measure").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/MeasureID")
+            .isEqualTo("measureID");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveDimensionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimensions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveDimension(xmlAssert, p);
+    }
+
+    private void checkPerspectiveDimension(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimension").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/CubeDimensionID")
+            .isEqualTo("cubeDimensionID");
+        checkPerspectiveAttributeList(xmlAssert, p);
+        checkPerspectiveHierarchyList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveHierarchyList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Hierarchies").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveHierarchy(xmlAssert, p);
+    }
+
+    private void checkPerspectiveHierarchy(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Hierarchy").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/HierarchyID")
+            .isEqualTo("hierarchyID");
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkPerspectiveAttributeList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attributes").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPerspectiveAttribute(xmlAssert, p);
+    }
+
+    private void checkPerspectiveAttribute(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attribute").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/AttributeID")
+            .isEqualTo("attributeID");
+        xmlAssert.valueByXPath(p + "/AttributeHierarchyVisible")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/DefaultMember")
+            .isEqualTo("defaultMember");
+        checkAnnotationList(xmlAssert, p);
     }
 
     private void checkPermission(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/Permission").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        checkAbstractItem(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/RoleID")
+            .isEqualTo("roleID");
+        xmlAssert.valueByXPath(p + "/Process")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/ReadDefinition")
+            .isEqualTo("Basic");
+        xmlAssert.valueByXPath(p + "/Read")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/Write")
+            .isEqualTo("Allowed");
     }
 
     private void checkPartition(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/Partition").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        checkTabularBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/ProcessingPriority")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath(p + "/AggregationPrefix")
+            .isEqualTo("aggregationPrefix");
+        checkPartitionStorageMode(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/ProcessingMode")
+            .isEqualTo("processingMode");
+        checkErrorConfiguration(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/StorageLocation")
+            .isEqualTo("storageLocation");
+        xmlAssert.valueByXPath(p + "/RemoteDatasourceID")
+            .isEqualTo("remoteDatasourceID");
+        xmlAssert.valueByXPath(p + "/Slice")
+            .isEqualTo("slice");
+        checkProactiveCaching(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("type");
+        xmlAssert.valueByXPath(p + "/EstimatedSize")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/EstimatedRows")
+            .isEqualTo("11");
+        checkPartitionCurrentStorageMode(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/AggregationDesignID")
+            .isEqualTo("aggregationDesignID");
+        checkAggregationInstanceList(xmlAssert, p);
+        checkDataSourceViewBinding(xmlAssert, p, "AggregationInstanceSource");
+        xmlAssert.valueByXPath(p + "/LastProcessed")
+            .isEqualTo("2024-01-10T10:45:00Z");
+        xmlAssert.valueByXPath(p + "/State")
+            .isEqualTo("state");
+        xmlAssert.valueByXPath(p + "/StringStoresCompatibilityLevel")
+            .isEqualTo("12");
+        xmlAssert.valueByXPath(p + "/CurrentStringStoresCompatibilityLevel")
+            .isEqualTo("14");
+        xmlAssert.valueByXPath(p + "/DirectQueryUsage")
+            .isEqualTo("directQueryUsage");
+    }
+
+    private void checkAggregationInstanceList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AggregationInstances").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAggregationInstance(xmlAssert, p);
+    }
+
+    private void checkAggregationInstance(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AggregationInstance").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/AggregationType")
+            .isEqualTo("aggregationType");
+        checkTabularBinding(xmlAssert, p);
+        checkAggregationInstanceDimensionList(xmlAssert, p);
+        checkAggregationInstanceMeasureList(xmlAssert, p);
+    }
+
+    private void checkAggregationInstanceMeasureList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measures").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAggregationInstanceMeasure(xmlAssert, p);
+    }
+
+    private void checkAggregationInstanceDimensionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimensions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAggregationInstanceDimension(xmlAssert, p);
+    }
+
+    private void checkAggregationInstanceMeasure(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measure").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/MeasureID")
+            .isEqualTo("measureID");
+        checkColumnBinding(xmlAssert, p);
+    }
+
+    private void checkColumnBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/TableID")
+            .isEqualTo("tableID");
+        xmlAssert.valueByXPath(p + "/ColumnID")
+            .isEqualTo("columnID");
+    }
+
+    private void checkAggregationInstanceDimension(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimension").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/CubeDimensionID")
+            .isEqualTo("cubeDimensionID");
+        checkAggregationInstanceAttributeList(xmlAssert, p);
+    }
+
+    private void checkAggregationInstanceAttributeList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attributes").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAggregationInstanceAttribute(xmlAssert, p);
+    }
+
+    private void checkAggregationInstanceAttribute(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Attribute").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/AttributeID")
+            .isEqualTo("attributeID");
+        checkDataItemList(xmlAssert, p, "KeyColumns", "KeyColumn");
+    }
+
+    private void checkDataItemList(XmlAssert xmlAssert, String path, String tagNameList, String tagName) {
+        String p = new StringBuilder(path).append("/").append(tagNameList).toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkDataItem(xmlAssert, p, tagName);
+    }
+
+    private void checkDataItem(XmlAssert xmlAssert, String path, String tagName) {
+        String p = new StringBuilder(path).append("/").append(tagName).toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/DataType")
+            .isEqualTo("dataType");
+        xmlAssert.valueByXPath(p + "/DataSize")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/MimeType")
+            .isEqualTo("mimeType");
+        xmlAssert.valueByXPath(p + "/NullProcessing")
+            .isEqualTo("Automatic");
+        xmlAssert.valueByXPath(p + "/Trimming")
+            .isEqualTo("trimming");
+        xmlAssert.valueByXPath(p + "/InvalidXmlCharacters")
+            .isEqualTo("Preserve");
+        xmlAssert.valueByXPath(p + "/Collation")
+            .isEqualTo("collation");
+        xmlAssert.valueByXPath(p + "/Format")
+            .isEqualTo("TrimAll");
+        checkBinding(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/TableID")
+            .isEqualTo("tableID");
+        xmlAssert.valueByXPath(p + "/ColumnID")
+            .isEqualTo("columnID");
+    }
+
+    private void checkPartitionCurrentStorageMode(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CurrentStorageMode").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p)
+            .isEqualTo("Rolap");
+    }
+
+    private void checkPartitionStorageMode(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/StorageMode").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p)
+            .isEqualTo("Rolap");
+    }
+
+    private void checkTabularBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/DataSourceID")
+            .isEqualTo("dataSourceID");
+        xmlAssert.valueByXPath(p + "/QueryDefinition")
+            .isEqualTo("queryDefinition");
     }
 
     private void checkMiningStructure(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/MiningStructure").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        checkBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/LastProcessed")
+            .isEqualTo("2024-01-10T10:45:00Z");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Language")
+            .isEqualTo("1");
+        xmlAssert.valueByXPath(p + "/Collation")
+            .isEqualTo("collation");
+        checkErrorConfiguration(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/CacheMode")
+            .isEqualTo("cacheMode");
+        xmlAssert.valueByXPath(p + "/HoldoutMaxPercent")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/HoldoutMaxCases")
+            .isEqualTo("11");
+        xmlAssert.valueByXPath(p + "/HoldoutSeed")
+            .isEqualTo("12");
+        xmlAssert.valueByXPath(p + "/HoldoutActualSize")
+            .isEqualTo("14");
+        checkMiningStructureColumnList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/State")
+            .isEqualTo("state");
+        checkMiningStructurePermissionList(xmlAssert, p);
+        checkMiningModelList(xmlAssert, p);
+    }
+
+    private void checkMiningModelList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MiningModels").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningModel(xmlAssert, p);
+    }
+
+    private void checkMiningStructurePermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MiningStructurePermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningStructurePermission(xmlAssert, p);
+    }
+
+    private void checkMiningStructurePermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MiningStructurePermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAbstractItem(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/RoleID")
+            .isEqualTo("roleID");
+        xmlAssert.valueByXPath(p + "/Process")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/ReadDefinition")
+            .isEqualTo("Basic");
+        xmlAssert.valueByXPath(p + "/Read")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/Write")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/AllowDrillThrough")
+            .isEqualTo("true");
+    }
+
+    private void checkMiningStructureColumnList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Columns").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningStructureColumn(xmlAssert, p);
+    }
+
+    private void checkMiningStructureColumn(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Column").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("type");
+        checkAnnotationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/IsKey")
+            .isEqualTo("true");
+        checkBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Distribution")
+            .isEqualTo("distribution");
+        checkMiningModelingFlagList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Content")
+            .isEqualTo("content");
+        checkClassifiedColumnList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DiscretizationMethod")
+            .isEqualTo("discretizationMethod");
+        xmlAssert.valueByXPath(p + "/DiscretizationBucketCount")
+            .isEqualTo("1");
+        checkDataItemList(xmlAssert, p, "KeyColumns", "KeyColumn");
+        checkDataItem(xmlAssert, p, "NameColumn");
+        checkTranslationList(xmlAssert, p);
+    }
+
+    private void checkClassifiedColumnList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ClassifiedColumns").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkClassifiedColumn(xmlAssert, p);
+    }
+
+    private void checkClassifiedColumn(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ClassifiedColumn").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p)
+            .isEqualTo("classifiedColumn");
+    }
+
+    private void checkMiningModelingFlagList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ModelingFlags").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningModelingFlag(xmlAssert, p);
+    }
+
+    private void checkMiningModelingFlag(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/ModelingFlag").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p)
+            .isEqualTo("modelingFlag");
     }
 
     private void checkMiningModel(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/MiningModel").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
+        xmlAssert.valueByXPath(p + "/Algorithm")
+            .isEqualTo("algorithm");
+        xmlAssert.valueByXPath(p + "/LastProcessed")
+            .isEqualTo("2024-01-10T10:45:00Z");
+        checkAlgorithmParameterList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/AllowDrillThrough")
+            .isEqualTo("true");
+        checkAttributeTranslationList(xmlAssert, p);
+        checkMiningModelColumnList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/State")
+            .isEqualTo("state");
+        checkFoldingParameters(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Filter")
+            .isEqualTo("filter");
+        checkMiningModelPermissionList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Language")
+            .isEqualTo("language");
+        xmlAssert.valueByXPath(p + "/Collation")
+            .isEqualTo("collation");
+    }
+
+    private void checkMiningModelPermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MiningModelPermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningModelPermission(xmlAssert, p);
+    }
+
+    private void checkMiningModelPermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/MiningModelPermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAbstractItem(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/RoleID")
+            .isEqualTo("roleID");
+        xmlAssert.valueByXPath(p + "/Process")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/ReadDefinition")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/Read")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/Write")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/AllowDrillThrough")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/AllowBrowsing")
+            .isEqualTo("true");
+    }
+
+    private void checkFoldingParameters(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/FoldingParameters").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/FoldIndex")
+            .isEqualTo("10");
+        xmlAssert.valueByXPath(p + "/FoldCount")
+            .isEqualTo("11");
+        xmlAssert.valueByXPath(p + "/FoldMaxCases")
+            .isEqualTo("12");
+        xmlAssert.valueByXPath(p + "/FoldTargetAttribute")
+            .isEqualTo("foldTargetAttribute");
+    }
+
+    private void checkMiningModelColumnList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Columns").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMiningModelColumn(xmlAssert, p);
+
+    }
+
+    private void checkMiningModelColumn(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Column").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/SourceColumnID")
+            .isEqualTo("sourceColumnID");
+        xmlAssert.valueByXPath(p + "/Usage")
+            .isEqualTo("usage");
+        xmlAssert.valueByXPath(p + "/Filter")
+            .isEqualTo("filter");
+        checkTranslationList(xmlAssert, p);
+        checkMiningModelingFlagList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkAttributeTranslationList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Translations").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAttributeTranslation(xmlAssert, p);
+
+    }
+
+    private void checkAttributeTranslation(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Translation").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
         //TODO
+    }
+
+    private void checkAlgorithmParameterList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AlgorithmParameters").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAlgorithmParameter(xmlAssert, p);
+    }
+
+    private void checkAlgorithmParameter(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AlgorithmParameter").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/Value")
+            .isEqualTo("value");
     }
 
     private void checkMeasureGroup(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/MeasureGroup").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        xmlAssert.valueByXPath(p + "/LastProcessed")
+            .isEqualTo("2024-01-10T10:45:00Z");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Type")
+            .isEqualTo("type");
+        xmlAssert.valueByXPath(p + "/State")
+            .isEqualTo("state");
+        checkMeasureList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DataAggregation")
+            .isEqualTo("dataAggregation");
+        checkMeasureGroupBinding(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/StorageMode")
+            .isEqualTo("valuensRolap");
+        xmlAssert.valueByXPath(p + "/StorageLocation")
+            .isEqualTo("storageLocation");
+        xmlAssert.valueByXPath(p + "/IgnoreUnrelatedDimensions")
+            .isEqualTo("true");
+        checkProactiveCaching(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/EstimatedRows")
+            .isEqualTo("10");
+        checkErrorConfiguration(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/EstimatedSize")
+            .isEqualTo("11");
+        xmlAssert.valueByXPath(p + "/ProcessingMode")
+            .isEqualTo("processingMode");
+        checkMeasureGroupDimensionList(xmlAssert, p);
+        checkPartitionList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/AggregationPrefix")
+            .isEqualTo("aggregationPrefix");
+        xmlAssert.valueByXPath(p + "/ProcessingPriority")
+            .isEqualTo("1");
+        checkAggregationDesignList(xmlAssert, p);
+    }
+
+    private void checkAggregationDesignList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AggregationDesigns").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAggregationDesign(xmlAssert, p);
+    }
+
+    private void checkPartitionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Partitions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkPartition(xmlAssert, p);
+    }
+
+    private void checkMeasureGroupDimensionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimensions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMeasureGroupDimension(xmlAssert, p);
+    }
+
+    private void checkMeasureGroupDimension(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Dimension").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/CubeDimensionID")
+            .isEqualTo("cubeDimensionID");
+        checkAnnotationList(xmlAssert, p);
+        checkMeasureGroupDimensionBinding(xmlAssert, p);
+
+        xmlAssert.valueByXPath(p + "/MeasureGroupID")
+            .isEqualTo("measureGroupID");
+        xmlAssert.valueByXPath(p + "/DirectSlice")
+            .isEqualTo("directSlice");
+    }
+
+    private void checkMeasureGroupDimensionBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/CubeDimensionID")
+            .isEqualTo("cubeDimensionID");
+    }
+
+    private void checkMeasureGroupBinding(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Source").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/DataSourceID")
+            .isEqualTo("dataSourceID");
+        xmlAssert.valueByXPath(p + "/CubeID")
+            .isEqualTo("cubeID");
+        xmlAssert.valueByXPath(p + "/MeasureGroupID")
+            .isEqualTo("measureGroupID");
+        xmlAssert.valueByXPath(p + "/Persistence")
+            .isEqualTo("Metadata");
+        xmlAssert.valueByXPath(p + "/RefreshPolicy")
+            .isEqualTo("ByQuery");
+        xmlAssert.valueByXPath(p + "/RefreshInterval")
+            .isEqualTo("PT48H");
+        xmlAssert.valueByXPath(p + "/Filter")
+            .isEqualTo("filter");
+    }
+
+    private void checkMeasureList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measures").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkMeasure(xmlAssert, p);
+    }
+
+    private void checkMeasure(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Measure").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/Name")
+            .isEqualTo("name");
+        xmlAssert.valueByXPath(p + "/ID")
+            .isEqualTo("id");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/AggregateFunction")
+            .isEqualTo("aggregateFunction");
+        xmlAssert.valueByXPath(p + "/DataType")
+            .isEqualTo("dataType");
+        checkDataItem(xmlAssert, p, "Source");
+        xmlAssert.valueByXPath(p + "/Visible")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/MeasureExpression")
+            .isEqualTo("measureExpression");
+        xmlAssert.valueByXPath(p + "/DisplayFolder")
+            .isEqualTo("displayFolder");
+        xmlAssert.valueByXPath(p + "/FormatString")
+            .isEqualTo("formatString");
+        xmlAssert.valueByXPath(p + "/BackColor")
+            .isEqualTo("backColor");
+        xmlAssert.valueByXPath(p + "/ForeColor")
+            .isEqualTo("foreColor");
+        xmlAssert.valueByXPath(p + "/FontName")
+            .isEqualTo("fontName");
+        xmlAssert.valueByXPath(p + "/FontSize")
+            .isEqualTo("fontSize");
+        xmlAssert.valueByXPath(p + "/FontFlags")
+            .isEqualTo("fontFlags");
+        checkTranslationList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
     }
 
     private void checkMdxScript(XmlAssert xmlAssert, String path) {
         String p = new StringBuilder(path).append("/MdxScript").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
+        checkAbstractItem(xmlAssert, p);
+        //checkCommandList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/DefaultScript")
+            .isEqualTo("true");
+        checkCalculationPropertyList(xmlAssert, p);
+    }
+
+    private void checkCalculationPropertyList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CalculationProperties").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCalculationProperty(xmlAssert, p);
+    }
+
+    private void checkCalculationProperty(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/CalculationProperty").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/CalculationReference")
+            .isEqualTo("calculationReference");
+        xmlAssert.valueByXPath(p + "/CalculationType")
+            .isEqualTo("calculationType");
+        checkTranslationList(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/Visible")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/SolveOrder")
+            .isEqualTo("1");
+
+        xmlAssert.valueByXPath(p + "/FormatString")
+            .isEqualTo("formatString");
+        xmlAssert.valueByXPath(p + "/BackColor")
+            .isEqualTo("backColor");
+        xmlAssert.valueByXPath(p + "/ForeColor")
+            .isEqualTo("foreColor");
+        xmlAssert.valueByXPath(p + "/FontName")
+            .isEqualTo("fontName");
+        xmlAssert.valueByXPath(p + "/FontSize")
+            .isEqualTo("fontSize");
+        xmlAssert.valueByXPath(p + "/FontFlags")
+            .isEqualTo("fontFlags");
+
+        xmlAssert.valueByXPath(p + "/NonEmptyBehavior")
+            .isEqualTo("nonEmptyBehavior");
+        xmlAssert.valueByXPath(p + "/AssociatedMeasureGroupID")
+            .isEqualTo("associatedMeasureGroupID");
+        xmlAssert.valueByXPath(p + "/DisplayFolder")
+            .isEqualTo("displayFolder");
+        xmlAssert.valueByXPath(p + "/Language")
+            .isEqualTo("10");
+        checkCalculationPropertiesVisualizationProperties(xmlAssert, p);
+    }
+
+    private void checkCalculationPropertiesVisualizationProperties(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/VisualizationProperties").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
         //TODO
+    }
+
+    private void checkCommandList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Commands").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkCommand(xmlAssert, p);
+
+    }
+
+    private void checkCommand(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Command").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAlter(xmlAssert, p);
+        //maybe need check other commands
+    }
+
+    private void checkAlter(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Alter").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkObjectReference(xmlAssert, p);
+        checkMajorObject(xmlAssert, p);
+        xmlAssert.valueByXPath(p + "/Scope")
+            .isEqualTo("Session");
+        xmlAssert.valueByXPath(p + "/AllowCreate")
+            .isEqualTo("true");
+        xmlAssert.valueByXPath(p + "/ObjectExpansion")
+            .isEqualTo("true");
+    }
+
+    private void checkObjectReference(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/Object").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/ServerID")
+            .isEqualTo("serverID");
+        xmlAssert.valueByXPath(p + "/DatabaseID")
+            .isEqualTo("databaseID");
+        xmlAssert.valueByXPath(p + "/RoleID")
+            .isEqualTo("roleID");
+        xmlAssert.valueByXPath(p + "/TraceID")
+            .isEqualTo("traceID");
+        xmlAssert.valueByXPath(p + "/AssemblyID")
+            .isEqualTo("assemblyID");
+        xmlAssert.valueByXPath(p + "/DimensionID")
+            .isEqualTo("dimensionID");
+        xmlAssert.valueByXPath(p + "/DimensionPermissionID")
+            .isEqualTo("dimensionPermissionID");
+        xmlAssert.valueByXPath(p + "/DataSourceID")
+            .isEqualTo("dataSourceID");
+        xmlAssert.valueByXPath(p + "/DataSourcePermissionID")
+            .isEqualTo("dataSourcePermissionID");
+        xmlAssert.valueByXPath(p + "/DatabasePermissionID")
+            .isEqualTo("databasePermissionID");
+        xmlAssert.valueByXPath(p + "/DataSourceViewID")
+            .isEqualTo("dataSourceViewID");
+        xmlAssert.valueByXPath(p + "/CubeID")
+            .isEqualTo("cubeID");
+        xmlAssert.valueByXPath(p + "/MiningStructureID")
+            .isEqualTo("miningStructureID");
+        xmlAssert.valueByXPath(p + "/MeasureGroupID")
+            .isEqualTo("measureGroupID");
+        xmlAssert.valueByXPath(p + "/PerspectiveID")
+            .isEqualTo("perspectiveID");
+        xmlAssert.valueByXPath(p + "/CubePermissionID")
+            .isEqualTo("cubePermissionID");
+        xmlAssert.valueByXPath(p + "/MdxScriptID")
+            .isEqualTo("mdxScriptID");
+        xmlAssert.valueByXPath(p + "/PartitionID")
+            .isEqualTo("partitionID");
+        xmlAssert.valueByXPath(p + "/AggregationDesignID")
+            .isEqualTo("aggregationDesignID");
+        xmlAssert.valueByXPath(p + "/MiningModelID")
+            .isEqualTo("miningModelID");
+        xmlAssert.valueByXPath(p + "/MiningModelPermissionID")
+            .isEqualTo("miningModelPermissionID");
+        xmlAssert.valueByXPath(p + "/MiningStructurePermissionID")
+            .isEqualTo("miningStructurePermissionID");
     }
 
     private void checkDimension(XmlAssert xmlAssert, String path) {
@@ -1876,7 +3097,7 @@ class SoapUtilTest {
         xmlAssert.valueByXPath(p + "/Visible")
             .isEqualTo("true");
         checkMeasureGroupList(xmlAssert, p);
-        checkDataSourceViewBinding(xmlAssert, p);
+        checkDataSourceViewBinding(xmlAssert, p, "Source");
         xmlAssert.valueByXPath(p + "/AggregationPrefix")
             .isEqualTo("aggregationPrefix");
         xmlAssert.valueByXPath(p + "/ProcessingPriority")
@@ -2042,11 +3263,11 @@ class SoapUtilTest {
         xmlAssert.nodesByXPath(p)
             .exist();
         xmlAssert.valueByXPath(p)
-            .isEqualTo("");
+            .isEqualTo("valuensRolap");
     }
 
-    private void checkDataSourceViewBinding(XmlAssert xmlAssert, String path) {
-        String p = new StringBuilder(path).append("/Source").toString();
+    private void checkDataSourceViewBinding(XmlAssert xmlAssert, String path, String tagName) {
+        String p = new StringBuilder(path).append("/").append(tagName).toString();
         xmlAssert.nodesByXPath(p)
             .exist();
         xmlAssert.valueByXPath(p + "/DataSourceViewID")
@@ -2122,7 +3343,42 @@ class SoapUtilTest {
         String p = new StringBuilder(path).append("/DimensionPermission").toString();
         xmlAssert.nodesByXPath(p)
             .exist();
-        //TODO
+        xmlAssert.valueByXPath(p + "/CubeDimensionID")
+            .isEqualTo("cubeDimensionID");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/Read")
+            .isEqualTo("Allowed");
+        xmlAssert.valueByXPath(p + "/Write")
+            .isEqualTo("Allowed");
+        checkAttributePermissionList(xmlAssert, p);
+        checkAnnotationList(xmlAssert, p);
+    }
+
+    private void checkAttributePermissionList(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AttributePermissions").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        checkAttributePermission(xmlAssert, p);
+    }
+
+    private void checkAttributePermission(XmlAssert xmlAssert, String path) {
+        String p = new StringBuilder(path).append("/AttributePermission").toString();
+        xmlAssert.nodesByXPath(p)
+            .exist();
+        xmlAssert.valueByXPath(p + "/AttributeID")
+            .isEqualTo("attributeID");
+        xmlAssert.valueByXPath(p + "/Description")
+            .isEqualTo("description");
+        xmlAssert.valueByXPath(p + "/DefaultMember")
+            .isEqualTo("defaultMember");
+        xmlAssert.valueByXPath(p + "/VisualTotals")
+            .isEqualTo("visualTotals");
+        xmlAssert.valueByXPath(p + "/AllowedSet")
+            .isEqualTo("allowedSet");
+        xmlAssert.valueByXPath(p + "/DeniedSet")
+            .isEqualTo("deniedSet");
+        checkAnnotationList(xmlAssert, p);
     }
 
     private void checkCubeDimensionList(XmlAssert xmlAssert, String path) {
