@@ -20,6 +20,7 @@ import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.engine200_200.ExpressionBinding;
 import org.eclipse.daanse.xmla.api.engine200_200.RowNumberBinding;
 import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
+import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
 import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
 import org.eclipse.daanse.xmla.api.engine300.RelationshipEndVisualizationProperties;
 import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
@@ -204,12 +205,14 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMNS;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COLUMN_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.COMMAND;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CONTENT;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CONTEXTUAL_NAME_RULE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CREATED_TIMESTAMP;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_DIMENSION_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.CUBE_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATA_SOURCE_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATA_SOURCE_INFO;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DATA_SOURCE_VIEW_ID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DEFAULT_DETAILS_POSITION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DEFAULT_MEMBER;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DESCRIPTION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.DIMENSION;
@@ -220,6 +223,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ESTIMATED_ROW
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ESTIMATED_SIZE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.EXPRESSION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FILTER;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FOLDER_POSITION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.FORMAT;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHIES;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.HIERARCHY;
@@ -248,6 +252,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REFRESH_INTER
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.REFRESH_POLICY;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.ROLE_ID;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SERVER_ID;
+import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SORT_PROPERTIES_POSITION;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.SOURCE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.STATE;
 import static org.eclipse.daanse.xmla.client.soapmessage.Constants.STORAGE_LOCATION;
@@ -264,7 +269,7 @@ import static org.eclipse.daanse.xmla.client.soapmessage.Constants.WRITE;
 
 class SoapUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
 
     private SoapUtil() {
         // constructor
@@ -1277,7 +1282,7 @@ class SoapUtil {
     static void addChildElementMeasureGroupStorageMode(SOAPElement element, MeasureGroup.StorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, STORAGE_MODE);
-            addChildElement(chElement, VALUENS, it.valuens());
+            chElement.setAttribute(VALUENS, it.valuens());
             addChildElement(chElement, VALUE, it.value() == null ? null : it.value().value());
         }
 
@@ -1369,6 +1374,16 @@ class SoapUtil {
             SOAPElement chElement = addChildElement(element, VISUALIZATION_PROPERTIES);
             addChildElement(chElement, "IsDefaultMeasure", String.valueOf(it.isDefaultMeasure()));
             addChildElement(chElement, "IsSimpleMeasure", String.valueOf(it.isSimpleMeasure()));
+            addChildElement(chElement, FOLDER_POSITION, String.valueOf(it.folderPosition()));
+            addChildElement(chElement, CONTEXTUAL_NAME_RULE, it.contextualNameRule());
+            addChildElement(chElement, "Alignment", it.alignment());
+            addChildElement(chElement, "IsFolderDefault", String.valueOf(it.isFolderDefault()));
+            addChildElement(chElement, "IsRightToLeft", String.valueOf(it.isRightToLeft()));
+            addChildElement(chElement, "SortDirection", it.sortDirection());
+            addChildElement(chElement, "Units", it.units());
+            addChildElement(chElement, "Width", String.valueOf(it.width()));
+            addChildElement(chElement, SORT_PROPERTIES_POSITION, String.valueOf(it.sortPropertiesPosition()));
+            addChildElement(chElement, DEFAULT_DETAILS_POSITION, String.valueOf(it.defaultDetailsPosition()));
         }
     }
 
@@ -1586,7 +1601,7 @@ class SoapUtil {
             addChildElement(chElement, LANGUAGE, String.valueOf(it.language()));
             addChildElement(chElement, COLLATION, it.collation());
             addChildElement(chElement, "UnknownMemberName", it.unknownMemberName());
-            addChildElementTranslationList(chElement, TRANSLATIONS, TRANSLATION, it.translations());
+            addChildElementTranslationList(chElement, "UnknownMemberTranslations", "UnknownMemberTranslation", it.translations());
             addChildElement(chElement, STATE, it.state());
             addChildElementProactiveCaching(chElement, it.proactiveCaching());
             addChildElement(chElement, PROCESSING_MODE, it.processingMode());
@@ -1648,14 +1663,14 @@ class SoapUtil {
     ) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, VISUALIZATION_PROPERTIES);
-            addChildElement(chElement, "FolderPosition", String.valueOf(it.folderPosition()));
-            addChildElement(chElement, "ContextualNameRule", it.contextualNameRule());
-            addChildElement(chElement, "DefaultDetailsPosition", String.valueOf(it.defaultDetailsPosition()));
+            addChildElement(chElement, FOLDER_POSITION, String.valueOf(it.folderPosition()));
+            addChildElement(chElement, CONTEXTUAL_NAME_RULE, it.contextualNameRule());
+            addChildElement(chElement, DEFAULT_DETAILS_POSITION, String.valueOf(it.defaultDetailsPosition()));
             addChildElement(chElement, "DisplayKeyPosition", String.valueOf(it.displayKeyPosition()));
             addChildElement(chElement, "CommonIdentifierPosition", String.valueOf(it.commonIdentifierPosition()));
             addChildElement(chElement, "IsDefaultMeasure", String.valueOf(it.isDefaultMeasure()));
             addChildElement(chElement, "IsDefaultImage", String.valueOf(it.isDefaultImage()));
-            addChildElement(chElement, "SortPropertiesPosition", String.valueOf(it.sortPropertiesPosition()));
+            addChildElement(chElement, SORT_PROPERTIES_POSITION, String.valueOf(it.sortPropertiesPosition()));
         }
     }
 
@@ -1710,7 +1725,7 @@ class SoapUtil {
             addChildElementTranslationList(chElement, TRANSLATIONS, TRANSLATION, it.translations());
             addChildElement(chElement, "AllMemberName", it.allMemberName());
             addChildElementAnnotationList(chElement, it.annotations());
-            addChildElementTranslationList(chElement, "AllMemberTranslations", "AllMemberTranslations", it.allMemberTranslations());
+            addChildElementTranslationList(chElement, "AllMemberTranslations", "AllMemberTranslation", it.allMemberTranslations());
             addChildElement(chElement, "MemberNamesUnique", String.valueOf(it.memberNamesUnique()));
             addChildElement(chElement, "MemberKeysUnique", String.valueOf(it.memberKeysUnique()));
             addChildElement(chElement, "AllowDuplicateNames", String.valueOf(it.allowDuplicateNames()));
@@ -1723,8 +1738,8 @@ class SoapUtil {
     static void addChildElementHierarchyVisualizationProperties(SOAPElement element, HierarchyVisualizationProperties it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, VISUALIZATION_PROPERTIES);
-            addChildElement(chElement, "ContextualNameRule", it.contextualNameRule());
-            addChildElement(chElement, "FolderPosition", String.valueOf(it.folderPosition()));
+            addChildElement(chElement, CONTEXTUAL_NAME_RULE, it.contextualNameRule());
+            addChildElement(chElement, FOLDER_POSITION, String.valueOf(it.folderPosition()));
         }
     }
 
@@ -1800,7 +1815,29 @@ class SoapUtil {
             addChildElement(chElement, PROCESSING_STATE, it.processingState());
             addChildElement(chElement, "AttributeHierarchyProcessingState",
                 it.attributeHierarchyProcessingState() == null ? null : it.attributeHierarchyProcessingState().value());
+            addChildElementDimensionAttributeVisualizationProperties(chElement, it.visualizationProperties());
             addChildElement(chElement, "ExtendedType", it.extendedType());
+        }
+    }
+
+    private static void addChildElementDimensionAttributeVisualizationProperties(SOAPElement element, DimensionAttributeVisualizationProperties it) {
+        if (it != null) {
+            SOAPElement chElement = addChildElement(element, "VisualizationProperties");
+
+            addChildElement(chElement, FOLDER_POSITION, String.valueOf(it.folderPosition()));
+            addChildElement(chElement, CONTEXTUAL_NAME_RULE, it.contextualNameRule());
+            addChildElement(chElement, "Alignment", it.alignment());
+            addChildElement(chElement, "IsFolderDefault", String.valueOf(it.isFolderDefault()));
+            addChildElement(chElement, "IsRightToLeft", String.valueOf(it.isRightToLeft()));
+            addChildElement(chElement, "SortDirection", it.sortDirection());
+            addChildElement(chElement, "Units", it.units());
+            addChildElement(chElement, "Width", String.valueOf(it.width()));
+            addChildElement(chElement, DEFAULT_DETAILS_POSITION, String.valueOf(it.defaultDetailsPosition()));
+            addChildElement(chElement, SORT_PROPERTIES_POSITION, String.valueOf(it.sortPropertiesPosition()));
+            addChildElement(chElement, "CommonIdentifierPosition", String.valueOf(it.commonIdentifierPosition()));
+            addChildElement(chElement, "DisplayKeyPosition", String.valueOf(it.displayKeyPosition()));
+            addChildElement(chElement, "IsDefaultImage", String.valueOf(it.isDefaultImage()));
+            addChildElement(chElement, "DefaultAggregateFunction", it.defaultAggregateFunction());
         }
     }
 
@@ -1830,7 +1867,7 @@ class SoapUtil {
     static void addChildElementDimensionAttributeType(SOAPElement element, DimensionAttribute.Type it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "Type");
-            addChildElement(chElement, VALUENS, it.valuens());
+            chElement.setAttribute(VALUENS, it.valuens());
             addChildElement(chElement, VALUE, it.value() == null ? null : it.value().value());
         }
     }
@@ -1838,7 +1875,7 @@ class SoapUtil {
     static void addChildElementDimensionCurrentStorageMode(SOAPElement element, Dimension.CurrentStorageMode it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "CurrentStorageMode");
-            addChildElement(chElement, VALUENS, it.valuens());
+            chElement.setAttribute(VALUENS, it.valuens());
             addChildElement(chElement, VALUE, it.value() == null ? null : it.value().value());
         }
     }
@@ -1875,7 +1912,7 @@ class SoapUtil {
     static void addChildElementDimensionUnknownMember(SOAPElement element, Dimension.UnknownMember it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "UnknownMember");
-            addChildElement(chElement, VALUENS, it.valuens());
+            chElement.setAttribute(VALUENS, it.valuens());
             addChildElement(chElement, VALUE, it.value() == null ? null : it.value().value());
         }
     }
@@ -1921,6 +1958,12 @@ class SoapUtil {
     static void addChildElementDataSourcePermission(SOAPElement element, DataSourcePermission it) {
         if (it != null) {
             SOAPElement chElement = addChildElement(element, "DataSourcePermission");
+            it.id().ifPresent(v -> addChildElement(chElement, ID, v));
+            addChildElement(chElement, NAME_LC, it.name());
+            it.createdTimestamp().ifPresent(v -> addChildElement(chElement, CREATED_TIMESTAMP, convertInstant(v)));
+            it.lastSchemaUpdate().ifPresent(v -> addChildElement(chElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
+            it.description().ifPresent(v -> addChildElement(chElement, DESCRIPTION, v));
+            it.annotations().ifPresent(v -> addChildElementAnnotationList(chElement, v));
             addChildElement(chElement, ROLE_ID, it.roleID());
             it.process().ifPresent(v -> addChildElement(chElement, PROCESS, String.valueOf(v)));
             it.readDefinition().ifPresent(v -> addChildElement(chElement, READ_DEFINITION, v.getValue()));
@@ -1969,7 +2012,7 @@ class SoapUtil {
             addChildElementDataSourceViewList(chElement, it.dataSourceViews());
             addChildElementDimensionList(chElement, it.dimensions());
             addChildElementCubeList(chElement, it.cubes());
-            addChildElementMiningStructureList(chElement, it.dimensions());
+            addChildElementMiningStructureList(chElement, it.miningStructures());
             addChildElementRoleList(chElement, it.roles());
             addChildElementAssemblyList(chElement, it.assemblies());
             addChildElementDatabasePermissionList(chElement, it.databasePermissions());
@@ -1992,10 +2035,10 @@ class SoapUtil {
         }
     }
 
-    static void addChildElementMiningStructureList(SOAPElement element, List<Dimension> list) {
+    static void addChildElementMiningStructureList(SOAPElement element, List<MiningStructure> list) {
         if (list != null) {
             SOAPElement chElement = addChildElement(element, "MiningStructures");
-            list.forEach(it -> addChildElementDimension(chElement, "MiningStructure", it));
+            list.forEach(it -> addChildElementMiningStructure(chElement, it));
         }
     }
 
@@ -2418,7 +2461,7 @@ class SoapUtil {
     static void addChildElementCubeStorageMode(SOAPElement element, Cube.StorageMode storageMode) {
         if (storageMode != null) {
             SOAPElement chElement = addChildElement(element, STORAGE_MODE);
-            addChildElement(chElement, VALUENS, storageMode.valuens());
+            chElement.setAttribute(VALUENS, storageMode.valuens());
             addChildElement(chElement, VALUE, storageMode.value() == null ? null : storageMode.value().value());
         }
 
@@ -2466,7 +2509,6 @@ class SoapUtil {
         cubePermission.id().ifPresent(v -> addChildElement(dimensionElement, ID, v));
         cubePermission.createdTimestamp().ifPresent(v -> addChildElement(dimensionElement, CREATED_TIMESTAMP, convertInstant(v)));
         cubePermission.lastSchemaUpdate().ifPresent(v -> addChildElement(dimensionElement, LAST_SCHEMA_UPDATE, convertInstant(v)));
-        cubePermission.description().ifPresent(v -> addChildElement(dimensionElement, DESCRIPTION, v));
         cubePermission.description().ifPresent(v -> addChildElement(dimensionElement, DESCRIPTION, v));
         cubePermission.annotations().ifPresent(v -> addChildElementAnnotationList(dimensionElement, v));
         cubePermission.readSourceData().ifPresent(v -> addChildElement(dimensionElement, "ReadSourceData", v));
