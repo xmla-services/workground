@@ -37,5 +37,7 @@
     <module>dbcreator.basic</module>
     <module>schemacreator.api</module>
     <module>schemacreator.basic</module>
+    <module>templatecreator.api</module>
+    <module>templatecreator.ods.basic</module>
   </modules>
 </project>
