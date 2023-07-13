@@ -38,6 +38,7 @@
     <module>schemacreator.api</module>
     <module>schemacreator.basic</module>
     <module>templatecreator.api</module>
+    <module>utils</module>
     <module>templatecreator.ods.basic</module>
   </modules>
 </project>
