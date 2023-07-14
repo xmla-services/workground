@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.basic;
 
+import com.github.miachm.sods.Sheet;
+import com.github.miachm.sods.SpreadSheet;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.templatecreator.api.TemplateCreatorService;
 import org.junit.jupiter.api.Test;
@@ -28,8 +30,11 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -43,13 +48,88 @@ class OdsTemplateCreatorServiceImplTest {
     Configuration conf;
 
     @Test
-    void test(
-        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider,
+    @SuppressWarnings("java:S5961")
+    void testTemplateForPopulationSchema(
+        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider,
         @InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME  + ")") ServiceAware<TemplateCreatorService> odsTemplateCreatorServiceAware
         ) throws InterruptedException, IOException {
         setupOdsDataLoadServiceImpl(path, "test", ".ods", "UTF-8");
         TemplateCreatorService templateCreatorService = odsTemplateCreatorServiceAware.waitForService(1000);
         templateCreatorService.createTemplate(provider.get());
+        Path p = Paths.get(new StringBuilder(path.toAbsolutePath().toString())
+                .append("test.ods").toString());
+        SpreadSheet spread = new SpreadSheet(p.toFile());
+        assertThat(spread).isNotNull();
+        assertThat(spread.getSheets()).hasSize(7);
+        assertThat(spread.getSheets())
+            .extracting(Sheet::getName)
+            .contains("continent")
+            .contains("country")
+            .contains("gender")
+            .contains("year")
+            .contains("state")
+            .contains("ageGroups")
+            .contains("population");
+
+        Sheet sheet = spread.getSheet("continent");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(2);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("name");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("id");
+
+        sheet = spread.getSheet("country");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(3);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("continent_id");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("name");
+        assertThat(sheet.getRange(0, 2).getValue()).isEqualTo("id");
+
+        sheet = spread.getSheet("gender");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(2);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("name");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("gender_id");
+
+
+        sheet = spread.getSheet("year");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(2);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("year");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("ordinal");
+
+        sheet = spread.getSheet("state");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(3);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("contry_id");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("name");
+        assertThat(sheet.getRange(0, 2).getValue()).isEqualTo("id");
+
+        sheet = spread.getSheet("ageGroups");
+        assertThat(sheet).isNotNull();
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(7);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("H9");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("H9_Order");
+        assertThat(sheet.getRange(0, 3).getValue()).isEqualTo("H1");
+        assertThat(sheet.getRange(0, 4).getValue()).isEqualTo("H2");
+        assertThat(sheet.getRange(0, 5).getValue()).isEqualTo("age");
+        assertThat(sheet.getRange(0, 6).getValue()).isEqualTo("H2_Order");
+
+        sheet = spread.getSheet("population");
+        assertThat(sheet).isNotNull();
+
+        assertThat(sheet.getMaxRows()).isEqualTo(2);
+        assertThat(sheet.getMaxColumns()).isEqualTo(4);
+        assertThat(sheet.getRange(0, 0).getValue()).isEqualTo("year");
+        assertThat(sheet.getRange(0, 1).getValue()).isEqualTo("state_id");
+        assertThat(sheet.getRange(0, 2).getValue()).isEqualTo("gender_id");
+        assertThat(sheet.getRange(0, 3).getValue()).isEqualTo("age");
+
     }
 
     private void setupOdsDataLoadServiceImpl(
