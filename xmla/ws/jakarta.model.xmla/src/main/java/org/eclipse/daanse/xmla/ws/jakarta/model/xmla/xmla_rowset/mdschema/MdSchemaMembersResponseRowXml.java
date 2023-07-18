@@ -98,7 +98,7 @@ public class MdSchemaMembersResponseRowXml extends AbstractMdSchemaResponseRowXm
      * The caption of the member.
      */
     @XmlElement(name = "MEMBER_CAPTION", required = false)
-    private String measureCaption;
+    private String memberCaption;
 
     /**
      * The number of children that the member has.
@@ -251,12 +251,12 @@ public class MdSchemaMembersResponseRowXml extends AbstractMdSchemaResponseRowXm
         this.memberGuid = memberGuid;
     }
 
-    public String getMeasureCaption() {
-        return measureCaption;
+    public String getMemberCaption() {
+        return memberCaption;
     }
 
-    public void setMeasureCaption(String measureCaption) {
-        this.measureCaption = measureCaption;
+    public void setMemberCaption(String memberCaption) {
+        this.memberCaption = memberCaption;
     }
 
     public Integer getChildrenCardinality() {

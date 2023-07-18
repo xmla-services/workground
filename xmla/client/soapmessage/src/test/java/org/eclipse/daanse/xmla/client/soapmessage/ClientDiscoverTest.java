@@ -1973,7 +1973,7 @@ class ClientDiscoverTest {
         assertThat(r.memberUniqueName()).isPresent().contains("MemberUniqueName");
         assertThat(r.memberType()).isPresent().contains(MemberTypeEnum.REGULAR_MEMBER);
         assertThat(r.memberGuid()).isPresent().contains(12);
-        assertThat(r.measureCaption()).isPresent().contains("MeasureCaption");
+        assertThat(r.memberCaption()).isPresent().contains("MemberCaption");
         assertThat(r.childrenCardinality()).isPresent().contains(14);
         assertThat(r.parentLevel()).isPresent().contains(15);
         assertThat(r.parentUniqueName()).isPresent().contains("ParentUniqueName");

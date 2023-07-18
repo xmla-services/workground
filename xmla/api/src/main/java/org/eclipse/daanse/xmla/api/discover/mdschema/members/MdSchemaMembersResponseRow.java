@@ -94,7 +94,7 @@ public interface MdSchemaMembersResponseRow {
     /**
      * @return The caption of the member.
      */
-    Optional<String> measureCaption();
+    Optional<String> memberCaption();
 
     /**
      * @return The number of children that the member has.

@@ -1791,8 +1791,8 @@ public class Convert {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.MemberTypeEnum.fromValue(i.getValue())));
         apiRow.memberGuid()
             .ifPresent(row::setMemberGuid);
-        apiRow.measureCaption()
-            .ifPresent(row::setMeasureCaption);
+        apiRow.memberCaption()
+            .ifPresent(row::setMemberCaption);
         apiRow.childrenCardinality()
             .ifPresent(row::setChildrenCardinality);
         apiRow.parentLevel()
