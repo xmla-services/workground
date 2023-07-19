@@ -67,6 +67,34 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRe
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
+import org.eclipse.daanse.xmla.api.xmla.Aggregation;
+import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
+import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Assembly;
+import org.eclipse.daanse.xmla.api.xmla.Command;
+import org.eclipse.daanse.xmla.api.xmla.Cube;
+import org.eclipse.daanse.xmla.api.xmla.DataSource;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
+import org.eclipse.daanse.xmla.api.xmla.Database;
+import org.eclipse.daanse.xmla.api.xmla.Dimension;
+import org.eclipse.daanse.xmla.api.xmla.EventType;
+import org.eclipse.daanse.xmla.api.xmla.MajorObject;
+import org.eclipse.daanse.xmla.api.xmla.MdxScript;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MiningModel;
+import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
+import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
+import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
+import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.Permission;
+import org.eclipse.daanse.xmla.api.xmla.Perspective;
+import org.eclipse.daanse.xmla.api.xmla.Role;
+import org.eclipse.daanse.xmla.api.xmla.Scope;
+import org.eclipse.daanse.xmla.api.xmla.Server;
+import org.eclipse.daanse.xmla.api.xmla.Trace;
+import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
@@ -95,10 +123,21 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaM
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignR;
+import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
+import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
+import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
+import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
+import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
+import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
+import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
 
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1178,6 +1217,511 @@ public class Convert {
             addMdSchemaActionsResponseRow(root, r)
         );
         return body;
+    }
+
+    public static Command commandtoCommand(SOAPElement element) {
+        NodeList nodeList = element.getElementsByTagName("Command");
+        if (nodeList != null && nodeList.getLength() > 0) {
+            return getCommand(nodeList.item(0).getChildNodes());
+        }
+        return null;
+    }
+
+
+    public static SOAPBody toStatementResponse(StatementResponse statementResponse) {
+        //TODO
+        return null;
+    }
+
+    private static Command getCommand(NodeList nl) {
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node n = nl.item(i);
+            String nodeName = n.getNodeName();
+            if ("Statement".equals(nodeName)) {
+                return new StatementR(n.getTextContent());
+            }
+            if ("Alter".equals(nodeName)) {
+                return getAlterCommand(n.getChildNodes());
+            }
+            if ("ClearCache".equals(nodeName)) {
+                return getClearCacheCommand(n.getChildNodes());
+            }
+            if ("Cancel".equals(nodeName)) {
+                return getCancelCommand(n.getChildNodes());
+            }
+        }
+        throw new IllegalArgumentException("Illegal command");
+    }
+
+    private static Command getCancelCommand(NodeList nl) {
+        Map<String, String> map = getMapValues(nl);
+        BigInteger connectionID = toBigInteger(map.get("ConnectionID"));
+        String sessionID = map.get("SessionID");
+        BigInteger spid = toBigInteger(map.get("SPID"));
+        Boolean cancelAssociated = toBoolean(map.get("CancelAssociated"));
+
+        return new CancelR(connectionID, sessionID, spid, cancelAssociated);
+    }
+
+    private static Boolean toBoolean(String it) {
+        return it != null ? Boolean.valueOf(it) : null;
+    }
+
+    private static Long toLong(String it) {
+        return it != null ? Long.valueOf(it) : null;
+    }
+
+    private static Integer toInteger(String it) {
+        return it != null ? Integer.valueOf(it) : null;
+    }
+
+
+    private static BigInteger toBigInteger(String it) {
+        return it != null ? new BigInteger(it) : null;
+    }
+
+    private static Command getClearCacheCommand(NodeList nl) {
+        ObjectReference object = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null && "Object".equals(node.getNodeName())) {
+                object = getObjectReference(node.getChildNodes());
+                break;
+            }
+        }
+        return new ClearCacheR(object);
+    }
+
+    private static ObjectReference getObjectReference(NodeList nl) {
+        Map<String, String> map = getMapValues(nl);
+        return new ObjectReferenceR(
+            map.get("ServerID"),
+            map.get("DatabaseID"),
+            map.get("RoleID"),
+            map.get("TraceID"),
+            map.get("AssemblyID"),
+            map.get("DimensionID"),
+            map.get("DimensionPermissionID"),
+            map.get("DataSourceID"),
+            map.get("DataSourcePermissionID"),
+            map.get("DatabasePermissionID"),
+            map.get("DataSourceViewID"),
+            map.get("CubeID"),
+            map.get("MiningStructureID"),
+            map.get("MeasureGroupID"),
+            map.get("PerspectiveID"),
+            map.get("CubePermissionID"),
+            map.get("MdxScriptID"),
+            map.get("PartitionID"),
+            map.get("AggregationDesignID"),
+            map.get("MiningModelID"),
+            map.get("MiningModelPermissionID"),
+            map.get("MiningStructurePermissionID")
+        );
+    }
+
+    private static Command getAlterCommand(NodeList nl) {
+        ObjectReference object = null;
+        MajorObject objectDefinition = null;
+        Scope scope = null;
+        Boolean allowCreate = null;
+        ObjectExpansion objectExpansion = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Object".equals(node.getNodeName())) {
+                    object = getObjectReference(node.getChildNodes());
+                }
+                if ("ObjectDefinition".equals(node.getNodeName())) {
+                    objectDefinition = getMajorObject(nl);
+                }
+                if ("Scope".equals(node.getNodeName())) {
+                    scope = Scope.fromValue(node.getTextContent());
+                }
+                if ("AllowCreate".equals(node.getNodeName())) {
+                    allowCreate = toBoolean(node.getTextContent());
+                }
+                if ("ObjectExpansion".equals(node.getNodeName())) {
+                    objectExpansion = ObjectExpansion.fromValue(node.getTextContent());
+                }
+            }
+
+        }
+        return new AlterR(object,
+            objectDefinition,
+            scope,
+            allowCreate,
+            objectExpansion);
+    }
+
+
+    private static MajorObject getMajorObject(NodeList nl) {
+        AggregationDesign aggregationDesign = null;
+        Assembly assembly = null;
+        Cube cube = null;
+        Database database = null;
+        DataSource dataSource = null;
+        DataSourceView dataSourceView = null;
+        Dimension dimension = null;
+        MdxScript mdxScript = null;
+        MeasureGroup measureGroup = null;
+        MiningModel miningModel = null;
+        MiningStructure miningStructure = null;
+        Partition partition = null;
+        Permission permission = null;
+        Perspective perspective = null;
+        Role role = null;
+        Server server = null;
+        Trace trace = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AggregationDesign".equals(node.getNodeName())) {
+                    aggregationDesign = getAggregationDesign(node.getChildNodes());
+                }
+                if ("Assembly".equals(node.getNodeName())) {
+                    assembly = getAssembly(node.getChildNodes());
+                }
+                if ("Cube".equals(node.getNodeName())) {
+                    cube = getCube(node.getChildNodes());
+                }
+                if ("Database".equals(node.getNodeName())) {
+                    database = getDatabase(node.getChildNodes());
+                }
+                if ("DataSource".equals(node.getNodeName())) {
+                    dataSource = getDataSource(node.getChildNodes());
+                }
+                if ("DataSourceView".equals(node.getNodeName())) {
+                    dataSourceView = getDataSourceView(node.getChildNodes());
+                }
+                if ("Dimension".equals(node.getNodeName())) {
+                    dimension = getDimension(node.getChildNodes());
+                }
+                if ("MdxScript".equals(node.getNodeName())) {
+                    mdxScript = getMdxScript(node.getChildNodes());
+                }
+                if ("MeasureGroup".equals(node.getNodeName())) {
+                    measureGroup = getMeasureGroup(node.getChildNodes());
+                }
+                if ("MiningModel".equals(node.getNodeName())) {
+                    miningModel = getMiningModel(node.getChildNodes());
+                }
+                if ("MiningStructure".equals(node.getNodeName())) {
+                    miningStructure = getMiningStructure(node.getChildNodes());
+                }
+                if ("Partition".equals(node.getNodeName())) {
+                    partition = getPartition(node.getChildNodes());
+                }
+                if ("Permission".equals(node.getNodeName())) {
+                    permission = getPermission(node.getChildNodes());
+                }
+                if ("Perspective".equals(node.getNodeName())) {
+                    perspective = getPerspective(node.getChildNodes());
+                }
+                if ("Role".equals(node.getNodeName())) {
+                    role = getRole(node.getChildNodes());
+                }
+                if ("Server".equals(node.getNodeName())) {
+                    server = getServer(node.getChildNodes());
+                }
+                if ("Trace".equals(node.getNodeName())) {
+                    trace = getTrace(node.getChildNodes());
+                }
+            }
+        }
+        return new MajorObjectR(
+            aggregationDesign,
+            assembly,
+            cube,
+            database,
+            dataSource,
+            dataSourceView,
+            dimension,
+            mdxScript,
+            measureGroup,
+            miningModel,
+            miningStructure,
+            partition,
+            permission,
+            perspective,
+            role,
+            server,
+            trace
+        );
+    }
+
+    private static Trace getTrace(NodeList nl) {
+        //TODO
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        String logFileName = null;
+        Boolean logFileAppend = null;
+        Long logFileSize = null;
+        Boolean audit = null;
+        Boolean logFileRollover = null;
+        Boolean autoRestart = null;
+        Instant stopTime = null;
+        TraceFilter filter = null;
+        EventType eventType = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("LogFileName".equals(node.getNodeName())) {
+                    logFileName = node.getTextContent();
+                }
+                if ("LogFileAppend".equals(node.getNodeName())) {
+                    logFileAppend = toBoolean(node.getTextContent());
+                }
+                if ("LogFileSize".equals(node.getNodeName())) {
+                    logFileSize = toLong(node.getTextContent());
+                }
+                if ("Audit".equals(node.getNodeName())) {
+                    audit = toBoolean(node.getTextContent());
+                }
+                if ("LogFileRollover".equals(node.getNodeName())) {
+                    logFileRollover = toBoolean(node.getTextContent());
+                }
+                if ("AutoRestart".equals(node.getNodeName())) {
+                    autoRestart = toBoolean(node.getTextContent());
+                }
+                if ("StopTime".equals(node.getNodeName())) {
+                    stopTime = toInstant(node.getTextContent());
+                }
+                if ("Filter".equals(node.getNodeName())) {
+                    filter = getTraceFilter(node.getTextContent());
+                }
+                if ("EventType".equals(node.getNodeName())) {
+                    eventType = getEventType(node.getTextContent());
+                }
+            }
+        }
+        return new TraceR(
+            name,
+            id,
+            createdTimestamp,
+            lastSchemaUpdate,
+            description,
+            annotations,
+            logFileName,
+            logFileAppend,
+            logFileSize,
+            audit,
+            logFileRollover,
+            autoRestart,
+            stopTime,
+            filter,
+            eventType
+        );
+    }
+
+    private static EventType getEventType(String textContent) {
+        //TODO
+        return null;
+    }
+
+    private static TraceFilter getTraceFilter(String textContent) {
+        //TODO
+        return null;
+    }
+
+    private static Instant toInstant(String it) {
+        return it != null ? Instant.parse(it) : null;
+    }
+
+    private static Server getServer(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Role getRole(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Perspective getPerspective(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Permission getPermission(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Partition getPartition(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static MiningStructure getMiningStructure(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static MiningModel getMiningModel(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static MeasureGroup getMeasureGroup(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static MdxScript getMdxScript(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Dimension getDimension(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static DataSourceView getDataSourceView(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static DataSource getDataSource(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Database getDatabase(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Cube getCube(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Assembly getAssembly(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static AggregationDesign getAggregationDesign(NodeList nl) {
+        String name = null;
+        Optional<String> id = null;
+        Optional<Instant> createdTimestamp = null;
+        Optional<Instant> lastSchemaUpdate = null;
+        Optional<String> description = null;
+        Optional<List<Annotation>> annotations = null;
+        Optional<Long> estimatedRows = null;
+        Optional<List<AggregationDesignDimension>> dimensions = null;
+        Optional<List<Aggregation>> aggregations = null;
+        Optional<Integer> estimatedPerformanceGain = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = Optional.ofNullable(node.getTextContent());
+                }
+                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                    createdTimestamp = Optional.ofNullable(toInstant(node.getTextContent()));
+                }
+                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                    lastSchemaUpdate = Optional.ofNullable(toInstant(node.getTextContent()));
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = Optional.ofNullable(node.getTextContent());
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = Optional.ofNullable(node.getTextContent());
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
+                }
+                if ("EstimatedRows".equals(node.getNodeName())) {
+                    estimatedRows = Optional.ofNullable(toLong(node.getTextContent()));
+                }
+                if ("Dimensions".equals(node.getNodeName())) {
+                    dimensions = Optional.ofNullable(getAggregationDesignDimensionList(node.getChildNodes()));
+                }
+                if ("Aggregations".equals(node.getNodeName())) {
+                    aggregations = Optional.ofNullable(getAggregationList(node.getChildNodes()));
+                }
+                if ("EstimatedPerformanceGain".equals(node.getNodeName())) {
+                    estimatedPerformanceGain = Optional.ofNullable(toInteger(node.getTextContent()));
+                }
+            }
+        }
+        return new AggregationDesignR(
+            name,
+            id,
+            createdTimestamp,
+            lastSchemaUpdate,
+            description,
+            annotations,
+            estimatedRows,
+            dimensions,
+            aggregations,
+            estimatedPerformanceGain);
+    }
+
+    private static List<Annotation> getAnnotationList(NodeList nl) {
+        List<Annotation> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Aggregation".equals(node.getNodeName())) {
+                    list.add(getAnnotation(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Annotation getAnnotation(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static List<Aggregation> getAggregationList(NodeList nl) {
+        List<Aggregation> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Aggregation".equals(node.getNodeName())) {
+                    list.add(getAggregation(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Aggregation getAggregation(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static List<AggregationDesignDimension> getAggregationDesignDimensionList(NodeList nl) {
+        //Dimension
+        List<AggregationDesignDimension> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null && "Dimension".equals(node.getNodeName())) {
+                list.add(getAggregationDesignDimension(node.getChildNodes()));
+            }
+        }
+        return list;
+    }
+
+    private static AggregationDesignDimension getAggregationDesignDimension(NodeList childNodes) {
+        //TODO
+        return null;
     }
 
     private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r) {
