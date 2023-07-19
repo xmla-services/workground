@@ -73,6 +73,10 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
+import org.eclipse.daanse.xmla.api.xmla.Command;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -128,6 +132,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchem
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
+import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,7 +210,7 @@ public class XmlaApiAdapter {
 
         }
         if (node != null && Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
-
+            return execute(node);
         }
 
         return body;
@@ -238,6 +244,28 @@ public class XmlaApiAdapter {
         return discover(requestType, properties, restictions);
     }
 
+    private SOAPBody execute(SOAPElement discover) {
+
+        Command command = null;
+        PropertiesR properties = null;
+        List<ExecuteParameter> parameters = null;
+
+        Iterator<Node> nodeIterator = discover.getChildElements();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            if (node instanceof SOAPElement element) {
+                if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
+                    properties = Convert.propertiestoProperties(element);
+                }
+                if (command == null && Constants.QNAME_MSXMLA_COMMAND.equals(element.getElementQName())) {
+                    command = Convert.commandtoCommand(element);
+                }
+            }
+        }
+
+        return execute(command, properties, parameters);
+    }
+
     private void printNode(SOAPElement node) {
         LOGGER.debug(node.getNamespaceURI());
         LOGGER.debug(node.getBaseURI());
@@ -251,8 +279,14 @@ public class XmlaApiAdapter {
         LOGGER.debug(elementQNameStr);
     }
 
-    private PropertiesR properties(SOAPElement propertiesElement) {
-        return new PropertiesR();
+    private SOAPBody execute(Command command, PropertiesR properties, List<ExecuteParameter> parameters) {
+
+        if (command instanceof StatementR statement) {
+            return handleStatement(statement, properties, parameters);
+        }
+        else {
+            throw new IllegalArgumentException("Unexpected value: " + command);
+        }
     }
 
     private SOAPBody discover(String requestType, PropertiesR properties, SOAPElement restrictionElement) {
@@ -553,6 +587,14 @@ public class XmlaApiAdapter {
             .mdSchemaFunctions(request);
 
         return Convert.toMdSchemaFunctions(rows);
+    }
+
+    private SOAPBody handleStatement(StatementR statement, PropertiesR properties, List<ExecuteParameter> parameters) {
+        StatementRequest statementRequest = new StatementRequestR(properties,
+            parameters,
+            statement);
+        StatementResponse statementResponse = xmlaService.execute().statement(statementRequest);
+        return Convert.toStatementResponse(statementResponse);
     }
 
 }
