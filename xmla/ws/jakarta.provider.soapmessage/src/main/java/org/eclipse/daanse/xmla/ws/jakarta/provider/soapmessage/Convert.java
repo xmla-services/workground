@@ -1,18 +1,20 @@
 /*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
@@ -67,34 +69,67 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRe
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
+import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
+import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
+import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
+import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
+import org.eclipse.daanse.xmla.api.xmla.AndOrType;
+import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
+import org.eclipse.daanse.xmla.api.xmla.BoolBinop;
 import org.eclipse.daanse.xmla.api.xmla.Command;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
 import org.eclipse.daanse.xmla.api.xmla.Database;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
+import org.eclipse.daanse.xmla.api.xmla.Event;
+import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
+import org.eclipse.daanse.xmla.api.xmla.EventSession;
 import org.eclipse.daanse.xmla.api.xmla.EventType;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.Member;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
+import org.eclipse.daanse.xmla.api.xmla.NotType;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.PartitionModes;
 import org.eclipse.daanse.xmla.api.xmla.Permission;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveDimension;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveKpi;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
+import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
+import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Scope;
 import org.eclipse.daanse.xmla.api.xmla.Server;
+import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
+import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
 import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
+import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
@@ -123,16 +158,49 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaM
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.engine300_300.XEventR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationAttributeR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignAttributeR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationDimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationInstanceR;
+import org.eclipse.daanse.xmla.model.record.xmla.AggregationR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
+import org.eclipse.daanse.xmla.model.record.xmla.AndOrTypeR;
+import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
+import org.eclipse.daanse.xmla.model.record.xmla.BoolBinopR;
 import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
 import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
+import org.eclipse.daanse.xmla.model.record.xmla.EventColumnIDR;
+import org.eclipse.daanse.xmla.model.record.xmla.EventR;
+import org.eclipse.daanse.xmla.model.record.xmla.EventSessionR;
+import org.eclipse.daanse.xmla.model.record.xmla.EventTypeR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
+import org.eclipse.daanse.xmla.model.record.xmla.MemberR;
+import org.eclipse.daanse.xmla.model.record.xmla.NotTypeR;
 import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
+import org.eclipse.daanse.xmla.model.record.xmla.PartitionR;
+import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveActionR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveAttributeR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveCalculationR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveDimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveHierarchyR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveKpiR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureGroupR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureR;
+import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveR;
+import org.eclipse.daanse.xmla.model.record.xmla.RoleR;
+import org.eclipse.daanse.xmla.model.record.xmla.ServerPropertyR;
+import org.eclipse.daanse.xmla.model.record.xmla.ServerR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
+import org.eclipse.daanse.xmla.model.record.xmla.TraceFilterR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
+import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 import java.math.BigInteger;
@@ -145,6 +213,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class Convert {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Convert.class);
     public static final String ROW = "row";
 
@@ -242,7 +311,8 @@ public class Convert {
         r.object().ifPresent(v -> addChildElement(row, "OBJECT", v));
         r.caption().ifPresent(v -> addChildElement(row, "CAPTION", v));
         r.parameterInfo().ifPresent(v -> addParameterInfoXmlList(row, v));
-        r.directQueryPushable().ifPresent(v -> addChildElement(row, "DIRECTQUERY_PUSHABLE", String.valueOf(v.getValue())));
+        r.directQueryPushable().ifPresent(v -> addChildElement(row, "DIRECTQUERY_PUSHABLE",
+            String.valueOf(v.getValue())));
     }
 
     private static void addParameterInfoXmlList(SOAPElement root, List<ParameterInfo> list) {
@@ -301,7 +371,8 @@ public class Convert {
         r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", String.valueOf(v)));
-        r.dimensionUniqueSetting().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS", String.valueOf(v.getValue())));
+        r.dimensionUniqueSetting().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
+            String.valueOf(v.getValue())));
         r.dimensionMasterName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_NAME", v));
         r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
     }
@@ -345,7 +416,8 @@ public class Convert {
         r.cubeCaption().ifPresent(v -> addChildElement(row, "CUBE_CAPTION", v));
         r.baseCubeName().ifPresent(v -> addChildElement(row, "BASE_CUBE_NAME", v));
         r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", String.valueOf(v.getValue())));
-        r.preferredQueryPatterns().ifPresent(v -> addChildElement(row, "PREFERRED_QUERY_PATTERNS", String.valueOf(v.getValue())));
+        r.preferredQueryPatterns().ifPresent(v -> addChildElement(row, "PREFERRED_QUERY_PATTERNS",
+            String.valueOf(v.getValue())));
     }
 
     public static MdSchemaMeasureGroupsRestrictionsR discoverMdSchemaMeasureGroups(SOAPElement restriction) {
@@ -455,7 +527,8 @@ public class Convert {
         r.dimension().ifPresent(v -> addChildElement(row, "DIMENSIONS", v));
         r.setCaption().ifPresent(v -> addChildElement(row, "SET_CAPTION", v));
         r.setDisplayFolder().ifPresent(v -> addChildElement(row, "SET_DISPLAY_FOLDER", v));
-        r.setEvaluationContext().ifPresent(v -> addChildElement(row, "SET_EVALUATION_CONTEXT", String.valueOf(v.getValue())));
+        r.setEvaluationContext().ifPresent(v -> addChildElement(row, "SET_EVALUATION_CONTEXT",
+            String.valueOf(v.getValue())));
     }
 
     public static MdSchemaPropertiesRestrictionsR discoverMdSchemaPropertiesRestrictions(SOAPElement restriction) {
@@ -504,7 +577,8 @@ public class Convert {
         r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", String.valueOf(v)));
         r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", String.valueOf(v)));
         r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.propertyContentType().ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE", String.valueOf(v.getValue())));
+        r.propertyContentType().ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE",
+            String.valueOf(v.getValue())));
         r.sqlColumnName().ifPresent(v -> addChildElement(row, "SQL_COLUMN_NAME", v));
         r.language().ifPresent(v -> addChildElement(row, "LANGUAGE", String.valueOf(v)));
         r.propertyOrigin().ifPresent(v -> addChildElement(row, "PROPERTY_ORIGIN", String.valueOf(v.getValue())));
@@ -617,7 +691,8 @@ public class Convert {
     }
 
     public static MdSchemaMeasureGroupDimensionsRestrictionsR discoverMdSchemaMeasureGroupDimensionsRestrictions(
-        SOAPElement restriction) {
+        SOAPElement restriction
+    ) {
         Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
         return new MdSchemaMeasureGroupDimensionsRestrictionsR(
             Optional.ofNullable(m.get("CATALOG_NAME")),
@@ -638,7 +713,10 @@ public class Convert {
         return body;
     }
 
-    private static void addMdSchemaMeasureGroupDimensionsResponseRow(SOAPElement root, MdSchemaMeasureGroupDimensionsResponseRow r) {
+    private static void addMdSchemaMeasureGroupDimensionsResponseRow(
+        SOAPElement root,
+        MdSchemaMeasureGroupDimensionsResponseRow r
+    ) {
         SOAPElement row = addChildElement(root, ROW);
         r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
         r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
@@ -649,7 +727,8 @@ public class Convert {
         r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
         r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", v.name()));
         r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
-        r.dimensionIsFactDimension().ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION", String.valueOf(v)));
+        r.dimensionIsFactDimension().ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION",
+            String.valueOf(v)));
         r.dimensionPath().ifPresent(v -> addMeasureGroupDimensionXmlList(row, v));
         r.dimensionGranularity().ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", v));
     }
@@ -704,8 +783,10 @@ public class Convert {
         r.levelCardinality().ifPresent(v -> addChildElement(row, "LEVEL_CARDINALITY", String.valueOf(v)));
         r.levelType().ifPresent(v -> addChildElement(row, "LEVEL_TYPE", String.valueOf(v.getValue())));
         r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.customRollupSetting().ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS", String.valueOf(v.getValue())));
-        r.levelUniqueSettings().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS", String.valueOf(v.getValue())));
+        r.customRollupSetting().ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS",
+            String.valueOf(v.getValue())));
+        r.levelUniqueSettings().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS",
+            String.valueOf(v.getValue())));
         r.levelIsVisible().ifPresent(v -> addChildElement(row, "LEVEL_IS_VISIBLE", String.valueOf(v)));
         r.levelOrderingProperty().ifPresent(v -> addChildElement(row, "LEVEL_ORDERING_PROPERTY", v));
         r.levelDbType().ifPresent(v -> addChildElement(row, "LEVEL_DBTYPE", String.valueOf(v.getValue())));
@@ -760,7 +841,8 @@ public class Convert {
         r.structure().ifPresent(v -> addChildElement(row, "STRUCTURE", String.valueOf(v.getValue())));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", String.valueOf(v)));
-        r.dimensionUniqueSettings().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS", String.valueOf(v.getValue())));
+        r.dimensionUniqueSettings().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
+            String.valueOf(v.getValue())));
         r.dimensionMasterUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_UNIQUE_NAME", v));
         r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
         r.hierarchyOrdinal().ifPresent(v -> addChildElement(row, "HIERARCHY_ORDINAL", String.valueOf(v)));
@@ -834,7 +916,7 @@ public class Convert {
         r.catalogName().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", v));
         r.schemaName().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", v));
         addChildElement(row, "TABLE_NAME", r.tableName());
-         addChildElement(row, "TABLE_TYPE", r.tableType().getValue());
+        addChildElement(row, "TABLE_TYPE", r.tableType().getValue());
     }
 
     public static DbSchemaSchemataRestrictionsR discoverDbSchemaSchemataRestrictions(SOAPElement restriction) {
@@ -1061,7 +1143,8 @@ public class Convert {
         r.currentlyUsed().ifPresent(v -> addChildElement(row, "CURRENTLY_USED", String.valueOf(v)));
         r.popularity().ifPresent(v -> addChildElement(row, "POPULARITY", String.valueOf(v)));
         r.weightedPopularity().ifPresent(v -> addChildElement(row, "WEIGHTEDPOPULARITY", String.valueOf(v)));
-        r.clientCacheRefreshPolicy().ifPresent(v -> addChildElement(row, "CLIENTCACHEREFRESHPOLICY", String.valueOf(v.getValue())));
+        r.clientCacheRefreshPolicy().ifPresent(v -> addChildElement(row, "CLIENTCACHEREFRESHPOLICY",
+            String.valueOf(v.getValue())));
     }
 
     public static DiscoverSchemaRowsetsRestrictionsR discoverSchemaRowsetsRestrictions(SOAPElement restriction) {
@@ -1227,7 +1310,6 @@ public class Convert {
         return null;
     }
 
-
     public static SOAPBody toStatementResponse(StatementResponse statementResponse) {
         //TODO
         return null;
@@ -1274,7 +1356,6 @@ public class Convert {
     private static Integer toInteger(String it) {
         return it != null ? Integer.valueOf(it) : null;
     }
-
 
     private static BigInteger toBigInteger(String it) {
         return it != null ? new BigInteger(it) : null;
@@ -1354,7 +1435,6 @@ public class Convert {
             allowCreate,
             objectExpansion);
     }
-
 
     private static MajorObject getMajorObject(NodeList nl) {
         AggregationDesign aggregationDesign = null;
@@ -1453,7 +1533,6 @@ public class Convert {
     }
 
     private static Trace getTrace(NodeList nl) {
-        //TODO
         String name = null;
         String id = null;
         Instant createdTimestamp = null;
@@ -1494,10 +1573,10 @@ public class Convert {
                     stopTime = toInstant(node.getTextContent());
                 }
                 if ("Filter".equals(node.getNodeName())) {
-                    filter = getTraceFilter(node.getTextContent());
+                    filter = getTraceFilter(node.getChildNodes());
                 }
                 if ("EventType".equals(node.getNodeName())) {
-                    eventType = getEventType(node.getTextContent());
+                    eventType = getEventType(node.getChildNodes());
                 }
             }
         }
@@ -1520,41 +1599,1275 @@ public class Convert {
         );
     }
 
-    private static EventType getEventType(String textContent) {
-        //TODO
-        return null;
+    private static EventType getEventType(NodeList nl) {
+        List<Event> events = null;
+        XEvent xEvent = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Events".equals(node.getNodeName())) {
+                    events = getEventList(node.getChildNodes());
+                }
+                if ("XEvent".equals(node.getNodeName())) {
+                    xEvent = getXEvent(node.getChildNodes());
+                }
+            }
+        }
+        return new EventTypeR(events, xEvent);
     }
 
-    private static TraceFilter getTraceFilter(String textContent) {
-        //TODO
-        return null;
+    private static XEvent getXEvent(NodeList nl) {
+        EventSession eventSession = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("event_session".equals(node.getNodeName())) {
+                    eventSession = getEventSession(node.getChildNodes());
+                }
+            }
+        }
+        return new XEventR(eventSession);
+    }
+
+    private static EventSession getEventSession(NodeList nl) {
+        String templateCategory = null;
+        String templateName = null;
+        String templateDescription = null;
+        List<Object> event = new ArrayList<>();
+        List<java.lang.Object> target = new ArrayList<>();
+        String name = null;
+        BigInteger maxMemory = null;
+        RetentionModes eventRetentionMode = null;
+        Long dispatchLatency = null;
+        Long maxEventSize = null;
+        PartitionModes memoryPartitionMode = null;
+        Boolean trackCausality = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("templateCategory".equals(node.getNodeName())) {
+                    templateCategory = node.getTextContent();
+                }
+                if ("templateName".equals(node.getNodeName())) {
+                    templateName = node.getTextContent();
+                }
+                if ("templateDescription".equals(node.getNodeName())) {
+                    templateDescription = node.getTextContent();
+                }
+                if ("event".equals(node.getNodeName())) {
+                    event.add(node.getTextContent());
+                }
+                if ("target".equals(node.getNodeName())) {
+                    target.add(node.getTextContent());
+                }
+                NamedNodeMap nm = node.getAttributes();
+                name = getAttribute(nm, "name");
+                maxMemory = toBigInteger(getAttribute(nm, "maxMemory"));
+                eventRetentionMode = RetentionModes.fromValue(getAttribute(nm, "eventRetentionMode"));
+                dispatchLatency = toLong(getAttribute(nm, "dispatchLatency"));
+                maxEventSize = toLong(getAttribute(nm, "maxEventSize"));
+                memoryPartitionMode = PartitionModes.fromValue(getAttribute(nm, "memoryPartitionMode"));
+                trackCausality = toBoolean(getAttribute(nm, "trackCausality"));
+            }
+        }
+        return new EventSessionR(
+            templateCategory,
+            templateName,
+            templateDescription,
+            event,
+            target,
+            name,
+            maxMemory,
+            eventRetentionMode,
+            dispatchLatency,
+            maxEventSize,
+            memoryPartitionMode,
+            trackCausality
+        );
+    }
+
+    private static List<Event> getEventList(NodeList nl) {
+        List<Event> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Event".equals(node.getNodeName())) {
+                    list.add(getEvent(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Event getEvent(NodeList nl) {
+        String eventID = null;
+        EventColumnID columns = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("EventID".equals(node.getNodeName())) {
+                    eventID = node.getTextContent();
+                }
+                if ("Columns".equals(node.getNodeName())) {
+                    columns = getEventColumnID(node.getChildNodes());
+                }
+            }
+        }
+        return new EventR(eventID, columns);
+    }
+
+    private static EventColumnID getEventColumnID(NodeList nl) {
+        List<String> columnID = new ArrayList();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("EventID".equals(node.getNodeName())) {
+                    columnID.add(node.getTextContent());
+                }
+            }
+        }
+        return new EventColumnIDR(columnID);
+    }
+
+    private static TraceFilter getTraceFilter(NodeList nl) {
+        NotType not = null;
+        AndOrType or = null;
+        AndOrType and = null;
+        BoolBinop isEqual = null;
+        BoolBinop notEqual = null;
+        BoolBinop less = null;
+        BoolBinop lessOrEqual = null;
+        BoolBinop greater = null;
+        BoolBinop greaterOrEqual = null;
+        BoolBinop like = null;
+        BoolBinop notLike = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Not".equals(node.getNodeName())) {
+                    not = getNotType(node.getChildNodes());
+                }
+                if ("Or".equals(node.getNodeName())) {
+                    or = getAndOrType(node.getChildNodes());
+                }
+                if ("Or".equals(node.getNodeName())) {
+                    or = getAndOrType(node.getChildNodes());
+                }
+                if ("And".equals(node.getNodeName())) {
+                    and = getAndOrType(node.getChildNodes());
+                }
+                if ("Equal".equals(node.getNodeName())) {
+                    isEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("NotEqual".equals(node.getNodeName())) {
+                    notEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Less".equals(node.getNodeName())) {
+                    less = getBoolBinop(node.getChildNodes());
+                }
+                if ("LessOrEqual".equals(node.getNodeName())) {
+                    lessOrEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Greater".equals(node.getNodeName())) {
+                    greater = getBoolBinop(node.getChildNodes());
+                }
+                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                    greaterOrEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Like".equals(node.getNodeName())) {
+                    like = getBoolBinop(node.getChildNodes());
+                }
+                if ("NotLike".equals(node.getNodeName())) {
+                    notLike = getBoolBinop(node.getChildNodes());
+                }
+            }
+        }
+        return new TraceFilterR(
+            not,
+            or,
+            and,
+            isEqual,
+            notEqual,
+            less,
+            lessOrEqual,
+            greater,
+            greaterOrEqual,
+            like,
+            notLike
+        );
+    }
+
+    private static BoolBinop getBoolBinop(NodeList nl) {
+        String columnID = null;
+        String value = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ColumnID".equals(node.getNodeName())) {
+                    columnID = node.getTextContent();
+                }
+                if ("Value".equals(node.getNodeName())) {
+                    value = node.getTextContent();
+                }
+            }
+        }
+        return new BoolBinopR(columnID, value);
+    }
+
+    private static AndOrType getAndOrType(NodeList nl) {
+        List<AndOrTypeEnum> notOrOrOrAnd = new ArrayList();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Not".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Not);
+                }
+                if ("Or".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Or);
+                }
+                if ("And".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.And);
+                }
+                if ("Equal".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Equal);
+                }
+                if ("NotEqual".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.NotEqual);
+                }
+                if ("Less".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Less);
+                }
+                if ("LessOrEqual".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.LessOrEqual);
+                }
+                if ("Greater".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Greater);
+                }
+                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.GreaterOrEqual);
+                }
+                if ("Like".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.Like);
+                }
+                if ("NotLike".equals(node.getNodeName())) {
+                    notOrOrOrAnd.add(AndOrTypeEnum.NotLike);
+                }
+            }
+        }
+        return new AndOrTypeR(notOrOrOrAnd);
+    }
+
+    private static NotType getNotType(NodeList nl) {
+        NotType not = null;
+        AndOrType or = null;
+        AndOrType and = null;
+        BoolBinop isEqual = null;
+        BoolBinop notEqual = null;
+        BoolBinop less = null;
+        BoolBinop lessOrEqual = null;
+        BoolBinop greater = null;
+        BoolBinop greaterOrEqual = null;
+        BoolBinop like = null;
+        BoolBinop notLike = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Not".equals(node.getNodeName())) {
+                    not = getNotType(node.getChildNodes());
+                }
+                if ("Or".equals(node.getNodeName())) {
+                    or = getAndOrType(node.getChildNodes());
+                }
+                if ("And".equals(node.getNodeName())) {
+                    and = getAndOrType(node.getChildNodes());
+                }
+                if ("Equal".equals(node.getNodeName())) {
+                    isEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("NotEqual".equals(node.getNodeName())) {
+                    notEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Less".equals(node.getNodeName())) {
+                    less = getBoolBinop(node.getChildNodes());
+                }
+                if ("LessOrEqual".equals(node.getNodeName())) {
+                    lessOrEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Greater".equals(node.getNodeName())) {
+                    greater = getBoolBinop(node.getChildNodes());
+                }
+                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                    greaterOrEqual = getBoolBinop(node.getChildNodes());
+                }
+                if ("Like".equals(node.getNodeName())) {
+                    like = getBoolBinop(node.getChildNodes());
+                }
+                if ("NotLike".equals(node.getNodeName())) {
+                    notLike = getBoolBinop(node.getChildNodes());
+                }
+
+            }
+        }
+        return new NotTypeR(
+            not,
+            or,
+            and,
+            isEqual,
+            notEqual,
+            less,
+            lessOrEqual,
+            greater,
+            greaterOrEqual,
+            like,
+            notLike);
     }
 
     private static Instant toInstant(String it) {
         return it != null ? Instant.parse(it) : null;
     }
 
-    private static Server getServer(NodeList childNodes) {
+    private static Server getServer(NodeList nl) {
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        String productName = null;
+        String edition = null;
+        Long editionID = null;
+        String version = null;
+        String serverMode = null;
+        String productLevel = null;
+        Long defaultCompatibilityLevel = null;
+        String supportedCompatibilityLevels = null;
+        List<Database> databases = null;
+        List<Assembly> assemblies = null;
+        List<Trace> traces = null;
+        List<Role> roles = null;
+        List<ServerProperty> serverProperties = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ProductName".equals(node.getNodeName())) {
+                    productName = node.getTextContent();
+                }
+                if ("Edition".equals(node.getNodeName())) {
+                    edition = node.getTextContent();
+                }
+                if ("EditionID".equals(node.getNodeName())) {
+                    editionID = toLong(node.getTextContent());
+                }
+                if ("Version".equals(node.getNodeName())) {
+                    version = node.getTextContent();
+                }
+                if ("ServerMode".equals(node.getNodeName())) {
+                    serverMode = node.getTextContent();
+                }
+                if ("ProductLevel".equals(node.getNodeName())) {
+                    productLevel = node.getTextContent();
+                }
+                if ("DefaultCompatibilityLevel".equals(node.getNodeName())) {
+                    defaultCompatibilityLevel = toLong(node.getTextContent());
+                }
+                if ("SupportedCompatibilityLevels".equals(node.getNodeName())) {
+                    supportedCompatibilityLevels = node.getTextContent();
+                }
+                if ("Databases".equals(node.getNodeName())) {
+                    databases = getDatabaseList(node.getChildNodes());
+                }
+                if ("Assemblies".equals(node.getNodeName())) {
+                    assemblies = getAssemblyList(node.getChildNodes());
+                }
+                if ("Traces".equals(node.getNodeName())) {
+                    traces = getTraceList(node.getChildNodes());
+                }
+                if ("Roles".equals(node.getNodeName())) {
+                    roles = getRoleList(node.getChildNodes());
+                }
+                if ("ServerProperties".equals(node.getNodeName())) {
+                    serverProperties = getServerPropertyList(node.getChildNodes());
+                }
+            }
+        }
+        return new ServerR(
+            name,
+            id,
+            createdTimestamp,
+            lastSchemaUpdate,
+            description,
+            annotations,
+            productName,
+            edition,
+            editionID,
+            version,
+            serverMode,
+            productLevel,
+            defaultCompatibilityLevel,
+            supportedCompatibilityLevels,
+            databases,
+            assemblies,
+            traces,
+            roles,
+            serverProperties
+        );
+    }
+
+    private static List<Role> getRoleList(NodeList nl) {
+        List<Role> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Role".equals(node.getNodeName())) {
+                    list.add(getRole(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static List<ServerProperty> getServerPropertyList(NodeList nl) {
+        List<ServerProperty> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ServerProperty".equals(node.getNodeName())) {
+                    list.add(getServerProperty(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static ServerProperty getServerProperty(NodeList nl) {
+        String name = null;
+        String value = null;
+        Boolean requiresRestart = null;
+        java.lang.Object pendingValue = null;
+        java.lang.Object defaultValue = null;
+        Boolean displayFlag = null;
+        String type = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Value".equals(node.getNodeName())) {
+                    value = node.getTextContent();
+                }
+                if ("RequiresRestart".equals(node.getNodeName())) {
+                    requiresRestart = toBoolean(node.getTextContent());
+                }
+                if ("PendingValue".equals(node.getNodeName())) {
+                    pendingValue = node.getTextContent();
+                }
+                if ("DefaultValue".equals(node.getNodeName())) {
+                    pendingValue = node.getTextContent();
+                }
+                if ("DisplayFlag".equals(node.getNodeName())) {
+                    displayFlag = toBoolean(node.getTextContent());
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = node.getTextContent();
+                }
+            }
+        }
+        return new ServerPropertyR(
+            name,
+            value,
+            requiresRestart,
+            pendingValue,
+            defaultValue,
+            displayFlag,
+            type);
+    }
+
+    private static List<Trace> getTraceList(NodeList nl) {
+        List<Trace> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Trace".equals(node.getNodeName())) {
+                    list.add(getTrace(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static List<Assembly> getAssemblyList(NodeList nl) {
+        List<Assembly> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Assembly".equals(node.getNodeName())) {
+                    list.add(getAssembly(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static List<Database> getDatabaseList(NodeList nl) {
+        List<Database> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Database".equals(node.getNodeName())) {
+                    list.add(getDatabase(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Role getRole(NodeList nl) {
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        List<Member> members = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                    createdTimestamp = toInstant(node.getTextContent());
+                }
+                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                    lastSchemaUpdate = toInstant(node.getTextContent());
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+
+                if ("Members".equals(node.getNodeName())) {
+                    members = getMemberList(node.getChildNodes());
+                }
+            }
+        }
+        return new RoleR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(createdTimestamp),
+            Optional.ofNullable(lastSchemaUpdate),
+            Optional.ofNullable(description),
+            Optional.ofNullable(annotations),
+            Optional.ofNullable(members)
+        );
+    }
+
+    private static List<Member> getMemberList(NodeList nl) {
+        List<Member> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Member".equals(node.getNodeName())) {
+                    list.add(getMember(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Member getMember(NodeList nl) {
+        String name = null;
+        String sid = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Sid".equals(node.getNodeName())) {
+                    sid = node.getTextContent();
+                }
+            }
+        }
+        return new MemberR(Optional.ofNullable(name),
+            Optional.ofNullable(sid));
+    }
+
+    private static Perspective getPerspective(NodeList nl) {
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        List<Translation> translations = null;
+        String defaultMeasure = null;
+        List<PerspectiveDimension> dimensions = null;
+        List<PerspectiveMeasureGroup> measureGroups = null;
+        List<PerspectiveCalculation> calculations = null;
+        List<PerspectiveKpi> kpis = null;
+        List<PerspectiveAction> actions = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                    createdTimestamp = toInstant(node.getTextContent());
+                }
+                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                    lastSchemaUpdate = toInstant(node.getTextContent());
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes());
+                }
+                if ("DefaultMeasure".equals(node.getNodeName())) {
+                    defaultMeasure = node.getTextContent();
+                }
+                if ("Dimensions".equals(node.getNodeName())) {
+                    dimensions = getPerspectiveDimensionList(node.getChildNodes());
+                }
+                if ("MeasureGroups".equals(node.getNodeName())) {
+                    measureGroups = getPerspectiveMeasureGroupList(node.getChildNodes());
+                }
+                if ("Calculations".equals(node.getNodeName())) {
+                    calculations = getPerspectiveCalculationList(node.getChildNodes());
+                }
+                if ("Kpis".equals(node.getNodeName())) {
+                    kpis = getPerspectiveKpiList(node.getChildNodes());
+                }
+                if ("Actions".equals(node.getNodeName())) {
+                    actions = getPerspectiveActionList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveR(
+            name,
+            id,
+            createdTimestamp,
+            lastSchemaUpdate,
+            description,
+            annotations,
+            translations,
+            defaultMeasure,
+            dimensions,
+            measureGroups,
+            calculations,
+            kpis,
+            actions);
+    }
+
+    private static List<PerspectiveAction> getPerspectiveActionList(NodeList nl) {
+        List<PerspectiveAction> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Action".equals(node.getNodeName())) {
+                    list.add(getPerspectiveAction(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveAction getPerspectiveAction(NodeList nl) {
+        String actionID = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ActionID".equals(node.getNodeName())) {
+                    actionID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveActionR(actionID, Optional.ofNullable(annotations));
+    }
+
+    private static List<PerspectiveKpi> getPerspectiveKpiList(NodeList nl) {
+        List<PerspectiveKpi> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Action".equals(node.getNodeName())) {
+                    list.add(getPerspectiveKpi(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveKpi getPerspectiveKpi(NodeList nl) {
+        String kpiID = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("KpiID".equals(node.getNodeName())) {
+                    kpiID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveKpiR(kpiID, Optional.ofNullable(annotations));
+    }
+
+    private static List<PerspectiveCalculation> getPerspectiveCalculationList(NodeList nl) {
+        List<PerspectiveCalculation> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Calculation".equals(node.getNodeName())) {
+                    list.add(getPerspectiveCalculation(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveCalculation getPerspectiveCalculation(NodeList nl) {
+
+        String name = null;
+        String type = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveCalculationR(name, type, Optional.ofNullable(annotations));
+    }
+
+    private static List<PerspectiveMeasureGroup> getPerspectiveMeasureGroupList(NodeList nl) {
+        List<PerspectiveMeasureGroup> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("MeasureGroup".equals(node.getNodeName())) {
+                    list.add(getPerspectiveMeasureGroup(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveMeasureGroup getPerspectiveMeasureGroup(NodeList nl) {
+        String measureGroupID = null;
+        List<PerspectiveMeasure> measures = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("MeasureGroupID".equals(node.getNodeName())) {
+                    measureGroupID = node.getTextContent();
+                }
+                if ("Measures".equals(node.getNodeName())) {
+                    measures = getPerspectiveMeasureList(node.getChildNodes());
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveMeasureGroupR(
+            measureGroupID,
+            Optional.ofNullable(measures),
+            Optional.ofNullable(annotations)
+        );
+    }
+
+    private static List<PerspectiveMeasure> getPerspectiveMeasureList(NodeList nl) {
+        List<PerspectiveMeasure> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Measure".equals(node.getNodeName())) {
+                    list.add(getPerspectiveMeasure(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveMeasure getPerspectiveMeasure(NodeList nl) {
+        String measureID = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("MeasureID".equals(node.getNodeName())) {
+                    measureID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveMeasureR(measureID,
+            annotations);
+    }
+
+    private static List<PerspectiveDimension> getPerspectiveDimensionList(NodeList nl) {
+        List<PerspectiveDimension> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Dimension".equals(node.getNodeName())) {
+                    list.add(getPerspectiveDimension(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveDimension getPerspectiveDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<PerspectiveAttribute> attributes = null;
+        List<PerspectiveHierarchy> hierarchies = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Attributes".equals(node.getNodeName())) {
+                    attributes = getPerspectiveAttributeList(node.getChildNodes());
+                }
+                if ("Hierarchies".equals(node.getNodeName())) {
+                    hierarchies = getPerspectiveHierarchyList(node.getChildNodes());
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveDimensionR(cubeDimensionID,
+            Optional.ofNullable(attributes),
+            Optional.ofNullable(hierarchies),
+            Optional.ofNullable(annotations));
+    }
+
+    private static List<PerspectiveHierarchy> getPerspectiveHierarchyList(NodeList nl) {
+        List<PerspectiveHierarchy> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Hierarchy".equals(node.getNodeName())) {
+                    list.add(getPerspectiveHierarchy(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveHierarchy getPerspectiveHierarchy(NodeList nl) {
+        String hierarchyID = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("HierarchyID".equals(node.getNodeName())) {
+                    hierarchyID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveHierarchyR(hierarchyID,
+            Optional.ofNullable(annotations));
+    }
+
+    private static List<PerspectiveAttribute> getPerspectiveAttributeList(NodeList nl) {
+        List<PerspectiveAttribute> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Attribute".equals(node.getNodeName())) {
+                    list.add(getPerspectiveAttribute(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static PerspectiveAttribute getPerspectiveAttribute(NodeList nl) {
+        String attributeID = null;
+        Boolean attributeHierarchyVisible = null;
+        String defaultMember = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("AttributeHierarchyVisible".equals(node.getNodeName())) {
+                    attributeHierarchyVisible = toBoolean(node.getTextContent());
+                }
+                if ("DefaultMember".equals(node.getNodeName())) {
+                    defaultMember = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new PerspectiveAttributeR(
+            attributeID,
+            Optional.ofNullable(attributeHierarchyVisible),
+            Optional.ofNullable(defaultMember),
+            Optional.ofNullable(annotations)
+        );
+    }
+
+    private static List<Translation> getTranslationList(NodeList nl) {
+        List<Translation> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Translation".equals(node.getNodeName())) {
+                    list.add(getTranslation(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Translation getTranslation(NodeList nl) {
+        long language = 0;
+        String caption = null;
+        String description = null;
+        String displayFolder = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Language".equals(node.getNodeName())) {
+                    language = toLong(node.getTextContent());
+                }
+                if ("Caption".equals(node.getNodeName())) {
+                    caption = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("DisplayFolder".equals(node.getNodeName())) {
+                    displayFolder = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new TranslationR(
+            language,
+            caption,
+            description,
+            displayFolder,
+            annotations);
+    }
+
+    private static Permission getPermission(NodeList nl) {
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        String roleID = null;
+        Boolean process = null;
+        ReadDefinitionEnum readDefinition = null;
+        ReadWritePermissionEnum read = null;
+        ReadWritePermissionEnum write = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("RoleID".equals(node.getNodeName())) {
+                    roleID = node.getTextContent();
+                }
+                if ("Process".equals(node.getNodeName())) {
+                    process = toBoolean(node.getTextContent());
+                }
+                if ("ReadDefinition".equals(node.getNodeName())) {
+                    readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
+                }
+                if ("Read".equals(node.getNodeName())) {
+                    read = ReadWritePermissionEnum.fromValue(node.getTextContent());
+                }
+                if ("Write".equals(node.getNodeName())) {
+                    write = ReadWritePermissionEnum.fromValue(node.getTextContent());
+                }
+            }
+        }
+        return new PermissionR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(createdTimestamp),
+            Optional.ofNullable(lastSchemaUpdate),
+            Optional.ofNullable(description),
+            Optional.ofNullable(annotations),
+            roleID,
+            Optional.ofNullable(process),
+            Optional.ofNullable(readDefinition),
+            Optional.ofNullable(read),
+            Optional.ofNullable(write));
+    }
+
+    private static Partition getPartition(NodeList nl) {
+        String name = null;
+        String id = null;
+        Instant createdTimestamp = null;
+        Instant lastSchemaUpdate = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        TabularBinding source = null;
+        BigInteger processingPriority = null;
+        String aggregationPrefix = null;
+        Partition.StorageMode storageMode = null;
+        String processingMode = null;
+        ErrorConfiguration errorConfiguration = null;
+        String storageLocation = null;
+        String remoteDatasourceID = null;
+        String slice = null;
+        ProactiveCaching proactiveCaching = null;
+        String type = null;
+        Long estimatedSize = null;
+        Long estimatedRows = null;
+        Partition.CurrentStorageMode currentStorageMode = null;
+        String aggregationDesignID = null;
+        List<AggregationInstance> aggregationInstances = null;
+        DataSourceViewBinding aggregationInstanceSource = null;
+        Instant lastProcessed = null;
+        String state = null;
+        Integer stringStoresCompatibilityLevel = null;
+        Integer currentStringStoresCompatibilityLevel = null;
+        String directQueryUsage = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Source".equals(node.getNodeName())) {
+                    source = getTabularBinding(node.getChildNodes());
+                }
+                if ("ProcessingPriority".equals(node.getNodeName())) {
+                    processingPriority = toBigInteger(node.getTextContent());
+                }
+                if ("AggregationPrefix".equals(node.getNodeName())) {
+                    aggregationPrefix = node.getTextContent();
+                }
+                if ("StorageMode".equals(node.getNodeName())) {
+                    storageMode = getPartitionStorageMode(node.getChildNodes());
+                }
+                if ("ProcessingMode".equals(node.getNodeName())) {
+                    processingMode = node.getTextContent();
+                }
+                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                    errorConfiguration = getErrorConfiguration(node.getChildNodes());
+                }
+                if ("StorageLocation".equals(node.getNodeName())) {
+                    storageLocation = node.getTextContent();
+                }
+                if ("RemoteDatasourceID".equals(node.getNodeName())) {
+                    remoteDatasourceID = node.getTextContent();
+                }
+                if ("Slice".equals(node.getNodeName())) {
+                    slice = node.getTextContent();
+                }
+                if ("ProactiveCaching".equals(node.getNodeName())) {
+                    proactiveCaching = getProactiveCaching(node.getChildNodes());
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = node.getTextContent();
+                }
+                if ("EstimatedSize".equals(node.getNodeName())) {
+                    estimatedSize = toLong(node.getTextContent());
+                }
+                if ("EstimatedRows".equals(node.getNodeName())) {
+                    estimatedRows = toLong(node.getTextContent());
+                }
+                if ("CurrentStorageMode".equals(node.getNodeName())) {
+                    currentStorageMode = getPartitionCurrentStorageMode(node.getChildNodes());
+                }
+                if ("AggregationDesignID".equals(node.getNodeName())) {
+                    aggregationDesignID = node.getTextContent();
+                }
+                if ("AggregationInstances".equals(node.getNodeName())) {
+                    aggregationInstances = getAggregationInstanceList(node.getChildNodes());
+                }
+                if ("AggregationInstanceSource".equals(node.getNodeName())) {
+                    aggregationInstanceSource = getDataSourceViewBinding(node.getChildNodes());
+                }
+                if ("LastProcessed".equals(node.getNodeName())) {
+                    lastProcessed = toInstant(node.getTextContent());
+                }
+                if ("State".equals(node.getNodeName())) {
+                    state = node.getTextContent();
+                }
+                if ("StringStoresCompatibilityLevel".equals(node.getNodeName())) {
+                    stringStoresCompatibilityLevel = toInteger(node.getTextContent());
+                }
+                if ("CurrentStringStoresCompatibilityLevel".equals(node.getNodeName())) {
+                    currentStringStoresCompatibilityLevel = toInteger(node.getTextContent());
+                }
+                if ("DirectQueryUsage".equals(node.getNodeName())) {
+                    directQueryUsage = node.getTextContent();
+                }
+            }
+        }
+
+        return new PartitionR(
+            name,
+            id,
+            createdTimestamp,
+            lastSchemaUpdate,
+            description,
+            annotations,
+            source,
+            processingPriority,
+            aggregationPrefix,
+            storageMode,
+            processingMode,
+            errorConfiguration,
+            storageLocation,
+            remoteDatasourceID,
+            slice,
+            proactiveCaching,
+            type,
+            estimatedSize,
+            estimatedRows,
+            currentStorageMode,
+            aggregationDesignID,
+            aggregationInstances,
+            aggregationInstanceSource,
+            lastProcessed,
+            state,
+            stringStoresCompatibilityLevel,
+            currentStringStoresCompatibilityLevel,
+            directQueryUsage
+        );
+    }
+
+    private static DataSourceViewBinding getDataSourceViewBinding(NodeList childNodes) {
         //TODO
         return null;
     }
 
-    private static Role getRole(NodeList childNodes) {
+    private static List<AggregationInstance> getAggregationInstanceList(NodeList nl) {
+        List<AggregationInstance> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AggregationInstance".equals(node.getNodeName())) {
+                    list.add(getAggregationInstance(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static AggregationInstance getAggregationInstance(NodeList nl) {
+        //TODO
+        String id = null;
+        String name = null;
+        String aggregationType = null;
+        TabularBinding source = null;
+        List<AggregationInstanceDimension> dimensions = null;
+        List<AggregationInstanceMeasure> measures = null;
+        List<Annotation> annotations = null;
+        String description = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AggregationType".equals(node.getNodeName())) {
+                    aggregationType = node.getTextContent();
+                }
+                if ("Source".equals(node.getNodeName())) {
+                    source = getTabularBinding(node.getChildNodes());
+                }
+                if ("Dimensions".equals(node.getNodeName())) {
+                    dimensions = getAggregationInstanceDimensionList(node.getChildNodes());
+                }
+                if ("Measures".equals(node.getNodeName())) {
+                    measures = getAggregationInstanceMeasureList(node.getChildNodes());
+                }
+            }
+        }
+        return new AggregationInstanceR(
+            id,
+            name,
+            aggregationType,
+            source,
+            dimensions,
+            measures,
+            annotations,
+            description);
+    }
+
+    private static List<AggregationInstanceMeasure> getAggregationInstanceMeasureList(NodeList childNodes) {
         //TODO
         return null;
     }
 
-    private static Perspective getPerspective(NodeList childNodes) {
+    private static List<AggregationInstanceDimension> getAggregationInstanceDimensionList(NodeList childNodes) {
         //TODO
         return null;
     }
 
-    private static Permission getPermission(NodeList childNodes) {
+    private static Partition.CurrentStorageMode getPartitionCurrentStorageMode(NodeList childNodes) {
         //TODO
         return null;
     }
 
-    private static Partition getPartition(NodeList childNodes) {
+    private static ProactiveCaching getProactiveCaching(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static ErrorConfiguration getErrorConfiguration(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static Partition.StorageMode getPartitionStorageMode(NodeList childNodes) {
+        //TODO
+        return null;
+    }
+
+    private static TabularBinding getTabularBinding(NodeList childNodes) {
         //TODO
         return null;
     }
@@ -1611,15 +2924,15 @@ public class Convert {
 
     private static AggregationDesign getAggregationDesign(NodeList nl) {
         String name = null;
-        Optional<String> id = null;
-        Optional<Instant> createdTimestamp = null;
-        Optional<Instant> lastSchemaUpdate = null;
-        Optional<String> description = null;
-        Optional<List<Annotation>> annotations = null;
-        Optional<Long> estimatedRows = null;
-        Optional<List<AggregationDesignDimension>> dimensions = null;
-        Optional<List<Aggregation>> aggregations = null;
-        Optional<Integer> estimatedPerformanceGain = null;
+        Optional<String> id = Optional.empty();
+        Optional<Instant> createdTimestamp = Optional.empty();
+        Optional<Instant> lastSchemaUpdate = Optional.empty();
+        Optional<String> description = Optional.empty();
+        Optional<List<Annotation>> annotations = Optional.empty();
+        Optional<Long> estimatedRows = Optional.empty();
+        Optional<List<AggregationDesignDimension>> dimensions = Optional.empty();
+        Optional<List<Aggregation>> aggregations = Optional.empty();
+        Optional<Integer> estimatedPerformanceGain = Optional.empty();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
@@ -1634,9 +2947,6 @@ public class Convert {
                 }
                 if ("LastSchemaUpdate".equals(node.getNodeName())) {
                     lastSchemaUpdate = Optional.ofNullable(toInstant(node.getTextContent()));
-                }
-                if ("Description".equals(node.getNodeName())) {
-                    description = Optional.ofNullable(node.getTextContent());
                 }
                 if ("Description".equals(node.getNodeName())) {
                     description = Optional.ofNullable(node.getTextContent());
@@ -1684,9 +2994,30 @@ public class Convert {
         return list;
     }
 
-    private static Annotation getAnnotation(NodeList childNodes) {
-        //TODO
-        return null;
+    private static Annotation getAnnotation(NodeList nl) {
+        String name = null;
+        Optional<String> visibility = Optional.empty();
+        Optional<java.lang.Object> value = Optional.empty();
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Visibility".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Value".equals(node.getNodeName())) {
+                    value = Optional.ofNullable(node.getTextContent());
+                }
+            }
+        }
+
+        return new AnnotationR(
+            name,
+            visibility,
+            value);
     }
 
     private static List<Aggregation> getAggregationList(NodeList nl) {
@@ -1702,13 +3033,98 @@ public class Convert {
         return list;
     }
 
-    private static Aggregation getAggregation(NodeList childNodes) {
-        //TODO
-        return null;
+    private static Aggregation getAggregation(NodeList nl) {
+        Optional<String> id = Optional.empty();
+        String name = null;
+        Optional<List<AggregationDimension>> dimensions = Optional.empty();
+        Optional<List<Annotation>> annotations = Optional.empty();
+        Optional<String> description = Optional.empty();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ID".equals(node.getNodeName())) {
+                    id = Optional.ofNullable(node.getTextContent());
+                }
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = Optional.ofNullable(node.getTextContent());
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
+                }
+                if ("Dimensions".equals(node.getNodeName())) {
+                    dimensions = Optional.ofNullable(getAggregationDimensionList(node.getChildNodes()));
+                }
+            }
+        }
+        return new AggregationR(id, name, dimensions, annotations, description);
+    }
+
+    private static List<AggregationDimension> getAggregationDimensionList(NodeList nl) {
+        List<AggregationDimension> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Dimension".equals(node.getNodeName())) {
+                    list.add(getAggregationDimension(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static AggregationDimension getAggregationDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        Optional<List<AggregationAttribute>> attributes = Optional.empty();
+        Optional<List<Annotation>> annotations = Optional.empty();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Attributes".equals(node.getNodeName())) {
+                    attributes = Optional.ofNullable(getAggregationAttributeList(node.getChildNodes()));
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
+                }
+            }
+        }
+        return new AggregationDimensionR(cubeDimensionID, attributes, annotations);
+    }
+
+    private static List<AggregationAttribute> getAggregationAttributeList(NodeList nl) {
+        List<AggregationAttribute> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null && "Attribute".equals(node.getNodeName())) {
+                list.add(getAggregationAttribute(node.getChildNodes()));
+            }
+        }
+        return list;
+    }
+
+    private static AggregationAttribute getAggregationAttribute(NodeList nl) {
+        String attributeID = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new AggregationAttributeR(attributeID, Optional.ofNullable(annotations));
     }
 
     private static List<AggregationDesignDimension> getAggregationDesignDimensionList(NodeList nl) {
-        //Dimension
         List<AggregationDesignDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
@@ -1719,9 +3135,57 @@ public class Convert {
         return list;
     }
 
-    private static AggregationDesignDimension getAggregationDesignDimension(NodeList childNodes) {
-        //TODO
-        return null;
+    private static AggregationDesignDimension getAggregationDesignDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<AggregationDesignAttribute> attributes = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Attributes".equals(node.getNodeName())) {
+                    attributes = getAggregationDesignAttributeList(node.getChildNodes());
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new AggregationDesignDimensionR(
+            cubeDimensionID,
+            Optional.ofNullable(attributes),
+            Optional.ofNullable(annotations)
+        );
+    }
+
+    private static List<AggregationDesignAttribute> getAggregationDesignAttributeList(NodeList nl) {
+        List<AggregationDesignAttribute> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null && "Attribute".equals(node.getNodeName())) {
+                list.add(getAggregationDesignAttribute(node.getChildNodes()));
+            }
+        }
+        return list;
+    }
+
+    private static AggregationDesignAttribute getAggregationDesignAttribute(NodeList nl) {
+        String attributeID = null;
+        Long estimatedCount = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("EstimatedCount".equals(node.getNodeName())) {
+                    estimatedCount = toLong(node.getTextContent());
+                }
+            }
+        }
+        return new AggregationDesignAttributeR(attributeID, Optional.ofNullable(estimatedCount));
     }
 
     private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r) {
@@ -1789,4 +3253,13 @@ public class Convert {
         }
     }
 
+    private static String getAttribute(NamedNodeMap namedNodeMap, String name) {
+        if (namedNodeMap != null) {
+            org.w3c.dom.Node nameNode = namedNodeMap.getNamedItem(name);
+            if (nameNode != null) {
+                return nameNode.getTextContent();
+            }
+        }
+        return null;
+    }
 }
