@@ -140,6 +140,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.SoapUtil.toStatementResponse;
+
 public class XmlaApiAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlaApiAdapter.class);
 
@@ -594,7 +596,7 @@ public class XmlaApiAdapter {
             parameters,
             statement);
         StatementResponse statementResponse = xmlaService.execute().statement(statementRequest);
-        return Convert.toStatementResponse(statementResponse);
+        return toStatementResponse(statementResponse);
     }
 
 }
