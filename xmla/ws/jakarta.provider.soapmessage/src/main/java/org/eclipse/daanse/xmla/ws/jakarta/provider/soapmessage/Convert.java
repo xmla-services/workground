@@ -96,6 +96,7 @@ import org.eclipse.daanse.xmla.api.xmla.AndOrType;
 import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
+import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
@@ -129,8 +130,11 @@ import org.eclipse.daanse.xmla.api.xmla.Event;
 import org.eclipse.daanse.xmla.api.xmla.EventColumnID;
 import org.eclipse.daanse.xmla.api.xmla.EventSession;
 import org.eclipse.daanse.xmla.api.xmla.EventType;
+import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
 import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
+import org.eclipse.daanse.xmla.api.xmla.Group;
 import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
+import org.eclipse.daanse.xmla.api.xmla.IncrementalProcessingNotification;
 import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
 import org.eclipse.daanse.xmla.api.xmla.Kpi;
 import org.eclipse.daanse.xmla.api.xmla.Level;
@@ -138,7 +142,9 @@ import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
 import org.eclipse.daanse.xmla.api.xmla.Measure;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Member;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
@@ -172,15 +178,20 @@ import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
+import org.eclipse.daanse.xmla.api.xmla.ReportParameter;
+import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
 import org.eclipse.daanse.xmla.api.xmla.RetentionModes;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Scope;
 import org.eclipse.daanse.xmla.api.xmla.Server;
 import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
+import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
 import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
+import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -211,6 +222,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMe
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.engine.ImpersonationInfoR;
+import org.eclipse.daanse.xmla.model.record.engine200_200.ExpressionBindingR;
+import org.eclipse.daanse.xmla.model.record.engine200_200.RowNumberBindingR;
 import org.eclipse.daanse.xmla.model.record.engine300.CalculationPropertiesVisualizationPropertiesR;
 import org.eclipse.daanse.xmla.model.record.engine300.DimensionAttributeVisualizationPropertiesR;
 import org.eclipse.daanse.xmla.model.record.engine300.HierarchyVisualizationPropertiesR;
@@ -236,41 +249,55 @@ import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.model.record.xmla.AndOrTypeR;
 import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
 import org.eclipse.daanse.xmla.model.record.xmla.AssemblyR;
+import org.eclipse.daanse.xmla.model.record.xmla.AttributeBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttributePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttributeTranslationR;
 import org.eclipse.daanse.xmla.model.record.xmla.BoolBinopR;
+import org.eclipse.daanse.xmla.model.record.xmla.CalculatedMeasureBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.CalculationPropertyR;
 import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
 import org.eclipse.daanse.xmla.model.record.xmla.CellPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
 import org.eclipse.daanse.xmla.model.record.xmla.ColumnBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.CubeAttributeBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeAttributeR;
+import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeHierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeR;
+import org.eclipse.daanse.xmla.model.record.xmla.DSVTableBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataItemR;
+import org.eclipse.daanse.xmla.model.record.xmla.DataMiningMeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourcePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourceR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabasePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabaseR;
+import org.eclipse.daanse.xmla.model.record.xmla.DegenerateMeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DimensionAttributeR;
+import org.eclipse.daanse.xmla.model.record.xmla.DimensionBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.DimensionPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.DrillThroughActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.ErrorConfigurationR;
 import org.eclipse.daanse.xmla.model.record.xmla.EventColumnIDR;
 import org.eclipse.daanse.xmla.model.record.xmla.EventR;
 import org.eclipse.daanse.xmla.model.record.xmla.EventSessionR;
 import org.eclipse.daanse.xmla.model.record.xmla.EventTypeR;
 import org.eclipse.daanse.xmla.model.record.xmla.FoldingParametersR;
+import org.eclipse.daanse.xmla.model.record.xmla.GroupR;
 import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
+import org.eclipse.daanse.xmla.model.record.xmla.IncrementalProcessingNotificationR;
+import org.eclipse.daanse.xmla.model.record.xmla.InheritedBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.KpiR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
 import org.eclipse.daanse.xmla.model.record.xmla.MdxScriptR;
+import org.eclipse.daanse.xmla.model.record.xmla.MeasureBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupDimensionBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureR;
 import org.eclipse.daanse.xmla.model.record.xmla.MemberR;
@@ -293,14 +320,30 @@ import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveKpiR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureGroupR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveMeasureR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveR;
+import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingIncrementalProcessingBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingR;
+import org.eclipse.daanse.xmla.model.record.xmla.QueryBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReferenceMeasureGroupDimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.RegularMeasureGroupDimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportActionR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportFormatParameterR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportParameterR;
 import org.eclipse.daanse.xmla.model.record.xmla.RoleR;
+import org.eclipse.daanse.xmla.model.record.xmla.RowBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.ScalarMiningStructureColumnR;
 import org.eclipse.daanse.xmla.model.record.xmla.ServerPropertyR;
 import org.eclipse.daanse.xmla.model.record.xmla.ServerR;
+import org.eclipse.daanse.xmla.model.record.xmla.StandardActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
+import org.eclipse.daanse.xmla.model.record.xmla.TableBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.TableMiningStructureColumnR;
+import org.eclipse.daanse.xmla.model.record.xmla.TimeAttributeBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.TimeBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceFilterR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
 import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
+import org.eclipse.daanse.xmla.model.record.xmla.UserDefinedGroupBindingR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
@@ -2780,7 +2823,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 if ("Source".equals(node.getNodeName())) {
-                    source = getTabularBinding(node.getChildNodes());
+                    source = getTabularBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("ProcessingPriority".equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
@@ -2926,7 +2969,7 @@ public class Convert {
                     aggregationType = node.getTextContent();
                 }
                 if ("Source".equals(node.getNodeName())) {
-                    source = getTabularBinding(node.getChildNodes());
+                    source = getTabularBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("Dimensions".equals(node.getNodeName())) {
                     dimensions = getAggregationInstanceDimensionList(node.getChildNodes());
@@ -3108,7 +3151,7 @@ public class Convert {
                     format = DataItemFormatEnum.fromValue(node.getTextContent());
                 }
                 if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes());
+                    source = getBinding(node.getChildNodes(),  getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("Annotations".equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
@@ -3127,9 +3170,413 @@ public class Convert {
             Optional.ofNullable(annotations));
     }
 
-    private static Binding getBinding(NodeList childNodes) {
-        //TODO
+    private static Binding getBinding(NodeList nl, String type) {
+        if ("ColumnBinding".equals(type)) {
+            return getColumnBinding(nl);
+        }
+        if ("RowBinding".equals(type)) {
+            return getRowBinding(nl);
+        }
+        if ("DataSourceViewBinding".equals(type)) {
+            return getDataSourceViewBinding(nl);
+        }
+        if ("AttributeBinding".equals(type)) {
+            return getAttributeBinding(nl);
+        }
+        if ("UserDefinedGroupBinding".equals(type)) {
+            return getUserDefinedGroupBinding(nl);
+        }
+        if ("MeasureBinding".equals(type)) {
+            return getMeasureBinding(nl);
+        }
+        if ("CubeAttributeBinding".equals(type)) {
+            return getCubeAttributeBinding(nl);
+        }
+        if ("DimensionBinding".equals(type)) {
+            return getDimensionBinding(nl);
+        }
+        if ("CubeDimensionBinding".equals(type)) {
+            return getCubeDimensionBinding(nl);
+        }
+        if ("MeasureGroupBinding".equals(type)) {
+            return getMeasureGroupBinding(nl);
+        }
+        if ("MeasureGroupDimensionBinding".equals(type)) {
+            return getMeasureGroupDimensionBinding(nl);
+        }
+        if ("TimeBinding".equals(type)) {
+            return getTimeBinding(nl);
+        }
+        if ("TimeAttributeBinding".equals(type)) {
+            return getTimeAttributeBinding();
+        }
+        if ("InheritedBinding".equals(type)) {
+            return getInheritedBinding();
+        }
+        if ("CalculatedMeasureBinding".equals(type)) {
+            return getCalculatedMeasureBinding(nl);
+        }
+        if ("RowNumberBinding".equals(type)) {
+            return getRowNumberBinding();
+        }
+        if ("ExpressionBinding".equals(type)) {
+            return getExpressionBinding(nl);
+        }
         return null;
+    }
+
+    private static Binding getExpressionBinding(NodeList nl) {
+        String expression = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Expression".equals(node.getNodeName())) {
+                    expression = node.getTextContent();
+                }
+            }
+        }
+        return new ExpressionBindingR(expression);
+    }
+
+    private static Binding getRowNumberBinding() {
+        return new RowNumberBindingR();
+    }
+
+    private static Binding getCalculatedMeasureBinding(NodeList nl) {
+        String measureName = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("MeasureName".equals(node.getNodeName())) {
+                    measureName = node.getTextContent();
+                }
+            }
+        }
+        return new CalculatedMeasureBindingR(measureName);
+    }
+
+    private static Binding getInheritedBinding() {
+        return new InheritedBindingR();
+    }
+
+    private static Binding getTimeAttributeBinding() {
+        return new TimeAttributeBindingR();
+    }
+
+    private static Binding getTimeBinding(NodeList nl) {
+        Instant calendarStartDate = null;
+        Instant calendarEndDate = null;
+        Integer firstDayOfWeek = null;
+        BigInteger calendarLanguage = null;
+        Integer fiscalFirstMonth = null;
+        Integer fiscalFirstDayOfMonth = null;
+        FiscalYearNameEnum fiscalYearName = null;
+        Integer reportingFirstMonth = null;
+        String reportingFirstWeekOfMonth = null;
+        ReportingWeekToMonthPatternEnum reportingWeekToMonthPattern = null;
+        Integer manufacturingFirstMonth = null;
+        Integer manufacturingFirstWeekOfMonth = null;
+        Integer manufacturingExtraMonthQuarter = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CalendarStartDate".equals(node.getNodeName())) {
+                    calendarStartDate = toInstant(node.getTextContent());
+                }
+                if ("CalendarEndDate".equals(node.getNodeName())) {
+                    calendarEndDate = toInstant(node.getTextContent());
+                }
+                if ("FirstDayOfWeek".equals(node.getNodeName())) {
+                    firstDayOfWeek = toInteger(node.getTextContent());
+                }
+                if ("CalendarLanguage".equals(node.getNodeName())) {
+                    calendarLanguage = toBigInteger(node.getTextContent());
+                }
+                if ("FiscalFirstMonth".equals(node.getNodeName())) {
+                    fiscalFirstMonth = toInteger(node.getTextContent());
+                }
+                if ("FiscalFirstDayOfMonth".equals(node.getNodeName())) {
+                    fiscalFirstDayOfMonth = toInteger(node.getTextContent());
+                }
+                if ("FiscalYearName".equals(node.getNodeName())) {
+                    fiscalYearName = FiscalYearNameEnum.fromValue(node.getTextContent());
+                }
+                if ("ReportingFirstMonth".equals(node.getNodeName())) {
+                    reportingFirstMonth = toInteger(node.getTextContent());
+                }
+                if ("ReportingFirstWeekOfMonth".equals(node.getNodeName())) {
+                    reportingFirstWeekOfMonth = node.getTextContent();
+                }
+                if ("ReportingWeekToMonthPattern".equals(node.getNodeName())) {
+                    reportingWeekToMonthPattern = ReportingWeekToMonthPatternEnum.fromValue(node.getTextContent());
+                }
+                if ("ManufacturingFirstMonth".equals(node.getNodeName())) {
+                    manufacturingFirstMonth = toInteger(node.getTextContent());
+                }
+                if ("ManufacturingFirstWeekOfMonth".equals(node.getNodeName())) {
+                    manufacturingFirstWeekOfMonth = toInteger(node.getTextContent());
+                }
+                if ("ManufacturingExtraMonthQuarter".equals(node.getNodeName())) {
+                    manufacturingExtraMonthQuarter = toInteger(node.getTextContent());
+                }
+            }
+        }
+        return new TimeBindingR(
+            calendarStartDate,
+            calendarEndDate,
+            Optional.ofNullable(firstDayOfWeek),
+            Optional.ofNullable(calendarLanguage),
+            Optional.ofNullable(fiscalFirstMonth),
+            Optional.ofNullable(fiscalFirstDayOfMonth),
+            Optional.ofNullable(fiscalYearName),
+            Optional.ofNullable(reportingFirstMonth),
+            Optional.ofNullable(reportingFirstWeekOfMonth),
+            Optional.ofNullable(reportingWeekToMonthPattern),
+            Optional.ofNullable(manufacturingFirstMonth),
+            Optional.ofNullable(manufacturingFirstWeekOfMonth),
+            Optional.ofNullable(manufacturingExtraMonthQuarter)
+        );
+    }
+
+    private static Binding getMeasureGroupDimensionBinding(NodeList nl) {
+        String cubeDimensionID = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+            }
+        }
+        return new MeasureGroupDimensionBindingR(cubeDimensionID);
+
+    }
+
+    private static Binding getCubeDimensionBinding(NodeList nl) {
+        String dataSourceID = null;
+        String cubeID = null;
+        String cubeDimensionID = null;
+        String filter = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("DataSourceID".equals(node.getNodeName())) {
+                    dataSourceID = node.getTextContent();
+                }
+                if ("CubeID".equals(node.getNodeName())) {
+                    cubeID = node.getTextContent();
+                }
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Filter".equals(node.getNodeName())) {
+                    filter = node.getTextContent();
+                }
+            }
+        }
+        return new CubeDimensionBindingR(
+            dataSourceID,
+            cubeID,
+            cubeDimensionID,
+            Optional.ofNullable(filter)
+        );
+
+    }
+
+    private static Binding getDimensionBinding(NodeList nl) {
+        String dataSourceID = null;
+        String dimensionID = null;
+        PersistenceEnum persistence = null;
+        RefreshPolicyEnum refreshPolicy = null;
+        Duration refreshInterval = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("DataSourceID".equals(node.getNodeName())) {
+                    dataSourceID = node.getTextContent();
+                }
+                if ("DimensionID".equals(node.getNodeName())) {
+                    dimensionID = node.getTextContent();
+                }
+                if ("Persistence".equals(node.getNodeName())) {
+                    persistence = PersistenceEnum.fromValue(node.getTextContent());
+                }
+                if ("RefreshPolicy".equals(node.getNodeName())) {
+                    refreshPolicy = RefreshPolicyEnum.fromValue(node.getTextContent());
+                }
+                if ("RefreshInterval".equals(node.getNodeName())) {
+                    refreshInterval = toDuration(node.getTextContent());
+                }
+            }
+        }
+        return new DimensionBindingR(
+            dataSourceID,
+            dimensionID,
+            Optional.ofNullable(persistence),
+            Optional.ofNullable(refreshPolicy),
+            Optional.ofNullable(refreshInterval)
+        );
+
+    }
+
+    private static Binding getCubeAttributeBinding(NodeList nl) {
+        String cubeID = null;
+        String cubeDimensionID = null;
+        String attributeID = null;
+        AttributeBindingTypeEnum type = null;
+        List<BigInteger> ordinal = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeID".equals(node.getNodeName())) {
+                    cubeID = node.getTextContent();
+                }
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = AttributeBindingTypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Ordinal".equals(node.getNodeName())) {
+                    ordinal = getOrdinalList(node.getChildNodes());
+                }
+            }
+        }
+
+        return new CubeAttributeBindingR(
+            cubeID,
+            cubeDimensionID,
+            attributeID,
+            type,
+            Optional.ofNullable(ordinal)
+        );
+
+    }
+
+    private static List<BigInteger> getOrdinalList(NodeList nl) {
+        List<BigInteger> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Ordinal".equals(node.getNodeName())) {
+                    list.add(toBigInteger(node.getTextContent()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Binding getMeasureBinding(NodeList nl) {
+        String measureID = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("MeasureID".equals(node.getNodeName())) {
+                    measureID = node.getTextContent();
+                }
+            }
+        }
+        return new MeasureBindingR(measureID);
+    }
+
+    private static Binding getUserDefinedGroupBinding(NodeList nl) {
+        String attributeID = null;
+        List<Group> groups = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("Groups".equals(node.getNodeName())) {
+                    groups = getGroupList(node.getChildNodes());
+                }
+            }
+        }
+        return new UserDefinedGroupBindingR(attributeID, Optional.ofNullable(groups));
+    }
+
+    private static List<Group> getGroupList(NodeList nl) {
+        List<Group> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Group".equals(node.getNodeName())) {
+                    list.add(getGroup(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Group getGroup(NodeList nl) {
+        String name = null;
+        List<String> members = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Members".equals(node.getNodeName())) {
+                    members = getMemberStringList(node.getChildNodes());
+                }
+            }
+        }
+        return new GroupR(
+            name,
+            Optional.ofNullable(members)
+        );
+    }
+
+    private static List<String> getMemberStringList(NodeList nl) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Member".equals(node.getNodeName())) {
+                    list.add(node.getTextContent());
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Binding getAttributeBinding(NodeList nl) {
+        String attributeID = null;
+        AttributeBindingTypeEnum type = null;
+        Integer ordinal = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("AttributeID".equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = AttributeBindingTypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Ordinal".equals(node.getNodeName())) {
+                    ordinal = toInteger(node.getTextContent());
+                }
+            }
+        }
+        return new AttributeBindingR(attributeID, type, Optional.ofNullable(ordinal));
+    }
+
+    private static Binding getRowBinding(NodeList nl) {
+        String tableID = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("TableID".equals(node.getNodeName())) {
+                    tableID = node.getTextContent();
+                }
+            }
+        }
+        return new RowBindingR(tableID);
     }
 
     private static Partition.CurrentStorageMode getPartitionCurrentStorageMode(NodeList nl) {
@@ -3164,7 +3611,8 @@ public class Convert {
                     aggregationStorage = node.getTextContent();
                 }
                 if ("Source".equals(node.getNodeName())) {
-                    source = getProactiveCachingBinding(node.getChildNodes());
+                    source = getProactiveCachingBinding(node.getChildNodes(),
+                        getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("SilenceInterval".equals(node.getNodeName())) {
                     silenceInterval = toDuration(node.getTextContent());
@@ -3197,9 +3645,67 @@ public class Convert {
         return it != null ? Duration.parse(it) : null;
     }
 
-    private static ProactiveCachingBinding getProactiveCachingBinding(NodeList childNodes) {
-        //TODO
+    private static ProactiveCachingBinding getProactiveCachingBinding(NodeList childNodes, String type) {
+        if ("ProactiveCachingQueryBinding".equals(type)) {
+            return getProactiveCachingQueryBinding();
+        }
+        if ("ProactiveCachingIncrementalProcessingBinding".equals(type)) {
+            return getProactiveCachingIncrementalProcessingBinding(childNodes);
+        }
         return null;
+    }
+
+    private static ProactiveCachingBinding getProactiveCachingIncrementalProcessingBinding(NodeList nl) {
+        Duration refreshInterval = null;
+        List<IncrementalProcessingNotification> incrementalProcessingNotifications = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("RefreshInterval".equals(node.getNodeName())) {
+                    refreshInterval = toDuration(node.getTextContent());
+                }
+                if ("IncrementalProcessingNotifications".equals(node.getNodeName())) {
+                    incrementalProcessingNotifications = getIncrementalProcessingNotificationList(node.getChildNodes());
+                }
+
+            }
+        }
+        return new ProactiveCachingIncrementalProcessingBindingR(Optional.ofNullable(refreshInterval),
+            incrementalProcessingNotifications);
+    }
+
+    private static List<IncrementalProcessingNotification> getIncrementalProcessingNotificationList(NodeList nl) {
+        List<IncrementalProcessingNotification> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("IncrementalProcessingNotification".equals(node.getNodeName())) {
+                    list.add(getIncrmentalProcessingNotification(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static IncrementalProcessingNotification getIncrmentalProcessingNotification(NodeList nl) {
+        String tableID = null;
+        String processingQuery = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("TableID".equals(node.getNodeName())) {
+                    tableID = node.getTextContent();
+                }
+                if ("ProcessingQuery".equals(node.getNodeName())) {
+                    processingQuery = node.getTextContent();
+                }
+            }
+        }
+        return new IncrementalProcessingNotificationR(tableID, processingQuery);
+    }
+
+    private static ProactiveCachingBinding getProactiveCachingQueryBinding() {
+        return new ProactiveCachingBindingR();
     }
 
     private static ErrorConfiguration getErrorConfiguration(NodeList nl) {
@@ -3269,9 +3775,87 @@ public class Convert {
         return new PartitionR.StorageMode(value, valuens);
     }
 
-    private static TabularBinding getTabularBinding(NodeList nl) {
-        //TODO
+    private static TabularBinding getTabularBinding(NodeList nl, String type) {
+        if ("TableBinding".equals(type)) {
+            return getTableBinding(nl);
+        }
+        if ("QueryBinding".equals(type)) {
+            return getQueryBinding(nl);
+        }
+        if ("DSVTableBinding".equals(type)) {
+            return getDSVTableBinding(nl);
+        }
         return null;
+    }
+
+    private static TabularBinding getDSVTableBinding(NodeList nl) {
+        String dataSourceViewID = null;
+        String tableID = null;
+        String dataEmbeddingStyle = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("DataSourceViewID".equals(node.getNodeName())) {
+                    dataSourceViewID = node.getTextContent();
+                }
+                if ("TableID".equals(node.getNodeName())) {
+                    tableID = node.getTextContent();
+                }
+                if ("DataEmbeddingStyle".equals(node.getNodeName())) {
+                    dataEmbeddingStyle = node.getTextContent();
+                }
+            }
+        }
+        return new DSVTableBindingR(
+            Optional.ofNullable(dataSourceViewID),
+            tableID,
+            Optional.ofNullable(dataEmbeddingStyle)
+        );
+    }
+
+    private static TabularBinding getQueryBinding(NodeList nl) {
+        String dataSourceID = null;
+        String queryDefinition = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("DataSourceID".equals(node.getNodeName())) {
+                    dataSourceID = node.getTextContent();
+                }
+                if ("QueryDefinition".equals(node.getNodeName())) {
+                    queryDefinition = node.getTextContent();
+                }
+            }
+        }
+        return new QueryBindingR(
+            Optional.ofNullable(dataSourceID),
+            queryDefinition
+        );
+    }
+
+    private static TabularBinding getTableBinding(NodeList nl) {
+        String dataSourceID = null;
+        String dbTableName = null;
+        String dbSchemaName = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("DataSourceID".equals(node.getNodeName())) {
+                    dataSourceID = node.getTextContent();
+                }
+                if ("DbTableName".equals(node.getNodeName())) {
+                    dbTableName = node.getTextContent();
+                }
+                if ("DbSchemaName".equals(node.getNodeName())) {
+                    dbSchemaName = node.getTextContent();
+                }
+            }
+        }
+        return new TableBindingR(
+            Optional.ofNullable(dataSourceID),
+            dbTableName,
+            Optional.ofNullable(dbSchemaName)
+        );
     }
 
     private static MiningStructure getMiningStructure(NodeList nl) {
@@ -3300,7 +3884,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes());
+                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("LastProcessed".equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
@@ -3473,16 +4057,161 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 if ("MiningStructurePermission".equals(node.getNodeName())) {
-                    list.add(getMiningStructureColumn(node.getChildNodes()));
+                    list.add(
+                        getMiningStructureColumn(
+                            node.getChildNodes(),
+                            getAttribute(node.getAttributes(), "xsi:type")
+                        )
+                    );
                 }
             }
         }
         return list;
     }
 
-    private static MiningStructureColumn getMiningStructureColumn(NodeList childNodes) {
-        //TODO
+    private static MiningStructureColumn getMiningStructureColumn(
+        NodeList nl,
+        String type) {
+        if ("ScalarMiningStructureColumn".equals(type)) {
+            return  getScalarMiningStructureColumn(nl);
+        }
+        if ("ScalarMiningStructureColumn".equals(type)) {
+            return  getTableMiningStructureColumn(nl);
+        }
         return null;
+    }
+
+    private static MiningStructureColumn getTableMiningStructureColumn(NodeList nl) {
+        List<DataItem> foreignKeyColumns = null;
+        MeasureGroupBinding sourceMeasureGroup = null;
+        List<MiningStructureColumn> columns = null;
+        List<Translation> translations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ForeignKeyColumns".equals(node.getNodeName())) {
+                    foreignKeyColumns = getDataItemList(node.getChildNodes(), "ForeignKeyColumn");
+                }
+                if ("SourceMeasureGroup".equals(node.getNodeName())) {
+                    sourceMeasureGroup = getMeasureGroupBinding(node.getChildNodes());
+                }
+                if ("Columns".equals(node.getNodeName())) {
+                    columns = getMiningStructureColumnList(node.getChildNodes());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                }
+            }
+        }
+        return new TableMiningStructureColumnR(
+            Optional.ofNullable(foreignKeyColumns),
+            Optional.ofNullable(sourceMeasureGroup),
+            Optional.ofNullable(columns),
+            Optional.ofNullable(translations)
+        );
+    }
+
+    private static MiningStructureColumn getScalarMiningStructureColumn(NodeList nl) {
+        String name = null;
+        String id = null;
+        String description = null;
+        String type = null;
+        List<Annotation> annotations = null;
+        Boolean isKey = null;
+        Binding source = null;
+        String distribution = null;
+        List<MiningModelingFlag> modelingFlags = null;
+        String content = null;
+        List<String> classifiedColumns = null;
+        String discretizationMethod = null;
+        BigInteger discretizationBucketCount = null;
+        List<DataItem> keyColumns = null;
+        DataItem nameColumn = null;
+        List<Translation> translations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("IsKey".equals(node.getNodeName())) {
+                    isKey = toBoolean(node.getTextContent());
+                }
+                if ("Source".equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                }
+                if ("Distribution".equals(node.getNodeName())) {
+                    distribution = node.getTextContent();
+                }
+                if ("ModelingFlags".equals(node.getNodeName())) {
+                    modelingFlags = getMiningModelingFlagList(node.getChildNodes());
+                }
+                if ("Content".equals(node.getNodeName())) {
+                    content = node.getTextContent();
+                }
+                if ("ClassifiedColumns".equals(node.getNodeName())) {
+                    classifiedColumns = getClassifiedColumnList(node.getChildNodes());
+                }
+                if ("DiscretizationMethod".equals(node.getNodeName())) {
+                    discretizationMethod = node.getTextContent();
+                }
+                if ("DiscretizationBucketCount".equals(node.getNodeName())) {
+                    discretizationBucketCount = toBigInteger(node.getTextContent());
+                }
+                if ("KeyColumns".equals(node.getNodeName())) {
+                    keyColumns = getDataItemList(node.getChildNodes(), "KeyColumn");
+                }
+                if ("NameColumn".equals(node.getNodeName())) {
+                    nameColumn = getDataItem(node.getChildNodes());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                }
+            }
+        }
+        return new ScalarMiningStructureColumnR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(description),
+            Optional.ofNullable(type),
+            Optional.ofNullable(annotations),
+            Optional.ofNullable(isKey),
+            Optional.ofNullable(source),
+            Optional.ofNullable(distribution),
+            Optional.ofNullable(modelingFlags),
+            content,
+            Optional.ofNullable(classifiedColumns),
+            Optional.ofNullable(discretizationMethod),
+            Optional.ofNullable(discretizationBucketCount),
+            Optional.ofNullable(keyColumns),
+            Optional.ofNullable(nameColumn),
+            Optional.ofNullable(translations)
+        );
+    }
+
+    private static List<String> getClassifiedColumnList(NodeList nl) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ClassifiedColumn".equals(node.getNodeName())) {
+                    list.add(node.getTextContent());
+                }
+            }
+        }
+        return list;
     }
 
     private static MiningModel getMiningModel(NodeList nl) {
@@ -4014,16 +4743,155 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 if ("Dimensions".equals(node.getNodeName())) {
-                    list.add(getMeasureGroupDimension(node.getChildNodes()));
+                    list.add(getMeasureGroupDimension(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
                 }
             }
         }
         return list;
     }
 
-    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getMeasureGroupDimension(NodeList nl) {
-        //TODO
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getMeasureGroupDimension(NodeList nl, String type) {
+        if ("ManyToManyMeasureGroupDimension".equals(type)) {
+            return getManyToManyMeasureGroupDimension(nl);
+        }
+        if ("RegularMeasureGroupDimension".equals(type)) {
+            return getRegularMeasureGroupDimension(nl);
+        }
+        if ("ReferenceMeasureGroupDimension".equals(type)) {
+            return getReferenceMeasureGroupDimension(nl);
+        }
+        if ("DegenerateMeasureGroupDimension".equals(type)) {
+            return getDegenerateMeasureGroupDimension(nl);
+        }
+        if ("DataMiningMeasureGroupDimension".equals(type)) {
+            return getDataMiningMeasureGroupDimension(nl);
+        }
         return null;
+    }
+
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getDataMiningMeasureGroupDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<Annotation> annotations = null;
+        MeasureGroupDimensionBinding source = null;
+        String caseCubeDimensionID = null;
+        //TODO
+        return new DataMiningMeasureGroupDimensionR(
+            cubeDimensionID,
+            annotations,
+            source,
+            caseCubeDimensionID
+        );
+    }
+
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getDegenerateMeasureGroupDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<Annotation> annotations = null;
+        MeasureGroupDimensionBinding source = null;
+        String shareDimensionStorage = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("Source".equals(node.getNodeName())) {
+                    source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
+                }
+
+                if ("ShareDimensionStorage".equals(node.getNodeName())) {
+                    shareDimensionStorage = node.getTextContent();
+                }
+            }
+        }
+        return new DegenerateMeasureGroupDimensionR(
+            cubeDimensionID,
+            annotations,
+            source,
+            shareDimensionStorage
+        );
+
+    }
+
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getReferenceMeasureGroupDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<Annotation> annotations = null;
+        MeasureGroupDimensionBinding source = null;
+        String intermediateCubeDimensionID = null;
+        String intermediateGranularityAttributeID = null;
+        String materialization = null;
+        String processingState = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimensionID".equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("Source".equals(node.getNodeName())) {
+                    source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
+                }
+
+                if ("IntermediateCubeDimensionID".equals(node.getNodeName())) {
+                    intermediateCubeDimensionID = node.getTextContent();
+                }
+                if ("IntermediateGranularityAttributeID".equals(node.getNodeName())) {
+                    intermediateGranularityAttributeID = node.getTextContent();
+                }
+                if ("Materialization".equals(node.getNodeName())) {
+                    materialization = node.getTextContent();
+                }
+                if ("ProcessingState".equals(node.getNodeName())) {
+                    processingState = node.getTextContent();
+                }
+            }
+        }
+        return new ReferenceMeasureGroupDimensionR(
+            cubeDimensionID,
+            annotations,
+            source,
+            intermediateCubeDimensionID,
+            intermediateGranularityAttributeID,
+            materialization,
+            processingState
+        );
+    }
+
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getRegularMeasureGroupDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<Annotation> annotations = null;
+        MeasureGroupDimensionBinding source = null;
+        String cardinality = null;
+        List<MeasureGroupAttribute> attributes = null;
+        //TODO
+        return new RegularMeasureGroupDimensionR(
+            cubeDimensionID,
+            annotations,
+            source,
+            cardinality,
+            attributes
+        );
+    }
+
+    private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getManyToManyMeasureGroupDimension(NodeList nl) {
+        String cubeDimensionID = null;
+        List<Annotation> annotations = null;
+        MeasureGroupDimensionBinding source = null;
+        String cardinality = null;
+        List<MeasureGroupAttribute> attributes = null;
+        //TODO
+        return new RegularMeasureGroupDimensionR(
+            cubeDimensionID,
+            annotations,
+            source,
+            cardinality,
+            attributes
+        );
     }
 
     private static MeasureGroup.StorageMode getMeasureGroupStorageMode(NodeList nl) {
@@ -4478,7 +5346,7 @@ public class Convert {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes());
+                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("MiningModelID".equals(node.getNodeName())) {
                     miningModelID = node.getTextContent();
@@ -4845,7 +5713,7 @@ public class Convert {
                     usage = node.getTextContent();
                 }
                 if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes());
+                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
                 }
                 if ("EstimatedCount".equals(node.getNodeName())) {
                     estimatedCount = toLong(node.getTextContent());
@@ -6311,7 +7179,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 if ("Action".equals(node.getNodeName())) {
-                    list.add(getAction(node.getChildNodes()));
+                    list.add(getAction(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
                 }
             }
         }
@@ -6500,9 +7368,356 @@ public class Convert {
             valuens);
     }
 
-    private static Action getAction(NodeList childNodes) {
-        //TODO
+    private static Action getAction(NodeList nl, String type) {
+        if ("StandardAction".equals(type)) {
+            return getStandardAction(nl);
+        }
+        if ("ReportAction".equals(type)) {
+            return getReportAction(nl);
+        }
+        if ("ReportAction".equals(type)) {
+            return getDrillThroughAction(nl);
+        }
         return null;
+    }
+
+    private static Action getDrillThroughAction(NodeList nl) {
+        String name = null;
+        String id = null;
+        String caption = null;
+        Boolean captionIsMdx = null;
+        List<Translation> translations = null;
+        TargetTypeEnum targetType = null;
+        String target = null;
+        String condition = null;
+        TypeEnum type = null;
+        String invocation = null;
+        String application = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        Boolean defaultAction = null;
+        List<Binding> columns = null;
+        Integer maximumRows = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("Caption".equals(node.getNodeName())) {
+                    caption = node.getTextContent();
+                }
+                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                    captionIsMdx = toBoolean(node.getTextContent());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                }
+                if ("TargetType".equals(node.getNodeName())) {
+                    targetType = TargetTypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Target".equals(node.getNodeName())) {
+                    target = node.getTextContent();
+                }
+                if ("Condition".equals(node.getNodeName())) {
+                    condition = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = TypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Invocation".equals(node.getNodeName())) {
+                    invocation = node.getTextContent();
+                }
+                if ("Application".equals(node.getNodeName())) {
+                    application = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+
+                if ("Default".equals(node.getNodeName())) {
+                    defaultAction = toBoolean(node.getTextContent());
+                }
+                if ("Columns".equals(node.getNodeName())) {
+                    columns = getBindingList(node.getChildNodes());
+                }
+                if ("MaximumRows".equals(node.getNodeName())) {
+                    maximumRows = toInteger(node.getTextContent());
+                }
+            }
+        }
+        return new DrillThroughActionR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(caption),
+            Optional.ofNullable(captionIsMdx),
+            Optional.ofNullable(translations),
+            targetType,
+            Optional.ofNullable(target),
+            Optional.ofNullable(condition),
+            type,
+            Optional.ofNullable(invocation),
+            Optional.ofNullable(application),
+            Optional.ofNullable(description),
+            Optional.ofNullable(annotations),
+            Optional.ofNullable(defaultAction),
+            Optional.ofNullable(columns),
+            Optional.ofNullable(maximumRows)
+        );
+    }
+
+    private static List<Binding> getBindingList(NodeList nl) {
+        List<Binding> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("CubeDimension".equals(node.getNodeName())) {
+                    list.add(getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Action getReportAction(NodeList nl) {
+        String name = null;
+        String id = null;
+        String caption = null;
+        Boolean captionIsMdx = null;
+        List<Translation> translations = null;
+        TargetTypeEnum targetType = null;
+        String target = null;
+        String condition = null;
+        TypeEnum type = null;
+        String invocation = null;
+        String application = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        String reportServer = null;
+        String path = null;
+        List<ReportParameter> reportParameters = null;
+        List<ReportFormatParameter> reportFormatParameters = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("Caption".equals(node.getNodeName())) {
+                    caption = node.getTextContent();
+                }
+                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                    captionIsMdx = toBoolean(node.getTextContent());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                }
+                if ("TargetType".equals(node.getNodeName())) {
+                    targetType = TargetTypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Target".equals(node.getNodeName())) {
+                    target = node.getTextContent();
+                }
+                if ("Condition".equals(node.getNodeName())) {
+                    condition = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = TypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Invocation".equals(node.getNodeName())) {
+                    invocation = node.getTextContent();
+                }
+                if ("Application".equals(node.getNodeName())) {
+                    application = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("ReportServer".equals(node.getNodeName())) {
+                    reportServer = node.getTextContent();
+                }
+                if ("Path".equals(node.getNodeName())) {
+                    path = node.getTextContent();
+                }
+                if ("ReportParameters".equals(node.getNodeName())) {
+                    reportParameters = getReportParameterList(node.getChildNodes());
+                }
+                if ("ReportFormatParameters".equals(node.getNodeName())) {
+                    reportFormatParameters = getReportFormatParametersList(node.getChildNodes());
+                }
+            }
+        }
+        return new ReportActionR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(caption),
+            Optional.ofNullable(captionIsMdx),
+            Optional.ofNullable(translations),
+            targetType,
+            Optional.ofNullable(target),
+            Optional.ofNullable(condition),
+            type,
+            Optional.ofNullable(invocation),
+            Optional.ofNullable(application),
+            Optional.ofNullable(description),
+            Optional.ofNullable(annotations),
+            reportServer,
+            Optional.ofNullable(path),
+            Optional.ofNullable(reportParameters),
+            Optional.ofNullable(reportFormatParameters)
+        );
+    }
+
+    private static List<ReportFormatParameter> getReportFormatParametersList(NodeList nl) {
+        List<ReportFormatParameter> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ReportFormatParameter".equals(node.getNodeName())) {
+                    list.add(getReportFormatParameter(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static ReportFormatParameter getReportFormatParameter(NodeList nl) {
+        String name = null;
+        String value = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Value".equals(node.getNodeName())) {
+                    value = node.getTextContent();
+                }
+            }
+        }
+        return new ReportFormatParameterR(name, value);
+    }
+
+    private static List<ReportParameter> getReportParameterList(NodeList nl) {
+        List<ReportParameter> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("ReportParameter".equals(node.getNodeName())) {
+                    list.add(getReportParameter(node.getChildNodes()));
+                }
+            }
+        }
+        return list;
+    }
+
+    private static ReportParameter getReportParameter(NodeList nl) {
+        String name = null;
+        String value = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("Value".equals(node.getNodeName())) {
+                    value = node.getTextContent();
+                }
+            }
+        }
+        return new ReportParameterR(name, value);
+    }
+
+    private static Action getStandardAction(NodeList nl) {
+        String name = null;
+        String id = null;
+        String caption = null;
+        Boolean captionIsMdx = null;
+        List<Translation> translations = null;
+        TargetTypeEnum targetType = null;
+        String target = null;
+        String condition = null;
+        TypeEnum type = null;
+        String invocation = null;
+        String application = null;
+        String description = null;
+        List<Annotation> annotations = null;
+        String expression = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if ("Name".equals(node.getNodeName())) {
+                    name = node.getTextContent();
+                }
+                if ("ID".equals(node.getNodeName())) {
+                    id = node.getTextContent();
+                }
+                if ("Caption".equals(node.getNodeName())) {
+                    caption = node.getTextContent();
+                }
+                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                    captionIsMdx = toBoolean(node.getTextContent());
+                }
+                if ("Translations".equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                }
+                if ("TargetType".equals(node.getNodeName())) {
+                    targetType = TargetTypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Target".equals(node.getNodeName())) {
+                    target = node.getTextContent();
+                }
+                if ("Condition".equals(node.getNodeName())) {
+                    condition = node.getTextContent();
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = TypeEnum.fromValue(node.getTextContent());
+                }
+                if ("Invocation".equals(node.getNodeName())) {
+                    invocation = node.getTextContent();
+                }
+                if ("Application".equals(node.getNodeName())) {
+                    application = node.getTextContent();
+                }
+                if ("Description".equals(node.getNodeName())) {
+                    description = node.getTextContent();
+                }
+                if ("Annotations".equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if ("Expression".equals(node.getNodeName())) {
+                    expression = node.getTextContent();
+                }
+            }
+        }
+        return new StandardActionR(
+            name,
+            Optional.ofNullable(id),
+            Optional.ofNullable(caption),
+            Optional.ofNullable(captionIsMdx),
+            Optional.ofNullable(translations),
+            targetType,
+            Optional.ofNullable(target),
+            Optional.ofNullable(condition),
+            type,
+            Optional.ofNullable(invocation),
+            Optional.ofNullable(application),
+            Optional.ofNullable(description),
+            Optional.ofNullable(annotations),
+            expression
+            );
     }
 
     private static CubeDimension getCubeDimension(NodeList nl) {
