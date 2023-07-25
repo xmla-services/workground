@@ -54,8 +54,6 @@ MdxStatement MdxStatement#interface :
   }
 ;
 
-INJECT MdxStatement : extends org.eclipse.daanse.mdx.model.api.MdxStatement;
-
 INJECT DrillthroughStatement :
    import java.util.List;
    import java.util.Optional;
@@ -105,8 +103,8 @@ DrillthroughStatement :
 INJECT ExplainStatement :
    implements org.eclipse.daanse.mdx.model.api.ExplainStatement
 {
-    public MdxStatement mdxStatement() {
-      return firstChildOfType(MdxStatement.class);
+    public org.eclipse.daanse.mdx.model.api.MdxStatement mdxStatement() {
+      return firstChildOfType(org.eclipse.daanse.mdx.model.api.MdxStatement.class);
     }
 }
 
@@ -162,10 +160,10 @@ INJECT DMVStatement :
        return (NameObjectIdentifier) firstChildOfType(DOT).nextSibling();
     }
 
-    public Expression where() {
+    public org.eclipse.daanse.mdx.model.api.expression.Expression where() {
         Node where = firstChildOfType(WHERE);
         return where == null ? null
-                             : (Expression) where.nextSibling();
+                             : (org.eclipse.daanse.mdx.model.api.expression.Expression) where.nextSibling();
     }
 }
 
@@ -196,8 +194,8 @@ INJECT SelectQueryAxisClause :
        return getChild(0).getType() == NON && getChild(1).getType() == EMPTY;
     }
 
-    public Expression expression() {
-        return firstChildOfType(Expression.class);
+    public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
     };
 
     public Axis axis() {
@@ -284,8 +282,8 @@ INJECT CreateSetBodyClause :
       return (CompoundId) getChild(0);
    }
 
-   public Expression expression() {
-      return (Expression) getChild(2);
+   public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
+      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
    }
 }  
 
@@ -321,8 +319,8 @@ SelectCellPropertyListClause SelectCellPropertyListClause# :
 INJECT SelectSlicerAxisClause :
    implements org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 {
-    public Expression expression() {
-      return (Expression) getChild(1);
+    public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
+      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(1);
     }
 }
 
@@ -354,12 +352,12 @@ INJECT SelectSubcubeClauseStatement :
   import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
   implements SelectSubcubeClause, org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement
 {
-    public SelectQueryClause selectQueryClause() {
-        return firstChildOfType(SelectQueryClause.class);
+    public org.eclipse.daanse.mdx.model.api.select.SelectQueryClause selectQueryClause() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.select.SelectQueryClause.class);
     }
 
-    public SelectSubcubeClause selectSubcubeClause() {
-        return firstChildOfType(SelectSubcubeClause.class);
+    public org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause selectSubcubeClause() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause.class);
     }
 
     public Optional<SelectSlicerAxisClause> selectSlicerAxisClause() {
@@ -380,8 +378,6 @@ SelectSubcubeClauseStatement :
   )?
   < RPAREN >
 ;
-
-INJECT SelectQueryClause : extends org.eclipse.daanse.mdx.model.api.select.SelectQueryClause
 
 SelectQueryClause#interface : 
    SelectQueryAsteriskClause
@@ -415,12 +411,12 @@ INJECT SelectStatement :
         return childrenOfType(SelectWithClause.class);
     } 
 
-    public SelectQueryClause selectQueryClause() {
-        return firstChildOfType(SelectQueryClause.class);
+    public org.eclipse.daanse.mdx.model.api.select.SelectQueryClause selectQueryClause() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.select.SelectQueryClause.class);
     }
 
-    public SelectSubcubeClause selectSubcubeClause() {
-        return firstChildOfType(SelectSubcubeClause.class);
+    public org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause selectSubcubeClause() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause.class);
     }
 
     public Optional<SelectSlicerAxisClause> selectSlicerAxisClause() {
@@ -453,10 +449,6 @@ SelectStatement :
   )?
 ;
 
-INJECT SelectQueryClause : extends org.eclipse.daanse.mdx.model.api.select.SelectQueryClause
-
-INJECT SelectSubcubeClause :
-   extends org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 
 SelectSubcubeClause#interface :
   SelectSubcubeClauseName
@@ -485,9 +477,6 @@ INJECT MeasureBodyClause : implements SelectWithClause, org.eclipse.daanse.mdx.m
 MeasureBodyClause :
   <NOT><NOT><NOT><NOT><NOT><NOT><NOT>
 ;
-
-
-INJECT SelectWithClause : extends org.eclipse.daanse.mdx.model.api.select.SelectWithClause
 
 
 // https://docs.oracle.com/cd/E57185_01/ESBTR/mdx_grammar_rules.html
@@ -538,8 +527,8 @@ INJECT CreateMemberBodyClause :
     return (CompoundId) getChild(0);
   }
 
-  public Expression expression() {
-     return (Expression) getChild(2);
+  public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
+     return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
   }
 
   public java.util.List<MemberPropertyDefinition> memberPropertyDefinitions() {
