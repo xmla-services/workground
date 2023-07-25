@@ -20,12 +20,10 @@ INJECT PARSER_CLASS :
 
 INJECT BASE_NODE_CLASS :
 {
-  public List<Expression> expressions() {
-    return Collections.unmodifiableList(childrenOfType(Expression.class));
+  public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
+    return Collections.unmodifiableList(childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class));
   }
 }  
-
-INJECT Expression : extends org.eclipse.daanse.mdx.model.api.expression.Expression
 
 Expression#interface :
   OrExpression
@@ -37,7 +35,12 @@ Expression#interface :
   )*
 ;
 
-INJECT interface ObjectIdentifier : extends Expression, org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier
+INJECT interface ObjectIdentifier:
+  import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
+{
+
+  public Quoting quoting();
+}
 
 ObjectIdentifier#interface :
   NameObjectIdentifier
@@ -90,8 +93,8 @@ INJECT CompoundId :
                org.eclipse.daanse.mdx.model.api.expression.CompoundId,
                org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
-    public java.util.List<ObjectIdentifier> objectIdentifiers() {
-       return childrenOfType(ObjectIdentifier.class);
+    public java.util.List<org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier> objectIdentifiers() {
+       return childrenOfType(org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.class);
     }
 
     public Type type() {
@@ -184,9 +187,9 @@ INJECT RelationalExpression :
       return Type.TERM_INFIX;
    }
 
-   public List<Expression> expressions() {
+   public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
       if (type() == Type.TERM_POSTFIX) {
-        return List.of((Expression) getFirstChild());
+        return List.of((org.eclipse.daanse.mdx.model.api.expression.Expression) getFirstChild());
       }
       return super.expressions();
    }
@@ -235,8 +238,8 @@ INJECT BinaryExpression :
        return Type.TERM_INFIX; 
     }
 
-    public List<Expression> expressions() {
-        return List.of((Expression) getFirstChild(), (Expression) getLastChild());
+    public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
+        return List.of((org.eclipse.daanse.mdx.model.api.expression.Expression) getFirstChild(), (org.eclipse.daanse.mdx.model.api.expression.Expression) getLastChild());
     }
 }    
 
@@ -353,15 +356,15 @@ INJECT FunctionCall :
        return getChild(0) instanceof NameObjectIdentifier noi ? Type.FUNCTION : Type.METHOD;
     }
     
-    public List<Expression> expressions() {
-       List<Expression> result = childrenOfType(Expression.class);
+    public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
+       List<org.eclipse.daanse.mdx.model.api.expression.Expression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
        // This is not supposed to include the LHS.
        result.remove(0);
        return result;
     }
 }    
       
-INJECT interface Literal : extends PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.Literal
+INJECT interface Literal : extends PrimaryExpression
 
 Literal#interface :
     <STRING_LITERAL>
@@ -493,12 +496,12 @@ CaseExpression :
 INJECT MemberPropertyDefinition :
   implements org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition
 {
-    public ObjectIdentifier objectIdentifier() {
-        return (ObjectIdentifier) getChild(0);
+    public org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier objectIdentifier() {
+        return (org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier) getChild(0);
    }
 
-   public Expression expression() {
-      return (Expression) getChild(2);
+   public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
+      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
    }
 }
 

@@ -59,7 +59,7 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     @Override
     public MdxStatement parseMdxStatement() throws MdxParserException {
         try {
-            return delegate.MdxStatement();
+            return (MdxStatement) delegate.MdxStatement();
 
         } catch (Exception e) {
             throw new MdxParserException(e);
@@ -250,7 +250,8 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
 
     public DMVStatement parseDMVStatement() throws MdxParserException {
         try {
-            return delegate.DMVStatement();
+            delegate.DMVStatement();
+            return (DMVStatement) delegate.peekNode();
         } catch (Exception e) {
             throw new MdxParserException(e);
         } finally {
