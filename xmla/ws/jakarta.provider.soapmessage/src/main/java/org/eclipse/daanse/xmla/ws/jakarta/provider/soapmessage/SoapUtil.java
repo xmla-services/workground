@@ -18,7 +18,9 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.eclipse.daanse.xmla.api.engine200.WarningColumn;
 import org.eclipse.daanse.xmla.api.engine200.WarningLocationObject;
+import org.eclipse.daanse.xmla.api.engine200.WarningMeasure;
 import org.eclipse.daanse.xmla.api.exception.ErrorType;
 import org.eclipse.daanse.xmla.api.exception.Exception;
 import org.eclipse.daanse.xmla.api.exception.MessageLocation;
@@ -35,6 +37,7 @@ import org.eclipse.daanse.xmla.api.mddataset.CellInfo;
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
 import org.eclipse.daanse.xmla.api.mddataset.CellSetType;
 import org.eclipse.daanse.xmla.api.mddataset.CellType;
+import org.eclipse.daanse.xmla.api.mddataset.CellTypeError;
 import org.eclipse.daanse.xmla.api.mddataset.CubeInfo;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
@@ -42,17 +45,23 @@ import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.MembersType;
 import org.eclipse.daanse.xmla.api.mddataset.NormTupleSet;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfo;
+import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
 import org.eclipse.daanse.xmla.api.mddataset.SetListType;
 import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 import org.eclipse.daanse.xmla.api.mddataset.TuplesType;
 import org.eclipse.daanse.xmla.api.mddataset.Type;
 import org.eclipse.daanse.xmla.api.mddataset.Union;
+import org.eclipse.daanse.xmla.api.mddataset.Value;
+import org.eclipse.daanse.xmla.api.msxmla.MemberRef;
 import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
+import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuplesType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SoapUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
@@ -61,7 +70,6 @@ public class SoapUtil {
         SOAPBody body = createSOAPBody();
         SOAPElement root = addRoot(body);
         addMdDataSet(root, statementResponse.mdDataSet());
-        //TODO
         return body;
     }
 
@@ -141,12 +149,37 @@ public class SoapUtil {
 
     }
 
-    private static void addWarningLocationObject(SOAPElement el, String tagName, WarningLocationObject sourceObject) {
-        //SourceObject
+    private static void addWarningLocationObject(SOAPElement e, String tagName, WarningLocationObject it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, tagName);
+            addWarningColumn(el, it.warningColumn());
+            addWarningMeasure(el, it.warningMeasure());
+        }
     }
 
-    private static void addStartEnd(SOAPElement el, String tagName, StartEnd end) {
-        //End
+    private static void addWarningMeasure(SOAPElement e, WarningMeasure it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "WarningMeasure");
+            addChildElement(el, "Cube", it.cube());
+            addChildElement(el, "MeasureGroup", it.measureGroup());
+            addChildElement(el, "MeasureName", it.measureName());
+        }
+    }
+
+    private static void addWarningColumn(SOAPElement e, WarningColumn it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "WarningColumn");
+            addChildElement(el, "Dimension", it.dimension());
+            addChildElement(el, "Attribute", it.attribute());
+        }
+    }
+
+    private static void addStartEnd(SOAPElement e, String tagName, StartEnd it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, tagName);
+            addChildElement(el, "Line", String.valueOf(it.line()));
+            addChildElement(el, "Column", String.valueOf(it.column()));
+        }
     }
 
 
@@ -167,7 +200,19 @@ public class SoapUtil {
     private static void addCellSetType(SOAPElement e, CellSetType it) {
         if (it != null) {
             SOAPElement el = addChildElement(e, "CellSet");
-            //TODO
+            addDataList(el, it.data());
+        }
+    }
+
+    private static void addDataList(SOAPElement el, List<byte[]> list) {
+        if (list != null) {
+            list.forEach(it -> addData(el, it));
+        }
+    }
+
+    private static void addData(SOAPElement e, byte[] it) {
+        if (it != null) {
+            addChildElement(e, "Data", new String(it, UTF_8));
         }
     }
 
@@ -180,7 +225,30 @@ public class SoapUtil {
     private static void addCellType(SOAPElement e, CellType it) {
         if (it != null) {
             SOAPElement el = addChildElement(e, "Cell");
-            //TODO
+            addCellTypeValue(el, it.value());
+            addCellInfoItemList(el, it.any());
+            addChildElement(el, "CellOrdinal", String.valueOf(it.cellOrdinal()));
+        }
+    }
+
+    private static void addCellTypeValue(SOAPElement e, Value it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "Value");
+            addCellTypeErrorList(el, it.error());
+        }
+    }
+
+    private static void addCellTypeErrorList(SOAPElement el, List<CellTypeError> list) {
+        if (list != null) {
+            list.forEach(it -> addCellTypeError(el, it));
+        }
+    }
+
+    private static void addCellTypeError(SOAPElement e, CellTypeError it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "Error");
+            addChildElement(el, "ErrorCode", String.valueOf(it.errorCode()));
+            addChildElement(el, "Description", it.description());
         }
     }
 
@@ -258,8 +326,34 @@ public class SoapUtil {
     private static void addNormTuplesType(SOAPElement e, NormTuplesType it) {
         if (it != null) {
             SOAPElement el = addChildElement(e, "NormTuples");
-            //TODO
+            addNormTupleList(el, it.normTuple());
+        }
+    }
 
+    private static void addNormTupleList(SOAPElement el, List<NormTuple> list) {
+        if (list  != null) {
+            list.forEach(it -> addNormTuple(el, it));
+        }
+    }
+
+    private static void addNormTuple(SOAPElement e, NormTuple it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "NormTuple");
+            addMemberRefList(e, it.memberRef());
+        }
+    }
+
+    private static void addMemberRefList(SOAPElement e, List<MemberRef> list) {
+        if (list  != null) {
+            list.forEach(it -> addMemberRef(e, it));
+        }
+    }
+
+    private static void addMemberRef(SOAPElement e, MemberRef it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "MemberRef");
+            addChildElement(el, "MemberOrdinal", String.valueOf(it.memberOrdinal()));
+            addChildElement(el, "MemberDispInfo", String.valueOf(it.memberDispInfo()));
         }
     }
 
@@ -380,8 +474,26 @@ public class SoapUtil {
         }
     }
 
-    private static void addCubeInfo(SOAPElement el, CubeInfo it) {
-        //TODO
+    private static void addCubeInfo(SOAPElement e, CubeInfo it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "CubeInfo");
+            addOlapInfoCubeList(el, it.cube());
+        }
+    }
+
+    private static void addOlapInfoCubeList(SOAPElement e, List<OlapInfoCube> list) {
+        if (list != null) {
+            list.forEach(it -> addOlapInfoCube(e, it));
+        }
+    }
+
+    private static void addOlapInfoCube(SOAPElement e, OlapInfoCube it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, "Cube");
+            addChildElement(el, "CubeName", it.cubeName());
+            addChildElement(el, "LastDataUpdate", String.valueOf(it.lastDataUpdate()));
+            addChildElement(el, "LastSchemaUpdate", String.valueOf(it.lastSchemaUpdate()));
+        }
     }
 
     private static SOAPBody createSOAPBody() {
@@ -418,5 +530,4 @@ public class SoapUtil {
             throw new RuntimeException("addChildElement error", e);
         }
     }
-
 }
