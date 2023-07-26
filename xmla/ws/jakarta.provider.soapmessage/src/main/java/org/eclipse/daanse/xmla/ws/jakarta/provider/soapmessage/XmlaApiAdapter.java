@@ -140,8 +140,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.SoapUtil.toStatementResponse;
-
 public class XmlaApiAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(XmlaApiAdapter.class);
 
@@ -335,7 +333,7 @@ public class XmlaApiAdapter {
         List<MdSchemaMeasureGroupsResponseRow> rows = xmlaService.discover()
             .mdSchemaMeasureGroups(request);
 
-        return Convert.toMdSchemaMeasureGroups(rows);
+        return SoapUtil.toMdSchemaMeasureGroups(rows);
     }
 
     private SOAPBody handleMdSchemaKpis(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -344,7 +342,7 @@ public class XmlaApiAdapter {
         List<MdSchemaKpisResponseRow> rows = xmlaService.discover()
             .mdSchemaKpis(request);
 
-        return Convert.toMdSchemaKpis(rows);
+        return SoapUtil.toMdSchemaKpis(rows);
     }
 
     private SOAPBody handleMdSchemaSets(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -353,7 +351,7 @@ public class XmlaApiAdapter {
         List<MdSchemaSetsResponseRow> rows = xmlaService.discover()
             .mdSchemaSets(request);
 
-        return Convert.toMdSchemaSets(rows);
+        return SoapUtil.toMdSchemaSets(rows);
     }
 
     private SOAPBody handleMdSchemaProperties(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -362,7 +360,7 @@ public class XmlaApiAdapter {
         List<MdSchemaPropertiesResponseRow> rows = xmlaService.discover()
             .mdSchemaProperties(request);
 
-        return Convert.toMdSchemaProperties(rows);
+        return SoapUtil.toMdSchemaProperties(rows);
 
     }
 
@@ -372,7 +370,7 @@ public class XmlaApiAdapter {
         List<MdSchemaMembersResponseRow> rows = xmlaService.discover()
             .mdSchemaMembers(request);
 
-        return Convert.toMdSchemaMembers(rows);
+        return SoapUtil.toMdSchemaMembers(rows);
 
     }
 
@@ -382,7 +380,7 @@ public class XmlaApiAdapter {
         List<MdSchemaMeasuresResponseRow> rows = xmlaService.discover()
             .mdSchemaMeasures(request);
 
-        return Convert.toMdSchemaMeasures(rows);
+        return SoapUtil.toMdSchemaMeasures(rows);
 
     }
 
@@ -392,7 +390,7 @@ public class XmlaApiAdapter {
         List<MdSchemaMeasureGroupDimensionsResponseRow> rows = xmlaService.discover()
             .mdSchemaMeasureGroupDimensions(request);
 
-        return Convert.toMdSchemaMeasureGroupDimensions(rows);
+        return SoapUtil.toMdSchemaMeasureGroupDimensions(rows);
 
     }
 
@@ -402,7 +400,7 @@ public class XmlaApiAdapter {
         List<MdSchemaLevelsResponseRow> rows = xmlaService.discover()
             .mdSchemaLevels(request);
 
-        return Convert.toMdSchemaLevels(rows);
+        return SoapUtil.toMdSchemaLevels(rows);
     }
 
     private SOAPBody handleMdSchemaHierarchies(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -411,7 +409,7 @@ public class XmlaApiAdapter {
         List<MdSchemaHierarchiesResponseRow> rows = xmlaService.discover()
             .mdSchemaHierarchies(request);
 
-        return Convert.toMdSchemaHierarchies(rows);
+        return SoapUtil.toMdSchemaHierarchies(rows);
     }
 
     private SOAPBody handleDbSchemaTablesInfo(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -420,7 +418,7 @@ public class XmlaApiAdapter {
         List<DbSchemaTablesInfoResponseRow> rows = xmlaService.discover()
             .dbSchemaTablesInfo(request);
 
-        return Convert.toDbSchemaTablesInfo(rows);
+        return SoapUtil.toDbSchemaTablesInfo(rows);
 
     }
 
@@ -430,7 +428,7 @@ public class XmlaApiAdapter {
         List<DbSchemaSourceTablesResponseRow> rows = xmlaService.discover()
             .dbSchemaSourceTables(request);
 
-        return Convert.toDbSchemaSourceTables(rows);
+        return SoapUtil.toDbSchemaSourceTables(rows);
 
     }
 
@@ -440,7 +438,7 @@ public class XmlaApiAdapter {
         List<DbSchemaSchemataResponseRow> rows = xmlaService.discover()
             .dbSchemaSchemata(request);
 
-        return Convert.toDbSchemaSchemata(rows);
+        return SoapUtil.toDbSchemaSchemata(rows);
 
     }
 
@@ -450,7 +448,7 @@ public class XmlaApiAdapter {
         List<DbSchemaProviderTypesResponseRow> rows = xmlaService.discover()
             .dbSchemaProviderTypes(request);
 
-        return Convert.toDbSchemaProviderTypes(rows);
+        return SoapUtil.toDbSchemaProviderTypes(rows);
 
     }
 
@@ -460,7 +458,7 @@ public class XmlaApiAdapter {
         List<DbSchemaColumnsResponseRow> rows = xmlaService.discover()
             .dbSchemaColumns(request);
 
-        return Convert.toDbSchemaColumns(rows);
+        return SoapUtil.toDbSchemaColumns(rows);
 
     }
 
@@ -470,7 +468,7 @@ public class XmlaApiAdapter {
         List<DiscoverXmlMetaDataResponseRow> rows = xmlaService.discover()
             .xmlMetaData(request);
 
-        return Convert.toDiscoverXmlMetaData(rows);
+        return SoapUtil.toDiscoverXmlMetaData(rows);
 
     }
 
@@ -480,7 +478,7 @@ public class XmlaApiAdapter {
         List<DiscoverDataSourcesResponseRow> rows = xmlaService.discover()
             .dataSources(request);
 
-        return Convert.toDiscoverDataSources(rows);
+        return SoapUtil.toDiscoverDataSources(rows);
 
     }
 
@@ -490,7 +488,7 @@ public class XmlaApiAdapter {
         List<DbSchemaCatalogsResponseRow> rows = xmlaService.discover()
             .dbSchemaCatalogs(request);
 
-        return Convert.toDbSchemaCatalogs(rows);
+        return SoapUtil.toDbSchemaCatalogs(rows);
 
     }
 
@@ -500,7 +498,7 @@ public class XmlaApiAdapter {
         List<DiscoverSchemaRowsetsResponseRow> rows = xmlaService.discover()
             .discoverSchemaRowsets(request);
 
-        return Convert.toDiscoverSchemaRowsets(rows);
+        return SoapUtil.toDiscoverSchemaRowsets(rows);
 
     }
 
@@ -510,7 +508,7 @@ public class XmlaApiAdapter {
         List<DiscoverEnumeratorsResponseRow> rows = xmlaService.discover()
             .discoverEnumerators(request);
 
-        return Convert.toDiscoverEnumerators(rows);
+        return SoapUtil.toDiscoverEnumerators(rows);
 
     }
 
@@ -520,7 +518,7 @@ public class XmlaApiAdapter {
         List<DiscoverKeywordsResponseRow> rows = xmlaService.discover()
             .discoverKeywords(request);
 
-        return Convert.toDiscoverKeywords(rows);
+        return SoapUtil.toDiscoverKeywords(rows);
 
     }
 
@@ -530,7 +528,7 @@ public class XmlaApiAdapter {
         List<DiscoverLiteralsResponseRow> rows = xmlaService.discover()
             .discoverLiterals(request);
 
-        return Convert.toDiscoverLiterals(rows);
+        return SoapUtil.toDiscoverLiterals(rows);
 
     }
 
@@ -540,7 +538,7 @@ public class XmlaApiAdapter {
         List<DbSchemaTablesResponseRow> rows = xmlaService.discover()
             .dbSchemaTables(request);
 
-        return Convert.toDbSchemaTables(rows);
+        return SoapUtil.toDbSchemaTables(rows);
 
     }
 
@@ -550,7 +548,7 @@ public class XmlaApiAdapter {
         List<MdSchemaActionsResponseRow> rows = xmlaService.discover()
             .mdSchemaActions(request);
 
-        return Convert.toMdSchemaActions(rows);
+        return SoapUtil.toMdSchemaActions(rows);
     }
 
     private SOAPBody handleMdSchemaCubes(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -559,7 +557,7 @@ public class XmlaApiAdapter {
         List<MdSchemaCubesResponseRow> rows = xmlaService.discover()
             .mdSchemaCubes(request);
 
-        return Convert.toMdSchemaCubes(rows);
+        return SoapUtil.toMdSchemaCubes(rows);
     }
 
     private SOAPBody handleMdSchemaDimensions(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -568,7 +566,7 @@ public class XmlaApiAdapter {
         List<MdSchemaDimensionsResponseRow> rows = xmlaService.discover()
             .mdSchemaDimensions(request);
 
-        return Convert.toMdSchemaDimensions(rows);
+        return SoapUtil.toMdSchemaDimensions(rows);
     }
 
     private SOAPBody handleDiscoverProperties(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -578,7 +576,7 @@ public class XmlaApiAdapter {
         List<DiscoverPropertiesResponseRow> rows = xmlaService.discover()
                 .discoverProperties(request);
 
-        return Convert.toDiscoverProperties(rows);
+        return SoapUtil.toDiscoverProperties(rows);
     }
 
     private SOAPBody handleMdSchemaFunctions(PropertiesR propertiesR, SOAPElement restrictionElement) {
@@ -588,7 +586,7 @@ public class XmlaApiAdapter {
         List<MdSchemaFunctionsResponseRow> rows = xmlaService.discover()
             .mdSchemaFunctions(request);
 
-        return Convert.toMdSchemaFunctions(rows);
+        return SoapUtil.toMdSchemaFunctions(rows);
     }
 
     private SOAPBody handleStatement(StatementR statement, PropertiesR properties, List<ExecuteParameter> parameters) {
@@ -596,7 +594,7 @@ public class XmlaApiAdapter {
             parameters,
             statement);
         StatementResponse statementResponse = xmlaService.execute().statement(statementRequest);
-        return toStatementResponse(statementResponse);
+        return SoapUtil.toStatementResponse(statementResponse);
     }
 
 }
