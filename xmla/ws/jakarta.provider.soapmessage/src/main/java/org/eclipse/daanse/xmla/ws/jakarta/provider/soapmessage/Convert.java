@@ -13,12 +13,8 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
-import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.Node;
-import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -38,35 +34,6 @@ import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.common.properties.PropertyListElementDefinition;
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.literals.DiscoverLiteralsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.functions.ParameterInfo;
-import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
-import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
 import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
@@ -294,8 +261,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.InheritedBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.KpiR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
+import org.eclipse.daanse.xmla.model.record.xmla.ManyToManyMeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MdxScriptR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupDimensionBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupR;
@@ -344,8 +313,6 @@ import org.eclipse.daanse.xmla.model.record.xmla.TraceFilterR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
 import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
 import org.eclipse.daanse.xmla.model.record.xmla.UserDefinedGroupBindingR;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
@@ -359,19 +326,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.*;
+
 public class Convert {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Convert.class);
-    public static final String ROW = "row";
-
-    private Convert() {
+	private Convert() {
         // constructor
     }
 
     public static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverPropertiesRestrictionsR(
-            Optional.ofNullable(m.get("PropertyName"))
+            Optional.ofNullable(m.get(PROPERTY_NAME))
         );
     }
 
@@ -406,1051 +372,318 @@ public class Convert {
         return properties;
     }
 
-    public static SOAPBody toDiscoverProperties(List<DiscoverPropertiesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverPropertiesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverPropertiesResponseRow(SOAPElement root, DiscoverPropertiesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "PropertyName", r.propertyName());
-        r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyDescription", v));
-        r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyType", v));
-        addChildElement(row, "PropertyAccessType", r.propertyAccessType());
-        r.required().ifPresent(v -> addChildElement(row, "IsRequired", String.valueOf(v)));
-        r.value().ifPresent(v -> addChildElement(row, "Value", v));
-    }
-
     public static MdSchemaFunctionsRestrictionsR discoverMdSchemaFunctionsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaFunctionsRestrictionsR(
-            Optional.ofNullable(OriginEnum.fromValue(m.get("ORIGIN"))),
-            Optional.ofNullable(InterfaceNameEnum.fromValue(m.get("INTERFACE_NAME"))),
-            Optional.ofNullable(m.get("LIBRARY_NAME"))
+            Optional.ofNullable(OriginEnum.fromValue(m.get(ORIGIN))),
+            Optional.ofNullable(InterfaceNameEnum.fromValue(m.get(INTERFACE_NAME))),
+            Optional.ofNullable(m.get(LIBRARY_NAME))
         );
     }
 
-    public static SOAPBody toMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaFunctionsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaFunctionsResponseRow(SOAPElement root, MdSchemaFunctionsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.functionalName().ifPresent(v -> addChildElement(row, "FUNCTION_NAME", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        addChildElement(row, "PARAMETER_LIST", r.parameterList());
-        r.returnType().ifPresent(v -> addChildElement(row, "RETURN_TYPE", String.valueOf(v)));
-        r.origin().ifPresent(v -> addChildElement(row, "ORIGIN", String.valueOf(v.getValue())));
-        r.interfaceName().ifPresent(v -> addChildElement(row, "INTERFACE_NAME", v.name()));
-        r.libraryName().ifPresent(v -> addChildElement(row, "LIBRARY_NAME", v));
-        r.dllName().ifPresent(v -> addChildElement(row, "DLL_NAME", v));
-        r.helpFile().ifPresent(v -> addChildElement(row, "HELP_FILE", v));
-        r.helpContext().ifPresent(v -> addChildElement(row, "HELP_CONTEXT", v));
-        r.object().ifPresent(v -> addChildElement(row, "OBJECT", v));
-        r.caption().ifPresent(v -> addChildElement(row, "CAPTION", v));
-        r.parameterInfo().ifPresent(v -> addParameterInfoXmlList(row, v));
-        r.directQueryPushable().ifPresent(v -> addChildElement(row, "DIRECTQUERY_PUSHABLE",
-            String.valueOf(v.getValue())));
-    }
-
-    private static void addParameterInfoXmlList(SOAPElement root, List<ParameterInfo> list) {
-        if (list != null) {
-            list.forEach(it -> addParameterInfoXml(root, it));
-        }
-    }
-
-    private static void addParameterInfoXml(SOAPElement root, ParameterInfo it) {
-        SOAPElement el = addChildElement(root, "PARAMETERINFO");
-        addChildElement(el, "NAME", it.name());
-        addChildElement(el, "DESCRIPTION", it.description());
-        addChildElement(el, "OPTIONAL", String.valueOf(it.optional()));
-        addChildElement(el, "REPEATABLE", String.valueOf(it.repeatable()));
-        addChildElement(el, "REPEATGROUP", String.valueOf(it.repeatGroup()));
-    }
 
     public static MdSchemaDimensionsRestrictionsR discoverMdSchemaDimensionsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaDimensionsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("DIMENSION_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
         );
-    }
-
-    public static SOAPBody toMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaDimensionsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaDimensionsResponseRow(SOAPElement root, MdSchemaDimensionsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.dimensionName().ifPresent(v -> addChildElement(row, "DIMENSION_NAME", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.dimensionGuid().ifPresent(v -> addChildElement(row, "DIMENSION_GUID", String.valueOf(v)));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.dimensionCaption().ifPresent(v -> addChildElement(row, "DIMENSION_CAPTION", v));
-        r.dimensionOptional().ifPresent(v -> addChildElement(row, "DIMENSION_ORDINAL", String.valueOf(v)));
-        r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", String.valueOf(v.getValue())));
-        r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", String.valueOf(v)));
-        r.defaultHierarchy().ifPresent(v -> addChildElement(row, "DEFAULT_HIERARCHY", v));
-        r.defaultHierarchy().ifPresent(v -> addChildElement(row, "DEFAULT_HIERARCHY", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", String.valueOf(v)));
-        r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", String.valueOf(v)));
-        r.dimensionUniqueSetting().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
-            String.valueOf(v.getValue())));
-        r.dimensionMasterName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_NAME", v));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
     }
 
     public static MdSchemaCubesRestrictionsR discoverMdSchemaCubesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
-        return new MdSchemaCubesRestrictionsR(m.get("CATALOG_NAME"),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("BASE_CUBE_NAME")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))));
-    }
-
-    public static SOAPBody toMdSchemaCubes(List<MdSchemaCubesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaCubesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaCubesResponseRow(SOAPElement root, MdSchemaCubesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "CATALOG_NAME", r.catalogName());
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.cubeType().ifPresent(v -> addChildElement(row, "CUBE_TYPE", v.name()));
-        r.cubeGuid().ifPresent(v -> addChildElement(row, "CUBE_GUID", String.valueOf(v)));
-        r.createdOn().ifPresent(v -> addChildElement(row, "CREATED_ON", String.valueOf(v)));
-        r.lastSchemaUpdate().ifPresent(v -> addChildElement(row, "LAST_SCHEMA_UPDATE", String.valueOf(v)));
-        r.schemaUpdatedBy().ifPresent(v -> addChildElement(row, "SCHEMA_UPDATED_BY", v));
-        r.lastDataUpdate().ifPresent(v -> addChildElement(row, "LAST_DATA_UPDATE", String.valueOf(v)));
-        r.dataUpdateDBy().ifPresent(v -> addChildElement(row, "DATA_UPDATED_BY", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.isDrillThroughEnabled().ifPresent(v -> addChildElement(row, "IS_DRILLTHROUGH_ENABLED", String.valueOf(v)));
-        r.isLinkable().ifPresent(v -> addChildElement(row, "IS_LINKABLE", String.valueOf(v)));
-        r.isWriteEnabled().ifPresent(v -> addChildElement(row, "IS_WRITE_ENABLED", String.valueOf(v)));
-        r.isSqlEnabled().ifPresent(v -> addChildElement(row, "IS_SQL_ENABLED", String.valueOf(v)));
-        r.cubeCaption().ifPresent(v -> addChildElement(row, "CUBE_CAPTION", v));
-        r.baseCubeName().ifPresent(v -> addChildElement(row, "BASE_CUBE_NAME", v));
-        r.cubeSource().ifPresent(v -> addChildElement(row, "CUBE_SOURCE", String.valueOf(v.getValue())));
-        r.preferredQueryPatterns().ifPresent(v -> addChildElement(row, "PREFERRED_QUERY_PATTERNS",
-            String.valueOf(v.getValue())));
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
+        return new MdSchemaCubesRestrictionsR(m.get(CATALOG_NAME),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(BASE_CUBE_NAME)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))));
     }
 
     public static MdSchemaMeasureGroupsRestrictionsR discoverMdSchemaMeasureGroups(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
-        return new MdSchemaMeasureGroupsRestrictionsR(Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("MEASUREGROUP_NAME"))
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
+        return new MdSchemaMeasureGroupsRestrictionsR(Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(MEASUREGROUP_NAME))
         );
-    }
-
-    public static SOAPBody toMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasureGroupsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaMeasureGroupsResponseRow(SOAPElement root, MdSchemaMeasureGroupsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.isWriteEnabled().ifPresent(v -> addChildElement(row, "IS_WRITE_ENABLED", String.valueOf(v)));
-        r.measureGroupCaption().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CAPTION", v));
     }
 
     public static MdSchemaKpisRestrictionsR discoverMdSchemaKpisRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
-        return new MdSchemaKpisRestrictionsR(Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("KPI_NAME")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE")))
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
+        return new MdSchemaKpisRestrictionsR(Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(KPI_NAME)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE)))
         );
-    }
-
-    public static SOAPBody toMdSchemaKpis(List<MdSchemaKpisResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaKpisResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaKpisResponseRow(SOAPElement root, MdSchemaKpisResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", v));
-        r.kpiName().ifPresent(v -> addChildElement(row, "KPI_NAME", v));
-        r.kpiCaption().ifPresent(v -> addChildElement(row, "KPI_CAPTION", v));
-        r.kpiDescription().ifPresent(v -> addChildElement(row, "KPI_DESCRIPTION", v));
-        r.kpiDisplayFolder().ifPresent(v -> addChildElement(row, "KPI_DISPLAY_FOLDER", v));
-        r.kpiGoal().ifPresent(v -> addChildElement(row, "KPI_GOAL", v));
-        r.kpiStatus().ifPresent(v -> addChildElement(row, "KPI_STATUS", v));
-        r.kpiTrend().ifPresent(v -> addChildElement(row, "KPI_TREND", v));
-        r.kpiStatusGraphic().ifPresent(v -> addChildElement(row, "KPI_STATUS_GRAPHIC", v));
-        r.kpiTrendGraphic().ifPresent(v -> addChildElement(row, "KPI_TREND_GRAPHIC", v));
-        r.kpiWight().ifPresent(v -> addChildElement(row, "KPI_WEIGHT", v));
-        r.kpiCurrentTimeMember().ifPresent(v -> addChildElement(row, "KPI_CURRENT_TIME_MEMBER", v));
-        r.kpiParentKpiName().ifPresent(v -> addChildElement(row, "KPI_PARENT_KPI_NAME", v));
-        r.annotation().ifPresent(v -> addChildElement(row, "ANNOTATIONS", v));
-        r.scope().ifPresent(v -> addChildElement(row, "ANNOTATIONS", String.valueOf(v.getValue())));
     }
 
     public static MdSchemaSetsRestrictionsR discoverMdSchemaSetsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaSetsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("SET_NAME")),
-            Optional.ofNullable(ScopeEnum.fromValue(m.get("SCOPE"))),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(m.get("HIERARCHY_UNIQUE_NAME"))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(SET_NAME)),
+            Optional.ofNullable(ScopeEnum.fromValue(m.get(SCOPE))),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME))
         );
-    }
-
-    public static SOAPBody toMdSchemaSets(List<MdSchemaSetsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaSetsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaSetsResponseRow(SOAPElement root, MdSchemaSetsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.setName().ifPresent(v -> addChildElement(row, "SET_NAME", v));
-        r.scope().ifPresent(v -> addChildElement(row, "SCOPE", String.valueOf(v.getValue())));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", v));
-        r.dimension().ifPresent(v -> addChildElement(row, "DIMENSIONS", v));
-        r.setCaption().ifPresent(v -> addChildElement(row, "SET_CAPTION", v));
-        r.setDisplayFolder().ifPresent(v -> addChildElement(row, "SET_DISPLAY_FOLDER", v));
-        r.setEvaluationContext().ifPresent(v -> addChildElement(row, "SET_EVALUATION_CONTEXT",
-            String.valueOf(v.getValue())));
     }
 
     public static MdSchemaPropertiesRestrictionsR discoverMdSchemaPropertiesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaPropertiesRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("HIERARCHY_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("LEVEL_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("MEMBER_UNIQUE_NAME")),
-            Optional.ofNullable(PropertyTypeEnum.fromValue(m.get("PROPERTY_TYPE"))),
-            Optional.ofNullable(m.get("PROPERTY_NAME")),
-            Optional.ofNullable(PropertyOriginEnum.fromValue(m.get("PROPERTY_ORIGIN"))),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("PROPERTY_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(MEMBER_UNIQUE_NAME)),
+            Optional.ofNullable(PropertyTypeEnum.fromValue(m.get(PROPERTY_TYPE))),
+            Optional.ofNullable(m.get(PROPERTY_NAME2)),
+            Optional.ofNullable(PropertyOriginEnum.fromValue(m.get(PROPERTY_ORIGIN))),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(PROPERTY_VISIBILITY)))
         );
-    }
-
-    public static SOAPBody toMdSchemaProperties(List<MdSchemaPropertiesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaPropertiesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaPropertiesResponseRow(SOAPElement root, MdSchemaPropertiesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", v));
-        r.memberUniqueName().ifPresent(v -> addChildElement(row, "MEMBER_UNIQUE_NAME", v));
-        r.propertyType().ifPresent(v -> addChildElement(row, "PROPERTY_TYPE", String.valueOf(v.getValue())));
-        r.propertyName().ifPresent(v -> addChildElement(row, "PROPERTY_NAME", v));
-        r.propertyCaption().ifPresent(v -> addChildElement(row, "PROPERTY_CAPTION", v));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", String.valueOf(v.getValue())));
-        r.characterMaximumLength().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH", String.valueOf(v)));
-        r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH", String.valueOf(v)));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", String.valueOf(v)));
-        r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.propertyContentType().ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE",
-            String.valueOf(v.getValue())));
-        r.sqlColumnName().ifPresent(v -> addChildElement(row, "SQL_COLUMN_NAME", v));
-        r.language().ifPresent(v -> addChildElement(row, "LANGUAGE", String.valueOf(v)));
-        r.propertyOrigin().ifPresent(v -> addChildElement(row, "PROPERTY_ORIGIN", String.valueOf(v.getValue())));
-        r.propertyAttributeHierarchyName().ifPresent(v -> addChildElement(row, "PROPERTY_ATTRIBUTE_HIERARCHY_NAME", v));
-        r.propertyCardinality().ifPresent(v -> addChildElement(row, "PROPERTY_CARDINALITY", v.name()));
-        r.propertyIsVisible().ifPresent(v -> addChildElement(row, "PROPERTY_IS_VISIBLE", String.valueOf(v)));
     }
 
     public static MdSchemaMembersRestrictionsR discoverMdSchemaMembersRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMembersRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("HIERARCHY_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("LEVEL_UNIQUE_NAME")),
-            Optional.ofNullable(Integer.decode(m.get("LEVEL_NUMBER"))),
-            Optional.ofNullable(m.get("MEMBER_NAME")),
-            Optional.ofNullable(m.get("MEMBER_UNIQUE_NAME")),
-            Optional.ofNullable(MemberTypeEnum.fromValue(m.get("MEMBER_TYPE"))),
-            Optional.ofNullable(m.get("MEMBER_CAPTION")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(TreeOpEnum.fromValue(m.get("TREE_OP")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
+            Optional.ofNullable(Integer.decode(m.get(LEVEL_NUMBER))),
+            Optional.ofNullable(m.get(MEMBER_NAME)),
+            Optional.ofNullable(m.get(MEMBER_UNIQUE_NAME)),
+            Optional.ofNullable(MemberTypeEnum.fromValue(m.get(MEMBER_TYPE))),
+            Optional.ofNullable(m.get(MEMBER_CAPTION)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(TreeOpEnum.fromValue(m.get(TREE_OP)))
         );
-    }
-
-    public static SOAPBody toMdSchemaMembers(List<MdSchemaMembersResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMembersResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaMembersResponseRow(SOAPElement root, MdSchemaMembersResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", v));
-        r.levelNumber().ifPresent(v -> addChildElement(row, "LEVEL_NUMBER", String.valueOf(v)));
-        r.memberOrdinal().ifPresent(v -> addChildElement(row, "MEMBER_ORDINAL", String.valueOf(v)));
-        r.memberName().ifPresent(v -> addChildElement(row, "MEMBER_NAME", v));
-        r.memberUniqueName().ifPresent(v -> addChildElement(row, "MEMBER_UNIQUE_NAME", v));
-        r.memberType().ifPresent(v -> addChildElement(row, "MEMBER_TYPE", String.valueOf(v.getValue())));
-        r.memberGuid().ifPresent(v -> addChildElement(row, "MEMBER_GUID", String.valueOf(v)));
-        r.memberCaption().ifPresent(v -> addChildElement(row, "MEMBER_CAPTION", v));
-        r.childrenCardinality().ifPresent(v -> addChildElement(row, "CHILDREN_CARDINALITY", String.valueOf(v)));
-        r.parentLevel().ifPresent(v -> addChildElement(row, "PARENT_LEVEL", String.valueOf(v)));
-        r.parentUniqueName().ifPresent(v -> addChildElement(row, "PARENT_UNIQUE_NAME", v));
-        r.parentCount().ifPresent(v -> addChildElement(row, "PARENT_COUNT", String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", v));
-        r.memberKey().ifPresent(v -> addChildElement(row, "MEMBER_KEY", v));
-        r.isPlaceHolderMember().ifPresent(v -> addChildElement(row, "IS_PLACEHOLDERMEMBER", String.valueOf(v)));
-        r.isDataMember().ifPresent(v -> addChildElement(row, "IS_DATAMEMBER", String.valueOf(v)));
-        r.scope().ifPresent(v -> addChildElement(row, "SCOPE", String.valueOf(v.getValue())));
     }
 
     public static MdSchemaMeasuresRestrictionsR discoverMdSchemaMeasuresRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMeasuresRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("MEASURE_NAME")),
-            Optional.ofNullable(m.get("MEASURE_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("MEASUREGROUP_NAME")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("MEASURE_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(MEASURE_NAME)),
+            Optional.ofNullable(m.get(MEASURE_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(MEASURE_VISIBILITY)))
         );
-    }
-
-    public static SOAPBody toMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasuresResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaMeasuresResponseRow(SOAPElement root, MdSchemaMeasuresResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-        r.measureName().ifPresent(v -> addChildElement(row, "MEASURE_NAME", v));
-        r.measureUniqueName().ifPresent(v -> addChildElement(row, "MEASURE_UNIQUE_NAME", v));
-        r.measureCaption().ifPresent(v -> addChildElement(row, "MEASURE_CAPTION", v));
-        r.measureGuid().ifPresent(v -> addChildElement(row, "MEASURE_GUID", String.valueOf(v)));
-        r.measureAggregator().ifPresent(v -> addChildElement(row, "MEASURE_AGGREGATOR", String.valueOf(v.getValue())));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", String.valueOf(v.getValue())));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", String.valueOf(v)));
-        r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", String.valueOf(v)));
-        r.measureUnits().ifPresent(v -> addChildElement(row, "MEASURE_UNITS", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", v));
-        r.measureIsVisible().ifPresent(v -> addChildElement(row, "MEASURE_IS_VISIBLE", String.valueOf(v)));
-        r.levelsList().ifPresent(v -> addChildElement(row, "LEVELS_LIST", v));
-        r.measureNameSqlColumnName().ifPresent(v -> addChildElement(row, "MEASURE_NAME_SQL_COLUMN_NAME", v));
-        r.measureUnqualifiedCaption().ifPresent(v -> addChildElement(row, "MEASURE_UNQUALIFIED_CAPTION", v));
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", v));
-        r.defaultFormatString().ifPresent(v -> addChildElement(row, "DEFAULT_FORMAT_STRING", v));
     }
 
     public static MdSchemaMeasureGroupDimensionsRestrictionsR discoverMdSchemaMeasureGroupDimensionsRestrictions(
         SOAPElement restriction
     ) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaMeasureGroupDimensionsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("MEASUREGROUP_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("DIMENSION_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
         );
-    }
-
-    public static SOAPBody toMdSchemaMeasureGroupDimensions(List<MdSchemaMeasureGroupDimensionsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaMeasureGroupDimensionsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaMeasureGroupDimensionsResponseRow(
-        SOAPElement root,
-        MdSchemaMeasureGroupDimensionsResponseRow r
-    ) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", v));
-        r.measureGroupCardinality().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CARDINALITY", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", v.name()));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
-        r.dimensionIsFactDimension().ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION",
-            String.valueOf(v)));
-        r.dimensionPath().ifPresent(v -> addMeasureGroupDimensionXmlList(row, v));
-        r.dimensionGranularity().ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", v));
-    }
-
-    private static void addMeasureGroupDimensionXmlList(SOAPElement el, List<MeasureGroupDimension> list) {
-        if (list != null) {
-            SOAPElement e = addChildElement(el, "DIMENSION_PATH");
-            list.forEach(it -> addMeasureGroupDimensionXml(e, it));
-        }
-    }
-
-    private static void addMeasureGroupDimensionXml(SOAPElement el, MeasureGroupDimension it) {
-        addChildElement(el, "MeasureGroupDimension", it.measureGroupDimension());
     }
 
     public static MdSchemaLevelsRestrictionsR discoverMdSchemaLevelsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaLevelsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("HIERARCHY_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("LEVEL_NAME")),
-            Optional.ofNullable(m.get("LEVEL_UNIQUE_NAME")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("DIMENSION_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(LEVEL_NAME)),
+            Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
         );
-    }
-
-    public static SOAPBody toMdSchemaLevels(List<MdSchemaLevelsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaLevelsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaLevelsResponseRow(SOAPElement root, MdSchemaLevelsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", v));
-        r.levelName().ifPresent(v -> addChildElement(row, "LEVEL_NAME", v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", v));
-        r.levelGuid().ifPresent(v -> addChildElement(row, "LEVEL_GUID", String.valueOf(v)));
-        r.levelCaption().ifPresent(v -> addChildElement(row, "LEVEL_CAPTION", v));
-        r.levelNumber().ifPresent(v -> addChildElement(row, "LEVEL_NUMBER", String.valueOf(v)));
-        r.levelCardinality().ifPresent(v -> addChildElement(row, "LEVEL_CARDINALITY", String.valueOf(v)));
-        r.levelType().ifPresent(v -> addChildElement(row, "LEVEL_TYPE", String.valueOf(v.getValue())));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.customRollupSetting().ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS",
-            String.valueOf(v.getValue())));
-        r.levelUniqueSettings().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS",
-            String.valueOf(v.getValue())));
-        r.levelIsVisible().ifPresent(v -> addChildElement(row, "LEVEL_IS_VISIBLE", String.valueOf(v)));
-        r.levelOrderingProperty().ifPresent(v -> addChildElement(row, "LEVEL_ORDERING_PROPERTY", v));
-        r.levelDbType().ifPresent(v -> addChildElement(row, "LEVEL_DBTYPE", String.valueOf(v.getValue())));
-        r.levelMasterUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_MASTER_UNIQUE_NAME", v));
-        r.levelNameSqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_NAME_SQL_COLUMN_NAME", v));
-        r.levelKeySqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_KEY_SQL_COLUMN_NAME", v));
-        r.levelUniqueNameSqlColumnName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME", v));
-        r.levelAttributeHierarchyName().ifPresent(v -> addChildElement(row, "LEVEL_ATTRIBUTE_HIERARCHY_NAME", v));
-        r.levelKeyCardinality().ifPresent(v -> addChildElement(row, "LEVEL_KEY_CARDINALITY", String.valueOf(v)));
-        r.levelOrigin().ifPresent(v -> addChildElement(row, "LEVEL_ORIGIN", String.valueOf(v.getValue())));
     }
 
     public static MdSchemaHierarchiesRestrictionsR discoverMdSchemaHierarchiesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaHierarchiesRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            Optional.ofNullable(m.get("CUBE_NAME")),
-            Optional.ofNullable(m.get("DIMENSION_UNIQUE_NAME")),
-            Optional.ofNullable(m.get("HIERARCHY_NAME")),
-            Optional.ofNullable(m.get("HIERARCHY_UNIQUE_NAME")),
-            Optional.ofNullable(Integer.decode(m.get("HIERARCHY_ORIGIN"))),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE"))),
-            Optional.ofNullable(VisibilityEnum.fromValue(m.get("HIERARCHY_VISIBILITY")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            Optional.ofNullable(m.get(CUBE_NAME)),
+            Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(HIERARCHY_NAME)),
+            Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
+            Optional.ofNullable(Integer.decode(m.get(HIERARCHY_ORIGIN))),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
+            Optional.ofNullable(VisibilityEnum.fromValue(m.get(HIERARCHY_VISIBILITY)))
         );
     }
 
-    public static SOAPBody toMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaHierarchiesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addMdSchemaHierarchiesResponseRow(SOAPElement root, MdSchemaHierarchiesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", v));
-        r.hierarchyName().ifPresent(v -> addChildElement(row, "HIERARCHY_NAME", v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", v));
-        r.hierarchyGuid().ifPresent(v -> addChildElement(row, "HIERARCHY_GUID", String.valueOf(v)));
-        r.hierarchyCaption().ifPresent(v -> addChildElement(row, "HIERARCHY_CAPTION", v));
-        r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", String.valueOf(v.getValue())));
-        r.hierarchyCardinality().ifPresent(v -> addChildElement(row, "HIERARCHY_CARDINALITY", String.valueOf(v)));
-        r.defaultMember().ifPresent(v -> addChildElement(row, "DEFAULT_MEMBER", v));
-        r.allMember().ifPresent(v -> addChildElement(row, "ALL_MEMBER", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.structure().ifPresent(v -> addChildElement(row, "STRUCTURE", String.valueOf(v.getValue())));
-        r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", String.valueOf(v)));
-        r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", String.valueOf(v)));
-        r.dimensionUniqueSettings().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
-            String.valueOf(v.getValue())));
-        r.dimensionMasterUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_UNIQUE_NAME", v));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", String.valueOf(v)));
-        r.hierarchyOrdinal().ifPresent(v -> addChildElement(row, "HIERARCHY_ORDINAL", String.valueOf(v)));
-        r.dimensionIsShared().ifPresent(v -> addChildElement(row, "DIMENSION_IS_SHARED", String.valueOf(v)));
-        r.hierarchyIsVisible().ifPresent(v -> addChildElement(row, "HIERARCHY_IS_VISIBLE", String.valueOf(v)));
-        r.hierarchyOrigin().ifPresent(v -> addChildElement(row, "HIERARCHY_ORIGIN", String.valueOf(v)));
-        r.hierarchyDisplayFolder().ifPresent(v -> addChildElement(row, "HIERARCHY_DISPLAY_FOLDER", v));
-        r.instanceSelection().ifPresent(v -> addChildElement(row, "INSTANCE_SELECTION", String.valueOf(v.getValue())));
-        r.groupingBehavior().ifPresent(v -> addChildElement(row, "GROUPING_BEHAVIOR", String.valueOf(v.getValue())));
-        r.structureType().ifPresent(v -> addChildElement(row, "STRUCTURE_TYPE", String.valueOf(v.getValue())));
-    }
 
     public static DbSchemaTablesInfoRestrictionsR discoverDbSchemaTablesInfo(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaTablesInfoRestrictionsR(
-            Optional.ofNullable(m.get("TABLE_CATALOG")),
-            Optional.ofNullable(m.get("TABLE_SCHEMA")),
-            m.get("TABLE_NAME"),
-            TableTypeEnum.fromValue(m.get("TABLE_TYPE"))
+            Optional.ofNullable(m.get(TABLE_CATALOG)),
+            Optional.ofNullable(m.get(TABLE_SCHEMA)),
+            m.get(TABLE_NAME),
+            TableTypeEnum.fromValue(m.get(TABLE_TYPE))
         );
-    }
-
-    public static SOAPBody toDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaTablesInfoResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaTablesInfoResponseRow(SOAPElement root, DbSchemaTablesInfoResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", v));
-        addChildElement(row, "TABLE_NAME", r.tableName());
-        addChildElement(row, "TABLE_TYPE", r.tableType());
-        r.tableGuid().ifPresent(v -> addChildElement(row, "TABLE_TYPE", String.valueOf(v)));
-        r.bookmarks().ifPresent(v -> addChildElement(row, "BOOKMARKS", String.valueOf(v)));
-        r.bookmarkType().ifPresent(v -> addChildElement(row, "BOOKMARK_TYPE", String.valueOf(v)));
-        r.bookmarkDataType().ifPresent(v -> addChildElement(row, "BOOKMARK_DATA_TYPE", String.valueOf(v)));
-        r.bookmarkMaximumLength().ifPresent(v -> addChildElement(row, "BOOKMARK_MAXIMUM_LENGTH", String.valueOf(v)));
-        r.bookmarkInformation().ifPresent(v -> addChildElement(row, "BOOKMARK_INFORMATION", String.valueOf(v)));
-        r.tableVersion().ifPresent(v -> addChildElement(row, "TABLE_VERSION", String.valueOf(v)));
-        r.cardinality().ifPresent(v -> addChildElement(row, "CARDINALITY", String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.tablePropId().ifPresent(v -> addChildElement(row, "TABLE_PROP_ID", String.valueOf(v)));
     }
 
     public static DbSchemaSourceTablesRestrictionsR discoverDbSchemaSourceTablesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaSourceTablesRestrictionsR(
-            Optional.ofNullable(m.get("TABLE_CATALOG")),
-            Optional.ofNullable(m.get("TABLE_SCHEMA")),
-            m.get("TABLE_NAME"),
-            TableTypeEnum.fromValue(m.get("TABLE_TYPE"))
+            Optional.ofNullable(m.get(TABLE_CATALOG)),
+            Optional.ofNullable(m.get(TABLE_SCHEMA)),
+            m.get(TABLE_NAME),
+            TableTypeEnum.fromValue(m.get(TABLE_TYPE))
         );
-    }
-
-    public static SOAPBody toDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaSourceTablesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaSourceTablesResponseRow(SOAPElement root, DbSchemaSourceTablesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", v));
-        addChildElement(row, "TABLE_NAME", r.tableName());
-        addChildElement(row, "TABLE_TYPE", r.tableType().getValue());
     }
 
     public static DbSchemaSchemataRestrictionsR discoverDbSchemaSchemataRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaSchemataRestrictionsR(
-            m.get("CATALOG_NAME"),
-            m.get("SCHEMA_NAME"),
-            m.get("SCHEMA_OWNER")
+            m.get(CATALOG_NAME),
+            m.get(SCHEMA_NAME),
+            m.get(SCHEMA_OWNER)
         );
-    }
-
-    public static SOAPBody toDbSchemaSchemata(List<DbSchemaSchemataResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaSchemataResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaSchemataResponseRow(SOAPElement root, DbSchemaSchemataResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "CATALOG_NAME", r.catalogName());
-        addChildElement(row, "SCHEMA_NAME", r.schemaName());
-        addChildElement(row, "SCHEMA_OWNER", r.schemaOwner());
     }
 
     public static DbSchemaProviderTypesRestrictionsR discoverDbSchemaProviderTypesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaProviderTypesRestrictionsR(
-            Optional.ofNullable(LevelDbTypeEnum.fromValue(m.get("DATA_TYPE"))),
-            Optional.ofNullable(Boolean.valueOf(m.get("BEST_MATCH")))
+            Optional.ofNullable(LevelDbTypeEnum.fromValue(m.get(DATA_TYPE))),
+            Optional.ofNullable(Boolean.valueOf(m.get(BEST_MATCH)))
         );
-    }
-
-    public static SOAPBody toDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaProviderTypesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaProviderTypesResponseRow(SOAPElement root, DbSchemaProviderTypesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.typeName().ifPresent(v -> addChildElement(row, "TYPE_NAME", v));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", String.valueOf(v.getValue())));
-        r.columnSize().ifPresent(v -> addChildElement(row, "COLUMN_SIZE", String.valueOf(v)));
-        r.literalPrefix().ifPresent(v -> addChildElement(row, "LITERAL_PREFIX", v));
-        r.literalSuffix().ifPresent(v -> addChildElement(row, "LITERAL_SUFFIX", v));
-        r.createParams().ifPresent(v -> addChildElement(row, "CREATE_PARAMS", v));
-        r.isNullable().ifPresent(v -> addChildElement(row, "IS_NULLABLE", String.valueOf(v)));
-        r.caseSensitive().ifPresent(v -> addChildElement(row, "CASE_SENSITIVE", String.valueOf(v)));
-        r.searchable().ifPresent(v -> addChildElement(row, "SEARCHABLE", String.valueOf(v.getValue())));
-        r.unsignedAttribute().ifPresent(v -> addChildElement(row, "UNSIGNED_ATTRIBUTE", String.valueOf(v)));
-        r.fixedPrecScale().ifPresent(v -> addChildElement(row, "FIXED_PREC_SCALE", String.valueOf(v)));
-        r.autoUniqueValue().ifPresent(v -> addChildElement(row, "AUTO_UNIQUE_VALUE", String.valueOf(v)));
-        r.localTypeName().ifPresent(v -> addChildElement(row, "LOCAL_TYPE_NAME", v));
-        r.minimumScale().ifPresent(v -> addChildElement(row, "MINIMUM_SCALE", String.valueOf(v)));
-        r.maximumScale().ifPresent(v -> addChildElement(row, "MAXIMUM_SCALE", String.valueOf(v)));
-        r.guid().ifPresent(v -> addChildElement(row, "GUID", String.valueOf(v)));
-        r.typeLib().ifPresent(v -> addChildElement(row, "TYPE_LIB", v));
-        r.version().ifPresent(v -> addChildElement(row, "VERSION", v));
-        r.isLong().ifPresent(v -> addChildElement(row, "IS_LONG", String.valueOf(v)));
-        r.bestMatch().ifPresent(v -> addChildElement(row, "BEST_MATCH", String.valueOf(v)));
-        r.isFixedLength().ifPresent(v -> addChildElement(row, "IS_FIXEDLENGTH", String.valueOf(v)));
     }
 
     public static DbSchemaColumnsRestrictionsR discoverDbSchemaColumnsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaColumnsRestrictionsR(
-            Optional.ofNullable(m.get("TABLE_CATALOG")),
-            Optional.ofNullable(m.get("TABLE_SCHEMA")),
-            Optional.ofNullable(m.get("TABLE_NAME")),
-            Optional.ofNullable(m.get("COLUMN_NAME")),
-            Optional.ofNullable(ColumnOlapTypeEnum.fromValue(m.get("COLUMN_OLAP_TYPE")))
+            Optional.ofNullable(m.get(TABLE_CATALOG)),
+            Optional.ofNullable(m.get(TABLE_SCHEMA)),
+            Optional.ofNullable(m.get(TABLE_NAME)),
+            Optional.ofNullable(m.get(COLUMN_NAME)),
+            Optional.ofNullable(ColumnOlapTypeEnum.fromValue(m.get(COLUMN_OLAP_TYPE)))
         );
-    }
-
-    public static SOAPBody toDbSchemaColumns(List<DbSchemaColumnsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaColumnsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaColumnsResponseRow(SOAPElement root, DbSchemaColumnsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.tableCatalog().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", v));
-        r.tableSchema().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", v));
-        r.tableName().ifPresent(v -> addChildElement(row, "TABLE_NAME", v));
-        r.columnName().ifPresent(v -> addChildElement(row, "COLUMN_NAME", v));
-        r.columnGuid().ifPresent(v -> addChildElement(row, "COLUMN_GUID", String.valueOf(v)));
-        r.columnPropId().ifPresent(v -> addChildElement(row, "COLUMN_PROPID", String.valueOf(v)));
-        r.ordinalPosition().ifPresent(v -> addChildElement(row, "ORDINAL_POSITION", String.valueOf(v)));
-        r.columnHasDefault().ifPresent(v -> addChildElement(row, "COLUMN_HAS_DEFAULT", String.valueOf(v)));
-        r.columnDefault().ifPresent(v -> addChildElement(row, "COLUMN_DEFAULT", v));
-        r.columnFlags().ifPresent(v -> addChildElement(row, "COLUMN_FLAG", String.valueOf(v.getValue())));
-        r.isNullable().ifPresent(v -> addChildElement(row, "IS_NULLABLE", String.valueOf(v)));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", String.valueOf(v)));
-        r.typeGuid().ifPresent(v -> addChildElement(row, "TYPE_GUID", String.valueOf(v)));
-        r.characterMaximum().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH", String.valueOf(v)));
-        r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH", String.valueOf(v)));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", String.valueOf(v)));
-        r.dateTimePrecision().ifPresent(v -> addChildElement(row, "DATETIME_PRECISION", String.valueOf(v)));
-        r.characterSetCatalog().ifPresent(v -> addChildElement(row, "CHARACTER_SET_CATALOG", v));
-        r.characterSetSchema().ifPresent(v -> addChildElement(row, "CHARACTER_SET_SCHEMA", v));
-        r.characterSetName().ifPresent(v -> addChildElement(row, "CHARACTER_SET_NAME", v));
-        r.collationCatalog().ifPresent(v -> addChildElement(row, "COLLATION_CATALOG", v));
-        r.collationSchema().ifPresent(v -> addChildElement(row, "COLLATION_SCHEMA", v));
-        r.collationName().ifPresent(v -> addChildElement(row, "COLLATION_NAME", v));
-        r.domainCatalog().ifPresent(v -> addChildElement(row, "DOMAIN_CATALOG", v));
-        r.domainSchema().ifPresent(v -> addChildElement(row, "DOMAIN_SCHEMA", v));
-        r.domainName().ifPresent(v -> addChildElement(row, "DOMAIN_NAME", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.columnOlapType().ifPresent(v -> addChildElement(row, "COLUMN_OLAP_TYPE", v.name()));
     }
 
     public static DiscoverXmlMetaDataRestrictionsR discoverDiscoverXmlMetaDataRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverXmlMetaDataRestrictionsR(
-            Optional.ofNullable(m.get("DatabaseID")),
-            Optional.ofNullable(m.get("DimensionID")),
-            Optional.ofNullable(m.get("CubeID")),
-            Optional.ofNullable(m.get("MeasureGroupID")),
-            Optional.ofNullable(m.get("PartitionID")),
-            Optional.ofNullable(m.get("PerspectiveID")),
-            Optional.ofNullable(m.get("DimensionPermissionID")),
-            Optional.ofNullable(m.get("RoleID")),
-            Optional.ofNullable(m.get("DatabasePermissionID")),
-            Optional.ofNullable(m.get("MiningModelID")),
-            Optional.ofNullable(m.get("MiningModelPermissionID")),
-            Optional.ofNullable(m.get("DataSourceID")),
-            Optional.ofNullable(m.get("MiningStructureID")),
-            Optional.ofNullable(m.get("AggregationDesignID")),
-            Optional.ofNullable(m.get("TraceID")),
-            Optional.ofNullable(m.get("MiningStructurePermissionID")),
-            Optional.ofNullable(m.get("CubePermissionID")),
-            Optional.ofNullable(m.get("AssemblyID")),
-            Optional.ofNullable(m.get("MdxScriptID")),
-            Optional.ofNullable(m.get("DataSourceViewID")),
-            Optional.ofNullable(m.get("DataSourcePermissionID")),
-            Optional.ofNullable(ObjectExpansionEnum.fromValue(m.get("ObjectExpansion")))
+            Optional.ofNullable(m.get(DATABASE_ID)),
+            Optional.ofNullable(m.get(DIMENSION_ID)),
+            Optional.ofNullable(m.get(CUBE_ID)),
+            Optional.ofNullable(m.get(MEASURE_GROUP_ID)),
+            Optional.ofNullable(m.get(PARTITION_ID)),
+            Optional.ofNullable(m.get(PERSPECTIVE_ID)),
+            Optional.ofNullable(m.get(DIMENSION_PERMISSION_ID)),
+            Optional.ofNullable(m.get(ROLE_ID)),
+            Optional.ofNullable(m.get(DATABASE_PERMISSION_ID)),
+            Optional.ofNullable(m.get(MINING_MODEL_ID)),
+            Optional.ofNullable(m.get(MINING_MODEL_PERMISSION_ID)),
+            Optional.ofNullable(m.get(DATA_SOURCE_ID)),
+            Optional.ofNullable(m.get(MINING_STRUCTURE_ID)),
+            Optional.ofNullable(m.get(AGGREGATION_DESIGN_ID)),
+            Optional.ofNullable(m.get(TRACE_ID)),
+            Optional.ofNullable(m.get(MINING_STRUCTURE_PERMISSION_ID)),
+            Optional.ofNullable(m.get(CUBE_PERMISSION_ID)),
+            Optional.ofNullable(m.get(ASSEMBLY_ID)),
+            Optional.ofNullable(m.get(MDX_SCRIPT_ID)),
+            Optional.ofNullable(m.get(DATA_SOURCE_VIEW_ID)),
+            Optional.ofNullable(m.get(DATA_SOURCE_PERMISSION_ID)),
+            Optional.ofNullable(ObjectExpansionEnum.fromValue(m.get(OBJECT_EXPANSION)))
         );
-    }
-
-    public static SOAPBody toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverXmlMetaDataResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverXmlMetaDataResponseRow(SOAPElement root, DiscoverXmlMetaDataResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "MetaData", r.metaData());
     }
 
     public static DiscoverDataSourcesRestrictionsR discoverDiscoverDataSourcesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverDataSourcesRestrictionsR(
-            m.get("DataSourceName"),
-            Optional.ofNullable(m.get("DataSourceDescription")),
-            Optional.ofNullable(m.get("URL")),
-            Optional.ofNullable(m.get("DataSourceInfo")),
-            m.get("ProviderName"),
-            Optional.ofNullable(ProviderTypeEnum.fromValue(m.get("ProviderType"))),
-            Optional.ofNullable(AuthenticationModeEnum.fromValue(m.get("AuthenticationMode")))
+            m.get(DATA_SOURCE_NAME),
+            Optional.ofNullable(m.get(DATA_SOURCE_DESCRIPTION)),
+            Optional.ofNullable(m.get(URL)),
+            Optional.ofNullable(m.get(DATA_SOURCE_INFO)),
+            m.get(PROVIDER_NAME),
+            Optional.ofNullable(ProviderTypeEnum.fromValue(m.get(PROVIDER_TYPE))),
+            Optional.ofNullable(AuthenticationModeEnum.fromValue(m.get(AUTHENTICATION_MODE)))
         );
-    }
-
-    public static SOAPBody toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverDataSourcesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverDataSourcesResponseRow(SOAPElement root, DiscoverDataSourcesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "DataSourceName", r.dataSourceName());
-        r.dataSourceDescription().ifPresent(v -> addChildElement(row, "DataSourceDescription", v));
-        r.url().ifPresent(v -> addChildElement(row, "URL", v));
-        r.dataSourceInfo().ifPresent(v -> addChildElement(row, "DataSourceInfo", v));
-        addChildElement(row, "ProviderName", r.providerName());
-        r.providerType().ifPresent(v -> addChildElement(row, "ProviderType", v.name()));
-        r.authenticationMode().ifPresent(v -> addChildElement(row, "AuthenticationMode", v.name()));
     }
 
     public static DbSchemaCatalogsRestrictionsR discoverDbSchemaCatalogsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaCatalogsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME"))
+            Optional.ofNullable(m.get(CATALOG_NAME))
         );
-    }
-
-    public static SOAPBody toDbSchemaCatalogs(List<DbSchemaCatalogsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaCatalogsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaCatalogsResponseRow(SOAPElement root, DbSchemaCatalogsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.roles().ifPresent(v -> addChildElement(row, "ROLES", v));
-        r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", String.valueOf(v)));
-        r.compatibilityLevel().ifPresent(v -> addChildElement(row, "COMPATIBILITY_LEVEL", String.valueOf(v)));
-        r.type().ifPresent(v -> addChildElement(row, "TYPE", String.valueOf(v.getValue())));
-        r.version().ifPresent(v -> addChildElement(row, "VERSION", String.valueOf(v)));
-        r.databaseId().ifPresent(v -> addChildElement(row, "DATABASE_ID", v));
-        r.dateQueried().ifPresent(v -> addChildElement(row, "DATE_QUERIED", String.valueOf(v)));
-        r.currentlyUsed().ifPresent(v -> addChildElement(row, "CURRENTLY_USED", String.valueOf(v)));
-        r.popularity().ifPresent(v -> addChildElement(row, "POPULARITY", String.valueOf(v)));
-        r.weightedPopularity().ifPresent(v -> addChildElement(row, "WEIGHTEDPOPULARITY", String.valueOf(v)));
-        r.clientCacheRefreshPolicy().ifPresent(v -> addChildElement(row, "CLIENTCACHEREFRESHPOLICY",
-            String.valueOf(v.getValue())));
     }
 
     public static DiscoverSchemaRowsetsRestrictionsR discoverSchemaRowsetsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverSchemaRowsetsRestrictionsR(
-            Optional.ofNullable(m.get("SchemaName"))
+            Optional.ofNullable(m.get(SCHEMA_NAME_LOW))
         );
-    }
-
-    public static SOAPBody toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverSchemaRowsetsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverSchemaRowsetsResponseRow(SOAPElement root, DiscoverSchemaRowsetsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "SchemaName", r.schemaName());
-        r.schemaGuid().ifPresent(v -> addChildElement(row, "SchemaGuid", v));
-        r.restrictions().ifPresent(v -> addChildElement(row, "Restrictions", v));
-        r.restrictions().ifPresent(v -> addChildElement(row, "Restrictions", v));
-        r.description().ifPresent(v -> addChildElement(row, "Description", v));
-        r.restrictionsMask().ifPresent(v -> addChildElement(row, "Description", String.valueOf(v)));
     }
 
     public static DiscoverEnumeratorsRestrictionsR discoverDiscoverEnumerators(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverEnumeratorsRestrictionsR(
-            Optional.ofNullable(m.get("EnumName"))
+            Optional.ofNullable(m.get(ENUM_NAME))
         );
-    }
-
-    public static SOAPBody toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverEnumeratorsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverEnumeratorsResponseRow(SOAPElement root, DiscoverEnumeratorsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "EnumName", r.elementName());
-        r.elementDescription().ifPresent(v -> addChildElement(row, "EnumDescription", v));
-        addChildElement(row, "EnumType", r.enumType());
-        addChildElement(row, "ElementName", r.elementName());
-        r.elementDescription().ifPresent(v -> addChildElement(row, "ElementDescription", v));
-        r.elementValue().ifPresent(v -> addChildElement(row, "ElementValue", v));
     }
 
     public static DiscoverKeywordsRestrictionsR discoverKeywordsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverKeywordsRestrictionsR(
-            Optional.ofNullable(m.get("Keyword"))
+            Optional.ofNullable(m.get(KEYWORD))
         );
-    }
-
-    public static SOAPBody toDiscoverKeywords(List<DiscoverKeywordsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverKeywordsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverKeywordsResponseRow(SOAPElement root, DiscoverKeywordsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "Keyword", r.keyword());
     }
 
     public static DiscoverLiteralsRestrictionsR discoverLiteralsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DiscoverLiteralsRestrictionsR(
-            Optional.ofNullable(m.get("LiteralName"))
+            Optional.ofNullable(m.get(LITERAL_NAME))
         );
-    }
-
-    public static SOAPBody toDiscoverLiterals(List<DiscoverLiteralsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDiscoverLiteralsResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDiscoverLiteralsResponseRow(SOAPElement root, DiscoverLiteralsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        addChildElement(row, "LiteralName", r.literalName());
-        addChildElement(row, "LiteralValue", r.literalValue());
-        addChildElement(row, "LiteralInvalidChars", r.literalInvalidChars());
-        addChildElement(row, "LiteralInvalidStartingChars", r.literalInvalidStartingChars());
-        addChildElement(row, "LiteralMaxLength", String.valueOf(r.literalMaxLength()));
-        addChildElement(row, "LiteralNameValue", String.valueOf(r.literalNameEnumValue().getValue()));
     }
 
     public static DbSchemaTablesRestrictionsR discoverDbSchemaTablesRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new DbSchemaTablesRestrictionsR(
-            Optional.ofNullable(m.get("TABLE_CATALOG")),
-            Optional.ofNullable(m.get("TABLE_SCHEMA")),
-            Optional.ofNullable(m.get("TABLE_NAME")),
-            Optional.ofNullable(m.get("TABLE_TYPE"))
+            Optional.ofNullable(m.get(TABLE_CATALOG)),
+            Optional.ofNullable(m.get(TABLE_SCHEMA)),
+            Optional.ofNullable(m.get(TABLE_NAME)),
+            Optional.ofNullable(m.get(TABLE_TYPE))
         );
     }
 
-    public static SOAPBody toDbSchemaTables(List<DbSchemaTablesResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addDbSchemaTablesResponseRow(root, r)
-        );
-        return body;
-    }
-
-    private static void addDbSchemaTablesResponseRow(SOAPElement root, DbSchemaTablesResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.tableCatalog().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", v));
-        r.tableSchema().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", v));
-        r.tableName().ifPresent(v -> addChildElement(row, "TABLE_NAME", v));
-        r.tableType().ifPresent(v -> addChildElement(row, "TABLE_TYPE", v));
-        r.tableGuid().ifPresent(v -> addChildElement(row, "TABLE_GUID", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.tablePropId().ifPresent(v -> addChildElement(row, "TABLE_PROP_ID", String.valueOf(v)));
-        r.dateCreated().ifPresent(v -> addChildElement(row, "DATE_CREATED", String.valueOf(v)));
-        r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", String.valueOf(v)));
-    }
 
     public static MdSchemaActionsRestrictionsR discoverMdSchemaActionsRestrictions(SOAPElement restriction) {
-        Map<String, String> m = getMapValuesByTag(restriction, "RestrictionList");
+        Map<String, String> m = getMapValuesByTag(restriction, RESTRICTION_LIST);
         return new MdSchemaActionsRestrictionsR(
-            Optional.ofNullable(m.get("CATALOG_NAME")),
-            Optional.ofNullable(m.get("SCHEMA_NAME")),
-            m.get("CUBE_NAME"),
-            Optional.ofNullable(m.get("ACTION_NAME")),
-            Optional.ofNullable(ActionTypeEnum.fromValue(m.get("ACTION_TYPE"))),
-            Optional.ofNullable(m.get("COORDINATE")),
-            CoordinateTypeEnum.fromValue(m.get("COORDINATE_TYPE")),
-            InvocationEnum.fromValue(m.get("INVOCATION")),
-            Optional.ofNullable(CubeSourceEnum.fromValue(m.get("CUBE_SOURCE")))
+            Optional.ofNullable(m.get(CATALOG_NAME)),
+            Optional.ofNullable(m.get(SCHEMA_NAME)),
+            m.get(CUBE_NAME),
+            Optional.ofNullable(m.get(ACTION_NAME)),
+            Optional.ofNullable(ActionTypeEnum.fromValue(m.get(ACTION_TYPE))),
+            Optional.ofNullable(m.get(COORDINATE)),
+            CoordinateTypeEnum.fromValue(m.get(COORDINATE_TYPE)),
+            InvocationEnum.fromValue(m.get(INVOCATION)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE)))
         );
-    }
-
-    public static SOAPBody toMdSchemaActions(List<MdSchemaActionsResponseRow> rows) {
-        SOAPBody body = createSOAPBody();
-        SOAPElement root = addRoot(body);
-        rows.forEach(r ->
-            addMdSchemaActionsResponseRow(root, r)
-        );
-        return body;
     }
 
     public static Command commandtoCommand(SOAPElement element) {
-        NodeList nodeList = element.getElementsByTagName("Command");
+        NodeList nodeList = element.getElementsByTagName(COMMAND);
         if (nodeList != null && nodeList.getLength() > 0) {
             return getCommand(nodeList.item(0).getChildNodes());
         }
@@ -1461,16 +694,16 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node n = nl.item(i);
             String nodeName = n.getNodeName();
-            if ("Statement".equals(nodeName)) {
+            if (STATEMENT.equals(nodeName)) {
                 return new StatementR(n.getTextContent());
             }
-            if ("Alter".equals(nodeName)) {
+            if (ALTER.equals(nodeName)) {
                 return getAlterCommand(n.getChildNodes());
             }
-            if ("ClearCache".equals(nodeName)) {
+            if (CLEAR_CACHE.equals(nodeName)) {
                 return getClearCacheCommand(n.getChildNodes());
             }
-            if ("Cancel".equals(nodeName)) {
+            if (CANCEL.equals(nodeName)) {
                 return getCancelCommand(n.getChildNodes());
             }
         }
@@ -1479,35 +712,19 @@ public class Convert {
 
     private static Command getCancelCommand(NodeList nl) {
         Map<String, String> map = getMapValues(nl);
-        BigInteger connectionID = toBigInteger(map.get("ConnectionID"));
-        String sessionID = map.get("SessionID");
-        BigInteger spid = toBigInteger(map.get("SPID"));
-        Boolean cancelAssociated = toBoolean(map.get("CancelAssociated"));
+        BigInteger connectionID = toBigInteger(map.get(CONNECTION_ID));
+        String sessionID = map.get(SESSION_ID);
+        BigInteger spid = toBigInteger(map.get(SPID));
+        Boolean cancelAssociated = toBoolean(map.get(CANCEL_ASSOCIATED));
 
         return new CancelR(connectionID, sessionID, spid, cancelAssociated);
-    }
-
-    private static Boolean toBoolean(String it) {
-        return it != null ? Boolean.valueOf(it) : null;
-    }
-
-    private static Long toLong(String it) {
-        return it != null ? Long.valueOf(it) : null;
-    }
-
-    private static Integer toInteger(String it) {
-        return it != null ? Integer.valueOf(it) : null;
-    }
-
-    private static BigInteger toBigInteger(String it) {
-        return it != null ? new BigInteger(it) : null;
     }
 
     private static Command getClearCacheCommand(NodeList nl) {
         ObjectReference object = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null && "Object".equals(node.getNodeName())) {
+            if (node != null && OBJECT2.equals(node.getNodeName())) {
                 object = getObjectReference(node.getChildNodes());
                 break;
             }
@@ -1518,28 +735,28 @@ public class Convert {
     private static ObjectReference getObjectReference(NodeList nl) {
         Map<String, String> map = getMapValues(nl);
         return new ObjectReferenceR(
-            map.get("ServerID"),
-            map.get("DatabaseID"),
-            map.get("RoleID"),
-            map.get("TraceID"),
-            map.get("AssemblyID"),
-            map.get("DimensionID"),
-            map.get("DimensionPermissionID"),
-            map.get("DataSourceID"),
-            map.get("DataSourcePermissionID"),
-            map.get("DatabasePermissionID"),
-            map.get("DataSourceViewID"),
-            map.get("CubeID"),
-            map.get("MiningStructureID"),
-            map.get("MeasureGroupID"),
-            map.get("PerspectiveID"),
-            map.get("CubePermissionID"),
-            map.get("MdxScriptID"),
-            map.get("PartitionID"),
-            map.get("AggregationDesignID"),
-            map.get("MiningModelID"),
-            map.get("MiningModelPermissionID"),
-            map.get("MiningStructurePermissionID")
+            map.get(SERVER_ID),
+            map.get(DATABASE_ID),
+            map.get(ROLE_ID),
+            map.get(TRACE_ID),
+            map.get(ASSEMBLY_ID),
+            map.get(DIMENSION_ID),
+            map.get(DIMENSION_PERMISSION_ID),
+            map.get(DATA_SOURCE_ID),
+            map.get(DATA_SOURCE_PERMISSION_ID),
+            map.get(DATABASE_PERMISSION_ID),
+            map.get(DATA_SOURCE_VIEW_ID),
+            map.get(CUBE_ID),
+            map.get(MINING_STRUCTURE_ID),
+            map.get(MEASURE_GROUP_ID),
+            map.get(PERSPECTIVE_ID),
+            map.get(CUBE_PERMISSION_ID),
+            map.get(MDX_SCRIPT_ID),
+            map.get(PARTITION_ID),
+            map.get(AGGREGATION_DESIGN_ID),
+            map.get(MINING_MODEL_ID),
+            map.get(MINING_MODEL_PERMISSION_ID),
+            map.get(MINING_STRUCTURE_PERMISSION_ID)
         );
     }
 
@@ -1553,19 +770,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Object".equals(node.getNodeName())) {
+                if (OBJECT2.equals(node.getNodeName())) {
                     object = getObjectReference(node.getChildNodes());
                 }
-                if ("ObjectDefinition".equals(node.getNodeName())) {
+                if (OBJECT_DEFINITION.equals(node.getNodeName())) {
                     objectDefinition = getMajorObject(nl);
                 }
-                if ("Scope".equals(node.getNodeName())) {
+                if (SCOPE2.equals(node.getNodeName())) {
                     scope = Scope.fromValue(node.getTextContent());
                 }
-                if ("AllowCreate".equals(node.getNodeName())) {
+                if (ALLOW_CREATE.equals(node.getNodeName())) {
                     allowCreate = toBoolean(node.getTextContent());
                 }
-                if ("ObjectExpansion".equals(node.getNodeName())) {
+                if (OBJECT_EXPANSION.equals(node.getNodeName())) {
                     objectExpansion = ObjectExpansion.fromValue(node.getTextContent());
                 }
             }
@@ -1603,10 +820,10 @@ public class Convert {
                 if ("AggregationDesign".equals(node.getNodeName())) {
                     aggregationDesign = getAggregationDesign(node.getChildNodes());
                 }
-                if ("Assembly".equals(node.getNodeName())) {
+                if (ASSEMBLY2.equals(node.getNodeName())) {
                     assembly = getAssembly(node.getChildNodes());
                 }
-                if ("Cube".equals(node.getNodeName())) {
+                if (CUBE2.equals(node.getNodeName())) {
                     cube = getCube(node.getChildNodes());
                 }
                 if ("Database".equals(node.getNodeName())) {
@@ -1618,13 +835,13 @@ public class Convert {
                 if ("DataSourceView".equals(node.getNodeName())) {
                     dataSourceView = getDataSourceView(node.getChildNodes());
                 }
-                if ("Dimension".equals(node.getNodeName())) {
+                if (DIMENSION.equals(node.getNodeName())) {
                     dimension = getDimension(node.getChildNodes());
                 }
                 if ("MdxScript".equals(node.getNodeName())) {
                     mdxScript = getMdxScript(node.getChildNodes());
                 }
-                if ("MeasureGroup".equals(node.getNodeName())) {
+                if (MEASURE_GROUP.equals(node.getNodeName())) {
                     measureGroup = getMeasureGroup(node.getChildNodes());
                 }
                 if ("MiningModel".equals(node.getNodeName())) {
@@ -1642,7 +859,7 @@ public class Convert {
                 if ("Perspective".equals(node.getNodeName())) {
                     perspective = getPerspective(node.getChildNodes());
                 }
-                if ("Role".equals(node.getNodeName())) {
+                if (ROLE2.equals(node.getNodeName())) {
                     role = getRole(node.getChildNodes());
                 }
                 if ("Server".equals(node.getNodeName())) {
@@ -1714,7 +931,7 @@ public class Convert {
                 if ("StopTime".equals(node.getNodeName())) {
                     stopTime = toInstant(node.getTextContent());
                 }
-                if ("Filter".equals(node.getNodeName())) {
+                if (FILTER.equals(node.getNodeName())) {
                     filter = getTraceFilter(node.getChildNodes());
                 }
                 if ("EventType".equals(node.getNodeName())) {
@@ -1762,10 +979,9 @@ public class Convert {
         EventSession eventSession = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("event_session".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("event_session".equals(node.getNodeName()))) {
                     eventSession = getEventSession(node.getChildNodes());
-                }
             }
         }
         return new XEventR(eventSession);
@@ -1832,10 +1048,9 @@ public class Convert {
         List<Event> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Event".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("Event".equals(node.getNodeName()))) {
                     list.add(getEvent(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -1848,10 +1063,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("EventID".equals(node.getNodeName())) {
+                if (EVENT_ID.equals(node.getNodeName())) {
                     eventID = node.getTextContent();
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getEventColumnID(node.getChildNodes());
                 }
             }
@@ -1860,13 +1075,12 @@ public class Convert {
     }
 
     private static EventColumnID getEventColumnID(NodeList nl) {
-        List<String> columnID = new ArrayList();
+        List<String> columnID = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("EventID".equals(node.getNodeName())) {
+            if ((node != null)
+                && (EVENT_ID.equals(node.getNodeName()))) {
                     columnID.add(node.getTextContent());
-                }
             }
         }
         return new EventColumnIDR(columnID);
@@ -1900,28 +1114,28 @@ public class Convert {
                 if ("And".equals(node.getNodeName())) {
                     and = getAndOrType(node.getChildNodes());
                 }
-                if ("Equal".equals(node.getNodeName())) {
+                if (EQUAL.equals(node.getNodeName())) {
                     isEqual = getBoolBinop(node.getChildNodes());
                 }
-                if ("NotEqual".equals(node.getNodeName())) {
+                if (NOT_EQUAL.equals(node.getNodeName())) {
                     notEqual = getBoolBinop(node.getChildNodes());
                 }
                 if ("Less".equals(node.getNodeName())) {
                     less = getBoolBinop(node.getChildNodes());
                 }
-                if ("LessOrEqual".equals(node.getNodeName())) {
+                if (LESS_OR_EQUAL.equals(node.getNodeName())) {
                     lessOrEqual = getBoolBinop(node.getChildNodes());
                 }
-                if ("Greater".equals(node.getNodeName())) {
+                if (GREATER.equals(node.getNodeName())) {
                     greater = getBoolBinop(node.getChildNodes());
                 }
-                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                if (GREATER_OR_EQUAL.equals(node.getNodeName())) {
                     greaterOrEqual = getBoolBinop(node.getChildNodes());
                 }
                 if ("Like".equals(node.getNodeName())) {
                     like = getBoolBinop(node.getChildNodes());
                 }
-                if ("NotLike".equals(node.getNodeName())) {
+                if (NOT_LIKE.equals(node.getNodeName())) {
                     notLike = getBoolBinop(node.getChildNodes());
                 }
             }
@@ -1950,7 +1164,7 @@ public class Convert {
                 if ("ColumnID".equals(node.getNodeName())) {
                     columnID = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
             }
@@ -1959,7 +1173,7 @@ public class Convert {
     }
 
     private static AndOrType getAndOrType(NodeList nl) {
-        List<AndOrTypeEnum> notOrOrOrAnd = new ArrayList();
+        List<AndOrTypeEnum> notOrOrOrAnd = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
@@ -1972,28 +1186,28 @@ public class Convert {
                 if ("And".equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.And);
                 }
-                if ("Equal".equals(node.getNodeName())) {
+                if (EQUAL.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.Equal);
                 }
-                if ("NotEqual".equals(node.getNodeName())) {
+                if (NOT_EQUAL.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.NotEqual);
                 }
                 if ("Less".equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.Less);
                 }
-                if ("LessOrEqual".equals(node.getNodeName())) {
+                if (LESS_OR_EQUAL.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.LessOrEqual);
                 }
-                if ("Greater".equals(node.getNodeName())) {
+                if (GREATER.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.Greater);
                 }
-                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                if (GREATER_OR_EQUAL.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.GreaterOrEqual);
                 }
                 if ("Like".equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.Like);
                 }
-                if ("NotLike".equals(node.getNodeName())) {
+                if (NOT_LIKE.equals(node.getNodeName())) {
                     notOrOrOrAnd.add(AndOrTypeEnum.NotLike);
                 }
             }
@@ -2025,28 +1239,28 @@ public class Convert {
                 if ("And".equals(node.getNodeName())) {
                     and = getAndOrType(node.getChildNodes());
                 }
-                if ("Equal".equals(node.getNodeName())) {
+                if (EQUAL.equals(node.getNodeName())) {
                     isEqual = getBoolBinop(node.getChildNodes());
                 }
-                if ("NotEqual".equals(node.getNodeName())) {
+                if (NOT_EQUAL.equals(node.getNodeName())) {
                     notEqual = getBoolBinop(node.getChildNodes());
                 }
                 if ("Less".equals(node.getNodeName())) {
                     less = getBoolBinop(node.getChildNodes());
                 }
-                if ("LessOrEqual".equals(node.getNodeName())) {
+                if (LESS_OR_EQUAL.equals(node.getNodeName())) {
                     lessOrEqual = getBoolBinop(node.getChildNodes());
                 }
-                if ("Greater".equals(node.getNodeName())) {
+                if (GREATER.equals(node.getNodeName())) {
                     greater = getBoolBinop(node.getChildNodes());
                 }
-                if ("GreaterOrEqual".equals(node.getNodeName())) {
+                if (GREATER_OR_EQUAL.equals(node.getNodeName())) {
                     greaterOrEqual = getBoolBinop(node.getChildNodes());
                 }
                 if ("Like".equals(node.getNodeName())) {
                     like = getBoolBinop(node.getChildNodes());
                 }
-                if ("NotLike".equals(node.getNodeName())) {
+                if (NOT_LIKE.equals(node.getNodeName())) {
                     notLike = getBoolBinop(node.getChildNodes());
                 }
 
@@ -2161,10 +1375,9 @@ public class Convert {
         List<Role> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Role".equals(node.getNodeName())) {
+            if ((node != null)
+                && (ROLE2.equals(node.getNodeName()))) {
                     list.add(getRole(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -2174,10 +1387,9 @@ public class Convert {
         List<ServerProperty> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("ServerProperty".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("ServerProperty".equals(node.getNodeName()))) {
                     list.add(getServerProperty(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -2195,10 +1407,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
                 if ("RequiresRestart".equals(node.getNodeName())) {
@@ -2232,10 +1444,9 @@ public class Convert {
         List<Trace> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Trace".equals(node.getNodeName())) {
-                    list.add(getTrace(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Trace".equals(node.getNodeName()))) {
+                list.add(getTrace(node.getChildNodes()));
             }
         }
         return list;
@@ -2245,10 +1456,9 @@ public class Convert {
         List<Assembly> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Assembly".equals(node.getNodeName())) {
+            if ((node != null)
+                && (ASSEMBLY2.equals(node.getNodeName()))) {
                     list.add(getAssembly(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -2258,10 +1468,9 @@ public class Convert {
         List<Database> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Database".equals(node.getNodeName())) {
-                    list.add(getDatabase(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Database".equals(node.getNodeName()))) {
+                list.add(getDatabase(node.getChildNodes()));
             }
         }
         return list;
@@ -2278,22 +1487,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
 
@@ -2317,10 +1526,9 @@ public class Convert {
         List<Member> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Member".equals(node.getNodeName())) {
-                    list.add(getMember(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Member".equals(node.getNodeName()))) {
+                list.add(getMember(node.getChildNodes()));
             }
         }
         return list;
@@ -2332,7 +1540,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
                 if ("Sid".equals(node.getNodeName())) {
@@ -2361,31 +1569,31 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
                 if ("DefaultMeasure".equals(node.getNodeName())) {
                     defaultMeasure = node.getTextContent();
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = getPerspectiveDimensionList(node.getChildNodes());
                 }
                 if ("MeasureGroups".equals(node.getNodeName())) {
@@ -2422,10 +1630,9 @@ public class Convert {
         List<PerspectiveAction> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Action".equals(node.getNodeName())) {
-                    list.add(getPerspectiveAction(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ACTION.equals(node.getNodeName()))) {
+                list.add(getPerspectiveAction(node.getChildNodes()));
             }
         }
         return list;
@@ -2440,7 +1647,7 @@ public class Convert {
                 if ("ActionID".equals(node.getNodeName())) {
                     actionID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2452,10 +1659,9 @@ public class Convert {
         List<PerspectiveKpi> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Action".equals(node.getNodeName())) {
-                    list.add(getPerspectiveKpi(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ACTION.equals(node.getNodeName()))) {
+                list.add(getPerspectiveKpi(node.getChildNodes()));
             }
         }
         return list;
@@ -2470,7 +1676,7 @@ public class Convert {
                 if ("KpiID".equals(node.getNodeName())) {
                     kpiID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2482,10 +1688,9 @@ public class Convert {
         List<PerspectiveCalculation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Calculation".equals(node.getNodeName())) {
-                    list.add(getPerspectiveCalculation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Calculation".equals(node.getNodeName()))) {
+                list.add(getPerspectiveCalculation(node.getChildNodes()));
             }
         }
         return list;
@@ -2499,13 +1704,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2517,10 +1722,9 @@ public class Convert {
         List<PerspectiveMeasureGroup> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MeasureGroup".equals(node.getNodeName())) {
-                    list.add(getPerspectiveMeasureGroup(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (MEASURE_GROUP.equals(node.getNodeName()))) {
+                list.add(getPerspectiveMeasureGroup(node.getChildNodes()));
             }
         }
         return list;
@@ -2533,13 +1737,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("MeasureGroupID".equals(node.getNodeName())) {
+                if (MEASURE_GROUP_ID.equals(node.getNodeName())) {
                     measureGroupID = node.getTextContent();
                 }
-                if ("Measures".equals(node.getNodeName())) {
+                if (MEASURES.equals(node.getNodeName())) {
                     measures = getPerspectiveMeasureList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2555,10 +1759,9 @@ public class Convert {
         List<PerspectiveMeasure> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Measure".equals(node.getNodeName())) {
-                    list.add(getPerspectiveMeasure(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (MEASURE.equals(node.getNodeName()))) {
+                list.add(getPerspectiveMeasure(node.getChildNodes()));
             }
         }
         return list;
@@ -2570,10 +1773,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("MeasureID".equals(node.getNodeName())) {
+                if (MEASURE_ID.equals(node.getNodeName())) {
                     measureID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2586,10 +1789,9 @@ public class Convert {
         List<PerspectiveDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Dimension".equals(node.getNodeName())) {
-                    list.add(getPerspectiveDimension(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (DIMENSION.equals(node.getNodeName()))) {
+                list.add(getPerspectiveDimension(node.getChildNodes()));
             }
         }
         return list;
@@ -2603,16 +1805,16 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getPerspectiveAttributeList(node.getChildNodes());
                 }
-                if ("Hierarchies".equals(node.getNodeName())) {
+                if (HIERARCHIES.equals(node.getNodeName())) {
                     hierarchies = getPerspectiveHierarchyList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2627,10 +1829,9 @@ public class Convert {
         List<PerspectiveHierarchy> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Hierarchy".equals(node.getNodeName())) {
-                    list.add(getPerspectiveHierarchy(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (HIERARCHY.equals(node.getNodeName()))) {
+                list.add(getPerspectiveHierarchy(node.getChildNodes()));
             }
         }
         return list;
@@ -2645,7 +1846,7 @@ public class Convert {
                 if ("HierarchyID".equals(node.getNodeName())) {
                     hierarchyID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2658,10 +1859,9 @@ public class Convert {
         List<PerspectiveAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Attribute".equals(node.getNodeName())) {
-                    list.add(getPerspectiveAttribute(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
+                list.add(getPerspectiveAttribute(node.getChildNodes()));
             }
         }
         return list;
@@ -2675,16 +1875,16 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
-                if ("AttributeHierarchyVisible".equals(node.getNodeName())) {
+                if (ATTRIBUTE_HIERARCHY_VISIBLE.equals(node.getNodeName())) {
                     attributeHierarchyVisible = toBoolean(node.getTextContent());
                 }
-                if ("DefaultMember".equals(node.getNodeName())) {
+                if (DEFAULT_MEMBER.equals(node.getNodeName())) {
                     defaultMember = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2701,10 +1901,9 @@ public class Convert {
         List<Translation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if (nodeName.equals(node.getNodeName())) {
-                    list.add(getTranslation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (nodeName.equals(node.getNodeName()))) {
+                list.add(getTranslation(node.getChildNodes()));
             }
         }
         return list;
@@ -2719,19 +1918,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toLong(node.getTextContent());
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -2759,19 +1958,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
             }
@@ -2822,25 +2021,25 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Source".equals(node.getNodeName())) {
-                    source = getTabularBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getTabularBinding(node.getChildNodes(), getNodeType(node));
                 }
-                if ("ProcessingPriority".equals(node.getNodeName())) {
+                if (PROCESSING_PRIORITY.equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
                 }
-                if ("AggregationPrefix".equals(node.getNodeName())) {
+                if (AGGREGATION_PREFIX.equals(node.getNodeName())) {
                     aggregationPrefix = node.getTextContent();
                 }
-                if ("StorageMode".equals(node.getNodeName())) {
+                if (STORAGE_MODE.equals(node.getNodeName())) {
                     storageMode = getPartitionStorageMode(node.getChildNodes());
                 }
-                if ("ProcessingMode".equals(node.getNodeName())) {
+                if (PROCESSING_MODE.equals(node.getNodeName())) {
                     processingMode = node.getTextContent();
                 }
-                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                if (ERROR_CONFIGURATION.equals(node.getNodeName())) {
                     errorConfiguration = getErrorConfiguration(node.getChildNodes());
                 }
-                if ("StorageLocation".equals(node.getNodeName())) {
+                if (STORAGE_LOCATION.equals(node.getNodeName())) {
                     storageLocation = node.getTextContent();
                 }
                 if ("RemoteDatasourceID".equals(node.getNodeName())) {
@@ -2849,22 +2048,22 @@ public class Convert {
                 if ("Slice".equals(node.getNodeName())) {
                     slice = node.getTextContent();
                 }
-                if ("ProactiveCaching".equals(node.getNodeName())) {
+                if (PROACTIVE_CACHING.equals(node.getNodeName())) {
                     proactiveCaching = getProactiveCaching(node.getChildNodes());
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = node.getTextContent();
                 }
-                if ("EstimatedSize".equals(node.getNodeName())) {
+                if (ESTIMATED_SIZE.equals(node.getNodeName())) {
                     estimatedSize = toLong(node.getTextContent());
                 }
-                if ("EstimatedRows".equals(node.getNodeName())) {
+                if (ESTIMATED_ROWS.equals(node.getNodeName())) {
                     estimatedRows = toLong(node.getTextContent());
                 }
                 if ("CurrentStorageMode".equals(node.getNodeName())) {
                     currentStorageMode = getPartitionCurrentStorageMode(node.getChildNodes());
                 }
-                if ("AggregationDesignID".equals(node.getNodeName())) {
+                if (AGGREGATION_DESIGN_ID.equals(node.getNodeName())) {
                     aggregationDesignID = node.getTextContent();
                 }
                 if ("AggregationInstances".equals(node.getNodeName())) {
@@ -2873,10 +2072,10 @@ public class Convert {
                 if ("AggregationInstanceSource".equals(node.getNodeName())) {
                     aggregationInstanceSource = getDataSourceViewBinding(node.getChildNodes());
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
                 if ("StringStoresCompatibilityLevel".equals(node.getNodeName())) {
@@ -2932,10 +2131,9 @@ public class Convert {
         List<AggregationInstance> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AggregationInstance".equals(node.getNodeName())) {
-                    list.add(getAggregationInstance(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("AggregationInstance".equals(node.getNodeName()))) {
+                list.add(getAggregationInstance(node.getChildNodes()));
             }
         }
         return list;
@@ -2953,28 +2151,28 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("AggregationType".equals(node.getNodeName())) {
                     aggregationType = node.getTextContent();
                 }
-                if ("Source".equals(node.getNodeName())) {
-                    source = getTabularBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getTabularBinding(node.getChildNodes(), getNodeType(node));
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = getAggregationInstanceDimensionList(node.getChildNodes());
                 }
-                if ("Measures".equals(node.getNodeName())) {
+                if (MEASURES.equals(node.getNodeName())) {
                     measures = getAggregationInstanceMeasureList(node.getChildNodes());
                 }
             }
@@ -2994,10 +2192,9 @@ public class Convert {
         List<AggregationInstanceMeasure> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Measure".equals(node.getNodeName())) {
-                    list.add(getAggregationInstanceMeasure(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (MEASURE.equals(node.getNodeName()))) {
+                list.add(getAggregationInstanceMeasure(node.getChildNodes()));
             }
         }
         return list;
@@ -3009,10 +2206,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("MeasureID".equals(node.getNodeName())) {
+                if (MEASURE_ID.equals(node.getNodeName())) {
                     measureID = node.getTextContent();
                 }
-                if ("MeasureID".equals(node.getNodeName())) {
+                if (MEASURE_ID.equals(node.getNodeName())) {
                     source = getColumnBinding(node.getChildNodes());
                 }
             }
@@ -3027,7 +2224,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("TableID".equals(node.getNodeName())) {
+                if (TABLE_ID.equals(node.getNodeName())) {
                     tableID = node.getTextContent();
                 }
                 if ("ColumnID".equals(node.getNodeName())) {
@@ -3042,10 +2239,9 @@ public class Convert {
         List<AggregationInstanceDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Dimension".equals(node.getNodeName())) {
+            if ((node != null)
+                && (DIMENSION.equals(node.getNodeName()))) {
                     list.add(getAggregationInstanceDimension(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -3057,10 +2253,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getAggregationInstanceAttributeList(node.getChildNodes());
                 }
             }
@@ -3072,10 +2268,9 @@ public class Convert {
         List<AggregationInstanceAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Attribute".equals(node.getNodeName())) {
-                    list.add(getAggregationInstanceAttribute(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
+                list.add(getAggregationInstanceAttribute(node.getChildNodes()));
             }
         }
         return list;
@@ -3087,11 +2282,11 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
-                if ("AttributeID".equals(node.getNodeName())) {
-                    keyColumns = getDataItemList(node.getChildNodes(), "KeyColumn");
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
+                    keyColumns = getDataItemList(node.getChildNodes(), KEY_COLUMN);
                 }
             }
         }
@@ -3103,10 +2298,9 @@ public class Convert {
         List<DataItem> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if (nodeName.equals(node.getNodeName())) {
-                    list.add(getDataItem(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (nodeName.equals(node.getNodeName()))) {
+                list.add(getDataItem(node.getChildNodes()));
             }
         }
         return list;
@@ -3144,16 +2338,16 @@ public class Convert {
                 if ("InvalidXmlCharacters".equals(node.getNodeName())) {
                     invalidXmlCharacters = InvalidXmlCharacterEnum.fromValue(node.getTextContent());
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
                 if ("Format".equals(node.getNodeName())) {
                     format = DataItemFormatEnum.fromValue(node.getTextContent());
                 }
-                if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes(),  getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(),  getNodeType(node));
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -3229,10 +2423,9 @@ public class Convert {
         String expression = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Expression".equals(node.getNodeName())) {
-                    expression = node.getTextContent();
-                }
+            if ((node != null)
+                && (EXPRESSION.equals(node.getNodeName()))) {
+                expression = node.getTextContent();
             }
         }
         return new ExpressionBindingR(expression);
@@ -3246,10 +2439,9 @@ public class Convert {
         String measureName = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MeasureName".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("MeasureName".equals(node.getNodeName()))) {
                     measureName = node.getTextContent();
-                }
             }
         }
         return new CalculatedMeasureBindingR(measureName);
@@ -3342,10 +2534,9 @@ public class Convert {
         String cubeDimensionID = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
-                    cubeDimensionID = node.getTextContent();
-                }
+            if ((node != null)
+                && (CUBE_DIMENSION_ID.equals(node.getNodeName()))) {
+                cubeDimensionID = node.getTextContent();
             }
         }
         return new MeasureGroupDimensionBindingR(cubeDimensionID);
@@ -3360,16 +2551,16 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
-                if ("CubeID".equals(node.getNodeName())) {
+                if (CUBE_ID.equals(node.getNodeName())) {
                     cubeID = node.getTextContent();
                 }
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Filter".equals(node.getNodeName())) {
+                if (FILTER.equals(node.getNodeName())) {
                     filter = node.getTextContent();
                 }
             }
@@ -3392,10 +2583,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
-                if ("DimensionID".equals(node.getNodeName())) {
+                if (DIMENSION_ID.equals(node.getNodeName())) {
                     dimensionID = node.getTextContent();
                 }
                 if ("Persistence".equals(node.getNodeName())) {
@@ -3404,7 +2595,7 @@ public class Convert {
                 if ("RefreshPolicy".equals(node.getNodeName())) {
                     refreshPolicy = RefreshPolicyEnum.fromValue(node.getTextContent());
                 }
-                if ("RefreshInterval".equals(node.getNodeName())) {
+                if (REFRESH_INTERVAL.equals(node.getNodeName())) {
                     refreshInterval = toDuration(node.getTextContent());
                 }
             }
@@ -3428,19 +2619,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeID".equals(node.getNodeName())) {
+                if (CUBE_ID.equals(node.getNodeName())) {
                     cubeID = node.getTextContent();
                 }
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = AttributeBindingTypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Ordinal".equals(node.getNodeName())) {
+                if (ORDINAL.equals(node.getNodeName())) {
                     ordinal = getOrdinalList(node.getChildNodes());
                 }
             }
@@ -3460,10 +2651,9 @@ public class Convert {
         List<BigInteger> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Ordinal".equals(node.getNodeName())) {
-                    list.add(toBigInteger(node.getTextContent()));
-                }
+            if ((node != null)
+                && (ORDINAL.equals(node.getNodeName()))) {
+                list.add(toBigInteger(node.getTextContent()));
             }
         }
         return list;
@@ -3473,10 +2663,9 @@ public class Convert {
         String measureID = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MeasureID".equals(node.getNodeName())) {
-                    measureID = node.getTextContent();
-                }
+            if ((node != null)
+                && (MEASURE_ID.equals(node.getNodeName()))) {
+                measureID = node.getTextContent();
             }
         }
         return new MeasureBindingR(measureID);
@@ -3488,7 +2677,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
                 if ("Groups".equals(node.getNodeName())) {
@@ -3503,10 +2692,9 @@ public class Convert {
         List<Group> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Group".equals(node.getNodeName())) {
-                    list.add(getGroup(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Group".equals(node.getNodeName()))) {
+                list.add(getGroup(node.getChildNodes()));
             }
         }
         return list;
@@ -3518,7 +2706,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
                 if ("Members".equals(node.getNodeName())) {
@@ -3536,10 +2724,9 @@ public class Convert {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Member".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("Member".equals(node.getNodeName()))) {
                     list.add(node.getTextContent());
-                }
             }
         }
         return list;
@@ -3552,13 +2739,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = AttributeBindingTypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Ordinal".equals(node.getNodeName())) {
+                if (ORDINAL.equals(node.getNodeName())) {
                     ordinal = toInteger(node.getTextContent());
                 }
             }
@@ -3570,10 +2757,9 @@ public class Convert {
         String tableID = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("TableID".equals(node.getNodeName())) {
+            if ((node != null)
+                && (TABLE_ID.equals(node.getNodeName()))) {
                     tableID = node.getTextContent();
-                }
             }
         }
         return new RowBindingR(tableID);
@@ -3586,7 +2772,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = PartitionCurrentStorageModeEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
             }
         }
         return new PartitionR.CurrentStorageMode(value, valuens);
@@ -3610,9 +2796,9 @@ public class Convert {
                 if ("AggregationStorage".equals(node.getNodeName())) {
                     aggregationStorage = node.getTextContent();
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = getProactiveCachingBinding(node.getChildNodes(),
-                        getAttribute(node.getAttributes(), "xsi:type"));
+                        getNodeType(node));
                 }
                 if ("SilenceInterval".equals(node.getNodeName())) {
                     silenceInterval = toDuration(node.getTextContent());
@@ -3661,7 +2847,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("RefreshInterval".equals(node.getNodeName())) {
+                if (REFRESH_INTERVAL.equals(node.getNodeName())) {
                     refreshInterval = toDuration(node.getTextContent());
                 }
                 if ("IncrementalProcessingNotifications".equals(node.getNodeName())) {
@@ -3678,10 +2864,9 @@ public class Convert {
         List<IncrementalProcessingNotification> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("IncrementalProcessingNotification".equals(node.getNodeName())) {
-                    list.add(getIncrmentalProcessingNotification(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("IncrementalProcessingNotification".equals(node.getNodeName()))) {
+                list.add(getIncrmentalProcessingNotification(node.getChildNodes()));
             }
         }
         return list;
@@ -3693,7 +2878,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("TableID".equals(node.getNodeName())) {
+                if (TABLE_ID.equals(node.getNodeName())) {
                     tableID = node.getTextContent();
                 }
                 if ("ProcessingQuery".equals(node.getNodeName())) {
@@ -3769,7 +2954,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = PartitionStorageModeEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
             }
         }
         return new PartitionR.StorageMode(value, valuens);
@@ -3795,10 +2980,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceViewID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_VIEW_ID.equals(node.getNodeName())) {
                     dataSourceViewID = node.getTextContent();
                 }
-                if ("TableID".equals(node.getNodeName())) {
+                if (TABLE_ID.equals(node.getNodeName())) {
                     tableID = node.getTextContent();
                 }
                 if ("DataEmbeddingStyle".equals(node.getNodeName())) {
@@ -3819,7 +3004,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
                 if ("QueryDefinition".equals(node.getNodeName())) {
@@ -3840,7 +3025,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
                 if ("DbTableName".equals(node.getNodeName())) {
@@ -3883,22 +3068,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(), getNodeType(node));
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toBigInteger(node.getTextContent());
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
-                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                if (ERROR_CONFIGURATION.equals(node.getNodeName())) {
                     errorConfiguration = getErrorConfiguration(node.getChildNodes());
                 }
                 if ("CacheMode".equals(node.getNodeName())) {
@@ -3916,10 +3101,10 @@ public class Convert {
                 if ("HoldoutActualSize".equals(node.getNodeName())) {
                     holdoutSeed = toInteger(node.getTextContent());
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getMiningStructureColumnList(node.getChildNodes());
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
                 if ("MiningStructurePermissions".equals(node.getNodeName())) {
@@ -3959,10 +3144,9 @@ public class Convert {
         List<MiningModel> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningModel".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("MiningModel".equals(node.getNodeName()))) {
                     list.add(getMiningModel(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -3972,10 +3156,9 @@ public class Convert {
         List<MiningStructurePermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningStructurePermission".equals(node.getNodeName())) {
-                    list.add(getMiningStructurePermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("MiningStructurePermission".equals(node.getNodeName()))) {
+                list.add(getMiningStructurePermission(node.getChildNodes()));
             }
         }
         return list;
@@ -3997,40 +3180,40 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AllowDrillThrough".equals(node.getNodeName())) {
+                if (ALLOW_DRILL_THROUGH.equals(node.getNodeName())) {
                     allowDrillThrough = toBoolean(node.getTextContent());
                 }
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
             }
@@ -4055,15 +3238,14 @@ public class Convert {
         List<MiningStructureColumn> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningStructurePermission".equals(node.getNodeName())) {
-                    list.add(
-                        getMiningStructureColumn(
-                            node.getChildNodes(),
-                            getAttribute(node.getAttributes(), "xsi:type")
-                        )
-                    );
-                }
+            if ((node != null)
+                && ("MiningStructurePermission".equals(node.getNodeName()))) {
+                list.add(
+                    getMiningStructureColumn(
+                        node.getChildNodes(),
+                        getNodeType(node)
+                    )
+                );
             }
         }
         return list;
@@ -4095,11 +3277,11 @@ public class Convert {
                 if ("SourceMeasureGroup".equals(node.getNodeName())) {
                     sourceMeasureGroup = getMeasureGroupBinding(node.getChildNodes());
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getMiningStructureColumnList(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
             }
         }
@@ -4131,26 +3313,26 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("IsKey".equals(node.getNodeName())) {
                     isKey = toBoolean(node.getTextContent());
                 }
-                if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(), getNodeType(node));
                 }
                 if ("Distribution".equals(node.getNodeName())) {
                     distribution = node.getTextContent();
@@ -4170,14 +3352,14 @@ public class Convert {
                 if ("DiscretizationBucketCount".equals(node.getNodeName())) {
                     discretizationBucketCount = toBigInteger(node.getTextContent());
                 }
-                if ("KeyColumns".equals(node.getNodeName())) {
-                    keyColumns = getDataItemList(node.getChildNodes(), "KeyColumn");
+                if (KEY_COLUMNS.equals(node.getNodeName())) {
+                    keyColumns = getDataItemList(node.getChildNodes(), KEY_COLUMN);
                 }
                 if ("NameColumn".equals(node.getNodeName())) {
                     nameColumn = getDataItem(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
             }
         }
@@ -4205,10 +3387,9 @@ public class Convert {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("ClassifiedColumn".equals(node.getNodeName())) {
-                    list.add(node.getTextContent());
-                }
+            if ((node != null)
+                && ("ClassifiedColumn".equals(node.getNodeName()))) {
+                list.add(node.getTextContent());
             }
         }
         return list;
@@ -4239,37 +3420,37 @@ public class Convert {
                 if ("Algorithm".equals(node.getNodeName())) {
                     algorithm = node.getTextContent();
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
                 if ("AlgorithmParameters".equals(node.getNodeName())) {
                     algorithmParameters = getAlgorithmParameterList(node.getChildNodes());
                 }
-                if ("AllowDrillThrough".equals(node.getNodeName())) {
+                if (ALLOW_DRILL_THROUGH.equals(node.getNodeName())) {
                     allowDrillThrough = toBoolean(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
+                if (TRANSLATIONS.equals(node.getNodeName())) {
                     translations = getAttributeTranslationList(node.getChildNodes());
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getMiningModelColumnList(node.getChildNodes());
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
                 if ("FoldingParameters".equals(node.getNodeName())) {
                     foldingParameters = getFoldingParameters(node.getChildNodes());
                 }
-                if ("Filter".equals(node.getNodeName())) {
+                if (FILTER.equals(node.getNodeName())) {
                     filter = node.getTextContent();
                 }
                 if ("MiningModelPermissions".equals(node.getNodeName())) {
                     miningModelPermissions = getMiningModelPermissionList(node.getChildNodes());
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = node.getTextContent();
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
             }
@@ -4300,10 +3481,9 @@ public class Convert {
         List<MiningModelPermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningModelPermission".equals(node.getNodeName())) {
-                    list.add(getMiningModelPermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("MiningModelPermission".equals(node.getNodeName()))) {
+                list.add(getMiningModelPermission(node.getChildNodes()));
             }
         }
         return list;
@@ -4326,25 +3506,25 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AllowDrillThrough".equals(node.getNodeName())) {
+                if (ALLOW_DRILL_THROUGH.equals(node.getNodeName())) {
                     allowDrillThrough = toBoolean(node.getTextContent());
                 }
                 if ("AllowBrowsing".equals(node.getNodeName())) {
                     allowBrowsing = toBoolean(node.getTextContent());
                 }
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
             }
@@ -4400,10 +3580,9 @@ public class Convert {
         List<MiningModelColumn> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningModelPermission".equals(node.getNodeName())) {
-                    list.add(getMiningModelColumn(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("MiningModelPermission".equals(node.getNodeName()))) {
+                list.add(getMiningModelColumn(node.getChildNodes()));
             }
         }
         return list;
@@ -4423,13 +3602,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("SourceColumnID".equals(node.getNodeName())) {
@@ -4438,19 +3617,19 @@ public class Convert {
                 if ("Usage".equals(node.getNodeName())) {
                     usage = node.getTextContent();
                 }
-                if ("Filter".equals(node.getNodeName())) {
+                if (FILTER.equals(node.getNodeName())) {
                     filter = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getMiningModelColumnList(node.getChildNodes());
                 }
                 if ("ModelingFlags".equals(node.getNodeName())) {
                     modelingFlags = getMiningModelingFlagList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -4474,10 +3653,9 @@ public class Convert {
         List<MiningModelingFlag> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AlgorithmParameter".equals(node.getNodeName())) {
-                    list.add(getMiningModelingFlag(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("AlgorithmParameter".equals(node.getNodeName()))) {
+                list.add(getMiningModelingFlag(node.getChildNodes()));
             }
         }
         return list;
@@ -4487,11 +3665,10 @@ public class Convert {
         String modelingFlag = null;
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("ModelingFlag".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("ModelingFlag".equals(node.getNodeName()))) {
                     modelingFlag = node.getTextContent();
                     break;
-                }
             }
         }
         return new MiningModelingFlagR(Optional.ofNullable(modelingFlag));
@@ -4501,10 +3678,9 @@ public class Convert {
         List<AttributeTranslation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Translation".equals(node.getNodeName())) {
-                    list.add(getAttributeTranslation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (TRANSLATION.equals(node.getNodeName()))) {
+                list.add(getAttributeTranslation(node.getChildNodes()));
             }
         }
         return list;
@@ -4521,19 +3697,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toLong(node.getTextContent());
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("CaptionColumn".equals(node.getNodeName())) {
@@ -4559,10 +3735,9 @@ public class Convert {
         List<AlgorithmParameter> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AlgorithmParameter".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("AlgorithmParameter".equals(node.getNodeName()))) {
                     list.add(getAlgorithmParameter(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -4574,10 +3749,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
             }
@@ -4618,61 +3793,61 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = node.getTextContent();
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
-                if ("Measures".equals(node.getNodeName())) {
+                if (MEASURES.equals(node.getNodeName())) {
                     measures = getMeasureList(node.getChildNodes());
                 }
                 if ("DataAggregation".equals(node.getNodeName())) {
                     dataAggregation = node.getTextContent();
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = getMeasureGroupBinding(node.getChildNodes());
                 }
-                if ("StorageMode".equals(node.getNodeName())) {
+                if (STORAGE_MODE.equals(node.getNodeName())) {
                     storageMode = getMeasureGroupStorageMode(node.getChildNodes());
                 }
-                if ("StorageLocation".equals(node.getNodeName())) {
+                if (STORAGE_LOCATION.equals(node.getNodeName())) {
                     storageLocation = node.getTextContent();
                 }
                 if ("IgnoreUnrelatedDimensions".equals(node.getNodeName())) {
                     ignoreUnrelatedDimensions = toBoolean(node.getTextContent());
                 }
-                if ("ProactiveCaching".equals(node.getNodeName())) {
+                if (PROACTIVE_CACHING.equals(node.getNodeName())) {
                     proactiveCaching = getProactiveCaching(node.getChildNodes());
                 }
-                if ("EstimatedRows".equals(node.getNodeName())) {
+                if (ESTIMATED_ROWS.equals(node.getNodeName())) {
                     estimatedRows = toLong(node.getTextContent());
                 }
-                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                if (ERROR_CONFIGURATION.equals(node.getNodeName())) {
                     errorConfiguration = getErrorConfiguration(node.getChildNodes());
                 }
-                if ("EstimatedSize".equals(node.getNodeName())) {
+                if (ESTIMATED_SIZE.equals(node.getNodeName())) {
                     estimatedSize = toLong(node.getTextContent());
                 }
-                if ("ProcessingMode".equals(node.getNodeName())) {
+                if (PROCESSING_MODE.equals(node.getNodeName())) {
                     processingMode = node.getTextContent();
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = getMeasureGroupDimensionList(node.getChildNodes());
                 }
                 if ("Partitions".equals(node.getNodeName())) {
                     partitions = getPartitionList(node.getChildNodes());
                 }
-                if ("AggregationPrefix".equals(node.getNodeName())) {
+                if (AGGREGATION_PREFIX.equals(node.getNodeName())) {
                     aggregationPrefix = node.getTextContent();
                 }
-                if ("ProcessingPriority".equals(node.getNodeName())) {
+                if (PROCESSING_PRIORITY.equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
                 }
                 if ("AggregationDesigns".equals(node.getNodeName())) {
@@ -4715,10 +3890,9 @@ public class Convert {
         List<AggregationDesign> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AggregationDesigns".equals(node.getNodeName())) {
-                    list.add(getAggregationDesign(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("AggregationDesigns".equals(node.getNodeName()))) {
+                list.add(getAggregationDesign(node.getChildNodes()));
             }
         }
         return list;
@@ -4728,10 +3902,9 @@ public class Convert {
         List<Partition> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Partition".equals(node.getNodeName())) {
-                    list.add(getPartition(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Partition".equals(node.getNodeName()))) {
+                list.add(getPartition(node.getChildNodes()));
             }
         }
         return list;
@@ -4741,10 +3914,9 @@ public class Convert {
         List<org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Dimensions".equals(node.getNodeName())) {
-                    list.add(getMeasureGroupDimension(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
-                }
+            if ((node != null)
+                && (DIMENSIONS.equals(node.getNodeName()))) {
+                list.add(getMeasureGroupDimension(node.getChildNodes(), getNodeType(node)));
             }
         }
         return list;
@@ -4774,7 +3946,23 @@ public class Convert {
         List<Annotation> annotations = null;
         MeasureGroupDimensionBinding source = null;
         String caseCubeDimensionID = null;
-        //TODO
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if (ANNOTATIONS.equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
+                }
+                if ("CaseCubeDimensionID".equals(node.getNodeName())) {
+                    caseCubeDimensionID = node.getTextContent();
+                }
+            }
+        }
         return new DataMiningMeasureGroupDimensionR(
             cubeDimensionID,
             annotations,
@@ -4791,13 +3979,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
                 }
 
@@ -4827,13 +4015,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
                 }
 
@@ -4846,7 +4034,7 @@ public class Convert {
                 if ("Materialization".equals(node.getNodeName())) {
                     materialization = node.getTextContent();
                 }
-                if ("ProcessingState".equals(node.getNodeName())) {
+                if (PROCESSING_STATE.equals(node.getNodeName())) {
                     processingState = node.getTextContent();
                 }
             }
@@ -4868,7 +4056,26 @@ public class Convert {
         MeasureGroupDimensionBinding source = null;
         String cardinality = null;
         List<MeasureGroupAttribute> attributes = null;
-        //TODO
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if (ANNOTATIONS.equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
+                }
+                if ("Cardinality".equals(node.getNodeName())) {
+                    cardinality = node.getTextContent();
+                }
+                if (ATTRIBUTES.equals(node.getNodeName())) {
+                    attributes = getMeasureGroupAttributeList(node.getChildNodes());
+                }
+            }
+        }
         return new RegularMeasureGroupDimensionR(
             cubeDimensionID,
             annotations,
@@ -4878,19 +4085,81 @@ public class Convert {
         );
     }
 
+    private static List<MeasureGroupAttribute> getMeasureGroupAttributeList(NodeList nl) {
+        List<MeasureGroupAttribute> list = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
+                list.add(getMeasureGroupAttribute(node.getChildNodes()));
+            }
+        }
+        return list;
+    }
+
+    private static MeasureGroupAttribute getMeasureGroupAttribute(NodeList nl) {
+        String attributeID = null;
+        List<DataItem> keyColumns = null;
+        String type = null;
+        List<Annotation> annotations = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
+                    attributeID = node.getTextContent();
+                }
+                if (KEY_COLUMNS.equals(node.getNodeName())) {
+                    keyColumns = getDataItemList(node.getChildNodes(), KEY_COLUMN);
+                }
+                if ("Type".equals(node.getNodeName())) {
+                    type = node.getTextContent();
+                }
+                if (ANNOTATIONS.equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+            }
+        }
+        return new MeasureGroupAttributeR(
+            attributeID,
+            keyColumns,
+            type,
+            annotations
+        );
+    }
+
     private static org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension getManyToManyMeasureGroupDimension(NodeList nl) {
         String cubeDimensionID = null;
         List<Annotation> annotations = null;
         MeasureGroupDimensionBinding source = null;
-        String cardinality = null;
-        List<MeasureGroupAttribute> attributes = null;
-        //TODO
-        return new RegularMeasureGroupDimensionR(
+        String measureGroupID = null;
+        String directSlice = null;
+
+        for (int i = 0; i < nl.getLength(); i++) {
+            org.w3c.dom.Node node = nl.item(i);
+            if (node != null) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
+                    cubeDimensionID = node.getTextContent();
+                }
+                if (ANNOTATIONS.equals(node.getNodeName())) {
+                    annotations = getAnnotationList(node.getChildNodes());
+                }
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = (MeasureGroupDimensionBinding)getMeasureGroupDimensionBinding(node.getChildNodes());
+                }
+                if (MEASURE_GROUP_ID.equals(node.getNodeName())) {
+                    measureGroupID = node.getTextContent();
+                }
+                if ("DirectSlice".equals(node.getNodeName())) {
+                    directSlice = node.getTextContent();
+                }
+            }
+        }
+        return new ManyToManyMeasureGroupDimensionR(
             cubeDimensionID,
             annotations,
             source,
-            cardinality,
-            attributes
+            measureGroupID,
+            directSlice
         );
     }
 
@@ -4901,7 +4170,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = MeasureGroupStorageModeEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
             }
         }
         return new MeasureGroupR.StorageMode(value, valuens);
@@ -4918,13 +4187,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
-                if ("CubeID".equals(node.getNodeName())) {
+                if (CUBE_ID.equals(node.getNodeName())) {
                     cubeID = node.getTextContent();
                 }
-                if ("MeasureGroupID".equals(node.getNodeName())) {
+                if (MEASURE_GROUP_ID.equals(node.getNodeName())) {
                     measureGroupID = node.getTextContent();
                 }
                 if ("Persistence".equals(node.getNodeName())) {
@@ -4933,10 +4202,10 @@ public class Convert {
                 if ("RefreshPolicy".equals(node.getNodeName())) {
                     refreshPolicy = RefreshPolicyEnum.fromValue(node.getTextContent());
                 }
-                if ("RefreshInterval".equals(node.getNodeName())) {
+                if (REFRESH_INTERVAL.equals(node.getNodeName())) {
                     refreshInterval = toDuration(node.getTextContent());
                 }
-                if ("Filter".equals(node.getNodeName())) {
+                if (FILTER.equals(node.getNodeName())) {
                     filter = node.getTextContent();
                 }
             }
@@ -4954,10 +4223,9 @@ public class Convert {
         List<Measure> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Measure".equals(node.getNodeName())) {
-                    list.add(getMeasure(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (MEASURE.equals(node.getNodeName()))) {
+                list.add(getMeasure(node.getChildNodes()));
             }
         }
         return list;
@@ -4984,13 +4252,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("AggregateFunction".equals(node.getNodeName())) {
@@ -4999,16 +4267,16 @@ public class Convert {
                 if ("DataType".equals(node.getNodeName())) {
                     dataType = node.getTextContent();
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = getDataItem(node.getChildNodes());
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("MeasureExpression".equals(node.getNodeName())) {
                     measureExpression = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
                 if ("FormatString".equals(node.getNodeName())) {
@@ -5029,10 +4297,10 @@ public class Convert {
                 if ("FontFlags".equals(node.getNodeName())) {
                     fontFlags = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -5100,10 +4368,9 @@ public class Convert {
         List<CalculationProperty> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CalculationProperty".equals(node.getNodeName())) {
-                    list.add(getCalculationProperty(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("CalculationProperty".equals(node.getNodeName()))) {
+                list.add(getCalculationProperty(node.getChildNodes()));
             }
         }
         return list;
@@ -5113,10 +4380,9 @@ public class Convert {
         List<Command> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Command".equals(node.getNodeName())) {
-                    list.add(getCommand(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (COMMAND.equals(node.getNodeName()))) {
+                list.add(getCommand(node.getChildNodes()));
             }
         }
         return list;
@@ -5150,13 +4416,13 @@ public class Convert {
                 if ("CalculationType".equals(node.getNodeName())) {
                     calculationType = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("SolveOrder".equals(node.getNodeName())) {
@@ -5183,13 +4449,13 @@ public class Convert {
                 if ("AssociatedMeasureGroupID".equals(node.getNodeName())) {
                     associatedMeasureGroupID = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toBigInteger(node.getTextContent());
                 }
-                if ("VisualizationProperties".equals(node.getNodeName())) {
+                if (VISUALIZATION_PROPERTIES.equals(node.getNodeName())) {
                     visualizationProperties = getCalculationPropertiesVisualizationProperties(node.getChildNodes());
                 }
             }
@@ -5232,10 +4498,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("FolderPosition".equals(node.getNodeName())) {
+                if (FOLDER_POSITION.equals(node.getNodeName())) {
                     folderPosition = toBigInteger(node.getTextContent());
                 }
-                if ("ContextualNameRule".equals(node.getNodeName())) {
+                if (CONTEXTUAL_NAME_RULE.equals(node.getNodeName())) {
                     contextualNameRule = node.getTextContent();
                 }
                 if ("Alignment".equals(node.getNodeName())) {
@@ -5256,10 +4522,10 @@ public class Convert {
                 if ("Width".equals(node.getNodeName())) {
                     width = toBigInteger(node.getTextContent());
                 }
-                if ("DefaultDetailsPosition".equals(node.getNodeName())) {
+                if (DEFAULT_DETAILS_POSITION.equals(node.getNodeName())) {
                     defaultDetailsPosition = toBigInteger(node.getTextContent());
                 }
-                if ("SortPropertiesPosition".equals(node.getNodeName())) {
+                if (SORT_PROPERTIES_POSITION.equals(node.getNodeName())) {
                     sortPropertiesPosition = toBigInteger(node.getTextContent());
                 }
                 if ("IsDefaultMeasure".equals(node.getNodeName())) {
@@ -5327,28 +4593,28 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(), getNodeType(node));
                 }
-                if ("MiningModelID".equals(node.getNodeName())) {
+                if (MINING_MODEL_ID.equals(node.getNodeName())) {
                     miningModelID = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
@@ -5360,19 +4626,19 @@ public class Convert {
                 if ("MdxMissingMemberMode".equals(node.getNodeName())) {
                     mdxMissingMemberMode = node.getTextContent();
                 }
-                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                if (ERROR_CONFIGURATION.equals(node.getNodeName())) {
                     errorConfiguration = getErrorConfiguration(node.getChildNodes());
                 }
-                if ("StorageMode".equals(node.getNodeName())) {
+                if (STORAGE_MODE.equals(node.getNodeName())) {
                     storageMode = node.getTextContent();
                 }
                 if ("WriteEnabled".equals(node.getNodeName())) {
                     writeEnabled = toBoolean(node.getTextContent());
                 }
-                if ("ProcessingPriority".equals(node.getNodeName())) {
+                if (PROCESSING_PRIORITY.equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
                 if ("DimensionPermissions".equals(node.getNodeName())) {
@@ -5381,10 +4647,10 @@ public class Convert {
                 if ("DependsOnDimensionID".equals(node.getNodeName())) {
                     dependsOnDimensionID = node.getTextContent();
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toBigInteger(node.getTextContent());
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
                 if ("UnknownMemberName".equals(node.getNodeName())) {
@@ -5393,13 +4659,13 @@ public class Convert {
                 if ("UnknownMemberTranslations".equals(node.getNodeName())) {
                     unknownMemberTranslations = getTranslationList(node.getChildNodes(), "UnknownMemberTranslation");
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
-                if ("ProactiveCaching".equals(node.getNodeName())) {
+                if (PROACTIVE_CACHING.equals(node.getNodeName())) {
                     proactiveCaching = getProactiveCaching(node.getChildNodes());
                 }
-                if ("ProcessingMode".equals(node.getNodeName())) {
+                if (PROCESSING_MODE.equals(node.getNodeName())) {
                     processingMode = node.getTextContent();
                 }
                 if ("ProcessingGroup".equals(node.getNodeName())) {
@@ -5408,10 +4674,10 @@ public class Convert {
                 if ("CurrentStorageMode".equals(node.getNodeName())) {
                     processingGroup = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getDimensionAttributeList(node.getChildNodes());
                 }
                 if ("AttributeAllMemberName".equals(node.getNodeName())) {
@@ -5421,7 +4687,7 @@ public class Convert {
                     attributeAllMemberTranslations = getTranslationList(node.getChildNodes(),
                         "AttributeAllMemberTranslation");
                 }
-                if ("Hierarchies".equals(node.getNodeName())) {
+                if (HIERARCHIES.equals(node.getNodeName())) {
                     hierarchies = getHierarchyList(node.getChildNodes());
                 }
                 if ("ProcessingRecommendation".equals(node.getNodeName())) {
@@ -5481,10 +4747,9 @@ public class Convert {
         List<DimensionPermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DimensionPermission".equals(node.getNodeName())) {
-                    list.add(getDimensionPermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DimensionPermission".equals(node.getNodeName()))) {
+                list.add(getDimensionPermission(node.getChildNodes()));
             }
         }
         return list;
@@ -5507,38 +4772,38 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
 
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
 
@@ -5572,10 +4837,9 @@ public class Convert {
         List<AttributePermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AttributePermission".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("AttributePermission".equals(node.getNodeName()))) {
                     list.add(getAttributePermission(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -5592,13 +4856,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("DefaultMember".equals(node.getNodeName())) {
+                if (DEFAULT_MEMBER.equals(node.getNodeName())) {
                     defaultMember = node.getTextContent();
                 }
                 if ("VisualTotals".equals(node.getNodeName())) {
@@ -5610,7 +4874,7 @@ public class Convert {
                 if ("DeniedSet".equals(node.getNodeName())) {
                     deniedSet = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -5633,7 +4897,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = UnknownMemberEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
             }
         }
         return new DimensionR.UnknownMember(value, valuens);
@@ -5643,10 +4907,9 @@ public class Convert {
         List<DimensionAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Attribute".equals(node.getNodeName())) {
-                    list.add(getDimensionAttribute(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
+                list.add(getDimensionAttribute(node.getChildNodes()));
             }
         }
         return list;
@@ -5697,13 +4960,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
@@ -5712,14 +4975,14 @@ public class Convert {
                 if ("Usage".equals(node.getNodeName())) {
                     usage = node.getTextContent();
                 }
-                if ("Source".equals(node.getNodeName())) {
-                    source = getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type"));
+                if (SOURCE.equals(node.getNodeName())) {
+                    source = getBinding(node.getChildNodes(), getNodeType(node));
                 }
                 if ("EstimatedCount".equals(node.getNodeName())) {
                     estimatedCount = toLong(node.getTextContent());
                 }
-                if ("KeyColumns".equals(node.getNodeName())) {
-                    keyColumns = getDataItemList(node.getChildNodes(), "KeyColumn");
+                if (KEY_COLUMNS.equals(node.getNodeName())) {
+                    keyColumns = getDataItemList(node.getChildNodes(), KEY_COLUMN);
                 }
                 if ("NameColumn".equals(node.getNodeName())) {
                     nameColumn = getDataItem(node.getChildNodes());
@@ -5727,7 +4990,7 @@ public class Convert {
                 if ("ValueColumn".equals(node.getNodeName())) {
                     valueColumn = getDataItem(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
+                if (TRANSLATIONS.equals(node.getNodeName())) {
                     translations = getAttributeTranslationList(node.getChildNodes());
                 }
                 if ("AttributeRelationships".equals(node.getNodeName())) {
@@ -5745,7 +5008,7 @@ public class Convert {
                 if ("OrderBy".equals(node.getNodeName())) {
                     orderBy = node.getTextContent();
                 }
-                if ("DefaultMember".equals(node.getNodeName())) {
+                if (DEFAULT_MEMBER.equals(node.getNodeName())) {
                     defaultMember = node.getTextContent();
                 }
                 if ("OrderByAttributeID".equals(node.getNodeName())) {
@@ -5790,7 +5053,7 @@ public class Convert {
                 if ("AttributeHierarchyOptimizedState".equals(node.getNodeName())) {
                     attributeHierarchyOptimizedState = node.getTextContent();
                 }
-                if ("AttributeHierarchyVisible".equals(node.getNodeName())) {
+                if (ATTRIBUTE_HIERARCHY_VISIBLE.equals(node.getNodeName())) {
                     attributeHierarchyVisible = toBoolean(node.getTextContent());
                 }
                 if ("AttributeHierarchyDisplayFolder".equals(node.getNodeName())) {
@@ -5805,17 +5068,17 @@ public class Convert {
                 if ("InstanceSelection".equals(node.getNodeName())) {
                     instanceSelection = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("ProcessingState".equals(node.getNodeName())) {
+                if (PROCESSING_STATE.equals(node.getNodeName())) {
                     processingState = node.getTextContent();
                 }
                 if ("AttributeHierarchyProcessingState".equals(node.getNodeName())) {
                     attributeHierarchyProcessingState =
                         AttributeHierarchyProcessingState.fromValue(node.getTextContent());
                 }
-                if ("VisualizationProperties".equals(node.getNodeName())) {
+                if (VISUALIZATION_PROPERTIES.equals(node.getNodeName())) {
                     visualizationProperties = getDimensionAttributeVisualizationProperties(node.getChildNodes());
                 }
                 if ("ExtendedType".equals(node.getNodeName())) {
@@ -5885,10 +5148,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("FolderPosition".equals(node.getNodeName())) {
+                if (FOLDER_POSITION.equals(node.getNodeName())) {
                     folderPosition = toBigInteger(node.getTextContent());
                 }
-                if ("ContextualNameRule".equals(node.getNodeName())) {
+                if (CONTEXTUAL_NAME_RULE.equals(node.getNodeName())) {
                     contextualNameRule = node.getTextContent();
                 }
                 if ("Alignment".equals(node.getNodeName())) {
@@ -5909,10 +5172,10 @@ public class Convert {
                 if ("Width".equals(node.getNodeName())) {
                     width = toBigInteger(node.getTextContent());
                 }
-                if ("DefaultDetailsPosition".equals(node.getNodeName())) {
+                if (DEFAULT_DETAILS_POSITION.equals(node.getNodeName())) {
                     defaultDetailsPosition = toBigInteger(node.getTextContent());
                 }
-                if ("SortPropertiesPosition".equals(node.getNodeName())) {
+                if (SORT_PROPERTIES_POSITION.equals(node.getNodeName())) {
                     sortPropertiesPosition = toBigInteger(node.getTextContent());
                 }
                 if ("CommonIdentifierPosition".equals(node.getNodeName())) {
@@ -5951,10 +5214,9 @@ public class Convert {
         List<Translation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("NamingTemplateTranslation".equals(node.getNodeName())) {
-                    list.add(getTranslation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("NamingTemplateTranslation".equals(node.getNodeName()))) {
+                list.add(getTranslation(node.getChildNodes()));
             }
         }
         return list;
@@ -5964,10 +5226,9 @@ public class Convert {
         List<AttributeTranslation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AttributeRelationship".equals(node.getNodeName())) {
-                    list.add(getAttributeTranslation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("AttributeRelationship".equals(node.getNodeName()))) {
+                list.add(getAttributeTranslation(node.getChildNodes()));
             }
         }
         return list;
@@ -5980,7 +5241,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = DimensionAttributeTypeEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
                 break;
             }
         }
@@ -5992,10 +5253,9 @@ public class Convert {
         List<Hierarchy> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Hierarchy".equals(node.getNodeName())) {
+            if ((node != null)
+                && (HIERARCHY.equals(node.getNodeName()))) {
                     list.add(getHierarchy(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -6020,26 +5280,26 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("ProcessingState".equals(node.getNodeName())) {
+                if (PROCESSING_STATE.equals(node.getNodeName())) {
                     processingState = node.getTextContent();
                 }
                 if ("StructureType".equals(node.getNodeName())) {
                     structureType = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
                 if ("AllMemberName".equals(node.getNodeName())) {
                     allMemberName = node.getTextContent();
@@ -6059,10 +5319,10 @@ public class Convert {
                 if ("Levels".equals(node.getNodeName())) {
                     levels = getLevelList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("VisualizationProperties".equals(node.getNodeName())) {
+                if (VISUALIZATION_PROPERTIES.equals(node.getNodeName())) {
                     visualizationProperties = getHierarchyVisualizationProperties(node.getChildNodes());
                 }
             }
@@ -6092,10 +5352,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("ContextualNameRule".equals(node.getNodeName())) {
+                if (CONTEXTUAL_NAME_RULE.equals(node.getNodeName())) {
                     contextualNameRule = node.getTextContent();
                 }
-                if ("FolderPosition".equals(node.getNodeName())) {
+                if (FOLDER_POSITION.equals(node.getNodeName())) {
                     folderPosition = toBigInteger(node.getTextContent());
                 }
             }
@@ -6110,10 +5370,9 @@ public class Convert {
         List<Level> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Level".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("Level".equals(node.getNodeName()))) {
                     list.add(getLevel(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -6130,13 +5389,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("SourceAttributeID".equals(node.getNodeName())) {
@@ -6145,10 +5404,10 @@ public class Convert {
                 if ("HideMemberIf".equals(node.getNodeName())) {
                     hideMemberIf = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -6166,14 +5425,13 @@ public class Convert {
     }
 
     private static Relationships getRelationships(NodeList nl) {
-        List<Relationship> relationship = null;
+        List<Relationship> relationship = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Relationship".equals(node.getNodeName())) {
-                    relationship.add(getRelationship(node.getChildNodes()));
-                    break;
-                }
+            if ((node != null)
+                && ("Relationship".equals(node.getNodeName()))) {
+                relationship.add(getRelationship(node.getChildNodes()));
+                break;
             }
         }
         return new RelationshipsR(relationship);
@@ -6187,10 +5445,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("FromRelationshipEnd".equals(node.getNodeName())) {
@@ -6219,22 +5477,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Role".equals(node.getNodeName())) {
+                if (ROLE2.equals(node.getNodeName())) {
                     role = node.getTextContent();
                 }
                 if ("Multiplicity".equals(node.getNodeName())) {
                     multiplicity = node.getTextContent();
                 }
-                if ("DimensionID".equals(node.getNodeName())) {
+                if (DIMENSION_ID.equals(node.getNodeName())) {
                     dimensionID = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getRelationshipEndAttributes(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
+                if (TRANSLATIONS.equals(node.getNodeName())) {
                     translations = getRelationshipEndTranslations(node.getChildNodes());
                 }
-                if ("VisualizationProperties".equals(node.getNodeName())) {
+                if (VISUALIZATION_PROPERTIES.equals(node.getNodeName())) {
                     visualizationProperties = getRelationshipEndVisualizationProperties(node.getChildNodes());
                 }
 
@@ -6260,13 +5518,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("FolderPosition".equals(node.getNodeName())) {
+                if (FOLDER_POSITION.equals(node.getNodeName())) {
                     folderPosition = toBigInteger(node.getTextContent());
                 }
-                if ("ContextualNameRule".equals(node.getNodeName())) {
+                if (CONTEXTUAL_NAME_RULE.equals(node.getNodeName())) {
                     contextualNameRule = node.getTextContent();
                 }
-                if ("DefaultDetailsPosition".equals(node.getNodeName())) {
+                if (DEFAULT_DETAILS_POSITION.equals(node.getNodeName())) {
                     defaultDetailsPosition = toBigInteger(node.getTextContent());
                 }
                 if ("DisplayKeyPosition".equals(node.getNodeName())) {
@@ -6281,7 +5539,7 @@ public class Convert {
                 if ("IsDefaultImage".equals(node.getNodeName())) {
                     isDefaultImage = toBoolean(node.getTextContent());
                 }
-                if ("SortPropertiesPosition".equals(node.getNodeName())) {
+                if (SORT_PROPERTIES_POSITION.equals(node.getNodeName())) {
                     sortPropertiesPosition = toBigInteger(node.getTextContent());
                 }
             }
@@ -6303,10 +5561,9 @@ public class Convert {
         List<RelationshipEndTranslation> translations = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Translation".equals(node.getNodeName())) {
-                    translations.add(getRelationshipEndTranslation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (TRANSLATION.equals(node.getNodeName()))) {
+                translations.add(getRelationshipEndTranslation(node.getChildNodes()));
             }
         }
         return translations;
@@ -6322,19 +5579,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toLong(node.getTextContent());
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("CollectionCaption".equals(node.getNodeName())) {
@@ -6357,10 +5614,9 @@ public class Convert {
         List<String> attributes = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Attribute".equals(node.getNodeName())) {
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
                     attributes.add(getAttributeId(node.getChildNodes()));
-                }
             }
         }
         return attributes;
@@ -6369,10 +5625,9 @@ public class Convert {
     private static String getAttributeId(NodeList nl) {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+            if ((node != null)
+                && (ATTRIBUTE_ID.equals(node.getNodeName()))) {
                     return node.getTextContent();
-                }
             }
         }
         return null;
@@ -6389,25 +5644,25 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("DataSourceID".equals(node.getNodeName())) {
+                if (DATA_SOURCE_ID.equals(node.getNodeName())) {
                     dataSourceID = node.getTextContent();
                 }
             }
@@ -6443,22 +5698,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("ManagedProvider".equals(node.getNodeName())) {
@@ -6516,10 +5771,9 @@ public class Convert {
         List<DataSourcePermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DataSourcePermission".equals(node.getNodeName())) {
-                    list.add(getDataSourcePermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DataSourcePermission".equals(node.getNodeName()))) {
+                list.add(getDataSourcePermission(node.getChildNodes()));
             }
         }
         return list;
@@ -6540,38 +5794,38 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
 
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
             }
@@ -6660,29 +5914,29 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
 
                 if ("LastUpdate".equals(node.getNodeName())) {
                     lastUpdate = toInstant(node.getTextContent());
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
                 if ("ReadWriteMode".equals(node.getNodeName())) {
@@ -6691,25 +5945,25 @@ public class Convert {
                 if ("DbStorageLocation".equals(node.getNodeName())) {
                     dbStorageLocation = node.getTextContent();
                 }
-                if ("AggregationPrefix".equals(node.getNodeName())) {
+                if (AGGREGATION_PREFIX.equals(node.getNodeName())) {
                     aggregationPrefix = node.getTextContent();
                 }
-                if ("ProcessingPriority".equals(node.getNodeName())) {
+                if (PROCESSING_PRIORITY.equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
                 }
-                if ("EstimatedSize".equals(node.getNodeName())) {
+                if (ESTIMATED_SIZE.equals(node.getNodeName())) {
                     estimatedSize = toLong(node.getTextContent());
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toBigInteger(node.getTextContent());
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("MasterDataSourceID".equals(node.getNodeName())) {
@@ -6727,7 +5981,7 @@ public class Convert {
                 if ("DataSourceViews".equals(node.getNodeName())) {
                     dataSourceViews = getDataSourceViewList(node.getChildNodes());
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = getDimensionList(node.getChildNodes());
                 }
                 if ("Cubes".equals(node.getNodeName())) {
@@ -6745,8 +5999,8 @@ public class Convert {
                 if ("DatabasePermissions".equals(node.getNodeName())) {
                     databasePermissions = getDatabasePermissionList(node.getChildNodes());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
                 if ("StorageEngineUsed".equals(node.getNodeName())) {
                     storageEngineUsed = node.getTextContent();
@@ -6819,10 +6073,9 @@ public class Convert {
         List<DatabasePermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DatabasePermission".equals(node.getNodeName())) {
-                    list.add(getDatabasePermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DatabasePermission".equals(node.getNodeName()))) {
+                list.add(getDatabasePermission(node.getChildNodes()));
             }
         }
         return list;
@@ -6833,10 +6086,9 @@ public class Convert {
         List<MiningStructure> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MiningStructure".equals(node.getNodeName())) {
-                    list.add(getMiningStructure(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("MiningStructure".equals(node.getNodeName()))) {
+                list.add(getMiningStructure(node.getChildNodes()));
             }
         }
         return list;
@@ -6846,10 +6098,9 @@ public class Convert {
         List<Cube> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Cube".equals(node.getNodeName())) {
+            if ((node != null)
+                && (CUBE2.equals(node.getNodeName()))) {
                     list.add(getCube(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -6859,10 +6110,9 @@ public class Convert {
         List<Dimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Dimension".equals(node.getNodeName())) {
+            if ((node != null)
+                && (DIMENSION.equals(node.getNodeName()))) {
                     list.add(getDimension(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -6872,10 +6122,9 @@ public class Convert {
         List<DataSourceView> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DataSourceView".equals(node.getNodeName())) {
-                    list.add(getDataSourceView(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DataSourceView".equals(node.getNodeName()))) {
+                list.add(getDataSourceView(node.getChildNodes()));
             }
         }
         return list;
@@ -6886,10 +6135,9 @@ public class Convert {
         List<DataSource> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DataSource".equals(node.getNodeName())) {
-                    list.add(getDataSource(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DataSource".equals(node.getNodeName()))) {
+                list.add(getDataSource(node.getChildNodes()));
             }
         }
         return list;
@@ -6900,10 +6148,9 @@ public class Convert {
         List<Account> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Account".equals(node.getNodeName())) {
-                    list.add(getAccount(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Account".equals(node.getNodeName()))) {
+                list.add(getAccount(node.getChildNodes()));
             }
         }
         return list;
@@ -6927,7 +6174,7 @@ public class Convert {
                 if ("Aliases".equals(node.getNodeName())) {
                     aliases = getAliasList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -6942,10 +6189,9 @@ public class Convert {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Alias".equals(node.getNodeName())) {
-                    list.add(node.getTextContent());
-                }
+            if ((node != null)
+                && ("Alias".equals(node.getNodeName()))) {
+                list.add(node.getTextContent());
             }
         }
         return list;
@@ -6968,19 +6214,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
                 if ("Administer".equals(node.getNodeName())) {
@@ -7040,34 +6286,34 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Language".equals(node.getNodeName())) {
+                if (LANGUAGE.equals(node.getNodeName())) {
                     language = toBigInteger(node.getTextContent());
                 }
-                if ("Collation".equals(node.getNodeName())) {
+                if (COLLATION.equals(node.getNodeName())) {
                     collation = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = getCubeDimensionList(node.getChildNodes());
                 }
                 if ("CubePermissions".equals(node.getNodeName())) {
@@ -7079,31 +6325,31 @@ public class Convert {
                 if ("Perspectives".equals(node.getNodeName())) {
                     perspectives = getPerspectiveList(node.getChildNodes());
                 }
-                if ("State".equals(node.getNodeName())) {
+                if (STATE.equals(node.getNodeName())) {
                     state = node.getTextContent();
                 }
                 if ("DefaultMeasure".equals(node.getNodeName())) {
                     defaultMeasure = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("MeasureGroups".equals(node.getNodeName())) {
                     measureGroups = getMeasureGroupList(node.getChildNodes());
                 }
-                if ("Source".equals(node.getNodeName())) {
+                if (SOURCE.equals(node.getNodeName())) {
                     source = getDataSourceViewBinding(node.getChildNodes());
                 }
-                if ("AggregationPrefix".equals(node.getNodeName())) {
+                if (AGGREGATION_PREFIX.equals(node.getNodeName())) {
                     aggregationPrefix = node.getTextContent();
                 }
-                if ("ProcessingPriority".equals(node.getNodeName())) {
+                if (PROCESSING_PRIORITY.equals(node.getNodeName())) {
                     processingPriority = toBigInteger(node.getTextContent());
                 }
-                if ("StorageMode".equals(node.getNodeName())) {
+                if (STORAGE_MODE.equals(node.getNodeName())) {
                     storageMode = getCubeStorageMode(node.getChildNodes());
                 }
-                if ("ProcessingMode".equals(node.getNodeName())) {
+                if (PROCESSING_MODE.equals(node.getNodeName())) {
                     processingMode = node.getTextContent();
                 }
                 if ("ScriptCacheProcessingMode".equals(node.getNodeName())) {
@@ -7115,25 +6361,25 @@ public class Convert {
                 if ("DaxOptimizationMode".equals(node.getNodeName())) {
                     daxOptimizationMode = node.getTextContent();
                 }
-                if ("ProactiveCaching".equals(node.getNodeName())) {
+                if (PROACTIVE_CACHING.equals(node.getNodeName())) {
                     proactiveCaching = getProactiveCaching(node.getChildNodes());
                 }
                 if ("Kpis".equals(node.getNodeName())) {
                     kpis = getKpiList(node.getChildNodes());
                 }
-                if ("ErrorConfiguration".equals(node.getNodeName())) {
+                if (ERROR_CONFIGURATION.equals(node.getNodeName())) {
                     errorConfiguration = getErrorConfiguration(node.getChildNodes());
                 }
                 if ("Actions".equals(node.getNodeName())) {
                     actions = getActionList(node.getChildNodes());
                 }
-                if ("StorageLocation".equals(node.getNodeName())) {
+                if (STORAGE_LOCATION.equals(node.getNodeName())) {
                     storageLocation = node.getTextContent();
                 }
-                if ("EstimatedRows".equals(node.getNodeName())) {
+                if (ESTIMATED_ROWS.equals(node.getNodeName())) {
                     estimatedRows = toLong(node.getTextContent());
                 }
-                if ("LastProcessed".equals(node.getNodeName())) {
+                if (LAST_PROCESSED.equals(node.getNodeName())) {
                     lastProcessed = toInstant(node.getTextContent());
                 }
             }
@@ -7177,10 +6423,9 @@ public class Convert {
         List<Action> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Action".equals(node.getNodeName())) {
-                    list.add(getAction(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
-                }
+            if ((node != null)
+                && (ACTION.equals(node.getNodeName()))) {
+                list.add(getAction(node.getChildNodes(), getNodeType(node)));
             }
         }
         return list;
@@ -7190,10 +6435,9 @@ public class Convert {
         List<Kpi> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Kpi".equals(node.getNodeName())) {
-                    list.add(getKpi(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Kpi".equals(node.getNodeName()))) {
+                list.add(getKpi(node.getChildNodes()));
             }
         }
         return list;
@@ -7203,10 +6447,9 @@ public class Convert {
         List<MeasureGroup> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MeasureGroup".equals(node.getNodeName())) {
-                    list.add(getMeasureGroup(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (MEASURE_GROUP.equals(node.getNodeName()))) {
+                list.add(getMeasureGroup(node.getChildNodes()));
             }
         }
         return list;
@@ -7216,10 +6459,9 @@ public class Convert {
         List<Perspective> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Perspective".equals(node.getNodeName())) {
-                    list.add(getPerspective(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Perspective".equals(node.getNodeName()))) {
+                list.add(getPerspective(node.getChildNodes()));
             }
         }
         return list;
@@ -7229,10 +6471,9 @@ public class Convert {
         List<MdxScript> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("MdxScript".equals(node.getNodeName())) {
-                    list.add(getMdxScript(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("MdxScript".equals(node.getNodeName()))) {
+                list.add(getMdxScript(node.getChildNodes()));
             }
         }
         return list;
@@ -7242,10 +6483,9 @@ public class Convert {
         List<CubePermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CubePermission".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("CubePermission".equals(node.getNodeName()))) {
                     list.add(getCubePermission(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -7255,10 +6495,9 @@ public class Convert {
         List<CubeDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CubeDimension".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("CubeDimension".equals(node.getNodeName()))) {
                     list.add(getCubeDimension(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -7284,25 +6523,25 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("DisplayFolder".equals(node.getNodeName())) {
+                if (DISPLAY_FOLDER.equals(node.getNodeName())) {
                     displayFolder = node.getTextContent();
                 }
                 if ("AssociatedMeasureGroupID".equals(node.getNodeName())) {
                     associatedMeasureGroupID = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
                 if ("Goal".equals(node.getNodeName())) {
@@ -7329,7 +6568,7 @@ public class Convert {
                 if ("ParentKpiID".equals(node.getNodeName())) {
                     parentKpiID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -7360,7 +6599,7 @@ public class Convert {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
                 value = CubeStorageModeEnumType.fromValue(node.getTextContent());
-                valuens = getAttribute(node.getAttributes(), "valuens");
+                valuens = getAttribute(node.getAttributes(), VALUENS);
                 break;
             }
         }
@@ -7401,50 +6640,50 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                if (CAPTION_IS_MDX.equals(node.getNodeName())) {
                     captionIsMdx = toBoolean(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("TargetType".equals(node.getNodeName())) {
+                if (TARGET_TYPE.equals(node.getNodeName())) {
                     targetType = TargetTypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Target".equals(node.getNodeName())) {
+                if (TARGET.equals(node.getNodeName())) {
                     target = node.getTextContent();
                 }
-                if ("Condition".equals(node.getNodeName())) {
+                if (CONDITION.equals(node.getNodeName())) {
                     condition = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = TypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Invocation".equals(node.getNodeName())) {
+                if (INVOCATION_LOW.equals(node.getNodeName())) {
                     invocation = node.getTextContent();
                 }
-                if ("Application".equals(node.getNodeName())) {
+                if (APPLICATION.equals(node.getNodeName())) {
                     application = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
 
                 if ("Default".equals(node.getNodeName())) {
                     defaultAction = toBoolean(node.getTextContent());
                 }
-                if ("Columns".equals(node.getNodeName())) {
+                if (COLUMNS.equals(node.getNodeName())) {
                     columns = getBindingList(node.getChildNodes());
                 }
                 if ("MaximumRows".equals(node.getNodeName())) {
@@ -7476,10 +6715,9 @@ public class Convert {
         List<Binding> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CubeDimension".equals(node.getNodeName())) {
-                    list.add(getBinding(node.getChildNodes(), getAttribute(node.getAttributes(), "xsi:type")));
-                }
+            if ((node != null)
+                && ("CubeDimension".equals(node.getNodeName()))) {
+                list.add(getBinding(node.getChildNodes(), getNodeType(node)));
             }
         }
         return list;
@@ -7506,43 +6744,43 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                if (CAPTION_IS_MDX.equals(node.getNodeName())) {
                     captionIsMdx = toBoolean(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("TargetType".equals(node.getNodeName())) {
+                if (TARGET_TYPE.equals(node.getNodeName())) {
                     targetType = TargetTypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Target".equals(node.getNodeName())) {
+                if (TARGET.equals(node.getNodeName())) {
                     target = node.getTextContent();
                 }
-                if ("Condition".equals(node.getNodeName())) {
+                if (CONDITION.equals(node.getNodeName())) {
                     condition = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = TypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Invocation".equals(node.getNodeName())) {
+                if (INVOCATION_LOW.equals(node.getNodeName())) {
                     invocation = node.getTextContent();
                 }
-                if ("Application".equals(node.getNodeName())) {
+                if (APPLICATION.equals(node.getNodeName())) {
                     application = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("ReportServer".equals(node.getNodeName())) {
@@ -7584,10 +6822,9 @@ public class Convert {
         List<ReportFormatParameter> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("ReportFormatParameter".equals(node.getNodeName())) {
-                    list.add(getReportFormatParameter(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("ReportFormatParameter".equals(node.getNodeName()))) {
+                list.add(getReportFormatParameter(node.getChildNodes()));
             }
         }
         return list;
@@ -7599,10 +6836,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
             }
@@ -7614,10 +6851,9 @@ public class Convert {
         List<ReportParameter> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("ReportParameter".equals(node.getNodeName())) {
-                    list.add(getReportParameter(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("ReportParameter".equals(node.getNodeName()))) {
+                list.add(getReportParameter(node.getChildNodes()));
             }
         }
         return list;
@@ -7629,10 +6865,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = node.getTextContent();
                 }
             }
@@ -7658,46 +6894,46 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Caption".equals(node.getNodeName())) {
+                if (CAPTION.equals(node.getNodeName())) {
                     caption = node.getTextContent();
                 }
-                if ("CaptionIsMdx".equals(node.getNodeName())) {
+                if (CAPTION_IS_MDX.equals(node.getNodeName())) {
                     captionIsMdx = toBoolean(node.getTextContent());
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("TargetType".equals(node.getNodeName())) {
+                if (TARGET_TYPE.equals(node.getNodeName())) {
                     targetType = TargetTypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Target".equals(node.getNodeName())) {
+                if (TARGET.equals(node.getNodeName())) {
                     target = node.getTextContent();
                 }
-                if ("Condition".equals(node.getNodeName())) {
+                if (CONDITION.equals(node.getNodeName())) {
                     condition = node.getTextContent();
                 }
                 if ("Type".equals(node.getNodeName())) {
                     type = TypeEnum.fromValue(node.getTextContent());
                 }
-                if ("Invocation".equals(node.getNodeName())) {
+                if (INVOCATION_LOW.equals(node.getNodeName())) {
                     invocation = node.getTextContent();
                 }
-                if ("Application".equals(node.getNodeName())) {
+                if (APPLICATION.equals(node.getNodeName())) {
                     application = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
-                if ("Expression".equals(node.getNodeName())) {
+                if (EXPRESSION.equals(node.getNodeName())) {
                     expression = node.getTextContent();
                 }
             }
@@ -7736,22 +6972,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Translations".equals(node.getNodeName())) {
-                    translations = getTranslationList(node.getChildNodes(), "Translation");
+                if (TRANSLATIONS.equals(node.getNodeName())) {
+                    translations = getTranslationList(node.getChildNodes(), TRANSLATION);
                 }
-                if ("DimensionID".equals(node.getNodeName())) {
+                if (DIMENSION_ID.equals(node.getNodeName())) {
                     dimensionID = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("AllMemberAggregationUsage".equals(node.getNodeName())) {
@@ -7763,13 +6999,13 @@ public class Convert {
                 if ("MemberUniqueNameStyle".equals(node.getNodeName())) {
                     memberUniqueNameStyle = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getCubeAttributeList(node.getChildNodes());
                 }
-                if ("Hierarchies".equals(node.getNodeName())) {
+                if (HIERARCHIES.equals(node.getNodeName())) {
                     hierarchies = getCubeHierarchyList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -7793,10 +7029,9 @@ public class Convert {
         List<CubeHierarchy> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Hierarchy".equals(node.getNodeName())) {
+            if ((node != null)
+                && (HIERARCHY.equals(node.getNodeName()))) {
                     list.add(getCubeHierarchy(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -7806,10 +7041,9 @@ public class Convert {
         List<CubeAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Attribute".equals(node.getNodeName())) {
-                    list.add(getCubeAttribute(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (ATTRIBUTE.equals(node.getNodeName()))) {
+                list.add(getCubeAttribute(node.getChildNodes()));
             }
         }
         return list;
@@ -7825,7 +7059,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
                 if ("AggregationUsage".equals(node.getNodeName())) {
@@ -7837,10 +7071,10 @@ public class Convert {
                 if ("AttributeHierarchyEnabled".equals(node.getNodeName())) {
                     attributeHierarchyEnabled = toBoolean(node.getTextContent());
                 }
-                if ("AttributeHierarchyVisible".equals(node.getNodeName())) {
+                if (ATTRIBUTE_HIERARCHY_VISIBLE.equals(node.getNodeName())) {
                     attributeHierarchyVisible = toBoolean(node.getTextContent());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -7869,13 +7103,13 @@ public class Convert {
                 if ("OptimizedState".equals(node.getNodeName())) {
                     optimizedState = node.getTextContent();
                 }
-                if ("Visible".equals(node.getNodeName())) {
+                if (VISIBLE.equals(node.getNodeName())) {
                     visible = toBoolean(node.getTextContent());
                 }
                 if ("Enabled".equals(node.getNodeName())) {
                     enabled = toBoolean(node.getTextContent());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -7906,19 +7140,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("RoleID".equals(node.getNodeName())) {
+                if (ROLE_ID.equals(node.getNodeName())) {
                     roleID = node.getTextContent();
                 }
-                if ("Process".equals(node.getNodeName())) {
+                if (PROCESS.equals(node.getNodeName())) {
                     process = toBoolean(node.getTextContent());
                 }
-                if ("ReadDefinition".equals(node.getNodeName())) {
+                if (READ_DEFINITION.equals(node.getNodeName())) {
                     readDefinition = ReadDefinitionEnum.fromValue(node.getTextContent());
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
                 if ("ReadSourceData".equals(node.getNodeName())) {
@@ -7954,10 +7188,9 @@ public class Convert {
         List<CellPermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("CellPermission".equals(node.getNodeName())) {
+            if ((node != null)
+                && ("CellPermission".equals(node.getNodeName()))) {
                     list.add(getCellPermission(node.getChildNodes()));
-                }
             }
         }
         return list;
@@ -7974,13 +7207,13 @@ public class Convert {
                 if ("Access".equals(node.getNodeName())) {
                     access = AccessEnum.fromValue(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Expression".equals(node.getNodeName())) {
+                if (EXPRESSION.equals(node.getNodeName())) {
                     expression = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -7998,10 +7231,9 @@ public class Convert {
         List<CubeDimensionPermission> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("DimensionPermission".equals(node.getNodeName())) {
-                    list.add(getCubeDimensionPermission(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("DimensionPermission".equals(node.getNodeName()))) {
+                list.add(getCubeDimensionPermission(node.getChildNodes()));
             }
         }
         return list;
@@ -8017,22 +7249,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
                 if ("Read".equals(node.getNodeName())) {
                     read = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
-                if ("Write".equals(node.getNodeName())) {
+                if (WRITE.equals(node.getNodeName())) {
                     write = ReadWritePermissionEnum.fromValue(node.getTextContent());
                 }
                 if ("AttributePermissions".equals(node.getNodeName())) {
                     attributePermissions = getAttributePermissionList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -8058,22 +7290,22 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = node.getTextContent();
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = toInstant(node.getTextContent());
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = toInstant(node.getTextContent());
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
                 if ("ImpersonationInfo".equals(node.getNodeName())) {
@@ -8105,28 +7337,28 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = Optional.ofNullable(node.getTextContent());
                 }
-                if ("CreatedTimestamp".equals(node.getNodeName())) {
+                if (CREATED_TIMESTAMP.equals(node.getNodeName())) {
                     createdTimestamp = Optional.ofNullable(toInstant(node.getTextContent()));
                 }
-                if ("LastSchemaUpdate".equals(node.getNodeName())) {
+                if (LAST_SCHEMA_UPDATE.equals(node.getNodeName())) {
                     lastSchemaUpdate = Optional.ofNullable(toInstant(node.getTextContent()));
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = Optional.ofNullable(node.getTextContent());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
                 }
-                if ("EstimatedRows".equals(node.getNodeName())) {
+                if (ESTIMATED_ROWS.equals(node.getNodeName())) {
                     estimatedRows = Optional.ofNullable(toLong(node.getTextContent()));
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = Optional.ofNullable(getAggregationDesignDimensionList(node.getChildNodes()));
                 }
                 if ("Aggregations".equals(node.getNodeName())) {
@@ -8154,10 +7386,9 @@ public class Convert {
         List<Annotation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Aggregation".equals(node.getNodeName())) {
-                    list.add(getAnnotation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Aggregation".equals(node.getNodeName()))) {
+                list.add(getAnnotation(node.getChildNodes()));
             }
         }
         return list;
@@ -8171,13 +7402,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
                 if ("Visibility".equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Value".equals(node.getNodeName())) {
+                if (VALUE.equals(node.getNodeName())) {
                     value = Optional.ofNullable(node.getTextContent());
                 }
             }
@@ -8193,10 +7424,9 @@ public class Convert {
         List<Aggregation> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Aggregation".equals(node.getNodeName())) {
-                    list.add(getAggregation(node.getChildNodes()));
-                }
+            if ((node != null)
+                && ("Aggregation".equals(node.getNodeName()))) {
+                list.add(getAggregation(node.getChildNodes()));
             }
         }
         return list;
@@ -8211,19 +7441,19 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("ID".equals(node.getNodeName())) {
+                if (ID.equals(node.getNodeName())) {
                     id = Optional.ofNullable(node.getTextContent());
                 }
-                if ("Name".equals(node.getNodeName())) {
+                if (NAME.equals(node.getNodeName())) {
                     name = node.getTextContent();
                 }
-                if ("Description".equals(node.getNodeName())) {
+                if (DESCRIPTION.equals(node.getNodeName())) {
                     description = Optional.ofNullable(node.getTextContent());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
                 }
-                if ("Dimensions".equals(node.getNodeName())) {
+                if (DIMENSIONS.equals(node.getNodeName())) {
                     dimensions = Optional.ofNullable(getAggregationDimensionList(node.getChildNodes()));
                 }
             }
@@ -8235,10 +7465,9 @@ public class Convert {
         List<AggregationDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null) {
-                if ("Dimension".equals(node.getNodeName())) {
-                    list.add(getAggregationDimension(node.getChildNodes()));
-                }
+            if ((node != null)
+                && (DIMENSION.equals(node.getNodeName()))) {
+                list.add(getAggregationDimension(node.getChildNodes()));
             }
         }
         return list;
@@ -8251,13 +7480,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = Optional.ofNullable(getAggregationAttributeList(node.getChildNodes()));
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = Optional.ofNullable(getAnnotationList(node.getChildNodes()));
                 }
             }
@@ -8269,7 +7498,7 @@ public class Convert {
         List<AggregationAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null && "Attribute".equals(node.getNodeName())) {
+            if (node != null && ATTRIBUTE.equals(node.getNodeName())) {
                 list.add(getAggregationAttribute(node.getChildNodes()));
             }
         }
@@ -8282,10 +7511,10 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -8297,7 +7526,7 @@ public class Convert {
         List<AggregationDesignDimension> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null && "Dimension".equals(node.getNodeName())) {
+            if (node != null && DIMENSION.equals(node.getNodeName())) {
                 list.add(getAggregationDesignDimension(node.getChildNodes()));
             }
         }
@@ -8311,13 +7540,13 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("CubeDimensionID".equals(node.getNodeName())) {
+                if (CUBE_DIMENSION_ID.equals(node.getNodeName())) {
                     cubeDimensionID = node.getTextContent();
                 }
-                if ("Attributes".equals(node.getNodeName())) {
+                if (ATTRIBUTES.equals(node.getNodeName())) {
                     attributes = getAggregationDesignAttributeList(node.getChildNodes());
                 }
-                if ("Annotations".equals(node.getNodeName())) {
+                if (ANNOTATIONS.equals(node.getNodeName())) {
                     annotations = getAnnotationList(node.getChildNodes());
                 }
             }
@@ -8333,7 +7562,7 @@ public class Convert {
         List<AggregationDesignAttribute> list = new ArrayList<>();
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
-            if (node != null && "Attribute".equals(node.getNodeName())) {
+            if (node != null && ATTRIBUTE.equals(node.getNodeName())) {
                 list.add(getAggregationDesignAttribute(node.getChildNodes()));
             }
         }
@@ -8346,7 +7575,7 @@ public class Convert {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node node = nl.item(i);
             if (node != null) {
-                if ("AttributeID".equals(node.getNodeName())) {
+                if (ATTRIBUTE_ID.equals(node.getNodeName())) {
                     attributeID = node.getTextContent();
                 }
                 if ("EstimatedCount".equals(node.getNodeName())) {
@@ -8355,19 +7584,6 @@ public class Convert {
             }
         }
         return new AggregationDesignAttributeR(attributeID, Optional.ofNullable(estimatedCount));
-    }
-
-    private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r) {
-        SOAPElement row = addChildElement(root, ROW);
-        r.actionName().ifPresent(v -> addChildElement(row, "ACTION_NAME", v));
-        r.actionType().ifPresent(v -> addChildElement(row, "ACTION_TYPE", String.valueOf(v.getValue())));
-        addChildElement(row, "COORDINATE", r.coordinate());
-        addChildElement(row, "COORDINATE_TYPE", String.valueOf(r.coordinateType().getValue()));
-        r.actionCaption().ifPresent(v -> addChildElement(row, "ACTION_CAPTION", v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", v));
-        r.content().ifPresent(v -> addChildElement(row, "CONTENT", v));
-        r.application().ifPresent(v -> addChildElement(row, "APPLICATION", v));
-        r.invocation().ifPresent(v -> addChildElement(row, "INVOCATION", String.valueOf(v.getValue())));
     }
 
     private static Map<String, String> getMapValuesByTag(SOAPElement el, String tagName) {
@@ -8387,41 +7603,6 @@ public class Convert {
         return result;
     }
 
-    private static SOAPElement addRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse");
-        SOAPElement ret = addChildElement(response, "return");
-        return addChildElement(ret, "root");
-    }
-
-    private static void addChildElement(SOAPElement element, String childElementName, String value) {
-        try {
-            if (value != null) {
-                element.addChildElement(childElementName).setTextContent(value);
-            }
-        } catch (SOAPException e) {
-            LOGGER.error("addChildElement {} error", childElementName);
-            throw new RuntimeException("addChildElement error", e);
-        }
-    }
-
-    private static SOAPElement addChildElement(SOAPElement element, String childElementName) {
-        try {
-            return element.addChildElement(childElementName);
-        } catch (SOAPException e) {
-            LOGGER.error("addChildElement {} error", childElementName);
-            throw new RuntimeException("addChildElement error", e);
-        }
-    }
-
-    private static SOAPBody createSOAPBody() {
-        try {
-            SOAPMessage message = MessageFactory.newInstance().createMessage();
-            return message.getSOAPBody();
-        } catch (SOAPException e) {
-            throw new RuntimeException("create SOAPBody error");
-        }
-    }
-
     private static String getAttribute(NamedNodeMap namedNodeMap, String name) {
         if (namedNodeMap != null) {
             org.w3c.dom.Node nameNode = namedNodeMap.getNamedItem(name);
@@ -8431,4 +7612,25 @@ public class Convert {
         }
         return null;
     }
+
+    private static String getNodeType(org.w3c.dom.Node node) {
+        return getAttribute(node.getAttributes(), XSI_TYPE);
+    }
+
+    private static Boolean toBoolean(String it) {
+        return it != null ? Boolean.valueOf(it) : null;
+    }
+
+    private static Long toLong(String it) {
+        return it != null ? Long.valueOf(it) : null;
+    }
+
+    private static Integer toInteger(String it) {
+        return it != null ? Integer.valueOf(it) : null;
+    }
+
+    private static BigInteger toBigInteger(String it) {
+        return it != null ? new BigInteger(it) : null;
+    }
+
 }
