@@ -1285,4 +1285,11 @@ public class PropertiesR implements Properties {
     public Optional<BigInteger> visualMode() {
         return visualMode;
     }
+
+    public void setByname(String name, String value) {
+        switch (name) {
+            case "Catalog": setCatalog(Optional.ofNullable(value));            
+            //TODO
+        }
+    }
 }

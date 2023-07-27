@@ -366,7 +366,11 @@ public class Convert {
             if (n instanceof SOAPElement propertyListElement) {
                 String name = propertyListElement.getLocalName();
                 Optional<PropertyListElementDefinition> opd = PropertyListElementDefinition.byNameValue(name);
-                opd.ifPresent(pd -> properties.addProperty(pd, propertyListElement.getTextContent()));
+                if (opd.isPresent()) {
+                    opd.ifPresent(pd -> properties.addProperty(pd, propertyListElement.getTextContent()));
+                } else {
+                    properties.setByname(name, propertyListElement.getTextContent());
+                }
             }
         }
         return properties;
@@ -463,7 +467,7 @@ public class Convert {
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
             Optional.ofNullable(m.get(LEVEL_UNIQUE_NAME)),
-            Optional.ofNullable(Integer.decode(m.get(LEVEL_NUMBER))),
+            Optional.ofNullable(toInteger(m.get(LEVEL_NUMBER))),
             Optional.ofNullable(m.get(MEMBER_NAME)),
             Optional.ofNullable(m.get(MEMBER_UNIQUE_NAME)),
             Optional.ofNullable(MemberTypeEnum.fromValue(m.get(MEMBER_TYPE))),
@@ -495,8 +499,8 @@ public class Convert {
             Optional.ofNullable(m.get(CATALOG_NAME)),
             Optional.ofNullable(m.get(SCHEMA_NAME)),
             Optional.ofNullable(m.get(CUBE_NAME)),
-            Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
+            Optional.ofNullable(m.get(MEASUREGROUP_NAME)),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(DIMENSION_VISIBILITY)))
         );
     }
@@ -525,7 +529,7 @@ public class Convert {
             Optional.ofNullable(m.get(DIMENSION_UNIQUE_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_NAME)),
             Optional.ofNullable(m.get(HIERARCHY_UNIQUE_NAME)),
-            Optional.ofNullable(Integer.decode(m.get(HIERARCHY_ORIGIN))),
+            Optional.ofNullable(toInteger(m.get(HIERARCHY_ORIGIN))),
             Optional.ofNullable(CubeSourceEnum.fromValue(m.get(CUBE_SOURCE))),
             Optional.ofNullable(VisibilityEnum.fromValue(m.get(HIERARCHY_VISIBILITY)))
         );
@@ -683,9 +687,24 @@ public class Convert {
     }
 
     public static Command commandtoCommand(SOAPElement element) {
-        NodeList nodeList = element.getElementsByTagName(COMMAND);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return getCommand(nodeList.item(0).getChildNodes());
+        Iterator<Node> nodeIterator = element.getChildElements();
+        while (nodeIterator.hasNext()) {
+            Node n= nodeIterator.next();
+            if (n instanceof SOAPElement) {
+                String nodeName = n.getNodeName();
+                if (STATEMENT.equals(nodeName)) {
+                    return new StatementR(n.getTextContent());
+                }
+                if (ALTER.equals(nodeName)) {
+                    return getAlterCommand(n.getChildNodes());
+                }
+                if (CLEAR_CACHE.equals(nodeName)) {
+                    return getClearCacheCommand(n.getChildNodes());
+                }
+                if (CANCEL.equals(nodeName)) {
+                    return getCancelCommand(n.getChildNodes());
+                }
+            }
         }
         return null;
     }
