@@ -25,7 +25,7 @@ public class Constants {
     public static final QName QNAME_MSXMLA_EXECUTE = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
         "Execute");
 
-    public static final QName QNAME_MSXMLA_COMMAND = new QName(null,
+    public static final QName QNAME_MSXMLA_COMMAND = new QName(URN_SCHEMAS_MICROSOFT_COM_XML_ANALYSIS,
         "Command");
 
     public static final String DISPLAY_FOLDER = "DisplayFolder";
