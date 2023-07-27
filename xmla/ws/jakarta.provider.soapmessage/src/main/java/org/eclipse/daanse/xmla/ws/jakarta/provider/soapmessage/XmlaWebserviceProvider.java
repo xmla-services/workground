@@ -13,8 +13,16 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
-import java.io.IOException;
-
+import jakarta.xml.soap.SOAPConstants;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPFactory;
+import jakarta.xml.soap.SOAPFault;
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.ws.Provider;
+import jakarta.xml.ws.Service;
+import jakarta.xml.ws.ServiceMode;
+import jakarta.xml.ws.WebServiceProvider;
+import jakarta.xml.ws.soap.SOAPFaultException;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
 import org.eclipse.daanse.ws.api.whiteboard.prototypes.SOAPWhiteboardEndpoint;
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -25,23 +33,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
-
-import jakarta.xml.soap.MessageFactory;
-import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPConstants;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPFactory;
-import jakarta.xml.soap.SOAPFault;
-import jakarta.xml.soap.SOAPMessage;
-import jakarta.xml.soap.SOAPPart;
-import jakarta.xml.ws.Provider;
-import jakarta.xml.ws.Service;
-import jakarta.xml.ws.ServiceMode;
-import jakarta.xml.ws.WebServiceProvider;
-import jakarta.xml.ws.soap.SOAPFaultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 @WebServiceProvider()
 @ServiceMode(value = Service.Mode.MESSAGE)
@@ -69,8 +64,6 @@ public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
         wsAdapter = new XmlaApiAdapter(xmlaService);
     }
 
-    private static final String MY_TNS = "my:tns";
-
     @Override
     public SOAPMessage invoke(SOAPMessage request) {
         LOGGER.debug("===== The provider got a request =====");
@@ -78,19 +71,7 @@ public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
             String reqString = SOAPUtil.string(request);
             LOGGER.debug(reqString);
 
-            wsAdapter.handleRequest(request);
-
-            MessageFactory messageFactory = MessageFactory.newInstance();
-            SOAPMessage soapMessage = messageFactory.createMessage();
-            SOAPPart soapPart = soapMessage.getSOAPPart();
-            SOAPEnvelope envelope = soapPart.getEnvelope();
-            envelope.addNamespaceDeclaration("tns", "myTargetNamespace");
-            SOAPBody body = envelope.getBody();
-
-            body.addChildElement("provider", "tns", MY_TNS);
-            body.addChildElement("say")
-                    .setTextContent("Hello Test");
-            return soapMessage;
+            return wsAdapter.handleRequest(request);
 
         } catch (SOAPException | IOException e) {
             throw new SOAPFaultException(getFault(e));

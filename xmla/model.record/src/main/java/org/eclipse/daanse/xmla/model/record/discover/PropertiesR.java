@@ -1301,4 +1301,11 @@ public class PropertiesR implements Properties {
     public void setDeep(Optional<Boolean> deep) {
         this.deep = deep;
     }
+
+    public void setByname(String name, String value) {
+        switch (name) {
+            case "Catalog": setCatalog(Optional.ofNullable(value));
+            //TODO
+        }
+    }
 }
