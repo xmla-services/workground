@@ -321,10 +321,6 @@ public class XmlaApiAdapter {
         if (command instanceof CancelR cancel) {
             handleCancel(cancel, properties, parameters, responseBody);
         }
-
-        else {
-            throw new IllegalArgumentException("Unexpected value: " + command);
-        }
     }
 
     private void discover(String requestType,

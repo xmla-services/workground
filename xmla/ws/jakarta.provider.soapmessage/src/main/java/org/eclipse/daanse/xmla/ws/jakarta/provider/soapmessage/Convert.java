@@ -239,6 +239,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.DataItemR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataMiningMeasureGroupDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourcePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourceR;
+import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabasePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabaseR;
@@ -691,18 +692,9 @@ public class Convert {
         while (nodeIterator.hasNext()) {
             Node n= nodeIterator.next();
             if (n instanceof SOAPElement) {
-                String nodeName = n.getNodeName();
-                if (STATEMENT.equals(nodeName)) {
-                    return new StatementR(n.getTextContent());
-                }
-                if (ALTER.equals(nodeName)) {
-                    return getAlterCommand(n.getChildNodes());
-                }
-                if (CLEAR_CACHE.equals(nodeName)) {
-                    return getClearCacheCommand(n.getChildNodes());
-                }
-                if (CANCEL.equals(nodeName)) {
-                    return getCancelCommand(n.getChildNodes());
+                Command command  = getCommand(n);
+                if (command != null) {
+                    return command;
                 }
             }
         }
@@ -712,21 +704,29 @@ public class Convert {
     private static Command getCommand(NodeList nl) {
         for (int i = 0; i < nl.getLength(); i++) {
             org.w3c.dom.Node n = nl.item(i);
-            String nodeName = n.getNodeName();
-            if (STATEMENT.equals(nodeName)) {
-                return new StatementR(n.getTextContent());
-            }
-            if (ALTER.equals(nodeName)) {
-                return getAlterCommand(n.getChildNodes());
-            }
-            if (CLEAR_CACHE.equals(nodeName)) {
-                return getClearCacheCommand(n.getChildNodes());
-            }
-            if (CANCEL.equals(nodeName)) {
-                return getCancelCommand(n.getChildNodes());
+            Command command  = getCommand(n);
+            if (command != null) {
+                return command;
             }
         }
         throw new IllegalArgumentException("Illegal command");
+    }
+
+    private static Command getCommand(org.w3c.dom.Node n) {
+        String nodeName = n.getNodeName();
+        if (STATEMENT.equals(nodeName)) {
+            return new StatementR(n.getTextContent());
+        }
+        if (ALTER.equals(nodeName)) {
+            return getAlterCommand(n.getChildNodes());
+        }
+        if (CLEAR_CACHE.equals(nodeName)) {
+            return getClearCacheCommand(n.getChildNodes());
+        }
+        if (CANCEL.equals(nodeName)) {
+            return getCancelCommand(n.getChildNodes());
+        }
+        return null;
     }
 
     private static Command getCancelCommand(NodeList nl) {
@@ -793,7 +793,7 @@ public class Convert {
                     object = getObjectReference(node.getChildNodes());
                 }
                 if (OBJECT_DEFINITION.equals(node.getNodeName())) {
-                    objectDefinition = getMajorObject(nl);
+                    objectDefinition = getMajorObject(node.getChildNodes());
                 }
                 if (SCOPE2.equals(node.getNodeName())) {
                     scope = Scope.fromValue(node.getTextContent());
@@ -2142,8 +2142,8 @@ public class Convert {
     }
 
     private static DataSourceViewBinding getDataSourceViewBinding(NodeList childNodes) {
-        getMapValues(childNodes);
-        return null;
+        Map<String, String> map  = getMapValues(childNodes);
+        return new DataSourceViewBindingR(map.get("DataSourceViewID"));
     }
 
     private static List<AggregationInstance> getAggregationInstanceList(NodeList nl) {

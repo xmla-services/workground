@@ -90,13 +90,46 @@ import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.CATALOG_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.CUBE_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.DATA_TYPE;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.DESCRIPTION;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.DESCRIPTION_UC;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.DIMENSION_IS_VISIBLE;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.DIMENSION_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.EXPRESSION_UC;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.HIERARCHY_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.LEVEL_UNIQUE_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.MEASUREGROUP_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.NUMERIC_PRECISION;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.NUMERIC_SCALE;
 import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.ROW;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.SCHEMA_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.SCOPE;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.TABLE_CATALOG;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.TABLE_NAME;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.TABLE_SCHEMA;
+import static org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage.Constants.TABLE_TYPE;
 
 public class SoapUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
+
+	private static final String MSXMLA = "msxmla";
+	private static final String EMPTY = "empty";
+    private static final String ROWSET = "rowset";
+	private static final Logger LOGGER = LoggerFactory.getLogger(SoapUtil.class);
+
+    private SoapUtil() {
+        //constructor
+    }
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+            .withZone(ZoneId.systemDefault());
 
     public static void toMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> rows, SOAPBody body) {
         SOAPElement root = addDiscoverRoot(body);
@@ -288,23 +321,31 @@ public class SoapUtil {
     }
 
     public static void toStatementResponse(StatementResponse statementResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body);
-        addMdDataSet(root, statementResponse.mdDataSet());
+        SOAPElement root = addExecuteRoot(body, "mddataset");
+        if (statementResponse != null) {
+            addMdDataSet(root, statementResponse.mdDataSet());
+        }
     }
 
     public static void toAlterResponse(AlterResponse alterResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body);
-        addEmptyresult(root, alterResponse.emptyresult());
+        SOAPElement root = addExecuteRoot(body, EMPTY);
+        if (alterResponse != null) {
+            addEmptyresult(root, alterResponse.emptyresult());
+        }
     }
 
     public static void toClearCacheResponse(ClearCacheResponse clearCacheResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body);
-        addEmptyresult(root, clearCacheResponse.emptyresult());
+        SOAPElement root = addExecuteRoot(body, EMPTY);
+        if (clearCacheResponse != null) {
+            addEmptyresult(root, clearCacheResponse.emptyresult());
+        }
     }
 
     public static void toCancelResponse(CancelResponse cancelResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body);
-        addEmptyresult(root, cancelResponse.emptyresult());
+        SOAPElement root = addExecuteRoot(body, EMPTY);
+        if (cancelResponse != null) {
+            addEmptyresult(root, cancelResponse.emptyresult());
+        }
     }
 
     private static void addEmptyresult(SOAPElement root, Emptyresult emptyresult) {
@@ -313,38 +354,38 @@ public class SoapUtil {
     }
 
     private static void addMdSchemaActionsResponseRow(SOAPElement root, MdSchemaActionsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        addChildElement(row, "CUBE_NAME", prefix, r.cubeName());
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        addChildElement(row, CUBE_NAME, prefix, r.cubeName());
         r.actionName().ifPresent(v -> addChildElement(row, "ACTION_NAME", prefix, v));
         r.actionType().ifPresent(v -> addChildElement(row, "ACTION_TYPE", prefix, String.valueOf(v.getValue())));
         addChildElement(row, "COORDINATE", prefix, r.coordinate());
         addChildElement(row, "COORDINATE_TYPE", prefix, String.valueOf(r.coordinateType().getValue()));
         r.actionCaption().ifPresent(v -> addChildElement(row, "ACTION_CAPTION", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.content().ifPresent(v -> addChildElement(row, "CONTENT", prefix, v));
         r.application().ifPresent(v -> addChildElement(row, "APPLICATION", prefix, v));
         r.invocation().ifPresent(v -> addChildElement(row, "INVOCATION", prefix, String.valueOf(v.getValue())));
     }
 
     private static void addDbSchemaTablesResponseRow(SOAPElement root, DbSchemaTablesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.tableCatalog().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", prefix, v));
-        r.tableSchema().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", prefix, v));
-        r.tableName().ifPresent(v -> addChildElement(row, "TABLE_NAME", prefix, v));
-        r.tableType().ifPresent(v -> addChildElement(row, "TABLE_TYPE", prefix, v));
+        r.tableCatalog().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
+        r.tableSchema().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
+        r.tableName().ifPresent(v -> addChildElement(row, TABLE_NAME, prefix, v));
+        r.tableType().ifPresent(v -> addChildElement(row, TABLE_TYPE, prefix, v));
         r.tableGuid().ifPresent(v -> addChildElement(row, "TABLE_GUID", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.tablePropId().ifPresent(v -> addChildElement(row, "TABLE_PROP_ID", prefix, String.valueOf(v)));
         r.dateCreated().ifPresent(v -> addChildElement(row, "DATE_CREATED", prefix, String.valueOf(v)));
         r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", prefix, String.valueOf(v)));
     }
 
     private static void addDiscoverLiteralsResponseRow(SOAPElement root, DiscoverLiteralsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "LiteralName", prefix, r.literalName());
         addChildElement(row, "LiteralValue", prefix, r.literalValue());
@@ -355,13 +396,13 @@ public class SoapUtil {
     }
 
     private static void addDiscoverKeywordsResponseRow(SOAPElement root, DiscoverKeywordsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "Keyword", prefix, r.keyword());
     }
 
     private static void addDiscoverEnumeratorsResponseRow(SOAPElement root, DiscoverEnumeratorsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "EnumName", prefix, r.enumName());
         r.enumDescription().ifPresent(v -> addChildElement(row, "EnumDescription", prefix, v));
@@ -372,20 +413,20 @@ public class SoapUtil {
     }
 
     private static void addDiscoverSchemaRowsetsResponseRow(SOAPElement root, DiscoverSchemaRowsetsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "SchemaName", prefix, r.schemaName());
         r.schemaGuid().ifPresent(v -> addChildElement(row, "SchemaGuid", prefix, v));
         r.restrictions().ifPresent(v -> addChildElement(row, "Restrictions", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "Description", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION, prefix, v));
         r.restrictionsMask().ifPresent(v -> addChildElement(row, "RestrictionsMask", prefix, String.valueOf(v)));
     }
 
     private static void addDbSchemaCatalogsResponseRow(SOAPElement root, DbSchemaCatalogsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.roles().ifPresent(v -> addChildElement(row, "ROLES", prefix, v));
         r.dateModified().ifPresent(v -> addChildElement(row, "DATE_MODIFIED", prefix, String.valueOf(v)));
         r.compatibilityLevel().ifPresent(v -> addChildElement(row, "COMPATIBILITY_LEVEL", prefix, String.valueOf(v)));
@@ -402,7 +443,7 @@ public class SoapUtil {
     }
 
     private static void addDiscoverDataSourcesResponseRow(SOAPElement root, DiscoverDataSourcesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "DataSourceName", prefix, r.dataSourceName());
         r.dataSourceDescription().ifPresent(v -> addChildElement(row, "DataSourceDescription", prefix, v));
@@ -414,17 +455,17 @@ public class SoapUtil {
     }
 
     private static void addDiscoverXmlMetaDataResponseRow(SOAPElement root, DiscoverXmlMetaDataResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "MetaData", prefix, r.metaData());
     }
 
     private static void addDbSchemaColumnsResponseRow(SOAPElement root, DbSchemaColumnsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.tableCatalog().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", prefix, v));
-        r.tableSchema().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", prefix, v));
-        r.tableName().ifPresent(v -> addChildElement(row, "TABLE_NAME", prefix, v));
+        r.tableCatalog().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
+        r.tableSchema().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
+        r.tableName().ifPresent(v -> addChildElement(row, TABLE_NAME, prefix, v));
         r.columnName().ifPresent(v -> addChildElement(row, "COLUMN_NAME", prefix, v));
         r.columnGuid().ifPresent(v -> addChildElement(row, "COLUMN_GUID", prefix, String.valueOf(v)));
         r.columnPropId().ifPresent(v -> addChildElement(row, "COLUMN_PROPID", prefix, String.valueOf(v)));
@@ -433,12 +474,12 @@ public class SoapUtil {
         r.columnDefault().ifPresent(v -> addChildElement(row, "COLUMN_DEFAULT", prefix, v));
         r.columnFlags().ifPresent(v -> addChildElement(row, "COLUMN_FLAG", prefix, String.valueOf(v.getValue())));
         r.isNullable().ifPresent(v -> addChildElement(row, "IS_NULLABLE", prefix, String.valueOf(v)));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", prefix, String.valueOf(v)));
+        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v)));
         r.typeGuid().ifPresent(v -> addChildElement(row, "TYPE_GUID", prefix, String.valueOf(v)));
         r.characterMaximum().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH", prefix, String.valueOf(v)));
         r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH", prefix, String.valueOf(v)));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", prefix, String.valueOf(v)));
-        r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", prefix, String.valueOf(v)));
+        r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION, prefix, String.valueOf(v)));
+        r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
         r.dateTimePrecision().ifPresent(v -> addChildElement(row, "DATETIME_PRECISION", prefix, String.valueOf(v)));
         r.characterSetCatalog().ifPresent(v -> addChildElement(row, "CHARACTER_SET_CATALOG", prefix, v));
         r.characterSetSchema().ifPresent(v -> addChildElement(row, "CHARACTER_SET_SCHEMA", prefix, v));
@@ -449,15 +490,15 @@ public class SoapUtil {
         r.domainCatalog().ifPresent(v -> addChildElement(row, "DOMAIN_CATALOG", prefix, v));
         r.domainSchema().ifPresent(v -> addChildElement(row, "DOMAIN_SCHEMA", prefix, v));
         r.domainName().ifPresent(v -> addChildElement(row, "DOMAIN_NAME", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.columnOlapType().ifPresent(v -> addChildElement(row, "COLUMN_OLAP_TYPE", prefix, v.name()));
     }
 
     private static void addDbSchemaProviderTypesResponseRow(SOAPElement root, DbSchemaProviderTypesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         r.typeName().ifPresent(v -> addChildElement(row, "TYPE_NAME", prefix, v));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", prefix, String.valueOf(v.getValue())));
+        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v.getValue())));
         r.columnSize().ifPresent(v -> addChildElement(row, "COLUMN_SIZE", prefix, String.valueOf(v)));
         r.literalPrefix().ifPresent(v -> addChildElement(row, "LITERAL_PREFIX", prefix, v));
         r.literalSuffix().ifPresent(v -> addChildElement(row, "LITERAL_SUFFIX", prefix, v));
@@ -480,29 +521,29 @@ public class SoapUtil {
     }
 
     private static void addDbSchemaSchemataResponseRow(SOAPElement root, DbSchemaSchemataResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        addChildElement(row, "CATALOG_NAME", prefix, r.catalogName());
-        addChildElement(row, "SCHEMA_NAME", prefix, r.schemaName());
+        addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
+        addChildElement(row, SCHEMA_NAME, prefix, r.schemaName());
         addChildElement(row, "SCHEMA_OWNER", prefix, r.schemaOwner());
     }
 
     private static void addDbSchemaSourceTablesResponseRow(SOAPElement root, DbSchemaSourceTablesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", prefix, v));
-        addChildElement(row, "TABLE_NAME", prefix, r.tableName());
-        addChildElement(row, "TABLE_TYPE", prefix, r.tableType().getValue());
+        r.catalogName().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
+        addChildElement(row, TABLE_NAME, prefix, r.tableName());
+        addChildElement(row, TABLE_TYPE, prefix, r.tableType().getValue());
     }
 
     private static void addDbSchemaTablesInfoResponseRow(SOAPElement root, DbSchemaTablesInfoResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "TABLE_CATALOG", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "TABLE_SCHEMA", prefix, v));
-        addChildElement(row, "TABLE_NAME", prefix, r.tableName());
-        addChildElement(row, "TABLE_TYPE", prefix, r.tableType());
+        r.catalogName().ifPresent(v -> addChildElement(row, TABLE_CATALOG, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, TABLE_SCHEMA, prefix, v));
+        addChildElement(row, TABLE_NAME, prefix, r.tableName());
+        addChildElement(row, TABLE_TYPE, prefix, r.tableType());
         r.tableGuid().ifPresent(v -> addChildElement(row, "TABLE_GUID", prefix, String.valueOf(v)));
         r.bookmarks().ifPresent(v -> addChildElement(row, "BOOKMARKS", prefix, String.valueOf(v)));
         r.bookmarkType().ifPresent(v -> addChildElement(row, "BOOKMARK_TYPE", prefix, String.valueOf(v)));
@@ -511,26 +552,26 @@ public class SoapUtil {
         r.bookmarkInformation().ifPresent(v -> addChildElement(row, "BOOKMARK_INFORMATION", prefix, String.valueOf(v)));
         r.tableVersion().ifPresent(v -> addChildElement(row, "TABLE_VERSION", prefix, String.valueOf(v)));
         r.cardinality().ifPresent(v -> addChildElement(row, "CARDINALITY", prefix, String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.tablePropId().ifPresent(v -> addChildElement(row, "TABLE_PROP_ID", prefix, String.valueOf(v)));
     }
 
     private static void addMdSchemaHierarchiesResponseRow(SOAPElement root, MdSchemaHierarchiesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.hierarchyName().ifPresent(v -> addChildElement(row, "HIERARCHY_NAME", prefix, v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", prefix, v));
+        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
         r.hierarchyGuid().ifPresent(v -> addChildElement(row, "HIERARCHY_GUID", prefix, String.valueOf(v)));
         r.hierarchyCaption().ifPresent(v -> addChildElement(row, "HIERARCHY_CAPTION", prefix, v));
         r.dimensionType().ifPresent(v -> addChildElement(row, "DIMENSION_TYPE", prefix, String.valueOf(v.getValue())));
         r.hierarchyCardinality().ifPresent(v -> addChildElement(row, "HIERARCHY_CARDINALITY", prefix, String.valueOf(v)));
         r.defaultMember().ifPresent(v -> addChildElement(row, "DEFAULT_MEMBER", prefix, v));
         r.allMember().ifPresent(v -> addChildElement(row, "ALL_MEMBER", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.structure().ifPresent(v -> addChildElement(row, "STRUCTURE", prefix, String.valueOf(v.getValue())));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", prefix, String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", prefix, String.valueOf(v)));
@@ -538,7 +579,7 @@ public class SoapUtil {
             prefix,
             String.valueOf(v.getValue())));
         r.dimensionMasterUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_UNIQUE_NAME", prefix, v));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", prefix, String.valueOf(v)));
+        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix, String.valueOf(v)));
         r.hierarchyOrdinal().ifPresent(v -> addChildElement(row, "HIERARCHY_ORDINAL", prefix, String.valueOf(v)));
         r.dimensionIsShared().ifPresent(v -> addChildElement(row, "DIMENSION_IS_SHARED", prefix, String.valueOf(v)));
         r.hierarchyIsVisible().ifPresent(v -> addChildElement(row, "HIERARCHY_IS_VISIBLE", prefix, String.valueOf(v)));
@@ -550,21 +591,21 @@ public class SoapUtil {
     }
 
     private static void addMdSchemaLevelsResponseRow(SOAPElement root, MdSchemaLevelsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
+        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
         r.levelName().ifPresent(v -> addChildElement(row, "LEVEL_NAME", prefix, v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", prefix, v));
+        r.levelUniqueName().ifPresent(v -> addChildElement(row, LEVEL_UNIQUE_NAME, prefix, v));
         r.levelGuid().ifPresent(v -> addChildElement(row, "LEVEL_GUID", prefix, String.valueOf(v)));
         r.levelCaption().ifPresent(v -> addChildElement(row, "LEVEL_CAPTION", prefix, v));
         r.levelNumber().ifPresent(v -> addChildElement(row, "LEVEL_NUMBER", prefix, String.valueOf(v)));
         r.levelCardinality().ifPresent(v -> addChildElement(row, "LEVEL_CARDINALITY", prefix, String.valueOf(v)));
         r.levelType().ifPresent(v -> addChildElement(row, "LEVEL_TYPE", prefix, String.valueOf(v.getValue())));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.customRollupSetting().ifPresent(v -> addChildElement(row, "CUSTOM_ROLLUP_SETTINGS",
             prefix, String.valueOf(v.getValue())));
         r.levelUniqueSettings().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_SETTINGS",
@@ -585,69 +626,69 @@ public class SoapUtil {
         SOAPElement root,
         MdSchemaMeasureGroupDimensionsResponseRow r
     ) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", prefix, v));
+        r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.measureGroupCardinality().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CARDINALITY", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.dimensionCardinality().ifPresent(v -> addChildElement(row, "DIMENSION_CARDINALITY", prefix, v.name()));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", prefix, String.valueOf(v)));
+        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix, String.valueOf(v)));
         r.dimensionIsFactDimension().ifPresent(v -> addChildElement(row, "DIMENSION_IS_FACT_DIMENSION", prefix,
             String.valueOf(v)));
         r.dimensionPath().ifPresent(v -> addMeasureGroupDimensionXmlList(row, v));
-        r.dimensionGranularity().ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", "rowset", v));
+        r.dimensionGranularity().ifPresent(v -> addChildElement(row, "DIMENSION_GRANULARITY", ROWSET, v));
     }
 
     private static void addMeasureGroupDimensionXmlList(SOAPElement el, List<MeasureGroupDimension> list) {
         if (list != null) {
-            SOAPElement e = addChildElement(el, "DIMENSION_PATH", "rowset");
+            SOAPElement e = addChildElement(el, "DIMENSION_PATH", ROWSET);
             list.forEach(it -> addMeasureGroupDimensionXml(e, it));
         }
     }
 
     private static void addMeasureGroupDimensionXml(SOAPElement el, MeasureGroupDimension it) {
-        addChildElement(el, "MeasureGroupDimension", "rowset", it.measureGroupDimension());
+        addChildElement(el, "MeasureGroupDimension", ROWSET, it.measureGroupDimension());
     }
 
     private static void addMdSchemaMeasuresResponseRow(SOAPElement root, MdSchemaMeasuresResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
         r.measureName().ifPresent(v -> addChildElement(row, "MEASURE_NAME", prefix, v));
         r.measureUniqueName().ifPresent(v -> addChildElement(row, "MEASURE_UNIQUE_NAME", prefix, v));
         r.measureCaption().ifPresent(v -> addChildElement(row, "MEASURE_CAPTION", prefix, v));
         r.measureGuid().ifPresent(v -> addChildElement(row, "MEASURE_GUID", prefix, String.valueOf(v)));
         r.measureAggregator().ifPresent(v -> addChildElement(row, "MEASURE_AGGREGATOR", prefix, String.valueOf(v.getValue())));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE", prefix, String.valueOf(v.getValue())));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION", prefix, String.valueOf(v)));
-        r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", prefix, String.valueOf(v)));
+        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE, prefix, String.valueOf(v.getValue())));
+        r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION, prefix, String.valueOf(v)));
+        r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
         r.measureUnits().ifPresent(v -> addChildElement(row, "MEASURE_UNITS", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
+        r.expression().ifPresent(v -> addChildElement(row, EXPRESSION_UC, prefix, v));
         r.measureIsVisible().ifPresent(v -> addChildElement(row, "MEASURE_IS_VISIBLE", prefix, String.valueOf(v)));
         r.levelsList().ifPresent(v -> addChildElement(row, "LEVELS_LIST", prefix, v));
         r.measureNameSqlColumnName().ifPresent(v -> addChildElement(row, "MEASURE_NAME_SQL_COLUMN_NAME", prefix, v));
         r.measureUnqualifiedCaption().ifPresent(v -> addChildElement(row, "MEASURE_UNQUALIFIED_CAPTION", prefix, v));
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", prefix, v));
+        r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.defaultFormatString().ifPresent(v -> addChildElement(row, "DEFAULT_FORMAT_STRING", prefix, v));
     }
 
     private static void addMdSchemaMembersResponseRow(SOAPElement root, MdSchemaMembersResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", prefix, v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
+        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
+        r.levelUniqueName().ifPresent(v -> addChildElement(row, LEVEL_UNIQUE_NAME, prefix, v));
         r.levelNumber().ifPresent(v -> addChildElement(row, "LEVEL_NUMBER", prefix, String.valueOf(v)));
         r.memberOrdinal().ifPresent(v -> addChildElement(row, "MEMBER_ORDINAL", prefix, String.valueOf(v)));
         r.memberName().ifPresent(v -> addChildElement(row, "MEMBER_NAME", prefix, v));
@@ -659,39 +700,39 @@ public class SoapUtil {
         r.parentLevel().ifPresent(v -> addChildElement(row, "PARENT_LEVEL", prefix, String.valueOf(v)));
         r.parentUniqueName().ifPresent(v -> addChildElement(row, "PARENT_UNIQUE_NAME", prefix, v));
         r.parentCount().ifPresent(v -> addChildElement(row, "PARENT_COUNT", prefix, String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
+        r.expression().ifPresent(v -> addChildElement(row, EXPRESSION_UC, prefix, v));
         r.memberKey().ifPresent(v -> addChildElement(row, "MEMBER_KEY", prefix, v));
         r.isPlaceHolderMember().ifPresent(v -> addChildElement(row, "IS_PLACEHOLDERMEMBER", prefix, String.valueOf(v)));
         r.isDataMember().ifPresent(v -> addChildElement(row, "IS_DATAMEMBER", prefix, String.valueOf(v)));
-        r.scope().ifPresent(v -> addChildElement(row, "SCOPE", prefix, String.valueOf(v.getValue())));
+        r.scope().ifPresent(v -> addChildElement(row, SCOPE, prefix, String.valueOf(v.getValue())));
     }
 
     private static void addMdSchemaPropertiesResponseRow(SOAPElement root, MdSchemaPropertiesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
-        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, "HIERARCHY_UNIQUE_NAME", prefix, v));
-        r.levelUniqueName().ifPresent(v -> addChildElement(row, "LEVEL_UNIQUE_NAME", prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
+        r.hierarchyUniqueName().ifPresent(v -> addChildElement(row, HIERARCHY_UNIQUE_NAME, prefix, v));
+        r.levelUniqueName().ifPresent(v -> addChildElement(row, LEVEL_UNIQUE_NAME, prefix, v));
         r.memberUniqueName().ifPresent(v -> addChildElement(row, "MEMBER_UNIQUE_NAME", prefix, v));
         r.propertyType().ifPresent(v -> addChildElement(row, "PROPERTY_TYPE",
             prefix, String.valueOf(v.getValue())));
         r.propertyName().ifPresent(v -> addChildElement(row, "PROPERTY_NAME", prefix, v));
         r.propertyCaption().ifPresent(v -> addChildElement(row, "PROPERTY_CAPTION", prefix, v));
-        r.dataType().ifPresent(v -> addChildElement(row, "DATA_TYPE",
+        r.dataType().ifPresent(v -> addChildElement(row, DATA_TYPE,
             prefix, String.valueOf(v.getValue())));
         r.characterMaximumLength().ifPresent(v -> addChildElement(row, "CHARACTER_MAXIMUM_LENGTH"
             , prefix, String.valueOf(v)));
         r.characterOctetLength().ifPresent(v -> addChildElement(row, "CHARACTER_OCTET_LENGTH",
             prefix, String.valueOf(v)));
-        r.numericPrecision().ifPresent(v -> addChildElement(row, "NUMERIC_PRECISION"
+        r.numericPrecision().ifPresent(v -> addChildElement(row, NUMERIC_PRECISION
             , prefix, String.valueOf(v)));
-        r.numericScale().ifPresent(v -> addChildElement(row, "NUMERIC_SCALE", prefix, String.valueOf(v)));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.numericScale().ifPresent(v -> addChildElement(row, NUMERIC_SCALE, prefix, String.valueOf(v)));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.propertyContentType().ifPresent(v -> addChildElement(row, "PROPERTY_CONTENT_TYPE", prefix,
             String.valueOf(v.getValue())));
         r.sqlColumnName().ifPresent(v -> addChildElement(row, "SQL_COLUMN_NAME", prefix, v));
@@ -709,16 +750,16 @@ public class SoapUtil {
     }
 
     private static void addMdSchemaSetsResponseRow(SOAPElement root, MdSchemaSetsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
         r.setName().ifPresent(v -> addChildElement(row, "SET_NAME", prefix, v));
-        r.scope().ifPresent(v -> addChildElement(row, "SCOPE", prefix, String.valueOf(v.getValue())));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
-        r.expression().ifPresent(v -> addChildElement(row, "EXPRESSION", prefix, v));
+        r.scope().ifPresent(v -> addChildElement(row, SCOPE, prefix, String.valueOf(v.getValue())));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
+        r.expression().ifPresent(v -> addChildElement(row, EXPRESSION_UC, prefix, v));
         r.dimension().ifPresent(v -> addChildElement(row, "DIMENSIONS", prefix, v));
         r.setCaption().ifPresent(v -> addChildElement(row, "SET_CAPTION", prefix, v));
         r.setDisplayFolder().ifPresent(v -> addChildElement(row, "SET_DISPLAY_FOLDER", prefix, v));
@@ -727,13 +768,13 @@ public class SoapUtil {
     }
 
     private static void addMdSchemaKpisResponseRow(SOAPElement root, MdSchemaKpisResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", prefix, v));
+        r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
         r.kpiName().ifPresent(v -> addChildElement(row, "KPI_NAME", prefix, v));
         r.kpiCaption().ifPresent(v -> addChildElement(row, "KPI_CAPTION", prefix, v));
         r.kpiDescription().ifPresent(v -> addChildElement(row, "KPI_DESCRIPTION", prefix, v));
@@ -748,29 +789,29 @@ public class SoapUtil {
         r.kpiCurrentTimeMember().ifPresent(v -> addChildElement(row, "KPI_CURRENT_TIME_MEMBER", prefix, v));
         r.kpiParentKpiName().ifPresent(v -> addChildElement(row, "KPI_PARENT_KPI_NAME", prefix, v));
         r.annotation().ifPresent(v -> addChildElement(row, "ANNOTATIONS", prefix, v));
-        r.scope().ifPresent(v -> addChildElement(row, "SCOPE",
+        r.scope().ifPresent(v -> addChildElement(row, SCOPE,
             prefix, String.valueOf(v.getValue())));
     }
 
     private static void addMdSchemaMeasureGroupsResponseRow(SOAPElement root, MdSchemaMeasureGroupsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
-        r.measureGroupName().ifPresent(v -> addChildElement(row, "MEASUREGROUP_NAME", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.measureGroupName().ifPresent(v -> addChildElement(row, MEASUREGROUP_NAME, prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.isWriteEnabled().ifPresent(v -> addChildElement(row, "IS_WRITE_ENABLED", prefix, String.valueOf(v)));
         r.measureGroupCaption().ifPresent(v -> addChildElement(row, "MEASUREGROUP_CAPTION", prefix, v));
     }
 
     private static void addMdSchemaCubesResponseRow(SOAPElement root, MdSchemaCubesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        addChildElement(row, "CATALOG_NAME", prefix, r.catalogName());
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        addChildElement(row, CATALOG_NAME, prefix, r.catalogName());
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
         r.cubeType().ifPresent(v -> addChildElement(row, "CUBE_TYPE", prefix, v.name()));
         r.cubeGuid().ifPresent(v -> addChildElement(row, "CUBE_GUID", prefix, String.valueOf(v)));
@@ -779,7 +820,7 @@ public class SoapUtil {
         r.schemaUpdatedBy().ifPresent(v -> addChildElement(row, "SCHEMA_UPDATED_BY", prefix, v));
         r.lastDataUpdate().ifPresent(v -> addChildElement(row, "LAST_DATA_UPDATE", prefix, String.valueOf(v)));
         r.dataUpdateDBy().ifPresent(v -> addChildElement(row, "DATA_UPDATED_BY", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.isDrillThroughEnabled().ifPresent(v -> addChildElement(row, "IS_DRILLTHROUGH_ENABLED", prefix, String.valueOf(v)));
         r.isLinkable().ifPresent(v -> addChildElement(row, "IS_LINKABLE", prefix, String.valueOf(v)));
         r.isWriteEnabled().ifPresent(v -> addChildElement(row, "IS_WRITE_ENABLED", prefix, String.valueOf(v)));
@@ -792,17 +833,17 @@ public class SoapUtil {
     }
 
     private static void addMdSchemaDimensionsResponseRow(SOAPElement root, MdSchemaDimensionsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
-        r.catalogName().ifPresent(v -> addChildElement(row, "CATALOG_NAME", prefix, v));
-        r.schemaName().ifPresent(v -> addChildElement(row, "SCHEMA_NAME", prefix, v));
-        r.cubeName().ifPresent(v -> addChildElement(row, "CUBE_NAME", prefix, v));
+        r.catalogName().ifPresent(v -> addChildElement(row, CATALOG_NAME, prefix, v));
+        r.schemaName().ifPresent(v -> addChildElement(row, SCHEMA_NAME, prefix, v));
+        r.cubeName().ifPresent(v -> addChildElement(row, CUBE_NAME, prefix, v));
 
         r.dimensionName().ifPresent(v -> addChildElement(row, "DIMENSION_NAME", prefix, v));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix, v));
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix, v));
         r.dimensionGuid().ifPresent(v -> addChildElement(row, "DIMENSION_GUID", prefix,
             String.valueOf(v)));
-        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_NAME", prefix,
+        r.dimensionUniqueName().ifPresent(v -> addChildElement(row, DIMENSION_UNIQUE_NAME, prefix,
             v));
         r.dimensionCaption().ifPresent(v -> addChildElement(row, "DIMENSION_CAPTION", prefix, v));
         r.dimensionOptional().ifPresent(v -> addChildElement(row, "DIMENSION_ORDINAL", prefix,
@@ -813,21 +854,21 @@ public class SoapUtil {
             String.valueOf(v)));
         r.defaultHierarchy().ifPresent(v -> addChildElement(row, "DEFAULT_HIERARCHY", prefix, v));
         r.defaultHierarchy().ifPresent(v -> addChildElement(row, "DEFAULT_HIERARCHY", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         r.isVirtual().ifPresent(v -> addChildElement(row, "IS_VIRTUAL", prefix, String.valueOf(v)));
         r.isReadWrite().ifPresent(v -> addChildElement(row, "IS_READWRITE", prefix, String.valueOf(v)));
         r.dimensionUniqueSetting().ifPresent(v -> addChildElement(row, "DIMENSION_UNIQUE_SETTINGS",
             prefix, String.valueOf(v.getValue())));
         r.dimensionMasterName().ifPresent(v -> addChildElement(row, "DIMENSION_MASTER_NAME", prefix, v));
-        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, "DIMENSION_IS_VISIBLE", prefix,
+        r.dimensionIsVisible().ifPresent(v -> addChildElement(row, DIMENSION_IS_VISIBLE, prefix,
             String.valueOf(v)));
     }
 
     private static void addMdSchemaFunctionsResponseRow(SOAPElement root, MdSchemaFunctionsResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         r.functionalName().ifPresent(v -> addChildElement(row, "FUNCTION_NAME", prefix, v));
-        r.description().ifPresent(v -> addChildElement(row, "DESCRIPTION", prefix, v));
+        r.description().ifPresent(v -> addChildElement(row, DESCRIPTION_UC, prefix, v));
         addChildElement(row, "PARAMETER_LIST", prefix, r.parameterList());
         r.returnType().ifPresent(v -> addChildElement(row, "RETURN_TYPE", prefix, String.valueOf(v)));
         r.origin().ifPresent(v -> addChildElement(row, "ORIGIN", prefix, String.valueOf(v.getValue())));
@@ -850,17 +891,17 @@ public class SoapUtil {
     }
 
     private static void addParameterInfoXml(SOAPElement root, ParameterInfo it) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement el = addChildElement(root, "PARAMETERINFO", prefix);
         addChildElement(el, "NAME", prefix, it.name());
-        addChildElement(el, "DESCRIPTION", prefix, it.description());
+        addChildElement(el, DESCRIPTION_UC, prefix, it.description());
         addChildElement(el, "OPTIONAL", prefix, String.valueOf(it.optional()));
         addChildElement(el, "REPEATABLE", prefix, String.valueOf(it.repeatable()));
         addChildElement(el, "REPEATGROUP", prefix, String.valueOf(it.repeatGroup()));
     }
 
     private static void addDiscoverPropertiesResponseRow(SOAPElement root, DiscoverPropertiesResponseRow r) {
-        String prefix = "rowset";
+        String prefix = ROWSET;
         SOAPElement row = addChildElement(root, ROW, prefix);
         addChildElement(row, "PropertyName", prefix, r.propertyName());
         r.propertyDescription().ifPresent(v -> addChildElement(row, "PropertyDescription", prefix, v));
@@ -870,9 +911,8 @@ public class SoapUtil {
         r.value().ifPresent(v -> addChildElement(row, "Value", prefix, v));
     }
 
-    private static void addMdDataSet(SOAPElement e, Mddataset it) {
+    private static void addMdDataSet(SOAPElement el, Mddataset it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "mddataset", "rowset");
             addOlapInfo(el, it.olapInfo());
             addAxes(el, it.axes());
             addCellData(el, it.cellData());
@@ -883,7 +923,7 @@ public class SoapUtil {
 
     private static void addMessages(SOAPElement e, Messages it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Messages","rowset");
+            SOAPElement el = addChildElement(e, "Messages",null);
             addExceptionTypeList(el, it.warningOrError());
 
         }
@@ -910,45 +950,51 @@ public class SoapUtil {
 
     private static void addErrorType(SOAPElement e, ErrorType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Error", "rowset");
+            SOAPElement el = addChildElement(e, "Error", null);
 
-            addChildElement(el, "Callstack", it.callstack());
-            addChildElement(el, "ErrorCode", String.valueOf(it.errorCode()));
+            addChildElement(el, "Callstack", null, it.callstack());
+            addChildElement(el, "ErrorCode", null, String.valueOf(it.errorCode()));
             addMessageLocation(el, it.location());
-            addChildElement(el, "Description", it.description());
-            addChildElement(el, "Source", it.source());
-            addChildElement(el, "HelpFile", it.helpFile());
+            setAttribute(el, DESCRIPTION, it.description());
+            setAttribute(el, "Source", it.source());
+            setAttribute(el, "HelpFile", it.helpFile());
+        }
+    }
+
+    private static void setAttribute(SOAPElement el, String name, String value) {
+        if (value != null) {
+        	el.setAttribute(name, value);
         }
     }
 
     private static void addWarningType(SOAPElement e, WarningType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Warning", "rowset");
-            addChildElement(el, "WarningCode", String.valueOf(it.warningCode()));
+            SOAPElement el = addChildElement(e, "Warning", null);
+            addChildElement(el, "WarningCode", null, String.valueOf(it.warningCode()));
             addMessageLocation(el, it.location());
-            addChildElement(el, "Description", it.description());
-            addChildElement(el, "Source", it.source());
-            addChildElement(el, "HelpFile", it.helpFile());
+            addChildElement(el, DESCRIPTION, null, it.description());
+            addChildElement(el, "Source", null,  it.source());
+            addChildElement(el, "HelpFile", null,  it.helpFile());
         }
     }
 
     private static void addMessageLocation(SOAPElement e, MessageLocation it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Location", "rowset");
+            SOAPElement el = addChildElement(e, "Location", null);
             addStartEnd(el, "Start", it.start());
             addStartEnd(el, "End", it.end());
-            addChildElement(el, "LineOffset", String.valueOf(it.lineOffset()));
-            addChildElement(el, "TextLength", String.valueOf(it.textLength()));
+            addChildElement(el, "LineOffset", null, String.valueOf(it.lineOffset()));
+            addChildElement(el, "TextLength", null, String.valueOf(it.textLength()));
             addWarningLocationObject(el, "SourceObject", it.sourceObject());
             addWarningLocationObject(el, "DependsOnObject", it.dependsOnObject());
-            addChildElement(el, "RowNumber", String.valueOf(it.rowNumber()));
+            addChildElement(el, "RowNumber", null, String.valueOf(it.rowNumber()));
         }
 
     }
 
     private static void addWarningLocationObject(SOAPElement e, String tagName, WarningLocationObject it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, tagName, "rowset");
+            SOAPElement el = addChildElement(e, tagName, null);
             addWarningColumn(el, it.warningColumn());
             addWarningMeasure(el, it.warningMeasure());
         }
@@ -956,47 +1002,47 @@ public class SoapUtil {
 
     private static void addWarningMeasure(SOAPElement e, WarningMeasure it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "WarningMeasure", "rowset");
-            addChildElement(el, "Cube", it.cube());
-            addChildElement(el, "MeasureGroup", it.measureGroup());
-            addChildElement(el, "MeasureName", it.measureName());
+            SOAPElement el = addChildElement(e, "WarningMeasure", "engine200");
+            addChildElement(el, "Cube", null, it.cube());
+            addChildElement(el, "MeasureGroup", null, it.measureGroup());
+            addChildElement(el, "MeasureName", null, it.measureName());
         }
     }
 
     private static void addWarningColumn(SOAPElement e, WarningColumn it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "WarningColumn", "rowset");
-            addChildElement(el, "Dimension", it.dimension());
-            addChildElement(el, "Attribute", it.attribute());
+            SOAPElement el = addChildElement(e, "WarningColumn", "engine200");
+            addChildElement(el, "Dimension", null, it.dimension());
+            addChildElement(el, "Attribute", null, it.attribute());
         }
     }
 
     private static void addStartEnd(SOAPElement e, String tagName, StartEnd it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, tagName, "rowset");
-            addChildElement(el, "Line", String.valueOf(it.line()));
-            addChildElement(el, "Column", String.valueOf(it.column()));
+            SOAPElement el = addChildElement(e, tagName, null);
+            addChildElement(el, "Line", null, String.valueOf(it.line()));
+            addChildElement(el, "Column", null, String.valueOf(it.column()));
         }
     }
 
 
     private static void addException(SOAPElement e, Exception it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Exception", "rowset");
+            addChildElement(e, "Exception", null);
         }
     }
 
     private static void addCellData(SOAPElement e, CellData it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CellData", "rowset");
+            SOAPElement el = addChildElement(e, "CellData", null);
             addCellTypeList(el, it.cell());
-            addCellSetType(el, it.cellSet());
+            //addCellSetType(el, it.cellSet());
         }
     }
 
     private static void addCellSetType(SOAPElement e, CellSetType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CellSet", "rowset");
+            SOAPElement el = addChildElement(e, "CellSet", ROWSET);
             addDataList(el, it.data());
         }
     }
@@ -1021,16 +1067,16 @@ public class SoapUtil {
 
     private static void addCellType(SOAPElement e, CellType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Cell", "rowset");
+            SOAPElement el = addChildElement(e, "Cell", null);
             addCellTypeValue(el, it.value());
             addCellInfoItemList(el, it.any());
-            addChildElement(el, "CellOrdinal", String.valueOf(it.cellOrdinal()));
+            setAttribute(el, "CellOrdinal", String.valueOf(it.cellOrdinal()));
         }
     }
 
     private static void addCellTypeValue(SOAPElement e, Value it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Value", "rowset");
+            SOAPElement el = addChildElement(e, "Value", null);
             addCellTypeErrorList(el, it.error());
         }
     }
@@ -1043,15 +1089,15 @@ public class SoapUtil {
 
     private static void addCellTypeError(SOAPElement e, CellTypeError it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Error", "rowset");
-            addChildElement(el, "ErrorCode", String.valueOf(it.errorCode()));
-            addChildElement(el, "Description", it.description());
+            SOAPElement el = addChildElement(e, "Error", null);
+            setAttribute(el, "ErrorCode", String.valueOf(it.errorCode()));
+            setAttribute(el, DESCRIPTION, it.description());
         }
     }
 
     private static void addAxes(SOAPElement e, Axes it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Axes", "rowset");
+            SOAPElement el = addChildElement(e, "Axes", null);
             addAxisList(el, it.axis());
         }
     }
@@ -1064,9 +1110,9 @@ public class SoapUtil {
 
     private static void addAxis(SOAPElement e, Axis it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Axis", "rowset");
+            SOAPElement el = addChildElement(e, "Axis", null);
             addTypeList(el, it.setType());
-            addChildElement(el, "name", it.name());
+            setAttribute(el, "name", it.name());
         }
     }
 
@@ -1098,14 +1144,14 @@ public class SoapUtil {
 
     private static void addUnion(SOAPElement e, Union it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Union", "rowset");
+            SOAPElement el = addChildElement(e, "Union", ROWSET);
             addTypeList(el, it.setType());
         }
     }
 
     private static void addNormTupleSet(SOAPElement e, NormTupleSet it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "NormTupleSet", "rowset");
+            SOAPElement el = addChildElement(e, "NormTupleSet", ROWSET);
             addNormTuplesType(el, it.normTuples());
             addTupleTypeList(el, it.membersLookup());
         }
@@ -1113,7 +1159,7 @@ public class SoapUtil {
 
     private static void addTupleTypeList(SOAPElement e, MembersLookup list) {
         if (list != null) {
-            SOAPElement el = addChildElement(e, "MembersLookup", "rowset");
+            SOAPElement el = addChildElement(e, "MembersLookup", ROWSET);
             if (list.members() != null) {
                 list.members().forEach(it -> addTupleType(el, "Members", it));
             }
@@ -1122,7 +1168,7 @@ public class SoapUtil {
 
     private static void addNormTuplesType(SOAPElement e, NormTuplesType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "NormTuples", "rowset");
+            SOAPElement el = addChildElement(e, "NormTuples", ROWSET);
             addNormTupleList(el, it.normTuple());
         }
     }
@@ -1135,8 +1181,8 @@ public class SoapUtil {
 
     private static void addNormTuple(SOAPElement e, NormTuple it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "NormTuple", "rowset");
-            addMemberRefList(e, it.memberRef());
+            SOAPElement el = addChildElement(e, "NormTuple", ROWSET);
+            addMemberRefList(el, it.memberRef());
         }
     }
 
@@ -1148,23 +1194,25 @@ public class SoapUtil {
 
     private static void addMemberRef(SOAPElement e, MemberRef it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "MemberRef", "rowset");
-            addChildElement(el, "MemberOrdinal", String.valueOf(it.memberOrdinal()));
-            addChildElement(el, "MemberDispInfo", String.valueOf(it.memberDispInfo()));
+            String prefix = ROWSET;
+            SOAPElement el = addChildElement(e, "MemberRef", prefix);
+            addChildElement(el, "MemberOrdinal", prefix, String.valueOf(it.memberOrdinal()));
+            addChildElement(el, "MemberDispInfo", prefix, String.valueOf(it.memberDispInfo()));
         }
     }
 
     private static void addSetListType(SOAPElement e, SetListType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CrossProduct", "rowset");
+            String prefix = ROWSET;
+            SOAPElement el = addChildElement(e, "CrossProduct", prefix);
             addTypeList(el, it.setType());
-            addChildElement(el, "Size", String.valueOf(it.size()));
+            addChildElement(el, "Size", prefix, String.valueOf(it.size()));
         }
     }
 
     private static void addTuplesType(SOAPElement e, TuplesType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Tuples", "rowset");
+            SOAPElement el = addChildElement(e, "Tuples", ROWSET);
             addTuplesTypeList(el, it.tuple());
         }
 
@@ -1178,7 +1226,7 @@ public class SoapUtil {
 
     private static void addTupleType(SOAPElement e, String tagName, TupleType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, tagName, "rowset");
+            SOAPElement el = addChildElement(e, tagName, ROWSET);
             addMemberTypeList(el, it.member());
         }
 
@@ -1192,23 +1240,23 @@ public class SoapUtil {
 
     private static void addMemberType(SOAPElement e, MemberType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Member", "rowset");
+            SOAPElement el = addChildElement(e, "Member", null);
             addCellInfoItemList(el, it.any());
-            addChildElement(el, "Hierarchy", it.hierarchy());
+            setAttribute(el, "Hierarchy", it.hierarchy());
         }
     }
 
     private static void addMembersType(SOAPElement e, MembersType it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Members", "rowset");
+            SOAPElement el = addChildElement(e, "Members", null);
             addMemberTypeList(el, it.member());
-            addChildElement(el, "Hierarchy", it.hierarchy());
+            setAttribute(el, "Hierarchy", it.hierarchy());
         }
     }
 
     private static void addOlapInfo(SOAPElement e, OlapInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "OlapInfo", "rowset");
+            SOAPElement el = addChildElement(e, "OlapInfo", null);
             addCubeInfo(el, it.cubeInfo());
             addAxesInfo(el, it.axesInfo());
             addCellInfo(el, it.cellInfo());
@@ -1217,7 +1265,7 @@ public class SoapUtil {
 
     private static void addCellInfo(SOAPElement e, CellInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CellInfo", "rowset");
+            SOAPElement el = addChildElement(e, "CellInfo", null);
             addCellInfoItemList(el, it.any());
         }
     }
@@ -1230,15 +1278,15 @@ public class SoapUtil {
 
     private static void addCellInfoItem(SOAPElement e, CellInfoItem it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, it.tagName(), "rowset");
-            el.setAttribute("name", it.name());
-            it.type().ifPresent(v -> el.setAttribute("type", v));
+            SOAPElement el = addChildElement(e, it.tagName(), null);
+            setAttribute(el,"name", it.name());
+            it.type().ifPresent(v -> setAttribute(el, "type", v));
         }
     }
 
     private static void addAxesInfo(SOAPElement e, AxesInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "AxesInfo", "rowset");
+            SOAPElement el = addChildElement(e, "AxesInfo", null);
             addAxisInfoList(el, it.axisInfo());
         }
     }
@@ -1251,8 +1299,8 @@ public class SoapUtil {
 
     private static void addAxisInfo(SOAPElement e, AxisInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "AxisInfo", "rowset");
-            addChildElement(el, "name", it.name());
+            SOAPElement el = addChildElement(e, "AxisInfo", null);
+            setAttribute(el, "name", it.name());
             addHierarchyInfoList(el, it.hierarchyInfo());
         }
     }
@@ -1265,15 +1313,15 @@ public class SoapUtil {
 
     private static void addHierarchyInfo(SOAPElement e, HierarchyInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "HierarchyInfo", "rowset");
+            SOAPElement el = addChildElement(e, "HierarchyInfo", null);
             addCellInfoItemList(el, it.any());
-            addChildElement(el, "name", it.name());
+            setAttribute(el, "name", it.name());
         }
     }
 
     private static void addCubeInfo(SOAPElement e, CubeInfo it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "CubeInfo", "rowset");
+            SOAPElement el = addChildElement(e, "CubeInfo", null);
             addOlapInfoCubeList(el, it.cube());
         }
     }
@@ -1286,22 +1334,27 @@ public class SoapUtil {
 
     private static void addOlapInfoCube(SOAPElement e, OlapInfoCube it) {
         if (it != null) {
-            SOAPElement el = addChildElement(e, "Cube", "rowset");
-            addChildElement(el, "CubeName", it.cubeName());
-            addChildElement(el, "LastDataUpdate", String.valueOf(it.lastDataUpdate()));
-            addChildElement(el, "LastSchemaUpdate", String.valueOf(it.lastSchemaUpdate()));
+            SOAPElement el = addChildElement(e, "Cube", null);
+            addChildElement(el, "CubeName", null, it.cubeName());
+            addChildElement(el, "LastDataUpdate", "engine", instantToString(it.lastDataUpdate()));
+            addChildElement(el, "LastSchemaUpdate", "engine", instantToString(it.lastSchemaUpdate()));
         }
     }
 
-    private static SOAPElement addDiscoverRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "DiscoverResponse", "msxmla");
-        SOAPElement ret = addChildElement(response, "return", null);
-        return addChildElement(ret, "root", "rowset");
+    private static String instantToString(Instant instant) {
+        return instant != null ? formatter.format(instant) : null;
     }
 
-    private static SOAPElement addExecuteRoot(SOAPElement body) {
-        SOAPElement response = addChildElement(body, "ExecuteResponse", "msxmla");
-        return addChildElement(response, "return", null);
+    private static SOAPElement addDiscoverRoot(SOAPElement body) {
+        SOAPElement response = addChildElement(body, "DiscoverResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", null);
+        return addChildElement(ret, "root", ROWSET);
+    }
+
+    private static SOAPElement addExecuteRoot(SOAPElement body, String prefix) {
+        SOAPElement response = addChildElement(body, "ExecuteResponse", MSXMLA);
+        SOAPElement ret = addChildElement(response, "return", MSXMLA);
+        return addChildElement(ret, "root", prefix);
 
     }
 
