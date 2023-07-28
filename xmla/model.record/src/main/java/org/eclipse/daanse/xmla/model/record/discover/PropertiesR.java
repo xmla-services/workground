@@ -1288,7 +1288,12 @@ public class PropertiesR implements Properties {
 
     public void setByname(String name, String value) {
         switch (name) {
-            case "Catalog": setCatalog(Optional.ofNullable(value));            
+            case "Catalog":
+            	setCatalog(Optional.ofNullable(value));
+            	break;
+            case "AxisFormat":
+                setAxisFormat(Optional.ofNullable(AxisFormat.fromValue(value)));
+                break;
             //TODO
         }
     }
