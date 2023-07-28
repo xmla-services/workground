@@ -206,5 +206,10 @@ public class Constants {
     public static final String KEYWORD = "Keyword";
     public static final String ENUM_NAME = "EnumName";
     public static final String SCHEMA_NAME_LOW = "SchemaName";
+    public static final String NUMERIC_SCALE = "NUMERIC_SCALE";
+    public static final String NUMERIC_PRECISION = "NUMERIC_PRECISION";
+    public static final String EXPRESSION_UC = "EXPRESSION";
+    public static final String DIMENSION_IS_VISIBLE = "DIMENSION_IS_VISIBLE";
+    public static final String DESCRIPTION_UC = "DESCRIPTION";
 
 }
