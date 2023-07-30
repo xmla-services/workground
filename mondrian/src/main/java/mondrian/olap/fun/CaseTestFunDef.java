@@ -12,9 +12,11 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.calc.BooleanCalc;
+import org.eclipse.daanse.calc.api.BooleanCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
+import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -25,6 +27,7 @@ import mondrian.olap.FunDef;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.type.BooleanType;
 
 /**
  * Definition of the tested <code>CASE</code> MDX operator.
@@ -70,11 +73,26 @@ class CaseTestFunDef extends FunDefBase {
         calcList.add(defaultCalc);
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 
+        
+        if ( call.getType() instanceof BooleanType){
+        	return	new AbstractBooleanCalc(call.getFunName(),call.getType(),calcList.stream().toArray(Calc[]::new)) {
+				
+				@Override
+				public Boolean evaluate(Evaluator evaluator) {
+					for (int i = 0; i < conditionCalcs.length; i++) {
+	                    if (conditionCalcs[i].evaluate(evaluator)) {
+	                        return (Boolean) exprCalcs[i].evaluate(evaluator);
+	                    }
+	                }
+	                return (Boolean) defaultCalc.evaluate(evaluator);
+				}
+			};
+        }
         return new GenericCalc(call.getFunName(),call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 for (int i = 0; i < conditionCalcs.length; i++) {
-                    if (conditionCalcs[i].evaluateBoolean(evaluator)) {
+                    if (conditionCalcs[i].evaluate(evaluator)) {
                         return exprCalcs[i].evaluate(evaluator);
                     }
                 }

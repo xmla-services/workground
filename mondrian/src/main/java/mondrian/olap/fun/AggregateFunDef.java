@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -34,7 +35,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
@@ -384,7 +384,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             if (hierarchy.getDimension().isMeasures()) {
                 return true;
             }
-            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
         }
 
         /**

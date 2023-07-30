@@ -22,13 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IntegerCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -332,7 +333,7 @@ public class JavaFunDef extends FunDefBase {
      * Base class for adapter calcs that convert arguments into the precise
      * type needed.
      */
-    private abstract static class AbstractCalc2 extends AbstractCalc {
+    private abstract static class AbstractCalc2 extends AbstractNestedProfilingCalc {
         /**
          * Creates an AbstractCalc2.
          *

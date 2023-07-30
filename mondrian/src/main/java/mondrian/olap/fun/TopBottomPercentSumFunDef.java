@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -21,7 +22,6 @@ import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -187,7 +187,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
     }
   }
 }

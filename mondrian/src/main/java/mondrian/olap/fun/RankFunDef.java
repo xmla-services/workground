@@ -18,8 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -27,7 +31,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractIntegerCalc;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -40,8 +43,6 @@ import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
 import mondrian.rolap.RolapUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Definition of the <code>RANK</code> MDX function.
@@ -375,7 +376,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * sorts the list of values. The result is a value of type {@link SortResult}, and can be used to implement the
    * <code>Rank</code> function efficiently.
    */
-  private static class SortedListCalc extends AbstractCalc {
+  private static class SortedListCalc extends AbstractNestedProfilingCalc {
     private final ListCalc listCalc;
     private final Calc keyCalc;
 
@@ -399,7 +400,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
     }
 
     @Override
@@ -608,7 +609,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * The result is a value of type {@link mondrian.olap.fun.RankFunDef.RankedMemberList} or
    * {@link mondrian.olap.fun.RankFunDef.RankedTupleList}, or null if the list is empty.
    */
-  private static class RankedListCalc extends AbstractCalc {
+  private static class RankedListCalc extends AbstractNestedProfilingCalc {
     private final ListCalc listCalc;
     private final boolean tuple;
 

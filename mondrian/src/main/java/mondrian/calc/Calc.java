@@ -9,6 +9,7 @@
 
 package mondrian.calc;
 
+import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.olap.Evaluator;
@@ -68,7 +69,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface Calc {
+public interface Calc<E> {
     /**
      * Evaluates this expression.
      *
@@ -76,7 +77,8 @@ public interface Calc {
      *                  this expression
      * @return Result of expression evaluation
      */
-    Object evaluate(Evaluator evaluator);
+    E evaluate(Evaluator evaluator);
+
 
     /**
      * Returns whether this expression depends upon a given hierarchy.
@@ -114,16 +116,9 @@ public interface Calc {
     boolean dependsOn(Hierarchy hierarchy);
 
     /**
-     * Returns the type of this expression.
+     * Returns the type.
      */
     Type getType();
-
-    /**
-     * Prints this expression, by accepting a visiting {@link CalcWriter}.
-     *
-     * @param calcWriter Writer
-     */
-    void accept(CalcWriter calcWriter);
 
     /**
      * Returns style in which the result of evaluating this expression is
@@ -139,5 +134,10 @@ public interface Calc {
 
     boolean isWrapperFor(java.lang.Class<?> iface);
 
-    <T> T unwrap(java.lang.Class<T> iface);
+    <X> X unwrap(java.lang.Class<X> iface);
+    
+    /**
+     * name of this expression.
+     */
+	public String getName();
 }

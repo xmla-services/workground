@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eigenbase.xom.XOMUtil;
@@ -27,7 +29,6 @@ import mondrian.calc.MemberCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericIterCalc;
@@ -79,7 +80,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     if (keySpecCount == 1 && ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) )) {
         List<MemberCalc> constantList = new ArrayList<>();
         List<MemberCalc> variableList = new ArrayList<>();
-        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractCalc) expCalc ).getCalcs();
+        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractNestedProfilingCalc) expCalc ).getCalcs();
         for ( MemberCalc memberCalc : calcs ) {
           if ( memberCalc.isWrapperFor( ConstantCalc.class ) && !listCalc.dependsOn( memberCalc.getType()
               .getHierarchy() ) ) {
@@ -133,7 +134,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private interface CalcWithDual extends Calc {
+  private interface CalcWithDual extends Calc<Object> {
     public TupleList evaluateDual( Evaluator rootEvaluator, Evaluator subEvaluator );
   }
 
@@ -226,25 +227,28 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       }
     }
 
-    @Override
-    public void collectArguments( Map<String, Object> arguments ) {
-      super.collectArguments( arguments );
+	@Override
+	protected Map<String, Object> profilingProperties(Map<String, Object> properties) {
 
-      StringBuilder result = new StringBuilder();
-      for ( SortKeySpec spec : keySpecList ) {
-        if ( result.length() > 0 ) {
-          result.append( "," );
-        }
+		
+		StringBuilder result = new StringBuilder();
+		for (SortKeySpec spec : keySpecList) {
+			if (result.length() > 0) {
+				result.append(",");
+			}
 
-        Flag sortKeyDir = spec.getDirection();
-        result.append( sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk) );
-      }
-      arguments.put( "direction", result.toString() );
-    }
+			Flag sortKeyDir = spec.getDirection();
+			result.append(sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk));
+		}
+		properties.put("direction", result.toString());
+
+		return super.profilingProperties(properties);
+	}
+
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
     }
 
     private Flag getDesc(boolean brk) {
@@ -322,7 +326,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      if ( AbstractCalc.anyDepends( memberCalcs, hierarchy ) ) {
+      if ( HirarchyDependsChecker.checkAnyDependsOnChilds(  memberCalcs,hierarchy ) ) {
         return true;
       }
       // Member calculations generate members, which mask the actual

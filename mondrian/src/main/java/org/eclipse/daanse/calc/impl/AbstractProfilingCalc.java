@@ -1,0 +1,99 @@
+/*
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
+package org.eclipse.daanse.calc.impl;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
+import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+
+import mondrian.olap.Evaluator;
+import mondrian.olap.type.Type;
+
+public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
+
+	private Type type;
+	private String name;
+
+	private Instant firstEvalStart = null;
+	private Instant lastEvalEnd = null;
+
+	private final List<CalcEvaluationProfile> evaluations = new ArrayList<CalcEvaluationProfile>();
+
+	public AbstractProfilingCalc(Type type, String name) {
+		this.type = type;
+		this.name = name;
+	}
+
+	@Override
+	public T evaluateWithProfile(Evaluator evaluator) {
+		Instant startEval = Instant.now();
+		if (firstEvalStart == null) {
+			firstEvalStart = startEval;
+		}
+		final T evalResult = evaluate(evaluator);
+
+		Instant endEval = Instant.now();
+		lastEvalEnd = endEval;
+
+		profileEvaluation(startEval, endEval, evalResult);
+		return evalResult;
+	}
+
+	protected void profileEvaluation(Instant evaluationStart, Instant evaluationEnd, T evaluationResult) {
+
+		CalcEvaluationProfile evaluationProfile = new CalcEvaluationProfileR(evaluationStart, evaluationEnd,
+				evaluationResult, Map.of());
+		evaluations.add(evaluationProfile);
+		
+
+	}
+	
+	protected Map<String, Object> profilingProperties(Map<String, Object> properties) {
+		return properties;
+	}
+
+
+	public CalcProfile getProfile() {
+		final List<CalcProfile> childProfiles = getChildProfiles();
+		Map<String, Object> profilingProperties =profilingProperties(new HashMap<String, Object>());
+		return new CalcProfileR(getName(), this.getClass(), getType(),getResultStyle(), Optional.ofNullable(firstEvalStart),
+				Optional.ofNullable(lastEvalEnd), profilingProperties, evaluations, childProfiles);
+	}
+
+	
+	List<CalcProfile> getChildProfiles() {
+		return List.of();
+	}
+
+
+
+	@Override
+	public Type getType() {
+		return type;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+}

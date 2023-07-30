@@ -20,7 +20,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface StringCalc extends Calc {
+public interface StringCalc extends Calc<Object> {
     /**
      * Evaluates this expression to yield a {@link String} value.
      *

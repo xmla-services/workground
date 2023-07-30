@@ -12,10 +12,12 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.calc.BooleanCalc;
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
@@ -25,7 +27,6 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
@@ -155,7 +156,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -190,7 +191,7 @@ class FilterFunDef extends FunDefBase {
                     CancellationChecker.checkCancelOrTimeout(
                         currentIteration++, execution);
                     cursor.setContext(evaluator);
-                    if (bcalc.evaluateBoolean(evaluator)) {
+                    if (bcalc.evaluate(evaluator)) {
                         result.addCurrent(cursor);
                     }
                 }
@@ -229,7 +230,7 @@ class FilterFunDef extends FunDefBase {
                     CancellationChecker.checkCancelOrTimeout(
                         currentIteration++, execution);
                     cursor.setContext(evaluator);
-                    if (bcalc.evaluateBoolean(evaluator)) {
+                    if (bcalc.evaluate(evaluator)) {
                         result.addCurrent(cursor);
                     }
                 }
@@ -275,7 +276,7 @@ class FilterFunDef extends FunDefBase {
                                 CancellationChecker.checkCancelOrTimeout(
                                     currentIteration++, execution);
                                 cursor.setContext(evaluator2);
-                                if (bcalc.evaluateBoolean(evaluator2)) {
+                                if (bcalc.evaluate(evaluator2)) {
                                     return true;
                                 }
                             }
@@ -346,7 +347,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -378,7 +379,7 @@ class FilterFunDef extends FunDefBase {
                     CancellationChecker.checkCancelOrTimeout(
                         currentIteration++, execution);
                     cursor.setContext(evaluator);
-                    if (bcalc.evaluateBoolean(evaluator)) {
+                    if (bcalc.evaluate(evaluator)) {
                         result.addCurrent(cursor);
                     }
                 }
@@ -418,7 +419,7 @@ class FilterFunDef extends FunDefBase {
                     CancellationChecker.checkCancelOrTimeout(
                         currentIteration++, execution);
                     cursor.setContext(evaluator);
-                    if (bcalc.evaluateBoolean(evaluator)) {
+                    if (bcalc.evaluate(evaluator)) {
                         result.addCurrent(cursor);
                     }
                 }

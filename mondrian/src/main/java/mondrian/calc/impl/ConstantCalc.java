@@ -16,14 +16,12 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.calc.BooleanCalc;
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
@@ -52,7 +50,7 @@ public class ConstantCalc extends GenericCalc {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Literal";
     }
 
@@ -85,12 +83,6 @@ public class ConstantCalc extends GenericCalc {
             value = 0;
         }
         return value;
-    }
-
-    @Override
-    public void collectArguments(Map<String, Object> arguments) {
-        super.collectArguments(arguments);
-        arguments.put("value", o);
     }
 
     @Override
@@ -151,15 +143,7 @@ public class ConstantCalc extends GenericCalc {
         return new ConstantCalc(new StringType(), s);
     }
 
-    /**
-     * Creates an expression which evaluates to a given boolean.
-     *
-     * @param b Boolean value
-     * @return Constant boolean expression
-     */
-    public static BooleanCalc constantBoolean(boolean b) {
-        return new ConstantCalc(new BooleanType(), b);
-    }
+
 
     /**
      * Creates an expression which evaluates to null.

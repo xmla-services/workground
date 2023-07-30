@@ -8,6 +8,8 @@
 */
 package mondrian.olap.fun;
 
+import java.time.Instant;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,14 +65,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     private final HierarchyCalc hierarchyCalc;
 
     public CalcImpl( Type type, HierarchyCalc hierarchyCalc ) {
-      super("CorrentMember", type, new Calc[] { hierarchyCalc } );
+      super("CurrentMember", type, new Calc[] { hierarchyCalc } );
       this.hierarchyCalc = hierarchyCalc;
     }
 
-    @Override
-	protected String getName() {
-      return "CurrentMember";
-    }
+ 
 
     @Override
 	public Member evaluateMember( Evaluator evaluator ) {
@@ -99,10 +98,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       this.hierarchy = (RolapHierarchy) hierarchy;
     }
 
-    @Override
-	protected String getName() {
-      return "CurrentMemberFixed";
-    }
+
 
     @Override
 	public Member evaluateMember( Evaluator evaluator ) {
@@ -115,11 +111,6 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return this.hierarchy == hierarchy;
     }
 
-    @Override
-	public void collectArguments( Map<String, Object> arguments ) {
-      arguments.put( "hierarchy", hierarchy );
-      super.collectArguments( arguments );
-    }
   }
 
   private static void validateSlicerMembers( Hierarchy hierarchy, Evaluator evaluator ) {

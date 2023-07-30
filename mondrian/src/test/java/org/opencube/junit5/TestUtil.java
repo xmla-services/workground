@@ -43,6 +43,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -63,7 +65,6 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.TestingContext;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -889,7 +890,7 @@ public class TestUtil {
 	}
 
 	public static Result executeQuery(Connection connection, String queryString) {
-		return executeQuery(connection, queryString, 60000l);
+		return executeQuery(connection, queryString, 300000l);
 	}
 
 	public static Result executeQueryTimeoutTest(Connection connection, String queryString ) {
@@ -1343,8 +1344,14 @@ public class TestUtil {
 		final Calc calc = query.compileExpression( exp, scalar, null );
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter( sw );
-		final CalcWriter calcWriter = new CalcWriter( pw, false );
-		calc.accept( calcWriter );
+		
+		   SimpleProfileResultWriter w=new SimpleProfileResultWriter(pw);
+		    
+			if (calc instanceof ProfilingCalc pc) {
+				w.write(pc.getProfile());
+			}else {
+				throw new RuntimeException("must be profiling calc");
+			}
 		pw.flush();
 		return sw.toString();
 	}

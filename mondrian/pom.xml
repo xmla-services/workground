@@ -24,6 +24,14 @@
   <dependencies>
 
 
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.core</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>

@@ -1502,4 +1502,5 @@ public boolean shouldIgnoreUnrelatedDimensions() {
 
     abstract void execute( RolapEvaluator evaluator );
   }
+
 }

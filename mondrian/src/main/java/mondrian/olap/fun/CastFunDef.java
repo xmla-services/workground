@@ -91,6 +91,13 @@ public class CastFunDef extends FunDefBase {
         if (o == null) {
             return FunUtil.DOUBLE_NULL;
         }
+		if (o instanceof Boolean bool) {
+			if (Boolean.TRUE.equals(bool)) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
         if (o instanceof String str) {
             return Double.valueOf(str);
         }
@@ -212,7 +219,6 @@ public class CastFunDef extends FunDefBase {
             return CastFunDef.toDouble(o, targetType);
         }
 
-        @Override
 		public boolean evaluateBoolean(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toBoolean(o, targetType);

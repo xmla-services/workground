@@ -9,10 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.sort.OrderKey;
@@ -46,7 +47,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     return new CalcImpl( call.getFunName(),call.getType(), memberCalc );
   }
 
-  public static class CalcImpl extends AbstractCalc {
+  public static class CalcImpl extends AbstractNestedProfilingCalc {
     private final MemberCalc memberCalc;
 
     /**
@@ -65,9 +66,6 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return new OrderKey( memberCalc.evaluateMember( evaluator ) );
     }
 
-    @Override
-	protected String getName() {
-      return "OrderKey";
-    }
+
   }
 }

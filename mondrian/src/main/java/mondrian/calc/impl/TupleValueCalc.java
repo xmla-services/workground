@@ -115,7 +115,7 @@ public class TupleValueCalc extends GenericCalc {
     public Calc optimize() {
         if (tupleCalc instanceof TupleFunDef.CalcImpl calc) {
             return MemberValueCalc.create(
-                    type,
+                    getType(),
                     calc.getMemberCalcs(),
                     nullCheck);
         }

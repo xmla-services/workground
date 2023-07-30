@@ -14,6 +14,7 @@ package mondrian.olap.fun;
 import java.util.AbstractList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -24,7 +25,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -184,7 +184,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
       }
 
       private boolean hasHighCardDimension( TupleList l ) {

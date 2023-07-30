@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
-import mondrian.calc.BooleanCalc;
 import mondrian.calc.Calc;
 import mondrian.calc.DimensionCalc;
 import mondrian.calc.DoubleCalc;
@@ -1840,15 +1840,15 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
-                        boolean b0 = calc0.evaluateBoolean(evaluator);
+					public Boolean evaluate(Evaluator evaluator) {
+                        boolean b0 = calc0.evaluate(evaluator);
                         // don't short-circuit evaluation if we're evaluating
                         // the axes; that way, we can combine all measures
                         // referenced in the AND expression in a single query
                         if (!evaluator.isEvalAxes() && !b0) {
                             return false;
                         }
-                        boolean b1 = calc1.evaluateBoolean(evaluator);
+                        boolean b1 = calc1.evaluate(evaluator);
                         return b0 && b1;
                     }
                 };
@@ -1872,15 +1872,15 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
-                        boolean b0 = calc0.evaluateBoolean(evaluator);
+					public Boolean evaluate(Evaluator evaluator) {
+                        boolean b0 = calc0.evaluate(evaluator);
                         // don't short-circuit evaluation if we're evaluating
                         // the axes; that way, we can combine all measures
                         // referenced in the OR expression in a single query
                         if (!evaluator.isEvalAxes() && b0) {
                             return true;
                         }
-                        boolean b1 = calc1.evaluateBoolean(evaluator);
+                        boolean b1 = calc1.evaluate(evaluator);
                         return b0 || b1;
                     }
                 };
@@ -1904,9 +1904,9 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
-                        final boolean b0 = calc0.evaluateBoolean(evaluator);
-                        final boolean b1 = calc1.evaluateBoolean(evaluator);
+					public Boolean evaluate(Evaluator evaluator) {
+                        final boolean b0 = calc0.evaluate(evaluator);
+                        final boolean b1 = calc1.evaluate(evaluator);
                         return b0 != b1;
                     }
                 };
@@ -1927,8 +1927,8 @@ public class BuiltinFunTable extends FunTableImpl {
                     compiler.compileBoolean(call.getArg(0));
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
-                        return !calc.evaluateBoolean(evaluator);
+					public Boolean evaluate(Evaluator evaluator) {
+                        return !calc.evaluate(evaluator);
                     }
                 };
             }
@@ -1949,7 +1949,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
@@ -1976,7 +1976,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2007,7 +2007,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
@@ -2034,7 +2034,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2065,7 +2065,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2096,7 +2096,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
@@ -2123,7 +2123,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2154,7 +2154,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
@@ -2181,7 +2181,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2212,7 +2212,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
@@ -2239,7 +2239,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
@@ -2270,7 +2270,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
-					public boolean evaluateBoolean(Evaluator evaluator) {
+					public Boolean evaluate(Evaluator evaluator) {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {

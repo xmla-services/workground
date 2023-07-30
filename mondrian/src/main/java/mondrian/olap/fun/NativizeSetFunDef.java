@@ -29,6 +29,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -39,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
@@ -67,7 +69,6 @@ import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -214,12 +215,14 @@ public class NativizeSetFunDef extends FunDefBase {
                 nativizeMinThreshold));
     }
 
-    static class NonNativeCalc implements Calc {
-        final Calc parent;
+    static class NonNativeCalc extends AbstractProfilingCalc<Object> implements ProfilingCalc<Object> {
+        final Calc<?> parent;
         final boolean nativeEnabled;
 
         protected NonNativeCalc(Calc parent, final boolean nativeEnabled) {
-            assert parent != null;
+            super(parent.getType(), parent.getName());
+        	assert parent != null;
+            
             this.parent = parent;
             this.nativeEnabled = nativeEnabled;
         }
@@ -234,16 +237,13 @@ public class NativizeSetFunDef extends FunDefBase {
 		public boolean dependsOn(final Hierarchy hierarchy) {
             return parent.dependsOn(hierarchy);
         }
+//
+//        @Override
+//		public Type getType() {
+//            return parent.getType();
+//        }
 
-        @Override
-		public Type getType() {
-            return parent.getType();
-        }
-
-        @Override
-		public void accept(final CalcWriter calcWriter) {
-            parent.accept(calcWriter);
-        }
+  
 
         @Override
 		public ResultStyle getResultStyle() {
@@ -271,6 +271,8 @@ public class NativizeSetFunDef extends FunDefBase {
 		public <T> T unwrap(Class<T> iface) {
             return iface.cast(this);
         }
+
+
     }
 
     static class NonNativeIterCalc

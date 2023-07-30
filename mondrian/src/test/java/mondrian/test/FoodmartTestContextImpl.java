@@ -42,6 +42,8 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -61,7 +63,6 @@ import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
@@ -1028,8 +1029,14 @@ public String compileExpression( String expression, final boolean scalar ) {
     final Calc calc = query.compileExpression( exp, scalar, null );
     final StringWriter sw = new StringWriter();
     final PrintWriter pw = new PrintWriter( sw );
-    final CalcWriter calcWriter = new CalcWriter( pw, false );
-    calc.accept( calcWriter );
+    
+    SimpleProfileResultWriter w=new SimpleProfileResultWriter(pw);
+    
+	if (calc instanceof ProfilingCalc pc) {
+		w.write(pc.getProfile());
+	}else {
+		throw new RuntimeException("must be profiling calc");
+	}
     pw.flush();
     return sw.toString();
   }

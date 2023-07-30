@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun.extra;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
@@ -85,7 +86,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

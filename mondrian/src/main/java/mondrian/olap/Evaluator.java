@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.daanse.compute.api.ComputationContext;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -30,7 +31,7 @@ import mondrian.calc.TupleIterable;
  * @author jhyde
  * @since 27 July, 2001
  */
-public interface Evaluator {
+public interface Evaluator extends ComputationContext{
 
     /**
      * Returns the current cube.

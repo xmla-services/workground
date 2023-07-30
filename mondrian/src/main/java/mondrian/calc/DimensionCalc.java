@@ -22,7 +22,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface DimensionCalc extends Calc {
+public interface DimensionCalc extends Calc<Object> {
     /**
      * Evaluates this expression to yield a dimension.
      *
