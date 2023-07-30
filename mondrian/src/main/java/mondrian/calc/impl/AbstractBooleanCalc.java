@@ -9,23 +9,20 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.BooleanCalc;
+import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the {@link mondrian.calc.BooleanCalc} interface.
- *
- * <p>The derived class must
- * implement the {@link #evaluateBoolean(mondrian.olap.Evaluator)} method,
- * and the {@link #evaluate(mondrian.olap.Evaluator)} method will call it.
+ * Abstract implementation of the {@link org.eclipse.daanse.calc.api.BooleanCalc} interface.
  *
  * @author jhyde
  * @since Sep 26, 2005
  */
 public abstract class AbstractBooleanCalc
-extends AbstractCalc
+extends AbstractNestedProfilingCalc<Boolean>
 implements BooleanCalc
 {
     /**
@@ -38,8 +35,5 @@ implements BooleanCalc
         super(name,type, calcs);
     }
 
-    @Override
-    public Object evaluate(Evaluator evaluator) {
-        return Boolean.valueOf(evaluateBoolean(evaluator));
-    }
+
 }

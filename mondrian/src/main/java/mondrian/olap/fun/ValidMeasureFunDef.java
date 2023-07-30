@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -24,7 +26,6 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -155,11 +156,13 @@ public class ValidMeasureFunDef extends FunDefBase
         private List<Member> getCalcsMembers(Evaluator evaluator) {
             List<Member> memberList;
             if (calc.isWrapperFor(MemberCalc.class)) {
+            	MemberCalc mc=    (MemberCalc) calc.unwrap(MemberCalc.class);
                 memberList = Collections.singletonList(
-                    calc.unwrap(MemberCalc.class).evaluateMember(evaluator));
+                    mc.evaluateMember(evaluator));
             } else {
+            	TupleCalc tc=  (TupleCalc) calc.unwrap((TupleCalc.class));
                 final Member[] tupleMembers =
-                    calc.unwrap((TupleCalc.class)).evaluateTuple(evaluator);
+                    tc.evaluateTuple(evaluator);
                 if (tupleMembers == null) {
                   memberList = null;
                 } else {
@@ -220,7 +223,7 @@ public class ValidMeasureFunDef extends FunDefBase
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
             // depends on all hierarchies
-            return AbstractCalc.butDepends(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.butDepends(getCalcs(), hierarchy);
         }
     }
 }

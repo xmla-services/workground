@@ -13,11 +13,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.DelegatingExpCompiler;
@@ -153,7 +153,7 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
      * Calc with three child Calcs, one for ITERABLE, LIST and MUTABLE_LIST,
      * which are evaluated during the normal evaluation process.
      */
-    static class MultiCalc implements Calc {
+    static class MultiCalc extends AbstractProfilingCalc<Object> implements Calc<Object> {
         static int counter = 0;
 
         final Calc calcIter;
@@ -170,6 +170,7 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             Calc calcMList,
             boolean onlyMutableList)
         {
+        	super(calcIter.getType(), calcIter.getName());
             this.calcIter = calcIter;
             this.calcList = calcList;
             this.calcMList = calcMList;
@@ -242,15 +243,6 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             return calcIter.dependsOn(hierarchy);
         }
 
-        @Override
-		public Type getType() {
-            return calcIter.getType();
-        }
-
-        @Override
-		public void accept(CalcWriter calcWriter) {
-            calcIter.accept(calcWriter);
-        }
 
         @Override
 		public ResultStyle getResultStyle() {

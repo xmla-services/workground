@@ -51,7 +51,7 @@ class IsNullFunDef extends FunDefBase {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
             @Override
-			public boolean evaluateBoolean(Evaluator evaluator) {
+			public Boolean evaluate(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);
                 return member.isNull()
                    || nonAllWithNullKey((RolapMember) member);

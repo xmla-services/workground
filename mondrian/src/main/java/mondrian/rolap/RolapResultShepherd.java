@@ -75,7 +75,7 @@ public class RolapResultShepherd {
                 // tasks will be put on an unbounded queue.
                 maximumPoolSize,
                 maximumPoolSize,
-                1,
+                1000000,
                 "mondrian.rolap.RolapResultShepherd$executor",
                 new RejectedExecutionHandler() {
                     @Override

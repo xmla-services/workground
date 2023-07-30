@@ -10,6 +10,7 @@
 */
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
@@ -17,7 +18,6 @@ import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -80,7 +80,7 @@ class PercentileFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

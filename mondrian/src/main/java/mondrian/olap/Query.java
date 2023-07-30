@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
+import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -41,7 +44,6 @@ import org.olap4j.impl.IdentifierParser;
 import org.olap4j.mdx.IdentifierSegment;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
@@ -781,21 +783,42 @@ public class Query extends QueryPart {
 
     @Override
     public void explain(PrintWriter pw) {
+    	SimpleProfileResultWriter spw = new SimpleProfileResultWriter(pw);
         final boolean profiling = getStatement().getProfileHandler() != null;
-        final CalcWriter calcWriter = new CalcWriter(pw, profiling);
         for (Formula formula : formulas) {
             formula.getMdxMember(); // TODO:
         }
         if (slicerCalc != null) {
             pw.println("Axis (FILTER):");
-            slicerCalc.accept(calcWriter);
+            
+			if (slicerCalc instanceof ProfilingCalc pc) {
+
+				CalcProfile calcProfile = pc.getProfile();
+				spw.write(calcProfile);
+				
+			} else {
+				pw.println("UNPROFILED: " + slicerCalc.getName());
+
+			}
             pw.println();
         }
         int i = -1;
         for (QueryAxis axis : axes) {
             ++i;
+			Calc<?> axisCalc = axisCalcs[i];
             pw.println(new StringBuilder("Axis (").append(axis.getAxisName()).append("):").toString());
-            axisCalcs[i].accept(calcWriter);
+            
+			if (axisCalc instanceof ProfilingCalc pc) {
+
+				CalcProfile calcProfile = pc.getProfile();
+				spw.write(calcProfile);
+				
+			} else {
+				pw.println("UNPROFILED: " + axisCalc.getName());
+
+			}
+
+
             pw.println();
         }
         pw.flush();

@@ -9,6 +9,8 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.TupleCalc;
 import mondrian.olap.Evaluator;
@@ -25,7 +27,7 @@ import mondrian.olap.type.Type;
  * @since Sep 27, 2005
  */
 public abstract class AbstractTupleCalc
-extends AbstractCalc
+extends AbstractNestedProfilingCalc<Object>
 implements TupleCalc
 {
     /**

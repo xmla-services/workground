@@ -17,7 +17,7 @@ import mondrian.olap.Evaluator;
  * @author Richard Emberson
  * @since Jan 11, 2007
  */
-public interface IterCalc extends Calc {
+public interface IterCalc extends Calc<Object> {
     /**
      * Evaluates an expression to yield an Iterable of members or tuples.
      *

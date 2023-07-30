@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -38,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -770,7 +771,7 @@ public class RolapSchemaReader
         FunDef fun, Exp[] args, Evaluator evaluator, Calc calc)
     {
         RolapEvaluator revaluator = (RolapEvaluator)
-            AbstractCalc.simplifyEvaluator(calc, evaluator);
+ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         if (evaluator.nativeEnabled()) {
             return schema.getNativeRegistry().createEvaluator(
                 revaluator, fun, args);

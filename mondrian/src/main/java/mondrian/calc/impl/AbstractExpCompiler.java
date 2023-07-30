@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
-import mondrian.calc.BooleanCalc;
 import mondrian.calc.Calc;
 import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;
@@ -392,30 +392,33 @@ public class AbstractExpCompiler implements ExpCompiler {
     @Override
     public BooleanCalc compileBoolean(Exp exp) {
         final Calc calc = compileScalar(exp, false);
-        if (calc instanceof BooleanCalc booleanCalc) {
-            if (calc instanceof ConstantCalc) {
-                final Object o = calc.evaluate(null);
-                if (!(o instanceof Boolean)) {
-                    return ConstantCalc.constantBoolean(
-                            CastFunDef.toBoolean(o, new BooleanType()));
-                }
-            }
-            return booleanCalc;
+        if (calc instanceof BooleanCalc bc) {
+            return bc;
         }
         if (calc instanceof DoubleCalc doubleCalc) {
             return new AbstractBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
                 @Override
-                public boolean evaluateBoolean(Evaluator evaluator) {
-                    return doubleCalc.evaluateDouble(evaluator) != 0;
-                }
+				public Boolean evaluate(Evaluator evaluator) {
+					double v0 = doubleCalc.evaluateDouble(evaluator);
+
+					if (Double.isNaN(v0) || v0 == FunUtil.DOUBLE_NULL) {
+						return FunUtil.BOOLEAN_NULL;
+					}
+
+					return v0 != 0;
+				}
             };
         } else if (calc instanceof IntegerCalc integerCalc) {
             return new AbstractBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
-                public boolean evaluateBoolean(Evaluator evaluator) {
-                    return integerCalc.evaluateInteger(evaluator) != 0;
-                }
-            };
+				public Boolean evaluate(Evaluator evaluator) {
+					int v0 = integerCalc.evaluateInteger(evaluator);
+					if (v0 == FunUtil.INTEGER_NULL) {
+						return FunUtil.BOOLEAN_NULL;
+					}
+					return v0 != 0;
+				}
+			};
         } else {
             return (BooleanCalc) calc;
         }

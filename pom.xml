@@ -985,6 +985,7 @@
     </dependency>
   </dependencies>
   <modules>
+    <module>compute</module>
     <module>org.eclipse.daanse.repackage.olap4j.xmla</module>
     <module>org.eclipse.daanse.repackage.olap4j</module>
     <module>org.eclipse.daanse.repackage.javacup</module>

@@ -9,6 +9,8 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DimensionCalc;
 import mondrian.olap.Evaluator;
@@ -26,7 +28,7 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class AbstractDimensionCalc
-extends AbstractCalc
+extends AbstractNestedProfilingCalc<Object>
 implements DimensionCalc
 {
     /**

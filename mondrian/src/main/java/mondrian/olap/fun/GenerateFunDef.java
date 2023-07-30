@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -27,7 +28,6 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.ConstantCalc;
@@ -199,7 +199,7 @@ class GenerateFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -252,7 +252,7 @@ class GenerateFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 }

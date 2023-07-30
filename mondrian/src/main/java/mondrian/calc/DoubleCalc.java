@@ -20,7 +20,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public interface DoubleCalc extends Calc {
+public interface DoubleCalc extends Calc<Object> {
     /**
      * Evaluates this expression to yield a <code>double</code> value.
      * If the result is null, returns the special

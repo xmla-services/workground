@@ -174,7 +174,7 @@ public class SetFunDef extends FunDefBase {
             if (type instanceof SetType) {
                 // TODO use resultStyles
                 final ListCalc listCalc = compiler.compileList(arg);
-                return new AbstractVoidCalc("AbstractVoidCalc1",type, new Calc[] {listCalc}) {
+                return new AbstractVoidCalc("Sublist",type, new Calc[] {listCalc}) {
                     @Override
 					public void evaluateVoid(Evaluator evaluator) {
                         TupleList list =
@@ -192,10 +192,6 @@ public class SetFunDef extends FunDefBase {
                         }
                     }
 
-                    @Override
-					protected String getName() {
-                        return "Sublist";
-                    }
                 };
             } else if (type instanceof mondrian.olap.type.LevelType) {
                 mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
@@ -277,7 +273,7 @@ public class SetFunDef extends FunDefBase {
             switch (calc.getResultStyle()) {
             case ITERABLE:
                 final IterCalc iterCalc = (IterCalc) calc;
-                return new AbstractIterCalc("VoidCalc",type, new Calc[]{calc}) {
+                return new AbstractIterCalc("Sublist",type, new Calc[]{calc}) {
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
@@ -285,15 +281,12 @@ public class SetFunDef extends FunDefBase {
                         return iterCalc.evaluateIterable(evaluator);
                     }
 
-                    @Override
-					protected String getName() {
-                        return "Sublist";
-                    }
+     
                 };
             case LIST:
             case MUTABLE_LIST:
                 final ListCalc listCalc = (ListCalc) calc;
-                return new AbstractIterCalc("VoidCalc",type, new Calc[]{calc}) {
+                return new AbstractIterCalc("Sublist",type, new Calc[]{calc}) {
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
@@ -315,10 +308,6 @@ public class SetFunDef extends FunDefBase {
                         return result;
                     }
 
-                    @Override
-					protected String getName() {
-                        return "Sublist";
-                    }
                 };
             }
             throw ResultStyleException.generateBadType(
@@ -327,7 +316,7 @@ public class SetFunDef extends FunDefBase {
         } else if (TypeUtil.couldBeMember(type)) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
             final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
-            return new AbstractIterCalc("VoidCalc",type, new Calc[] {memberCalc}) {
+            return new AbstractIterCalc("Sublist",type, new Calc[] {memberCalc}) {
                 @Override
 				public TupleIterable evaluateIterable(
                     Evaluator evaluator)
@@ -339,10 +328,7 @@ public class SetFunDef extends FunDefBase {
                         : new UnaryTupleList(Collections.singletonList(member));
                 }
 
-                @Override
-				protected String getName() {
-                    return "Sublist";
-                }
+ 
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
@@ -356,11 +342,6 @@ public class SetFunDef extends FunDefBase {
                     return new ListTupleList(
                         tupleCalc.getType().getArity(),
                         Arrays.asList(members));
-                }
-
-                @Override
-				protected String getName() {
-                    return "Sublist";
                 }
             };
         }

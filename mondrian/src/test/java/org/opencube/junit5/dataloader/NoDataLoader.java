@@ -24,8 +24,7 @@ public class NoDataLoader implements DataLoader{
 
 	@Override
 	public boolean loadData(Context dataSource) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

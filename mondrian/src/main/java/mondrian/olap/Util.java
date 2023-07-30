@@ -14,6 +14,9 @@
  */
 package mondrian.olap;
 
+import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
+import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -89,6 +92,9 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
+import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -110,7 +116,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.LevelExpr;
@@ -137,9 +142,6 @@ import mondrian.util.ConcatenableList;
 import mondrian.util.Pair;
 import mondrian.util.UtilCompatible;
 import mondrian.util.UtilCompatibleJdk16;
-
-import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
-import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
 
 /**
  * Utility functions used throughout mondrian. All methods are static.
@@ -4460,10 +4462,21 @@ public class Util extends XOMUtil {
     }
     final StringWriter stringWriter = new StringWriter();
     final PrintWriter printWriter = new PrintWriter( stringWriter );
-    final CalcWriter calcWriter = new CalcWriter( printWriter, true );
+    
+	SimpleProfileResultWriter spw = new SimpleProfileResultWriter(printWriter);
+
     printWriter.println( title );
     if ( calc != null ) {
-      calc.accept( calcWriter );
+    	
+    	if (calc instanceof ProfilingCalc pc) {
+
+			CalcProfile calcProfile = pc.getProfile();
+			spw.write(calcProfile);
+			
+		} else {
+			printWriter.println("UNPROFILED: " + calc.getName());
+
+		}
     }
     printWriter.close();
     handler.explain( stringWriter.toString(), timing );

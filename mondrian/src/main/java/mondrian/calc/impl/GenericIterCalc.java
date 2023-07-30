@@ -9,6 +9,12 @@
 
 package mondrian.calc.impl;
 
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Map;
+
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
@@ -28,7 +34,7 @@ import mondrian.olap.type.Type;
  * @since Nov 7, 2008
  */
 public abstract class GenericIterCalc
-extends AbstractCalc
+extends AbstractNestedProfilingCalc<Object>
 implements ListCalc, IterCalc
 {
     /**
@@ -55,7 +61,7 @@ implements ListCalc, IterCalc
 
     @Override
     public SetType getType() {
-        return (SetType) type;
+        return (SetType) super.getType();
     }
 
     @Override
@@ -80,4 +86,5 @@ implements ListCalc, IterCalc
         final Object o = evaluate(evaluator);
         return (TupleIterable) o;
     }
+
 }

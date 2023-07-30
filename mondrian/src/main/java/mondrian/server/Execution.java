@@ -208,11 +208,11 @@ public class Execution {
       case TIMEOUT:
         if ( timeoutTimeMillis > 0 ) {
           long currTime = System.currentTimeMillis();
-          if ( currTime > timeoutTimeMillis ) {
-            this.state = State.TIMEOUT;
-            fireExecutionEndEvent();
-            throw MondrianResource.instance().QueryTimeout.ex( timeoutIntervalMillis / 1000 );
-          }
+//          if ( currTime > timeoutTimeMillis ) {
+//            this.state = State.TIMEOUT;
+//            fireExecutionEndEvent();
+//            throw MondrianResource.instance().QueryTimeout.ex( timeoutIntervalMillis / 1000 );
+//          }
         }
         break;
       case ERROR:

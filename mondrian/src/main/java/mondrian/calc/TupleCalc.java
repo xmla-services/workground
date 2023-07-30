@@ -25,7 +25,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public interface TupleCalc extends Calc {
+public interface TupleCalc extends Calc<Object> {
     /**
      * Evaluates this expression to yield a tuple.
      *

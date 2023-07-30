@@ -22,7 +22,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface LevelCalc extends Calc {
+public interface LevelCalc extends Calc<Object> {
     /**
      * Evaluates this expression to yield a level.
      *

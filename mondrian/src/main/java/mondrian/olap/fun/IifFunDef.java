@@ -9,7 +9,8 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.BooleanCalc;
+import org.eclipse.daanse.calc.api.BooleanCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
@@ -94,7 +95,7 @@ public class IifFunDef extends FunDefBase {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
@@ -114,7 +115,7 @@ public class IifFunDef extends FunDefBase {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
@@ -144,7 +145,7 @@ public class IifFunDef extends FunDefBase {
                 @Override
 				public String evaluateString(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     StringCalc calc = b ? calc1 : calc2;
                     return calc.evaluateString(evaluator);
                 }
@@ -170,7 +171,7 @@ public class IifFunDef extends FunDefBase {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
-                            booleanCalc.evaluateBoolean(evaluator);
+                            booleanCalc.evaluate(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
@@ -201,7 +202,7 @@ public class IifFunDef extends FunDefBase {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
-                            booleanCalc.evaluateBoolean(evaluator);
+                            booleanCalc.evaluate(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
@@ -231,13 +232,13 @@ public class IifFunDef extends FunDefBase {
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
             return new AbstractBooleanCalc(call.getFunName(),call.getType(), calcs) {
                 @Override
-				public boolean evaluateBoolean(Evaluator evaluator) {
+				public Boolean evaluate(Evaluator evaluator) {
                     final boolean condition =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     if (condition) {
-                        return booleanCalc1.evaluateBoolean(evaluator);
+                        return booleanCalc1.evaluate(evaluator);
                     } else {
-                        return booleanCalc2.evaluateBoolean(evaluator);
+                        return booleanCalc2.evaluate(evaluator);
                     }
                 }
             };

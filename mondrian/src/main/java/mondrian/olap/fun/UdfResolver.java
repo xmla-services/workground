@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -36,6 +37,7 @@ import mondrian.olap.FunDef;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
@@ -195,12 +197,16 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf2 = factory.create();
             if (call.getType() instanceof SetType) {
                 return new ListCalcImpl(call, calcs, udf2, expCalcs);
-            } else {
+            } else if(call.getType() instanceof BooleanType) {
+                return new BooleanScalarUserDefinedFunctionCalcImpl(call, calcs, udf2, expCalcs);
+            }else {
                 return new ScalarCalcImpl(call, calcs, udf2, expCalcs);
             }
         }
     }
 
+
+    
     /**
      * Expression that evaluates a scalar user-defined function.
      */

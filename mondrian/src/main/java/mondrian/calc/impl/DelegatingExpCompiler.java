@@ -12,7 +12,8 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
-import mondrian.calc.BooleanCalc;
+import org.eclipse.daanse.calc.api.BooleanCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;

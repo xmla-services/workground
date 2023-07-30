@@ -51,7 +51,7 @@ class IsFunDef extends FunDefBase {
             		call.getFunName(),call.getType(), new Calc[] {tupleCalc0, tupleCalc1})
             {
                 @Override
-				public boolean evaluateBoolean(Evaluator evaluator) {
+				public Boolean evaluate(Evaluator evaluator) {
                     Member[] o0 = tupleCalc0.evaluateTuple(evaluator);
                     Member[] o1 = tupleCalc1.evaluateTuple(evaluator);
                     return FunUtil.equalTuple(o0, o1);
@@ -63,7 +63,7 @@ class IsFunDef extends FunDefBase {
             final Calc calc1 = compiler.compile(call.getArg(1));
             return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
                 @Override
-				public boolean evaluateBoolean(Evaluator evaluator) {
+				public Boolean evaluate(Evaluator evaluator) {
                     Object o0 = calc0.evaluate(evaluator);
                     Object o1 = calc1.evaluate(evaluator);
                     return o0.equals(o1);

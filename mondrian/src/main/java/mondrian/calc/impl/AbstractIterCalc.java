@@ -9,6 +9,8 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ResultStyle;
@@ -30,7 +32,7 @@ import mondrian.olap.type.Type;
  * @since Oct 24, 2008
  */
 public abstract class AbstractIterCalc
-extends AbstractCalc
+extends AbstractNestedProfilingCalc<Object>
 implements IterCalc
 {
     /**
