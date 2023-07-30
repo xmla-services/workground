@@ -156,7 +156,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
         }
     }
 
@@ -172,7 +172,7 @@ class FilterFunDef extends FunDefBase {
             evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
-                Calc[] calcs = getCalcs();
+                Calc[] calcs = getChildCalcs();
                 ListCalc lcalc = (ListCalc) calcs[0];
                 BooleanCalc bcalc = (BooleanCalc) calcs[1];
 
@@ -212,7 +212,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		protected TupleIterable makeIterable(Evaluator evaluator) {
-            Calc[] calcs = getCalcs();
+            Calc[] calcs = getChildCalcs();
             ListCalc lcalc = (ListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
             TupleList members = lcalc.evaluateList(evaluator);
@@ -252,7 +252,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		protected TupleIterable makeIterable(Evaluator evaluator) {
-            Calc[] calcs = getCalcs();
+            Calc[] calcs = getChildCalcs();
             IterCalc icalc = (IterCalc) calcs[0];
             final BooleanCalc bcalc = (BooleanCalc) calcs[1];
 
@@ -347,7 +347,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
         }
     }
 
@@ -360,7 +360,7 @@ class FilterFunDef extends FunDefBase {
 
         @Override
 		protected TupleList makeList(Evaluator evaluator) {
-            Calc[] calcs = getCalcs();
+            Calc[] calcs = getChildCalcs();
             ListCalc lcalc = (ListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
             TupleList members0 = lcalc.evaluateList(evaluator);
@@ -402,7 +402,7 @@ class FilterFunDef extends FunDefBase {
             evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
-                Calc[] calcs = getCalcs();
+                Calc[] calcs = getChildCalcs();
                 ListCalc lcalc = (ListCalc) calcs[0];
                 BooleanCalc bcalc = (BooleanCalc) calcs[1];
                 TupleList members0 = lcalc.evaluateList(evaluator);

@@ -92,7 +92,7 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 import org.eclipse.daanse.calc.api.ProfilingCalc;
 import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -4470,7 +4470,7 @@ public class Util extends XOMUtil {
     	
     	if (calc instanceof ProfilingCalc pc) {
 
-			CalcProfile calcProfile = pc.getProfile();
+			CalculationProfile calcProfile = pc.getCalculationProfile();
 			spw.write(calcProfile);
 			
 		} else {

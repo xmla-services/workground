@@ -10,12 +10,11 @@
 package org.eclipse.daanse.calc.impl;
 
 import java.io.PrintWriter;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 
 public class SimpleProfileResultWriter {
 	private static final int DEFAULT_INDENT = 4;
@@ -34,11 +33,11 @@ public class SimpleProfileResultWriter {
 		this.indent = indent;
 	}
 
-	public void write(CalcProfile profile) {
+	public void write(CalculationProfile profile) {
 		write(profile, false);
 	}
 
-	private void write(CalcProfile profile, boolean doIndent) {
+	private void write(CalculationProfile profile, boolean doIndent) {
 
 		if (doIndent) {
 			indent();
@@ -91,7 +90,7 @@ public class SimpleProfileResultWriter {
 
 		printWriter.println();
 
-		for (final CalcProfile childCalc : profile.childProfiles()) {
+		for (final CalculationProfile childCalc : profile.childProfiles()) {
 			write(childCalc, true);
 
 		}

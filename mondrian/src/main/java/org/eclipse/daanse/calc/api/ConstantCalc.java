@@ -11,11 +11,14 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.api.constant;
+package org.eclipse.daanse.calc.api;
 
 import mondrian.calc.Calc;
 
+/**
+ * Marker Interface for {@link Calc} that returns the same value on each call of
+ * {@link #evaluate(mondrian.olap.Evaluator)} method.
+ */
 public interface ConstantCalc<E> extends Calc<E> {
 
-	
 }

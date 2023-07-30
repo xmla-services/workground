@@ -20,5 +20,5 @@ public interface ProfilingCalc<E> extends Calc<E> {
 
 	E evaluateWithProfile(Evaluator evaluator);
 
-	CalcProfile getProfile();
+	CalculationProfile getCalculationProfile();
 }

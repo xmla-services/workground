@@ -1033,7 +1033,7 @@ public String compileExpression( String expression, final boolean scalar ) {
     SimpleProfileResultWriter w=new SimpleProfileResultWriter(pw);
     
 	if (calc instanceof ProfilingCalc pc) {
-		w.write(pc.getProfile());
+		w.write(pc.getCalculationProfile());
 	}else {
 		throw new RuntimeException("must be profiling calc");
 	}

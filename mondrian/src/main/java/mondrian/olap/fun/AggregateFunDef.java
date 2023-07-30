@@ -384,7 +384,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             if (hierarchy.getDimension().isMeasures()) {
                 return true;
             }
-            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
         }
 
         /**

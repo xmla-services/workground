@@ -76,7 +76,7 @@ public class CacheFunDef extends FunDefBase {
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {cacheDescriptor.getCalc()};
                 }
 
@@ -94,7 +94,7 @@ public class CacheFunDef extends FunDefBase {
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {cacheDescriptor.getCalc()};
                 }
 

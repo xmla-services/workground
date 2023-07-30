@@ -112,7 +112,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }
@@ -135,7 +135,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }

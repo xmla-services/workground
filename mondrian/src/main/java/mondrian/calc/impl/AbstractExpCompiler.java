@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -396,7 +397,7 @@ public class AbstractExpCompiler implements ExpCompiler {
             return bc;
         }
         if (calc instanceof DoubleCalc doubleCalc) {
-            return new AbstractBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
+            return new AbstractBooleanNestedProfilingCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					double v0 = doubleCalc.evaluateDouble(evaluator);
@@ -409,7 +410,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
             };
         } else if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractBooleanNestedProfilingCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					int v0 = integerCalc.evaluateInteger(evaluator);

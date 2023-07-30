@@ -67,7 +67,7 @@ class PropertiesFunDef extends FunDefBase {
             }
 
             @Override
-			public Calc[] getCalcs() {
+			public Calc[] getChildCalcs() {
                 return new Calc[] {memberCalc, stringCalc};
             }
         };

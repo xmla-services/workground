@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 import org.eclipse.daanse.calc.api.ProfilingCalc;
 import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.Connection;
@@ -793,7 +793,7 @@ public class Query extends QueryPart {
             
 			if (slicerCalc instanceof ProfilingCalc pc) {
 
-				CalcProfile calcProfile = pc.getProfile();
+				CalculationProfile calcProfile = pc.getCalculationProfile();
 				spw.write(calcProfile);
 				
 			} else {
@@ -810,7 +810,7 @@ public class Query extends QueryPart {
             
 			if (axisCalc instanceof ProfilingCalc pc) {
 
-				CalcProfile calcProfile = pc.getProfile();
+				CalculationProfile calcProfile = pc.getCalculationProfile();
 				spw.write(calcProfile);
 				
 			} else {

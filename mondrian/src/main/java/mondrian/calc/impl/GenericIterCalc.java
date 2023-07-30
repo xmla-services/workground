@@ -41,7 +41,7 @@ implements ListCalc, IterCalc
      * Creates a GenericIterCalc without specifying child calculated
      * expressions.
      *
-     * <p>Subclass should override {@link #getCalcs()}.
+     * <p>Subclass should override {@link #getChildCalcs()}.
      *
      * @param exp Source expression
      */

@@ -85,7 +85,7 @@ public class MemberArrayValueCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return memberCalcs;
     }
 
