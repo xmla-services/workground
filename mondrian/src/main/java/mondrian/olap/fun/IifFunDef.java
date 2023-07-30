@@ -10,12 +10,12 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
@@ -101,7 +101,7 @@ public class IifFunDef extends FunDefBase {
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
 
@@ -121,7 +121,7 @@ public class IifFunDef extends FunDefBase {
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
             };
@@ -177,7 +177,7 @@ public class IifFunDef extends FunDefBase {
                     }
 
                     @Override
-					public Calc[] getCalcs() {
+					public Calc[] getChildCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -208,7 +208,7 @@ public class IifFunDef extends FunDefBase {
                     }
 
                     @Override
-					public Calc[] getCalcs() {
+					public Calc[] getChildCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -230,7 +230,7 @@ public class IifFunDef extends FunDefBase {
             final BooleanCalc booleanCalc2 =
                 compiler.compileBoolean(call.getArg(2));
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
-            return new AbstractBooleanCalc(call.getFunName(),call.getType(), calcs) {
+            return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), calcs) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
                     final boolean condition =

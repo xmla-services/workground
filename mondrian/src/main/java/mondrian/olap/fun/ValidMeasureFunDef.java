@@ -186,7 +186,7 @@ public class ValidMeasureFunDef extends FunDefBase
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[]{calc};
         }
 
@@ -223,7 +223,7 @@ public class ValidMeasureFunDef extends FunDefBase
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
             // depends on all hierarchies
-            return HirarchyDependsChecker.butDepends(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.butDepends(getChildCalcs(), hierarchy);
         }
     }
 }

@@ -74,7 +74,7 @@ class VarFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

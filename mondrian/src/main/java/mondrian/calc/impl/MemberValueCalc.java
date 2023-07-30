@@ -106,7 +106,7 @@ public class MemberValueCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new MemberCalc[] {memberCalc};
     }
 

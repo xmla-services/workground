@@ -149,7 +149,7 @@ public class SetFunDef extends FunDefBase {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return voidCalcs;
         }
 
@@ -400,7 +400,7 @@ public class SetFunDef extends FunDefBase {
 
         // override return type
         @Override
-		public IterCalc[] getCalcs() {
+		public IterCalc[] getChildCalcs() {
             return iterCalcs;
         }
 

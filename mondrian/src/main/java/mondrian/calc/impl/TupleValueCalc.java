@@ -70,7 +70,7 @@ public class TupleValueCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new Calc[] {tupleCalc};
     }
 

@@ -22,7 +22,7 @@ import java.util.Optional;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
-public interface CalcProfile {
+public interface CalculationProfile {
 
 	String name();
 
@@ -40,7 +40,7 @@ public interface CalcProfile {
 
 	List<CalcEvaluationProfile> evaluationProfiles();
 
-	List<CalcProfile> childProfiles();
+	List<CalculationProfile> childProfiles();
 
 	Duration duration();
 

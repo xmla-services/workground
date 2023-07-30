@@ -40,7 +40,7 @@ public class AbstractVoidCalc extends GenericCalc implements VoidCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return calcs;
     }
 }

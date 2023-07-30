@@ -13,13 +13,10 @@
 */
 package org.eclipse.daanse.calc.impl;
 
-import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 import org.eclipse.daanse.calc.api.ProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -30,11 +27,19 @@ import mondrian.olap.type.Type;
 
 public abstract class AbstractNestedProfilingCalc<E> extends AbstractProfilingCalc<E> implements Calc<E> {
 
-	private final Calc<?>[] calcs;
+	private final Calc<?>[] childCalcs;
 
-	protected AbstractNestedProfilingCalc(String name, Type type, Calc<?>[] calcs) {
+    /**
+     * {@inheritDoc}
+     *
+     * Holds the childCalcs witch are accessible using {@link #getChildCalcs()}.
+     * Enhances its own {@link CalculationProfile} with the Children's {@link CalculationProfile}.
+     * 
+     * @param calcs Child {@link Calc}s that are needed to calculate this.
+     */
+	protected AbstractNestedProfilingCalc(String name, Type type, Calc<?>[] childCalcs) {
 		super(type, name);
-		this.calcs = calcs;
+		this.childCalcs = childCalcs;
 
 	}
 
@@ -59,13 +64,13 @@ public abstract class AbstractNestedProfilingCalc<E> extends AbstractProfilingCa
     }
 
 
-     public Calc<?>[] getCalcs() {
-        return calcs;
+     public Calc<?>[] getChildCalcs() {
+        return childCalcs;
     }
 
     @Override
     public boolean dependsOn( Hierarchy hierarchy ) {
-        return HirarchyDependsChecker.checkAnyDependsOnChilds(  getCalcs(),hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsOnChilds(  getChildCalcs(),hierarchy );
     }
     
 
@@ -75,9 +80,9 @@ public abstract class AbstractNestedProfilingCalc<E> extends AbstractProfilingCa
     }
 
 	@Override
-	protected List<CalcProfile> getChildProfiles() {
-		List<CalcProfile> childProfiles = Stream.of(getCalcs()).filter(ProfilingCalc.class::isInstance)
-				.map(ProfilingCalc.class::cast).map(ProfilingCalc::getProfile).toList();
+	protected List<CalculationProfile> getChildProfiles() {
+		List<CalculationProfile> childProfiles = Stream.of(getChildCalcs()).filter(ProfilingCalc.class::isInstance)
+				.map(ProfilingCalc.class::cast).map(ProfilingCalc::getCalculationProfile).toList();
 
 		return childProfiles;
 	}

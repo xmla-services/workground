@@ -176,7 +176,7 @@ public class CastFunDef extends FunDefBase {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 

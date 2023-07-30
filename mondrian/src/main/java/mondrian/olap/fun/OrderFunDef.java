@@ -80,7 +80,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     if (keySpecCount == 1 && ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) )) {
         List<MemberCalc> constantList = new ArrayList<>();
         List<MemberCalc> variableList = new ArrayList<>();
-        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractNestedProfilingCalc) expCalc ).getCalcs();
+        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractNestedProfilingCalc) expCalc ).getChildCalcs();
         for ( MemberCalc memberCalc : calcs ) {
           if ( memberCalc.isWrapperFor( ConstantCalc.class ) && !listCalc.dependsOn( memberCalc.getType()
               .getHierarchy() ) ) {
@@ -248,7 +248,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return HirarchyDependsChecker.checkAnyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
     private Flag getDesc(boolean brk) {
@@ -282,7 +282,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         SortKeySpec key = iter.next();
         Calc expCalc = key.getKey();
         if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl calc) {
-          Calc[] calcs = calc.getCalcs();
+          Calc[] calcs = calc.getChildCalcs();
           MemberCalc memberCalc = (MemberCalc) calcs[0];
           if ( memberCalc instanceof ConstantCalc || !listHierarchies.contains( memberCalc.getType()
               .getHierarchy() ) ) {

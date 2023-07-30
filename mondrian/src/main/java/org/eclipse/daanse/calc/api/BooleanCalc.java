@@ -15,6 +15,15 @@ package org.eclipse.daanse.calc.api;
 
 import mondrian.calc.Calc;
 
+
+/**
+ * @author: Stefan Bischof 
+ * 
+ * Marker interface to check the returning type of an {@link mondrian.calc.Calc}
+ */
+
+//TODO: used sealed types
+
 public interface BooleanCalc extends Calc<Boolean> {
    
 }

@@ -8,12 +8,12 @@
 */
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -49,7 +49,7 @@ class IsNullFunDef extends FunDefBase {
             throw new IllegalArgumentException("ArgCount should be 1 ");
         }
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
-        return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
+        return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
             @Override
 			public Boolean evaluate(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);

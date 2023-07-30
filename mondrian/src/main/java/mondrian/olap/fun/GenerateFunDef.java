@@ -199,7 +199,7 @@ class GenerateFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
         }
     }
 
@@ -252,7 +252,7 @@ class GenerateFunDef extends FunDefBase {
 
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
-            return HirarchyDependsChecker.checkAnyDependsButFirst(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
         }
     }
 }

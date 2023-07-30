@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -47,7 +47,7 @@ class IsFunDef extends FunDefBase {
         case Category.TUPLE:
             final TupleCalc tupleCalc0 = compiler.compileTuple(call.getArg(0));
             final TupleCalc tupleCalc1 = compiler.compileTuple(call.getArg(1));
-            return new AbstractBooleanCalc(
+            return new AbstractBooleanNestedProfilingCalc(
             		call.getFunName(),call.getType(), new Calc[] {tupleCalc0, tupleCalc1})
             {
                 @Override
@@ -61,7 +61,7 @@ class IsFunDef extends FunDefBase {
             assert category == call.getArg(1).getCategory();
             final Calc calc0 = compiler.compile(call.getArg(0));
             final Calc calc1 = compiler.compile(call.getArg(1));
-            return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
+            return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
                     Object o0 = calc0.evaluate(evaluator);

@@ -53,7 +53,7 @@ import mondrian.olap.type.Type;
  *
  * Each of these sub-interfaces has an abstract implementation:
  * {@link mondrian.calc.impl.AbstractIntegerCalc},
- * {@link mondrian.calc.impl.AbstractBooleanCalc},
+ * {@link org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc},
  * {@link mondrian.calc.impl.AbstractDoubleCalc},
  * {@link mondrian.calc.impl.AbstractStringCalc},
  * {@link mondrian.calc.impl.AbstractMemberCalc},

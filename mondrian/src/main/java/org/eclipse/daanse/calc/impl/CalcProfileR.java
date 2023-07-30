@@ -2,20 +2,19 @@ package org.eclipse.daanse.calc.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
 public record CalcProfileR(String name, Class<?> clazz, Type type, ResultStyle resultStyle, Optional<Instant> start,
 		Optional<Instant> end, Map<String, Object> additionalValues, List<CalcEvaluationProfile> evaluationProfiles,
-		List<CalcProfile> childProfiles) implements CalcProfile {
+		List<CalculationProfile> childProfiles) implements CalculationProfile {
 
 	@Override
 	public Duration duration() {

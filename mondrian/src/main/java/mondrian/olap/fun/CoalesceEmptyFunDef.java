@@ -60,7 +60,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             }
 
             @Override
-			public Calc[] getCalcs() {
+			public Calc[] getChildCalcs() {
                 return calcs;
             }
         };

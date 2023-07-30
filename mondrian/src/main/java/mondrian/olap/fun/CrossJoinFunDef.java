@@ -238,7 +238,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         return (TupleIterable) nativeEvaluator.execute( ResultStyle.ITERABLE );
       }
 
-      Calc[] calcs = getCalcs();
+      Calc[] calcs = getChildCalcs();
       IterCalc calc1 = (IterCalc) calcs[0];
       IterCalc calc2 = (IterCalc) calcs[1];
 
@@ -419,7 +419,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         return (TupleList) nativeEvaluator.execute( ResultStyle.LIST );
       }
 
-      Calc[] calcs = getCalcs();
+      Calc[] calcs = getChildCalcs();
       ListCalc listCalc1 = (ListCalc) calcs[0];
       ListCalc listCalc2 = (ListCalc) calcs[1];
 

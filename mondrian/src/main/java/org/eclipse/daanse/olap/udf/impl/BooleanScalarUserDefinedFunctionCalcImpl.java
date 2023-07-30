@@ -12,17 +12,17 @@
 */
 package org.eclipse.daanse.olap.udf.impl;
 
+import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;
 import mondrian.spi.UserDefinedFunction;
 
-public class BooleanScalarUserDefinedFunctionCalcImpl extends AbstractBooleanCalc {
+public class BooleanScalarUserDefinedFunctionCalcImpl extends AbstractBooleanNestedProfilingCalc {
         private final UserDefinedFunction udf;
         private final UserDefinedFunction.Argument[] args;
 

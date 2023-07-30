@@ -15,8 +15,8 @@ package org.eclipse.daanse.calc.impl;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.CalcProfile;
-import org.eclipse.daanse.calc.api.constant.ConstantCalc;
+import org.eclipse.daanse.calc.api.CalculationProfile;
+import org.eclipse.daanse.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.ResultStyle;
@@ -57,7 +57,7 @@ public abstract class AbstractConstantProfilingCalc<T> extends AbstractProfiling
 		return null;
 	}
 	@Override
-	List<CalcProfile> getChildProfiles() {
+	List<CalculationProfile> getChildProfiles() {
 		return List.of();
 	}
 

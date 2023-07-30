@@ -369,7 +369,7 @@ public class JavaFunDef extends FunDefBase {
 
         @Override
 		public Object evaluate(Evaluator evaluator) {
-            final Calc[] calcs = getCalcs();
+            final Calc[] calcs = getChildCalcs();
             for (int i = 0; i < args.length; i++) {
                 args[i] = calcs[i].evaluate(evaluator);
                 if (args[i] == null) {

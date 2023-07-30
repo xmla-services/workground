@@ -22,9 +22,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalcProfile;
+import org.eclipse.daanse.calc.api.CalculationProfile;
 import org.eclipse.daanse.calc.api.ProfilingCalc;
 
+import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
@@ -38,6 +39,12 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 
 	private final List<CalcEvaluationProfile> evaluations = new ArrayList<CalcEvaluationProfile>();
 
+	/**
+	 * Abstract Implementation of {@link ProfilingCalc} that generated a {@link CalculationProfile} while calling {@link #evaluateWithProfile(Evaluator)))
+	 *
+	 * @param Type
+	 * @param name
+	 */
 	public AbstractProfilingCalc(Type type, String name) {
 		this.type = type;
 		this.name = name;
@@ -72,15 +79,15 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 	}
 
 
-	public CalcProfile getProfile() {
-		final List<CalcProfile> childProfiles = getChildProfiles();
+	public CalculationProfile getCalculationProfile() {
+		final List<CalculationProfile> childProfiles = getChildProfiles();
 		Map<String, Object> profilingProperties =profilingProperties(new HashMap<String, Object>());
 		return new CalcProfileR(getName(), this.getClass(), getType(),getResultStyle(), Optional.ofNullable(firstEvalStart),
 				Optional.ofNullable(lastEvalEnd), profilingProperties, evaluations, childProfiles);
 	}
 
 	
-	List<CalcProfile> getChildProfiles() {
+	List<CalculationProfile> getChildProfiles() {
 		return List.of();
 	}
 

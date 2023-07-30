@@ -35,7 +35,7 @@ public class CacheCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new Calc[] {key.getCalc()};
     }
 }

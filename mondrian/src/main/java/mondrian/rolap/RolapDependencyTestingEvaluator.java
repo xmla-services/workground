@@ -322,7 +322,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 
@@ -363,7 +363,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 

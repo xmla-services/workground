@@ -228,7 +228,7 @@ public class UdfResolver implements Resolver {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return calcs;
         }
 
