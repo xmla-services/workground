@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
@@ -71,8 +71,8 @@ class TupleItemFunDef extends FunDefBase {
 				public Member evaluateMember(Evaluator evaluator) {
                     final Member member =
                             memberCalc.evaluateMember(evaluator);
-                    final int index =
-                            indexCalc.evaluateInteger(evaluator);
+                    final Integer index =
+                            indexCalc.evaluate(evaluator);
                     if (index != 0) {
                         return null;
                     }
@@ -95,7 +95,7 @@ class TupleItemFunDef extends FunDefBase {
                             tupleCalc.evaluateTuple(evaluator);
                     assert members == null
                         || members.length == nullTupleMembers.length;
-                    final int index = indexCalc.evaluateInteger(evaluator);
+                    final Integer index = indexCalc.evaluate(evaluator);
                     if (members == null) {
                         return nullTupleMembers[index];
                     }

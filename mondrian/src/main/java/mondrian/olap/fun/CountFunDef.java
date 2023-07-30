@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
@@ -18,7 +19,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractIntegerCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -48,9 +48,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc calc = compiler.compileAs( call.getArg( 0 ), null, ResultStyle.ITERABLE_ANY );
     final boolean includeEmpty =
         call.getArgCount() < 2 || ( (Literal) call.getArg( 1 ) ).getValue().equals( "INCLUDEEMPTY" );
-    return new AbstractIntegerCalc( call.getFunName(),call.getType(), new Calc[] { calc } ) {
+    return new AbstractProfilingNestedIntegerCalc( call.getFunName(),call.getType(), new Calc[] { calc } ) {
       @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( CountFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {

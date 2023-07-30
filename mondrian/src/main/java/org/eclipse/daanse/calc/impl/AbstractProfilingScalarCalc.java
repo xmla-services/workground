@@ -13,12 +13,18 @@
 */
 package org.eclipse.daanse.calc.impl;
 
-import mondrian.olap.type.BooleanType;
+import mondrian.calc.ResultStyle;
+import mondrian.olap.type.Type;
 
-public class BooleanConstantProfilingCalc extends AbstractConstantProfilingCalc<Boolean> {
+public abstract class AbstractProfilingScalarCalc<T> extends AbstractProfilingCalc<T> {
 
-	public BooleanConstantProfilingCalc(Boolean value) {
-		super(value, new BooleanType(), "BooleanConstantProfilingCalc");
+	public AbstractProfilingScalarCalc(Type type, String name) {
+		super(type, name);
+	}
+
+	@Override
+	public ResultStyle getResultStyle() {
+		return ResultStyle.VALUE;
 	}
 
 }

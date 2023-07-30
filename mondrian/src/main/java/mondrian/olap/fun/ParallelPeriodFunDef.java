@@ -9,13 +9,14 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
@@ -25,6 +26,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Validator;
+import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
@@ -73,7 +75,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         final IntegerCalc lagValueCalc =
             (args.length >= 2)
             ? compiler.compileInteger(args[1])
-            : ConstantCalc.constantInteger(1);
+            : new ConstantIntegerProfilingCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
 
         // If level is not specified, we compute it from
         // member at runtime.
@@ -116,7 +118,7 @@ class ParallelPeriodFunDef extends FunDefBase {
             @Override
 			public Member evaluateMember(Evaluator evaluator) {
                 Member member;
-                int lagValue = lagValueCalc.evaluateInteger(evaluator);
+                Integer lagValue = lagValueCalc.evaluate(evaluator);
                 Level ancestorLevel;
                 if (ancestorLevelCalc != null) {
                     ancestorLevel = ancestorLevelCalc.evaluateLevel(evaluator);
@@ -146,7 +148,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         Member member,
         Level ancestorLevel,
         Evaluator evaluator,
-        int lagValue)
+        Integer lagValue)
     {
         // Now do some error checking.
         // The ancestorLevel and the member must be from the

@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
@@ -71,7 +71,7 @@ class AncestorFunDef extends FunDefBase {
             {
                 @Override
 				public Member evaluateMember(Evaluator evaluator) {
-                    int distance = distanceCalc.evaluateInteger(evaluator);
+                    Integer distance = distanceCalc.evaluate(evaluator);
                     Member member = memberCalc.evaluateMember(evaluator);
                     return FunUtil.ancestor(evaluator, member, distance, null);
                 }

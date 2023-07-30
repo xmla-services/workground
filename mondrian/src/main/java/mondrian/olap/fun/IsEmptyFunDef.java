@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -47,7 +47,7 @@ class IsEmptyFunDef extends FunDefBase {
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Calc calc = compiler.compileScalar(call.getArg(0), true);
-        return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
+        return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
             @Override
 			public Boolean evaluate(Evaluator evaluator) {
                 Object o = calc.evaluate(evaluator);

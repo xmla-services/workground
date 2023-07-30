@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.IterCalc;
@@ -34,7 +34,7 @@ import mondrian.olap.type.Type;
  * @since Nov 7, 2008
  */
 public abstract class GenericIterCalc
-extends AbstractNestedProfilingCalc<Object>
+extends AbstractProfilingNestedCalc<Object>
 implements ListCalc, IterCalc
 {
     /**

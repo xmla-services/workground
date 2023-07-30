@@ -11,12 +11,16 @@ package mondrian.calc.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
+import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -26,7 +30,6 @@ import mondrian.calc.DimensionCalc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.IterCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
@@ -46,7 +49,6 @@ import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
-import mondrian.olap.fun.CastFunDef;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.HierarchyDimensionFunDef;
@@ -305,20 +307,54 @@ public class AbstractExpCompiler implements ExpCompiler {
         {
             return (IntegerCalc) calc;
         }
-        if (type instanceof NumericType) {
-            if (calc instanceof ConstantCalc constantCalc) {
-                return new ConstantCalc(
-                        new DecimalType(Integer.MAX_VALUE, 0),
-                        constantCalc.evaluateInteger(null));
-            } else if (calc instanceof DoubleCalc doubleCalc) {
-                return new AbstractIntegerCalc("AbstractIntegerCalc",exp.getType(), new Calc[] {doubleCalc}) {
-                    @Override
-                    public int evaluateInteger(Evaluator evaluator) {
-                        return (int) doubleCalc.evaluateDouble(evaluator);
-                    }
-                };
-            }
-        }
+		if (type instanceof NullType) {
+			if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc<?> constantCalc) {
+				//no evaluate on constantCalc  result is null and constant - nothing expected while evaluate
+				return new ConstantIntegerProfilingCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
+			}		
+
+		}
+		if (type instanceof NumericType) {
+			if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc<?> constantCalc) {
+
+				Object o = constantCalc.evaluate(evaluator);
+				Integer i = null;
+				if (o != null) {
+					Number n = (Number) o;
+					i = n.intValue();
+				}
+				return new ConstantIntegerProfilingCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
+			} else if (calc instanceof DoubleCalc doubleCalc) {
+				return new AbstractProfilingNestedIntegerCalc("AbstractIntegerCalc", exp.getType(),
+						new Calc[] { doubleCalc }) {
+					@Override
+					public Integer evaluate(Evaluator evaluator) {
+						Double d = doubleCalc.evaluateDouble(evaluator);
+						if (d == null) {
+							return null;
+						}
+						return d.intValue();
+					}
+				};
+			}
+
+		} else {
+			return new AbstractProfilingNestedIntegerCalc("AbstractIntegerCalc", new DecimalType(Integer.MAX_VALUE, 0),
+					new Calc[] { calc }) {
+				@Override
+				public Integer evaluate(Evaluator evaluator) {
+					Object o = calc.evaluate(evaluator);
+					if (o == null) {
+						return null;
+					} else if (o instanceof Number n) {
+						return n.intValue();
+					}
+
+					throw evaluator.newEvalException(null, "expected NUMBER was " + o);
+				}
+			};
+		}
+        
         return (IntegerCalc) calc;
     }
 
@@ -397,7 +433,7 @@ public class AbstractExpCompiler implements ExpCompiler {
             return bc;
         }
         if (calc instanceof DoubleCalc doubleCalc) {
-            return new AbstractBooleanNestedProfilingCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
+            return new AbstractProfilingNestedBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					double v0 = doubleCalc.evaluateDouble(evaluator);
@@ -410,11 +446,11 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
             };
         } else if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractBooleanNestedProfilingCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractProfilingNestedBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
-					int v0 = integerCalc.evaluateInteger(evaluator);
-					if (v0 == FunUtil.INTEGER_NULL) {
+					Integer v0 = integerCalc.evaluate(evaluator);
+					if (v0 == null) {
 						return FunUtil.BOOLEAN_NULL;
 					}
 					return v0 != 0;
@@ -441,7 +477,14 @@ public class AbstractExpCompiler implements ExpCompiler {
             return new AbstractDoubleCalc("AbstractDoubleCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
                 public double evaluateDouble(Evaluator evaluator) {
-                    return integerCalc.evaluateInteger(evaluator);
+                	
+                	Integer i=integerCalc.evaluate(evaluator);
+                	if(i==null) {
+                		return FunUtil.DOUBLE_NULL;
+                				//null;
+                				// TODO: !!! JUST REFACTORING 0 must be null
+                	}
+                    return i.doubleValue();
                 }
             };
         }

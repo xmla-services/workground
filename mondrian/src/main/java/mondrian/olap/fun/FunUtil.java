@@ -96,11 +96,11 @@ public class FunUtil extends Util {
    */
   public static final double DOUBLE_EMPTY = -0.000000012345;
 
-  /**
-   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
-   * mondrian.calc.IntegerCalc}.
-   */
-  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
+//  /**
+//   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
+//   * org.eclipse.daanse.calc.api.IntegerCalc}.
+//   */
+//  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
 
   /**
    * Null value in three-valued boolean logic. Actually, a placeholder until we actually implement 3VL.
@@ -688,14 +688,14 @@ public class FunUtil extends Util {
       : d;
   }
 
-  /**
-   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
-   */
-  public static Integer box( int n ) {
-    return n == FunUtil.INTEGER_NULL
-      ? null
-      : n;
-  }
+//  /**
+//   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
+//   */
+//  public static Integer box( int n ) {
+//    return n == FunUtil.INTEGER_NULL
+//      ? null
+//      : n;
+//  }
 
   static double percentile(
     Evaluator evaluator,

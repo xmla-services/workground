@@ -11,7 +11,7 @@ package mondrian.calc.impl;
 
 import java.util.Date;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -22,7 +22,6 @@ import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.HierarchyCalc;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.StringCalc;
@@ -42,9 +41,9 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class GenericCalc
-extends AbstractNestedProfilingCalc<Object>
+extends AbstractProfilingNestedCalc<Object>
 implements TupleCalc,
-StringCalc, IntegerCalc, DoubleCalc,  DateTimeCalc,
+StringCalc,  DoubleCalc,  DateTimeCalc,
 VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 {
     /**
@@ -116,18 +115,18 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
-    public int evaluateInteger(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            final Number number = (Number) o;
-            return number == null
-                    ? FunUtil.INTEGER_NULL
-                            : number.intValue();
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
-        }
-    }
+//    @Override
+//    public int evaluateInteger(Evaluator evaluator) {
+//        final Object o = evaluate(evaluator);
+//        try {
+//            final Number number = (Number) o;
+//            return number == null
+//                    ? FunUtil.INTEGER_NULL
+//                            : number.intValue();
+//        } catch (final ClassCastException e) {
+//            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
+//        }
+//    }
 
     @Override
     public double evaluateDouble(Evaluator evaluator) {

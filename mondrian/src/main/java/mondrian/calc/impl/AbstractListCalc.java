@@ -9,7 +9,7 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ListCalc;
@@ -31,7 +31,7 @@ import mondrian.olap.type.Type;
  * @since Sep 27, 2005
  */
 public abstract class AbstractListCalc
-extends AbstractNestedProfilingCalc<Object>
+extends AbstractProfilingNestedCalc<Object>
 implements ListCalc {
     private final boolean mutable;
 

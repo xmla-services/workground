@@ -14,13 +14,13 @@ package mondrian.olap.fun;
 import java.util.AbstractList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
@@ -104,8 +104,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
             (TupleList) nativeEvaluator.execute( ResultStyle.LIST );
         }
 
-        int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == 0 || n == mondrian.olap.fun.FunUtil.INTEGER_NULL) {
+        Integer n = integerCalc.evaluate( evaluator );
+        if ( n == 0 || n ==null) {
           return TupleCollections.emptyList( arity );
         }
 

@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -61,7 +61,7 @@ class LeadLagFunDef extends FunDefBase {
             @Override
 			public Member evaluateMember(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);
-                int n = integerCalc.evaluateInteger(evaluator);
+                Integer n = integerCalc.evaluate(evaluator);
                 if (lag) {
                     if (n == Integer.MIN_VALUE) {
                         // Bump up lagValue by one, otherwise -n (used

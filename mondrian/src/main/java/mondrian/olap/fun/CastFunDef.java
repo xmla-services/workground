@@ -71,12 +71,12 @@ public class CastFunDef extends FunDefBase {
             .append("'").toString());
     }
 
-    public static int toInt(
+    public static Integer toInt(
         Object o,
         final Type targetType)
     {
         if (o == null) {
-            return FunUtil.INTEGER_NULL;
+            return null;
         }
         if (o instanceof String str) {
             return Integer.parseInt(str);
@@ -186,7 +186,7 @@ public class CastFunDef extends FunDefBase {
             case Category.STRING:
                 return evaluateString(evaluator);
             case Category.INTEGER:
-                return FunUtil.box(evaluateInteger(evaluator));
+                return evaluateInteger(evaluator);
             case Category.NUMERIC:
                 return FunUtil.box(evaluateDouble(evaluator));
             case Category.DATE_TIME:
@@ -207,8 +207,8 @@ public class CastFunDef extends FunDefBase {
             return String.valueOf(o);
         }
 
-        @Override
-		public int evaluateInteger(Evaluator evaluator) {
+        
+		public Integer evaluateInteger(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toInt(o, targetType);
         }

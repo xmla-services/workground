@@ -25,7 +25,7 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
 
-public abstract class AbstractNestedProfilingCalc<E> extends AbstractProfilingCalc<E> implements Calc<E> {
+public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCalc<E> implements Calc<E> {
 
 	private final Calc<?>[] childCalcs;
 
@@ -37,7 +37,7 @@ public abstract class AbstractNestedProfilingCalc<E> extends AbstractProfilingCa
      * 
      * @param calcs Child {@link Calc}s that are needed to calculate this.
      */
-	protected AbstractNestedProfilingCalc(String name, Type type, Calc<?>[] childCalcs) {
+	protected AbstractProfilingNestedCalc(String name, Type type, Calc<?>[] childCalcs) {
 		super(type, name);
 		this.childCalcs = childCalcs;
 

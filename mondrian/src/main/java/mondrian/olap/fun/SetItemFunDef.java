@@ -12,11 +12,11 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
@@ -190,8 +190,8 @@ class SetItemFunDef extends FunDefBase {
                         }
                         assert list != null;
                         try {
-                            final int index =
-                                indexCalc.evaluateInteger(evaluator);
+                            final Integer index =
+                                indexCalc.evaluate(evaluator);
                             int listSize = list.size();
                             if (index >= listSize || index < 0) {
                                 return nullTuple;
@@ -253,8 +253,8 @@ class SetItemFunDef extends FunDefBase {
                             evaluator.restore(savepoint);
                         }
                         try {
-                            final int index =
-                                indexCalc.evaluateInteger(evaluator);
+                            final Integer index =
+                                indexCalc.evaluate(evaluator);
                             int listSize = list.size();
                             if (index >= listSize || index < 0) {
                                 return nullMember;

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -80,7 +80,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     if (keySpecCount == 1 && ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) )) {
         List<MemberCalc> constantList = new ArrayList<>();
         List<MemberCalc> variableList = new ArrayList<>();
-        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractNestedProfilingCalc) expCalc ).getChildCalcs();
+        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractProfilingNestedCalc) expCalc ).getChildCalcs();
         for ( MemberCalc memberCalc : calcs ) {
           if ( memberCalc.isWrapperFor( ConstantCalc.class ) && !listCalc.dependsOn( memberCalc.getType()
               .getHierarchy() ) ) {

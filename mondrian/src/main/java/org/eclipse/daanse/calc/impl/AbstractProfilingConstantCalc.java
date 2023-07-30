@@ -23,11 +23,11 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public abstract class AbstractConstantProfilingCalc<T> extends AbstractProfilingCalc<T> implements ConstantCalc<T> {
+public abstract class AbstractProfilingConstantCalc<T> extends AbstractProfilingCalc<T> implements ConstantCalc<T> {
 
 	private T value;
 
-	public AbstractConstantProfilingCalc(T value, Type type, String name) {
+	public AbstractProfilingConstantCalc(T value, Type type, String name) {
 		super(type, name);
 		this.value = value;
 	}

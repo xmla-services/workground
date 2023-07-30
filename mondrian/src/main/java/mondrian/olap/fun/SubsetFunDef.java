@@ -9,9 +9,10 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
@@ -58,10 +59,10 @@ class SubsetFunDef extends FunDefBase {
                 try {
                     evaluator.setNonEmpty(false);
                     final TupleList list = listCalc.evaluateList(evaluator);
-                    final int start = startCalc.evaluateInteger(evaluator);
+                    final Integer start = startCalc.evaluate(evaluator);
                     int end;
                     if (countCalc != null) {
-                        final int count = countCalc.evaluateInteger(evaluator);
+                        final Integer count = countCalc.evaluate(evaluator);
                         end = start + count;
                     } else {
                         end = list.size();

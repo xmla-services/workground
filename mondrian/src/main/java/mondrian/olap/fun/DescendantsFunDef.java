@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
@@ -150,9 +150,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
           List<Member> result = new ArrayList<>();
-          int depth = -1;
+          Integer depth = -1;
           if ( depthCalc != null ) {
-            depth = depthCalc.evaluateInteger( evaluator );
+            depth = depthCalc.evaluate( evaluator );
             if ( depth < 0 ) {
               depth = -1; // no limit
             }
@@ -175,7 +175,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
           List<Member> result = new ArrayList<>();
-          final int depth = depthCalc.evaluateInteger( evaluator );
+          final Integer depth = depthCalc.evaluate( evaluator );
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           DescendantsFunDef.descendantsByDepth(

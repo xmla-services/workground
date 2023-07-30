@@ -78,7 +78,7 @@ public interface FunDef {
      *
      * <p>The result must implement the appropriate interface for the result
      * type. For example, a function which returns an integer must return
-     * an object which implements {@link mondrian.calc.IntegerCalc}.
+     * an object which implements {@link org.eclipse.daanse.calc.api.IntegerCalc}.
      */
     Calc compileCall(ResolvedFunCall call, ExpCompiler compiler);
     

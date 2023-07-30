@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -47,7 +47,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     return new CalcImpl( call.getFunName(),call.getType(), memberCalc );
   }
 
-  public static class CalcImpl extends AbstractNestedProfilingCalc {
+  public static class CalcImpl extends AbstractProfilingNestedCalc {
     private final MemberCalc memberCalc;
 
     /**

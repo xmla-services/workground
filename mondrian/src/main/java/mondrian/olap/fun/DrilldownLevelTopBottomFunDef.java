@@ -15,6 +15,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -22,7 +23,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
@@ -123,8 +123,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         }
 
         TupleList list = listCalc.evaluateList( evaluator );
-        int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == FunUtil.INTEGER_NULL || n <= 0 ) {
+        Integer n = integerCalc.evaluate( evaluator );
+        if ( n == null || n <= 0 ) {
           return list;
         }
         Level level;
