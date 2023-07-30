@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -75,7 +75,7 @@ class CaseTestFunDef extends FunDefBase {
 
         
         if ( call.getType() instanceof BooleanType){
-        	return	new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(),calcList.stream().toArray(Calc[]::new)) {
+        	return	new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(),calcList.stream().toArray(Calc[]::new)) {
 				
 				@Override
 				public Boolean evaluate(Evaluator evaluator) {

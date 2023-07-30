@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -230,7 +230,7 @@ public class IifFunDef extends FunDefBase {
             final BooleanCalc booleanCalc2 =
                 compiler.compileBoolean(call.getArg(2));
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
-            return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), calcs) {
+            return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), calcs) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
                     final boolean condition =

@@ -11,11 +11,11 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -61,13 +61,13 @@ class DimensionsNumericFunDef extends FunDefBase {
         {
             @Override
 			public Hierarchy evaluateHierarchy(Evaluator evaluator) {
-                int n = integerCalc.evaluateInteger(evaluator);
+                Integer n = integerCalc.evaluate(evaluator);
                 return nthHierarchy(evaluator, n);
             }
         };
     }
 
-    RolapHierarchy nthHierarchy(Evaluator evaluator, int n) {
+    RolapHierarchy nthHierarchy(Evaluator evaluator, Integer n) {
         RolapCube cube = (RolapCube) evaluator.getCube();
         List<RolapHierarchy> hierarchies = cube.getHierarchies();
         if (n >= hierarchies.size() || n < 0) {

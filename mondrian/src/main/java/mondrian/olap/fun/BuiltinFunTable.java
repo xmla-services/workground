@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.impl.AbstractBooleanNestedProfilingCalc;
+import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -31,14 +33,12 @@ import mondrian.calc.DimensionCalc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractDoubleCalc;
-import mondrian.calc.impl.AbstractIntegerCalc;
 import mondrian.calc.impl.AbstractLevelCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
@@ -183,7 +183,7 @@ public class BuiltinFunTable extends FunTableImpl {
 					public Level evaluateLevel(Evaluator evaluator) {
                         Hierarchy hierarchy =
                                 hierarchyCalc.evaluateHierarchy(evaluator);
-                        int ordinal = ordinalCalc.evaluateInteger(evaluator);
+                        Integer ordinal = ordinalCalc.evaluate(evaluator);
                         return nthLevel(hierarchy, ordinal);
                     }
                 };
@@ -745,9 +745,9 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final ListCalc listCalc =
                         compiler.compileList(call.getArg(0));
-                return new AbstractIntegerCalc(call.getFunName(),call.getType(), new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedIntegerCalc(call.getFunName(),call.getType(), new Calc[] {listCalc}) {
                     @Override
-					public int evaluateInteger(Evaluator evaluator) {
+					public Integer evaluate(Evaluator evaluator) {
                         TupleList list = listCalc.evaluateList(evaluator);
                         return FunUtil.count(evaluator, list, true);
                     }
@@ -792,9 +792,9 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final LevelCalc levelCalc =
                         compiler.compileLevel(call.getArg(0));
-                return new AbstractIntegerCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
+                return new AbstractProfilingNestedIntegerCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
                     @Override
-					public int evaluateInteger(Evaluator evaluator) {
+					public Integer evaluate(Evaluator evaluator) {
                         final Level level = levelCalc.evaluateLevel(evaluator);
                         return level.getDepth();
                     }
@@ -1492,9 +1492,9 @@ public class BuiltinFunTable extends FunTableImpl {
                     {
                         final MemberCalc memberCalc =
                                 compiler.compileMember(call.getArg(0));
-                        return new AbstractIntegerCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc}) {
+                        return new AbstractProfilingNestedIntegerCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc}) {
                             @Override
-							public int evaluateInteger(Evaluator evaluator) {
+							public Integer evaluate(Evaluator evaluator) {
                                 final Member member =
                                         memberCalc.evaluateMember(evaluator);
                                 return member.getLevel().getDepth();
@@ -1837,7 +1837,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     compiler.compileBoolean(call.getArg(0));
                 final BooleanCalc calc1 =
                     compiler.compileBoolean(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -1869,7 +1869,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     compiler.compileBoolean(call.getArg(0));
                 final BooleanCalc calc1 =
                     compiler.compileBoolean(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -1901,7 +1901,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     compiler.compileBoolean(call.getArg(0));
                 final BooleanCalc calc1 =
                     compiler.compileBoolean(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -1925,7 +1925,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final BooleanCalc calc =
                     compiler.compileBoolean(call.getArg(0));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
                         return !calc.evaluate(evaluator);
@@ -1946,7 +1946,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -1973,7 +1973,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2004,7 +2004,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2031,7 +2031,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2062,7 +2062,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2093,7 +2093,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2120,7 +2120,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2151,7 +2151,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2178,7 +2178,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2209,7 +2209,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2236,7 +2236,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2267,7 +2267,7 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc calc0 = compiler.compileString(call.getArg(0));
                 final StringCalc calc1 = compiler.compileString(call.getArg(1));
-                return new AbstractBooleanNestedProfilingCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
+                return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
@@ -2334,9 +2334,9 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final StringCalc stringCalc =
                     compiler.compileString(call.getArg(0));
-                return new AbstractIntegerCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+                return new AbstractProfilingNestedIntegerCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
                     @Override
-					public int evaluateInteger(Evaluator evaluator) {
+					public Integer evaluate(Evaluator evaluator) {
                         String value = stringCalc.evaluateString(evaluator);
                         if (value == null) {
                             return 0;

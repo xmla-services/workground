@@ -33,7 +33,7 @@ import mondrian.olap.Exp;
  * <p>
  * Rationale: Children calcs are used in about 50 places, but mostly for
  * dependency-checking (e.g.
- * {@link org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc#anyDepends}). A few places uses the
+ * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc#anyDepends}). A few places uses the
  * calcs array but should use more strongly typed members. e.g.
  * FilterFunDef.MutableMemberIterCalc should have data members 'MemberListCalc
  * listCalc' and 'BooleanCalc conditionCalc'.

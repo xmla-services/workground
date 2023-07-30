@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -96,7 +96,7 @@ call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);
-                int indexValue = indexValueCalc.evaluateInteger(evaluator);
+                Integer indexValue = indexValueCalc.evaluate(evaluator);
 
                 return new UnaryTupleList(
                     lastPeriods(member, evaluator, indexValue));
@@ -118,7 +118,7 @@ call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
     List<Member> lastPeriods(
         Member member,
         Evaluator evaluator,
-        int indexValue)
+        Integer indexValue)
     {
         // empty set
         if ((indexValue == 0) || member.isNull()) {

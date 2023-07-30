@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
 import mondrian.calc.impl.GenericCalc;
@@ -193,8 +193,13 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (byte) integerCalc.evaluateInteger(evaluator);
-                    }
+
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.byteValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -226,8 +231,12 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (short) integerCalc.evaluateInteger(evaluator);
-                    }
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.shortValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -246,8 +255,12 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (long) integerCalc.evaluateInteger(evaluator);
-                    }
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.longValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -333,7 +346,7 @@ public class JavaFunDef extends FunDefBase {
      * Base class for adapter calcs that convert arguments into the precise
      * type needed.
      */
-    private abstract static class AbstractCalc2 extends AbstractNestedProfilingCalc {
+    private abstract static class AbstractCalc2 extends AbstractProfilingNestedCalc {
         /**
          * Creates an AbstractCalc2.
          *

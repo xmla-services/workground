@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.daanse.calc.impl.AbstractNestedProfilingCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -31,7 +32,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractIntegerCalc;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -111,7 +111,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank2TupleCalc extends AbstractIntegerCalc {
+  private static class Rank2TupleCalc extends AbstractProfilingNestedIntegerCalc {
     private final TupleCalc tupleCalc;
     private final Calc listCalc;
 
@@ -122,7 +122,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         // Get member or tuple.
@@ -130,7 +130,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // the result is null (even if the list is null).
         final Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -155,7 +155,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank2MemberCalc extends AbstractIntegerCalc {
+  private static class Rank2MemberCalc extends AbstractProfilingNestedIntegerCalc {
     private final MemberCalc memberCalc;
     private final Calc listCalc;
 
@@ -166,7 +166,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
 
@@ -175,7 +175,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // the result is null (even if the list is null).
         final Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         // Get the set of members/tuples.
         // If the list is empty, MSAS cannot figure out the type of the
@@ -197,7 +197,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank3TupleCalc extends AbstractIntegerCalc {
+  private static class Rank3TupleCalc extends AbstractProfilingNestedIntegerCalc {
     private final TupleCalc tupleCalc;
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
@@ -211,12 +211,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -230,7 +230,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // First try to find the member in the cached SortResult
@@ -281,7 +281,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank3MemberCalc extends AbstractIntegerCalc {
+  private static class Rank3MemberCalc extends AbstractProfilingNestedIntegerCalc {
     private final MemberCalc memberCalc;
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
@@ -295,12 +295,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // Evaluate the list (or retrieve from cache).
@@ -312,7 +312,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // First try to find the member in the cached SortResult
@@ -376,7 +376,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * sorts the list of values. The result is a value of type {@link SortResult}, and can be used to implement the
    * <code>Rank</code> function efficiently.
    */
-  private static class SortedListCalc extends AbstractNestedProfilingCalc {
+  private static class SortedListCalc extends AbstractProfilingNestedCalc {
     private final ListCalc listCalc;
     private final Calc keyCalc;
 
@@ -609,7 +609,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * The result is a value of type {@link mondrian.olap.fun.RankFunDef.RankedMemberList} or
    * {@link mondrian.olap.fun.RankFunDef.RankedTupleList}, or null if the list is empty.
    */
-  private static class RankedListCalc extends AbstractNestedProfilingCalc {
+  private static class RankedListCalc extends AbstractProfilingNestedCalc {
     private final ListCalc listCalc;
     private final boolean tuple;
 

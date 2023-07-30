@@ -41,7 +41,7 @@ import mondrian.olap.type.Type;
 //TODO: remove  and use just the new interface org.eclipse.daanse.calc.api.ConstantCalc
 public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.calc.api.ConstantCalc<Object>{
     private final Object o;
-    private final int i;
+    private final Integer i;
     private final double d;
 
     public ConstantCalc( Type type, Object o) {
@@ -75,27 +75,22 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
         return value;
     }
 
-    private int initializeInteger(Object o) {
-        int value;
-        if (o instanceof Number) {
-            value = ((Number) o).intValue();
-        } else if (o == null) {
-            value = FunUtil.INTEGER_NULL;
-        } else {
-            value = 0;
-        }
-        return value;
-    }
+	private Integer initializeInteger(Object o) {
+		if (o == null) {
+			return null;
+		} else if (o instanceof Number n) {
+			return n.intValue();
+		} else {
+			return 0;
+		}
+
+	}
 
     @Override
     public Object evaluate(Evaluator evaluator) {
         return o;
     }
 
-    @Override
-    public int evaluateInteger(Evaluator evaluator) {
-        return i;
-    }
 
     @Override
     public double evaluateDouble(Evaluator evaluator) {
@@ -115,15 +110,6 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
         return new Calc[0];
     }
 
-    /**
-     * Creates an expression which evaluates to a given integer.
-     *
-     * @param i Integer value
-     * @return Constant integer expression
-     */
-    public static ConstantCalc constantInteger(int i) {
-        return new ConstantCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
-    }
 
     /**
      * Creates an expression which evaluates to a given double.

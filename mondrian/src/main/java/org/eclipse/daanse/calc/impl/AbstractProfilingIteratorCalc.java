@@ -21,9 +21,9 @@ import java.util.Map;
 import mondrian.olap.type.Type;
 //TODO: may be removed writer can calculate its won because has access to the objects
 
-public abstract class AbstractIteratorProfilingCalc<T> extends AbstractProfilingCalc<T> {
+public abstract class AbstractProfilingIteratorCalc<T> extends AbstractProfilingCalc<T> {
 
-	public AbstractIteratorProfilingCalc(Type type, String name) {
+	public AbstractProfilingIteratorCalc(Type type, String name) {
 		super(type, name);
 	}
 

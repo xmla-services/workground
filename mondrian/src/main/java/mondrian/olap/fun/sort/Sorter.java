@@ -13,7 +13,6 @@ package mondrian.olap.fun.sort;
 
 import static mondrian.olap.Util.newInternal;
 import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
-import static mondrian.olap.fun.FunUtil.INTEGER_NULL;
 import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.util.AbstractList;
@@ -646,14 +645,6 @@ public class Sorter {
       : d;
   }
 
-  /**
-   * Converts an int (primitive) value to an Integer. IntegerNull becomes null.
-   */
-  public static Integer box( int n ) {
-    return n == INTEGER_NULL
-      ? null
-      : n;
-  }
 
 
   /**
