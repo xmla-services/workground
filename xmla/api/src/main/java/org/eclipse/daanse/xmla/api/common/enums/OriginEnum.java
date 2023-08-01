@@ -36,7 +36,7 @@ public enum OriginEnum {
         if (v == null) {
             return null;
         }
-        int vi = Integer.parseInt(v);
+        int vi = Integer.decode(v);
         return Stream.of(OriginEnum.values())
             .filter(e -> (e.value == vi))
             .findFirst()
