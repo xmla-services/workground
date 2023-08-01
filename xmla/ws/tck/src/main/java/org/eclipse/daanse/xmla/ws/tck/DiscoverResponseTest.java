@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import jakarta.xml.soap.SOAPException;
+import org.assertj.core.api.Condition;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
@@ -127,11 +128,8 @@ import javax.xml.transform.TransformerException;
 @RequireServiceComponentRuntime
 class DiscoverResponseTest {
 
-    private static final String ONE_0X00000001 = "0x00000001";
-
-	private static final String ONE_0X0001 = "0x0001";
-
-	private static final String TABLE_TYPE_LOW = "tableType";
+    public static final String MEMBER_KEY = "MEMBER_KEY";
+    private static final String TABLE_TYPE_LOW = "tableType";
 
 	private static final String TABLE_SCHEMA_LOW = "tableSchema";
 
@@ -478,7 +476,6 @@ class DiscoverResponseTest {
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
             Map.entry("ROLES", "roles"),
             Map.entry("DATE_MODIFIED", DATE),
-            Map.entry("TYPE", "0x00"),
             Map.entry("VERSION", "2"),
             Map.entry("DATABASE_ID", "databaseId"),
             Map.entry("DATE_QUERIED", DATE),
@@ -486,6 +483,8 @@ class DiscoverResponseTest {
             Map.entry("POPULARITY", "1.1"),
             Map.entry("WEIGHTEDPOPULARITY", "1.2"),
             Map.entry("CLIENTCACHEREFRESHPOLICY", "0")));
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:TYPE").asString()
+        .has(new Condition<>(item -> TypeEnum.fromValue(item).equals(TypeEnum.MULTIDIMENSIONAL), "MULTIDIMENSIONAL"));
     }
 
     @Test
@@ -547,7 +546,6 @@ class DiscoverResponseTest {
             Map.entry("ORDINAL_POSITION", "3"),
             Map.entry("COLUMN_HAS_DEFAULT", "true"),
             Map.entry("COLUMN_DEFAULT", "columnDefault"),
-            Map.entry("COLUMN_FLAG", "0x1"),
             Map.entry("IS_NULLABLE", FALSE),
             Map.entry(DATA_TYPE, "4"),
             Map.entry("TYPE_GUID", "5"),
@@ -567,6 +565,9 @@ class DiscoverResponseTest {
             Map.entry("DOMAIN_NAME", "domainName"),
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
             Map.entry("COLUMN_OLAP_TYPE", "ATTRIBUTE")));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:COLUMN_FLAG"
+        ).asString().has(new Condition<>(item -> ColumnFlagsEnum.fromValue(item).equals(ColumnFlagsEnum.DBCOLUMNFLAGS_ISBOOKMARK), "DBCOLUMNFLAGS_ISBOOKMARK"));
     }
 
     @Test
@@ -618,7 +619,6 @@ class DiscoverResponseTest {
             Map.entry("CREATE_PARAMS", "createParams"),
             Map.entry("IS_NULLABLE", "true"),
             Map.entry("CASE_SENSITIVE", FALSE),
-            Map.entry("SEARCHABLE", "0x01"),
             Map.entry("UNSIGNED_ATTRIBUTE", "true"),
             Map.entry("FIXED_PREC_SCALE", FALSE),
             Map.entry("AUTO_UNIQUE_VALUE", "true"),
@@ -631,6 +631,9 @@ class DiscoverResponseTest {
             Map.entry("IS_LONG", FALSE),
             Map.entry("BEST_MATCH", "true"),
             Map.entry("IS_FIXEDLENGTH", FALSE)));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:SEARCHABLE"
+        ).asString().has(new Condition<>(item -> SearchableEnum.fromValue(item).equals(SearchableEnum.DB_UNSEARCHABLE), "DB_UNSEARCHABLE"));
     }
 
     @Test
@@ -819,7 +822,6 @@ class DiscoverResponseTest {
             Map.entry(SCHEMA_NAME, SCHEMA_NAME_LOW),
             Map.entry(CUBE_NAME, CUBE_NAME_LOW),
             Map.entry("ACTION_NAME", "actionName"),
-            Map.entry("ACTION_TYPE", "0x01"),
             Map.entry("COORDINATE", "coordinate"),
             Map.entry("COORDINATE_TYPE", "1"),
             Map.entry("ACTION_CAPTION", "actionCaption"),
@@ -827,6 +829,9 @@ class DiscoverResponseTest {
             Map.entry("CONTENT", "content"),
             Map.entry("APPLICATION", "application"),
             Map.entry("INVOCATION", "1")));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:ACTION_TYPE"
+        ).asString().has(new Condition<>(item -> ActionTypeEnum.fromValue(item).equals(ActionTypeEnum.URL), "URL"));
     }
 
     @Test
@@ -884,10 +889,14 @@ class DiscoverResponseTest {
             Map.entry("IS_WRITE_ENABLED", "true"),
             Map.entry("IS_SQL_ENABLED", FALSE),
             Map.entry("CUBE_CAPTION", "cubeCaption"),
-            Map.entry("BASE_CUBE_NAME", "baseCubeName"),
-            Map.entry("CUBE_SOURCE", "0x01"),
-            Map.entry("PREFERRED_QUERY_PATTERNS", "0x00")
+            Map.entry("BASE_CUBE_NAME", "baseCubeName")
         ));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:CUBE_SOURCE"
+        ).asString().has(new Condition<>(item -> CubeSourceEnum.fromValue(item).equals(CubeSourceEnum.CUBE), "CUBE"));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:PREFERRED_QUERY_PATTERNS"
+        ).asString().has(new Condition<>(item -> PreferredQueryPatternsEnum.fromValue(Integer.decode(item)).equals(PreferredQueryPatternsEnum.CROSS_JOIN), "CROSS_JOIN"));
     }
 
     @Test
@@ -942,10 +951,12 @@ class DiscoverResponseTest {
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
             Map.entry("IS_VIRTUAL", "true"),
             Map.entry("IS_READWRITE", FALSE),
-            Map.entry("DIMENSION_UNIQUE_SETTINGS", ONE_0X00000001),
             Map.entry("DIMENSION_MASTER_NAME", "dimensionMasterName"),
             Map.entry(DIMENSION_IS_VISIBLE, "true")
         ));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:DIMENSION_UNIQUE_SETTINGS"
+        ).asString().has(new Condition<>(item -> DimensionUniqueSettingEnum.fromValue(item).equals(DimensionUniqueSettingEnum.MEMBER_KEY), MEMBER_KEY));
     }
 
     @Test
@@ -993,7 +1004,6 @@ class DiscoverResponseTest {
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
             Map.entry("PARAMETER_LIST", "parameterList"),
             Map.entry("RETURN_TYPE", "1"),
-            Map.entry("ORIGIN", "0x1"),
             Map.entry("INTERFACE_NAME", "FILTER"),
             Map.entry("LIBRARY_NAME", "libraryName"),
             Map.entry("DLL_NAME", "dllName"),
@@ -1001,9 +1011,14 @@ class DiscoverResponseTest {
             Map.entry("HELP_CONTEXT", "helpContext"),
             Map.entry("OBJECT", "object"),
             Map.entry("CAPTION", "caption"),
-            Map.entry("PARAMETERINFO", "namedescriptiontruefalse1"),
-            Map.entry("DIRECTQUERY_PUSHABLE", "0x1")
+            Map.entry("PARAMETERINFO", "namedescriptiontruefalse1")
         ));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:ORIGIN"
+        ).asString().has(new Condition<>(item -> OriginEnum.fromValue(item).equals(OriginEnum.MSOLAP), "MSOLAP"));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:DIRECTQUERY_PUSHABLE"
+        ).asString().has(new Condition<>(item -> DirectQueryPushableEnum.fromValue(item).equals(DirectQueryPushableEnum.MEASURE), "MEASURE"));
     }
 
     @Test
@@ -1070,20 +1085,22 @@ class DiscoverResponseTest {
             Map.entry("STRUCTURE", "0"),
             Map.entry("IS_VIRTUAL", "true"),
             Map.entry("IS_READWRITE", FALSE),
-            Map.entry("DIMENSION_UNIQUE_SETTINGS", ONE_0X00000001),
             Map.entry("DIMENSION_MASTER_UNIQUE_NAME", "dimensionMasterUniqueName"),
             Map.entry(DIMENSION_IS_VISIBLE, "true"),
             Map.entry("HIERARCHY_ORDINAL", "3"),
             Map.entry("DIMENSION_IS_SHARED", FALSE),
             Map.entry("HIERARCHY_IS_VISIBLE", "true"),
-            Map.entry("HIERARCHY_ORIGIN", ONE_0X0001),
             Map.entry("HIERARCHY_DISPLAY_FOLDER", "hierarchyDisplayFolder"),
             Map.entry("INSTANCE_SELECTION", "1"),
             Map.entry("GROUPING_BEHAVIOR", "1"),
             Map.entry("STRUCTURE_TYPE", "Natural")
         ));
-
-
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:DIMENSION_UNIQUE_SETTINGS"
+        ).asString().has(new Condition<>(item -> DimensionUniqueSettingEnum.fromValue(item).equals(DimensionUniqueSettingEnum.MEMBER_KEY), MEMBER_KEY));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:HIERARCHY_ORIGIN"
+        ).asString().has(new Condition<>(item -> HierarchyOriginEnum.fromValue(item).equals(HierarchyOriginEnum.USER_DEFINED), "USER_DEFINED"));
     }
 
     @Test
@@ -1205,10 +1222,7 @@ class DiscoverResponseTest {
             Map.entry("LEVEL_CAPTION", "levelCaption"),
             Map.entry("LEVEL_NUMBER", "2"),
             Map.entry("LEVEL_CARDINALITY", "3"),
-            Map.entry("LEVEL_TYPE", ONE_0X0001),
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
-            Map.entry("CUSTOM_ROLLUP_SETTINGS", "0x01"),
-            Map.entry("LEVEL_UNIQUE_SETTINGS", ONE_0X00000001),
             Map.entry("LEVEL_IS_VISIBLE", "true"),
             Map.entry("LEVEL_ORDERING_PROPERTY", "levelOrderingProperty"),
             Map.entry("LEVEL_DBTYPE", "0"),
@@ -1217,9 +1231,21 @@ class DiscoverResponseTest {
             Map.entry("LEVEL_KEY_SQL_COLUMN_NAME", "levelKeySqlColumnName"),
             Map.entry("LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME", "levelUniqueNameSqlColumnName"),
             Map.entry("LEVEL_ATTRIBUTE_HIERARCHY_NAME", "levelAttributeHierarchyName"),
-            Map.entry("LEVEL_KEY_CARDINALITY", "4"),
-            Map.entry("LEVEL_ORIGIN", ONE_0X0001)
+            Map.entry("LEVEL_KEY_CARDINALITY", "4")
         ));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:LEVEL_TYPE"
+        ).asString().has(new Condition<>(item -> LevelTypeEnum.fromValue(item).equals(LevelTypeEnum.ALL), "ALL"));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:CUSTOM_ROLLUP_SETTINGS"
+        ).asString().has(new Condition<>(item -> CustomRollupSettingEnum.fromValue(item)
+            .equals(CustomRollupSettingEnum.CUSTOM_ROLLUP_EXPRESSION_EXIST), "CUSTOM_ROLLUP_EXPRESSION_EXIST"));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:LEVEL_UNIQUE_SETTINGS"
+        ).asString().has(new Condition<>(item -> LevelUniqueSettingsEnum.fromValue(item).equals(LevelUniqueSettingsEnum.KEY_COLUMNS), "KEY_COLUMNS"));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:LEVEL_ORIGIN"
+        ).asString().has(new Condition<>(item -> LevelOriginEnum.fromValue(item).equals(LevelOriginEnum.USER_DEFINED), "LevelOriginEnum"));
     }
 
     @Test
@@ -1436,7 +1462,7 @@ class DiscoverResponseTest {
             Map.entry("PARENT_COUNT", "6"),
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
             Map.entry(EXPRESSION, EXPRESSION_LOW),
-            Map.entry("MEMBER_KEY", "memberKey"),
+            Map.entry(MEMBER_KEY, "memberKey"),
             Map.entry("IS_PLACEHOLDERMEMBER", "true"),
             Map.entry("IS_DATAMEMBER", FALSE),
             Map.entry(SCOPE, "1")
@@ -1505,7 +1531,6 @@ class DiscoverResponseTest {
             Map.entry(NUMERIC_PRECISION, "3"),
             Map.entry(NUMERIC_SCALE, "4"),
             Map.entry(DESCRIPTION, DESCRIPTION_LOW),
-            Map.entry("PROPERTY_CONTENT_TYPE", "0x00"),
             Map.entry("SQL_COLUMN_NAME", "sqlColumnName"),
             Map.entry("LANGUAGE", "5"),
             Map.entry("PROPERTY_ORIGIN", "1"),
@@ -1514,6 +1539,9 @@ class DiscoverResponseTest {
             Map.entry("MIME_TYPE", "mimeType"),
             Map.entry("PROPERTY_IS_VISIBLE", "true")
         ));
+        xmlAssert.valueByXPath(
+            "/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row/rowset:PROPERTY_CONTENT_TYPE"
+        ).asString().has(new Condition<>(item -> PropertyContentTypeEnum.fromValue(item).equals(PropertyContentTypeEnum.REGULAR), "REGULAR"));
     }
 
     @Test
