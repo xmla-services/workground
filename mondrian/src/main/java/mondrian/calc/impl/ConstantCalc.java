@@ -11,13 +11,13 @@ package mondrian.calc.impl;
 
 import java.util.Map;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
 import mondrian.olap.Evaluator;
@@ -41,14 +41,11 @@ import mondrian.olap.type.Type;
 //TODO: remove  and use just the new interface org.eclipse.daanse.calc.api.ConstantCalc
 public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.calc.api.ConstantCalc<Object>{
     private final Object o;
-    private final Integer i;
-    private final double d;
 
     public ConstantCalc( Type type, Object o) {
         super("ConstantCalc",type);
         this.o = o;
-        i = initializeInteger(o);
-        d = initializeDouble(o);
+  
     }
 
     @Override
@@ -92,10 +89,10 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
     }
 
 
-    @Override
-    public double evaluateDouble(Evaluator evaluator) {
-        return d;
-    }
+//    @Override
+//    public double evaluateDouble(Evaluator evaluator) {
+//        return d;
+//    }
 
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
@@ -111,15 +108,6 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
     }
 
 
-    /**
-     * Creates an expression which evaluates to a given double.
-     *
-     * @param v Double value
-     * @return Constant double expression
-     */
-    public static DoubleCalc constantDouble(double v) {
-        return new ConstantCalc(new NumericType(), v);
-    }
 
     /**
      * Creates an expression which evaluates to a given string.

@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -20,7 +21,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -96,9 +96,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected Calc genIterCalc( final ResolvedFunCall call, final IterCalc iterCalc, final Calc calc ) {
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { iterCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { iterCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
@@ -118,9 +118,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected Calc genListCalc( final ResolvedFunCall call, final ListCalc listCalc, final Calc calc ) {
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {

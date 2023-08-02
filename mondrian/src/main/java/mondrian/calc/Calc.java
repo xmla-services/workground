@@ -10,6 +10,7 @@
 package mondrian.calc;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -55,7 +56,7 @@ import mondrian.olap.type.Type;
  * Each of these sub-interfaces has an abstract implementation:
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc},
- * {@link mondrian.calc.impl.AbstractDoubleCalc},
+ * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc},
  * {@link mondrian.calc.impl.AbstractStringCalc},
  * {@link mondrian.calc.impl.AbstractMemberCalc},
  * {@link mondrian.calc.impl.AbstractLevelCalc},

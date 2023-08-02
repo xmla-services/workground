@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -16,7 +17,6 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -45,9 +45,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final ListCalc listCalc = compiler.compileList( call.getArg( 0 ) );
     final Calc calc =
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call.getType() );
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( AvgFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {

@@ -13,12 +13,12 @@ package mondrian.olap.fun;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
@@ -129,7 +129,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
       TupleList list = listCalc.evaluateList( evaluator );
-      double target = doubleCalc.evaluateDouble( evaluator );
+      Double target = doubleCalc.evaluate( evaluator );
       if ( list.isEmpty() ) {
         return list;
       }

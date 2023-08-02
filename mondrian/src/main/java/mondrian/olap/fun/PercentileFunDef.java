@@ -10,15 +10,15 @@
 */
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -60,17 +60,17 @@ class PercentileFunDef extends AbstractAggregateFunDef {
             compiler.compileScalar(call.getArg(1), true);
         final DoubleCalc percentCalc =
             compiler.compileDouble(call.getArg(2));
-        return new AbstractDoubleCalc(
+        return new AbstractProfilingNestedDoubleCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc, calc, percentCalc})
         {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
-                double percent = percentCalc.evaluateDouble(evaluator) * 0.01;
+                Double percent = percentCalc.evaluate(evaluator) * 0.01;
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final double percentile =
+                    final Double percentile =
                         FunUtil.percentile(evaluator, list, calc, percent);
                     return percentile;
                 } finally {

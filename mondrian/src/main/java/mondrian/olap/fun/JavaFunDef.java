@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
@@ -285,7 +285,7 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, doubleCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (float) doubleCalc.evaluateDouble(evaluator);
+                        return  doubleCalc.evaluate(evaluator).floatValue();
                     }
                 };
             }

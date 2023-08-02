@@ -116,8 +116,8 @@
     tempIgnoreStrageTests=true#,\
     
 -runproperties.tester:  \
-#	tester.names=\
-#	mondrian.olap.fun.FunctionTest
+	tester.names=\
+	mondrian.olap.fun.FunctionTest
 #	mondrian.test.BasicQueryTest
 #	mondrian.rolap.FilterTest
 #    mondrian.test.ExplainPlanTest

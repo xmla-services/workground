@@ -188,7 +188,7 @@ public class CastFunDef extends FunDefBase {
             case Category.INTEGER:
                 return evaluateInteger(evaluator);
             case Category.NUMERIC:
-                return FunUtil.box(evaluateDouble(evaluator));
+                return evaluateDouble(evaluator);
             case Category.DATE_TIME:
                 return evaluateDateTime(evaluator);
             case Category.LOGICAL:
@@ -213,8 +213,8 @@ public class CastFunDef extends FunDefBase {
             return CastFunDef.toInt(o, targetType);
         }
 
-        @Override
-		public double evaluateDouble(Evaluator evaluator) {
+        
+		public Double evaluateDouble(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toDouble(o, targetType);
         }

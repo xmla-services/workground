@@ -11,15 +11,18 @@ package mondrian.calc.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.impl.ConstantBooleanProfilingCalc;
+import org.eclipse.daanse.calc.impl.ConstantDoubleProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -27,7 +30,6 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import mondrian.calc.Calc;
 import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.IterCalc;
@@ -329,7 +331,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 						new Calc[] { doubleCalc }) {
 					@Override
 					public Integer evaluate(Evaluator evaluator) {
-						Double d = doubleCalc.evaluateDouble(evaluator);
+						Double d = doubleCalc.evaluate(evaluator);
 						if (d == null) {
 							return null;
 						}
@@ -432,11 +434,31 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (calc instanceof BooleanCalc bc) {
             return bc;
         }
+        //
+        if (calc instanceof ConstantCalc constantCalc)
+        {
+        	Object o=constantCalc.evaluate(null);
+        	
+        	Boolean b = null;
+        	if( o ==null) {
+        		b=FunUtil.BOOLEAN_NULL;
+        	}else if (o instanceof Boolean bt) {
+				b=bt;
+			}else if (o instanceof Number n) {
+				b=n.intValue()>0;
+			}else {
+				throw new RuntimeException("wring type. was: "+o);
+			}
+            return 	new ConstantBooleanProfilingCalc(b);
+        }
+        //
+        
+        
         if (calc instanceof DoubleCalc doubleCalc) {
-            return new AbstractProfilingNestedBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
+            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
-					double v0 = doubleCalc.evaluateDouble(evaluator);
+					Double v0 = doubleCalc.evaluate(evaluator);
 
 					if (Double.isNaN(v0) || v0 == FunUtil.DOUBLE_NULL) {
 						return FunUtil.BOOLEAN_NULL;
@@ -446,7 +468,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
             };
         } else if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractProfilingNestedBooleanCalc("AbstractBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					Integer v0 = integerCalc.evaluate(evaluator);
@@ -457,7 +479,22 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
 			};
         } else {
-            return (BooleanCalc) calc;
+            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {calc}) {
+                @Override
+				public Boolean evaluate(Evaluator evaluator) {
+					Object v0 = calc.evaluate(evaluator);
+					if (v0 == null) {
+						return FunUtil.BOOLEAN_NULL;
+					}
+					if (v0 instanceof Boolean b) {
+						return b;
+					}if (v0 instanceof Number n) {
+						return n.intValue() != 0;
+					}
+					throw evaluator.newEvalException(null, "wrong type, was:"+v0);
+					
+				}
+			};
         }
     }
 
@@ -467,16 +504,29 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (calc instanceof ConstantCalc constantCalc
                 && !(calc.evaluate(null) instanceof Double))
         {
-            return ConstantCalc.constantDouble(
-                constantCalc.evaluateDouble(null));
+        	Object o=constantCalc.evaluate(null);
+        	
+        	Double d = null;
+        	if( o ==null) {
+        		d=FunUtil.DOUBLE_NULL;
+        	}else if (o instanceof Double dt) {
+				d=dt;
+			}else if (o instanceof Number n) {
+				d=n.doubleValue();
+			}else {
+				throw new RuntimeException("wring type. was: "+o);
+			}
+        
+            return 	new ConstantDoubleProfilingCalc(new NumericType(),d);
+
         }
         if (calc instanceof DoubleCalc doubleCalc) {
             return doubleCalc;
         }
         if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractDoubleCalc("AbstractDoubleCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractProfilingNestedDoubleCalc("AbstractProfilingNestedDoubleCalc",exp.getType(), new Calc[] {integerCalc}) {
                 @Override
-                public double evaluateDouble(Evaluator evaluator) {
+                public Double evaluate(Evaluator evaluator) {
                 	
                 	Integer i=integerCalc.evaluate(evaluator);
                 	if(i==null) {
@@ -488,7 +538,26 @@ public class AbstractExpCompiler implements ExpCompiler {
                 }
             };
         }
-        throw Util.newInternal("cannot cast " + exp);
+
+		return new AbstractProfilingNestedDoubleCalc("AbstractProfilingNestedDoubleCalc", new NumericType(), new Calc[] { calc }) {
+			@Override
+			public Double evaluate(Evaluator evaluator) {
+
+				Object o = calc.evaluate(evaluator);
+				if (o == null) {
+					return FunUtil.DOUBLE_NULL;
+					// null;
+					// TODO: !!! JUST REFACTORING 0 must be null
+				} else if (o instanceof Double d) {
+					return d;
+				} else if (o instanceof Number n) {
+					return n.doubleValue();
+				}
+				throw evaluator.newEvalException(null, "wrtong typed, was: " + o);
+			}
+		};
+
+     //   throw Util.newInternal("cannot cast " + exp);
     }
 
     @Override

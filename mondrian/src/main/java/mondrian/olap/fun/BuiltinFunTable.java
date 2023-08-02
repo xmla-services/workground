@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -30,7 +32,6 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DimensionCalc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
@@ -38,7 +39,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.AbstractLevelCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
@@ -1602,11 +1602,11 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
+                return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
                     @Override
-					public double evaluateDouble(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+					public Double evaluate(Evaluator evaluator) {
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (v0 == FunUtil.DOUBLE_NULL) {
                             if (v1 == FunUtil.DOUBLE_NULL) {
                                 return FunUtil.DOUBLE_NULL;
@@ -1637,11 +1637,11 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
+                return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
                     @Override
-					public double evaluateDouble(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+					public Double evaluate(Evaluator evaluator) {
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (v0 == FunUtil.DOUBLE_NULL) {
                             if (v1 == FunUtil.DOUBLE_NULL) {
                                 return FunUtil.DOUBLE_NULL;
@@ -1672,11 +1672,11 @@ public class BuiltinFunTable extends FunTableImpl {
             {
                 final DoubleCalc calc0 = compiler.compileDouble(call.getArg(0));
                 final DoubleCalc calc1 = compiler.compileDouble(call.getArg(1));
-                return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
+                return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc0, calc1}) {
                     @Override
-					public double evaluateDouble(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+					public Double evaluate(Evaluator evaluator) {
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         // Multiply and divide return null if EITHER arg is
                         // null.
                         if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {
@@ -1714,13 +1714,13 @@ public class BuiltinFunTable extends FunTableImpl {
                 // Null. This is only used by certain applications and does not
                 // conform to MSAS behavior.
                 if (!isNullDenominatorProducesNull) {
-                    return new AbstractDoubleCalc(
+                    return new AbstractProfilingNestedDoubleCalc(
                         call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                     {
                         @Override
-						public double evaluateDouble(Evaluator evaluator) {
-                            final double v0 = calc0.evaluateDouble(evaluator);
-                            final double v1 = calc1.evaluateDouble(evaluator);
+						public Double evaluate(Evaluator evaluator) {
+                            final Double v0 = calc0.evaluate(evaluator);
+                            final Double v1 = calc1.evaluate(evaluator);
                             // Null in numerator always returns DoubleNull.
                             //
                             if (v0 == FunUtil.DOUBLE_NULL) {
@@ -1734,13 +1734,13 @@ public class BuiltinFunTable extends FunTableImpl {
                         }
                     };
                 } else {
-                    return new AbstractDoubleCalc(
+                    return new AbstractProfilingNestedDoubleCalc(
                         call.getFunName(),call.getType(), new Calc[] {calc0, calc1})
                     {
                         @Override
-						public double evaluateDouble(Evaluator evaluator) {
-                            final double v0 = calc0.evaluateDouble(evaluator);
-                            final double v1 = calc1.evaluateDouble(evaluator);
+						public Double evaluate(Evaluator evaluator) {
+                            final Double v0 = calc0.evaluate(evaluator);
+                            final Double v1 = calc1.evaluate(evaluator);
                             // Null in numerator or denominator returns
                             // DoubleNull.
                             if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {
@@ -1765,10 +1765,10 @@ public class BuiltinFunTable extends FunTableImpl {
 			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
             {
                 final DoubleCalc calc = compiler.compileDouble(call.getArg(0));
-                return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
+                return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
                     @Override
-					public double evaluateDouble(Evaluator evaluator) {
-                        final double v = calc.evaluateDouble(evaluator);
+					public Double evaluate(Evaluator evaluator) {
+                        final Double v = calc.evaluate(evaluator);
                         if (v == FunUtil.DOUBLE_NULL) {
                             return FunUtil.DOUBLE_NULL;
                         } else {
@@ -1977,8 +1977,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL
@@ -1986,7 +1986,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         {
                             return FunUtil.BOOLEAN_NULL;
                         }
-                        return v0 == v1;
+                        return v0.equals(v1);
                     }
                 };
             }
@@ -2035,8 +2035,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL
@@ -2066,8 +2066,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL
@@ -2124,8 +2124,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL
@@ -2182,8 +2182,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL
@@ -2240,8 +2240,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 {
                     @Override
 					public Boolean evaluate(Evaluator evaluator) {
-                        final double v0 = calc0.evaluateDouble(evaluator);
-                        final double v1 = calc1.evaluateDouble(evaluator);
+                        final Double v0 = calc0.evaluate(evaluator);
+                        final Double v1 = calc1.evaluate(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
                             || v0 == FunUtil.DOUBLE_NULL

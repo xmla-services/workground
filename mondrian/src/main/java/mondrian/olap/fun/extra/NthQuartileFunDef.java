@@ -9,15 +9,16 @@
 
 package mondrian.olap.fun.extra;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.calc.impl.CurrentValueDoubleCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -67,10 +68,10 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
         final DoubleCalc doubleCalc =
             call.getArgCount() > 1
             ? compiler.compileDouble(call.getArg(1))
-            : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, doubleCalc}) {
+            : new CurrentValueDoubleCalc(call.getType());
+        return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, doubleCalc}) {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);

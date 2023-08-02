@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -30,7 +31,6 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -1120,7 +1120,10 @@ public class FunUtil extends Util {
       for ( int i = 0; i < calcs.length; i++ ) {
         DoubleCalc calc = calcs[ i ];
         SetWrapper retval = retvals[ i ];
-        double o = calc.evaluateDouble( evaluator );
+        Double o = calc.evaluate( evaluator );
+        if(o==null) {
+        	System.out.println(calc);
+        }
         if ( o == FunUtil.DOUBLE_NULL) {
           retval.nullCount++;
           retval.v.add( null );
