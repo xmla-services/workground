@@ -12,6 +12,7 @@ package mondrian.calc;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

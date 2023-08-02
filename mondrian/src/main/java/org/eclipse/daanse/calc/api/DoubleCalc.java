@@ -11,18 +11,11 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
+
 package org.eclipse.daanse.calc.api;
 
 import mondrian.calc.Calc;
 
+public interface DoubleCalc extends Calc<Double> {
 
-/**
- * @author: Stefan Bischof 
- * 
- * Marker interface to check the returning type of an {@link mondrian.calc.Calc}
- */
-
-
-public interface BooleanCalc extends Calc<Boolean> {
-   
 }

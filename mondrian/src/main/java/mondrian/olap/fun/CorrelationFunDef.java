@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -16,7 +17,6 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -51,11 +51,11 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
             call.getArgCount() > 2
             ? compiler.compileScalar(call.getArg(2), true)
             : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(
+        return new AbstractProfilingNestedDoubleCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc, calc1, calc2})
         {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);

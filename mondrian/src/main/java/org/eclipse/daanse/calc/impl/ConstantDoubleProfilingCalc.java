@@ -13,14 +13,14 @@ FunUtil* Copyright (c) 2023 Contributors to the Eclipse Foundation.
 */
 package org.eclipse.daanse.calc.impl;
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DoubleCalc;
 
-import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.NumericType;
 
-public class ConstantBooleanProfilingCalc extends AbstractProfilingConstantCalc<Boolean> implements BooleanCalc{
+public class ConstantDoubleProfilingCalc extends AbstractProfilingConstantCalc<Double> implements DoubleCalc{
 
-	public ConstantBooleanProfilingCalc(Boolean value) {
-		super(value, new BooleanType(), "ConstantBooleanProfilingCalc");
+	public ConstantDoubleProfilingCalc(NumericType type,Double value) {
+		super(value, type, "ConstantDoubleProfilingCalc");
 	}
 
 }
