@@ -1296,6 +1296,7 @@ public class DiscoverServiceImpl implements DiscoverService {
                 Properties properties = requestApi.properties();
                 SOAPElement discover = message.getSOAPBody()
                     .addChildElement(DISCOVER);
+                discover.setAttribute("xmlns", "urn:schemas-microsoft-com:xml-analysis");
                 discover.addChildElement(REQUEST_TYPE).setTextContent(MDSCHEMA_DIMENSIONS);
                 SOAPElement restrictionList = discover.addChildElement(RESTRICTIONS)
                     .addChildElement(RESTRICTION_LIST);

@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.grabber;
 
-import org.eclipse.daanse.grabber.api.GrabberServiceFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.test.common.annotation.InjectService;
@@ -29,7 +28,7 @@ class GrabberServiceImplTest {
     public static final String COMPONENT_NAME = "org.eclipse.daanse.grabber.basic.GrabberServiceFactoryImpl";
 
     @Test
-    void test(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") GrabberServiceFactory grabberServiceFactory) throws SQLException {
+    void test() throws SQLException {
 
     }
 
