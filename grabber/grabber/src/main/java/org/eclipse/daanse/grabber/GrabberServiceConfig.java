@@ -18,4 +18,9 @@ public interface GrabberServiceConfig {
     @AttributeDefinition(name = "Cron-job expression")
     default String schedulerExpression() { return "*/30 * * * * ?"; }
 
+    @AttributeDefinition(description = "targetSchemaName")
+    default String targetSchemaName() {
+        return "target";
+    }
+
 }

@@ -14,9 +14,13 @@
 package org.eclipse.daanse.grabber;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
+import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.grabber.api.GrabberInitData;
 import org.eclipse.daanse.grabber.api.GrabberService;
+import org.eclipse.daanse.grabber.api.StructureProviderService;
+import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorService;
+import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -39,6 +43,7 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +60,15 @@ public class GrabberServiceImpl implements GrabberService {
     private GrabberServiceConfig config;
 
     @Reference
-    JdbcMetaDataServiceFactory jmdsf;
+    private JdbcMetaDataServiceFactory jmdsf;
+
+    @Reference
+    private StructureProviderService structureProviderService;
+
+    @Reference
+    private DatabaseCreatorService databaseCreatorService;
+
+
 
     @Activate
     public void activate(Map<String, Object> configMap) {
@@ -70,18 +83,20 @@ public class GrabberServiceImpl implements GrabberService {
         config = null;
     }
 
-    public GrabberServiceImpl(DataSource dataSource) {
+    public GrabberServiceImpl(DataSource dataSource) throws SQLException {
         this.dataSource = dataSource;
     }
 
     @Override
-    public Schema grab(GrabberInitData gid) {
+    public Schema grab(GrabberInitData gid)  {
         LOGGER.debug("start grabbing");
         if (gid.getSourcesEndPoints() != null) {
-            List<DBStructure> dbStructureList = new ArrayList<>();
-            gid.getSourcesEndPoints().forEach(it ->
-                dbStructureList.add(grabStructure(it))
-            );
+            DBStructure dbStructure = structureProviderService.grabStructure(config.targetSchemaName(), gid.getSourcesEndPoints());
+            try {
+                databaseCreatorService.createDatabaseSchema(dataSource, dbStructure);
+            } catch (SQLException exception) {
+                new GrabberException("grabbing error " + exception.getMessage());
+            }
 
             gid.getSourcesEndPoints().forEach(
                 this::grabData
@@ -91,54 +106,10 @@ public class GrabberServiceImpl implements GrabberService {
         return null;
     }
 
-    private DBStructure grabStructure(String endPointUrl) {
-        XmlaService client  = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        DiscoverXmlMetaDataRestrictionsR restrictions = new DiscoverXmlMetaDataRestrictionsR(
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty()
-        );
-        DiscoverXmlMetaDataRequest request = new DiscoverXmlMetaDataRequestR(properties, restrictions);
-        List<DiscoverXmlMetaDataResponseRow> res = client.discover().xmlMetaData(request);
-        if (res != null && !res.isEmpty()) {
-            String schemaString = res.get(0).metaData();
-            Schema schema = getSchema(schemaString);
-            return Utils.getDBStructure(schema);
-        }
-        return new DBStructure(endPointUrl, List.of());
-    }
-
-    private Schema getSchema(String schemaString) {
-        //TODO
-        return null;
-    }
-
     private void grabData(String endPointUrl) {
         XmlaService client  = new XmlaServiceClientImpl(endPointUrl);
-        //DiscoverXmlMetaDataRequest request = new DiscoverXmlMetaDataRequestR()
-        //client.discover().xmlMetaData()
-        //get data
-        //client.execute()
+
+
     }
 
 }
