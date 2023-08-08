@@ -52,6 +52,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaCubes;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaDimensions;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaHierarchies;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaLevels;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaProperties;
+
 public class StructureProviderServiceImpl {
 
     private static final Integer START_LEVEL_NUMBER = 1;
@@ -238,93 +244,4 @@ public class StructureProviderServiceImpl {
         }
         return Optional.empty();
     }
-
-    private List<MdSchemaDimensionsResponseRow> getMdSchemaDimensions(String endPointUrl) {
-        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        MdSchemaDimensionsRestrictionsR restrictions = new MdSchemaDimensionsRestrictionsR(
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.of(CubeSourceEnum.CUBE),
-            Optional.of(VisibilityEnum.VISIBLE)
-        );
-        MdSchemaDimensionsRequest request = new MdSchemaDimensionsRequestR(properties, restrictions);
-        return client.discover().mdSchemaDimensions(request);
-    }
-
-    private List<MdSchemaHierarchiesResponseRow> getMdSchemaHierarchies(String endPointUrl) {
-        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        MdSchemaHierarchiesRestrictionsR restrictions = new MdSchemaHierarchiesRestrictionsR(
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.of(CubeSourceEnum.CUBE),
-            Optional.of(VisibilityEnum.VISIBLE)
-        );
-        MdSchemaHierarchiesRequest request = new MdSchemaHierarchiesRequestR(properties, restrictions);
-        return client.discover().mdSchemaHierarchies(request);
-
-    }
-
-    private List<MdSchemaCubesResponseRow> getMdSchemaCubes(String endPointUrl) {
-        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        MdSchemaCubesRestrictionsR restrictions = new MdSchemaCubesRestrictionsR(
-            null,
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty()
-        );
-        MdSchemaCubesRequest request = new MdSchemaCubesRequestR(properties, restrictions);
-        return client.discover().mdSchemaCubes(request);
-    }
-
-    private List<MdSchemaLevelsResponseRow> getMdSchemaLevels(String endPointUrl) {
-        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        MdSchemaLevelsRestrictionsR restrictions = new MdSchemaLevelsRestrictionsR(
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.of(CubeSourceEnum.CUBE),
-            Optional.of(VisibilityEnum.VISIBLE)
-        );
-        MdSchemaLevelsRequest request = new MdSchemaLevelsRequestR(properties, restrictions);
-        return client.discover().mdSchemaLevels(request);
-    }
-
-    private List<MdSchemaPropertiesResponseRow> getMdSchemaProperties(String endPointUrl) {
-        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
-        PropertiesR properties = new PropertiesR();
-        MdSchemaPropertiesRestrictionsR restrictions = new MdSchemaPropertiesRestrictionsR(
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.empty(),
-            Optional.of(CubeSourceEnum.CUBE),
-            Optional.of(VisibilityEnum.VISIBLE)
-        );
-        MdSchemaPropertiesRequest request = new MdSchemaPropertiesRequestR(properties, restrictions);
-        return client.discover().mdSchemaProperties(request);
-    }
-
 }
