@@ -24,12 +24,25 @@ import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorServiceFact
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.client.soapmessage.XmlaServiceClientImpl;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -43,11 +56,19 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.eclipse.daanse.grabber.MdxQueryProvider.getDictionaryQuery;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.executeStatment;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaDimensions;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaLevels;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaProperties;
 
 @Designate(ocd = GrabberServiceConfig.class, factory = true)
 @Component(service = GrabberService.class, scope = ServiceScope.SINGLETON)
@@ -108,8 +129,32 @@ public class GrabberServiceImpl implements GrabberService {
 
     private void grabData(String endPointUrl) {
         XmlaService client  = new XmlaServiceClientImpl(endPointUrl);
+        List<MdSchemaLevelsResponseRow> levels = getMdSchemaLevels(endPointUrl);
+        List<MdSchemaPropertiesResponseRow> properties = getMdSchemaProperties(endPointUrl);
 
+        List<MdSchemaLevelsResponseRow> regularLevels = levels.stream()
+            .filter(it -> it.levelType().isPresent()
+                && it.levelType().get().equals(LevelTypeEnum.REGULAR))
+            .toList();
+        regularLevels.forEach(it -> {
+            String query = getDictionaryQuery(it, properties);
+            StatementResponse statementResponse = executeStatment(endPointUrl, query);
+            executeDictionaryQueryTargetDatabaseQuery(statementResponse, it, properties);
 
+        });
+    }
+
+    private void executeDictionaryQueryTargetDatabaseQuery(StatementResponse statementResponse, MdSchemaLevelsResponseRow it, List<MdSchemaPropertiesResponseRow> properties) {
+        Optional<String> lunOptional = it.levelUniqueName();
+        Optional<String> hunOptional = it.hierarchyUniqueName();
+        Optional<String> cnOptional = it.cubeName();
+        try (final Connection connection = dataSource.getConnection();
+             final Statement statement = connection.createStatement()
+        ) {
+            //TODO
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 }
