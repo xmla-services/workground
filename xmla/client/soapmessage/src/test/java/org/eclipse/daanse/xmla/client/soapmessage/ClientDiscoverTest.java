@@ -266,34 +266,34 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_DATASOURCES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_DATASOURCES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourceName")
             .isEqualTo("dataSourceName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceDescription")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourceDescription")
             .isEqualTo("dataSourceDescription");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/URL")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:URL")
             .isEqualTo("url");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourceInfo")
             .isEqualTo("dataSourceInfo");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ProviderName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ProviderName")
             .isEqualTo("providerName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ProviderType")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ProviderType")
             .isEqualTo("DMP");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/AuthenticationMode")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:AuthenticationMode")
             .isEqualTo("Authenticated");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -328,22 +328,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_ENUMERATORS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_ENUMERATORS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/EnumName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:EnumName")
             .isEqualTo("FoodMart");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -372,22 +372,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_KEYWORDS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_KEYWORDS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/Keyword")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:Keyword")
             .isEqualTo("Keyword");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -421,22 +421,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_LITERALS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_LITERALS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LiteralName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LiteralName")
             .isEqualTo("LiteralName");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -471,22 +471,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_PROPERTIES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_PROPERTIES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PropertyName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PropertyName")
             .isEqualTo("PropertyName");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -524,22 +524,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_SCHEMA_ROWSETS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_SCHEMA_ROWSETS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SchemaName")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SchemaName")
             .isEqualTo("SchemaName");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -593,44 +593,44 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DISCOVER_XML_METADATA");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DISCOVER_XML_METADATA");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DatabaseID")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DatabaseID")
             .isEqualTo("DatabaseId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DimensionID").isEqualTo("DimensionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CubeID").isEqualTo("CubeId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MeasureGroupID").isEqualTo("MeasureGroupId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PartitionID").isEqualTo("PartitionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PerspectiveID").isEqualTo("PerspectiveId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DimensionPermissionID").isEqualTo("DimensionPermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/RoleID").isEqualTo("RoleId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DatabasePermissionID").isEqualTo("DatabasePermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MiningModelID").isEqualTo("MiningModelId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MiningModelPermissionID").isEqualTo("MiningModelPermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceID").isEqualTo("DataSourceId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MiningStructureID").isEqualTo("MiningStructureId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/AggregationDesignID").isEqualTo("AggregationDesignId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TraceID").isEqualTo("TraceId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MiningStructurePermissionID").isEqualTo("MiningStructurePermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CubePermissionID").isEqualTo("CubePermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/AssemblyID").isEqualTo("AssemblyId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MdxScriptID").isEqualTo("MdxScriptId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourceViewID").isEqualTo("DataSourceViewId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DataSourcePermissionID").isEqualTo("DataSourcePermissionId");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ObjectExpansion").isEqualTo("ExpandObject");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DimensionID").isEqualTo("DimensionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CubeID").isEqualTo("CubeId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MeasureGroupID").isEqualTo("MeasureGroupId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PartitionID").isEqualTo("PartitionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PerspectiveID").isEqualTo("PerspectiveId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DimensionPermissionID").isEqualTo("DimensionPermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:RoleID").isEqualTo("RoleId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DatabasePermissionID").isEqualTo("DatabasePermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MiningModelID").isEqualTo("MiningModelId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MiningModelPermissionID").isEqualTo("MiningModelPermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourceID").isEqualTo("DataSourceId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MiningStructureID").isEqualTo("MiningStructureId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:AggregationDesignID").isEqualTo("AggregationDesignId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TraceID").isEqualTo("TraceId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MiningStructurePermissionID").isEqualTo("MiningStructurePermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CubePermissionID").isEqualTo("CubePermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:AssemblyID").isEqualTo("AssemblyId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MdxScriptID").isEqualTo("MdxScriptId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourceViewID").isEqualTo("DataSourceViewId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DataSourcePermissionID").isEqualTo("DataSourcePermissionId");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ObjectExpansion").isEqualTo("ExpandObject");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -672,22 +672,22 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_CATALOGS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_CATALOGS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -751,31 +751,31 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_COLUMNS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_COLUMNS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_CATALOG")
             .isEqualTo("TableCatalog");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_SCHEMA")
             .isEqualTo("TableSchema");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_NAME")
             .isEqualTo("TableName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COLUMN_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:COLUMN_NAME")
             .isEqualTo("ColumnName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COLUMN_OLAP_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:COLUMN_OLAP_TYPE")
             .isEqualTo("ATTRIBUTE");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -829,25 +829,25 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_PROVIDER_TYPES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_PROVIDER_TYPES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DATA_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DATA_TYPE")
             .isEqualTo("0");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/BEST_MATCH")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:BEST_MATCH")
             .isEqualTo("true");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -883,27 +883,27 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_SCHEMATA");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_SCHEMATA");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_OWNER")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_OWNER")
             .isEqualTo("SchemaOwner");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -941,29 +941,29 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_SOURCE_TABLES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_SOURCE_TABLES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_CATALOG")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_SCHEMA")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_NAME")
             .isEqualTo("TableName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_TYPE")
             .isEqualTo("TABLE");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1006,29 +1006,29 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_TABLES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_TABLES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_CATALOG")
             .isEqualTo("TableCatalog");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_SCHEMA")
             .isEqualTo("TableSchema");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_NAME")
             .isEqualTo("TableName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_TYPE")
             .isEqualTo("TableType");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1077,29 +1077,29 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("DBSCHEMA_TABLES_INFO");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("DBSCHEMA_TABLES_INFO");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_CATALOG")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_CATALOG")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_SCHEMA")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_SCHEMA")
             .isEqualTo("TableSchema");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_NAME")
             .isEqualTo("TableName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TABLE_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TABLE_TYPE")
             .isEqualTo("TABLE");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1151,40 +1151,40 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_ACTIONS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_ACTIONS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ACTION_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ACTION_NAME")
             .isEqualTo("ActionName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ACTION_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ACTION_TYPE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COORDINATE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:COORDINATE")
             .isEqualTo("Coordinate");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/COORDINATE_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:COORDINATE_TYPE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/INVOCATION")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:INVOCATION")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
 
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1239,32 +1239,32 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_CUBES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_CUBES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
 
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/BASE_CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:BASE_CUBE_NAME")
             .isEqualTo("BaseCubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1319,36 +1319,36 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_DIMENSIONS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_DIMENSIONS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
 
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_NAME")
             .isEqualTo("DimensionName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1403,28 +1403,28 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_FUNCTIONS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_FUNCTIONS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
 
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/ORIGIN")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:ORIGIN")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/INTERFACE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:INTERFACE_NAME")
             .isEqualTo("FILTER");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LIBRARY_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LIBRARY_NAME")
             .isEqualTo("LibraryName");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1491,39 +1491,39 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_HIERARCHIES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_HIERARCHIES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_NAME")
             .isEqualTo("HierarchyName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_UNIQUE_NAME")
             .isEqualTo("HierarchyUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_ORIGIN")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_ORIGIN")
             .isEqualTo(10);
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1578,31 +1578,31 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_KPIS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_KPIS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/KPI_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:KPI_NAME")
             .isEqualTo("KpiName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1667,39 +1667,39 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_LEVELS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_LEVELS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_UNIQUE_NAME")
             .isEqualTo("HierarchyUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_NAME")
             .isEqualTo("LevelName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_UNIQUE_NAME")
             .isEqualTo("LevelUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1750,33 +1750,33 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_MEASUREGROUP_DIMENSIONS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_MEASUREGROUP_DIMENSIONS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASUREGROUP_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASUREGROUP_NAME")
             .isEqualTo("MeasureGroupName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1818,29 +1818,29 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_MEASUREGROUPS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_MEASUREGROUPS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASUREGROUP_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASUREGROUP_NAME")
             .isEqualTo("MeasureGroupName");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1899,37 +1899,37 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_MEASURES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_MEASURES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASURE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASURE_NAME")
             .isEqualTo("MeasureName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASURE_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASURE_UNIQUE_NAME")
             .isEqualTo("MeasureUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASUREGROUP_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASUREGROUP_NAME")
             .isEqualTo("MeasureGroupName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEASURE_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEASURE_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -1996,46 +1996,46 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_MEMBERS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_MEMBERS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_UNIQUE_NAME")
             .isEqualTo("HierarchyUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_UNIQUE_NAME")
             .isEqualTo("LevelUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_NUMBER")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_NUMBER")
             .isEqualTo("10");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEMBER_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEMBER_NAME")
             .isEqualTo("MemberName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEMBER_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEMBER_UNIQUE_NAME")
             .isEqualTo("MemberUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEMBER_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEMBER_TYPE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEMBER_CAPTION")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEMBER_CAPTION")
             .isEqualTo("MemberCaption");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/TREE_OP")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:TREE_OP")
             .isEqualTo("1");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -2102,45 +2102,45 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_PROPERTIES");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_PROPERTIES");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/DIMENSION_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:DIMENSION_UNIQUE_NAME")
             .isEqualTo("DimensionUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_UNIQUE_NAME")
             .isEqualTo("HierarchyUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/LEVEL_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:LEVEL_UNIQUE_NAME")
             .isEqualTo("LevelUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/MEMBER_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:MEMBER_UNIQUE_NAME")
             .isEqualTo("MemberUniqueName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PROPERTY_TYPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PROPERTY_TYPE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PROPERTY_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PROPERTY_NAME")
             .isEqualTo("PropertyName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PROPERTY_ORIGIN")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PROPERTY_ORIGIN")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/PROPERTY_VISIBILITY")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:PROPERTY_VISIBILITY")
             .isEqualTo("1");
 
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 
@@ -2189,34 +2189,34 @@ class ClientDiscoverTest {
         request.writeTo(System.out);
         XmlAssert xmlAssert = XMLUtil.createAssert(request);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover")
             .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/RequestType").isEqualTo("MDSCHEMA_SETS");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:RequestType").isEqualTo("MDSCHEMA_SETS");
         // Restrictions
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CATALOG_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CATALOG_NAME")
             .isEqualTo("CatalogName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCHEMA_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCHEMA_NAME")
             .isEqualTo("SchemaName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_NAME")
             .isEqualTo("CubeName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SET_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SET_NAME")
             .isEqualTo("SetName");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/SCOPE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:SCOPE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/CUBE_SOURCE")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:CUBE_SOURCE")
             .isEqualTo("1");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Restrictions/RestrictionList/HIERARCHY_UNIQUE_NAME")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Restrictions/msxmla:RestrictionList/msxmla:HIERARCHY_UNIQUE_NAME")
             .isEqualTo("HierarchyUniqueName");
         // Properties
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList")
             .exist();
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/DataSourceInfo")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:DataSourceInfo")
             .isEqualTo("FoodMart");
-        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/Discover/Properties/PropertyList/Content")
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:Discover/msxmla:Properties/msxmla:PropertyList/msxmla:Content")
             .isEqualTo("SchemaData");
     }
 

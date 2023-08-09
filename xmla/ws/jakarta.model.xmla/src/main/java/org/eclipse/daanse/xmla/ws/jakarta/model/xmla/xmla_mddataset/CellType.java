@@ -67,13 +67,11 @@ public class CellType {
     public static class Value {
 
         @XmlElement(name = "Error")
-        //@XmlMixed
-        //@XmlElementRefs({@XmlElementRef(name = "Error", type = CellTypeError.class)})
         protected List<CellTypeError> error;
 
+        @SuppressWarnings("java:S1700")
         @XmlMixed
-        //@XmlValue
-        protected String value;
+        protected List<String> value;
 
         @XmlAttribute(name = "type", namespace = "xsi")
         protected CellTypeEnum type;
@@ -86,11 +84,11 @@ public class CellType {
             this.error = error;
         }
 
-        public String getValue() {
+        public List<String> getValue() {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(List<String> value) {
             this.value = value;
         }
 
