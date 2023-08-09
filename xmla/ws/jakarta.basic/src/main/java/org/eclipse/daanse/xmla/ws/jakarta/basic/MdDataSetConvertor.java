@@ -118,7 +118,7 @@ public class MdDataSetConvertor {
             CellType.Value res = new CellType.Value();
             res.setError(convertCellTypeErrorList(value.error()));
             res.setType(CellTypeEnum.fromValue(value.type() != null ? value.type().getValue() : null ));
-            //res.setValue(value.value());
+            res.setValue(value.value() != null ? List.of(value.value()) : null);
             return res;
         }
         return null;
