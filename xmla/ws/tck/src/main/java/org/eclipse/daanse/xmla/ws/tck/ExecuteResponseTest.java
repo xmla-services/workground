@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.ws.tck;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.api.common.enums.CellTypeEnum;
 import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Type;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
@@ -170,7 +171,7 @@ class ExecuteResponseTest {
         CellTypeError error = new CellTypeErrorR(1l,
             DESCRIPTION);
 
-        ValueR value = new ValueR(List.of(error));
+        ValueR value = new ValueR("10", CellTypeEnum.INTEGER, List.of(error));
 
         CellType cell = new CellTypeR(value,
             List.of(any),
@@ -457,6 +458,10 @@ class ExecuteResponseTest {
             .exist().haveAttribute("CellOrdinal", "1");
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/CellData/Cell/Value")
             .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/CellData/Cell/Value")
+            .haveAttribute("type", "xsd:int");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/CellData/Cell/Value")
+            .asInt().isEqualTo(10);
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/CellData/Cell/Value/Error")
             .exist().haveAttribute("Description", DESCRIPTION).haveAttribute("ErrorCode", "1");
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/CellData/Cell/tagName")

@@ -1077,6 +1077,8 @@ public class SoapUtil {
     private static void addCellTypeValue(SOAPElement e, Value it) {
         if (it != null) {
             SOAPElement el = addChildElement(e, "Value", null);
+            el.setAttribute("xsi:type", it.type().getValue());
+            el.setTextContent(it.value());
             addCellTypeErrorList(el, it.error());
         }
     }

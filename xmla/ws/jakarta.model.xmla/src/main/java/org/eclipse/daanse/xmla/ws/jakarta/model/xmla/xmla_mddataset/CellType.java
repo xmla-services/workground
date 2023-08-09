@@ -13,17 +13,18 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset;
 
-import java.util.List;
-
-import org.w3c.dom.Element;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlMixed;
 import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CellTypeEnum;
+import org.w3c.dom.Element;
+
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CellType", propOrder = {"value", "any"})
@@ -62,11 +63,20 @@ public class CellType {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {"error"})
+    @XmlType(name = "", propOrder = {"error", "value", "type"})
     public static class Value {
 
         @XmlElement(name = "Error")
+        //@XmlMixed
+        //@XmlElementRefs({@XmlElementRef(name = "Error", type = CellTypeError.class)})
         protected List<CellTypeError> error;
+
+        @XmlMixed
+        //@XmlValue
+        protected String value;
+
+        @XmlAttribute(name = "type", namespace = "xsi")
+        protected CellTypeEnum type;
 
         public List<CellTypeError> getError() {
             return this.error;
@@ -74,6 +84,22 @@ public class CellType {
 
         public void setError(List<CellTypeError> error) {
             this.error = error;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public CellTypeEnum getType() {
+            return type;
+        }
+
+        public void setType(CellTypeEnum type) {
+            this.type = type;
         }
     }
 

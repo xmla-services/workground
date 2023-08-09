@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.client.soapmessage;
 import jakarta.xml.soap.SOAPBody;
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CellTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -1294,7 +1295,9 @@ class Convertor {
             for (int i = 0; i < nl.getLength(); i++) {
                 Node node = nl.item(i).getChildNodes().item(i);
                 if (node != null && "Value".equals(node.getNodeName())) {
-                    return new ValueR(getCellTypeErrorList(node.getChildNodes()));
+                    String value = node.getTextContent();
+                    CellTypeEnum cellType = CellTypeEnum.fromValue(getAttribute(node.getAttributes(), "xsi:type"));
+                    return new ValueR(value, cellType, getCellTypeErrorList(node.getChildNodes()));
                 }
             }
         }
