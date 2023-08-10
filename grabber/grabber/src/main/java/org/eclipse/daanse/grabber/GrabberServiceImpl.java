@@ -13,60 +13,55 @@
  */
 package org.eclipse.daanse.grabber;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
+import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 import org.eclipse.daanse.grabber.api.GrabberInitData;
 import org.eclipse.daanse.grabber.api.GrabberService;
 import org.eclipse.daanse.grabber.api.StructureProviderService;
-import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorService;
-import org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api.DbCreatorServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.utils.Utils;
-import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
-import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
-import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
-import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
-import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
-import org.eclipse.daanse.xmla.client.soapmessage.XmlaServiceClientImpl;
-import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
-import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequestR;
-import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictionsR;
-import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRequestR;
-import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRestrictionsR;
-import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
+import org.eclipse.daanse.xmla.api.mddataset.CellType;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.osgi.util.converter.Converter;
-import org.osgi.util.converter.Converters;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import static org.eclipse.daanse.grabber.MdxQueryProvider.getDictionaryQuery;
-import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.executeStatment;
+import static org.eclipse.daanse.grabber.GrabberUtils.getDimensionNameByUniqueName;
+import static org.eclipse.daanse.grabber.GrabberUtils.getFactColumns;
+import static org.eclipse.daanse.grabber.GrabberUtils.getHierarchyNameByUniqueName;
+import static org.eclipse.daanse.grabber.GrabberUtils.getPropertyColumns;
+import static org.eclipse.daanse.grabber.MdxQueryProvider.getMdxDictionaryQuery;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.executeStatement;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaCubes;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaDimensions;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaHierarchies;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaLevels;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaProperties;
 
@@ -76,7 +71,6 @@ public class GrabberServiceImpl implements GrabberService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GrabberServiceImpl.class);
     private final DataSource dataSource;
-
     public static final Converter CONVERTER = Converters.standardConverter();
     private GrabberServiceConfig config;
 
@@ -89,7 +83,8 @@ public class GrabberServiceImpl implements GrabberService {
     @Reference
     private DatabaseCreatorService databaseCreatorService;
 
-
+    @Reference
+    private DialectResolver dialectResolver;
 
     @Activate
     public void activate(Map<String, Object> configMap) {
@@ -104,19 +99,20 @@ public class GrabberServiceImpl implements GrabberService {
         config = null;
     }
 
-    public GrabberServiceImpl(DataSource dataSource) throws SQLException {
+    public GrabberServiceImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    public Schema grab(GrabberInitData gid)  {
+    public Schema grab(GrabberInitData gid) {
         LOGGER.debug("start grabbing");
         if (gid.getSourcesEndPoints() != null) {
-            DBStructure dbStructure = structureProviderService.grabStructure(config.targetSchemaName(), gid.getSourcesEndPoints());
+            DBStructure dbStructure = structureProviderService.grabStructure(config.targetSchemaName(),
+                gid.getSourcesEndPoints());
             try {
                 databaseCreatorService.createDatabaseSchema(dataSource, dbStructure);
             } catch (SQLException exception) {
-                new GrabberException("grabbing error " + exception.getMessage());
+                throw new GrabberException("grabbing error " + exception.getMessage());
             }
 
             gid.getSourcesEndPoints().forEach(
@@ -128,33 +124,175 @@ public class GrabberServiceImpl implements GrabberService {
     }
 
     private void grabData(String endPointUrl) {
-        XmlaService client  = new XmlaServiceClientImpl(endPointUrl);
         List<MdSchemaLevelsResponseRow> levels = getMdSchemaLevels(endPointUrl);
         List<MdSchemaPropertiesResponseRow> properties = getMdSchemaProperties(endPointUrl);
+        List<MdSchemaDimensionsResponseRow> dimensions = getMdSchemaDimensions(endPointUrl);
+        List<MdSchemaHierarchiesResponseRow> hierarchies = getMdSchemaHierarchies(endPointUrl);
+        List<MdSchemaCubesResponseRow> cubes = getMdSchemaCubes(endPointUrl);
 
         List<MdSchemaLevelsResponseRow> regularLevels = levels.stream()
             .filter(it -> it.levelType().isPresent()
                 && it.levelType().get().equals(LevelTypeEnum.REGULAR))
             .toList();
         regularLevels.forEach(it -> {
-            String query = getDictionaryQuery(it, properties);
-            StatementResponse statementResponse = executeStatment(endPointUrl, query);
-            executeDictionaryQueryTargetDatabaseQuery(statementResponse, it, properties);
-
+            String dimensionName = getDimensionNameByUniqueName(dimensions, it.dimensionUniqueName().get());
+            String hierarchy = getHierarchyNameByUniqueName(hierarchies, it.hierarchyUniqueName().get());
+            List<String> columns = getPropertyColumns(properties, it).stream().map(Column::getName).toList();
+            String mdxQuery = getMdxDictionaryQuery(it, properties);
+            String sqlQuery = getInsertDictionaryQuery(it, dimensionName, hierarchy, columns);
+            StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
+            executeTargetDatabaseQuery(statementResponse, 2 + columns.size(), sqlQuery, null);
         });
+        cubes.forEach(c ->{
+            Optional<String> optionalCubeName = c.cubeName();
+            if (optionalCubeName.isPresent()) {
+                List<Column> factColumns = getFactColumns(optionalCubeName.get(), dimensions, hierarchies);
+                String mdxQuery = getMdxFactQuery(c, dimensions, hierarchies);
+                String sqlQuery = getInsertFactQuery(c, factColumns);
+                StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
+                //TODO add source id
+                executeTargetDatabaseQuery(statementResponse, factColumns.size(), sqlQuery, null);
+            }
+        });
+
+
     }
 
-    private void executeDictionaryQueryTargetDatabaseQuery(StatementResponse statementResponse, MdSchemaLevelsResponseRow it, List<MdSchemaPropertiesResponseRow> properties) {
-        Optional<String> lunOptional = it.levelUniqueName();
-        Optional<String> hunOptional = it.hierarchyUniqueName();
-        Optional<String> cnOptional = it.cubeName();
+    private String getInsertFactQuery(MdSchemaCubesResponseRow c, List<Column> factColumns) {
+        StringBuilder sb = new StringBuilder();
+        Optional<String> cubeNameOptional = c.cubeName();
+        if (cubeNameOptional.isPresent() && !factColumns.isEmpty()) {
+            sb.append("insert into ").append(cubeNameOptional)
+                .append("(");
+            sb.append(factColumns.stream().map(Column::getName).collect(Collectors.joining(", ")));
+            sb.append(" ) VALUES ");
+            sb.append(", ").append(factColumns.stream().map(i -> "?").collect(Collectors.joining(", ")));
+            sb.append(" ) ");
+        }
+        return sb.toString();
+
+    }
+
+    private String getMdxFactQuery(MdSchemaCubesResponseRow c,
+                                   List<MdSchemaDimensionsResponseRow> dimensions,
+                                   List<MdSchemaHierarchiesResponseRow> hierarchies) {
+        //TODO
+        return null;
+    }
+
+    private String getInsertDictionaryQuery(
+        MdSchemaLevelsResponseRow it, String dimension, String hierarchy,
+        List<String> columns
+    ) {
+        StringBuilder sb = new StringBuilder();
+        Optional<String> cubeNameOptional = it.cubeName();
+        Optional<String> levelNameOptional = it.levelName();
+        if (cubeNameOptional.isPresent() && levelNameOptional.isPresent()) {
+            sb.append("insert into ").append(getDictionaryTableName(cubeNameOptional.get(),
+                dimension, hierarchy,
+                levelNameOptional.get()))
+                .append("(key, caption");
+            if (!columns.isEmpty()) {
+                sb.append(",").append(columns.stream().collect(Collectors.joining(",")));
+            }
+            sb.append(" ) VALUES ");
+            sb.append(" ( ?, ?");
+            if (!columns.isEmpty()) {
+                sb.append(", ").append(columns.stream().map(i -> "?").collect(Collectors.joining(", ")));
+            }
+            sb.append(" ) ");
+        }
+        return sb.toString();
+    }
+
+    private String getDictionaryTableName(
+        String cubeName,
+        String dimensionName,
+        String hierarchyName,
+        String levelName
+    ) {
+        return new StringBuilder(cubeName).append("_").append(dimensionName).append("_")
+            .append(hierarchyName).append("_").append(levelName).toString();
+    }
+
+    private void executeTargetDatabaseQuery(
+        StatementResponse statementResponse,
+        int portion,
+        String sqlQuery, Long sourceId
+    ) {
         try (final Connection connection = dataSource.getConnection();
-             final Statement statement = connection.createStatement()
+             final PreparedStatement ps = connection.prepareStatement(sqlQuery)
         ) {
-            //TODO
+            Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
+            if (dialectOptional.isPresent()) {
+                Dialect dialect = dialectOptional.get();
+                if (dialect.supportBatchOperations()) {
+                    batchExecute(ps, portion, statementResponse.mdDataSet().cellData().cell(), sourceId);
+                } else {
+                    execute(ps, portion, statementResponse.mdDataSet().cellData().cell(), sourceId);
+                }
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private void batchExecute(PreparedStatement ps, int portion, List<CellType> cell, Long sourceId) throws SQLException {
+        long start = System.currentTimeMillis();
+        long startBatch = start;
+        List<List<CellType>> subSets = getListPortions(cell, portion);
+        ps.clearParameters();
+        int count = 0;
+        for (List<CellType> cells : subSets) {
+            for (int i = 0; i < cells.size(); i++) {
+                ps.setString(i, cells.get(i).value().value());
+            }
+            if (sourceId != null) {
+                ps.setLong(cells.size(), sourceId);
+            }
+            ps.addBatch();
+            count++;
+            if (count % config.batchSize() == 0) {
+                ps.executeBatch();
+                LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - startBatch));
+                ps.getConnection().commit();
+                LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - startBatch));
+                startBatch = System.currentTimeMillis();
+            }
+        }
+        LOGGER.debug("---");
+        ps.executeBatch();
+        LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - startBatch));
+
+        ps.getConnection().commit();
+        LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - startBatch));
+        ps.getConnection().setAutoCommit(true);
+        LOGGER.debug("---");
+        LOGGER.debug("execute time {}", (System.currentTimeMillis() - start));
+    }
+
+    private void execute(PreparedStatement ps, int portion, List<CellType> cell, Long sourceId) throws SQLException {
+        long start = System.currentTimeMillis();
+        List<List<CellType>> subSets = getListPortions(cell, portion);
+        ps.clearParameters();
+        for (List<CellType> cells : subSets) {
+            for (int i = 0; i < cells.size(); i++) {
+                ps.setString(i, cells.get(i).value().value());
+            }
+            if (sourceId != null) {
+                ps.setLong(cells.size(), sourceId);
+            }
+            ps.executeUpdate();
+        }
+        LOGGER.debug("---");
+        LOGGER.debug("execute time {}", (System.currentTimeMillis() - start));
+    }
+
+    private List<List<CellType>> getListPortions(List<CellType> cell, int portion) {
+        final AtomicInteger counter = new AtomicInteger();
+        Map<Integer, List<CellType>> groups =
+            cell.stream().collect(Collectors.groupingBy(s -> counter.getAndIncrement() / portion));
+        return new ArrayList<>(groups.values());
     }
 
 }
