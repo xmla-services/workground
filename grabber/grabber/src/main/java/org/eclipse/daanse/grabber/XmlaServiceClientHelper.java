@@ -47,6 +47,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class XmlaServiceClientHelper {
+
+    private XmlaServiceClientHelper() {
+        // constructor
+    }
+
     static List<MdSchemaLevelsResponseRow> getMdSchemaLevels(String endPointUrl) {
         XmlaService client = new XmlaServiceClientImpl(endPointUrl);
         PropertiesR properties = new PropertiesR();
@@ -135,7 +140,7 @@ public class XmlaServiceClientHelper {
         return client.discover().mdSchemaCubes(request);
     }
 
-    static StatementResponse executeStatment(String endPointUrl, String mdxQuery) {
+    static StatementResponse executeStatement(String endPointUrl, String mdxQuery) {
         XmlaService client = new XmlaServiceClientImpl(endPointUrl);
         PropertiesR properties = new PropertiesR();
         StatementR command = new StatementR(mdxQuery);

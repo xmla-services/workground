@@ -23,4 +23,12 @@ public interface GrabberServiceConfig {
         return "target";
     }
 
+    /**
+     * @return Batch Size. Use Batch operation if dialect support it
+     */
+    @AttributeDefinition(description = "batchSize")
+    default int batchSize() {
+        return 1000;
+    }
+
 }
