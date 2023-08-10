@@ -42,7 +42,7 @@ public class MdxQueryProvider {
         // constructor
     }
 
-    static String getDictionaryQuery(MdSchemaLevelsResponseRow it, List<MdSchemaPropertiesResponseRow> properties) {
+    static String getMdxDictionaryQuery(MdSchemaLevelsResponseRow it, List<MdSchemaPropertiesResponseRow> properties) {
         Optional<String> lunOptional = it.levelUniqueName();
         Optional<String> hunOptional = it.hierarchyUniqueName();
         Optional<String> cnOptional = it.cubeName();
