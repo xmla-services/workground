@@ -47,10 +47,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.grabber.GrabberUtils.getDimensionNameByUniqueName;
@@ -106,6 +108,7 @@ public class GrabberServiceImpl implements GrabberService {
     @Override
     public Schema grab(GrabberInitData gid) {
         LOGGER.debug("start grabbing");
+
         if (gid.getSourcesEndPoints() != null) {
             DBStructure dbStructure = structureProviderService.grabStructure(config.targetSchemaName(),
                 gid.getSourcesEndPoints());
@@ -114,8 +117,8 @@ public class GrabberServiceImpl implements GrabberService {
             } catch (SQLException exception) {
                 throw new GrabberException("grabbing error " + exception.getMessage());
             }
-
-            gid.getSourcesEndPoints().forEach(
+            Map<Long, String> sourceMap = loadSourceTable(gid.getSourcesEndPoints());
+            sourceMap.entrySet().forEach(
                 this::grabData
             );
         }
@@ -123,7 +126,29 @@ public class GrabberServiceImpl implements GrabberService {
         return null;
     }
 
-    private void grabData(String endPointUrl) {
+    private Map<Long, String> loadSourceTable(List<String> sourcesEndPoints) {
+        final AtomicLong counter = new AtomicLong();
+        Map<Long, String> map =
+            sourcesEndPoints.stream().collect(Collectors.toMap(s -> counter.getAndIncrement(), s -> s));
+        String sqlQuery = "INSERT INTO sources (source_id, source) VALUES (?, ?)";
+        try (final Connection connection = dataSource.getConnection();
+             final PreparedStatement ps = connection.prepareStatement(sqlQuery)
+        ) {
+            ps.clearParameters();
+            for (Map.Entry<Long, String> e : map.entrySet()) {
+                ps.setLong(1, e.getKey());
+                ps.setString(2, e.getValue());
+                ps.executeUpdate();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return map;
+    }
+
+    private void grabData(Map.Entry<Long, String> e) {
+        String endPointUrl = e.getValue();
+        Long sourceId = e.getKey();
         List<MdSchemaLevelsResponseRow> levels = getMdSchemaLevels(endPointUrl);
         List<MdSchemaPropertiesResponseRow> properties = getMdSchemaProperties(endPointUrl);
         List<MdSchemaDimensionsResponseRow> dimensions = getMdSchemaDimensions(endPointUrl);
@@ -141,17 +166,16 @@ public class GrabberServiceImpl implements GrabberService {
             String mdxQuery = getMdxDictionaryQuery(it, properties);
             String sqlQuery = getInsertDictionaryQuery(it, dimensionName, hierarchy, columns);
             StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-            executeTargetDatabaseQuery(statementResponse, 2 + columns.size(), sqlQuery, null);
+            executeTargetDatabaseQuery(statementResponse, 2 + columns.size(), sqlQuery);
         });
         cubes.forEach(c ->{
             Optional<String> optionalCubeName = c.cubeName();
             if (optionalCubeName.isPresent()) {
                 List<Column> factColumns = getFactColumns(optionalCubeName.get(), dimensions, hierarchies);
-                String mdxQuery = getMdxFactQuery(c, dimensions, hierarchies);
+                String mdxQuery = getMdxFactQuery(c, levels);
                 String sqlQuery = getInsertFactQuery(c, factColumns);
                 StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-                //TODO add source id
-                executeTargetDatabaseQuery(statementResponse, factColumns.size(), sqlQuery, null);
+                executeTargetDatabaseQuery(statementResponse, factColumns.size() - 1 , sqlQuery);
             }
         });
 
@@ -162,7 +186,7 @@ public class GrabberServiceImpl implements GrabberService {
         StringBuilder sb = new StringBuilder();
         Optional<String> cubeNameOptional = c.cubeName();
         if (cubeNameOptional.isPresent() && !factColumns.isEmpty()) {
-            sb.append("insert into ").append(cubeNameOptional)
+            sb.append("INSERT INTO ").append(cubeNameOptional)
                 .append("(");
             sb.append(factColumns.stream().map(Column::getName).collect(Collectors.joining(", ")));
             sb.append(" ) VALUES ");
@@ -174,9 +198,24 @@ public class GrabberServiceImpl implements GrabberService {
     }
 
     private String getMdxFactQuery(MdSchemaCubesResponseRow c,
-                                   List<MdSchemaDimensionsResponseRow> dimensions,
-                                   List<MdSchemaHierarchiesResponseRow> hierarchies) {
-        //TODO
+                                   List<MdSchemaLevelsResponseRow> levels) {
+        List<MdSchemaLevelsResponseRow> regularLevels = levels.stream()
+            .filter(it -> it.levelType().isPresent()
+                && it.levelType().get().equals(LevelTypeEnum.REGULAR))
+            .toList();
+        Map<String, List<MdSchemaLevelsResponseRow>> map =
+            regularLevels.stream().collect(Collectors.groupingBy(s -> s.hierarchyUniqueName().get()));
+        List<MdSchemaLevelsResponseRow> lastLevels = map.values().stream().map(it ->
+            it.stream().max(
+                Comparator.comparingInt(r -> r.levelNumber().get())
+            ).get())
+            .toList();
+
+        StringBuilder sb = new StringBuilder("DRILLTHROUGH SELECT FROM [");
+        sb.append(c.cubeName().get());
+        sb.append("]");
+        sb.append(" RETURN ");
+        sb.append(lastLevels.stream().map(it -> it.levelUniqueName().get()).toList().stream().collect(Collectors.joining(",")));
         return null;
     }
 
@@ -218,7 +257,7 @@ public class GrabberServiceImpl implements GrabberService {
     private void executeTargetDatabaseQuery(
         StatementResponse statementResponse,
         int portion,
-        String sqlQuery, Long sourceId
+        String sqlQuery
     ) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement ps = connection.prepareStatement(sqlQuery)
@@ -227,9 +266,9 @@ public class GrabberServiceImpl implements GrabberService {
             if (dialectOptional.isPresent()) {
                 Dialect dialect = dialectOptional.get();
                 if (dialect.supportBatchOperations()) {
-                    batchExecute(ps, portion, statementResponse.mdDataSet().cellData().cell(), sourceId);
+                    batchExecute(ps, portion, statementResponse.mdDataSet().cellData().cell());
                 } else {
-                    execute(ps, portion, statementResponse.mdDataSet().cellData().cell(), sourceId);
+                    execute(ps, portion, statementResponse.mdDataSet().cellData().cell());
                 }
             }
         } catch (SQLException throwables) {
@@ -237,7 +276,7 @@ public class GrabberServiceImpl implements GrabberService {
         }
     }
 
-    private void batchExecute(PreparedStatement ps, int portion, List<CellType> cell, Long sourceId) throws SQLException {
+    private void batchExecute(PreparedStatement ps, int portion, List<CellType> cell) throws SQLException {
         long start = System.currentTimeMillis();
         long startBatch = start;
         List<List<CellType>> subSets = getListPortions(cell, portion);
@@ -245,10 +284,7 @@ public class GrabberServiceImpl implements GrabberService {
         int count = 0;
         for (List<CellType> cells : subSets) {
             for (int i = 0; i < cells.size(); i++) {
-                ps.setString(i, cells.get(i).value().value());
-            }
-            if (sourceId != null) {
-                ps.setLong(cells.size(), sourceId);
+                ps.setString(i + 1, cells.get(i).value().value());
             }
             ps.addBatch();
             count++;
@@ -271,16 +307,13 @@ public class GrabberServiceImpl implements GrabberService {
         LOGGER.debug("execute time {}", (System.currentTimeMillis() - start));
     }
 
-    private void execute(PreparedStatement ps, int portion, List<CellType> cell, Long sourceId) throws SQLException {
+    private void execute(PreparedStatement ps, int portion, List<CellType> cell) throws SQLException {
         long start = System.currentTimeMillis();
         List<List<CellType>> subSets = getListPortions(cell, portion);
         ps.clearParameters();
         for (List<CellType> cells : subSets) {
             for (int i = 0; i < cells.size(); i++) {
-                ps.setString(i, cells.get(i).value().value());
-            }
-            if (sourceId != null) {
-                ps.setLong(cells.size(), sourceId);
+                ps.setString(i + 1, cells.get(i).value().value());
             }
             ps.executeUpdate();
         }
