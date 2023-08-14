@@ -16,7 +16,7 @@ package org.eclipse.daanse.xmla.ws.tck;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.common.enums.CellTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 import org.eclipse.daanse.xmla.api.exception.Messages;
 import org.eclipse.daanse.xmla.api.exception.Type;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
@@ -30,6 +30,8 @@ import org.eclipse.daanse.xmla.api.mddataset.CellTypeError;
 import org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo;
 import org.eclipse.daanse.xmla.api.mddataset.MemberType;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.model.record.engine200.WarningColumnR;
 import org.eclipse.daanse.xmla.model.record.engine200.WarningLocationObjectR;
 import org.eclipse.daanse.xmla.model.record.engine200.WarningMeasureR;
@@ -59,6 +61,9 @@ import org.eclipse.daanse.xmla.model.record.mddataset.MemberTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.MembersTypeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoCubeR;
 import org.eclipse.daanse.xmla.model.record.mddataset.OlapInfoR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowItemR;
+import org.eclipse.daanse.xmla.model.record.mddataset.RowSetRowR;
 import org.eclipse.daanse.xmla.model.record.mddataset.ValueR;
 import org.eclipse.daanse.xmla.model.record.xmla_empty.EmptyresultR;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,7 +176,7 @@ class ExecuteResponseTest {
         CellTypeError error = new CellTypeErrorR(1l,
             DESCRIPTION);
 
-        ValueR value = new ValueR("10", CellTypeEnum.INTEGER, List.of(error));
+        ValueR value = new ValueR("10", ItemTypeEnum.INTEGER, List.of(error));
 
         CellType cell = new CellTypeR(value,
             List.of(any),
@@ -190,7 +195,7 @@ class ExecuteResponseTest {
             cellData,
             exception,
             messages);
-        StatementResponseR row = new StatementResponseR(mdDataSet);
+        StatementResponseR row = new StatementResponseR(mdDataSet, null);
 
         ExecuteService executeService = xmlaService.execute();
         when(executeService.statement(any())).thenReturn(row);
@@ -204,6 +209,31 @@ class ExecuteResponseTest {
 
         XmlAssert xmlAssert = XMLUtil.createAssert(response);
         checkRow(xmlAssert);
+    }
+
+    @Test
+    void testStatementRow(@InjectService XmlaService xmlaService) throws SOAPException, IOException, TransformerException {
+        List<RowSetRowItem> rowSetRowItems = List.of(
+            new RowSetRowItemR("tagName", VALUE2, Optional.ofNullable(ItemTypeEnum.INTEGER))
+        );
+        RowSetRow rowSetRow = new RowSetRowR(rowSetRowItems);
+        List<RowSetRow> rowSetRows = List.of(rowSetRow);
+        RowSetR rowSet = new RowSetR(rowSetRows);
+
+        StatementResponseR row = new StatementResponseR(null, rowSet);
+
+        ExecuteService executeService = xmlaService.execute();
+        when(executeService.statement(any())).thenReturn(row);
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.SOAP_ENDPOINT_URL,
+            Optional.of(Constants.SOAP_ACTION_EXECUTE), SOAPUtil.envelop(STATEMENT_REQUEST));
+
+        logger.debug("Statement response :");
+        String responseStr =  string(response);
+        logger.debug(responseStr);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRowWithRow(xmlAssert);
     }
 
     @Test
@@ -470,6 +500,23 @@ class ExecuteResponseTest {
         checkException(xmlAssert, "mddataset");
 
         checkMessages(xmlAssert, "mddataset");
+    }
+
+    private void checkRowWithRow(XmlAssert xmlAssert) {
+        xmlAssert.hasXPath("/SOAP:Envelope");
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse").exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/rowset:root")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/rowset:root/rowset:row")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/rowset:root/rowset:row/tagName")
+            .exist();
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/rowset:root/rowset:row/tagName")
+            .exist().haveAttribute("type", "xsd:int");
+        xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/rowset:root/rowset:row/tagName")
+            .asString().isEqualTo("value");
     }
 
 }

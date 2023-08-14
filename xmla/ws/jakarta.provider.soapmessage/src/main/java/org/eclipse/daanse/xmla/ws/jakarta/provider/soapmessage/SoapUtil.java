@@ -76,6 +76,8 @@ import org.eclipse.daanse.xmla.api.mddataset.MembersType;
 import org.eclipse.daanse.xmla.api.mddataset.NormTupleSet;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfo;
 import org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.api.mddataset.SetListType;
 import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 import org.eclipse.daanse.xmla.api.mddataset.TuplesType;
@@ -321,9 +323,33 @@ public class SoapUtil {
     }
 
     public static void toStatementResponse(StatementResponse statementResponse, SOAPBody body) {
-        SOAPElement root = addExecuteRoot(body, "mddataset");
-        if (statementResponse != null) {
-            addMdDataSet(root, statementResponse.mdDataSet());
+        if (statementResponse.mdDataSet() != null) {
+            SOAPElement root = addExecuteRoot(body, "mddataset");
+            if (statementResponse != null) {
+                addMdDataSet(root, statementResponse.mdDataSet());
+            }
+        }
+        if (statementResponse.rowSet() != null) {
+            SOAPElement root = addExecuteRoot(body, ROWSET);
+            if (statementResponse.rowSet().rowSetRows() != null) {
+                statementResponse.rowSet().rowSetRows().forEach(it -> addRowSetRow(root, it));
+            }
+        }
+    }
+
+    private static void addRowSetRow(SOAPElement e, RowSetRow it) {
+        String prefix = ROWSET;
+        SOAPElement row = addChildElement(e, ROW, prefix);
+        if (it.rowSetRowItem() != null) {
+            it.rowSetRowItem().forEach(i -> addRowSetRowItem(row, i));
+        }
+    }
+
+    private static void addRowSetRowItem(SOAPElement e, RowSetRowItem it) {
+        if (it != null) {
+            SOAPElement el = addChildElement(e, it.tagName(), null);
+            el.setTextContent(it.value());
+            it.type().ifPresent(v -> setAttribute(el, "type", v.getValue()));
         }
     }
 

@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.common.enums;
 
 import java.util.stream.Stream;
 
-public enum CellTypeEnum {
+public enum ItemTypeEnum {
 
     INTEGER("xsd:int"),
 
@@ -27,7 +27,7 @@ public enum CellTypeEnum {
 
     private final String value;
 
-    CellTypeEnum(String v) {
+    ItemTypeEnum(String v) {
         this.value = v;
     }
 
@@ -35,10 +35,10 @@ public enum CellTypeEnum {
         return value;
     }
 
-    public static CellTypeEnum fromValue(String v) {
+    public static ItemTypeEnum fromValue(String v) {
         if (v != null) {
-            return Stream.of(CellTypeEnum.values()).filter(e -> (e.value.equals(v))).findFirst()
-                .orElse(CellTypeEnum.STRING);
+            return Stream.of(ItemTypeEnum.values()).filter(e -> (e.value.equals(v))).findFirst()
+                .orElse(ItemTypeEnum.STRING);
         }
         return null;
     }
