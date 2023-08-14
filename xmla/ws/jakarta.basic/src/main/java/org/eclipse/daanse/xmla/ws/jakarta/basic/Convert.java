@@ -134,7 +134,9 @@ import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheRequest;
 import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
-import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
+import org.eclipse.daanse.xmla.api.mddataset.RowSet;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
 import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
@@ -210,6 +212,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDim
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.ParameterInfoXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.StatementRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaCatalogsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaColumnsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaProviderTypesResponseRowXml;
@@ -240,6 +243,11 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSche
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
 import jakarta.xml.bind.JAXBException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class Convert {
 
@@ -2260,8 +2268,8 @@ public class Convert {
         return new StatementRequestR(properties, parameters, command);
     }
 
-    public static ExecuteResponse toStatement(StatementResponse responseApi) {
-        Return ret = convertStatementResponse(responseApi.mdDataSet());
+    public static ExecuteResponse toStatement(StatementResponse responseApi) throws JAXBException, IOException {
+        Return ret = convertStatementResponse(responseApi);
         ExecuteResponse responseWs = new ExecuteResponse();
         responseWs.setReturnValue(ret);
 
@@ -2327,10 +2335,62 @@ public class Convert {
         return result;
     }
 
-    private static Return convertStatementResponse(Mddataset mdDataSet) {
+    private static Return convertStatementResponse(StatementResponse responseApi) throws JAXBException, IOException {
         Return ret = new Return();
-        ret.setValue(MdDataSetConvertor.convertMdDataSet(mdDataSet));
+        if (responseApi.mdDataSet() != null) {
+            ret.setValue(MdDataSetConvertor.convertMdDataSet(responseApi.mdDataSet()));
+        }
+        if (responseApi.rowSet() != null) {
+        	ret.setValue(convertStatementResponseRowSet(responseApi.rowSet()));
+        }
         return ret;
+    }
+
+    private static Rowset convertStatementResponseRowSet(RowSet rowSet) throws JAXBException, IOException {
+        Rowset rowset = new Rowset();
+        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
+            StatementRowXml.class);
+        rowset.setRow(convertRowSetRowList(rowSet.rowSetRows()));
+        rowset.setSchema(schema);
+        return rowset;
+    }
+
+    private static List<Row> convertRowSetRowList(List<RowSetRow> list) {
+        if (list != null) {
+            return list.stream().map(Convert::convertRowSetRow).toList();
+        }
+        return List.of();
+    }
+
+    private static Row convertRowSetRow(RowSetRow rowSetRow) {
+        StatementRowXml row = new StatementRowXml();
+        row.setAny(convertRowSetItemList(rowSetRow.rowSetRowItem()));
+        return row;
+    }
+
+    private static List<Element> convertRowSetItemList(List<RowSetRowItem> list) {
+        if (list != null) {
+            return list.stream().map(Convert::convertElement).toList();
+        }
+        return List.of();
+    }
+
+    private static Element convertElement(RowSetRowItem rowSetItem) {
+        if (rowSetItem != null) {
+            try {
+                Document document = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .newDocument();
+                Element element = document.createElement(rowSetItem.tagName());
+                element.setTextContent(rowSetItem.value());
+                rowSetItem.type().ifPresent(type -> element.setAttributeNS("xsi", "type", type.getValue()));
+                return element;
+            } catch (ParserConfigurationException e) {
+                throw new ConvertorException(e);
+            }
+        }
+
+        return null;
     }
 
     private static Return getReturn(List<Row> rows, Class<?> cl) throws JAXBException, IOException {
@@ -2352,5 +2412,4 @@ public class Convert {
 		}
 		return List.of();
 	}
-
 }

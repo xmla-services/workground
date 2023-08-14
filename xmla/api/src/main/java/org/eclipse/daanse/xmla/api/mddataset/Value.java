@@ -1,6 +1,6 @@
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import org.eclipse.daanse.xmla.api.common.enums.CellTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ItemTypeEnum;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface Value {
 
     String value();
 
-    CellTypeEnum type();
+    ItemTypeEnum type();
 }

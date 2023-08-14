@@ -227,7 +227,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 		return Convert.toAlter(responseApi);
 	}
 
-	private ExecuteResponse handleStatement(Execute requestWs) {
+	private ExecuteResponse handleStatement(Execute requestWs) throws JAXBException, IOException {
 		StatementRequest requestApi = Convert.fromStatement(requestWs);
 		StatementResponse responseApi = xmlaService.execute().statement(requestApi);
 		return Convert.toStatement(responseApi);

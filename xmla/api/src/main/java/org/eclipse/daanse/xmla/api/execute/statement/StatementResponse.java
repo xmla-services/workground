@@ -14,11 +14,12 @@
 package org.eclipse.daanse.xmla.api.execute.statement;
 
 import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
+import org.eclipse.daanse.xmla.api.mddataset.RowSet;
 
 public interface StatementResponse {
 
     Mddataset mdDataSet();
 
-    //RowSet rowSet();
-    //TODO
+    RowSet rowSet();
+
 }
