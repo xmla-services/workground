@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
@@ -548,7 +549,9 @@ public class AbstractExpCompiler implements ExpCompiler {
 					return FunUtil.DOUBLE_NULL;
 					// null;
 					// TODO: !!! JUST REFACTORING 0 must be null
-				} else if (o instanceof Double d) {
+				} else  if(Objects.equals(o, FunUtil.DOUBLE_NULL)){
+					return FunUtil.DOUBLE_NULL;
+				}else if (o instanceof Double d) {
 					return d;
 				} else if (o instanceof Number n) {
 					return n.doubleValue();

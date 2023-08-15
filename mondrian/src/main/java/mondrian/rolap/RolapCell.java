@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -130,7 +131,7 @@ public class RolapCell implements Cell {
 
     @Override
 	public boolean isNull() {
-        return (ci.value == Util.nullValue);
+        return (Objects.equals(ci.value ,Util.nullValue));
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -1886,7 +1887,7 @@ public Cell getCell( int[] pos ) {
 
     @Override
 	public String format( Object value, String formatString ) {
-      if ( value == Util.nullValue ) {
+      if ( Objects.equals( value ,Util.nullValue )) {
         value = null;
       }
       if ( value instanceof Throwable ) {

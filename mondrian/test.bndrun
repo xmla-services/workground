@@ -115,10 +115,14 @@
 -systemproperties.tester:\
     tempIgnoreStrageTests=true#,\
     
--runproperties.tester:  \
-	tester.names=\
-	mondrian.olap.fun.FunctionTest
-#	mondrian.test.BasicQueryTest
-#	mondrian.rolap.FilterTest
-#    mondrian.test.ExplainPlanTest
+-runproperties.tester:\
+    tester.names=\
+      'mondrian.test.ExplainPlanTest,\
+      mondrian.olap.fun.FunctionTest,\
+      mondrian.test.BasicQueryTest,\
+      mondrian.olap.fun.vba.VbaTest,\
+      mondrian.olap.fun.SortTest,\
+      mondrian.rolap.FilterTest,\
+      mondrian.test.UdfTest,\
+      mondrian.util.FormatTest'
   #,\
