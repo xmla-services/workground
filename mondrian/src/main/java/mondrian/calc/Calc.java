@@ -10,6 +10,7 @@
 package mondrian.calc;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
@@ -62,7 +63,7 @@ import mondrian.olap.type.Type;
  * {@link mondrian.calc.impl.AbstractMemberCalc},
  * {@link mondrian.calc.impl.AbstractLevelCalc},
  * {@link mondrian.calc.impl.AbstractHierarchyCalc},
- * {@link mondrian.calc.impl.AbstractDimensionCalc}.<p/>
+ * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc}.<p/>
  *
  * {@link mondrian.calc.impl.GenericCalc} is an adapter which implements all of these interfaces
  * and will try to convert any given result to the correct type. Use it

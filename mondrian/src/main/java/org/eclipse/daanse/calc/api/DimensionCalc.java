@@ -10,16 +10,15 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-*/package org.eclipse.daanse.calc.impl;
+*/
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
+package org.eclipse.daanse.calc.api;
 
-import mondrian.olap.type.BooleanType;
+import org.eclipse.daanse.olap.api.model.Dimension;
 
-public class ConstantBooleanProfilingCalc extends AbstractProfilingConstantCalc<Boolean> implements BooleanCalc{
+import mondrian.calc.Calc;
 
-	public ConstantBooleanProfilingCalc(Boolean value) {
-		super(value, new BooleanType(), "ConstantBooleanProfilingCalc");
-	}
+
+public interface DimensionCalc extends Calc<Dimension> {
 
 }

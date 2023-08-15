@@ -9,9 +9,6 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
-import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -19,12 +16,9 @@ import org.eclipse.daanse.olap.api.model.Member;
 import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.MemberType;
-import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 
 /**
@@ -56,28 +50,7 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
                         : ResultStyle.VALUE_NOT_NULL;
     }
 
-    private double initializeDouble(Object o) {
-        double value;
-        if (o instanceof Number) {
-            value = ((Number) o).doubleValue();
-        } else if (o == null) {
-            value = FunUtil.DOUBLE_NULL;
-        } else {
-            value = 0;
-        }
-        return value;
-    }
-
-	private Integer initializeInteger(Object o) {
-		if (o == null) {
-			return null;
-		} else if (o instanceof Number n) {
-			return n.intValue();
-		} else {
-			return 0;
-		}
-
-	}
+    
 
     @Override
     public Object evaluate(Evaluator evaluator) {
@@ -85,10 +58,7 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
     }
 
 
-//    @Override
-//    public double evaluateDouble(Evaluator evaluator) {
-//        return d;
-//    }
+
 
     @Override
     public boolean dependsOn(Hierarchy hierarchy) {
@@ -149,15 +119,5 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
                 hierarchy);
     }
 
-    /**
-     * Creates an expression which evaluates to a given dimension.
-     *
-     * @param dimension Dimension
-     * @return Constant dimension expression
-     */
-    public static Calc constantDimension(Dimension dimension) {
-        return new ConstantCalc(
-                DimensionType.forDimension(dimension),
-                dimension);
-    }
+
 }
