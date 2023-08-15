@@ -6141,6 +6141,31 @@ class FunctionTest {//extends FoodMartTestCase {
       result,
       0.001 );
   }
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testCoalesceEmpty2(TestingContext context) {
+    Result result = executeQuery(context.createConnection(),
+      "with\n"
+        + "    member Measures.[Sales Per Customer] as 'Measures.[Sales Count] / Measures.[Customer Count]'\n"
+        + "    member Measures.[Coal] as 'coalesceempty(([Measures].[Sales Per Customer], [Store].[All Stores]"
+        + ".[Mexico].[DF]),\n"
+        + "        Measures.[Sales Per Customer])'\n"
+        + "select \n"
+        + "    {Measures.[Sales Per Customer], Measures.[Coal]} on columns,\n"
+        + "    {[Store].[All Stores].[Mexico].[DF], [Store].[All Stores].[USA].[WA]} on rows\n"
+        + "from \n"
+        + "    [Sales]\n"
+        + "where\n"
+        + "    ([Time].[1997].[Q2])" );
+
+    checkDataResults(
+      new Double[][] {
+        new Double[] { null, null },
+        new Double[] { 8.963D, 8.963D }
+      },
+      result,
+      0.001 ); 
+}
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -7111,6 +7136,24 @@ class FunctionTest {//extends FoodMartTestCase {
     assertExprReturns(context.createConnection(), "5 + " + NullNumericExpr, "5" ); // 5 + null --> 5
     assertExprReturns(context.createConnection(), NullNumericExpr + " + " + NullNumericExpr, "" );
     assertExprReturns(context.createConnection(), NullNumericExpr + " + 0", "0" );
+  }
+  
+  
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testPlus_NULL_plus_1(TestingContext context) {
+	  assertExprReturns(context.createConnection(),  "null + 1", "1" );
+  }
+  
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testPlus_NULL_plus_0(TestingContext context) {
+	  assertExprReturns(context.createConnection(),  "null + 0", "0" );
+  }
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testPlus_NULL_plus_NULL(TestingContext context) {
+	  assertExprReturns(context.createConnection(),  "null + null", "" );
   }
 
   @ParameterizedTest
@@ -13168,8 +13211,20 @@ Intel platforms):
     assertExprReturns(context.createConnection(), "exp(1)", Math.E, 0.00000001 );
     assertExprReturns(context.createConnection(), "exp(-2)", 1d / ( Math.E * Math.E ), 0.00000001 );
 
-    // If any arg is null, result is null.
-    assertExprReturns(context.createConnection(), "exp(cast(null as numeric))", "" );
+    }
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testVbaBasic1(TestingContext context) {
+	  // If any arg is null, result is null.
+	    assertExprReturns(context.createConnection(), "exp(null)", "" );
+
+  }
+  @ParameterizedTest
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  void testVbaBasic2(TestingContext context) {
+	  // If any arg is null, result is null.
+	    assertExprReturns(context.createConnection(), "exp(cast(null as numeric))", "" );
+
   }
 
   // Test a VBA function with variable number of args.

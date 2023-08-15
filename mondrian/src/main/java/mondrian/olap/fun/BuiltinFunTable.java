@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
@@ -1607,14 +1608,15 @@ public class BuiltinFunTable extends FunTableImpl {
 					public Double evaluate(Evaluator evaluator) {
                         final Double v0 = calc0.evaluate(evaluator);
                         final Double v1 = calc1.evaluate(evaluator);
-                        if (v0 == FunUtil.DOUBLE_NULL) {
-                            if (v1 == FunUtil.DOUBLE_NULL) {
+                        
+                        if (v0 == FunUtil.DOUBLE_NULL || v0 == null) {
+                            if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 return FunUtil.DOUBLE_NULL;
                             } else {
                                 return v1;
                             }
                         } else {
-                            if (v1 == FunUtil.DOUBLE_NULL) {
+                            if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 return v0;
                             } else {
                                 return v0 + v1;
@@ -1642,14 +1644,14 @@ public class BuiltinFunTable extends FunTableImpl {
 					public Double evaluate(Evaluator evaluator) {
                         final Double v0 = calc0.evaluate(evaluator);
                         final Double v1 = calc1.evaluate(evaluator);
-                        if (v0 == FunUtil.DOUBLE_NULL) {
-                            if (v1 == FunUtil.DOUBLE_NULL) {
+                        if (v0 == FunUtil.DOUBLE_NULL || v0 == null) {
+                            if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 return FunUtil.DOUBLE_NULL;
                             } else {
                                 return - v1;
                             }
                         } else {
-                            if (v1 == FunUtil.DOUBLE_NULL) {
+                            if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 return v0;
                             } else {
                                 return v0 - v1;
@@ -1679,7 +1681,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final Double v1 = calc1.evaluate(evaluator);
                         // Multiply and divide return null if EITHER arg is
                         // null.
-                        if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {
+                        if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL || v0 == null|| v1 == null) {
                             return FunUtil.DOUBLE_NULL;
                         } else {
                             return v0 * v1;
@@ -1723,9 +1725,9 @@ public class BuiltinFunTable extends FunTableImpl {
                             final Double v1 = calc1.evaluate(evaluator);
                             // Null in numerator always returns DoubleNull.
                             //
-                            if (v0 == FunUtil.DOUBLE_NULL) {
+                            if (v0 == FunUtil.DOUBLE_NULL || v0 == null) {
                                 return FunUtil.DOUBLE_NULL;
-                            } else if (v1 == FunUtil.DOUBLE_NULL) {
+                            } else if (v1 == FunUtil.DOUBLE_NULL || v1 == null) {
                                 // Null only in denominator returns Infinity.
                                 return Double.POSITIVE_INFINITY;
                             } else {
@@ -1743,7 +1745,7 @@ public class BuiltinFunTable extends FunTableImpl {
                             final Double v1 = calc1.evaluate(evaluator);
                             // Null in numerator or denominator returns
                             // DoubleNull.
-                            if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL) {
+                            if (v0 == FunUtil.DOUBLE_NULL || v1 == FunUtil.DOUBLE_NULL || v0 == null || v1 == null) {
                                 return FunUtil.DOUBLE_NULL;
                             } else {
                                 return v0 / v1;
@@ -1769,7 +1771,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public Double evaluate(Evaluator evaluator) {
                         final Double v = calc.evaluate(evaluator);
-                        if (v == FunUtil.DOUBLE_NULL) {
+                        if (v == FunUtil.DOUBLE_NULL || v == null) {
                             return FunUtil.DOUBLE_NULL;
                         } else {
                             return - v;
@@ -1986,7 +1988,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         {
                             return FunUtil.BOOLEAN_NULL;
                         }
-                        return v0.equals(v1);
+                        return Objects.equals(v0, v1);
                     }
                 };
             }
@@ -2013,7 +2015,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         if (b0 == null || b1 == null) {
                             return FunUtil.BOOLEAN_NULL;
                         }
-                        return !b0.equals(b1);
+                        return !Objects.equals(b0, b1);
                     }
                 };
             }
@@ -2044,7 +2046,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         {
                             return FunUtil.BOOLEAN_NULL;
                         }
-                        return v0 != v1;
+                        return !Objects.equals(v0, v1);
                     }
                 };
             }

@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
@@ -385,7 +386,7 @@ public class JavaFunDef extends FunDefBase {
             final Calc[] calcs = getChildCalcs();
             for (int i = 0; i < args.length; i++) {
                 args[i] = calcs[i].evaluate(evaluator);
-                if (args[i] == null) {
+                if (args[i] == null || Objects.equals(args[i], FunUtil.DOUBLE_NULL)) {
                     return Util.nullValue;
                 }
             }
