@@ -15,14 +15,14 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -141,12 +141,12 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                         memberDimension.getUniqueName());
             }
         }
-        return new AbstractMemberCalc(
+        return new AbstractProfilingNestedMemberCalc(
         		call.getFunName(),call.getType(), new Calc[] {levelCalc, memberCalc})
         {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+			public Member evaluate(Evaluator evaluator) {
+                Member member = memberCalc.evaluate(evaluator);
 
                 // If the level argument is present, use it. Otherwise use the
                 // level immediately after that of the member argument.

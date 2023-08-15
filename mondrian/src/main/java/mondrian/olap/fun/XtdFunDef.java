@@ -11,12 +11,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -132,7 +132,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
-              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluateMember( evaluator ) ) );
+              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluate( evaluator ) ) );
             } finally {
               evaluator.getTiming().markEnd( XtdFunDef.TIMING_NAME );
             }

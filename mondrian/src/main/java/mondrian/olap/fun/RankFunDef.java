@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
@@ -29,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.CacheCalc;
@@ -173,7 +173,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // Get member or tuple.
         // If the member is null (or the tuple contains a null member)
         // the result is null (even if the list is null).
-        final Member member = memberCalc.evaluateMember( evaluator );
+        final Member member = memberCalc.evaluate( evaluator );
         if ( member == null || member.isNull() ) {
           return null;
         }
@@ -298,7 +298,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
-        Member member = memberCalc.evaluateMember( evaluator );
+        Member member = memberCalc.evaluate( evaluator );
         if ( member == null || member.isNull() ) {
           return null;
         }

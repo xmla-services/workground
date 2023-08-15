@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -25,7 +26,6 @@ import org.eigenbase.xom.XOMUtil;
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -284,7 +284,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl calc) {
           Calc[] calcs = calc.getChildCalcs();
           MemberCalc memberCalc = (MemberCalc) calcs[0];
-          if ( memberCalc instanceof ConstantCalc || !listHierarchies.contains( memberCalc.getType()
+          if ( memberCalc instanceof org.eclipse.daanse.calc.api.ConstantCalc || !listHierarchies.contains( memberCalc.getType()
               .getHierarchy() ) ) {
             iter.remove();
           }
@@ -317,7 +317,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       // Evaluate each of the members, and set as context in the
       // sub-evaluator.
       for ( int i = 0; i < memberCalcs.length; i++ ) {
-        members[i] = memberCalcs[i].evaluateMember( evaluator );
+        members[i] = memberCalcs[i].evaluate( evaluator );
       }
       final Evaluator subEval = evaluator.push( members );
       // Evaluate the expression in the new context.

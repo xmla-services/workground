@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
@@ -61,9 +61,9 @@ class StrToTupleFunDef extends FunDefBase {
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
-            return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(

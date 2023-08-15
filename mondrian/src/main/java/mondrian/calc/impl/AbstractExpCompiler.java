@@ -23,6 +23,7 @@ import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
@@ -30,6 +31,7 @@ import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedLevelCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.calc.impl.ConstantBooleanProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantDoubleProfilingCalc;
@@ -39,12 +41,12 @@ import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCalc;
@@ -221,7 +223,26 @@ public class AbstractExpCompiler implements ExpCompiler {
             return hierarchyToMember(hierarchyCalc);
         }
         assert type instanceof MemberType : type;
-        return (MemberCalc) compile(exp);
+        
+        Calc<?>calc= compile(exp);
+        
+        if(calc instanceof MemberCalc membCalc) {
+        	return membCalc;
+        }
+        	
+		MemberCalc mCalc = new AbstractProfilingNestedMemberCalc("AbstractProfilingNestedMemberCalc", type,
+				new Calc[] { calc }) {
+
+			@Override
+			public Member evaluate(Evaluator evaluator) {
+				Object o = calc.evaluate(evaluator);
+				if (o instanceof Member m) {
+					return m;
+				}
+				throw evaluator.newEvalException(null, "expected Member, was: " + o);
+			}
+		};
+		return mCalc;
     }
 
     private MemberCalc hierarchyToMember(

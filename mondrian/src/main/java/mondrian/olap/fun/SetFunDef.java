@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.VoidCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -27,7 +28,6 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleCollections;
@@ -216,7 +216,7 @@ public class SetFunDef extends FunDefBase {
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
-                        Member member = memberCalc.evaluateMember(evaluator);
+                        Member member = memberCalc.evaluate(evaluator);
                         if (member == null || member.isNull()) {
                             return null;
                         }
@@ -326,7 +326,7 @@ public class SetFunDef extends FunDefBase {
                     Evaluator evaluator)
                 {
                     final Member member =
-                        memberCalc.evaluateMember(evaluator);
+                        memberCalc.evaluate(evaluator);
                     return member == null
                         ? TupleCollections.createList(1)
                         : new UnaryTupleList(Collections.singletonList(member));

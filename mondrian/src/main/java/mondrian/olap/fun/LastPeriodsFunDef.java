@@ -14,11 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -95,7 +95,7 @@ call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+                Member member = memberCalc.evaluate(evaluator);
                 Integer indexValue = indexValueCalc.evaluate(evaluator);
 
                 return new UnaryTupleList(

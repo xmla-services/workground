@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.HierarchyCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eigenbase.util.property.StringProperty;
@@ -22,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
@@ -61,7 +61,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that evaluates the hierarchy expression first.
    */
-  public static class CalcImpl extends AbstractMemberCalc {
+  public static class CalcImpl extends AbstractProfilingNestedMemberCalc {
     private final HierarchyCalc hierarchyCalc;
 
     public CalcImpl( Type type, HierarchyCalc hierarchyCalc ) {
@@ -72,7 +72,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
  
 
     @Override
-	public Member evaluateMember( Evaluator evaluator ) {
+	public Member evaluate( Evaluator evaluator ) {
       Hierarchy hierarchy = hierarchyCalc.evaluate( evaluator );
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
@@ -87,7 +87,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that uses a fixed hierarchy.
    */
-  public static class FixedCalcImpl extends AbstractMemberCalc {
+  public static class FixedCalcImpl extends AbstractProfilingNestedMemberCalc {
     // getContext works faster if we give RolapHierarchy rather than
     // Hierarchy
     private final RolapHierarchy hierarchy;
@@ -101,7 +101,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
 
     @Override
-	public Member evaluateMember( Evaluator evaluator ) {
+	public Member evaluate( Evaluator evaluator ) {
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }

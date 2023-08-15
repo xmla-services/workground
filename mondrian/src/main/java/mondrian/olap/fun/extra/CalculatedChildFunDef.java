@@ -11,14 +11,14 @@ package mondrian.olap.fun.extra;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.SchemaReader;
@@ -50,13 +50,13 @@ public class CalculatedChildFunDef extends FunDefBase {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
 
-        return new AbstractMemberCalc(
+        return new AbstractProfilingNestedMemberCalc(
         		call.getFunName(),call.getType(),
             new Calc[] {memberCalc, stringCalc})
         {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+			public Member evaluate(Evaluator evaluator) {
+                Member member = memberCalc.evaluate(evaluator);
                 String name = stringCalc.evaluate(evaluator);
                 return getCalculatedChild(member, name, evaluator);
             }

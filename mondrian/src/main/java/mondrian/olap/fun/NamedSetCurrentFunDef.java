@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.NamedSetExpr;
 import mondrian.mdx.ResolvedFunCall;
@@ -56,9 +56,9 @@ public class NamedSetCurrentFunDef extends FunDefBase {
         assert arg0 instanceof NamedSetExpr : "checked this in createCall";
         final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;
         if (arg0.getType().getArity() == 1) {
-            return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[0]) {
+            return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[0]) {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     return namedSetExpr.getEval(evaluator).currentMember();
                 }
             };

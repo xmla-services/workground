@@ -83,17 +83,6 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
         return new ConstantCalc(type, null);
     }
 
-    /**
-     * Creates an expression which evaluates to a given member.
-     *
-     * @param member Member
-     * @return Constant member expression
-     */
-    public static Calc constantMember(Member member) {
-        return new ConstantCalc(
-                MemberType.forMember(member),
-                member);
-    }
 
 
 }

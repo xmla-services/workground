@@ -11,11 +11,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.ConstantMemberProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -82,12 +83,12 @@ class RangeFunDef extends FunDefBase {
             Member nullMember =
                 ((RolapMember) members[1].evaluate(null)).getHierarchy()
                 .getNullMember();
-            members[0] = (MemberCalc)ConstantCalc.constantMember(nullMember);
+            members[0] = ConstantMemberProfilingCalc.of(nullMember);
         } else if (members[1] == null) {
             Member nullMember =
                 ((RolapMember) members[0].evaluate(null)).getHierarchy()
                 .getNullMember();
-            members[1] = (MemberCalc)ConstantCalc.constantMember(nullMember);
+            members[1] = ConstantMemberProfilingCalc.of(nullMember);
         }
 
         return members;
@@ -102,8 +103,8 @@ class RangeFunDef extends FunDefBase {
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
-                final Member member0 = memberCalcs[0].evaluateMember(evaluator);
-                final Member member1 = memberCalcs[1].evaluateMember(evaluator);
+                final Member member0 = memberCalcs[0].evaluate(evaluator);
+                final Member member1 = memberCalcs[1].evaluate(evaluator);
                 if (member0.isNull() || member1.isNull()) {
                     return TupleCollections.emptyList(1);
                 }

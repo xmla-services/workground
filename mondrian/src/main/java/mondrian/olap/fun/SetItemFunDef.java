@@ -14,13 +14,13 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -211,9 +211,9 @@ class SetItemFunDef extends FunDefBase {
             final MemberType memberType = (MemberType) elementType;
             final Member nullMember = FunUtil.makeNullMember(memberType);
             if (isString) {
-                return new AbstractMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), calcs) {
                     @Override
-					public Member evaluateMember(Evaluator evaluator) {
+					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final List<Member> list;
                         try {
@@ -239,9 +239,9 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), calcs) {
                     @Override
-					public Member evaluateMember(Evaluator evaluator) {
+					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final List<Member> list;
                         try {

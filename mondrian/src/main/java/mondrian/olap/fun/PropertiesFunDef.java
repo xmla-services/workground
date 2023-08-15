@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -20,7 +21,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -62,7 +62,7 @@ class PropertiesFunDef extends FunDefBase {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 return PropertiesFunDef.properties(
-                    memberCalc.evaluateMember(evaluator),
+                    memberCalc.evaluate(evaluator),
                         stringCalc.evaluate(evaluator));
             }
 

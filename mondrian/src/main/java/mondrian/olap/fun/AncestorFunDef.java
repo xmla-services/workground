@@ -11,13 +11,13 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -51,13 +51,13 @@ class AncestorFunDef extends FunDefBase {
         if (type1 instanceof LevelType) {
             final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(1));
-            return new AbstractMemberCalc(
+            return new AbstractProfilingNestedMemberCalc(
                 call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     Level level = levelCalc.evaluate(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     int distance =
                         member.getLevel().getDepth() - level.getDepth();
                     return FunUtil.ancestor(evaluator, member, distance, level);
@@ -66,13 +66,13 @@ class AncestorFunDef extends FunDefBase {
         } else {
             final IntegerCalc distanceCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
+            return new AbstractProfilingNestedMemberCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     Integer distance = distanceCalc.evaluate(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     return FunUtil.ancestor(evaluator, member, distance, null);
                 }
             };

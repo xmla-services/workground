@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -153,24 +153,28 @@ public class ValidMeasureFunDef extends FunDefBase
             return evaluator.evaluateCurrent();
         }
 
-        private List<Member> getCalcsMembers(Evaluator evaluator) {
-            List<Member> memberList;
-            if (calc.isWrapperFor(MemberCalc.class)) {
-            	MemberCalc mc=    (MemberCalc) calc.unwrap(MemberCalc.class);
-                memberList = Collections.singletonList(
-                    mc.evaluateMember(evaluator));
-            } else {
-            	TupleCalc tc=  (TupleCalc) calc.unwrap((TupleCalc.class));
-                final Member[] tupleMembers =
-                    tc.evaluateTuple(evaluator);
-                if (tupleMembers == null) {
-                  memberList = null;
-                } else {
-                  memberList = Arrays.asList(tupleMembers);
-                }
-            }
-            return memberList;
-        }
+		private List<Member> getCalcsMembers(Evaluator evaluator) {
+			List<Member> memberList;
+
+			MemberCalc mc = null;
+			if (calc instanceof MemberCalc tmpMembCalc) {
+				mc = tmpMembCalc;
+			} else if (calc.isWrapperFor(MemberCalc.class)) {
+				mc = (MemberCalc) calc.unwrap(MemberCalc.class);
+			}
+			if (mc != null) {
+				memberList = Collections.singletonList(mc.evaluate(evaluator));
+			} else {
+				TupleCalc tc = (TupleCalc) calc.unwrap((TupleCalc.class));
+				final Member[] tupleMembers = tc.evaluateTuple(evaluator);
+				if (tupleMembers == null) {
+					memberList = null;
+				} else {
+					memberList = Arrays.asList(tupleMembers);
+				}
+			}
+			return memberList;
+		}
 
         private List<Member> getCalculatedMembersFromContext(
             Evaluator evaluator)
