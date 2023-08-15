@@ -13,6 +13,7 @@ import java.util.Date;
 
 import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -20,7 +21,6 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
@@ -37,8 +37,7 @@ import mondrian.olap.type.Type;
  */
 public abstract class GenericCalc
 extends AbstractProfilingNestedCalc<Object>
-implements TupleCalc,
- MemberCalc
+implements TupleCalc
 {
     /**
      * Creates a GenericCalc without specifying child calculated expressions.
@@ -109,15 +108,7 @@ implements TupleCalc,
 
 
 
-    @Override
-    public Member evaluateMember(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Member) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.MEMBER, o));
-        }
-    }
+
 
     private enum TypeEnum {
         NULL,

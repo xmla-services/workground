@@ -13,11 +13,12 @@ package mondrian.calc.impl;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
@@ -68,21 +69,38 @@ public class BetterExpCompiler extends AbstractExpCompiler {
             assert calc instanceof TupleCalc;
             return (TupleCalc) calc;
         } else if (type instanceof MemberType) {
-            assert calc instanceof MemberCalc;
-            final MemberCalc memberCalc = (MemberCalc) calc;
+        	MemberCalc tmpCalc=null;
+            if( calc instanceof MemberCalc mc) {
+            	tmpCalc=mc;
+            }else {
+				tmpCalc = new AbstractProfilingNestedMemberCalc("AbstractProfilingNestedMemberCalc", type, new Calc[] { calc }) {
+
+					@Override
+					public Member evaluate(Evaluator evaluator) {
+						Object o = calc.evaluate(evaluator);
+						if (o instanceof Member m) {
+							return m;
+						}
+						throw evaluator.newEvalException(null, "expected Member, was: " + o);
+					}
+				};
+            }
+            final MemberCalc memberCalc =  tmpCalc;
             return new AbstractTupleCalc("AbstractTupleCalc1",type, new Calc[] {memberCalc}) {
                 @Override
                 public Member[] evaluateTuple(Evaluator evaluator) {
-                    final Member member = memberCalc.evaluateMember(evaluator);
+                    final Member member = memberCalc.evaluate(evaluator);
                     if(member == null) {
                         //<Tuple>.Item(-1)
                         return null;
                     }
                     else {
-                        return new Member[]{memberCalc.evaluateMember(evaluator)};
+                        return new Member[]{memberCalc.evaluate(evaluator)};
                     }
                 }
             };
+            
+            
         } else {
             throw Util.newInternal("cannot cast " + exp);
         }

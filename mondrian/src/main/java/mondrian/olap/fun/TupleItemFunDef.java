@@ -10,13 +10,13 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -64,13 +64,13 @@ class TupleItemFunDef extends FunDefBase {
                 compiler.compileMember(call.getArg(0));
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
+            return new AbstractProfilingNestedMemberCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, indexCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     final Member member =
-                            memberCalc.evaluateMember(evaluator);
+                            memberCalc.evaluate(evaluator);
                     final Integer index =
                             indexCalc.evaluate(evaluator);
                     if (index != 0) {
@@ -84,13 +84,13 @@ class TupleItemFunDef extends FunDefBase {
                 compiler.compileTuple(call.getArg(0));
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
+            return new AbstractProfilingNestedMemberCalc(
             		call.getFunName(),call.getType(), new Calc[] {tupleCalc, indexCalc})
             {
                 final Member[] nullTupleMembers =
                         FunUtil.makeNullTuple((TupleType) tupleCalc.getType());
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     final Member[] members =
                             tupleCalc.evaluateTuple(evaluator);
                     assert members == null

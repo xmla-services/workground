@@ -10,13 +10,13 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -97,7 +97,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
             if ( memberCalc == null ) {
               member = evaluator.getContext( level.getHierarchy() );
             } else {
-              member = memberCalc.evaluateMember( evaluator );
+              member = memberCalc.evaluate( evaluator );
             }
           }
           return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, member ) );

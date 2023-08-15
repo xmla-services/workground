@@ -10,11 +10,11 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -41,9 +41,9 @@ class StrToMemberFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc memberNameCalc =
             compiler.compileString(call.getArg(0));
-        return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[] {memberNameCalc}) {
+        return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[] {memberNameCalc}) {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
+			public Member evaluate(Evaluator evaluator) {
                 String memberName =
                     memberNameCalc.evaluate(evaluator);
                 if (memberName == null) {

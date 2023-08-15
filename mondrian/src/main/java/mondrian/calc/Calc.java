@@ -15,6 +15,7 @@ import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -62,7 +63,7 @@ import mondrian.olap.type.Type;
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc},
- * {@link mondrian.calc.impl.AbstractMemberCalc},
+ * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedLevelCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc}.<p/>

@@ -15,11 +15,11 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -116,7 +116,7 @@ public class TupleFunDef extends FunDefBase {
             for (int i = 0; i < members.length; i++) {
                 final Member member =
                     members[i] =
-                    memberCalcs[i].evaluateMember(evaluator);
+                    memberCalcs[i].evaluate(evaluator);
                 if (member == null || member.isNull()) {
                     return null;
                 }

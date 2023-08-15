@@ -9,6 +9,7 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.calc.impl.ConstantMemberProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
@@ -82,7 +83,7 @@ public class MemberExpr extends ExpBase implements Exp {
 
     @Override
 	public Calc accept(ExpCompiler compiler) {
-        return ConstantCalc.constantMember(member);
+        return ConstantMemberProfilingCalc.of(member);
     }
 
     @Override

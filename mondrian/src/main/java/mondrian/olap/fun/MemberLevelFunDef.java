@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedLevelCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -61,7 +61,7 @@ public class MemberLevelFunDef extends FunDefBase {
 
 		@Override
 		public Level evaluate(Evaluator evaluator) {
-            Member member = memberCalc.evaluateMember(evaluator);
+            Member member = memberCalc.evaluate(evaluator);
             return member.getLevel();
         }
     }

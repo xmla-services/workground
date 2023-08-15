@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 
@@ -44,7 +44,7 @@ class MemberDimensionFunDef extends FunDefBase {
         {
             @Override
 			public Dimension evaluate(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+                Member member = memberCalc.evaluate(evaluator);
                 return member.getDimension();
             }
         };

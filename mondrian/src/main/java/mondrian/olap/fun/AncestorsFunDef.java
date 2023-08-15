@@ -14,12 +14,12 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -69,7 +69,7 @@ class AncestorsFunDef extends FunDefBase {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     Level level = levelCalc.evaluate(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     int distance =
                         member.getDepth() - level.getDepth();
                     List<Member> ancestors = new ArrayList<>();
@@ -88,7 +88,7 @@ class AncestorsFunDef extends FunDefBase {
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    Member member = memberCalc.evaluateMember(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     Integer distance = distanceCalc.evaluate(evaluator);
                     List<Member> ancestors = new ArrayList<>();
                     for (int curDist = 1; curDist <= distance; curDist++) {

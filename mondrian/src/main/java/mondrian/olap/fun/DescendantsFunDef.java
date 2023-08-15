@@ -19,13 +19,13 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -148,7 +148,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
           Integer depth = -1;
           if ( depthCalc != null ) {
@@ -173,7 +173,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     		  call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
           final Integer depth = depthCalc.evaluate( evaluator );
           final SchemaReader schemaReader =
@@ -198,7 +198,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Evaluator context =
             evaluator.isNonEmpty() ? evaluator : null;
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();

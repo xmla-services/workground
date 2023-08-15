@@ -11,6 +11,8 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -18,8 +20,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -111,12 +111,12 @@ class ParallelPeriodFunDef extends FunDefBase {
             break;
         }
 
-        return new AbstractMemberCalc(
+        return new AbstractProfilingNestedMemberCalc(
         		call.getFunName(),call.getType(),
             new Calc[] {memberCalc, lagValueCalc, ancestorLevelCalc})
         {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
+			public Member evaluate(Evaluator evaluator) {
                 Member member;
                 Integer lagValue = lagValueCalc.evaluate(evaluator);
                 Level ancestorLevel;
@@ -126,10 +126,10 @@ class ParallelPeriodFunDef extends FunDefBase {
                         member =
                             evaluator.getContext(ancestorLevel.getHierarchy());
                     } else {
-                        member = memberCalc.evaluateMember(evaluator);
+                        member = memberCalc.evaluate(evaluator);
                     }
                 } else {
-                    member = memberCalc.evaluateMember(evaluator);
+                    member = memberCalc.evaluate(evaluator);
                     Member parent = member.getParentMember();
                     if (parent == null) {
                         // This is a root member,

@@ -9,11 +9,11 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.MemberCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.Type;
@@ -41,7 +41,7 @@ public class MemberArrayValueCalc extends GenericCalc {
      *
      * <p>Clients outside this package should use the
      * {@link MemberValueCalc#create(mondrian.olap.Exp,
-     * mondrian.calc.MemberCalc[], boolean)}
+     * org.eclipse.daanse.calc.api.MemberCalc[], boolean)}
      * factory method.
      *
      * @param exp Expression
@@ -64,7 +64,7 @@ public class MemberArrayValueCalc extends GenericCalc {
         try {
             for (int i = 0; i < memberCalcs.length; i++) {
                 final MemberCalc memberCalc = memberCalcs[i];
-                final Member member = memberCalc.evaluateMember(evaluator);
+                final Member member = memberCalc.evaluate(evaluator);
                 if (member == null
                         || member.isNull())
                 {
