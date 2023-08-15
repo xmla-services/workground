@@ -13,8 +13,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalculationProfile;
+import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 
 public class SimpleProfileResultWriter {
 	private static final int DEFAULT_INDENT = 4;

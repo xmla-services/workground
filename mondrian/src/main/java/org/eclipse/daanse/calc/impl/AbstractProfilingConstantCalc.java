@@ -15,8 +15,8 @@ package org.eclipse.daanse.calc.impl;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.CalculationProfile;
 import org.eclipse.daanse.calc.api.ConstantCalc;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.ResultStyle;

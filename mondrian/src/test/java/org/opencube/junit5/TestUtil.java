@@ -43,7 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;

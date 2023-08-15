@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.VoidCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
@@ -32,12 +34,10 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.calc.VoidCalc;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.AbstractTupleIterable;
-import mondrian.calc.impl.AbstractVoidCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCall;
@@ -174,9 +174,9 @@ public class SetFunDef extends FunDefBase {
             if (type instanceof SetType) {
                 // TODO use resultStyles
                 final ListCalc listCalc = compiler.compileList(arg);
-                return new AbstractVoidCalc("Sublist",type, new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedVoidCalc("Sublist",type, new Calc[] {listCalc}) {
                     @Override
-					public void evaluateVoid(Evaluator evaluator) {
+					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
                             listCalc.evaluateList(evaluator);
                         // Add only tuples which are not null. Tuples with
@@ -190,6 +190,7 @@ public class SetFunDef extends FunDefBase {
                             }
                             result.add(members);
                         }
+						return null;
                     }
 
                 };
@@ -199,42 +200,45 @@ public class SetFunDef extends FunDefBase {
                         mondrian.olap.Syntax.Property,
                         new Exp[] {arg});
                 final ListCalc listCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
-                return new AbstractVoidCalc("AbstractVoidCalc2",type, new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc2",type, new Calc[] {listCalc}) {
                     @Override
-					public void evaluateVoid(Evaluator evaluator) {
+					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
                                 listCalc.evaluateList(evaluator);
                         result = list;
+						return null;
                     }
                 };
             } else if (type.getArity() == 1 && arg instanceof MemberType) {
                 final MemberCalc memberCalc = compiler.compileMember(arg);
-                return new AbstractVoidCalc("AbstractVoidCalc3",type, new Calc[]{memberCalc}) {
+                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc3",type, new Calc[]{memberCalc}) {
                     final Member[] members = {null};
                     @Override
-					public void evaluateVoid(Evaluator evaluator) {
+					public Void evaluate(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
                         Member member = memberCalc.evaluateMember(evaluator);
                         if (member == null || member.isNull()) {
-                            return;
+                            return null;
                         }
                         members[0] = member;
                         result.addTuple(members);
+						return null;
                     }
                 };
             } else {
                 final TupleCalc tupleCalc = compiler.compileTuple(arg);
-                return new AbstractVoidCalc("AbstractVoidCalc4",type, new Calc[]{tupleCalc}) {
+                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc4",type, new Calc[]{tupleCalc}) {
                     @Override
-					public void evaluateVoid(Evaluator evaluator) {
+					public Void evaluate(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
                         Member[] members = tupleCalc.evaluateTuple(evaluator);
                         if (members == null
                             || FunUtil.tupleContainsNullMember(members))
                         {
-                            return;
+                            return null;
                         }
                         result.addTuple(members);
+						return null;
                     }
                 };
             }
@@ -244,7 +248,7 @@ public class SetFunDef extends FunDefBase {
 		public TupleList evaluateList(final Evaluator evaluator) {
             result.clear();
             for (VoidCalc voidCalc : voidCalcs) {
-                voidCalc.evaluateVoid(evaluator);
+                voidCalc.evaluate(evaluator);
             }
             return result.cloneList(-1);
         }

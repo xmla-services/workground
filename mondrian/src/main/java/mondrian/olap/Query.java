@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.calc.api.CalculationProfile;
-import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.calc.impl.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;

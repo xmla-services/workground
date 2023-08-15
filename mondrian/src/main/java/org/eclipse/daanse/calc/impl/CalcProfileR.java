@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalculationProfile;
+import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;

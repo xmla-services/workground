@@ -14,25 +14,24 @@
 
 package org.eclipse.daanse.calc.impl;
 
-import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.api.VoidCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the {@link org.eclipse.daanse.calc.api.StringCalc}
+ * Abstract implementation of the {@link org.eclipse.daanse.calc.api.VoidCalc}
  * interface.
  * 
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedStringCalc extends AbstractProfilingNestedCalc<String>
-		implements StringCalc {
+public abstract class AbstractProfilingNestedVoidCalc extends AbstractProfilingNestedCalc<Void> implements VoidCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedStringCalc(String name, Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedVoidCalc(String name, Type type, Calc<?>[] calcs) {
 		super(name, type, calcs);
 	}
 

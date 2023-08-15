@@ -11,14 +11,19 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.api;
+package org.eclipse.daanse.calc.api.profile;
 
-import mondrian.calc.Calc;
-import mondrian.olap.Evaluator;
+import java.time.Instant;
+import java.util.Map;
 
-public interface ProfilingCalc<E> extends Calc<E> {
+public interface CalcEvaluationProfile {
 
-	E evaluateWithProfile(Evaluator evaluator);
+	Instant start();
 
-	CalculationProfile getCalculationProfile();
+	Instant end();
+
+	Object evaluationResult();
+
+	Map<String, Object> additionalValues();
+
 }
