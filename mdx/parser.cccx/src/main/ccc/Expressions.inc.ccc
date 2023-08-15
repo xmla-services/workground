@@ -344,6 +344,7 @@ INJECT DotName :
 
 INJECT FunctionCall :
     import java.util.List;
+    import java.util.ArrayList;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
     public String name() {
@@ -357,10 +358,25 @@ INJECT FunctionCall :
     }
 
     public List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> expressions() {
-       List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.MdxExpression.class);
-       // This is not supposed to include the LHS.
-       result.remove(0);
-       return result;
+        List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
+        if (Type.METHOD.equals(type())) {
+            List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> res = new ArrayList<>();
+            for (org.eclipse.daanse.mdx.model.api.expression.MdxExpression ex : result) {
+                if (ex instanceof CompoundId compoundId) {
+                    List<org.eclipse.daanse.mdx.model.api.expression.MdxExpression> exList = compoundId.expressions();
+                    if (exList.size() > 0 && exList.get(0) instanceof NameObjectIdentifier nameObjectIdentifier) {
+                    	res.add(nameObjectIdentifier);
+                    }
+                } else {
+                	res.add(ex);
+                }
+            }
+            return res;
+        } else {
+            // This is not supposed to include the LHS.
+            result.remove(0);
+        }
+        return result;
     }
 }
 
