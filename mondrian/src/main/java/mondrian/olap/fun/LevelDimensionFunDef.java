@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.LevelCalc;
-import mondrian.calc.impl.AbstractDimensionCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 
@@ -40,9 +40,9 @@ class LevelDimensionFunDef extends FunDefBase {
     {
         final LevelCalc levelCalc =
             compiler.compileLevel(call.getArg(0));
-        return new AbstractDimensionCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
+        return new AbstractProfilingNestedDimensionCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
             @Override
-			public Dimension evaluateDimension(Evaluator evaluator) {
+			public Dimension evaluate(Evaluator evaluator) {
                 Level level =  levelCalc.evaluateLevel(evaluator);
                 return level.getDimension();
             }

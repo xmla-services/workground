@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DateTimeCalc;
+import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;

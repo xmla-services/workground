@@ -11,7 +11,6 @@ package mondrian.calc.impl;
 
 import java.util.Date;
 
-import org.eclipse.daanse.calc.api.DateTimeCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -19,7 +18,6 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DimensionCalc;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
@@ -40,7 +38,7 @@ import mondrian.olap.type.Type;
 public abstract class GenericCalc
 extends AbstractProfilingNestedCalc<Object>
 implements TupleCalc,
- MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
+ MemberCalc, LevelCalc, HierarchyCalc
 {
     /**
      * Creates a GenericCalc without specifying child calculated expressions.
@@ -101,40 +99,7 @@ implements TupleCalc,
         }
     }
 
-//    @Override
-//    public String evaluateString(Evaluator evaluator) {
-//        final Object o = evaluate(evaluator);
-//        try {
-//            return (String) o;
-//        } catch (final ClassCastException e) {
-//            throw evaluator.newEvalException(null, msg(TypeEnum.STRING, o));
-//        }
-//    }
 
-//    @Override
-//    public int evaluateInteger(Evaluator evaluator) {
-//        final Object o = evaluate(evaluator);
-//        try {
-//            final Number number = (Number) o;
-//            return number == null
-//                    ? FunUtil.INTEGER_NULL
-//                            : number.intValue();
-//        } catch (final ClassCastException e) {
-//            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
-//        }
-//    }
-
-//    @Override
-//    public double evaluateDouble(Evaluator evaluator) {
-//        final Object o = evaluate(evaluator);
-//        try {
-//
-//            final Number number = (Number) o;
-//            return GenericCalc.numberToDouble(number);
-//        } catch (final ClassCastException e) {
-//            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
-//        }
-//    }
 
     public static double numberToDouble(Number number) {
         return number == null
@@ -142,22 +107,7 @@ implements TupleCalc,
                         : number.doubleValue();
     }
 
-   
-//    @Override
-//    public Date evaluateDateTime(Evaluator evaluator) {
-//        final Object o = evaluate(evaluator);
-//        try {
-//            return (Date) o;
-//        } catch (final ClassCastException e) {
-//            throw evaluator.newEvalException(null, msg(TypeEnum.DATETIME, o));
-//        }
-//    }
 
-//    @Override
-//    public void evaluateVoid(Evaluator evaluator) {
-//        final Object result = evaluate(evaluator);
-//        assert result == null;
-//    }
 
     @Override
     public Member evaluateMember(Evaluator evaluator) {
@@ -186,16 +136,6 @@ implements TupleCalc,
             return (Hierarchy) o;
         } catch (final ClassCastException e) {
             throw evaluator.newEvalException(null, msg(TypeEnum.HIERARCHY, o));
-        }
-    }
-
-    @Override
-    public Dimension evaluateDimension(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Dimension) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.DIMENSION, o));
         }
     }
 

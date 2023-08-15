@@ -18,10 +18,12 @@ import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DateTimeCalc;
+import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
@@ -33,7 +35,6 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DimensionCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.IterCalc;
@@ -257,7 +258,22 @@ public class AbstractExpCompiler implements ExpCompiler {
                     hierarchyCalc);
         }
         assert type instanceof DimensionType : type;
-        return (DimensionCalc) compile(exp);
+        Calc<?> calc=	compile(exp);
+        
+        if(calc instanceof DimensionCalc dimCalc) {
+        	return dimCalc;
+        }
+		return new AbstractProfilingNestedDimensionCalc("AbstractProfilingNestedDimensionCalc", type, new Calc[] { calc }) {
+
+			@Override
+			public Dimension evaluate(Evaluator evaluator) {
+				Object o = calc.evaluate(evaluator);
+				if (o instanceof Dimension d) {
+					return d;
+				}
+				throw evaluator.newEvalException(null, "expected Dimension, was: " + o);
+			}
+		};
     }
 
     @Override
@@ -795,7 +811,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         @Override
         public Hierarchy evaluateHierarchy(Evaluator evaluator) {
             final Dimension dimension =
-                    dimensionCalc.evaluateDimension(evaluator);
+                    dimensionCalc.evaluate(evaluator);
             final Hierarchy hierarchy =
                     FunUtil.getDimensionDefaultHierarchy(dimension);
             if (hierarchy != null) {

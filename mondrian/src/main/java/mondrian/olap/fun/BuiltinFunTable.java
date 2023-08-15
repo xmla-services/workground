@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
@@ -34,7 +35,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DimensionCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
@@ -1215,7 +1215,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Dimension dimension =
-                                dimensionCalc.evaluateDimension(evaluator);
+                                dimensionCalc.evaluate(evaluator);
                         return dimension.getCaption();
                     }
                 };
@@ -1331,7 +1331,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Dimension dimension =
-                                dimensionCalc.evaluateDimension(evaluator);
+                                dimensionCalc.evaluate(evaluator);
                         return dimension.getName();
                     }
                 };
@@ -1428,7 +1428,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Dimension dimension =
-                                dimensionCalc.evaluateDimension(evaluator);
+                                dimensionCalc.evaluate(evaluator);
                         return dimension.getUniqueName();
                     }
                 };
