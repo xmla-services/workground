@@ -9,11 +9,11 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.calc.impl.ConstantLevelProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
@@ -78,7 +78,7 @@ public class LevelExpr extends ExpBase implements Exp {
 
     @Override
 	public Calc accept(ExpCompiler compiler) {
-        return ConstantCalc.constantLevel(level);
+        return ConstantLevelProfilingCalc.of(level);
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -23,7 +24,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
@@ -131,7 +131,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         if ( levelCalc == null ) {
           level = null;
         } else {
-          level = levelCalc.evaluateLevel( evaluator );
+          level = levelCalc.evaluate( evaluator );
         }
         List<Member> result = new ArrayList<>();
         assert list.getArity() == 1;

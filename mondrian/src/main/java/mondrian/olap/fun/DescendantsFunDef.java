@@ -18,13 +18,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -204,7 +204,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
             evaluator.getSchemaReader();
           final Level level =
             levelCalc != null
-              ? levelCalc.evaluateLevel( evaluator )
+              ? levelCalc.evaluate( evaluator )
               : member.getLevel();
           DescendantsFunDef.descendantsByLevel(
             schemaReader, member, level, result,

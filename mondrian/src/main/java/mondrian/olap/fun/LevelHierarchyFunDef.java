@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
@@ -50,7 +50,7 @@ public class LevelHierarchyFunDef extends FunDefBase {
 
         @Override
 		public Hierarchy evaluate(Evaluator evaluator) {
-            Level level = levelCalc.evaluateLevel(evaluator);
+            Level level = levelCalc.evaluate(evaluator);
             return level.getHierarchy();
         }
     }
