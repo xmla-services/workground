@@ -12,12 +12,12 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -66,7 +66,7 @@ class StrToSetFunDef extends FunDefBase {
             return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
@@ -81,7 +81,7 @@ class StrToSetFunDef extends FunDefBase {
             return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());

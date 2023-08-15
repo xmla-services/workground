@@ -19,12 +19,15 @@ import java.util.Objects;
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.calc.impl.ConstantBooleanProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantDoubleProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
+import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
@@ -39,7 +42,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
 import mondrian.mdx.MemberExpr;
@@ -361,10 +363,38 @@ public class AbstractExpCompiler implements ExpCompiler {
         return (IntegerCalc) calc;
     }
 
-    @Override
-    public StringCalc compileString(Exp exp) {
-        return (StringCalc) compileScalar(exp, false);
-    }
+	@Override
+	public StringCalc compileString(Exp exp) {
+		Calc<?> c = compileScalar(exp, false);
+
+		if (c instanceof StringCalc sc) {
+			return sc;
+		}else if (c instanceof org.eclipse.daanse.calc.api.ConstantCalc cc) {
+			Object o = cc.evaluate(null);
+			String s = null;
+			if (o != null) {
+				s = o.toString();
+			}
+			return new ConstantStringProfilingCalc(new StringType(), s);
+		}else {
+			return new AbstractProfilingNestedStringCalc("AbstractProfilingNestedStringCalc", new StringType(), new Calc[] {c}) {
+
+				@Override
+				public String evaluate(Evaluator evaluator) {
+					
+					Object o = c.evaluate(evaluator);
+					
+					String s = null;
+					if (o != null) {
+						s = o.toString();
+					}
+					return s;
+				}
+		
+			
+			};
+		}
+	}
 
     @Override
     public DateTimeCalc compileDateTime(Exp exp) {

@@ -11,13 +11,13 @@ package mondrian.olap.fun.extra;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -57,7 +57,7 @@ public class CalculatedChildFunDef extends FunDefBase {
             @Override
 			public Member evaluateMember(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);
-                String name = stringCalc.evaluateString(evaluator);
+                String name = stringCalc.evaluate(evaluator);
                 return getCalculatedChild(member, name, evaluator);
             }
         };

@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
 import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -60,7 +60,7 @@ class DimensionsStringFunDef extends FunDefBase {
             @Override
 			public Hierarchy evaluateHierarchy(Evaluator evaluator) {
                 String dimensionName =
-                    stringCalc.evaluateString(evaluator);
+                    stringCalc.evaluate(evaluator);
                 return findHierarchy(dimensionName, evaluator);
             }
         };

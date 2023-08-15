@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DateTimeCalc;
@@ -27,7 +28,6 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Evaluator;

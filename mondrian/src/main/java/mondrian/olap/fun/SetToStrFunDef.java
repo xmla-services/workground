@@ -11,6 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
@@ -18,7 +19,6 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -40,9 +40,9 @@ class SetToStrFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         Exp arg = call.getArg(0);
         final ListCalc listCalc = compiler.compileList(arg);
-        return new AbstractStringCalc(call.getFunName(),call.getType(), new Calc[]{listCalc}) {
+        return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[]{listCalc}) {
             @Override
-			public String evaluateString(Evaluator evaluator) {
+			public String evaluate(Evaluator evaluator) {
                 final TupleList list = listCalc.evaluateList(evaluator);
                 if (list.getArity() == 1) {
                     return SetToStrFunDef.memberSetToStr(list.slice(0));

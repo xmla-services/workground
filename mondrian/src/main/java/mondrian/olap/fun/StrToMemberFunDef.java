@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -45,7 +45,7 @@ class StrToMemberFunDef extends FunDefBase {
             @Override
 			public Member evaluateMember(Evaluator evaluator) {
                 String memberName =
-                    memberNameCalc.evaluateString(evaluator);
+                    memberNameCalc.evaluate(evaluator);
                 if (memberName == null) {
                     throw FunUtil.newEvalException(
                         MondrianResource.instance().NullValue.ex());
