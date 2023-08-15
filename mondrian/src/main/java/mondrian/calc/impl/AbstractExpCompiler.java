@@ -22,12 +22,14 @@ import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedLevelCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.calc.impl.ConstantBooleanProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantDoubleProfilingCalc;
@@ -36,11 +38,11 @@ import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.ParameterSlot;
@@ -247,7 +249,24 @@ public class AbstractExpCompiler implements ExpCompiler {
                     memberCalc);
         }
         assert type instanceof LevelType;
-        return (LevelCalc) compile(exp);
+		Calc<?> calc = compile(exp);
+
+		if (calc instanceof LevelCalc lCalc) {
+			return lCalc;
+		}
+		LevelCalc levelCalc = new AbstractProfilingNestedLevelCalc("AbstractProfilingNestedLevelCalc", type,
+				new Calc[] { calc }) {
+
+			@Override
+			public Level evaluate(Evaluator evaluator) {
+				Object o = calc.evaluate(evaluator);
+				if (o instanceof Level lvl) {
+					return lvl;
+				}
+				throw evaluator.newEvalException(null, "expected Level, was: " + o);
+			}
+		};
+		return levelCalc;
     }
 
     @Override

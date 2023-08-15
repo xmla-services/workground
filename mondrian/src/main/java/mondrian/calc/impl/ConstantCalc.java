@@ -95,16 +95,5 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
                 member);
     }
 
-    /**
-     * Creates an expression which evaluates to a given level.
-     *
-     * @param level Level
-     * @return Constant level expression
-     */
-    public static Calc constantLevel(Level level) {
-        return new ConstantCalc(
-                LevelType.forLevel(level),
-                level);
-    }
 
 }

@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -93,7 +93,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
             member = evaluator.getContext( timeHierarchy );
             level = member.getLevel().getParentLevel();
           } else {
-            level = levelCalc.evaluateLevel( evaluator );
+            level = levelCalc.evaluate( evaluator );
             if ( memberCalc == null ) {
               member = evaluator.getContext( level.getHierarchy() );
             } else {

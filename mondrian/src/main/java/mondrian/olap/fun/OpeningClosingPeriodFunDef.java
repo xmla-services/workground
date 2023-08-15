@@ -14,13 +14,13 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -160,7 +160,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                     }
                     level = levels[targetDepth];
                 } else {
-                    level = levelCalc.evaluateLevel(evaluator);
+                    level = levelCalc.evaluate(evaluator);
                 }
 
                 // Shortcut if the level is above the member.

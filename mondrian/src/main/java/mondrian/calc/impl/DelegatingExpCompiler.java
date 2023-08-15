@@ -18,12 +18,12 @@ import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.ParameterSlot;

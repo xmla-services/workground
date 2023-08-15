@@ -17,13 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
@@ -97,7 +97,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                     }
                     int searchDepth = -1;
                     if (levelCalc != null) {
-                        Level level = levelCalc.evaluateLevel(evaluator);
+                        Level level = levelCalc.evaluate(evaluator);
                         searchDepth = level.getDepth();
                     }
                     return new UnaryTupleList(

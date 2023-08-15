@@ -10,6 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -17,7 +18,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.ConstantCalc;
@@ -121,7 +121,7 @@ class ParallelPeriodFunDef extends FunDefBase {
                 Integer lagValue = lagValueCalc.evaluate(evaluator);
                 Level ancestorLevel;
                 if (ancestorLevelCalc != null) {
-                    ancestorLevel = ancestorLevelCalc.evaluateLevel(evaluator);
+                    ancestorLevel = ancestorLevelCalc.evaluate(evaluator);
                     if (memberCalc == null) {
                         member =
                             evaluator.getContext(ancestorLevel.getHierarchy());
