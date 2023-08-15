@@ -11,7 +11,7 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;

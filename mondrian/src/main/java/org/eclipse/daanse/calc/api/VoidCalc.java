@@ -12,14 +12,9 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.impl;
+package org.eclipse.daanse.calc.api;
 
-import java.time.Instant;
-import java.util.Map;
+import mondrian.calc.Calc;
 
-import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
-
-public record CalcEvaluationProfileR(Instant start, Instant end, Object evaluationResult,
-		Map<String, Object> additionalValues) implements CalcEvaluationProfile {
-
+public interface VoidCalc extends Calc<Void> {
 }

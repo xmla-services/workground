@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.daanse.calc.api.CalculationProfile;
-import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

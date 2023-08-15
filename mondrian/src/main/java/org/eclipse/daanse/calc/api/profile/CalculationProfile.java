@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.api;
+package org.eclipse.daanse.calc.api.profile;
 
 import java.time.Duration;
 import java.time.Instant;

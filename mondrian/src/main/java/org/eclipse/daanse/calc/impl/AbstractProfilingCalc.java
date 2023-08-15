@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.daanse.calc.api.CalcEvaluationProfile;
-import org.eclipse.daanse.calc.api.CalculationProfile;
-import org.eclipse.daanse.calc.api.ProfilingCalc;
+import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
+import org.eclipse.daanse.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
