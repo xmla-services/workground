@@ -9,10 +9,10 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.impl.ConstantDimensionProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
@@ -77,7 +77,7 @@ public class DimensionExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public Calc<Dimension> accept(ExpCompiler compiler) {
+	public DimensionCalc accept(ExpCompiler compiler) {
         return ConstantDimensionProfilingCalc.of(dimension);
     }
 

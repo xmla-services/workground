@@ -12,6 +12,7 @@ package mondrian.calc;
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -62,7 +63,7 @@ import mondrian.olap.type.Type;
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc},
  * {@link mondrian.calc.impl.AbstractMemberCalc},
  * {@link mondrian.calc.impl.AbstractLevelCalc},
- * {@link mondrian.calc.impl.AbstractHierarchyCalc},
+ * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc},
  * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc}.<p/>
  *
  * {@link mondrian.calc.impl.GenericCalc} is an adapter which implements all of these interfaces

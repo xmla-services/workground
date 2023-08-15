@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eigenbase.util.property.StringProperty;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -73,7 +73,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public Member evaluateMember( Evaluator evaluator ) {
-      Hierarchy hierarchy = hierarchyCalc.evaluateHierarchy( evaluator );
+      Hierarchy hierarchy = hierarchyCalc.evaluate( evaluator );
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }

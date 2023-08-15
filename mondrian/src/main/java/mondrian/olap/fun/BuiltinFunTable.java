@@ -21,6 +21,7 @@ import java.util.Objects;
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
@@ -36,7 +37,6 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.MemberCalc;
@@ -183,7 +183,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public Level evaluateLevel(Evaluator evaluator) {
                         Hierarchy hierarchy =
-                                hierarchyCalc.evaluateHierarchy(evaluator);
+                                hierarchyCalc.evaluate(evaluator);
                         Integer ordinal = ordinalCalc.evaluate(evaluator);
                         return nthLevel(hierarchy, ordinal);
                     }
@@ -227,7 +227,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public Level evaluateLevel(Evaluator evaluator) {
                         Hierarchy hierarchy =
-                            hierarchyCalc.evaluateHierarchy(evaluator);
+                            hierarchyCalc.evaluate(evaluator);
                         String name = nameCalc.evaluate(evaluator);
                         for (Level level : hierarchy.getLevels()) {
                             if (level.getName().equals(name)) {
@@ -391,7 +391,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public Member evaluateMember(Evaluator evaluator) {
                         Hierarchy hierarchy =
-                                hierarchyCalc.evaluateHierarchy(evaluator);
+                                hierarchyCalc.evaluate(evaluator);
                         return evaluator.getSchemaReader()
                                 .getHierarchyDefaultMember(hierarchy);
                     }
@@ -673,7 +673,7 @@ public class BuiltinFunTable extends FunTableImpl {
                             @Override
 							public Object evaluate(Evaluator evaluator) {
                                 Hierarchy hierarchy =
-                                    hierarchyCalc.evaluateHierarchy(evaluator);
+                                    hierarchyCalc.evaluate(evaluator);
                                 return aggregateChildren(
                                     evaluator, hierarchy, valueCalc);
                             }
@@ -1050,7 +1050,7 @@ public class BuiltinFunTable extends FunTableImpl {
 					public TupleList evaluateList(Evaluator evaluator)
                     {
                         Hierarchy hierarchy =
-                            hierarchyCalc.evaluateHierarchy(evaluator);
+                            hierarchyCalc.evaluate(evaluator);
                         return FunUtil.hierarchyMembers(hierarchy, evaluator, false);
                     }
                 };
@@ -1076,7 +1076,7 @@ public class BuiltinFunTable extends FunTableImpl {
 					public TupleList evaluateList(Evaluator evaluator)
                     {
                         Hierarchy hierarchy =
-                            hierarchyCalc.evaluateHierarchy(evaluator);
+                            hierarchyCalc.evaluate(evaluator);
                         return FunUtil.hierarchyMembers(hierarchy, evaluator, true);
                     }
                 };
@@ -1239,7 +1239,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Hierarchy hierarchy =
-                                hierarchyCalc.evaluateHierarchy(evaluator);
+                                hierarchyCalc.evaluate(evaluator);
                         return hierarchy.getCaption();
                     }
                 };
@@ -1355,7 +1355,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Hierarchy hierarchy =
-                                hierarchyCalc.evaluateHierarchy(evaluator);
+                                hierarchyCalc.evaluate(evaluator);
                         return hierarchy.getName();
                     }
                 };
@@ -1452,7 +1452,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     @Override
 					public String evaluate(Evaluator evaluator) {
                         final Hierarchy hierarchy =
-                                hierarchyCalc.evaluateHierarchy(evaluator);
+                                hierarchyCalc.evaluate(evaluator);
                         return hierarchy.getUniqueName();
                     }
                 };

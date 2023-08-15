@@ -107,17 +107,4 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
                 level);
     }
 
-    /**
-     * Creates an expression which evaluates to a given hierarchy.
-     *
-     * @param hierarchy Hierarchy
-     * @return Constant hierarchy expression
-     */
-    public static Calc constantHierarchy(Hierarchy hierarchy) {
-        return new ConstantCalc(
-                HierarchyType.forHierarchy(hierarchy),
-                hierarchy);
-    }
-
-
 }

@@ -2,7 +2,6 @@ package org.eclipse.daanse.calc.impl;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
 
-import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
 

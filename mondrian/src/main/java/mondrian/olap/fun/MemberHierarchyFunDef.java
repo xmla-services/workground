@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
@@ -40,7 +40,7 @@ public class MemberHierarchyFunDef extends FunDefBase {
         return new CalcImpl(call.getType(), memberCalc);
     }
 
-    public static class CalcImpl extends AbstractHierarchyCalc {
+    public static class CalcImpl extends AbstractProfilingNestedHierarchyCalc {
         private final MemberCalc memberCalc;
 
         public CalcImpl(Type type, MemberCalc memberCalc) {
@@ -49,7 +49,7 @@ public class MemberHierarchyFunDef extends FunDefBase {
         }
 
         @Override
-		public Hierarchy evaluateHierarchy(Evaluator evaluator) {
+		public Hierarchy evaluate(Evaluator evaluator) {
             Member member = memberCalc.evaluateMember(evaluator);
             return member.getHierarchy();
         }
