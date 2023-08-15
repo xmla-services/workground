@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.DateTimeCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
@@ -32,7 +33,6 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.HierarchyCalc;

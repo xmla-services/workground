@@ -11,6 +11,7 @@ package mondrian.calc.impl;
 
 import java.util.Date;
 
+import org.eclipse.daanse.calc.api.DateTimeCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -18,7 +19,6 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.DateTimeCalc;
 import mondrian.calc.DimensionCalc;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
@@ -40,7 +40,6 @@ import mondrian.olap.type.Type;
 public abstract class GenericCalc
 extends AbstractProfilingNestedCalc<Object>
 implements TupleCalc,
-  DateTimeCalc,
  MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 {
     /**
@@ -144,15 +143,15 @@ implements TupleCalc,
     }
 
    
-    @Override
-    public Date evaluateDateTime(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Date) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.DATETIME, o));
-        }
-    }
+//    @Override
+//    public Date evaluateDateTime(Evaluator evaluator) {
+//        final Object o = evaluate(evaluator);
+//        try {
+//            return (Date) o;
+//        } catch (final ClassCastException e) {
+//            throw evaluator.newEvalException(null, msg(TypeEnum.DATETIME, o));
+//        }
+//    }
 
 //    @Override
 //    public void evaluateVoid(Evaluator evaluator) {

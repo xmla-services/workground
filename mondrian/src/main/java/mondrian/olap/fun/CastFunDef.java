@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import java.util.Date;
 import java.util.List;
 
 import mondrian.calc.Calc;
@@ -223,5 +224,13 @@ public class CastFunDef extends FunDefBase {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toBoolean(o, targetType);
         }
+		public Date evaluateDateTime(Evaluator evaluator) {
+            final Object o = calc.evaluate(evaluator);
+            if(o instanceof Date d) {
+            	return d;
+            }
+			throw evaluator.newEvalException(null, "must be Date but was: " + o);
+		}
     }
+
 }
