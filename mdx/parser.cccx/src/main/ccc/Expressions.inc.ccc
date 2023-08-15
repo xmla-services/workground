@@ -12,7 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-// Breaking the expression logic out into a 
+// Breaking the expression logic out into a
 // separate INCLUDE
 
 INJECT PARSER_CLASS :
@@ -23,13 +23,13 @@ INJECT BASE_NODE_CLASS :
   public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
     return Collections.unmodifiableList(childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class));
   }
-}  
+}
 
 Expression#interface :
   OrExpression
   (
     (
-      < AS > 
+      < AS >
       ObjectIdentifier
     )#BinaryExpression(+1)
   )*
@@ -48,8 +48,8 @@ ObjectIdentifier#interface :
   KeyObjectIdentifier
 ;
 
-INJECT interface NameObjectIdentifier : 
-    extends ObjectIdentifier, 
+INJECT interface NameObjectIdentifier :
+    extends ObjectIdentifier,
             org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier,
             org.eclipse.daanse.mdx.model.api.expression.SymbolLiteral
 
@@ -59,11 +59,11 @@ NameObjectIdentifier#interface :
   // This only seems to exist in the Pentaho grammar. REVISIT
   //<RESERVED_WORD>
   //|
-  < ID > 
+  < ID >
   |
-  // Neither the Microsoft spec nor the Oracle spec makes any mention of this!  
-  < AT_ID > 
-  | 
+  // Neither the Microsoft spec nor the Oracle spec makes any mention of this!
+  < AT_ID >
+  |
   < QUOTED_ID >
 ;
 
@@ -87,9 +87,9 @@ KeyObjectIdentifier :
 ;
 
 
-INJECT CompoundId : 
+INJECT CompoundId :
     import static PARSER_PACKAGE.PARSER_CLASS.stripQuotes;
-    implements Expression, 
+    implements Expression,
                org.eclipse.daanse.mdx.model.api.expression.CompoundId,
                org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
@@ -112,7 +112,7 @@ INJECT CompoundId :
            default -> image;
         };
     }
-}  
+}
 
 CompoundId :
   ObjectIdentifier
@@ -133,23 +133,23 @@ OrExpression#void :
 
 
 AndExpression#void :
-  NegatedExpression 
+  NegatedExpression
   (
     (
-      < AND > 
-      NegatedExpression 
+      < AND >
+      NegatedExpression
     )#BinaryExpression(+1)
   )*
 ;
 
-INJECT NegatedExpression : 
+INJECT NegatedExpression :
     import java.util.List;
     implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
   public String name() {
     return "NOT";
   }
-  
+
   public Type type() {
      return Type.TERM_PREFIX;
   }
@@ -196,15 +196,15 @@ INJECT RelationalExpression :
 }
 
 RelationalExpression#(>1) :
-  AdditiveExpression 
+  AdditiveExpression
   (
-    ( 
+    (
       < EQ > | < NE > | < LT > | < GT > | < LE > | < GE > | (<IS>[<EMPTY>]) | ([<NOT>] <MATCHES> =>||) | ([<NOT>] <IN> =>||)
-    ) 
+    )
     (
       SCAN {getToken(0).getType()==EMPTY}# => {}
       |
-      AdditiveExpression 
+      AdditiveExpression
     )
   )?
 ;
@@ -235,25 +235,25 @@ INJECT BinaryExpression :
     }
 
     public Type type() {
-       return Type.TERM_INFIX; 
+       return Type.TERM_INFIX;
     }
 
     public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
         return List.of((org.eclipse.daanse.mdx.model.api.expression.Expression) getFirstChild(), (org.eclipse.daanse.mdx.model.api.expression.Expression) getLastChild());
     }
-}    
+}
 
 MultiplicativeExpression#void :
   UnaryExpression
   (
     (
-      (<ASTERISK>|<SOLIDUS>) 
-      UnaryExpression 
+      (<ASTERISK>|<SOLIDUS>)
+      UnaryExpression
     )#BinaryExpression(+1)
   )*
 ;
 
-INJECT UnaryExpression : 
+INJECT UnaryExpression :
     import java.util.List;
     implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
@@ -262,7 +262,7 @@ INJECT UnaryExpression :
     }
 
     public Type type() {
-       return Type.TERM_PREFIX; 
+       return Type.TERM_PREFIX;
     }
 }
 
@@ -276,7 +276,7 @@ UnaryExpression#(>1) :
       <EXISTING>
     )?
     PrimaryExpression
-;    
+;
 
 INJECT PrimaryExpression : extends Expression
 
@@ -284,16 +284,16 @@ PrimaryExpression#interface :
     PrimaryPrefix
     (
       SCAN 1 {!(peekNode() instanceof CompoundId || peekNode() instanceof ObjectIdentifier || peekNode() instanceof QualifiedIdentifier)}
-      => 
+      =>
       <DOT> ObjectIdentifier #DotName(3)
       |
-      SCAN 1 {peekNode() instanceof CompoundId 
-              || peekNode() instanceof ObjectIdentifier 
-              || peekNode() instanceof QualifiedIdentifier 
+      SCAN 1 {peekNode() instanceof CompoundId
+              || peekNode() instanceof ObjectIdentifier
+              || peekNode() instanceof QualifiedIdentifier
               || peekNode() instanceof DotName}
       =>
       (
-          < LPAREN > 
+          < LPAREN >
           PossiblyEmptyExpression
           (< COMMA > PossiblyEmptyExpression)*
           < RPAREN >
@@ -302,15 +302,15 @@ PrimaryExpression#interface :
 ;
 
 PrimaryPrefix#void :
-      Literal 
-      | 
+      Literal
+      |
       CastExpression
       |
       ExpressionList
-      | 
-      Tuple 
-      | 
-      CaseExpression 
+      |
+      Tuple
+      |
+      CaseExpression
       |
       QualifiedIdentifier
       |
@@ -325,7 +325,7 @@ PrimaryPrefix#void :
       }
 ;
 
-INJECT DotName : 
+INJECT DotName :
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
     public String name() {
@@ -338,16 +338,17 @@ INJECT DotName :
 			    case UNQUOTED -> Type.PROPERTY;
 			    case QUOTED -> Type.PROPERTY_QUOTED;
           default-> Type.PROPERTY_AMPERS_AND_QUOTED;
-			 };       
+			 };
     }
-}    
-  
-INJECT FunctionCall : 
+}
+
+INJECT FunctionCall :
     import java.util.List;
+    import java.util.ArrayList;
     implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
     public String name() {
-        if (getChild(0) instanceof NameObjectIdentifier noi) return noi.name(); 
+        if (getChild(0) instanceof NameObjectIdentifier noi) return noi.name();
         if (getChild(0) instanceof CompoundId ci) return ci.getLastChild().toString();
         return null;
     }
@@ -355,15 +356,30 @@ INJECT FunctionCall :
     public Type type() {
        return getChild(0) instanceof NameObjectIdentifier noi ? Type.FUNCTION : Type.METHOD;
     }
-    
+
     public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
-       List<org.eclipse.daanse.mdx.model.api.expression.Expression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
-       // This is not supposed to include the LHS.
-       result.remove(0);
-       return result;
+        List<org.eclipse.daanse.mdx.model.api.expression.Expression> result = childrenOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
+        if (Type.METHOD.equals(type())) {
+            List<org.eclipse.daanse.mdx.model.api.expression.Expression> res = new ArrayList<>();
+            for (org.eclipse.daanse.mdx.model.api.expression.Expression ex : result) {
+                if (ex instanceof CompoundId compoundId) {
+                    List<org.eclipse.daanse.mdx.model.api.expression.Expression> exList = compoundId.expressions();
+                    if (exList.size() > 0 && exList.get(0) instanceof NameObjectIdentifier nameObjectIdentifier) {
+                    	res.add(nameObjectIdentifier);
+                    }
+                } else {
+                	res.add(ex);
+                }
+            }
+            return res;
+        } else {
+            // This is not supposed to include the LHS.
+            result.remove(0);
+        }
+        return result;
     }
-}    
-      
+}
+
 INJECT interface Literal : extends PrimaryExpression
 
 Literal#interface :
@@ -395,7 +411,7 @@ CastExpression :
     <LPAREN>
     OrExpression
     <AS>
-    NameObjectIdentifier 
+    NameObjectIdentifier
     <RPAREN>
 ;
 
@@ -409,16 +425,16 @@ INJECT ExpressionList :
   public Type type() {
      return Type.PARENTHESES;
   }
-}  
+}
 
-ExpressionList : 
+ExpressionList :
    <LPAREN>
    Expression
    (<COMMA> Expression)*
    <RPAREN>
 ;
 
-INJECT Tuple : 
+INJECT Tuple :
   implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
   public String name() {
@@ -428,7 +444,7 @@ INJECT Tuple :
   public Type type() {
      return Type.BRACES;
   }
-}  
+}
 
 Tuple :
   // set built from sets/tuples
@@ -440,9 +456,9 @@ Tuple :
   < RBRACE >
 ;
 
-INJECT QualifiedIdentifier : 
+INJECT QualifiedIdentifier :
   implements PrimaryExpression
- 
+
 QualifiedIdentifier :
    NameObjectIdentifier
    =>|+1
@@ -451,7 +467,7 @@ QualifiedIdentifier :
       // but currently we ignore the qualifiers. The previous example is
       // equivalent to 'foo(a, b)'.
    (<BANG> NameObjectIdentifier)+
-;   
+;
 
 INJECT EmptyExpression : implements Expression
 
@@ -464,11 +480,11 @@ EmptyExpression#(true) :
 PossiblyEmptyExpression#void :
   Expression
   |
-  EmptyExpression 
+  EmptyExpression
 ;
 
-INJECT CaseExpression : 
-   implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression 
+INJECT CaseExpression :
+   implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
    public String name() {
       return (getChild(1) instanceof Expression) ? "_CaseMatch" : "_CaseTest";
@@ -477,7 +493,7 @@ INJECT CaseExpression :
    public Type type() {
       return Type.TERM_CASE;
    }
-}   
+}
 
 CaseExpression :
     < CASE >
@@ -506,8 +522,8 @@ INJECT MemberPropertyDefinition :
 }
 
 MemberPropertyDefinition :
-  ObjectIdentifier 
-  < EQ > 
+  ObjectIdentifier
+  < EQ >
   Expression
 ;
 
