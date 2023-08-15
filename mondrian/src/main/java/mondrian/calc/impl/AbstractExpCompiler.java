@@ -20,15 +20,18 @@ import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.DateTimeCalc;
 import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.calc.impl.ConstantBooleanProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantDoubleProfilingCalc;
+import org.eclipse.daanse.calc.impl.ConstantHierarchyProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
 import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -36,7 +39,6 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
 import mondrian.calc.IterCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
@@ -287,8 +289,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                 final Hierarchy hierarchy =
                         FunUtil.getDimensionDefaultHierarchy(dimension);
                 if (hierarchy != null) {
-                    return (HierarchyCalc) ConstantCalc.constantHierarchy(
-                            hierarchy);
+                    return ConstantHierarchyProfilingCalc.of(hierarchy);
                 }
                 // SSAS gives error at run time (often as an error in a
                 // cell) but we prefer to give an error at validate time.
@@ -800,7 +801,7 @@ public class AbstractExpCompiler implements ExpCompiler {
     /**
      * Computes the hierarchy of a dimension.
      */
-    private static class DimensionHierarchyCalc extends AbstractHierarchyCalc {
+    private static class DimensionHierarchyCalc extends AbstractProfilingNestedHierarchyCalc {
         private final DimensionCalc dimensionCalc;
 
         protected DimensionHierarchyCalc(Type type, DimensionCalc dimensionCalc) {
@@ -809,7 +810,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
 
         @Override
-        public Hierarchy evaluateHierarchy(Evaluator evaluator) {
+        public Hierarchy evaluate(Evaluator evaluator) {
             final Dimension dimension =
                     dimensionCalc.evaluate(evaluator);
             final Hierarchy hierarchy =

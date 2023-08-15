@@ -9,13 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.HierarchyCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
@@ -56,7 +56,7 @@ public class HierarchyDimensionFunDef extends FunDefBase {
         @Override
 		public Dimension evaluate(Evaluator evaluator) {
             Hierarchy hierarchy =
-                    hierarchyCalc.evaluateHierarchy(evaluator);
+                    hierarchyCalc.evaluate(evaluator);
             return hierarchy.getDimension();
         }
     }

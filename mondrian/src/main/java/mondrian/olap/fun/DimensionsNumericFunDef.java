@@ -12,11 +12,11 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -57,10 +57,10 @@ class DimensionsNumericFunDef extends FunDefBase {
     {
         final IntegerCalc integerCalc =
             compiler.compileInteger(call.getArg(0));
-        return new AbstractHierarchyCalc(call.getFunName(),call.getType(), new Calc[] {integerCalc})
+        return new AbstractProfilingNestedHierarchyCalc(call.getFunName(),call.getType(), new Calc[] {integerCalc})
         {
             @Override
-			public Hierarchy evaluateHierarchy(Evaluator evaluator) {
+			public Hierarchy evaluate(Evaluator evaluator) {
                 Integer n = integerCalc.evaluate(evaluator);
                 return nthHierarchy(evaluator, n);
             }

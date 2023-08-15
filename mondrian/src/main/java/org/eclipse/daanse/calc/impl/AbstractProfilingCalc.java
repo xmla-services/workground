@@ -15,7 +15,6 @@ package org.eclipse.daanse.calc.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,6 @@ import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
 import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
