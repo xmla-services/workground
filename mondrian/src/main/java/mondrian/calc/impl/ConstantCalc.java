@@ -9,9 +9,8 @@
 
 package mondrian.calc.impl;
 
-import java.util.Map;
-
-import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -19,15 +18,12 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.MemberType;
-import mondrian.olap.type.NumericType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 
@@ -106,20 +102,6 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
     public Calc[] getChildCalcs() {
         return new Calc[0];
     }
-
-
-
-    /**
-     * Creates an expression which evaluates to a given string.
-     *
-     * @param s String value
-     * @return Constant string expression
-     */
-    public static StringCalc constantString(String s) {
-        return new ConstantCalc(new StringType(), s);
-    }
-
-
 
     /**
      * Creates an expression which evaluates to null.

@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
@@ -67,7 +67,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         try {
 
           Member[] subtotal = tupleCalc1.evaluateTuple( evaluator );
-          String namedSetName = stringCalc.evaluateString( evaluator );
+          String namedSetName = stringCalc.evaluate( evaluator );
 
           Object cacheObj = evaluator.getQuery().getEvalCache( makeSetCacheKey( namedSetName, subtotal ) );
           if ( cacheObj != null ) {

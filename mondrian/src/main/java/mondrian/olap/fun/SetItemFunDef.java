@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.calc.impl.AbstractTupleCalc;
@@ -152,7 +152,7 @@ class SetItemFunDef extends FunDefBase {
                             String[] results = new String[stringCalcs.length];
                             for (int i = 0; i < stringCalcs.length; i++) {
                                 results[i] =
-                                    stringCalcs[i].evaluateString(evaluator);
+                                    stringCalcs[i].evaluate(evaluator);
                             }
                             listLoop:
                             for (List<Member> members : list) {
@@ -226,7 +226,7 @@ class SetItemFunDef extends FunDefBase {
                         }
                         try {
                             final String result =
-                                stringCalcs[0].evaluateString(evaluator);
+                                stringCalcs[0].evaluate(evaluator);
                             for (Member member : list) {
                                 if (SetItemFunDef.matchMember(member, result)) {
                                     return member;

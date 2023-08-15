@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -23,13 +26,11 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -106,7 +107,7 @@ class GenerateFunDef extends FunDefBase {
             if (call.getArgCount() == 3) {
                 delimCalc = compiler.compileString(call.getArg(2));
             } else {
-                delimCalc = ConstantCalc.constantString("");
+                delimCalc = new ConstantStringProfilingCalc(new StringType(), "");
             }
 
             return new GenerateStringCalcImpl(
@@ -203,7 +204,7 @@ class GenerateFunDef extends FunDefBase {
         }
     }
 
-    private static class GenerateStringCalcImpl extends AbstractStringCalc {
+    private static class GenerateStringCalcImpl extends AbstractProfilingNestedStringCalc {
         private final IterCalc iterCalc;
         private final StringCalc stringCalc;
         private final StringCalc sepCalc;
@@ -221,7 +222,7 @@ class GenerateFunDef extends FunDefBase {
         }
 
         @Override
-		public String evaluateString(Evaluator evaluator) {
+		public String evaluate(Evaluator evaluator) {
             final int savepoint = evaluator.savepoint();
             try {
                 StringBuilder buf = new StringBuilder();
@@ -237,11 +238,11 @@ class GenerateFunDef extends FunDefBase {
                         currentIteration++, execution);
                     cursor.setContext(evaluator);
                     if (k++ > 0) {
-                        String sep = sepCalc.evaluateString(evaluator);
+                        String sep = sepCalc.evaluate(evaluator);
                         buf.append(sep);
                     }
                     final String result2 =
-                        stringCalc.evaluateString(evaluator);
+                        stringCalc.evaluate(evaluator);
                     buf.append(result2);
                 }
                 return buf.toString();

@@ -36,7 +36,7 @@ implements DoubleCalc
      * {@inheritDoc} 
      *
      */
-    protected AbstractProfilingNestedDoubleCalc(String name, Type type, Calc[] calcs) {
+    protected AbstractProfilingNestedDoubleCalc(String name, Type type, Calc<?>[] calcs) {
         super(name,type, calcs);
         assert getType() instanceof NumericType;
     }

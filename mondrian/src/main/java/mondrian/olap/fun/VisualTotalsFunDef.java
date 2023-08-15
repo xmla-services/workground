@@ -12,12 +12,12 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -133,7 +133,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             final String name = member.getName();;
             final String caption;
             if (stringCalc != null) {
-                final String namePattern = stringCalc.evaluateString(evaluator);
+                final String namePattern = stringCalc.evaluate(evaluator);
                 caption = VisualTotalsFunDef.substitute(namePattern, member.getCaption());
             } else {
                 caption = member.getCaption();

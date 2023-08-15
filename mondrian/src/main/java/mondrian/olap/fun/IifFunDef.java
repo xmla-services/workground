@@ -10,13 +10,13 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -140,14 +140,14 @@ public class IifFunDef extends FunDefBase {
                 compiler.compileBoolean(call.getArg(0));
             final StringCalc calc1 = compiler.compileString(call.getArg(1));
             final StringCalc calc2 = compiler.compileString(call.getArg(2));
-            return new AbstractStringCalc(
+            return new AbstractProfilingNestedStringCalc(
             		call.getFunName(),call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
                 @Override
-				public String evaluateString(Evaluator evaluator) {
+				public String evaluate(Evaluator evaluator) {
                     final boolean b =
                         booleanCalc.evaluate(evaluator);
                     StringCalc calc = b ? calc1 : calc2;
-                    return calc.evaluateString(evaluator);
+                    return calc.evaluate(evaluator);
                 }
             };
         }

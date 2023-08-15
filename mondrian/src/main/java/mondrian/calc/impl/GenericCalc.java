@@ -12,6 +12,7 @@ package mondrian.calc.impl;
 import java.util.Date;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -24,7 +25,6 @@ import mondrian.calc.DimensionCalc;
 import mondrian.calc.HierarchyCalc;
 import mondrian.calc.LevelCalc;
 import mondrian.calc.MemberCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.calc.VoidCalc;
 import mondrian.olap.Evaluator;
@@ -43,7 +43,7 @@ import mondrian.olap.type.Type;
 public abstract class GenericCalc
 extends AbstractProfilingNestedCalc<Object>
 implements TupleCalc,
-StringCalc,   DateTimeCalc,
+  DateTimeCalc,
 VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 {
     /**
@@ -105,15 +105,15 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
-    public String evaluateString(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (String) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.STRING, o));
-        }
-    }
+//    @Override
+//    public String evaluateString(Evaluator evaluator) {
+//        final Object o = evaluate(evaluator);
+//        try {
+//            return (String) o;
+//        } catch (final ClassCastException e) {
+//            throw evaluator.newEvalException(null, msg(TypeEnum.STRING, o));
+//        }
+//    }
 
 //    @Override
 //    public int evaluateInteger(Evaluator evaluator) {

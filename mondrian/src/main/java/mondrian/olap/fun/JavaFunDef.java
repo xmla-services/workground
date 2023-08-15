@@ -25,12 +25,12 @@ import java.util.Objects;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -217,7 +217,7 @@ public class JavaFunDef extends FunDefBase {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final String string =
-                        stringCalc.evaluateString(evaluator);
+                        stringCalc.evaluate(evaluator);
                     return
                         Character.valueOf(
                             string == null
