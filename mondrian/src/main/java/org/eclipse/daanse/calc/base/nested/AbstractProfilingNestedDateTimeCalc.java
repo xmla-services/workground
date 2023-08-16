@@ -7,11 +7,12 @@
  * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
  */
 
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.nested;
 
 import java.util.Date;
 
 import org.eclipse.daanse.calc.api.DateTimeCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.type.Type;

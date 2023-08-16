@@ -1,6 +1,7 @@
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.value;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingValueCalc;
 
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;

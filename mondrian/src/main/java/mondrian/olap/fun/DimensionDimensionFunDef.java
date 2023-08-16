@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.base.ConstantDimensionProfilingCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.calc.Calc;
@@ -41,6 +41,6 @@ class DimensionDimensionFunDef extends FunDefBase {
     {
         Dimension dimension =
             ((DimensionExpr) call.getArg(0)).getDimension();
-        return ConstantDimensionProfilingCalc.of(dimension);
+        return ConstantProfilingDimensionCalc.of(dimension);
     }
 }

@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;

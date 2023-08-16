@@ -12,7 +12,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.base.ConstantMemberProfilingCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
@@ -83,12 +83,12 @@ class RangeFunDef extends FunDefBase {
             Member nullMember =
                 ((RolapMember) members[1].evaluate(null)).getHierarchy()
                 .getNullMember();
-            members[0] = ConstantMemberProfilingCalc.of(nullMember);
+            members[0] = ConstantProfilingMemberCalc.of(nullMember);
         } else if (members[1] == null) {
             Member nullMember =
                 ((RolapMember) members[0].evaluate(null)).getHierarchy()
                 .getNullMember();
-            members[1] = ConstantMemberProfilingCalc.of(nullMember);
+            members[1] = ConstantProfilingMemberCalc.of(nullMember);
         }
 
         return members;

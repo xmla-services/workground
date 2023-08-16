@@ -1,4 +1,4 @@
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.profile;
 
 import java.time.Duration;
 import java.time.Instant;

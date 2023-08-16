@@ -12,9 +12,10 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.nested;
 
 import org.eclipse.daanse.calc.api.DimensionCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.calc.Calc;

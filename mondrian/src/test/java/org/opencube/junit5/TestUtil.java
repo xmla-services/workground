@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.base.SimpleProfileResultWriter;
+import org.eclipse.daanse.calc.base.profile.SimpleProfileResultWriter;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;

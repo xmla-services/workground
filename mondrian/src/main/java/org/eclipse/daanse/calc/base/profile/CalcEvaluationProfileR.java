@@ -10,16 +10,16 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-*/package org.eclipse.daanse.calc.base;
+*/
 
-import org.eclipse.daanse.calc.api.IntegerCalc;
+package org.eclipse.daanse.calc.base.profile;
 
-import mondrian.olap.type.DecimalType;
+import java.time.Instant;
+import java.util.Map;
 
-public class ConstantIntegerProfilingCalc extends AbstractProfilingConstantCalc<Integer> implements IntegerCalc{
+import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
 
-	public ConstantIntegerProfilingCalc(DecimalType type,Integer value) {
-		super(value, type, "ConstantIntegerProfilingCalc");
-	}
+public record CalcEvaluationProfileR(Instant start, Instant end, Object evaluationResult,
+		Map<String, Object> additionalValues) implements CalcEvaluationProfile {
 
 }

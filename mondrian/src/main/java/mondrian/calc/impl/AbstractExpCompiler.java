@@ -26,19 +26,19 @@ import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedDimensionCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedHierarchyCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedIntegerCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedLevelCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedMemberCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.calc.base.ConstantBooleanProfilingCalc;
-import org.eclipse.daanse.calc.base.ConstantDoubleProfilingCalc;
-import org.eclipse.daanse.calc.base.ConstantHierarchyProfilingCalc;
-import org.eclipse.daanse.calc.base.ConstantIntegerProfilingCalc;
-import org.eclipse.daanse.calc.base.ConstantStringProfilingCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingBooleanCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingDoubleCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingHierarchyCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingIntegerCalc;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingStringCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDimensionCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedLevelCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -329,7 +329,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                 final Hierarchy hierarchy =
                         FunUtil.getDimensionDefaultHierarchy(dimension);
                 if (hierarchy != null) {
-                    return ConstantHierarchyProfilingCalc.of(hierarchy);
+                    return ConstantProfilingHierarchyCalc.of(hierarchy);
                 }
                 // SSAS gives error at run time (often as an error in a
                 // cell) but we prefer to give an error at validate time.
@@ -372,7 +372,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		if (type instanceof NullType) {
 			if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc<?> constantCalc) {
 				//no evaluate on constantCalc  result is null and constant - nothing expected while evaluate
-				return new ConstantIntegerProfilingCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
+				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
 			}		
 
 		}
@@ -385,7 +385,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 					Number n = (Number) o;
 					i = n.intValue();
 				}
-				return new ConstantIntegerProfilingCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
+				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
 			} else if (calc instanceof DoubleCalc doubleCalc) {
 				return new AbstractProfilingNestedIntegerCalc("AbstractIntegerCalc", exp.getType(),
 						new Calc[] { doubleCalc }) {
@@ -432,7 +432,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			if (o != null) {
 				s = o.toString();
 			}
-			return new ConstantStringProfilingCalc(new StringType(), s);
+			return new ConstantProfilingStringCalc(new StringType(), s);
 		}else {
 			return new AbstractProfilingNestedStringCalc("AbstractProfilingNestedStringCalc", new StringType(), new Calc[] {c}) {
 
@@ -537,7 +537,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}else {
 				throw new RuntimeException("wring type. was: "+o);
 			}
-            return 	new ConstantBooleanProfilingCalc(b);
+            return 	new ConstantProfilingBooleanCalc(b);
         }
         //
         
@@ -605,7 +605,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				throw new RuntimeException("wring type. was: "+o);
 			}
         
-            return 	new ConstantDoubleProfilingCalc(new NumericType(),d);
+            return 	new ConstantProfilingDoubleCalc(new NumericType(),d);
 
         }
         if (calc instanceof DoubleCalc doubleCalc) {

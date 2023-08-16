@@ -11,21 +11,27 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.base;
+
+package org.eclipse.daanse.calc.base.nested;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
+import mondrian.calc.Calc;
 import mondrian.olap.type.MemberType;
+import mondrian.olap.type.Type;
 
-public class ConstantMemberProfilingCalc extends AbstractProfilingConstantCalc<Member> implements MemberCalc {
 
-	public ConstantMemberProfilingCalc(MemberType type, Member value) {
-		super(value, type, "ConstantMemberProfilingCalc");
-	}
+public abstract class AbstractProfilingNestedMemberCalc
+extends AbstractProfilingNestedCalc<Member>
+implements MemberCalc
+{
 
-	public static ConstantMemberProfilingCalc of(Member member) {
-		return new ConstantMemberProfilingCalc(MemberType.forMember(member), member);
-	}
+    protected AbstractProfilingNestedMemberCalc(String name, Type type, Calc<?>[] calcs) {
+        super(name,type, calcs);
+        assert getType() instanceof MemberType;
+    }
+
 
 }

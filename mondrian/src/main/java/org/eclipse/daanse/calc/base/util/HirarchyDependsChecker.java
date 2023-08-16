@@ -1,4 +1,4 @@
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.util;
 
 import java.util.Objects;
 import java.util.stream.Stream;

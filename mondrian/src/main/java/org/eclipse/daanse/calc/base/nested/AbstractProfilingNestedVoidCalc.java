@@ -11,30 +11,29 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.base;
 
-import org.eclipse.daanse.calc.api.IntegerCalc;
+package org.eclipse.daanse.calc.base.nested;
+
+import org.eclipse.daanse.calc.api.VoidCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
-import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the
- * {@link org.eclipse.daanse.calc.api.IntegerCalc} interface.
+ * Abstract implementation of the {@link org.eclipse.daanse.calc.api.VoidCalc}
+ * interface.
  * 
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedIntegerCalc extends AbstractProfilingNestedCalc<Integer>
-		implements IntegerCalc {
+public abstract class AbstractProfilingNestedVoidCalc extends AbstractProfilingNestedCalc<Void> implements VoidCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedIntegerCalc(String name, Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedVoidCalc(String name, Type type, Calc<?>[] calcs) {
 		super(name, type, calcs);
-		assert getType() instanceof NumericType;
 	}
 
 }

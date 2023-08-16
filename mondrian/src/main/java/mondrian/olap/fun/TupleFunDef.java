@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;

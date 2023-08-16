@@ -94,7 +94,7 @@ import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.base.SimpleProfileResultWriter;
+import org.eclipse.daanse.calc.base.profile.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Cube;

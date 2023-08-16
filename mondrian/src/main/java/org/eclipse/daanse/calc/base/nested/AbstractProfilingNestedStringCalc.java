@@ -12,26 +12,28 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.nested;
 
-import org.eclipse.daanse.calc.api.VoidCalc;
+import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the {@link org.eclipse.daanse.calc.api.VoidCalc}
+ * Abstract implementation of the {@link org.eclipse.daanse.calc.api.StringCalc}
  * interface.
  * 
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedVoidCalc extends AbstractProfilingNestedCalc<Void> implements VoidCalc {
+public abstract class AbstractProfilingNestedStringCalc extends AbstractProfilingNestedCalc<String>
+		implements StringCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedVoidCalc(String name, Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedStringCalc(String name, Type type, Calc<?>[] calcs) {
 		super(name, type, calcs);
 	}
 
