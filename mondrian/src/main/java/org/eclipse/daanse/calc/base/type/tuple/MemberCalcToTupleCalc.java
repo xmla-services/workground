@@ -25,7 +25,7 @@ public class MemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc<Memb
 	private final MemberCalc memberCalc;
 
 	public MemberCalcToTupleCalc(Type type, MemberCalc memberCalc) {
-		super( type, new MemberCalc[] { memberCalc });
+		super(type, new MemberCalc[] { memberCalc });
 		this.memberCalc = memberCalc;
 	}
 

@@ -12,7 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base.nested.conv;
+package org.eclipse.daanse.calc.base.type.dimension;
 
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -21,9 +21,9 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertUnknownToDimensionCalc extends AbstractProfilingNestedDimensionCalc<Calc<?>> {
+public class UnknownToDimensionCalc extends AbstractProfilingNestedDimensionCalc<Calc<?>> {
 
-	public ConvertUnknownToDimensionCalc(Type type, Calc<?> calc) {
+	public UnknownToDimensionCalc(Type type, Calc<?> calc) {
 		super(type, new Calc<?>[] { calc });
 	}
 

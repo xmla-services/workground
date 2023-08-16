@@ -12,7 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base.nested.conv;
+package org.eclipse.daanse.calc.base.type.member;
 
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -21,10 +21,10 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertUnknownToMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {
+public class UnknownToMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {
 
-	public ConvertUnknownToMemberCalc(Type type, Calc<?> childCalc) {
-		super( type, new Calc[] { childCalc });
+	public UnknownToMemberCalc(Type type, Calc<?> childCalc) {
+		super(type, new Calc[] { childCalc });
 	}
 
 	@Override

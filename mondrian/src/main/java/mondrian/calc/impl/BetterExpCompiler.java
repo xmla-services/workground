@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToMemberCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToTupleCalc;
+import org.eclipse.daanse.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.calc.base.type.tuple.MemberCalcToTupleCalc;
+import org.eclipse.daanse.calc.base.type.tuple.UnknownToTupleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ListCalc;
@@ -63,14 +63,14 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 				return tc;
 			}
 
-			TupleCalc tc = new ConvertUnknownToTupleCalc( type, calc);
+			TupleCalc tc = new UnknownToTupleCalc( type, calc);
 			return tc;
 		} else if (type instanceof MemberType) {
 			MemberCalc tmpCalc = null;
 			if (calc instanceof MemberCalc mc) {
 				tmpCalc = mc;
 			} else {
-				tmpCalc = new ConvertUnknownToMemberCalc( type, calc);
+				tmpCalc = new UnknownToMemberCalc( type, calc);
 			}
 			final MemberCalc memberCalc = tmpCalc;
 			return new MemberCalcToTupleCalc( type,  memberCalc);
