@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.api.VoidCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -29,7 +30,6 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -231,7 +231,7 @@ public class SetFunDef extends FunDefBase {
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
-                        Member[] members = tupleCalc.evaluateTuple(evaluator);
+                        Member[] members = tupleCalc.evaluate(evaluator);
                         if (members == null
                             || FunUtil.tupleContainsNullMember(members))
                         {
@@ -342,7 +342,7 @@ public class SetFunDef extends FunDefBase {
 				public TupleIterable evaluateIterable(
                     Evaluator evaluator)
                 {
-                    final Member[] members = tupleCalc.evaluateTuple(evaluator);
+                    final Member[] members = tupleCalc.evaluate(evaluator);
                     return new ListTupleList(
                         tupleCalc.getType().getArity(),
                         Arrays.asList(members));

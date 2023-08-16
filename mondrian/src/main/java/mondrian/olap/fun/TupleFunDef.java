@@ -16,11 +16,11 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -102,7 +102,7 @@ public class TupleFunDef extends FunDefBase {
         return new CalcImpl(call, memberCalcs);
     }
 
-    public static class CalcImpl extends AbstractTupleCalc {
+    public static class CalcImpl extends AbstractProfilingNestedTupleCalc {
         private final MemberCalc[] memberCalcs;
 
         public CalcImpl(ResolvedFunCall call, MemberCalc[] memberCalcs) {
@@ -111,7 +111,7 @@ public class TupleFunDef extends FunDefBase {
         }
 
         @Override
-		public Member[] evaluateTuple(Evaluator evaluator) {
+		public Member[] evaluate(Evaluator evaluator) {
             final Member[] members = new Member[memberCalcs.length];
             for (int i = 0; i < members.length; i++) {
                 final Member member =

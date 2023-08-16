@@ -9,11 +9,11 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
-import mondrian.calc.TupleCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.TupleFunDef;
 import mondrian.olap.type.TupleType;
@@ -53,7 +53,7 @@ public class TupleValueCalc extends GenericCalc {
 
     @Override
     public Object evaluate(Evaluator evaluator) {
-        final Member[] members = tupleCalc.evaluateTuple(evaluator);
+        final Member[] members = tupleCalc.evaluate(evaluator);
         if ((members == null) || (nullCheck
                 && evaluator.needToReturnNullForUnrelatedDimension(members)))
         {

@@ -15,13 +15,13 @@ import java.util.List;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractTupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -136,9 +136,9 @@ class SetItemFunDef extends FunDefBase {
         if (elementType instanceof TupleType tupleType) {
             final Member[] nullTuple = FunUtil.makeNullTuple(tupleType);
             if (isString) {
-                return new AbstractTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), calcs) {
                     @Override
-					public Member[] evaluateTuple(Evaluator evaluator) {
+					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final TupleList list;
                         try {
@@ -176,9 +176,9 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), calcs) {
                     @Override
-					public Member[] evaluateTuple(Evaluator evaluator) {
+					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final TupleList list;
                         try {

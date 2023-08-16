@@ -10,12 +10,12 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.TypeUtil;
@@ -63,7 +63,7 @@ class TupleToStrFunDef extends FunDefBase {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final Member[] members =
-                            tupleCalc.evaluateTuple(evaluator);
+                            tupleCalc.evaluate(evaluator);
                     if (members == null) {
                         return "";
                     }

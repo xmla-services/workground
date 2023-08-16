@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -25,7 +26,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -166,7 +166,7 @@ public class ValidMeasureFunDef extends FunDefBase
 				memberList = Collections.singletonList(mc.evaluate(evaluator));
 			} else {
 				TupleCalc tc = (TupleCalc) calc.unwrap((TupleCalc.class));
-				final Member[] tupleMembers = tc.evaluateTuple(evaluator);
+				final Member[] tupleMembers = tc.evaluate(evaluator);
 				if (tupleMembers == null) {
 					memberList = null;
 				} else {

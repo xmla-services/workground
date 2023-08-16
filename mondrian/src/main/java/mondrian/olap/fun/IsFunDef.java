@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -52,8 +52,8 @@ class IsFunDef extends FunDefBase {
             {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
-                    Member[] o0 = tupleCalc0.evaluateTuple(evaluator);
-                    Member[] o1 = tupleCalc1.evaluateTuple(evaluator);
+                    Member[] o0 = tupleCalc0.evaluate(evaluator);
+                    Member[] o1 = tupleCalc1.evaluate(evaluator);
                     return FunUtil.equalTuple(o0, o1);
                 }
             };

@@ -21,6 +21,7 @@ import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -28,7 +29,6 @@ import mondrian.calc.IterCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCalc;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;

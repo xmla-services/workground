@@ -14,13 +14,14 @@ package mondrian.calc.impl;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.impl.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -65,9 +66,24 @@ public class BetterExpCompiler extends AbstractExpCompiler {
             final Exp defaultMember = unresolvedFunCall.accept(getValidator());
             return compileTuple(defaultMember);
         }
-        if (type instanceof TupleType) {
-            assert calc instanceof TupleCalc;
-            return (TupleCalc) calc;
+        if (type instanceof TupleType) { 
+        	
+        	if(calc instanceof TupleCalc tc) {
+        		return tc;
+        	}
+        	
+        	TupleCalc tc= new AbstractProfilingNestedTupleCalc("AbstractProfilingNestedTupleCalc", type, new Calc<?>[] {calc}) {
+				
+				@Override
+				public Member[] evaluate(Evaluator evaluator) {
+					Object o = calc.evaluate(evaluator);
+					if (o instanceof Member[] tuple) {
+						return tuple;
+					}
+					throw evaluator.newEvalException(null, "expected Member[], was: " + o);
+				}
+			};
+            return tc;
         } else if (type instanceof MemberType) {
         	MemberCalc tmpCalc=null;
             if( calc instanceof MemberCalc mc) {
@@ -86,9 +102,9 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 				};
             }
             final MemberCalc memberCalc =  tmpCalc;
-            return new AbstractTupleCalc("AbstractTupleCalc1",type, new Calc[] {memberCalc}) {
+            return new AbstractProfilingNestedTupleCalc("AbstractTupleCalc1",type, new Calc[] {memberCalc}) {
                 @Override
-                public Member[] evaluateTuple(Evaluator evaluator) {
+                public Member[] evaluate(Evaluator evaluator) {
                     final Member member = memberCalc.evaluate(evaluator);
                     if(member == null) {
                         //<Tuple>.Item(-1)
