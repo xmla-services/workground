@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedIntegerCalc;
-import org.eclipse.daanse.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

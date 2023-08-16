@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -32,6 +31,7 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eigenbase.util.property.Property;
 import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;

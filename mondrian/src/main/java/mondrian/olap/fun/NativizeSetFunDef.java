@@ -29,14 +29,14 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.daanse.calc.api.profile.CalculationProfile;
-import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

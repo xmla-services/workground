@@ -11,8 +11,8 @@ package mondrian.calc;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
 /**
  * List of tuples.

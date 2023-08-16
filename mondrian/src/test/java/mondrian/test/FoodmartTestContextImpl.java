@@ -42,8 +42,6 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.base.profile.SimpleProfileResultWriter;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -52,6 +50,8 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;

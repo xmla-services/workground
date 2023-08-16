@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

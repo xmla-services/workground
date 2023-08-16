@@ -11,9 +11,9 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingMemberCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

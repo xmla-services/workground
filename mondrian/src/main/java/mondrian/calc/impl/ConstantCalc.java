@@ -28,8 +28,8 @@ import mondrian.olap.type.Type;
  * @since Sep 27, 2005
  */
 
-//TODO: remove  and use just the new interface org.eclipse.daanse.calc.api.ConstantCalc
-public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.calc.api.ConstantCalc<Object>{
+//TODO: remove  and use just the new interface org.eclipse.daanse.olap.calc.api.ConstantCalc
+public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.olap.calc.api.ConstantCalc<Object>{
     private final Object o;
 
     public ConstantCalc( Type type, Object o) {

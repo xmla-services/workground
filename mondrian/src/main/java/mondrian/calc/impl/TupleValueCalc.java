@@ -9,9 +9,9 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;

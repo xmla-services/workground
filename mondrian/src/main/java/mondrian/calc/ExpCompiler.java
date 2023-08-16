@@ -11,20 +11,20 @@ package mondrian.calc;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.api.DateTimeCalc;
-import org.eclipse.daanse.calc.api.DimensionCalc;
-import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.api.LevelCalc;
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eigenbase.util.property.StringProperty;
 
 import mondrian.calc.impl.BetterExpCompiler;

@@ -11,9 +11,9 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
