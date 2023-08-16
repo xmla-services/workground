@@ -18,15 +18,14 @@ import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertMemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc {
+public class ConvertMemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc<MemberCalc> {
 	private final MemberCalc memberCalc;
 
 	public ConvertMemberCalcToTupleCalc(Type type, MemberCalc memberCalc) {
-		super( type, new Calc[] { memberCalc });
+		super( type, new MemberCalc[] { memberCalc });
 		this.memberCalc = memberCalc;
 	}
 

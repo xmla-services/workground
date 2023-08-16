@@ -31,7 +31,7 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class GenericCalc
-extends AbstractProfilingNestedCalc<Object>
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
 {
     /**
      * Creates a GenericCalc without specifying child calculated expressions.

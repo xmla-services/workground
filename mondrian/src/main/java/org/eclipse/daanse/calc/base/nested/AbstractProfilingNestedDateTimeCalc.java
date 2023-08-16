@@ -18,12 +18,12 @@ import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
 
-public abstract class AbstractProfilingNestedDateTimeCalc
-extends AbstractProfilingNestedCalc<Date>
+public abstract class AbstractProfilingNestedDateTimeCalc<C   extends Calc<?>>
+extends AbstractProfilingNestedCalc<Date,C>
 implements DateTimeCalc
 {
 
-    protected AbstractProfilingNestedDateTimeCalc(Type type, Calc<?>[] calcs) {
+    protected AbstractProfilingNestedDateTimeCalc(Type type, C[] calcs) {
         super(type, calcs);
     }
 

@@ -23,12 +23,12 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 
 
-public abstract class AbstractProfilingNestedMemberCalc
-extends AbstractProfilingNestedCalc<Member>
+public abstract class AbstractProfilingNestedMemberCalc< C extends Calc<?>>
+extends AbstractProfilingNestedCalc<Member,C>
 implements MemberCalc
 {
 
-    protected AbstractProfilingNestedMemberCalc(Type type, Calc<?>[] calcs) {
+    protected AbstractProfilingNestedMemberCalc(Type type, C[] calcs) {
         super(type, calcs);
         assert getType() instanceof MemberType;
     }

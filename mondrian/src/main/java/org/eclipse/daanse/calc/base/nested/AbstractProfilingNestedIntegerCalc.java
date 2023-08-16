@@ -27,13 +27,13 @@ import mondrian.olap.type.Type;
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedIntegerCalc extends AbstractProfilingNestedCalc<Integer>
+public abstract class AbstractProfilingNestedIntegerCalc<C   extends Calc<?>> extends AbstractProfilingNestedCalc<Integer,C>
 		implements IntegerCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedIntegerCalc(Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedIntegerCalc(Type type, C[] calcs) {
 		super( type, calcs);
 		assert getType() instanceof NumericType;
 	}

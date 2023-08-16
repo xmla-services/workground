@@ -23,12 +23,12 @@ import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.Type;
 
 
-public abstract class AbstractProfilingNestedDimensionCalc
-extends AbstractProfilingNestedCalc<Dimension>
+public abstract class AbstractProfilingNestedDimensionCalc<C   extends Calc<?>>
+extends AbstractProfilingNestedCalc<Dimension,C>
 implements DimensionCalc
 {
 
-    protected AbstractProfilingNestedDimensionCalc(Type type, Calc<?>[] calcs) {
+    protected AbstractProfilingNestedDimensionCalc(Type type, C[] calcs) {
         super(type, calcs);
         assert getType() instanceof DimensionType;
     }

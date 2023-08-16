@@ -22,9 +22,9 @@ import mondrian.calc.Calc;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
-public abstract class AbstractProfilingNestedLevelCalc extends AbstractProfilingNestedCalc<Level> implements LevelCalc {
+public abstract class AbstractProfilingNestedLevelCalc<C   extends Calc<?> > extends AbstractProfilingNestedCalc<Level,C> implements LevelCalc {
 
-	protected AbstractProfilingNestedLevelCalc(Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedLevelCalc(Type type, C[] calcs) {
 		super( type, calcs);
 		assert getType() instanceof LevelType;
 	}

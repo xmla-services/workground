@@ -23,12 +23,12 @@ import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.Type;
 
 
-public abstract class AbstractProfilingNestedHierarchyCalc
-extends AbstractProfilingNestedCalc<Hierarchy>
+public abstract class AbstractProfilingNestedHierarchyCalc<C   extends Calc<?>>
+extends AbstractProfilingNestedCalc<Hierarchy,C >
 implements HierarchyCalc
 {
 
-    protected AbstractProfilingNestedHierarchyCalc(Type type, Calc<?>[] calcs) {
+    protected AbstractProfilingNestedHierarchyCalc(Type type, C[] calcs) {
         super(type, calcs);
         assert getType() instanceof HierarchyType;
     }

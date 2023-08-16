@@ -32,7 +32,7 @@ import mondrian.olap.type.Type;
  * @since Oct 24, 2008
  */
 public abstract class AbstractIterCalc
-extends AbstractProfilingNestedCalc<Object>
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
 implements IterCalc
 {
     /**
