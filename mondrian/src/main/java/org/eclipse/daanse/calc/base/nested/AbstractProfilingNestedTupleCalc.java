@@ -21,10 +21,10 @@ import org.eclipse.daanse.olap.api.model.Member;
 import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
-public abstract class AbstractProfilingNestedTupleCalc extends AbstractProfilingNestedCalc<Member[]>
+public abstract class AbstractProfilingNestedTupleCalc<C  extends Calc<?>> extends AbstractProfilingNestedCalc<Member[],C>
 		implements TupleCalc {
 
-	protected AbstractProfilingNestedTupleCalc(Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedTupleCalc(Type type, C[] calcs) {
 		super( type, calcs);
 	}
 

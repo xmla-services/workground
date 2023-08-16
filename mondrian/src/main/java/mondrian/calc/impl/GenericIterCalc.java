@@ -34,7 +34,7 @@ import mondrian.olap.type.Type;
  * @since Nov 7, 2008
  */
 public abstract class GenericIterCalc
-extends AbstractProfilingNestedCalc<Object>
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
 implements ListCalc, IterCalc
 {
     /**

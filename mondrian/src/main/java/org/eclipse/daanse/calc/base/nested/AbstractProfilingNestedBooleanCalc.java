@@ -25,15 +25,15 @@ import mondrian.olap.type.Type;
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedBooleanCalc
-extends AbstractProfilingNestedCalc<Boolean>
+public abstract class AbstractProfilingNestedBooleanCalc<C   extends Calc<?>>
+extends AbstractProfilingNestedCalc<Boolean,C>
 implements BooleanCalc
 {
     /**
      * {@inheritDoc} 
      *
      */
-    protected AbstractProfilingNestedBooleanCalc( Type type,Calc[] calcs) {
+    protected AbstractProfilingNestedBooleanCalc( Type type,C[] calcs) {
         super(type, calcs);
     }
 

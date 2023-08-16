@@ -31,7 +31,7 @@ import mondrian.olap.type.Type;
  * @since Sep 27, 2005
  */
 public abstract class AbstractListCalc
-extends AbstractProfilingNestedCalc<Object>
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
 implements ListCalc {
     private final boolean mutable;
 

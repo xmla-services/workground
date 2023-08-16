@@ -27,13 +27,14 @@ import mondrian.olap.type.Type;
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedVoidCalc extends AbstractProfilingNestedCalc<Void> implements VoidCalc {
+public abstract class AbstractProfilingNestedVoidCalc<C extends Calc<?>> extends AbstractProfilingNestedCalc<Void, C>
+		implements VoidCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedVoidCalc(Type type, Calc<?>[] calcs) {
-		super( type, calcs);
+	protected AbstractProfilingNestedVoidCalc(Type type, C[] calcs) {
+		super(type, calcs);
 	}
 
 }

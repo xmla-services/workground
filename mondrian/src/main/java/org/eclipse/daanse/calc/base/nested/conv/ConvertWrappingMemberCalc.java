@@ -21,7 +21,7 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertWrappingMemberCalc extends AbstractProfilingNestedMemberCalc {
+public class ConvertWrappingMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {
 
 	public ConvertWrappingMemberCalc(Type type, Calc<?> childCalc) {
 		super( type, new Calc[] { childCalc });
