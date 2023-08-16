@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -61,7 +61,7 @@ class HeadTailFunDef extends FunDefBase {
         final IntegerCalc integerCalc =
             call.getArgCount() > 1
             ? compiler.compileInteger(call.getArg(1))
-            : new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
+            : new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         if (head) {
             return new AbstractListCalc(
             		call.getType(), new Calc[] {listCalc, integerCalc})

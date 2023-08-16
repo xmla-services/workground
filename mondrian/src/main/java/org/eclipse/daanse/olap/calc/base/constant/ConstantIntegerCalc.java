@@ -16,11 +16,11 @@ package org.eclipse.daanse.olap.calc.base.constant;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 
-import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.NumericType;
 
-public class ConstantProfilingIntegerCalc extends AbstractProfilingConstantCalc<Integer> implements IntegerCalc {
+public class ConstantIntegerCalc extends AbstractProfilingConstantCalc<Integer> implements IntegerCalc {
 
-	public ConstantProfilingIntegerCalc(DecimalType type, Integer value) {
+	public ConstantIntegerCalc(NumericType type, Integer value) {
 		super(value, type);
 	}
 

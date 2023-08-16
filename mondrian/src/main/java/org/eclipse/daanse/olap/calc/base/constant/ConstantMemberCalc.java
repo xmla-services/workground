@@ -13,15 +13,20 @@
 */
 package org.eclipse.daanse.olap.calc.base.constant;
 
-import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 
-import mondrian.olap.type.StringType;
+import mondrian.olap.type.MemberType;
 
-public class ConstantProfilingStringCalc extends AbstractProfilingConstantCalc<String> implements StringCalc {
+public class ConstantMemberCalc extends AbstractProfilingConstantCalc<Member> implements MemberCalc {
 
-	public ConstantProfilingStringCalc(StringType type, String value) {
+	public ConstantMemberCalc(MemberType type, Member value) {
 		super(value, type);
+	}
+
+	public static ConstantMemberCalc of(Member member) {
+		return new ConstantMemberCalc(MemberType.forMember(member), member);
 	}
 
 }

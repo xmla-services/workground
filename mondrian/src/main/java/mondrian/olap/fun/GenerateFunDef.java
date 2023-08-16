@@ -18,7 +18,7 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingStringCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
@@ -31,7 +31,6 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -107,7 +106,7 @@ class GenerateFunDef extends FunDefBase {
             if (call.getArgCount() == 3) {
                 delimCalc = compiler.compileString(call.getArg(2));
             } else {
-                delimCalc = new ConstantProfilingStringCalc(new StringType(), "");
+                delimCalc = new ConstantStringCalc(new StringType(), "");
             }
 
             return new GenerateStringCalcImpl(

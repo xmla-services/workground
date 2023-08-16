@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingHierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.Category;
@@ -78,7 +78,7 @@ public class HierarchyExpr extends ExpBase implements Exp {
 
     @Override
 	public HierarchyCalc accept(ExpCompiler compiler) {
-        return ConstantProfilingHierarchyCalc.of(hierarchy);
+        return ConstantHierarchyCalc.of(hierarchy);
     }
 
     @Override

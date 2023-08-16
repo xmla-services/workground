@@ -15,11 +15,12 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.olap4j.impl.UnmodifiableArrayMap;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.NumericType;
@@ -184,10 +185,23 @@ public class Literal extends ExpBase {
         return this;
     }
 
-    @Override
-	public Calc accept(ExpCompiler compiler) {
-        return new ConstantCalc(getType(), o);
-    }
+	@Override
+	public Calc<?> accept(ExpCompiler compiler) {
+
+		switch (category) {
+		case Category.NUMERIC:
+			if (o instanceof Number n) {
+				return new ConstantDoubleCalc(new NumericType(), n.doubleValue());
+			}
+		default:
+			String s = null;
+
+			if (o != null) {
+				s = o.toString();
+			}
+			return new ConstantStringCalc(new StringType(), s);
+		}
+	}
 
     @Override
 	public Object accept(MdxVisitor visitor) {

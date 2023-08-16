@@ -15,12 +15,11 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -75,7 +74,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         final IntegerCalc lagValueCalc =
             (args.length >= 2)
             ? compiler.compileInteger(args[1])
-            : new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
+            : new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
 
         // If level is not specified, we compute it from
         // member at runtime.
