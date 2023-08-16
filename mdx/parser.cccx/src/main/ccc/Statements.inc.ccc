@@ -511,6 +511,8 @@ SelectStatement :
     SelectQueryAsteriskClause
     |
     SelectQueryAxesClause
+    |
+    SelectQueryEmptyClause
   )?
   < FROM >
   SelectSubcubeClause
