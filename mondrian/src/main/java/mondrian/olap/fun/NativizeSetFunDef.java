@@ -31,7 +31,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;

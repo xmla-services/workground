@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.Locale;
 
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

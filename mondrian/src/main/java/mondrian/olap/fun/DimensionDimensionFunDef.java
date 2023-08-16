@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.impl.ConstantDimensionProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantDimensionProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.calc.Calc;

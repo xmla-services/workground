@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.calc.impl.ConstantStringProfilingCalc;
-import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.ConstantStringProfilingCalc;
+import org.eclipse.daanse.calc.base.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 

@@ -10,7 +10,7 @@
 package mondrian.mdx;
 
 import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.impl.ConstantHierarchyProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantHierarchyProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.ExpCompiler;

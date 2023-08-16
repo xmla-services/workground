@@ -12,7 +12,7 @@
 */
 package org.eclipse.daanse.olap.udf.impl;
 
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;

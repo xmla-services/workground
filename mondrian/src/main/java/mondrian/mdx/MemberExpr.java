@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import org.eclipse.daanse.calc.impl.ConstantMemberProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantMemberProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
