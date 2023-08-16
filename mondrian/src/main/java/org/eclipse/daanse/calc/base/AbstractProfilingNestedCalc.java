@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;

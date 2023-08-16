@@ -11,15 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-
-package org.eclipse.daanse.calc.base;
-
-import java.time.Instant;
-import java.util.Map;
-
-import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
-
-public record CalcEvaluationProfileR(Instant start, Instant end, Object evaluationResult,
-		Map<String, Object> additionalValues) implements CalcEvaluationProfile {
-
-}
+//TODO: RM EXPORT
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.calc.base.value;

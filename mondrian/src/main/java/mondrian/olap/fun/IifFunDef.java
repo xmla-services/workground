@@ -11,8 +11,8 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

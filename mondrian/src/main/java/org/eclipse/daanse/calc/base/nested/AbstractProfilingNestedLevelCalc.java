@@ -11,21 +11,22 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.base;
+
+package org.eclipse.daanse.calc.base.nested;
 
 import org.eclipse.daanse.calc.api.LevelCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 
+import mondrian.calc.Calc;
 import mondrian.olap.type.LevelType;
+import mondrian.olap.type.Type;
 
-public class ConstantLevelProfilingCalc extends AbstractProfilingConstantCalc<Level> implements LevelCalc {
+public abstract class AbstractProfilingNestedLevelCalc extends AbstractProfilingNestedCalc<Level> implements LevelCalc {
 
-	public ConstantLevelProfilingCalc(LevelType type, Level value) {
-		super(value, type, "ConstantLevelProfilingCalc");
-	}
-
-	public static ConstantLevelProfilingCalc of(Level level) {
-		return new ConstantLevelProfilingCalc(LevelType.forLevel(level), level);
+	protected AbstractProfilingNestedLevelCalc(String name, Type type, Calc<?>[] calcs) {
+		super(name, type, calcs);
+		assert getType() instanceof LevelType;
 	}
 
 }

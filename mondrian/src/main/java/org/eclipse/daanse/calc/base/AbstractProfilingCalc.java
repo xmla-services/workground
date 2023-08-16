@@ -23,6 +23,8 @@ import java.util.Optional;
 import org.eclipse.daanse.calc.api.profile.CalcEvaluationProfile;
 import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.calc.base.profile.CalcEvaluationProfileR;
+import org.eclipse.daanse.calc.base.profile.CalcProfileR;
 
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;

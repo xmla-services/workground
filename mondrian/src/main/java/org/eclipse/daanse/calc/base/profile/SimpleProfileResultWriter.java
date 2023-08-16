@@ -7,7 +7,7 @@
  * Copyright (c) 2002-2021 Hitachi Vantara..  All rights reserved.
  */
 
-package org.eclipse.daanse.calc.base;
+package org.eclipse.daanse.calc.base.profile;
 
 import java.io.PrintWriter;
 import java.util.List;

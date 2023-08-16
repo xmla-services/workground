@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.CurrentValueDoubleCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.calc.base.value.CurrentValueDoubleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

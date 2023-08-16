@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.calc.base.ConstantStringProfilingCalc;
-import org.eclipse.daanse.calc.base.HirarchyDependsChecker;
+import org.eclipse.daanse.calc.base.constant.ConstantProfilingStringCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
@@ -107,7 +107,7 @@ class GenerateFunDef extends FunDefBase {
             if (call.getArgCount() == 3) {
                 delimCalc = compiler.compileString(call.getArg(2));
             } else {
-                delimCalc = new ConstantStringProfilingCalc(new StringType(), "");
+                delimCalc = new ConstantProfilingStringCalc(new StringType(), "");
             }
 
             return new GenerateStringCalcImpl(

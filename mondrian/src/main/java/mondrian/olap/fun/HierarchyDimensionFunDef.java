@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedDimensionCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 

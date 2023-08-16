@@ -11,16 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.calc.base;
-
-import org.eclipse.daanse.calc.api.DoubleCalc;
-
-import mondrian.olap.type.NumericType;
-
-public class ConstantDoubleProfilingCalc extends AbstractProfilingConstantCalc<Double> implements DoubleCalc {
-
-	public ConstantDoubleProfilingCalc(NumericType type, Double value) {
-		super(value, type, "ConstantDoubleProfilingCalc");
-	}
-
-}
+//TODO: RM EXPORT
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.calc.base.constant;

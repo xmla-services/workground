@@ -11,8 +11,8 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.HirarchyDependsChecker;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;

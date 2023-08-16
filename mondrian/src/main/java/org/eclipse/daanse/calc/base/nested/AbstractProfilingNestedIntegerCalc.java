@@ -11,29 +11,31 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
+package org.eclipse.daanse.calc.base.nested;
 
-package org.eclipse.daanse.calc.base;
-
-import org.eclipse.daanse.calc.api.StringCalc;
+import org.eclipse.daanse.calc.api.IntegerCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
+import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the {@link org.eclipse.daanse.calc.api.StringCalc}
- * interface.
+ * Abstract implementation of the
+ * {@link org.eclipse.daanse.calc.api.IntegerCalc} interface.
  * 
  * Handles nested child and profiling
  *
  */
-public abstract class AbstractProfilingNestedStringCalc extends AbstractProfilingNestedCalc<String>
-		implements StringCalc {
+public abstract class AbstractProfilingNestedIntegerCalc extends AbstractProfilingNestedCalc<Integer>
+		implements IntegerCalc {
 	/**
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedStringCalc(String name, Type type, Calc<?>[] calcs) {
+	protected AbstractProfilingNestedIntegerCalc(String name, Type type, Calc<?>[] calcs) {
 		super(name, type, calcs);
+		assert getType() instanceof NumericType;
 	}
 
 }

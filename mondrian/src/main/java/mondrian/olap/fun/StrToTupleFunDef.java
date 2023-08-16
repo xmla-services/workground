@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedMemberCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
