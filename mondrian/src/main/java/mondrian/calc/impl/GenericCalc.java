@@ -40,8 +40,8 @@ extends AbstractProfilingNestedCalc<Object>
      *
      * @param exp Source expression
      */
-    protected GenericCalc(String name, Type type) {
-        super(name,type, null);
+    protected GenericCalc(Type type) {
+        super(type, null);
     }
 
     /**
@@ -50,8 +50,8 @@ extends AbstractProfilingNestedCalc<Object>
      * @param exp Source expression
      * @param calcs Child compiled expressions
      */
-    protected GenericCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected GenericCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
 

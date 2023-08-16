@@ -46,14 +46,14 @@ public class MemberLevelFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
-        return new CalcImpl(call.getType(), memberCalc);
+        return new MemberLevelCalcImpl(call.getType(), memberCalc);
     }
 
-    public static class CalcImpl extends AbstractProfilingNestedLevelCalc {
+    public static class MemberLevelCalcImpl extends AbstractProfilingNestedLevelCalc {
         private final MemberCalc memberCalc;
 
-        public CalcImpl(Type type, MemberCalc memberCalc) {
-            super("MemberLevel",type, new Calc[] {memberCalc});
+        public MemberLevelCalcImpl(Type type, MemberCalc memberCalc) {
+            super(type, new Calc[] {memberCalc});
             this.memberCalc = memberCalc;
         }
 

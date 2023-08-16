@@ -96,7 +96,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected Calc genIterCalc( final ResolvedFunCall call, final IterCalc iterCalc, final Calc calc ) {
-    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { iterCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { iterCalc, calc } ) {
       @Override
 	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
@@ -118,7 +118,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   protected Calc genListCalc( final ResolvedFunCall call, final ListCalc listCalc, final Calc calc ) {
-    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { listCalc, calc } ) {
       @Override
 	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );

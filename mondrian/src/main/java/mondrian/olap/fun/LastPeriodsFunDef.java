@@ -80,7 +80,7 @@ class LastPeriodsFunDef extends FunDefBase {
                 ((RolapCube) compiler.getEvaluator().getCube())
                     .getTimeHierarchy(getName());
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);
         } else {
             memberCalc = compiler.compileMember(args[1]);
@@ -91,7 +91,7 @@ class LastPeriodsFunDef extends FunDefBase {
                 compiler.compileInteger(args[0]);
 
         return new AbstractListCalc(
-call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
+call.getType(), new Calc[] {memberCalc, indexValueCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {

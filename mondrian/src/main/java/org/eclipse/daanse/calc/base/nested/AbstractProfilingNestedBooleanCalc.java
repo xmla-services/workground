@@ -33,8 +33,8 @@ implements BooleanCalc
      * {@inheritDoc} 
      *
      */
-    protected AbstractProfilingNestedBooleanCalc(String name, Type type,Calc[] calcs) {
-        super(name,type, calcs);
+    protected AbstractProfilingNestedBooleanCalc( Type type,Calc[] calcs) {
+        super(type, calcs);
     }
 
 

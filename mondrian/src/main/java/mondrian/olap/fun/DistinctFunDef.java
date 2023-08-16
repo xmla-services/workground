@@ -53,7 +53,7 @@ class DistinctFunDef extends FunDefBase {
         private final ListCalc listCalc;
 
         public CalcImpl(ResolvedFunCall call, ListCalc listCalc) {
-            super(call.getFunName(),call.getType(), new Calc[]{listCalc});
+            super(call.getType(), new Calc[]{listCalc});
             this.listCalc = listCalc;
         }
 

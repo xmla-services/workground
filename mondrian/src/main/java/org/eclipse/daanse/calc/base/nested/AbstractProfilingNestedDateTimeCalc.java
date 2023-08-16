@@ -23,8 +23,8 @@ extends AbstractProfilingNestedCalc<Date>
 implements DateTimeCalc
 {
 
-    protected AbstractProfilingNestedDateTimeCalc(String name, Type type, Calc<?>[] calcs) {
-        super(name,type, calcs);
+    protected AbstractProfilingNestedDateTimeCalc(Type type, Calc<?>[] calcs) {
+        super(type, calcs);
     }
 
  

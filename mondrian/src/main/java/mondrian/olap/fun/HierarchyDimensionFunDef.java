@@ -42,14 +42,14 @@ public class HierarchyDimensionFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final HierarchyCalc hierarchyCalc =
                 compiler.compileHierarchy(call.getArg(0));
-        return new CalcImpl(call.getType(), hierarchyCalc);
+        return new DimensionCalcImpl(call.getType(), hierarchyCalc);
     }
 
-    public static class CalcImpl extends AbstractProfilingNestedDimensionCalc {
+    public static class DimensionCalcImpl extends AbstractProfilingNestedDimensionCalc {
         private final HierarchyCalc hierarchyCalc;
 
-        public CalcImpl(Type type, HierarchyCalc hierarchyCalc) {
-            super("Dimension",type, new Calc[] {hierarchyCalc});
+        public DimensionCalcImpl(Type type, HierarchyCalc hierarchyCalc) {
+            super(type, new Calc[] {hierarchyCalc});
             this.hierarchyCalc = hierarchyCalc;
         }
 

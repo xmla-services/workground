@@ -142,9 +142,5 @@ public interface Calc<E> {
     boolean isWrapperFor(java.lang.Class<?> iface);
 
     <X> X unwrap(java.lang.Class<X> iface);
-    
-    /**
-     * name of this expression.
-     */
-	public String getName();
+
 }

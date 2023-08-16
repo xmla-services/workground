@@ -89,7 +89,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         : null;
     final int arity = call.getType().getArity();
     return new AbstractListCalc(
-    		call.getFunName(),call.getType(),
+    		call.getType(),
       new Calc[] { listCalc, integerCalc, orderCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {

@@ -63,17 +63,17 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 				return tc;
 			}
 
-			TupleCalc tc = new ConvertWrappingTupleCalc("ConvertWrappingTupleCalc", type, calc);
+			TupleCalc tc = new ConvertWrappingTupleCalc( type, calc);
 			return tc;
 		} else if (type instanceof MemberType) {
 			MemberCalc tmpCalc = null;
 			if (calc instanceof MemberCalc mc) {
 				tmpCalc = mc;
 			} else {
-				tmpCalc = new ConvertWrappingMemberCalc("ConvertWrappingMemberCalc", type, calc);
+				tmpCalc = new ConvertWrappingMemberCalc( type, calc);
 			}
 			final MemberCalc memberCalc = tmpCalc;
-			return new ConvertMemberCalcToTupleCalc("ConvertMemberCalcToTupleCalc", type,  memberCalc);
+			return new ConvertMemberCalcToTupleCalc( type,  memberCalc);
 
 		} else {
 			throw Util.newInternal("cannot cast " + exp);
@@ -97,7 +97,7 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 		private final ListCalc listCalc;
 
 		public CopyListCalc(ListCalc listCalc) {
-			super("CopyListCalc", listCalc.getType(), new Calc[] { listCalc });
+			super( listCalc.getType(), new Calc[] { listCalc });
 			this.listCalc = listCalc;
 		}
 

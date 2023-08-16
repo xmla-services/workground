@@ -43,8 +43,8 @@ implements IterCalc
      * @param calcs List of child compiled expressions (for dependency
      *   analysis)
      */
-    protected AbstractIterCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected AbstractIterCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
     @Override

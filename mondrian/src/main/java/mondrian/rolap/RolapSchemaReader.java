@@ -880,7 +880,8 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
 
         @Override
 		public Calc compile(ExpCompiler compiler) {
-            return new GenericCalc("SystemPropertyCalc",getType()) {
+            return new GenericCalc(getType()) {
+            	//"SystemPropertyCalc"
                 @Override
 				public Calc[] getChildCalcs() {
                     return new Calc[0];

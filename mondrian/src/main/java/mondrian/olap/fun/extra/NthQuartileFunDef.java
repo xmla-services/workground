@@ -69,7 +69,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
             call.getArgCount() > 1
             ? compiler.compileDouble(call.getArg(1))
             : new CurrentValueDoubleCalc(call.getType());
-        return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, doubleCalc}) {
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {listCalc, doubleCalc}) {
             @Override
 			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();

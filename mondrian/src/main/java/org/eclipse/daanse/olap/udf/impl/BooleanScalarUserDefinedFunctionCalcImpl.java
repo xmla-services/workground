@@ -31,7 +31,7 @@ public class BooleanScalarUserDefinedFunctionCalcImpl extends AbstractProfilingN
                 Calc[] calcs,
                 UserDefinedFunction udf,
                 UserDefinedFunction.Argument[] args)      {
-            super(call.getFunName(),call.getType(),calcs);
+            super(call.getType(),calcs);
             this.udf = udf;
             this.args = args;
         }

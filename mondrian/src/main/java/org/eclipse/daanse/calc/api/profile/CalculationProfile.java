@@ -24,8 +24,6 @@ import mondrian.olap.type.Type;
 
 public interface CalculationProfile {
 
-	String name();
-
 	Class<?> clazz();
 
 	Type type();

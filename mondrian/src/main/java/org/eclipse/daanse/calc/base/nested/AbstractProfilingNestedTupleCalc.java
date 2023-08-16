@@ -24,8 +24,8 @@ import mondrian.olap.type.Type;
 public abstract class AbstractProfilingNestedTupleCalc extends AbstractProfilingNestedCalc<Member[]>
 		implements TupleCalc {
 
-	protected AbstractProfilingNestedTupleCalc(String name, Type type, Calc<?>[] calcs) {
-		super(name, type, calcs);
+	protected AbstractProfilingNestedTupleCalc(Type type, Calc<?>[] calcs) {
+		super( type, calcs);
 	}
 
 }

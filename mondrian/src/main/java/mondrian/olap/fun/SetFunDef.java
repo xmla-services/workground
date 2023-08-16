@@ -143,7 +143,7 @@ public class SetFunDef extends FunDefBase {
             ExpCompiler compiler,
             List<ResultStyle> resultStyles)
         {
-            super("SetListCalc",type, null);
+            super(type, null);
             voidCalcs = compileSelf(args, compiler, resultStyles);
             result = TupleCollections.createList(getType().getArity());
         }
@@ -174,7 +174,8 @@ public class SetFunDef extends FunDefBase {
             if (type instanceof SetType) {
                 // TODO use resultStyles
                 final ListCalc listCalc = compiler.compileList(arg);
-                return new AbstractProfilingNestedVoidCalc("Sublist",type, new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {listCalc}) {
+                	// name "Sublist..."
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
@@ -200,7 +201,7 @@ public class SetFunDef extends FunDefBase {
                         mondrian.olap.Syntax.Property,
                         new Exp[] {arg});
                 final ListCalc listCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
-                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc2",type, new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {listCalc}) {
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
@@ -211,7 +212,7 @@ public class SetFunDef extends FunDefBase {
                 };
             } else if (type.getArity() == 1 && arg instanceof MemberType) {
                 final MemberCalc memberCalc = compiler.compileMember(arg);
-                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc3",type, new Calc[]{memberCalc}) {
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[]{memberCalc}) {
                     final Member[] members = {null};
                     @Override
 					public Void evaluate(Evaluator evaluator) {
@@ -227,7 +228,7 @@ public class SetFunDef extends FunDefBase {
                 };
             } else {
                 final TupleCalc tupleCalc = compiler.compileTuple(arg);
-                return new AbstractProfilingNestedVoidCalc("AbstractVoidCalc4",type, new Calc[]{tupleCalc}) {
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[]{tupleCalc}) {
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
@@ -277,7 +278,8 @@ public class SetFunDef extends FunDefBase {
             switch (calc.getResultStyle()) {
             case ITERABLE:
                 final IterCalc iterCalc = (IterCalc) calc;
-                return new AbstractIterCalc("Sublist",type, new Calc[]{calc}) {
+                return new AbstractIterCalc(type, new Calc[]{calc}) {
+                	// name "Sublist..."
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
@@ -290,7 +292,8 @@ public class SetFunDef extends FunDefBase {
             case LIST:
             case MUTABLE_LIST:
                 final ListCalc listCalc = (ListCalc) calc;
-                return new AbstractIterCalc("Sublist",type, new Calc[]{calc}) {
+                return new AbstractIterCalc(type, new Calc[]{calc}) {
+                	// name "Sublist..."
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
@@ -320,7 +323,8 @@ public class SetFunDef extends FunDefBase {
         } else if (TypeUtil.couldBeMember(type)) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
             final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
-            return new AbstractIterCalc("Sublist",type, new Calc[] {memberCalc}) {
+            return new AbstractIterCalc(type, new Calc[] {memberCalc}) {
+            	// name "Sublist..."// name "Sublist..."
                 @Override
 				public TupleIterable evaluateIterable(
                     Evaluator evaluator)
@@ -337,7 +341,7 @@ public class SetFunDef extends FunDefBase {
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
             final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
-            return new AbstractIterCalc(call.getFunName(),call.getType(), new Calc[] {tupleCalc}) {
+            return new AbstractIterCalc(call.getType(), new Calc[] {tupleCalc}) {
                 @Override
 				public TupleIterable evaluateIterable(
                     Evaluator evaluator)
@@ -396,7 +400,7 @@ public class SetFunDef extends FunDefBase {
             ExpCompiler compiler,
             List<ResultStyle> resultStyles)
         {
-            super("ExprIterCalc",type, null);
+            super(type, null);
             final List<Calc> calcList =
                 SetFunDef.compileSelf(args, compiler, resultStyles);
             iterCalcs = calcList.toArray(new IterCalc[calcList.size()]);
@@ -517,7 +521,7 @@ public class SetFunDef extends FunDefBase {
          * @param call Expression which was compiled
          */
         EmptyListCalc(ResolvedFunCall call) {
-            super(call.getFunName(),call.getType(), new Calc[0]);
+            super(call.getType(), new Calc[0]);
 
             list = TupleCollections.emptyList(call.getType().getArity());
         }

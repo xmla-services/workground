@@ -57,7 +57,7 @@ class DimensionsNumericFunDef extends FunDefBase {
     {
         final IntegerCalc integerCalc =
             compiler.compileInteger(call.getArg(0));
-        return new AbstractProfilingNestedHierarchyCalc(call.getFunName(),call.getType(), new Calc[] {integerCalc})
+        return new AbstractProfilingNestedHierarchyCalc(call.getType(), new Calc[] {integerCalc})
         {
             @Override
 			public Hierarchy evaluate(Evaluator evaluator) {

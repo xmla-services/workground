@@ -36,7 +36,7 @@ public class LevelMembersFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final LevelCalc levelCalc =
             compiler.compileLevel(call.getArg(0));
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
+        return new AbstractListCalc(call.getType(), new Calc[] {levelCalc}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 Level level = levelCalc.evaluate(evaluator);

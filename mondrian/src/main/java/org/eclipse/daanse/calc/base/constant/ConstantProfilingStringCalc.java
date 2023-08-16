@@ -10,7 +10,8 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-*/package org.eclipse.daanse.calc.base.constant;
+*/
+package org.eclipse.daanse.calc.base.constant;
 
 import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.calc.base.AbstractProfilingConstantCalc;
@@ -20,7 +21,7 @@ import mondrian.olap.type.StringType;
 public class ConstantProfilingStringCalc extends AbstractProfilingConstantCalc<String> implements StringCalc {
 
 	public ConstantProfilingStringCalc(StringType type, String value) {
-		super(value, type, "ConstantProfilingStringCalc");
+		super(value, type);
 	}
 
 }

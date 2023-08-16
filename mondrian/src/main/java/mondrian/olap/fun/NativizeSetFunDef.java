@@ -220,7 +220,7 @@ public class NativizeSetFunDef extends FunDefBase {
         final boolean nativeEnabled;
 
         protected NonNativeCalc(Calc parent, final boolean nativeEnabled) {
-            super(parent.getType(), parent.getName());
+            super(parent.getType());
         	assert parent != null;
             
             this.parent = parent;
@@ -332,7 +332,7 @@ public class NativizeSetFunDef extends FunDefBase {
             SubstitutionMap substitutionMap,
             Exp originalExp)
         {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             NativizeSetFunDef.LOGGER.debug("---- NativeListCalc constructor");
             this.substitutionMap = substitutionMap;
             this.simpleCalc = (ListCalc) calcs[0];

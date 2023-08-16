@@ -24,8 +24,8 @@ import mondrian.olap.type.Type;
 public class CacheCalc extends GenericCalc {
     private final ExpCacheDescriptor key;
 
-    public CacheCalc(String name, Type type, ExpCacheDescriptor key) {
-        super( name,  type);
+    public CacheCalc( Type type, ExpCacheDescriptor key) {
+        super(   type);
         this.key = key;
     }
 

@@ -40,7 +40,7 @@ class LevelDimensionFunDef extends FunDefBase {
     {
         final LevelCalc levelCalc =
             compiler.compileLevel(call.getArg(0));
-        return new AbstractProfilingNestedDimensionCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
+        return new AbstractProfilingNestedDimensionCalc(call.getType(), new Calc[] {levelCalc}) {
             @Override
 			public Dimension evaluate(Evaluator evaluator) {
                 Level level =  levelCalc.evaluate(evaluator);

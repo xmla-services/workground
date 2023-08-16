@@ -106,7 +106,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                 ((RolapCube) compiler.getEvaluator().getCube())
                     .getTimeHierarchy(getName());
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                         MemberType.forHierarchy(defaultTimeHierarchy),
                     defaultTimeHierarchy);
             levelCalc = null;
@@ -117,7 +117,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                     .getTimeHierarchy(getName());
             levelCalc = compiler.compileLevel(call.getArg(0));
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                     
                         MemberType.forHierarchy(defaultTimeHierarchy),
                     defaultTimeHierarchy);
@@ -142,7 +142,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             }
         }
         return new AbstractProfilingNestedMemberCalc(
-        		call.getFunName(),call.getType(), new Calc[] {levelCalc, memberCalc})
+        		call.getType(), new Calc[] {levelCalc, memberCalc})
         {
             @Override
 			public Member evaluate(Evaluator evaluator) {

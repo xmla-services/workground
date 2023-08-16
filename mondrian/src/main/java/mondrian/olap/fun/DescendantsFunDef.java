@@ -144,8 +144,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         depthSpecified
           ? compiler.compileInteger( call.getArg( 1 ) )
           : null;
-      return new AbstractListCalc(
-        call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
+      return new AbstractListCalc(call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluate( evaluator );
@@ -170,7 +169,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         compiler.compileInteger( call.getArg( 1 ) );
       final Flag flag1 = flag;
       return new AbstractListCalc(
-    		  call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
+    		  call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluate( evaluator );
@@ -193,7 +192,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           : null;
       final Flag flag2 = flag;
       return new AbstractListCalc(
-    		  call.getFunName(),call.getType(), new Calc[] { memberCalc, levelCalc } ) {
+    		  call.getType(), new Calc[] { memberCalc, levelCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Evaluator context =

@@ -58,7 +58,7 @@ class OrderFunDef extends FunDefBase {
 
     static final ResolverImpl Resolver = new ResolverImpl();
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
-    public static final String CALC_IMPL = "CalcImpl";
+    public static final String CALC_IMPL = "CurrentMemberCalc";
 
     public OrderFunDef( ResolverBase resolverBase, int type, int[] types ) {
     super( resolverBase, type, types );
@@ -95,7 +95,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           // All members are constant. Optimize by setting entire
           // context first.
           calcList[1] = new ValueCalc( expCalc.getType()  );
-          return new ContextCalc( calcs, new CalcImpl(CALC_IMPL,call.getType(), calcList, keySpecList ) );
+          return new ContextCalc( calcs, new CurrentMemberCalc(call.getType(), calcList, keySpecList ) );
         } else {
           // Some members are constant. Evaluate these before
           // evaluating the list expression.
@@ -103,7 +103,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
               MemberValueCalc.create(  expCalc.getType() , variableList.toArray(
                   new MemberCalc[variableList.size()] ), compiler.getEvaluator()
                       .mightReturnNullForUnrelatedDimension() );
-          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( CALC_IMPL,call.getType(),
+          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CurrentMemberCalc( call.getType(),
               calcList, keySpecList ) );
         }
     }
@@ -111,7 +111,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       final Calc expCalcs = keySpecList.get( i ).getKey();
       calcList[i + 1] = expCalcs;
     }
-    return new CalcImpl( CALC_IMPL,call.getType(), calcList, keySpecList );
+    return new CurrentMemberCalc( call.getType(), calcList, keySpecList );
   }
 
   private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
@@ -138,15 +138,15 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     public TupleList evaluateDual( Evaluator rootEvaluator, Evaluator subEvaluator );
   }
 
-  private static class CalcImpl extends AbstractListCalc implements CalcWithDual {
+  private static class CurrentMemberCalc extends AbstractListCalc implements CalcWithDual {
     private final IterCalc iterCalc;
     private final Calc sortKeyCalc;
     private final List<SortKeySpec> keySpecList;
     private final int originalKeySpecCount;
     private final int arity;
 
-    public CalcImpl( String name,Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
-      super( name,type, calcList );
+    public CurrentMemberCalc( Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
+      super( type, calcList );
       this.iterCalc = (IterCalc) calcList[0];
       this.sortKeyCalc = calcList[1];
       this.keySpecList = keySpecList;
@@ -299,7 +299,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     private final Member[] members; // workspace
 
     protected ContextCalc( MemberCalc[] memberCalcs, CalcWithDual calc ) {
-      super( "ContextCalc",calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
+      super( calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
       this.memberCalcs = memberCalcs;
       this.calc = calc;
       this.members = new Member[memberCalcs.length];

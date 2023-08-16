@@ -284,7 +284,7 @@ public class RolapResult extends ResultBase {
         SetType setType = new SetType(memberType1);
         mondrian.calc.ListCalc listCalc =
                 new mondrian.calc.impl.AbstractListCalc(
-                        "AbstractListCalc",setType, new Calc[0])
+                        setType, new Calc[0])
                 {
                   @Override
 				public TupleList evaluateList(
@@ -460,7 +460,7 @@ public class RolapResult extends ResultBase {
 
           final List<Member> prevSlicerMembers = new ArrayList<>();
 
-          final Calc calcCached = new GenericCalc("DummyExp", query.slicerCalc.getType() ) {
+          final Calc calcCached = new GenericCalc( query.slicerCalc.getType() ) {
             @Override
 			public Object evaluate( Evaluator evaluator ) {
               try {
@@ -492,7 +492,7 @@ public class RolapResult extends ResultBase {
           // Generate a cached calculation for slicer aggregation
           // This is so critical for performance that we should consider creating an
           // optimized query level slicer cache.
-          final Calc calc = new CacheCalc("CacheCalc", query.getSlicerAxis().getSet().getType(), cacheDescriptor );
+          final Calc calc = new CacheCalc( query.getSlicerAxis().getSet().getType(), cacheDescriptor );
 
           // replace the slicer set with a placeholder to avoid
           // interaction between the aggregate calc we just created

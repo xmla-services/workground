@@ -18,8 +18,8 @@ import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingScalarCalc<T> extends AbstractProfilingCalc<T> {
 
-	public AbstractProfilingScalarCalc(Type type, String name) {
-		super(type, name);
+	public AbstractProfilingScalarCalc(Type type) {
+		super(type);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import mondrian.olap.type.MemberType;
 public class ConstantProfilingMemberCalc extends AbstractProfilingConstantCalc<Member> implements MemberCalc {
 
 	public ConstantProfilingMemberCalc(MemberType type, Member value) {
-		super(value, type, "ConstantProfilingMemberCalc");
+		super(value, type);
 	}
 
 	public static ConstantProfilingMemberCalc of(Member member) {

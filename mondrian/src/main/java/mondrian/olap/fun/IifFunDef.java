@@ -91,7 +91,7 @@ public class IifFunDef extends FunDefBase {
             compiler.compileAs(
                 call.getArg(2), call.getType(), ResultStyle.ANY_LIST);
         if (call.getType() instanceof SetType) {
-            return new GenericIterCalc(call.getFunName(),call.getType()) {
+            return new GenericIterCalc(call.getType()) {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
@@ -111,7 +111,7 @@ public class IifFunDef extends FunDefBase {
               }
             };
         } else {
-            return new GenericCalc(call.getFunName(),call.getType()) {
+            return new GenericCalc(call.getType()) {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
@@ -141,7 +141,7 @@ public class IifFunDef extends FunDefBase {
             final StringCalc calc1 = compiler.compileString(call.getArg(1));
             final StringCalc calc2 = compiler.compileString(call.getArg(2));
             return new AbstractProfilingNestedStringCalc(
-            		call.getFunName(),call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
+            		call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final boolean b =
@@ -167,7 +167,7 @@ public class IifFunDef extends FunDefBase {
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileScalar(call.getArg(1), true);
                 final Calc calc2 = compiler.compileScalar(call.getArg(2), true);
-                return new GenericCalc(call.getFunName(),call.getType()) {
+                return new GenericCalc(call.getType()) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
@@ -198,7 +198,7 @@ public class IifFunDef extends FunDefBase {
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileTuple(call.getArg(1));
                 final Calc calc2 = compiler.compileTuple(call.getArg(2));
-                return new GenericCalc(call.getFunName(),call.getType()) {
+                return new GenericCalc(call.getType()) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
@@ -230,7 +230,7 @@ public class IifFunDef extends FunDefBase {
             final BooleanCalc booleanCalc2 =
                 compiler.compileBoolean(call.getArg(2));
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
-            return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), calcs) {
+            return new AbstractProfilingNestedBooleanCalc(call.getType(), calcs) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
                     final boolean condition =

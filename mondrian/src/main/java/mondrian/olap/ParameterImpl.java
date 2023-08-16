@@ -282,7 +282,7 @@ public class ParameterImpl
          * @param slot Slot
          */
         public ParameterCalc(ParameterSlot slot) {
-            super("ParameterCalc",slot.getParameter().getType(), new Calc[0]);
+            super(slot.getParameter().getType(), new Calc[0]);
             this.slot = slot;
         }
 
@@ -316,7 +316,7 @@ public class ParameterImpl
          * @param slot Slot
          */
         public MemberListParameterCalc(ParameterSlot slot) {
-			super("MemberListParameterCalc", slot.getParameter().getType(), new Calc[0]);
+			super( slot.getParameter().getType(), new Calc[0]);
             this.slot = slot;
         }
 

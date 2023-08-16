@@ -51,7 +51,7 @@ class SubsetFunDef extends FunDefBase {
             ? compiler.compileInteger(call.getArg(2))
             : null;
         return new AbstractListCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, startCalc, countCalc})
+        		call.getType(), new Calc[] {listCalc, startCalc, countCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {

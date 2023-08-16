@@ -28,8 +28,8 @@ extends AbstractProfilingNestedCalc<Member>
 implements MemberCalc
 {
 
-    protected AbstractProfilingNestedMemberCalc(String name, Type type, Calc<?>[] calcs) {
-        super(name,type, calcs);
+    protected AbstractProfilingNestedMemberCalc(Type type, Calc<?>[] calcs) {
+        super(type, calcs);
         assert getType() instanceof MemberType;
     }
 

@@ -10,7 +10,8 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-*/package org.eclipse.daanse.calc.base.constant;
+*/
+package org.eclipse.daanse.calc.base.constant;
 
 import org.eclipse.daanse.calc.api.DimensionCalc;
 import org.eclipse.daanse.calc.base.AbstractProfilingConstantCalc;
@@ -21,7 +22,7 @@ import mondrian.olap.type.DimensionType;
 public class ConstantProfilingDimensionCalc extends AbstractProfilingConstantCalc<Dimension> implements DimensionCalc {
 
 	public ConstantProfilingDimensionCalc(DimensionType type, Dimension value) {
-		super(value, type, "ConstantProfilingDimensionCalc");
+		super(value, type);
 	}
 
 	public static ConstantProfilingDimensionCalc of(Dimension dimension) {

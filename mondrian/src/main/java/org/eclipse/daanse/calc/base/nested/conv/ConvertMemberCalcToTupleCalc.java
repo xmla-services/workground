@@ -25,8 +25,8 @@ import mondrian.olap.type.Type;
 public class ConvertMemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc {
 	private final MemberCalc memberCalc;
 
-	public ConvertMemberCalcToTupleCalc(String name, Type type, MemberCalc memberCalc) {
-		super(name, type, new Calc[] { memberCalc });
+	public ConvertMemberCalcToTupleCalc(Type type, MemberCalc memberCalc) {
+		super( type, new Calc[] { memberCalc });
 		this.memberCalc = memberCalc;
 	}
 

@@ -41,8 +41,8 @@ implements ListCalc {
      * @param exp   Expression which was compiled
      * @param calcs List of child compiled expressions (for dependency analysis)
      */
-    protected AbstractListCalc( String name, Type type, Calc[] calcs ) {
-        this( name,type, calcs, true );
+    protected AbstractListCalc(  Type type, Calc[] calcs ) {
+        this( type, calcs, true );
     }
 
     /**
@@ -52,8 +52,8 @@ implements ListCalc {
      * @param calcs   List of child compiled expressions (for dependency analysis)
      * @param mutable Whether the list is mutable
      */
-    protected AbstractListCalc( String name, Type type, Calc[] calcs, boolean mutable ) {
-        super( name,type, calcs );
+    protected AbstractListCalc(  Type type, Calc[] calcs, boolean mutable ) {
+        super( type, calcs );
         this.mutable = mutable;
         assert type instanceof SetType : "expecting a set: " + getType();
     }

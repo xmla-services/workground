@@ -55,7 +55,7 @@ public class ExistingFunDef extends FunDefBase {
         final IterCalc setArg = compiler.compileIter(call.getArg(0));
         final Type myType = call.getArg(0).getType();
 
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {setArg}) {
+        return new AbstractListCalc(call.getType(), new Calc[] {setArg}) {
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
                 return myType.usesHierarchy(hierarchy, false);

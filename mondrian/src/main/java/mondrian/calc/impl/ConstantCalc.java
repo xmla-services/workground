@@ -33,15 +33,11 @@ public class ConstantCalc extends GenericCalc  implements org.eclipse.daanse.cal
     private final Object o;
 
     public ConstantCalc( Type type, Object o) {
-        super("ConstantCalc",type);
+        super(type);
         this.o = o;
   
     }
 
-    @Override
-    public String getName() {
-        return "Literal";
-    }
 
     @Override
     public ResultStyle getResultStyle() {

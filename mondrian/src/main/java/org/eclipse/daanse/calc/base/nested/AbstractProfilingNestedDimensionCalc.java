@@ -28,8 +28,8 @@ extends AbstractProfilingNestedCalc<Dimension>
 implements DimensionCalc
 {
 
-    protected AbstractProfilingNestedDimensionCalc(String name, Type type, Calc<?>[] calcs) {
-        super(name,type, calcs);
+    protected AbstractProfilingNestedDimensionCalc(Type type, Calc<?>[] calcs) {
+        super(type, calcs);
         assert getType() instanceof DimensionType;
     }
 

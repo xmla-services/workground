@@ -46,7 +46,7 @@ public class TupleValueCalc extends GenericCalc {
      *     dimensions in a virtual cube
      */
     public TupleValueCalc( Type type, TupleCalc tupleCalc, boolean nullCheck) {
-        super("TupleValueCalc",type);
+        super(type);
         this.tupleCalc = tupleCalc;
         this.nullCheck = nullCheck;
     }
@@ -113,7 +113,7 @@ public class TupleValueCalc extends GenericCalc {
      * @return optimized expression
      */
     public Calc optimize() {
-        if (tupleCalc instanceof TupleFunDef.CalcImpl calc) {
+        if (tupleCalc instanceof TupleFunDef.CurrentMemberCalc calc) {
             return MemberValueCalc.create(
                     getType(),
                     calc.getMemberCalcs(),

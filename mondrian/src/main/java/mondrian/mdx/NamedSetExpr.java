@@ -103,8 +103,7 @@ public class NamedSetExpr extends ExpBase implements Exp {
             return null;
         }
 
-        return new AbstractIterCalc(
-            getNamedSet().getName(),getType(),
+        return new AbstractIterCalc(getType(),
             new Calc[]{/* todo: compile namedSet.getExp() */})
         {
             @Override

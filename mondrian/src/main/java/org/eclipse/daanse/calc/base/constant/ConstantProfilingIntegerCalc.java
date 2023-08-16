@@ -10,17 +10,18 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-*/package org.eclipse.daanse.calc.base.constant;
+*/
+package org.eclipse.daanse.calc.base.constant;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.base.AbstractProfilingConstantCalc;
 
 import mondrian.olap.type.DecimalType;
 
-public class ConstantProfilingIntegerCalc extends AbstractProfilingConstantCalc<Integer> implements IntegerCalc{
+public class ConstantProfilingIntegerCalc extends AbstractProfilingConstantCalc<Integer> implements IntegerCalc {
 
-	public ConstantProfilingIntegerCalc(DecimalType type,Integer value) {
-		super(value, type, "ConstantProfilingIntegerCalc");
+	public ConstantProfilingIntegerCalc(DecimalType type, Integer value) {
+		super(value, type);
 	}
 
 }

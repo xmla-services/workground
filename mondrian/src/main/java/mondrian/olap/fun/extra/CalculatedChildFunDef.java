@@ -51,7 +51,7 @@ public class CalculatedChildFunDef extends FunDefBase {
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
 
         return new AbstractProfilingNestedMemberCalc(
-        		call.getFunName(),call.getType(),
+        		call.getType(),
             new Calc[] {memberCalc, stringCalc})
         {
             @Override

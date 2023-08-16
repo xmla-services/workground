@@ -63,7 +63,7 @@ class StrToSetFunDef extends FunDefBase {
         Type elementType = type.getElementType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractListCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     String string = stringCalc.evaluate(evaluator);
@@ -78,7 +78,7 @@ class StrToSetFunDef extends FunDefBase {
         } else {
             TupleType tupleType = (TupleType) elementType;
             final List<Hierarchy> hierarchyList = tupleType.getHierarchies();
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractListCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     String string = stringCalc.evaluate(evaluator);

@@ -12,7 +12,7 @@ import org.eclipse.daanse.calc.api.profile.CalculationProfile;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
-public record CalcProfileR(String name, Class<?> clazz, Type type, ResultStyle resultStyle, Optional<Instant> start,
+public record CalcProfileR(Class<?> clazz, Type type, ResultStyle resultStyle, Optional<Instant> start,
 		Optional<Instant> end, Map<String, Object> additionalValues, List<CalcEvaluationProfile> evaluationProfiles,
 		List<CalculationProfile> childProfiles) implements CalculationProfile {
 

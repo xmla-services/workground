@@ -50,7 +50,7 @@ class ExistsFunDef extends FunDefBase
         final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
 
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc1, listCalc2}) {
+        return new AbstractListCalc(call.getType(), new Calc[] {listCalc1, listCalc2}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList leftTuples = listCalc1.evaluateList(evaluator);

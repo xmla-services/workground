@@ -126,8 +126,8 @@ class FilterFunDef extends FunDefBase {
     private abstract static class BaseIterCalc extends AbstractIterCalc {
         private ResolvedFunCall call;
 
-		protected BaseIterCalc(String name,ResolvedFunCall call, Calc[] calcs) {
-            super(name,call.getType(), calcs);
+		protected BaseIterCalc(ResolvedFunCall call, Calc[] calcs) {
+            super(call.getType(), calcs);
             this.call=call;
         }
 
@@ -162,7 +162,7 @@ class FilterFunDef extends FunDefBase {
 
     private static class MutableIterCalc extends BaseIterCalc {
         MutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
-            super("MutableIterCalc",call, calcs);
+            super(call, calcs);
             assert calcs[0] instanceof ListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
@@ -205,7 +205,7 @@ class FilterFunDef extends FunDefBase {
 
     private static class ImmutableIterCalc extends BaseIterCalc {
         ImmutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
-            super("ImmutableIterCalc",call, calcs);
+            super(call, calcs);
             assert calcs[0] instanceof ListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
@@ -245,7 +245,7 @@ class FilterFunDef extends FunDefBase {
         extends BaseIterCalc
     {
         IterIterCalc(ResolvedFunCall call, Calc[] calcs) {
-            super("IterIterCalc",call, calcs);
+            super(call, calcs);
             assert calcs[0] instanceof IterCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
@@ -324,7 +324,7 @@ class FilterFunDef extends FunDefBase {
         private ResolvedFunCall call;
 
 		protected BaseListCalc(ResolvedFunCall call, Calc[] calcs) {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             this.call=call;
         }
 

@@ -53,7 +53,7 @@ public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
         final Exp arg0 = call.getArg(0);
         assert arg0 instanceof NamedSetExpr : "checked this in createCall";
         final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;
-        return new AbstractProfilingNestedIntegerCalc(call.getFunName(),call.getType(), new Calc[0]) {
+        return new AbstractProfilingNestedIntegerCalc(call.getType(), new Calc[0]) {
             @Override
 			public Integer evaluate(Evaluator evaluator) {
                 return namedSetExpr.getEval(evaluator).currentOrdinal();

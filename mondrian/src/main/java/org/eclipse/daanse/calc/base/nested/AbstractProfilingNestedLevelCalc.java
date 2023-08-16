@@ -24,8 +24,8 @@ import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingNestedLevelCalc extends AbstractProfilingNestedCalc<Level> implements LevelCalc {
 
-	protected AbstractProfilingNestedLevelCalc(String name, Type type, Calc<?>[] calcs) {
-		super(name, type, calcs);
+	protected AbstractProfilingNestedLevelCalc(Type type, Calc<?>[] calcs) {
+		super( type, calcs);
 		assert getType() instanceof LevelType;
 	}
 

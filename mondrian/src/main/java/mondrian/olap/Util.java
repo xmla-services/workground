@@ -4474,7 +4474,7 @@ public class Util extends XOMUtil {
 			spw.write(calcProfile);
 			
 		} else {
-			printWriter.println("UNPROFILED: " + calc.getName());
+			printWriter.println("UNPROFILED: " + calc.getClass().getName());
 
 		}
     }

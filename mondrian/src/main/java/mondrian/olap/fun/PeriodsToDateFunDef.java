@@ -82,7 +82,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final RolapHierarchy timeHierarchy =
         levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getName() ) : null;
 
-    return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { levelCalc, memberCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { levelCalc, memberCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         evaluator.getTiming().markStart( PeriodsToDateFunDef.TIMING_NAME );

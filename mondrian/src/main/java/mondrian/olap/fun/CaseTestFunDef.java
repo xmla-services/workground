@@ -75,7 +75,7 @@ class CaseTestFunDef extends FunDefBase {
 
         
         if ( call.getType() instanceof BooleanType){
-        	return	new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(),calcList.stream().toArray(Calc[]::new)) {
+        	return	new AbstractProfilingNestedBooleanCalc(call.getType(),calcList.stream().toArray(Calc[]::new)) {
 				
 				@Override
 				public Boolean evaluate(Evaluator evaluator) {
@@ -88,7 +88,7 @@ class CaseTestFunDef extends FunDefBase {
 				}
 			};
         }
-        return new GenericCalc(call.getFunName(),call.getType()) {
+        return new GenericCalc(call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 for (int i = 0; i < conditionCalcs.length; i++) {

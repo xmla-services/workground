@@ -37,14 +37,14 @@ public class MemberHierarchyFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
-        return new CalcImpl(call.getType(), memberCalc);
+        return new MemberHirarchyCalcImpl(call.getType(), memberCalc);
     }
 
-    public static class CalcImpl extends AbstractProfilingNestedHierarchyCalc {
+    public static class MemberHirarchyCalcImpl extends AbstractProfilingNestedHierarchyCalc {
         private final MemberCalc memberCalc;
 
-        public CalcImpl(Type type, MemberCalc memberCalc) {
-            super("MemberHirarchy",type, new Calc[] {memberCalc});
+        public MemberHirarchyCalcImpl(Type type, MemberCalc memberCalc) {
+            super(type, new Calc[] {memberCalc});
             this.memberCalc = memberCalc;
         }
 

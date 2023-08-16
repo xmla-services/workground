@@ -109,7 +109,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Level level = getLevel( compiler.getEvaluator() );
     switch ( call.getArgCount() ) {
       case 0:
-        return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[0] ) {
+        return new AbstractListCalc( call.getType(), new Calc[0] ) {
           @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
@@ -127,7 +127,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         };
       default:
         final MemberCalc memberCalc = compiler.compileMember( call.getArg( 0 ) );
-        return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { memberCalc } ) {
+        return new AbstractListCalc( call.getType(), new Calc[] { memberCalc } ) {
           @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );

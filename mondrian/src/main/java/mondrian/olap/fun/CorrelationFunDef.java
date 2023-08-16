@@ -51,8 +51,7 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
             call.getArgCount() > 2
             ? compiler.compileScalar(call.getArg(2), true)
             : new ValueCalc(call.getType());
-        return new AbstractProfilingNestedDoubleCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, calc1, calc2})
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {listCalc, calc1, calc2})
         {
             @Override
 			public Double evaluate(Evaluator evaluator) {

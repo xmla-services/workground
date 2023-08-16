@@ -21,7 +21,7 @@ import mondrian.olap.type.NumericType;
 public class ConstantProfilingDoubleCalc extends AbstractProfilingConstantCalc<Double> implements DoubleCalc {
 
 	public ConstantProfilingDoubleCalc(NumericType type, Double value) {
-		super(value, type, "ConstantProfilingDoubleCalc");
+		super(value, type);
 	}
 
 }

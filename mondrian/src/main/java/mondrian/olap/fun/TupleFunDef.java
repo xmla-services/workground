@@ -99,14 +99,14 @@ public class TupleFunDef extends FunDefBase {
         for (int i = 0; i < args.length; i++) {
             memberCalcs[i] = compiler.compileMember(args[i]);
         }
-        return new CalcImpl(call, memberCalcs);
+        return new CurrentMemberCalc(call, memberCalcs);
     }
 
-    public static class CalcImpl extends AbstractProfilingNestedTupleCalc {
+    public static class CurrentMemberCalc extends AbstractProfilingNestedTupleCalc {
         private final MemberCalc[] memberCalcs;
 
-        public CalcImpl(ResolvedFunCall call, MemberCalc[] memberCalcs) {
-            super("CalcImpl",call.getType(), memberCalcs);
+        public CurrentMemberCalc(ResolvedFunCall call, MemberCalc[] memberCalcs) {
+            super(call.getType(), memberCalcs);
             this.memberCalcs = memberCalcs;
         }
 
