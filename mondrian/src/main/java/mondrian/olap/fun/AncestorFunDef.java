@@ -52,7 +52,7 @@ class AncestorFunDef extends FunDefBase {
             final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(1));
             return new AbstractProfilingNestedMemberCalc(
-                call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
+                call.getType(), new Calc[] {memberCalc, levelCalc})
             {
                 @Override
 				public Member evaluate(Evaluator evaluator) {
@@ -67,7 +67,7 @@ class AncestorFunDef extends FunDefBase {
             final IntegerCalc distanceCalc =
                 compiler.compileInteger(call.getArg(1));
             return new AbstractProfilingNestedMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
+            		call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
                 @Override
 				public Member evaluate(Evaluator evaluator) {

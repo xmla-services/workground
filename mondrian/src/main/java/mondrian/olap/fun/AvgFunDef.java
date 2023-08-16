@@ -45,7 +45,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final ListCalc listCalc = compiler.compileList( call.getArg( 0 ) );
     final Calc calc =
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call.getType() );
-    return new AbstractProfilingNestedDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { listCalc, calc } ) {
       @Override
 	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( AvgFunDef.TIMING_NAME );

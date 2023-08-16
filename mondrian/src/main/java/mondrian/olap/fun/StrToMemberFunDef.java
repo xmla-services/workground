@@ -41,7 +41,7 @@ class StrToMemberFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc memberNameCalc =
             compiler.compileString(call.getArg(0));
-        return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[] {memberNameCalc}) {
+        return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] {memberNameCalc}) {
             @Override
 			public Member evaluate(Evaluator evaluator) {
                 String memberName =

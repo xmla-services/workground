@@ -49,7 +49,7 @@ class IsNullFunDef extends FunDefBase {
             throw new IllegalArgumentException("ArgCount should be 1 ");
         }
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
-        return new AbstractProfilingNestedBooleanCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
+        return new AbstractProfilingNestedBooleanCalc(call.getType(), new Calc[]{memberCalc}) {
             @Override
 			public Boolean evaluate(Evaluator evaluator) {
                 Member member = memberCalc.evaluate(evaluator);

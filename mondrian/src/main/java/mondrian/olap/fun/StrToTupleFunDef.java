@@ -61,7 +61,7 @@ class StrToTupleFunDef extends FunDefBase {
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
-            return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public Member evaluate(Evaluator evaluator) {
                     String string = stringCalc.evaluate(evaluator);
@@ -75,7 +75,7 @@ class StrToTupleFunDef extends FunDefBase {
         } else {
             TupleType tupleType = (TupleType) elementType;
             final List<Hierarchy> hierarchies = tupleType.getHierarchies();
-            return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractProfilingNestedTupleCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public Member[] evaluate(Evaluator evaluator) {
                     String string = stringCalc.evaluate(evaluator);

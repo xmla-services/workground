@@ -61,7 +61,7 @@ class PercentileFunDef extends AbstractAggregateFunDef {
         final DoubleCalc percentCalc =
             compiler.compileDouble(call.getArg(2));
         return new AbstractProfilingNestedDoubleCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, calc, percentCalc})
+        		call.getType(), new Calc[] {listCalc, calc, percentCalc})
         {
             @Override
 			public Double evaluate(Evaluator evaluator) {

@@ -46,7 +46,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       compiler.compileList( call.getArg( 0 ), true );
     String order = FunUtil.getLiteralArg( call, 1, "PRE", HierarchizeFunDef.prePost );
     final boolean post = order.equals( "POST" );
-    return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { listCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { listCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         TupleList list = listCalc.evaluateList( evaluator );

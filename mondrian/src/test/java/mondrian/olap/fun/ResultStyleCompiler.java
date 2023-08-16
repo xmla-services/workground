@@ -170,7 +170,7 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             Calc calcMList,
             boolean onlyMutableList)
         {
-        	super(calcIter.getType(), calcIter.getName());
+        	super(calcIter.getType());
             this.calcIter = calcIter;
             this.calcList = calcList;
             this.calcMList = calcMList;

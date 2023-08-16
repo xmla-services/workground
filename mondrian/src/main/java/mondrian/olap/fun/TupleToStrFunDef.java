@@ -43,7 +43,7 @@ class TupleToStrFunDef extends FunDefBase {
         if (TypeUtil.couldBeMember(call.getArg(0).getType())) {
             final MemberCalc memberCalc =
                     compiler.compileMember(call.getArg(0));
-            return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {memberCalc}) {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final Member member =
@@ -59,7 +59,7 @@ class TupleToStrFunDef extends FunDefBase {
         } else {
             final TupleCalc tupleCalc =
                     compiler.compileTuple(call.getArg(0));
-            return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[] {tupleCalc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {tupleCalc}) {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final Member[] members =

@@ -23,8 +23,8 @@ import mondrian.olap.type.Type;
 
 public class ConvertWrappingTupleCalc extends AbstractProfilingNestedTupleCalc {
 
-	public ConvertWrappingTupleCalc(String name, Type type, Calc<?> childCalc) {
-		super(name, type, new Calc<?>[] {childCalc});
+	public ConvertWrappingTupleCalc(Type type, Calc<?> childCalc) {
+		super( type, new Calc<?>[] {childCalc});
 	}
 
 	@Override

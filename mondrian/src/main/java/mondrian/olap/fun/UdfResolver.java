@@ -221,7 +221,7 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
         {
-            super(call.getFunName(),call.getType());
+            super(call.getType());
             this.calcs = calcs;
             this.udf = udf;
             this.args = args;
@@ -266,7 +266,7 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
         {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             this.udf = udf;
             this.args = args;
         }

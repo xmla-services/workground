@@ -48,7 +48,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc calc = compiler.compileAs( call.getArg( 0 ), null, ResultStyle.ITERABLE_ANY );
     final boolean includeEmpty =
         call.getArgCount() < 2 || ( (Literal) call.getArg( 1 ) ).getValue().equals( "INCLUDEEMPTY" );
-    return new AbstractProfilingNestedIntegerCalc( call.getFunName(),call.getType(), new Calc[] { calc } ) {
+    return new AbstractProfilingNestedIntegerCalc( call.getType(), new Calc[] { calc } ) {
       @Override
 	public Integer evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( CountFunDef.TIMING_NAME );

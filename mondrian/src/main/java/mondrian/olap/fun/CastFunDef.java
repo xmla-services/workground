@@ -59,7 +59,7 @@ public class CastFunDef extends FunDefBase {
         final Type targetType = call.getType();
         final Exp arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
-        return new CalcImpl(arg, calc, targetType);
+        return new CastCalcImpl(arg, calc, targetType);
     }
 
     private static RuntimeException cannotConvert(
@@ -164,13 +164,13 @@ public class CastFunDef extends FunDefBase {
         }
     }
 
-    private static class CalcImpl extends GenericCalc {
+    private static class CastCalcImpl extends GenericCalc {
         private final Calc calc;
         private final Type targetType;
         private final int targetCategory;
 
-        public CalcImpl(Exp arg, Calc calc, Type targetType) {
-            super("Cast",arg.getType());
+        public CastCalcImpl(Exp arg, Calc calc, Type targetType) {
+            super(arg.getType());
             this.calc = calc;
             this.targetType = targetType;
             this.targetCategory = TypeUtil.typeToCategory(targetType);

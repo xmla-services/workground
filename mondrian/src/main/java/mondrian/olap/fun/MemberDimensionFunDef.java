@@ -40,7 +40,7 @@ class MemberDimensionFunDef extends FunDefBase {
     {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));
-        return new AbstractProfilingNestedDimensionCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc})
+        return new AbstractProfilingNestedDimensionCalc(call.getType(), new Calc[] {memberCalc})
         {
             @Override
 			public Dimension evaluate(Evaluator evaluator) {

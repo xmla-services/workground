@@ -77,7 +77,7 @@ public class ValidMeasureFunDef extends FunDefBase
         private final Calc calc;
 
         public CalcImpl(ResolvedFunCall call, Calc calc) {
-            super(call.getFunName(),call.getType());
+            super(call.getType());
             this.calc = calc;
         }
 

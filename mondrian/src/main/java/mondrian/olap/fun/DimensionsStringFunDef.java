@@ -55,7 +55,7 @@ class DimensionsStringFunDef extends FunDefBase {
     {
         final StringCalc stringCalc =
             compiler.compileString(call.getArg(0));
-        return new AbstractProfilingNestedHierarchyCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc})
+        return new AbstractProfilingNestedHierarchyCalc(call.getType(), new Calc[] {stringCalc})
         {
             @Override
 			public Hierarchy evaluate(Evaluator evaluator) {

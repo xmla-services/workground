@@ -60,7 +60,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final TupleCalc tupleCalc1 = compiler.compileTuple( call.getArg( 1 ) );
     final StringCalc stringCalc = compiler.compileString( call.getArg( 2 ) );
 
-    return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { listCalc1, tupleCalc1, stringCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { listCalc1, tupleCalc1, stringCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         evaluator.getTiming().markStart( TIMING_NAME );

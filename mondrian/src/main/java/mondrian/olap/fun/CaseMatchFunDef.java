@@ -68,7 +68,7 @@ class CaseMatchFunDef extends FunDefBase {
         calcList.add(defaultCalc);
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 
-        return new GenericCalc(call.getFunName(),call.getType()) {
+        return new GenericCalc(call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 Object value = valueCalc.evaluate(evaluator);

@@ -95,7 +95,7 @@ class ParallelPeriodFunDef extends FunDefBase {
                 // For some functions, such as Levels(<string expression>),
                 // the dimension cannot be determined at compile time.
                 memberCalc =
-                    new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                    new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                         call.getType(), hierarchy);
             } else {
                 memberCalc = null;
@@ -106,13 +106,13 @@ class ParallelPeriodFunDef extends FunDefBase {
                 ((RolapCube) compiler.getEvaluator().getCube())
                     .getTimeHierarchy(getName());
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);
             break;
         }
 
         return new AbstractProfilingNestedMemberCalc(
-        		call.getFunName(),call.getType(),
+        		call.getType(),
             new Calc[] {memberCalc, lagValueCalc, ancestorLevelCalc})
         {
             @Override

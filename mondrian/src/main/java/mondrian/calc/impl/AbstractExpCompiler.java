@@ -230,7 +230,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         	return membCalc;
         }
         	
-		MemberCalc mCalc = new AbstractProfilingNestedMemberCalc("AbstractProfilingNestedMemberCalc", type,
+		MemberCalc mCalc = new AbstractProfilingNestedMemberCalc( type,
 				new Calc[] { calc }) {
 
 			@Override
@@ -250,11 +250,11 @@ public class AbstractExpCompiler implements ExpCompiler {
     {
         final Hierarchy hierarchy = hierarchyCalc.getType().getHierarchy();
         if (hierarchy != null) {
-            return new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+            return new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                     TypeUtil.toMemberType(hierarchyCalc.getType()),
                     hierarchy);
         }
-        return new HierarchyCurrentMemberFunDef.CalcImpl(
+        return new HierarchyCurrentMemberFunDef.CurrentMemberCalc(
                 TypeUtil.toMemberType(hierarchyCalc.getType()),
                 hierarchyCalc);
     }
@@ -265,7 +265,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (type instanceof MemberType) {
             // <Member> --> <Member>.Level
             final MemberCalc memberCalc = compileMember(exp);
-            return new MemberLevelFunDef.CalcImpl(
+            return new MemberLevelFunDef.MemberLevelCalcImpl(
                     LevelType.forType(type),
                     memberCalc);
         }
@@ -275,7 +275,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		if (calc instanceof LevelCalc lCalc) {
 			return lCalc;
 		}
-		LevelCalc levelCalc = new AbstractProfilingNestedLevelCalc("AbstractProfilingNestedLevelCalc", type,
+		LevelCalc levelCalc = new AbstractProfilingNestedLevelCalc( type,
 				new Calc[] { calc }) {
 
 			@Override
@@ -295,7 +295,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         final Type type = exp.getType();
         if (type instanceof HierarchyType) {
             final HierarchyCalc hierarchyCalc = compileHierarchy(exp);
-            return new HierarchyDimensionFunDef.CalcImpl(
+            return new HierarchyDimensionFunDef.DimensionCalcImpl(
                     new DimensionType(type.getDimension()),
                     hierarchyCalc);
         }
@@ -305,7 +305,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if(calc instanceof DimensionCalc dimCalc) {
         	return dimCalc;
         }
-		return new AbstractProfilingNestedDimensionCalc("AbstractProfilingNestedDimensionCalc", type, new Calc[] { calc }) {
+		return new AbstractProfilingNestedDimensionCalc( type, new Calc[] { calc }) {
 
 			@Override
 			public Dimension evaluate(Evaluator evaluator) {
@@ -345,14 +345,14 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (type instanceof MemberType) {
             // <Member> --> <Member>.Hierarchy
             final MemberCalc memberCalc = compileMember(exp);
-            return new MemberHierarchyFunDef.CalcImpl(
+            return new MemberHierarchyFunDef.MemberHirarchyCalcImpl(
             		HierarchyType.forType(type),
                     memberCalc);
         }
         if (type instanceof LevelType) {
             // <Level> --> <Level>.Hierarchy
             final LevelCalc levelCalc = compileLevel(exp);
-            return new LevelHierarchyFunDef.CalcImpl(
+            return new LevelHierarchyFunDef.LevelHirarchyCalc(
             		HierarchyType.forType(type),
                     levelCalc);
         }
@@ -387,7 +387,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
 				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
 			} else if (calc instanceof DoubleCalc doubleCalc) {
-				return new AbstractProfilingNestedIntegerCalc("AbstractIntegerCalc", exp.getType(),
+				return new AbstractProfilingNestedIntegerCalc( exp.getType(),
 						new Calc[] { doubleCalc }) {
 					@Override
 					public Integer evaluate(Evaluator evaluator) {
@@ -401,7 +401,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}
 
 		} else {
-			return new AbstractProfilingNestedIntegerCalc("AbstractIntegerCalc", new DecimalType(Integer.MAX_VALUE, 0),
+			return new AbstractProfilingNestedIntegerCalc( new DecimalType(Integer.MAX_VALUE, 0),
 					new Calc[] { calc }) {
 				@Override
 				public Integer evaluate(Evaluator evaluator) {
@@ -434,7 +434,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}
 			return new ConstantProfilingStringCalc(new StringType(), s);
 		}else {
-			return new AbstractProfilingNestedStringCalc("AbstractProfilingNestedStringCalc", new StringType(), new Calc[] {c}) {
+			return new AbstractProfilingNestedStringCalc( new StringType(), new Calc[] {c}) {
 
 				@Override
 				public String evaluate(Evaluator evaluator) {
@@ -543,7 +543,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         
         
         if (calc instanceof DoubleCalc doubleCalc) {
-            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {doubleCalc}) {
+            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {doubleCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					Double v0 = doubleCalc.evaluate(evaluator);
@@ -556,7 +556,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
             };
         } else if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {integerCalc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					Integer v0 = integerCalc.evaluate(evaluator);
@@ -567,7 +567,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
 			};
         } else {
-            return new AbstractProfilingNestedBooleanCalc("AbstractProfilingNestedBooleanCalc",exp.getType(), new Calc[] {calc}) {
+            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {calc}) {
                 @Override
 				public Boolean evaluate(Evaluator evaluator) {
 					Object v0 = calc.evaluate(evaluator);
@@ -612,7 +612,7 @@ public class AbstractExpCompiler implements ExpCompiler {
             return doubleCalc;
         }
         if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractProfilingNestedDoubleCalc("AbstractProfilingNestedDoubleCalc",exp.getType(), new Calc[] {integerCalc}) {
+            return new AbstractProfilingNestedDoubleCalc(exp.getType(), new Calc[] {integerCalc}) {
                 @Override
                 public Double evaluate(Evaluator evaluator) {
                 	
@@ -627,7 +627,7 @@ public class AbstractExpCompiler implements ExpCompiler {
             };
         }
 
-		return new AbstractProfilingNestedDoubleCalc("AbstractProfilingNestedDoubleCalc", new NumericType(), new Calc[] { calc }) {
+		return new AbstractProfilingNestedDoubleCalc( new NumericType(), new Calc[] { calc }) {
 			@Override
 			public Double evaluate(Evaluator evaluator) {
 
@@ -845,7 +845,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         private final DimensionCalc dimensionCalc;
 
         protected DimensionHierarchyCalc(Type type, DimensionCalc dimensionCalc) {
-            super("DimensionHierarchyCalc",type, new Calc[] {dimensionCalc});
+            super(type, new Calc[] {dimensionCalc});
             this.dimensionCalc = dimensionCalc;
         }
 

@@ -54,7 +54,7 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
         final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
         return new AbstractListCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc1, listCalc2}, false)
+        		call.getType(), new Calc[] {listCalc1, listCalc2}, false)
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {

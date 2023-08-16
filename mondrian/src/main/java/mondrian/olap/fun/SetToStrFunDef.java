@@ -40,7 +40,7 @@ class SetToStrFunDef extends FunDefBase {
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         Exp arg = call.getArg(0);
         final ListCalc listCalc = compiler.compileList(arg);
-        return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[]{listCalc}) {
+        return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[]{listCalc}) {
             @Override
 			public String evaluate(Evaluator evaluator) {
                 final TupleList list = listCalc.evaluateList(evaluator);

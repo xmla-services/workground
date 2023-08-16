@@ -52,20 +52,20 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final HierarchyCalc hierarchyCalc = compiler.compileHierarchy( call.getArg( 0 ) );
     final Hierarchy hierarchy = hierarchyCalc.getType().getHierarchy();
     if ( hierarchy != null ) {
-      return new FixedCalcImpl( call.getType(), hierarchy );
+      return new CurrentMemberFixedCalc( call.getType(), hierarchy );
     } else {
-      return new CalcImpl( call.getType(), hierarchyCalc );
+      return new CurrentMemberCalc( call.getType(), hierarchyCalc );
     }
   }
 
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that evaluates the hierarchy expression first.
    */
-  public static class CalcImpl extends AbstractProfilingNestedMemberCalc {
+  public static class CurrentMemberCalc extends AbstractProfilingNestedMemberCalc {
     private final HierarchyCalc hierarchyCalc;
 
-    public CalcImpl( Type type, HierarchyCalc hierarchyCalc ) {
-      super("CurrentMember", type, new Calc[] { hierarchyCalc } );
+    public CurrentMemberCalc( Type type, HierarchyCalc hierarchyCalc ) {
+      super( type, new Calc[] { hierarchyCalc } );
       this.hierarchyCalc = hierarchyCalc;
     }
 
@@ -87,13 +87,13 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that uses a fixed hierarchy.
    */
-  public static class FixedCalcImpl extends AbstractProfilingNestedMemberCalc {
+  public static class CurrentMemberFixedCalc extends AbstractProfilingNestedMemberCalc {
     // getContext works faster if we give RolapHierarchy rather than
     // Hierarchy
     private final RolapHierarchy hierarchy;
 
-    public FixedCalcImpl( Type type, Hierarchy hierarchy ) {
-      super( "CurrentMemberFixed",type, new Calc[] {} );
+    public CurrentMemberFixedCalc( Type type, Hierarchy hierarchy ) {
+      super( type, new Calc[] {} );
       assert hierarchy != null;
       this.hierarchy = (RolapHierarchy) hierarchy;
     }

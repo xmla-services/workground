@@ -107,7 +107,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         : new ValueCalc(
                new ScalarType()  );
     return new AbstractListCalc(
-    		call.getFunName(),call.getType(),
+    		call.getType(),
       new Calc[] { listCalc, integerCalc, orderCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {

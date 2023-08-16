@@ -960,7 +960,7 @@ public class RolapHierarchy extends HierarchyBase {
                 SetType setType = new SetType(memberType1);
                 ListCalc listCalc =
                     new AbstractListCalc(
-                         "AbstractListCalc1",setType, new Calc[0])
+                         setType, new Calc[0])
                     {
                         @Override
 						public TupleList evaluateList(
@@ -1579,7 +1579,7 @@ public class RolapHierarchy extends HierarchyBase {
             ListCalc listCalc)
         {
             super(
-                "LimitedRollupAggregateCalc",returnType,
+                returnType,
                 listCalc,
                 new ValueCalc(returnType));
         }

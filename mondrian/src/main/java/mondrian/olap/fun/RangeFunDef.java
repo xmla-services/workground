@@ -99,7 +99,7 @@ class RangeFunDef extends FunDefBase {
         final MemberCalc[] memberCalcs =
             compileMembers(call.getArg(0), call.getArg(1), compiler);
         return new AbstractListCalc(
-        		call.getFunName(),call.getType(), new Calc[] {memberCalcs[0], memberCalcs[1]})
+        		call.getType(), new Calc[] {memberCalcs[0], memberCalcs[1]})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {

@@ -23,8 +23,8 @@ import mondrian.olap.type.Type;
 
 public class ConvertWrappingMemberCalc extends AbstractProfilingNestedMemberCalc {
 
-	public ConvertWrappingMemberCalc(String name, Type type, Calc<?> childCalc) {
-		super(name, type, new Calc[] { childCalc });
+	public ConvertWrappingMemberCalc(Type type, Calc<?> childCalc) {
+		super( type, new Calc[] { childCalc });
 	}
 
 	@Override

@@ -22,44 +22,44 @@ import mondrian.olap.type.Type;
 public abstract class AbstractProfilingValueCalc<T> extends AbstractProfilingCalc<T> {
 
 	public AbstractProfilingValueCalc(Type type) {
-		super(type, "ValueCalc");
+		super(type);
 	}
-    @Override
-    public T evaluate(Evaluator evaluator) {
-        return convertCurrentValue(evaluator.evaluateCurrent());
-    }
 
-    protected abstract T convertCurrentValue(Object evaluateCurrent);
-    
 	@Override
-    public boolean dependsOn(Hierarchy hierarchy) {
-        return true;
-    }
-	
-    /**
-     * {@inheritDoc}
-     *
-     * by default check isInstance.
-     */
-    @Override
-    public boolean isWrapperFor( Class<?> iface ) {
-        return iface.isInstance( this );
-    }
+	public T evaluate(Evaluator evaluator) {
+		return convertCurrentValue(evaluator.evaluateCurrent());
+	}
 
-    /**
-     * {@inheritDoc}
-     *
-     * by default just cast.
-     */
-    @Override
-    public <T> T unwrap( Class<T> iface ) {
-        return iface.cast( this );
-    }
+	protected abstract T convertCurrentValue(Object evaluateCurrent);
 
+	@Override
+	public boolean dependsOn(Hierarchy hierarchy) {
+		return true;
+	}
 
-    @Override
-    public ResultStyle getResultStyle() {
-        return ResultStyle.VALUE;
-    }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * by default check isInstance.
+	 */
+	@Override
+	public boolean isWrapperFor(Class<?> iface) {
+		return iface.isInstance(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * by default just cast.
+	 */
+	@Override
+	public <T> T unwrap(Class<T> iface) {
+		return iface.cast(this);
+	}
+
+	@Override
+	public ResultStyle getResultStyle() {
+		return ResultStyle.VALUE;
+	}
 
 }

@@ -56,14 +56,14 @@ public class NamedSetCurrentFunDef extends FunDefBase {
         assert arg0 instanceof NamedSetExpr : "checked this in createCall";
         final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;
         if (arg0.getType().getArity() == 1) {
-            return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), new Calc[0]) {
+            return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[0]) {
                 @Override
 				public Member evaluate(Evaluator evaluator) {
                     return namedSetExpr.getEval(evaluator).currentMember();
                 }
             };
         } else {
-            return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), new Calc[0]) {
+            return new AbstractProfilingNestedTupleCalc(call.getType(), new Calc[0]) {
                 @Override
 				public Member[] evaluate(Evaluator evaluator) {
                     return namedSetExpr.getEval(evaluator).currentTuple();

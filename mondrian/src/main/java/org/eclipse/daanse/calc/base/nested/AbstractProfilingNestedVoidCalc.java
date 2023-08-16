@@ -32,8 +32,8 @@ public abstract class AbstractProfilingNestedVoidCalc extends AbstractProfilingN
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedVoidCalc(String name, Type type, Calc<?>[] calcs) {
-		super(name, type, calcs);
+	protected AbstractProfilingNestedVoidCalc(Type type, Calc<?>[] calcs) {
+		super( type, calcs);
 	}
 
 }

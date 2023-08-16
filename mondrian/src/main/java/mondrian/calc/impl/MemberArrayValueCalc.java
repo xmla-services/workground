@@ -50,7 +50,7 @@ public class MemberArrayValueCalc extends GenericCalc {
      *     dimensions in a virtual cube
      */
     MemberArrayValueCalc(Type type, MemberCalc[] memberCalcs, boolean nullCheck) {
-        super("MemberArrayValueCalc",type);
+        super(type);
         this.nullCheck = nullCheck;
 
         assert type instanceof ScalarType ;

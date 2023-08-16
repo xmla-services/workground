@@ -48,7 +48,7 @@ class MedianFunDef extends AbstractAggregateFunDef {
         final Calc calc = call.getArgCount() > 1
             ? compiler.compileScalar(call.getArg(1), true)
             : new ValueCalc(call.getType());
-        return new AbstractProfilingNestedDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, calc}) {
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {listCalc, calc}) {
             @Override
 			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();

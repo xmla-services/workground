@@ -33,8 +33,8 @@ public abstract class AbstractProfilingNestedIntegerCalc extends AbstractProfili
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedIntegerCalc(String name, Type type, Calc<?>[] calcs) {
-		super(name, type, calcs);
+	protected AbstractProfilingNestedIntegerCalc(Type type, Calc<?>[] calcs) {
+		super( type, calcs);
 		assert getType() instanceof NumericType;
 	}
 

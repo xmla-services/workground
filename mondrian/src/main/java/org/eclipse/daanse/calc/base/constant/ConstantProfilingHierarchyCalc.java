@@ -22,7 +22,7 @@ import mondrian.olap.type.HierarchyType;
 public class ConstantProfilingHierarchyCalc extends AbstractProfilingConstantCalc<Hierarchy> implements HierarchyCalc {
 
 	public ConstantProfilingHierarchyCalc(HierarchyType type, Hierarchy value) {
-		super(value, type, "ConstantProfilingHierarchyCalc");
+		super(value, type);
 	}
 
 	public static ConstantProfilingHierarchyCalc of(Hierarchy hierarchy) {

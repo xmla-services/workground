@@ -47,7 +47,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
         for (int i = 0; i < args.length; i++) {
             calcs[i] = compiler.compileScalar(args[i], true);
         }
-        return new GenericCalc(call.getFunName(),call.getType()) {
+        return new GenericCalc(call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 for (Calc calc : calcs) {

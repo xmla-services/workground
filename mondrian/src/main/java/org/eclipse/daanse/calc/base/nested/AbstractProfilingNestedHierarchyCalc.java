@@ -28,8 +28,8 @@ extends AbstractProfilingNestedCalc<Hierarchy>
 implements HierarchyCalc
 {
 
-    protected AbstractProfilingNestedHierarchyCalc(String name, Type type, Calc<?>[] calcs) {
-        super(name,type, calcs);
+    protected AbstractProfilingNestedHierarchyCalc(Type type, Calc<?>[] calcs) {
+        super(type, calcs);
         assert getType() instanceof HierarchyType;
     }
 

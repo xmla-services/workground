@@ -45,8 +45,8 @@ implements ListCalc, IterCalc
      *
      * @param exp Source expression
      */
-    protected GenericIterCalc(String name, Type type) {
-        super( name,  type, null);
+    protected GenericIterCalc( Type type) {
+        super(   type, null);
     }
 
     /**
@@ -55,8 +55,8 @@ implements ListCalc, IterCalc
      * @param exp Source expression
      * @param calcs Child compiled expressions
      */
-    protected GenericIterCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected GenericIterCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
     @Override

@@ -52,7 +52,7 @@ class FormatFunDef extends FunDefBase {
             // compiling format string.
             String formatString = (String) ((Literal) args[1]).getValue();
             final Format format = new Format(formatString, locale);
-            return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {calc}) {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final Object o = calc.evaluate(evaluator);
@@ -63,7 +63,7 @@ class FormatFunDef extends FunDefBase {
             // Variable string expression
             final StringCalc stringCalc =
                     compiler.compileString(call.getArg(1));
-            return new AbstractProfilingNestedStringCalc(call.getFunName(),call.getType(), new Calc[] {calc, stringCalc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {calc, stringCalc}) {
                 @Override
 				public String evaluate(Evaluator evaluator) {
                     final Object o = calc.evaluate(evaluator);

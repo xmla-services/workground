@@ -33,8 +33,8 @@ public abstract class AbstractProfilingNestedStringCalc extends AbstractProfilin
 	 * {@inheritDoc}
 	 *
 	 */
-	protected AbstractProfilingNestedStringCalc(String name, Type type, Calc<?>[] calcs) {
-		super(name, type, calcs);
+	protected AbstractProfilingNestedStringCalc(Type type, Calc<?>[] calcs) {
+		super( type, calcs);
 	}
 
 }

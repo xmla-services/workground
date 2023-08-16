@@ -22,7 +22,7 @@ import mondrian.olap.type.LevelType;
 public class ConstantProfilingLevelCalc extends AbstractProfilingConstantCalc<Level> implements LevelCalc {
 
 	public ConstantProfilingLevelCalc(LevelType type, Level value) {
-		super(value, type, "ConstantProfilingLevelCalc");
+		super(value, type);
 	}
 
 	public static ConstantProfilingLevelCalc of(Level level) {

@@ -43,18 +43,14 @@ public class SimpleProfileResultWriter {
 			indent();
 		}
 		printWriter.print(currentIndentPrefix);
-		printWriter.print(profile.name());
+		printWriter.print(profile.clazz().getSimpleName());
 
 		printWriter.print("(");
 
-		printWriter.print("name");
+	
+		printWriter.print("package");
 		printWriter.print("=");
-		printWriter.print(profile.name());
-		printWriter.print(", ");
-		
-		printWriter.print("class");
-		printWriter.print("=");
-		printWriter.print(profile.clazz());
+		printWriter.print(profile.clazz().getPackageName());
 		printWriter.print(", ");
 		
 		printWriter.print("type");

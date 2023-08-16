@@ -79,7 +79,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     final ListCalc listCalc = compiler.compileList( call.getArg( 1 ) );
     final Calc keyCalc = compiler.compileScalar( call.getArg( 2 ), true );
-    Calc sortedListCalc = new SortedListCalc( call.getFunName(),call.getType(), listCalc, keyCalc );
+    Calc sortedListCalc = new SortedListCalc( call.getType(), listCalc, keyCalc );
     final ExpCacheDescriptor cacheDescriptor = new ExpCacheDescriptor( call, sortedListCalc, compiler.getEvaluator() );
     if ( type0 instanceof TupleType ) {
       final TupleCalc tupleCalc = compiler.compileTuple( call.getArg( 0 ) );
@@ -98,7 +98,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc listCalc;
     if ( MondrianProperties.instance().EnableExpCache.get() ) {
       final ExpCacheDescriptor key = new ExpCacheDescriptor( listExp, listCalc1, compiler.getEvaluator() );
-      listCalc = new CacheCalc( "CacheCalc",listExp.getType(), key );
+      listCalc = new CacheCalc( listExp.getType(), key );
     } else {
       listCalc = listCalc1;
     }
@@ -116,7 +116,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     private final Calc listCalc;
 
     public Rank2TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc listCalc ) {
-      super( call.getFunName(),call.getType(), new Calc[] { tupleCalc, listCalc } );
+      super( call.getType(), new Calc[] { tupleCalc, listCalc } );
       this.tupleCalc = tupleCalc;
       this.listCalc = listCalc;
     }
@@ -160,7 +160,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     private final Calc listCalc;
 
     public Rank2MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc listCalc ) {
-      super( call.getFunName(),call.getType(), new Calc[] { memberCalc, listCalc } );
+      super( call.getType(), new Calc[] { memberCalc, listCalc } );
       this.memberCalc = memberCalc;
       this.listCalc = listCalc;
     }
@@ -204,7 +204,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     public Rank3TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
-      super( call.getFunName(),call.getType(), new Calc[] { tupleCalc, sortCalc } );
+      super( call.getType(), new Calc[] { tupleCalc, sortCalc } );
       this.tupleCalc = tupleCalc;
       this.sortCalc = sortCalc;
       this.cacheDescriptor = cacheDescriptor;
@@ -288,7 +288,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     public Rank3MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
-      super( call.getFunName(),call.getType(), new Calc[] { memberCalc, sortCalc } );
+      super( call.getType(), new Calc[] { memberCalc, sortCalc } );
       this.memberCalc = memberCalc;
       this.sortCalc = sortCalc;
       this.cacheDescriptor = cacheDescriptor;
@@ -392,8 +392,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
      * @param keyCalc
      *          Compiled expression to compute the sort key
      */
-    public SortedListCalc( String name,Type type, ListCalc listCalc, Calc keyCalc ) {
-      super( name,type, new Calc[] { listCalc, keyCalc } );
+    public SortedListCalc( Type type, ListCalc listCalc, Calc keyCalc ) {
+      super( type, new Calc[] { listCalc, keyCalc } );
       this.listCalc = listCalc;
       this.keyCalc = keyCalc;
     }
@@ -622,7 +622,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
      *          Whether elements of the list are tuples (as opposed to members)
      */
     public RankedListCalc( ListCalc listCalc, boolean tuple ) {
-      super( "RankedListCalc", listCalc.getType() , new Calc[] { listCalc } );
+      super(  listCalc.getType() , new Calc[] { listCalc } );
       this.listCalc = listCalc;
       this.tuple = tuple;
     }

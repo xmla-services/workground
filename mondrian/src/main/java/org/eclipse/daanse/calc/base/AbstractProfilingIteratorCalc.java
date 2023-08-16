@@ -23,8 +23,8 @@ import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingIteratorCalc<T> extends AbstractProfilingCalc<T> {
 
-	public AbstractProfilingIteratorCalc(Type type, String name) {
-		super(type, name);
+	public AbstractProfilingIteratorCalc(Type type) {
+		super(type);
 	}
 
 	private long elementCount;
@@ -42,8 +42,9 @@ public abstract class AbstractProfilingIteratorCalc<T> extends AbstractProfiling
 
 	@Override
 	protected Map<String, Object> profilingProperties(Map<String, Object> properties) {
-		
-		//TODO: may be removed writer can calculate its won because has access to the objects
+
+		// TODO: may be removed writer can calculate its won because has access to the
+		// objects
 		properties.put("elementCount", elementCount);
 		properties.put("elementSquaredCount", elementSquaredCount);
 		return properties;

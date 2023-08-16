@@ -7642,7 +7642,7 @@ class FunctionTest extends FoodMartTestCase {
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST)\n"
         + "    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures]"
         + ".[Unit Sales]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Unit Sales])\n"
-        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, "
+        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.CurrentMemberCalc, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC)\n"
         + "        Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$22$1, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST)\n"
@@ -7660,7 +7660,7 @@ class FunctionTest extends FoodMartTestCase {
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST)\n"
         + "    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Time]"
         + ".[1997]>, resultStyle=VALUE_NOT_NULL, value=[Time].[1997])\n"
-        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, "
+        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.CurrentMemberCalc, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC)\n"
         + "        Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$22$1, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST)\n"
@@ -7677,7 +7677,7 @@ class FunctionTest extends FoodMartTestCase {
     // No ContextCalc this time. All members are non-variable.
     assertAxisCompilesTo(
       "order([Product].children, [Product].CurrentMember.Parent)",
-      "CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, "
+      "CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.CurrentMemberCalc, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC)\n"
         + "    Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$22$1, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST)\n"
@@ -7736,7 +7736,7 @@ class FunctionTest extends FoodMartTestCase {
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST)\n"
         + "    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures]"
         + ".[Store Sales]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Store Sales])\n"
-        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, "
+        + "    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.CurrentMemberCalc, "
         + "type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC)\n"
         + "        ImmutableIterCalc(name=ImmutableIterCalc, class=class mondrian.olap.fun"
         + ".FilterFunDef$ImmutableIterCalc, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=ITERABLE)\n"

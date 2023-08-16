@@ -222,7 +222,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   class CrossJoinIterCalc extends AbstractIterCalc {
 	private  ResolvedFunCall call;
     CrossJoinIterCalc( ResolvedFunCall call, Calc[] calcs ) {
-      super( "CrossJoinIterCalc",call.getType(), calcs );
+      super( call.getType(), calcs );
       this.call=call;
     }
 
@@ -404,7 +404,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   abstract class BaseListCalc extends AbstractListCalc {
 	  ResolvedFunCall call;
     protected BaseListCalc( ResolvedFunCall call, Calc[] calcs, boolean mutable ) {
-      super( call.getFunName(),call.getType(), calcs, mutable );
+      super( call.getType(), calcs, mutable );
       this.call=call;
     }
 

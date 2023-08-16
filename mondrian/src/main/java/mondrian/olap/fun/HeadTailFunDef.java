@@ -64,7 +64,7 @@ class HeadTailFunDef extends FunDefBase {
             : new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         if (head) {
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {listCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
@@ -81,7 +81,7 @@ class HeadTailFunDef extends FunDefBase {
             };
         } else {
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {listCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {

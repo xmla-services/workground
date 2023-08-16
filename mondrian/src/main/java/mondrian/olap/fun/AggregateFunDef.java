@@ -104,7 +104,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 : new ValueCalc(call.getType());
         final Member member =
             call.getArgCount() > 1 ? getMember(call.getArg(1)) : null;
-        return new AggregateCalc(call.getFunName(),calc.getType(), listCalc, calc, member);
+        return new AggregateCalc(calc.getType(), listCalc, calc, member);
     }
 
     public static class AggregateCalc extends GenericCalc {
@@ -113,16 +113,16 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         private final Member member;
 
         public AggregateCalc(
-            String name,Type type, ListCalc listCalc, Calc calc, Member member)
+            Type type, ListCalc listCalc, Calc calc, Member member)
         {
-            super(name,type, new Calc[]{listCalc, calc});
+            super(type, new Calc[]{listCalc, calc});
             this.listCalc = listCalc;
             this.calc = calc;
             this.member = member;
         }
 
-        public AggregateCalc(String name,Type type, ListCalc listCalc, Calc calc) {
-            this(name,type, listCalc, calc, null);
+        public AggregateCalc(Type type, ListCalc listCalc, Calc calc) {
+            this(type, listCalc, calc, null);
         }
 
         @Override

@@ -65,7 +65,7 @@ class TupleItemFunDef extends FunDefBase {
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
             return new AbstractProfilingNestedMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, indexCalc})
+            		call.getType(), new Calc[] {memberCalc, indexCalc})
             {
                 @Override
 				public Member evaluate(Evaluator evaluator) {
@@ -85,7 +85,7 @@ class TupleItemFunDef extends FunDefBase {
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
             return new AbstractProfilingNestedMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {tupleCalc, indexCalc})
+            		call.getType(), new Calc[] {tupleCalc, indexCalc})
             {
                 final Member[] nullTupleMembers =
                         FunUtil.makeNullTuple((TupleType) tupleCalc.getType());

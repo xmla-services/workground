@@ -32,7 +32,6 @@ import mondrian.olap.type.Type;
 public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 
 	private Type type;
-	private String name;
 
 	private Instant firstEvalStart = null;
 	private Instant lastEvalEnd = null;
@@ -40,14 +39,15 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 	private final List<CalcEvaluationProfile> evaluations = new ArrayList<CalcEvaluationProfile>();
 
 	/**
-	 * Abstract Implementation of {@link ProfilingCalc} that generated a {@link CalculationProfile} while calling {@link #evaluateWithProfile(Evaluator)))
+	 * Abstract Implementation of {@link ProfilingCalc} that generated a
+	 * {@link CalculationProfile} while calling
+	 * {@link #evaluateWithProfile(Evaluator)))
 	 *
 	 * @param Type
 	 * @param name
 	 */
-	public AbstractProfilingCalc(Type type, String name) {
+	public AbstractProfilingCalc(Type type) {
 		this.type = type;
-		this.name = name;
 	}
 
 	@Override
@@ -70,37 +70,27 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 		CalcEvaluationProfile evaluationProfile = new CalcEvaluationProfileR(evaluationStart, evaluationEnd,
 				evaluationResult, Map.of());
 		evaluations.add(evaluationProfile);
-		
 
 	}
-	
+
 	protected Map<String, Object> profilingProperties(Map<String, Object> properties) {
 		return properties;
 	}
 
-
 	public CalculationProfile getCalculationProfile() {
 		final List<CalculationProfile> childProfiles = getChildProfiles();
-		Map<String, Object> profilingProperties =profilingProperties(new HashMap<String, Object>());
-		return new CalcProfileR(getName(), this.getClass(), getType(),getResultStyle(), Optional.ofNullable(firstEvalStart),
+		Map<String, Object> profilingProperties = profilingProperties(new HashMap<String, Object>());
+		return new CalcProfileR(this.getClass(), getType(), getResultStyle(), Optional.ofNullable(firstEvalStart),
 				Optional.ofNullable(lastEvalEnd), profilingProperties, evaluations, childProfiles);
 	}
 
-	
 	List<CalculationProfile> getChildProfiles() {
 		return List.of();
 	}
 
-
-
 	@Override
 	public Type getType() {
 		return type;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 }

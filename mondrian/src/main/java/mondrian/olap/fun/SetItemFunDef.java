@@ -136,7 +136,7 @@ class SetItemFunDef extends FunDefBase {
         if (elementType instanceof TupleType tupleType) {
             final Member[] nullTuple = FunUtil.makeNullTuple(tupleType);
             if (isString) {
-                return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getType(), calcs) {
                     @Override
 					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
@@ -176,7 +176,7 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractProfilingNestedTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getType(), calcs) {
                     @Override
 					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
@@ -211,7 +211,7 @@ class SetItemFunDef extends FunDefBase {
             final MemberType memberType = (MemberType) elementType;
             final Member nullMember = FunUtil.makeNullMember(memberType);
             if (isString) {
-                return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getType(), calcs) {
                     @Override
 					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
@@ -239,7 +239,7 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractProfilingNestedMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getType(), calcs) {
                     @Override
 					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();

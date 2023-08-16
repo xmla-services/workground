@@ -27,8 +27,8 @@ public abstract class AbstractProfilingConstantCalc<T> extends AbstractProfiling
 
 	private T value;
 
-	public AbstractProfilingConstantCalc(T value, Type type, String name) {
-		super(type, name);
+	public AbstractProfilingConstantCalc(T value, Type type) {
+		super(type);
 		this.value = value;
 	}
 
@@ -56,6 +56,7 @@ public abstract class AbstractProfilingConstantCalc<T> extends AbstractProfiling
 	public <X> X unwrap(Class<X> iface) {
 		return null;
 	}
+
 	@Override
 	List<CalculationProfile> getChildProfiles() {
 		return List.of();

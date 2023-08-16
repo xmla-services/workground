@@ -25,65 +25,62 @@ import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
-
 public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCalc<E> implements Calc<E> {
 
 	private final Calc<?>[] childCalcs;
 
-    /**
-     * {@inheritDoc}
-     *
-     * Holds the childCalcs witch are accessible using {@link #getChildCalcs()}.
-     * Enhances its own {@link CalculationProfile} with the Children's {@link CalculationProfile}.
-     * 
-     * @param calcs Child {@link Calc}s that are needed to calculate this.
-     */
-	protected AbstractProfilingNestedCalc(String name, Type type, Calc<?>[] childCalcs) {
-		super(type, name);
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Holds the childCalcs witch are accessible using {@link #getChildCalcs()}.
+	 * Enhances its own {@link CalculationProfile} with the Children's
+	 * {@link CalculationProfile}.
+	 * 
+	 * @param calcs Child {@link Calc}s that are needed to calculate this.
+	 */
+	protected AbstractProfilingNestedCalc(Type type, Calc<?>[] childCalcs) {
+		super(type);
 		this.childCalcs = childCalcs;
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * by default check isInstance.
+	 */
+	@Override
+	public boolean isWrapperFor(Class<?> iface) {
+		return iface.isInstance(this);
+	}
 
-    /**
-     * {@inheritDoc}
-     *
-     * by default check isInstance.
-     */
-    @Override
-    public boolean isWrapperFor( Class<?> iface ) {
-        return iface.isInstance( this );
-    }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * by default just cast.
+	 */
+	@Override
+	public <T> T unwrap(Class<T> iface) {
+		return iface.cast(this);
+	}
 
-    /**
-     * {@inheritDoc}
-     *
-     * by default just cast.
-     */
-    @Override
-    public <T> T unwrap( Class<T> iface ) {
-        return iface.cast( this );
-    }
+	public Calc<?>[] getChildCalcs() {
+		return childCalcs;
+	}
 
+	protected Calc<?> getFirstChildCalcs() {
+		return getChildCalcs()[0];
+	}
 
-    public Calc<?>[] getChildCalcs() {
-        return childCalcs;
-    }
-    
-    protected Calc<?> getFirstChildCalcs() {
-        return getChildCalcs()[0];
-    }
+	@Override
+	public boolean dependsOn(Hierarchy hierarchy) {
+		return HirarchyDependsChecker.checkAnyDependsOnChilds(getChildCalcs(), hierarchy);
+	}
 
-    @Override
-    public boolean dependsOn( Hierarchy hierarchy ) {
-        return HirarchyDependsChecker.checkAnyDependsOnChilds(  getChildCalcs(),hierarchy );
-    }
-    
-
-    @Override
-    public ResultStyle getResultStyle() {
-        return ResultStyle.VALUE;
-    }
+	@Override
+	public ResultStyle getResultStyle() {
+		return ResultStyle.VALUE;
+	}
 
 	@Override
 	protected List<CalculationProfile> getChildProfiles() {
@@ -92,5 +89,5 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 
 		return childProfiles;
 	}
-	
+
 }

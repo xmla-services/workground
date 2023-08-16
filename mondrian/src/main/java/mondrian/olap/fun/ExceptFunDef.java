@@ -49,7 +49,7 @@ class ExceptFunDef extends FunDefBase {
         // todo: implement ALL
         final ListCalc listCalc0 = compiler.compileList(call.getArg(0));
         final ListCalc listCalc1 = compiler.compileList(call.getArg(1));
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc0, listCalc1})
+        return new AbstractListCalc(call.getType(), new Calc[] {listCalc0, listCalc1})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {

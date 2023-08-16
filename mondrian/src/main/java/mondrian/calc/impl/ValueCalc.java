@@ -31,7 +31,7 @@ public class ValueCalc extends GenericCalc {
      * @param exp Source expression
      */
     public ValueCalc( Type type) {
-        super("ValueCalc",type, new Calc[0]);
+        super(type, new Calc[0]);
     }
 
     @Override

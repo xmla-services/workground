@@ -50,7 +50,7 @@ public class MemberValueCalc extends GenericCalc {
      *     dimensions in a virtual cube
      */
     public MemberValueCalc(Type type, MemberCalc memberCalc, boolean nullCheck) {
-        super( "MemberValueCalc",  type);
+        super(type);
         this.nullCheck = nullCheck;
         if (!(type instanceof ScalarType)) {
             throw new IllegalArgumentException("Invalid type in MemberValueCalc");

@@ -797,7 +797,7 @@ public class Query extends QueryPart {
 				spw.write(calcProfile);
 				
 			} else {
-				pw.println("UNPROFILED: " + slicerCalc.getName());
+				pw.println("UNPROFILED: " + slicerCalc.getClass().getName());
 
 			}
             pw.println();
@@ -814,7 +814,7 @@ public class Query extends QueryPart {
 				spw.write(calcProfile);
 				
 			} else {
-				pw.println("UNPROFILED: " + axisCalc.getName());
+				pw.println("UNPROFILED: " + axisCalc.getClass().getName());
 
 			}
 
