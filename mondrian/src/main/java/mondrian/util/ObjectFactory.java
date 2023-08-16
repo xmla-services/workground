@@ -285,7 +285,7 @@ import org.eigenbase.util.property.StringProperty;
  */
 public abstract class ObjectFactory<V> {
 
-    private static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
+    private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     /**
@@ -504,7 +504,7 @@ public abstract class ObjectFactory<V> {
      * @throws CreationException if unable to create the object
      */
     protected abstract V getDefault(
-        Class[] parameterTypes,
+        Class<?>[] parameterTypes,
         Object[] parameterValues)
         throws CreationException;
 

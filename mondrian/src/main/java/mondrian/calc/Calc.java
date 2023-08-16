@@ -9,14 +9,6 @@
 
 package mondrian.calc;
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.api.DimensionCalc;
-import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.api.LevelCalc;
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.StringCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.olap.Evaluator;

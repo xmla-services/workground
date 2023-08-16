@@ -69,7 +69,7 @@ public abstract class AbstractProfilingNestedCalc<E, C extends Calc<?>> extends 
 		return childCalcs;
 	}
 
-	protected C getFirstChildCalcs() {
+	protected C getFirstChildCalc() {
 		return getChildCalcs()[0];
 	}
 

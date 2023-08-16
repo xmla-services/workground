@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.DoubleCalc;
@@ -29,6 +30,7 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eigenbase.xom.XOMUtil;
+import org.olap4j.impl.IdentifierParser.Builder;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
@@ -71,7 +73,6 @@ import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
-import org.olap4j.impl.IdentifierParser.Builder;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.
@@ -288,31 +289,9 @@ public class FunUtil extends Util {
     }
   }
 
-  /**
-   * Returns the default hierarchy of a dimension, or null if there is no default.
-   *
-   * @param dimension Dimension
-   * @return Default hierarchy, or null
-   * @see MondrianResource#CannotImplicitlyConvertDimensionToHierarchy
-   */
-  public static Hierarchy getDimensionDefaultHierarchy( Dimension dimension ) {
-    final Hierarchy[] hierarchies = dimension.getHierarchies();
-    if ( hierarchies.length == 1 ) {
-      return hierarchies[ 0 ];
-    }
-    if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
-      // In SSAS 2005, dimensions with more than one hierarchy do not have
-      // a default hierarchy.
-      return null;
-    }
-    for ( Hierarchy hierarchy : hierarchies ) {
-      if ( hierarchy.getName() == null
-        || hierarchy.getUniqueName().equals( dimension.getUniqueName() ) ) {
-        return hierarchy;
-      }
-    }
-    return null;
-  }
+
+
+	
 
   static List<Member> addMembers(
     final SchemaReader schemaReader,

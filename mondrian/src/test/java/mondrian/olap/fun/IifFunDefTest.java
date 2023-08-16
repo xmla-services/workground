@@ -44,7 +44,7 @@ class IifFunDefTest {
     when( trueCaseParamMock.getType() ).thenReturn( setTypeMock );
     setListCalc = new SetListCalc( setTypeMock, new Exp[] { args[1] }, compilerMock, ResultStyle.LIST_MUTABLELIST );
     call = new ResolvedFunCall( funDefMock, args, setTypeMock );
-    when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn( setListCalc );
+    when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn(  setListCalc );
   }
 
   @Test

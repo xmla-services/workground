@@ -12,27 +12,30 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base.nested.conv;
+package org.eclipse.daanse.calc.base.type.tuple;
 
+import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertWrappingTupleCalc extends AbstractProfilingNestedTupleCalc<Calc<?>> {
+public class MemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc<MemberCalc> {
+	private final MemberCalc memberCalc;
 
-	public ConvertWrappingTupleCalc(Type type, Calc<?> childCalc) {
-		super( type, new Calc<?>[] {childCalc});
+	public MemberCalcToTupleCalc(Type type, MemberCalc memberCalc) {
+		super( type, new MemberCalc[] { memberCalc });
+		this.memberCalc = memberCalc;
 	}
 
 	@Override
 	public Member[] evaluate(Evaluator evaluator) {
-		Object o = getFirstChildCalcs().evaluate(evaluator);
-		if (o instanceof Member[] tuple) {
-			return tuple;
+		final Member member = memberCalc.evaluate(evaluator);
+		if (member == null) {
+			return null;
+		} else {
+			return new Member[] { memberCalc.evaluate(evaluator) };
 		}
-		throw evaluator.newEvalException(null, "expected Member[], was: " + o);
 	}
 }
