@@ -375,6 +375,9 @@ INJECT FunctionCall :
         } else {
             // This is not supposed to include the LHS.
             result.remove(0);
+            if (result.size() == 1 && result.get(0) instanceof EmptyExpression ) {
+                result.clear();
+            }
         }
         return result;
     }
@@ -469,7 +472,17 @@ QualifiedIdentifier :
    (<BANG> NameObjectIdentifier)+
 ;
 
-INJECT EmptyExpression : implements Expression
+INJECT EmptyExpression : implements Expression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
+{
+   public String name() {
+      return "";
+   }
+
+   public Type type() {
+      return Type.EMPTY;
+   }
+}
+
 
 EmptyExpression#(true) :
 {
@@ -487,7 +500,7 @@ INJECT CaseExpression :
    implements PrimaryExpression, org.eclipse.daanse.mdx.model.api.expression.CallExpression
 {
    public String name() {
-      return (getChild(1) instanceof Expression) ? "_CaseMatch" : "_CaseTest";
+      return (getChild(1) instanceof org.eclipse.daanse.mdx.model.api.expression.Expression) ? "_CaseMatch" : "_CaseTest";
    }
 
    public Type type() {
