@@ -16,36 +16,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.api.DateTimeCalc;
-import org.eclipse.daanse.calc.api.DimensionCalc;
-import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.api.LevelCalc;
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingBooleanCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingDoubleCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingHierarchyCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingIntegerCalc;
-import org.eclipse.daanse.calc.base.constant.ConstantProfilingStringCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.type.booleanx.DoubleToBooleanCalc;
-import org.eclipse.daanse.calc.base.type.booleanx.IntgegerToBooleanCalc;
-import org.eclipse.daanse.calc.base.type.booleanx.UnknownToBooleanCalc;
-import org.eclipse.daanse.calc.base.type.dimension.UnknownToDimensionCalc;
-import org.eclipse.daanse.calc.base.type.doublex.IntegerToDoubleCalc;
-import org.eclipse.daanse.calc.base.type.hierarchy.DimensionDefaultHierarchyCalc;
-import org.eclipse.daanse.calc.base.type.integer.DoubleToIntegerCalc;
-import org.eclipse.daanse.calc.base.type.integer.UnknownToIntegerCalc;
-import org.eclipse.daanse.calc.base.type.level.UnknownToLevelCalc;
-import org.eclipse.daanse.calc.base.type.member.UnknownToMemberCalc;
-import org.eclipse.daanse.calc.base.type.string.UnknownToStringCalc;
-import org.eclipse.daanse.calc.base.util.DimensionUtil;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingHierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingStringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.type.booleanx.DoubleToBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.type.booleanx.IntgegerToBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.type.booleanx.UnknownToBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.type.dimension.UnknownToDimensionCalc;
+import org.eclipse.daanse.olap.calc.base.type.doublex.IntegerToDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.type.hierarchy.DimensionDefaultHierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.type.integer.DoubleToIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.type.integer.UnknownToIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.type.level.UnknownToLevelCalc;
+import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
+import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
+import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -336,14 +336,14 @@ public class AbstractExpCompiler implements ExpCompiler {
             return (IntegerCalc) calc;
         }
 		if (type instanceof NullType) {
-			if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc<?> constantCalc) {
+			if (calc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc<?> constantCalc) {
 				//no evaluate on constantCalc  result is null and constant - nothing expected while evaluate
 				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
 			}		
 
 		}
 		if (type instanceof NumericType) {
-			if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc<?> constantCalc) {
+			if (calc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc<?> constantCalc) {
 
 				Object o = constantCalc.evaluate(evaluator);
 				Integer i = null;
@@ -369,7 +369,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 
 		if (calc instanceof StringCalc stringCalc) {
 			return stringCalc;
-		}else if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc cc) {
+		}else if (calc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc cc) {
 			Object o = cc.evaluate(null);
 			String s = null;
 			if (o != null) {

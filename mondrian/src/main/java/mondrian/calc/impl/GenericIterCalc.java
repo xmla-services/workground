@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.IterCalc;

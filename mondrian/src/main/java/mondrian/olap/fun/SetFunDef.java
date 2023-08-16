@@ -19,11 +19,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.api.VoidCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedVoidCalc;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.api.VoidCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

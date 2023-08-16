@@ -22,13 +22,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.IdentifierParser.Builder;
 
@@ -99,7 +99,7 @@ public class FunUtil extends Util {
 
 //  /**
 //   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
-//   * org.eclipse.daanse.calc.api.IntegerCalc}.
+//   * org.eclipse.daanse.olap.calc.api.IntegerCalc}.
 //   */
 //  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
 

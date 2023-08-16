@@ -12,16 +12,16 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.api.DateTimeCalc;
-import org.eclipse.daanse.calc.api.DimensionCalc;
-import org.eclipse.daanse.calc.api.DoubleCalc;
-import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.api.LevelCalc;
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
-import org.eclipse.daanse.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.Calc;
@@ -284,7 +284,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl calc) {
           Calc[] calcs = calc.getChildCalcs();
           MemberCalc memberCalc = (MemberCalc) calcs[0];
-          if ( memberCalc instanceof org.eclipse.daanse.calc.api.ConstantCalc || !listHierarchies.contains( memberCalc.getType()
+          if ( memberCalc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc || !listHierarchies.contains( memberCalc.getType()
               .getHierarchy() ) ) {
             iter.remove();
           }

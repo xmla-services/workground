@@ -11,11 +11,11 @@ package mondrian.calc.impl;
 
 import java.util.Date;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.olap.fun.FunUtil;

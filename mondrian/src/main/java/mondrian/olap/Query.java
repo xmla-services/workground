@@ -25,9 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.calc.api.profile.CalculationProfile;
-import org.eclipse.daanse.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.calc.base.profile.SimpleProfileResultWriter;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -40,6 +37,9 @@ import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
 import org.olap4j.impl.IdentifierParser;
 import org.olap4j.mdx.IdentifierSegment;
 

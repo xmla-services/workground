@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.calc.base.AbstractProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
