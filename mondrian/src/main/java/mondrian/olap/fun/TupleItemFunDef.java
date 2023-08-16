@@ -11,12 +11,12 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.MemberCalc;
+import org.eclipse.daanse.calc.api.TupleCalc;
 import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -92,7 +92,7 @@ class TupleItemFunDef extends FunDefBase {
                 @Override
 				public Member evaluate(Evaluator evaluator) {
                     final Member[] members =
-                            tupleCalc.evaluateTuple(evaluator);
+                            tupleCalc.evaluate(evaluator);
                     assert members == null
                         || members.length == nullTupleMembers.length;
                     final Integer index = indexCalc.evaluate(evaluator);
