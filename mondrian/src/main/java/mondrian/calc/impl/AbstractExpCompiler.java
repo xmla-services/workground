@@ -19,6 +19,7 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -28,11 +29,11 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingBooleanCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingDoubleCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingHierarchyCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingIntegerCalc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantProfilingStringCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.type.booleanx.DoubleToBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.type.booleanx.IntgegerToBooleanCalc;
@@ -300,7 +301,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                 final Hierarchy hierarchy =
                         DimensionUtil.getDimensionDefaultHierarchyOrThrow(dimension);
                 if (hierarchy != null) {
-                    return ConstantProfilingHierarchyCalc.of(hierarchy);
+                    return ConstantHierarchyCalc.of(hierarchy);
                 }
             }
             final DimensionCalc dimensionCalc = compileDimension(exp);
@@ -338,7 +339,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		if (type instanceof NullType) {
 			if (calc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc<?> constantCalc) {
 				//no evaluate on constantCalc  result is null and constant - nothing expected while evaluate
-				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
+				return new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
 			}		
 
 		}
@@ -351,7 +352,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 					Number n = (Number) o;
 					i = n.intValue();
 				}
-				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
+				return new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
 			} else if (calc instanceof DoubleCalc doubleCalc) {
 				return new DoubleToIntegerCalc(exp.getType(),  doubleCalc);
 			}
@@ -375,7 +376,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			if (o != null) {
 				s = o.toString();
 			}
-			return new ConstantProfilingStringCalc(new StringType(), s);
+			return new ConstantStringCalc(new StringType(), s);
 		}else {
 			return new UnknownToStringCalc(new StringType(),  calc);
 		}
@@ -465,7 +466,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}else {
 				throw new RuntimeException("wring type. was: "+o);
 			}
-            return 	new ConstantProfilingBooleanCalc(b);
+            return 	new ConstantBooleanCalc(b);
         }
         //
         
@@ -498,7 +499,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 				throw new RuntimeException("wring type. was: "+o);
 			}
         
-            return 	new ConstantProfilingDoubleCalc(new NumericType(),d);
+            return 	new ConstantDoubleCalc(new NumericType(),d);
 
         }
         if (calc instanceof DoubleCalc doubleCalc) {

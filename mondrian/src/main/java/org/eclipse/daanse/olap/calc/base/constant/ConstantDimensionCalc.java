@@ -13,20 +13,20 @@
 */
 package org.eclipse.daanse.olap.calc.base.constant;
 
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 
-import mondrian.olap.type.LevelType;
+import mondrian.olap.type.DimensionType;
 
-public class ConstantProfilingLevelCalc extends AbstractProfilingConstantCalc<Level> implements LevelCalc {
+public class ConstantDimensionCalc extends AbstractProfilingConstantCalc<Dimension> implements DimensionCalc {
 
-	public ConstantProfilingLevelCalc(LevelType type, Level value) {
+	public ConstantDimensionCalc(DimensionType type, Dimension value) {
 		super(value, type);
 	}
 
-	public static ConstantProfilingLevelCalc of(Level level) {
-		return new ConstantProfilingLevelCalc(LevelType.forLevel(level), level);
+	public static ConstantDimensionCalc of(Dimension dimension) {
+		return new ConstantDimensionCalc(DimensionType.forDimension(dimension), dimension);
 	}
 
 }

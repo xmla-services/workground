@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
@@ -30,7 +31,6 @@ import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.MemberArrayValueCalc;
 import mondrian.calc.impl.MemberValueCalc;

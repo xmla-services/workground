@@ -13,15 +13,20 @@
 */
 package org.eclipse.daanse.olap.calc.base.constant;
 
-import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 
-import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.HierarchyType;
 
-public class ConstantProfilingBooleanCalc extends AbstractProfilingConstantCalc<Boolean> implements BooleanCalc {
+public class ConstantHierarchyCalc extends AbstractProfilingConstantCalc<Hierarchy> implements HierarchyCalc {
 
-	public ConstantProfilingBooleanCalc(Boolean value) {
-		super(value, new BooleanType());
+	public ConstantHierarchyCalc(HierarchyType type, Hierarchy value) {
+		super(value, type);
+	}
+
+	public static ConstantHierarchyCalc of(Hierarchy hierarchy) {
+		return new ConstantHierarchyCalc(HierarchyType.forHierarchy(hierarchy), hierarchy);
 	}
 
 }

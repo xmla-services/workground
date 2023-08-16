@@ -13,20 +13,20 @@
 */
 package org.eclipse.daanse.olap.calc.base.constant;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 
-import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.LevelType;
 
-public class ConstantProfilingHierarchyCalc extends AbstractProfilingConstantCalc<Hierarchy> implements HierarchyCalc {
+public class ConstantLevelCalc extends AbstractProfilingConstantCalc<Level> implements LevelCalc {
 
-	public ConstantProfilingHierarchyCalc(HierarchyType type, Hierarchy value) {
+	public ConstantLevelCalc(LevelType type, Level value) {
 		super(value, type);
 	}
 
-	public static ConstantProfilingHierarchyCalc of(Hierarchy hierarchy) {
-		return new ConstantProfilingHierarchyCalc(HierarchyType.forHierarchy(hierarchy), hierarchy);
+	public static ConstantLevelCalc of(Level level) {
+		return new ConstantLevelCalc(LevelType.forLevel(level), level);
 	}
 
 }

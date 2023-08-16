@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -69,7 +69,7 @@ class CaseTestFunDef extends FunDefBase {
         final Calc defaultCalc =
             args.length % 2 == 1
             ? compiler.compileScalar(args[args.length - 1], true)
-            : ConstantCalc.constantNull(call.getType());
+            : ConstantCalcs.nullCalcOf(call.getType());
         calcList.add(defaultCalc);
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 

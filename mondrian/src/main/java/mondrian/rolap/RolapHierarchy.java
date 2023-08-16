@@ -37,6 +37,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
@@ -58,7 +59,6 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExpr;
@@ -1009,7 +1009,7 @@ public class RolapHierarchy extends HierarchyBase {
 							public Calc compileCall(
                                 ResolvedFunCall call, ExpCompiler compiler)
                             {
-                                return new ConstantCalc(returnType, null);
+                                return ConstantCalcs.nullCalcOf(returnType);
                             }
 
                             @Override
