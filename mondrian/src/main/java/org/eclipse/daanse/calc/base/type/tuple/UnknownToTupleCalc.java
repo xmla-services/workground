@@ -12,7 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base.nested.conv;
+package org.eclipse.daanse.calc.base.type.tuple;
 
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -21,10 +21,10 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertUnknownToTupleCalc extends AbstractProfilingNestedTupleCalc<Calc<?>> {
+public class UnknownToTupleCalc extends AbstractProfilingNestedTupleCalc<Calc<?>> {
 
-	public ConvertUnknownToTupleCalc(Type type, Calc<?> childCalc) {
-		super( type, new Calc<?>[] {childCalc});
+	public UnknownToTupleCalc(Type type, Calc<?> childCalc) {
+		super(type, new Calc<?>[] { childCalc });
 	}
 
 	@Override

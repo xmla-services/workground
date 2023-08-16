@@ -1,3 +1,17 @@
+/*
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
+
 package org.eclipse.daanse.calc.base.util;
 
 import java.util.Optional;
@@ -41,13 +55,12 @@ public class DimensionUtil {
 	 * @param dimension - Dimension that holds the default Hierarchy
 	 * @return {@link Hierarchy} Default hierarchy
 	 */
-	public static Hierarchy getDimensionDefaultHierarchyOrThrow(Dimension dimension) throws RuntimeException{
+	public static Hierarchy getDimensionDefaultHierarchyOrThrow(Dimension dimension) throws RuntimeException {
 		return getDimensionDefaultHierarchy(dimension).orElseThrow(() -> {
-			String s="Could not Calculate the default hierarchy of the given dimension ''{0}''. It may contains more than one hierarchy. Specify the hierarchy explicitly.";
-			s= s.formatted(dimension.getName());
-			return 
-					new RuntimeException(s);
-					
+			String s = "Could not Calculate the default hierarchy of the given dimension ''{0}''. It may contains more than one hierarchy. Specify the hierarchy explicitly.";
+			s = s.formatted(dimension.getName());
+			return new RuntimeException(s);
+
 		});
 	}
 

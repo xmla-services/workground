@@ -31,14 +31,18 @@ import org.eclipse.daanse.calc.base.constant.ConstantProfilingDoubleCalc;
 import org.eclipse.daanse.calc.base.constant.ConstantProfilingHierarchyCalc;
 import org.eclipse.daanse.calc.base.constant.ConstantProfilingIntegerCalc;
 import org.eclipse.daanse.calc.base.constant.ConstantProfilingStringCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedIntegerCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToDimensionCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToLevelCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToMemberCalc;
+import org.eclipse.daanse.calc.base.type.booleanx.DoubleToBooleanCalc;
+import org.eclipse.daanse.calc.base.type.booleanx.IntgegerToBooleanCalc;
+import org.eclipse.daanse.calc.base.type.booleanx.UnknownToBooleanCalc;
+import org.eclipse.daanse.calc.base.type.dimension.UnknownToDimensionCalc;
+import org.eclipse.daanse.calc.base.type.doublex.IntegerToDoubleCalc;
 import org.eclipse.daanse.calc.base.type.hierarchy.DimensionDefaultHierarchyCalc;
+import org.eclipse.daanse.calc.base.type.integer.DoubleToIntegerCalc;
+import org.eclipse.daanse.calc.base.type.integer.UnknownToIntegerCalc;
+import org.eclipse.daanse.calc.base.type.level.UnknownToLevelCalc;
+import org.eclipse.daanse.calc.base.type.member.UnknownToMemberCalc;
+import org.eclipse.daanse.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.calc.base.util.DimensionUtil;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -229,7 +233,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         	return membCalc;
         }
         	
-		MemberCalc mCalc = new ConvertUnknownToMemberCalc(type, calc);
+		MemberCalc mCalc = new UnknownToMemberCalc(type, calc);
 		return mCalc;
     }
 
@@ -263,7 +267,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		if (calc instanceof LevelCalc lCalc) {
 			return lCalc;
 		}
-		LevelCalc levelCalc = new ConvertUnknownToLevelCalc(type,  calc);
+		LevelCalc levelCalc = new UnknownToLevelCalc(type,  calc);
 		return levelCalc;
     }
 
@@ -282,7 +286,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if(calc instanceof DimensionCalc dimCalc) {
         	return dimCalc;
         }
-		return new ConvertUnknownToDimensionCalc(type, calc);
+		return new UnknownToDimensionCalc(type, calc);
     }
 
     @Override
@@ -324,7 +328,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 
     @Override
     public IntegerCalc compileInteger(Exp exp) {
-        final Calc calc = compileScalar(exp, false);
+        final Calc<?> calc = compileScalar(exp, false);
         final Type type = calc.getType();
         if (type instanceof DecimalType decimalType
                 && decimalType.getScale() == 0)
@@ -349,34 +353,11 @@ public class AbstractExpCompiler implements ExpCompiler {
 				}
 				return new ConstantProfilingIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), i);
 			} else if (calc instanceof DoubleCalc doubleCalc) {
-				return new AbstractProfilingNestedIntegerCalc( exp.getType(),
-						new Calc[] { doubleCalc }) {
-					@Override
-					public Integer evaluate(Evaluator evaluator) {
-						Double d = doubleCalc.evaluate(evaluator);
-						if (d == null) {
-							return null;
-						}
-						return d.intValue();
-					}
-				};
+				return new DoubleToIntegerCalc(exp.getType(),  doubleCalc);
 			}
 
 		} else {
-			return new AbstractProfilingNestedIntegerCalc( new DecimalType(Integer.MAX_VALUE, 0),
-					new Calc[] { calc }) {
-				@Override
-				public Integer evaluate(Evaluator evaluator) {
-					Object o = calc.evaluate(evaluator);
-					if (o == null) {
-						return null;
-					} else if (o instanceof Number n) {
-						return n.intValue();
-					}
-
-					throw evaluator.newEvalException(null, "expected NUMBER was " + o);
-				}
-			};
+			return new UnknownToIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0),calc);
 		}
         
         return (IntegerCalc) calc;
@@ -384,11 +365,11 @@ public class AbstractExpCompiler implements ExpCompiler {
 
 	@Override
 	public StringCalc compileString(Exp exp) {
-		Calc<?> c = compileScalar(exp, false);
+		Calc<?> calc = compileScalar(exp, false);
 
-		if (c instanceof StringCalc sc) {
-			return sc;
-		}else if (c instanceof org.eclipse.daanse.calc.api.ConstantCalc cc) {
+		if (calc instanceof StringCalc stringCalc) {
+			return stringCalc;
+		}else if (calc instanceof org.eclipse.daanse.calc.api.ConstantCalc cc) {
 			Object o = cc.evaluate(null);
 			String s = null;
 			if (o != null) {
@@ -396,22 +377,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}
 			return new ConstantProfilingStringCalc(new StringType(), s);
 		}else {
-			return new AbstractProfilingNestedStringCalc( new StringType(), new Calc[] {c}) {
-
-				@Override
-				public String evaluate(Evaluator evaluator) {
-					
-					Object o = c.evaluate(evaluator);
-					
-					String s = null;
-					if (o != null) {
-						s = o.toString();
-					}
-					return s;
-				}
-		
-			
-			};
+			return new UnknownToStringCalc(new StringType(),  calc);
 		}
 	}
 
@@ -436,7 +402,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         } else {
             resultStyleList = ResultStyle.LIST_ONLY;
         }
-        Calc calc = compileAs(exp, null, resultStyleList);
+        Calc<?> calc = compileAs(exp, null, resultStyleList);
         if (calc instanceof ListCalc listCalc) {
             return listCalc;
         }
@@ -480,7 +446,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 
     @Override
     public BooleanCalc compileBoolean(Exp exp) {
-        final Calc calc = compileScalar(exp, false);
+        final Calc<?> calc = compileScalar(exp, false);
         if (calc instanceof BooleanCalc bc) {
             return bc;
         }
@@ -505,52 +471,17 @@ public class AbstractExpCompiler implements ExpCompiler {
         
         
         if (calc instanceof DoubleCalc doubleCalc) {
-            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {doubleCalc}) {
-                @Override
-				public Boolean evaluate(Evaluator evaluator) {
-					Double v0 = doubleCalc.evaluate(evaluator);
-
-					if (Double.isNaN(v0) || v0 == FunUtil.DOUBLE_NULL) {
-						return FunUtil.BOOLEAN_NULL;
-					}
-
-					return v0 != 0;
-				}
-            };
+            return new DoubleToBooleanCalc(exp.getType(),  doubleCalc);
         } else if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {integerCalc}) {
-                @Override
-				public Boolean evaluate(Evaluator evaluator) {
-					Integer v0 = integerCalc.evaluate(evaluator);
-					if (v0 == null) {
-						return FunUtil.BOOLEAN_NULL;
-					}
-					return v0 != 0;
-				}
-			};
+            return new IntgegerToBooleanCalc(exp.getType(),  integerCalc);
         } else {
-            return new AbstractProfilingNestedBooleanCalc(exp.getType(), new Calc[] {calc}) {
-                @Override
-				public Boolean evaluate(Evaluator evaluator) {
-					Object v0 = calc.evaluate(evaluator);
-					if (v0 == null) {
-						return FunUtil.BOOLEAN_NULL;
-					}
-					if (v0 instanceof Boolean b) {
-						return b;
-					}if (v0 instanceof Number n) {
-						return n.intValue() != 0;
-					}
-					throw evaluator.newEvalException(null, "wrong type, was:"+v0);
-					
-				}
-			};
+            return new UnknownToBooleanCalc(exp.getType(),  calc);
         }
     }
 
     @Override
     public DoubleCalc compileDouble(Exp exp) {
-        final Calc calc = compileScalar(exp, false);
+        final Calc<?> calc = compileScalar(exp, false);
         if (calc instanceof ConstantCalc constantCalc
                 && !(calc.evaluate(null) instanceof Double))
         {
@@ -574,40 +505,10 @@ public class AbstractExpCompiler implements ExpCompiler {
             return doubleCalc;
         }
         if (calc instanceof IntegerCalc integerCalc) {
-            return new AbstractProfilingNestedDoubleCalc(exp.getType(), new Calc[] {integerCalc}) {
-                @Override
-                public Double evaluate(Evaluator evaluator) {
-                	
-                	Integer i=integerCalc.evaluate(evaluator);
-                	if(i==null) {
-                		return FunUtil.DOUBLE_NULL;
-                				//null;
-                				// TODO: !!! JUST REFACTORING 0 must be null
-                	}
-                    return i.doubleValue();
-                }
-            };
+            return new IntegerToDoubleCalc(exp.getType(),  integerCalc);
         }
 
-		return new AbstractProfilingNestedDoubleCalc( new NumericType(), new Calc[] { calc }) {
-			@Override
-			public Double evaluate(Evaluator evaluator) {
-
-				Object o = calc.evaluate(evaluator);
-				if (o == null) {
-					return FunUtil.DOUBLE_NULL;
-					// null;
-					// TODO: !!! JUST REFACTORING 0 must be null
-				} else  if(Objects.equals(o, FunUtil.DOUBLE_NULL)){
-					return FunUtil.DOUBLE_NULL;
-				}else if (o instanceof Double d) {
-					return d;
-				} else if (o instanceof Number n) {
-					return n.doubleValue();
-				}
-				throw evaluator.newEvalException(null, "wrtong typed, was: " + o);
-			}
-		};
+		return new UnknownToDoubleCalc(new NumericType(), calc);
 
      //   throw Util.newInternal("cannot cast " + exp);
     }
@@ -618,7 +519,7 @@ public class AbstractExpCompiler implements ExpCompiler {
     }
 
     @Override
-    public Calc compileScalar(Exp exp, boolean specific) {
+    public Calc<?> compileScalar(Exp exp, boolean specific) {
         final Type type = exp.getType();
         if (type instanceof MemberType) {
             final MemberCalc calc = compileMember(exp);
@@ -654,12 +555,12 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
     }
 
-    private Calc hierarchyToScalar(HierarchyCalc hierarchyCalc) {
+    private Calc<?> hierarchyToScalar(HierarchyCalc hierarchyCalc) {
         final MemberCalc memberCalc = hierarchyToMember(hierarchyCalc);
         return memberToScalar(memberCalc);
     }
 
-    private Calc memberToScalar(MemberCalc memberCalc) {
+    private Calc<?> memberToScalar(MemberCalc memberCalc) {
         final MemberType memberType = (MemberType) memberCalc.getType();
         return MemberValueCalc.create(
                 memberType.getValueType(),
@@ -682,7 +583,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         // registered with a slot. Otherwise a cycle is possible.
         final Type type = parameter.getType();
         Exp defaultExp = parameter.getDefaultExp();
-        Calc calc;
+        Calc<?> calc;
         if (type instanceof ScalarType) {
             if (!defaultExp.getType().equals(type)) {
                 defaultExp =
@@ -711,7 +612,58 @@ public class AbstractExpCompiler implements ExpCompiler {
 
 
 
+
+
+
+
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	public class UnknownToDoubleCalc extends AbstractProfilingNestedDoubleCalc<Calc<?>> {
+
+		public UnknownToDoubleCalc(Type type, Calc<?> calc) {
+			super(type, new Calc[] { calc });
+		}
+
+		@Override
+		public Double evaluate(Evaluator evaluator) {
+
+			Object o = getFirstChildCalc().evaluate(evaluator);
+			if (o == null) {
+				return FunUtil.DOUBLE_NULL;
+				// null;
+				// TODO: !!! JUST REFACTORING 0 must be null
+			} else  if(Objects.equals(o, FunUtil.DOUBLE_NULL)){
+				return FunUtil.DOUBLE_NULL;
+			}else if (o instanceof Double d) {
+				return d;
+			} else if (o instanceof Number n) {
+				return n.doubleValue();
+			}
+			throw evaluator.newEvalException(null, "wrtong typed, was: " + o);
+		}
+	}
+
 
 	/**
      * Implementation of {@link ParameterSlot}.
@@ -719,7 +671,7 @@ public class AbstractExpCompiler implements ExpCompiler {
     private static class ParameterSlotImpl implements ParameterSlot {
         private final Parameter parameter;
         private final int index;
-        private Calc defaultValueCalc;
+        private Calc<?> defaultValueCalc;
         private Object value;
         private boolean assigned;
         private Object cachedDefaultValue;
@@ -743,7 +695,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
 
         @Override
-        public Calc getDefaultValueCalc() {
+        public Calc<?> getDefaultValueCalc() {
             return defaultValueCalc;
         }
 
@@ -761,7 +713,7 @@ public class AbstractExpCompiler implements ExpCompiler {
          *
          * @see #getDefaultValueCalc()
          */
-        private void setDefaultValueCalc(Calc calc) {
+        private void setDefaultValueCalc(Calc<?> calc) {
             defaultValueCalc = calc;
         }
 

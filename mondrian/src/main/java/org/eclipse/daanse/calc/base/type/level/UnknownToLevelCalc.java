@@ -12,7 +12,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 
-package org.eclipse.daanse.calc.base.nested.conv;
+package org.eclipse.daanse.calc.base.type.level;
 
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedLevelCalc;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -21,18 +21,18 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertUnknownToLevelCalc extends AbstractProfilingNestedLevelCalc<Calc<?>> {
+public class UnknownToLevelCalc extends AbstractProfilingNestedLevelCalc<Calc<?>> {
 
-		public ConvertUnknownToLevelCalc(Type type,  Calc<?> childCalc) {
-			super(type, new Calc[] { childCalc });
-		}
-
-		@Override
-		public Level evaluate(Evaluator evaluator) {
-			Object o = getFirstChildCalc().evaluate(evaluator);
-			if (o instanceof Level lvl) {
-				return lvl;
-			}
-			throw evaluator.newEvalException(null, "expected Level, was: " + o);
-		}
+	public UnknownToLevelCalc(Type type, Calc<?> childCalc) {
+		super(type, new Calc[] { childCalc });
 	}
+
+	@Override
+	public Level evaluate(Evaluator evaluator) {
+		Object o = getFirstChildCalc().evaluate(evaluator);
+		if (o instanceof Level lvl) {
+			return lvl;
+		}
+		throw evaluator.newEvalException(null, "expected Level, was: " + o);
+	}
+}
