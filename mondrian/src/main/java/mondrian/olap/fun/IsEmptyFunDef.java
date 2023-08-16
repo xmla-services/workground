@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

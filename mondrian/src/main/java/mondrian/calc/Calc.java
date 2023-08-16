@@ -59,14 +59,14 @@ import mondrian.olap.type.Type;
  * {@link DimensionCalc} yield elements of the OLAP model.<p/>
  *
  * Each of these sub-interfaces has an abstract implementation:
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedIntegerCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDoubleCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedStringCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedLevelCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedHierarchyCalc},
- * {@link org.eclipse.daanse.calc.impl.AbstractProfilingNestedDimensionCalc}.<p/>
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedIntegerCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedDoubleCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedStringCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedMemberCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedLevelCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedHierarchyCalc},
+ * {@link org.eclipse.daanse.calc.base.AbstractProfilingNestedDimensionCalc}.<p/>
  *
  * {@link mondrian.calc.impl.GenericCalc} is an adapter which implements all of these interfaces
  * and will try to convert any given result to the correct type. Use it

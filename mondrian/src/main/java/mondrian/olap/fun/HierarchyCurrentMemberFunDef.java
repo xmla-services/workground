@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.calc.api.HierarchyCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eigenbase.util.property.StringProperty;

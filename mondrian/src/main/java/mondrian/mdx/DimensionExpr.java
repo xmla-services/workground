@@ -10,7 +10,7 @@
 package mondrian.mdx;
 
 import org.eclipse.daanse.calc.api.DimensionCalc;
-import org.eclipse.daanse.calc.impl.ConstantDimensionProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantDimensionProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.calc.ExpCompiler;

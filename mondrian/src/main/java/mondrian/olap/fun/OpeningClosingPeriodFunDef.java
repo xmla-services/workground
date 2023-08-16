@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.LevelCalc;
 import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;

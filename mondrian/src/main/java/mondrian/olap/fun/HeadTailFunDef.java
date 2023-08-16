@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.IntegerCalc;
-import org.eclipse.daanse.calc.impl.ConstantIntegerProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantIntegerProfilingCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

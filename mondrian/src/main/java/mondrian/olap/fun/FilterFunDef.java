@@ -13,8 +13,8 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.calc.api.BooleanCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
-import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.calc.base.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 

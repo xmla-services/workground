@@ -10,7 +10,7 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;

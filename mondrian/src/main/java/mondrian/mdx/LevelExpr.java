@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import org.eclipse.daanse.calc.impl.ConstantLevelProfilingCalc;
+import org.eclipse.daanse.calc.base.ConstantLevelProfilingCalc;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;

@@ -26,7 +26,7 @@ import java.util.Objects;
 import org.eclipse.daanse.calc.api.DoubleCalc;
 import org.eclipse.daanse.calc.api.IntegerCalc;
 import org.eclipse.daanse.calc.api.StringCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

@@ -17,8 +17,8 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
-import org.eclipse.daanse.calc.impl.AbstractProfilingNestedCalc;
-import org.eclipse.daanse.calc.impl.HirarchyDependsChecker;
+import org.eclipse.daanse.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.calc.base.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eigenbase.xom.XOMUtil;
