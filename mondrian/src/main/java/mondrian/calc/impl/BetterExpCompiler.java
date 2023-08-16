@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.api.TupleCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertMemberCalcToTupleCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertWrappingMemberCalc;
-import org.eclipse.daanse.calc.base.nested.conv.ConvertWrappingTupleCalc;
+import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToMemberCalc;
+import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToTupleCalc;
+import org.eclipse.daanse.calc.base.type.tuple.MemberCalcToTupleCalc;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ListCalc;
@@ -63,17 +63,17 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 				return tc;
 			}
 
-			TupleCalc tc = new ConvertWrappingTupleCalc( type, calc);
+			TupleCalc tc = new ConvertUnknownToTupleCalc( type, calc);
 			return tc;
 		} else if (type instanceof MemberType) {
 			MemberCalc tmpCalc = null;
 			if (calc instanceof MemberCalc mc) {
 				tmpCalc = mc;
 			} else {
-				tmpCalc = new ConvertWrappingMemberCalc( type, calc);
+				tmpCalc = new ConvertUnknownToMemberCalc( type, calc);
 			}
 			final MemberCalc memberCalc = tmpCalc;
-			return new ConvertMemberCalcToTupleCalc( type,  memberCalc);
+			return new MemberCalcToTupleCalc( type,  memberCalc);
 
 		} else {
 			throw Util.newInternal("cannot cast " + exp);

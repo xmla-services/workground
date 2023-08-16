@@ -14,28 +14,25 @@
 
 package org.eclipse.daanse.calc.base.nested.conv;
 
-import org.eclipse.daanse.calc.api.MemberCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.api.model.Member;
 
+import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertMemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc<MemberCalc> {
-	private final MemberCalc memberCalc;
+public class ConvertUnknownToTupleCalc extends AbstractProfilingNestedTupleCalc<Calc<?>> {
 
-	public ConvertMemberCalcToTupleCalc(Type type, MemberCalc memberCalc) {
-		super( type, new MemberCalc[] { memberCalc });
-		this.memberCalc = memberCalc;
+	public ConvertUnknownToTupleCalc(Type type, Calc<?> childCalc) {
+		super( type, new Calc<?>[] {childCalc});
 	}
 
 	@Override
 	public Member[] evaluate(Evaluator evaluator) {
-		final Member member = memberCalc.evaluate(evaluator);
-		if (member == null) {
-			return null;
-		} else {
-			return new Member[] { memberCalc.evaluate(evaluator) };
+		Object o = getFirstChildCalc().evaluate(evaluator);
+		if (o instanceof Member[] tuple) {
+			return tuple;
 		}
+		throw evaluator.newEvalException(null, "expected Member[], was: " + o);
 	}
 }

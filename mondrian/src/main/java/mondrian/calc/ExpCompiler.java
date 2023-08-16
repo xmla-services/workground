@@ -65,7 +65,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @return Compiled expression
      */
-    Calc compile(Exp exp);
+    Calc<?> compile(Exp exp);
 
     /**
      * Compiles an expression to a given result type.
@@ -197,7 +197,7 @@ public interface ExpCompiler {
      *   {@link #compileString(mondrian.olap.Exp)}
      * @return Calculation which returns the scalar value of the expression
      */
-    Calc compileScalar(Exp exp, boolean specific);
+    Calc<?> compileScalar(Exp exp, boolean specific);
 
     /**
      * Implements a parameter, returning a unique slot which will hold the
@@ -224,7 +224,7 @@ public interface ExpCompiler {
      */
     public static final class Factory extends ObjectFactory<ExpCompiler> {
         private static final Factory factory;
-        private static final Class[] CLASS_ARRAY;
+        private static final Class<?>[] CLASS_ARRAY;
         static {
             factory = new Factory();
             CLASS_ARRAY = new Class[] {
@@ -357,7 +357,7 @@ public interface ExpCompiler {
          */
         @Override
         protected ExpCompiler getDefault(
-                final Class[] parameterTypes,
+                final Class<?>[] parameterTypes,
                 final Object[] parameterValues)
                         throws CreationException
         {

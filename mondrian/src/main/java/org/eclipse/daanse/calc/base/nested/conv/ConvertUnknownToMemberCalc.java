@@ -21,15 +21,15 @@ import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
-public class ConvertWrappingMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {
+public class ConvertUnknownToMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {
 
-	public ConvertWrappingMemberCalc(Type type, Calc<?> childCalc) {
+	public ConvertUnknownToMemberCalc(Type type, Calc<?> childCalc) {
 		super( type, new Calc[] { childCalc });
 	}
 
 	@Override
 	public Member evaluate(Evaluator evaluator) {
-		Object o = getFirstChildCalcs().evaluate(evaluator);
+		Object o = getFirstChildCalc().evaluate(evaluator);
 		if (o instanceof Member m) {
 			return m;
 		}

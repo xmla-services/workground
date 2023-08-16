@@ -32,17 +32,16 @@ import org.eclipse.daanse.calc.base.constant.ConstantProfilingHierarchyCalc;
 import org.eclipse.daanse.calc.base.constant.ConstantProfilingIntegerCalc;
 import org.eclipse.daanse.calc.base.constant.ConstantProfilingStringCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedBooleanCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedDoubleCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedIntegerCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedLevelCalc;
-import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.calc.base.nested.AbstractProfilingNestedStringCalc;
+import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToDimensionCalc;
+import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToLevelCalc;
+import org.eclipse.daanse.calc.base.nested.conv.ConvertUnknownToMemberCalc;
+import org.eclipse.daanse.calc.base.type.hierarchy.DimensionDefaultHierarchyCalc;
+import org.eclipse.daanse.calc.base.util.DimensionUtil;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -141,7 +140,7 @@ public class AbstractExpCompiler implements ExpCompiler {
      * Uses the current ResultStyle to compile the expression.
      */
     @Override
-    public Calc compile(Exp exp) {
+    public Calc<?> compile(Exp exp) {
         return exp.accept(this);
     }
 
@@ -151,7 +150,7 @@ public class AbstractExpCompiler implements ExpCompiler {
      * Uses a new ResultStyle to compile the expression.
      */
     @Override
-    public Calc compileAs(
+    public Calc<?> compileAs(
             Exp exp,
             Type resultType,
             List<ResultStyle> preferredResultTypes)
@@ -193,7 +192,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                     return compileScalar(exp, false);
                 }
             }
-            final Calc calc = compile(exp);
+            final Calc<?> calc = compile(exp);
             if (substitutions > 0) {
                 final IterCalc iterCalc = (IterCalc) calc;
                 if (iterCalc == null) {
@@ -230,18 +229,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         	return membCalc;
         }
         	
-		MemberCalc mCalc = new AbstractProfilingNestedMemberCalc( type,
-				new Calc[] { calc }) {
-
-			@Override
-			public Member evaluate(Evaluator evaluator) {
-				Object o = calc.evaluate(evaluator);
-				if (o instanceof Member m) {
-					return m;
-				}
-				throw evaluator.newEvalException(null, "expected Member, was: " + o);
-			}
-		};
+		MemberCalc mCalc = new ConvertUnknownToMemberCalc(type, calc);
 		return mCalc;
     }
 
@@ -275,18 +263,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		if (calc instanceof LevelCalc lCalc) {
 			return lCalc;
 		}
-		LevelCalc levelCalc = new AbstractProfilingNestedLevelCalc( type,
-				new Calc[] { calc }) {
-
-			@Override
-			public Level evaluate(Evaluator evaluator) {
-				Object o = calc.evaluate(evaluator);
-				if (o instanceof Level lvl) {
-					return lvl;
-				}
-				throw evaluator.newEvalException(null, "expected Level, was: " + o);
-			}
-		};
+		LevelCalc levelCalc = new ConvertUnknownToLevelCalc(type,  calc);
 		return levelCalc;
     }
 
@@ -305,17 +282,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if(calc instanceof DimensionCalc dimCalc) {
         	return dimCalc;
         }
-		return new AbstractProfilingNestedDimensionCalc( type, new Calc[] { calc }) {
-
-			@Override
-			public Dimension evaluate(Evaluator evaluator) {
-				Object o = calc.evaluate(evaluator);
-				if (o instanceof Dimension d) {
-					return d;
-				}
-				throw evaluator.newEvalException(null, "expected Dimension, was: " + o);
-			}
-		};
+		return new ConvertUnknownToDimensionCalc(type, calc);
     }
 
     @Override
@@ -327,18 +294,13 @@ public class AbstractExpCompiler implements ExpCompiler {
             final Dimension dimension = type.getDimension();
             if (dimension != null) {
                 final Hierarchy hierarchy =
-                        FunUtil.getDimensionDefaultHierarchy(dimension);
+                        DimensionUtil.getDimensionDefaultHierarchyOrThrow(dimension);
                 if (hierarchy != null) {
                     return ConstantProfilingHierarchyCalc.of(hierarchy);
                 }
-                // SSAS gives error at run time (often as an error in a
-                // cell) but we prefer to give an error at validate time.
-                throw MondrianResource.instance()
-                .CannotImplicitlyConvertDimensionToHierarchy.ex(
-                        dimension.getName());
             }
             final DimensionCalc dimensionCalc = compileDimension(exp);
-            return new DimensionHierarchyCalc(
+            return new DimensionDefaultHierarchyCalc(
             		HierarchyType.forType(type),
                     dimensionCalc);
         }
@@ -747,7 +709,11 @@ public class AbstractExpCompiler implements ExpCompiler {
         return resultStyles;
     }
 
-    /**
+
+
+	
+
+	/**
      * Implementation of {@link ParameterSlot}.
      */
     private static class ParameterSlotImpl implements ParameterSlot {
@@ -838,30 +804,5 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
     }
 
-    /**
-     * Computes the hierarchy of a dimension.
-     */
-    private static class DimensionHierarchyCalc extends AbstractProfilingNestedHierarchyCalc {
-        private final DimensionCalc dimensionCalc;
-
-        protected DimensionHierarchyCalc(Type type, DimensionCalc dimensionCalc) {
-            super(type, new Calc[] {dimensionCalc});
-            this.dimensionCalc = dimensionCalc;
-        }
-
-        @Override
-        public Hierarchy evaluate(Evaluator evaluator) {
-            final Dimension dimension =
-                    dimensionCalc.evaluate(evaluator);
-            final Hierarchy hierarchy =
-                    FunUtil.getDimensionDefaultHierarchy(dimension);
-            if (hierarchy != null) {
-                return hierarchy;
-            }
-            throw FunUtil.newEvalException(
-                    MondrianResource.instance()
-                    .CannotImplicitlyConvertDimensionToHierarchy.ex(
-                            dimension.getName()));
-        }
-    }
+    
 }
