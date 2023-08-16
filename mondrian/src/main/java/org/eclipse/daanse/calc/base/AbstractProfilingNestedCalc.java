@@ -44,6 +44,7 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
 
 	}
 
+
     /**
      * {@inheritDoc}
      *
@@ -65,8 +66,12 @@ public abstract class AbstractProfilingNestedCalc<E> extends AbstractProfilingCa
     }
 
 
-     public Calc<?>[] getChildCalcs() {
+    public Calc<?>[] getChildCalcs() {
         return childCalcs;
+    }
+    
+    protected Calc<?> getFirstChildCalcs() {
+        return getChildCalcs()[0];
     }
 
     @Override
