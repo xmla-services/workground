@@ -15,9 +15,9 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
 
@@ -25,7 +25,6 @@ import mondrian.olap.type.Type;
  * Adapter which computes a scalar or tuple expression and converts it to any
  * required type.
  *
- * @see mondrian.calc.impl.GenericIterCalc
  *
  * @author jhyde
  * @since Sep 26, 2005

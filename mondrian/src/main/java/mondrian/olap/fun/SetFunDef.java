@@ -20,15 +20,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.VoidCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
@@ -107,7 +107,7 @@ public class SetFunDef extends FunDefBase {
         if (args.length == 0) {
             // Special treatment for empty set, because we don't know whether it
             // is a set of members or tuples, and so we need it to implement
-            // both MemberListCalc and ListCalc.
+            // both MemberListCalc and TupleListCalc.
             return new EmptyListCalc(call);
         }
         if (args.length == 1
@@ -173,13 +173,13 @@ public class SetFunDef extends FunDefBase {
             final Type type = arg.getType();
             if (type instanceof SetType) {
                 // TODO use resultStyles
-                final ListCalc listCalc = compiler.compileList(arg);
-                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {listCalc}) {
+                final TupleListCalc tupleListCalc = compiler.compileList(arg);
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
                 	// name "Sublist..."
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
-                            listCalc.evaluateList(evaluator);
+                            tupleListCalc.evaluateList(evaluator);
                         // Add only tuples which are not null. Tuples with
                         // any null members are considered null.
                         outer:
@@ -200,12 +200,12 @@ public class SetFunDef extends FunDefBase {
                         "Members",
                         mondrian.olap.Syntax.Property,
                         new Exp[] {arg});
-                final ListCalc listCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
-                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {listCalc}) {
+                final TupleListCalc tupleListCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
+                return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
                     @Override
 					public Void evaluate(Evaluator evaluator) {
                         TupleList list =
-                                listCalc.evaluateList(evaluator);
+                                tupleListCalc.evaluateList(evaluator);
                         result = list;
 						return null;
                     }
@@ -251,7 +251,7 @@ public class SetFunDef extends FunDefBase {
             for (VoidCalc voidCalc : voidCalcs) {
                 voidCalc.evaluate(evaluator);
             }
-            return result.cloneList(-1);
+            return result.copyList(-1);
         }
     }
 
@@ -267,7 +267,7 @@ public class SetFunDef extends FunDefBase {
         return calcs;
     }
 
-    private static IterCalc createCalc(
+    private static TupleIteratorCalc createCalc(
         Exp arg,
         ExpCompiler compiler,
         List<ResultStyle> resultStyles)
@@ -277,30 +277,30 @@ public class SetFunDef extends FunDefBase {
             final Calc calc = compiler.compileAs(arg, null, resultStyles);
             switch (calc.getResultStyle()) {
             case ITERABLE:
-                final IterCalc iterCalc = (IterCalc) calc;
+                final TupleIteratorCalc tupleIteratorCalc = (TupleIteratorCalc) calc;
                 return new AbstractIterCalc(type, new Calc[]{calc}) {
                 	// name "Sublist..."
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
                     {
-                        return iterCalc.evaluateIterable(evaluator);
+                        return tupleIteratorCalc.evaluateIterable(evaluator);
                     }
 
      
                 };
             case LIST:
             case MUTABLE_LIST:
-                final ListCalc listCalc = (ListCalc) calc;
+                final TupleListCalc tupleListCalc = (TupleListCalc) calc;
                 return new AbstractIterCalc(type, new Calc[]{calc}) {
                 	// name "Sublist..."
                     @Override
 					public TupleIterable evaluateIterable(
                         Evaluator evaluator)
                     {
-                        TupleList list = listCalc.evaluateList(
+                        TupleList list = tupleListCalc.evaluateList(
                             evaluator);
-                        TupleList result = list.cloneList(list.size());
+                        TupleList result = list.copyList(list.size());
                         // Add only tuples which are not null. Tuples with
                         // any null members are considered null.
                         list:
@@ -392,7 +392,7 @@ public class SetFunDef extends FunDefBase {
      * iterator.
      */
     public static class ExprIterCalc extends AbstractIterCalc {
-        private final IterCalc[] iterCalcs;
+        private final TupleIteratorCalc[] tupleIteratorCalcs;
 
         public ExprIterCalc(
 			Type type,
@@ -403,13 +403,13 @@ public class SetFunDef extends FunDefBase {
             super(type, null);
             final List<Calc> calcList =
                 SetFunDef.compileSelf(args, compiler, resultStyles);
-            iterCalcs = calcList.toArray(new IterCalc[calcList.size()]);
+            tupleIteratorCalcs = calcList.toArray(new TupleIteratorCalc[calcList.size()]);
         }
 
         // override return type
         @Override
-		public IterCalc[] getChildCalcs() {
-            return iterCalcs;
+		public TupleIteratorCalc[] getChildCalcs() {
+            return tupleIteratorCalcs;
         }
 
         @Override
@@ -420,8 +420,8 @@ public class SetFunDef extends FunDefBase {
                 @Override
 				public TupleCursor tupleCursor() {
                     return new AbstractTupleCursor(arity) {
-                        Iterator<IterCalc> calcIterator =
-                            Arrays.asList(iterCalcs).iterator();
+                        Iterator<TupleIteratorCalc> calcIterator =
+                            Arrays.asList(tupleIteratorCalcs).iterator();
                         TupleCursor currentCursor =
                             TupleCollections.emptyList(1).tupleCursor();
 

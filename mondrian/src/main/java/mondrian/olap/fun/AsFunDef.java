@@ -11,7 +11,8 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;

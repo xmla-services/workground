@@ -15,23 +15,19 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.Type;
 
+public abstract class AbstractProfilingNestedHierarchyCalc<C extends Calc<?>>
+		extends AbstractProfilingNestedCalc<Hierarchy, C> implements HierarchyCalc {
 
-public abstract class AbstractProfilingNestedHierarchyCalc<C   extends Calc<?>>
-extends AbstractProfilingNestedCalc<Hierarchy,C >
-implements HierarchyCalc
-{
-
-    protected AbstractProfilingNestedHierarchyCalc(Type type, C[] calcs) {
-        super(type, calcs);
-        assert getType() instanceof HierarchyType;
-    }
-
+	protected AbstractProfilingNestedHierarchyCalc(Type type, C[] calcs) {
+		super(type, calcs);
+		requiresType(HierarchyType.class);
+	}
 
 }

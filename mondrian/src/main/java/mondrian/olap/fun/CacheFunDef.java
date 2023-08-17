@@ -12,9 +12,9 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;

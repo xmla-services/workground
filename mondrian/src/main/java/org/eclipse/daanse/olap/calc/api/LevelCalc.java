@@ -16,8 +16,6 @@ package org.eclipse.daanse.olap.calc.api;
 
 import org.eclipse.daanse.olap.api.model.Level;
 
-import mondrian.calc.Calc;
-
 
 public interface LevelCalc extends Calc<Level> {
 

@@ -13,14 +13,14 @@ package mondrian.calc.impl;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.MemberCalcToTupleCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.UnknownToTupleCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
@@ -81,30 +81,30 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 	}
 
 	@Override
-	public ListCalc compileList(Exp exp, boolean mutable) {
-		final ListCalc listCalc = super.compileList(exp, mutable);
-		if (mutable && listCalc.getResultStyle() == ResultStyle.LIST) {
+	public TupleListCalc compileList(Exp exp, boolean mutable) {
+		final TupleListCalc tupleListCalc = super.compileList(exp, mutable);
+		if (mutable && tupleListCalc.getResultStyle() == ResultStyle.LIST) {
 			// Wrap the expression in an expression which creates a mutable
 			// copy.
-			return new CopyListCalc(listCalc);
+			return new CopyListCalc(tupleListCalc);
 		}
-		return listCalc;
+		return tupleListCalc;
 	}
 
 	
 
 	private static class CopyListCalc extends AbstractListCalc {
-		private final ListCalc listCalc;
+		private final TupleListCalc tupleListCalc;
 
-		public CopyListCalc(ListCalc listCalc) {
-			super( listCalc.getType(), new Calc[] { listCalc });
-			this.listCalc = listCalc;
+		public CopyListCalc(TupleListCalc tupleListCalc) {
+			super( tupleListCalc.getType(), new Calc[] { tupleListCalc });
+			this.tupleListCalc = tupleListCalc;
 		}
 
 		@Override
 		public TupleList evaluateList(Evaluator evaluator) {
-			final TupleList list = listCalc.evaluateList(evaluator);
-			return list.cloneList(-1);
+			final TupleList list = tupleListCalc.evaluateList(evaluator);
+			return list.copyList(-1);
 		}
 	}
 }

@@ -24,14 +24,14 @@ import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.util.property.IntegerProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
@@ -97,32 +97,32 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final Calc calc =
             call.getArgCount() > 1
                 ? compiler.compileScalar(call.getArg(1), true)
                 : new ValueCalc(call.getType());
         final Member member =
             call.getArgCount() > 1 ? getMember(call.getArg(1)) : null;
-        return new AggregateCalc(calc.getType(), listCalc, calc, member);
+        return new AggregateCalc(calc.getType(), tupleListCalc, calc, member);
     }
 
     public static class AggregateCalc extends GenericCalc {
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final Calc calc;
         private final Member member;
 
         public AggregateCalc(
-            Type type, ListCalc listCalc, Calc calc, Member member)
+            Type type, TupleListCalc tupleListCalc, Calc calc, Member member)
         {
-            super(type, new Calc[]{listCalc, calc});
-            this.listCalc = listCalc;
+            super(type, new Calc[]{tupleListCalc, calc});
+            this.tupleListCalc = tupleListCalc;
             this.calc = calc;
             this.member = member;
         }
 
-        public AggregateCalc(Type type, ListCalc listCalc, Calc calc) {
-            this(type, listCalc, calc, null);
+        public AggregateCalc(Type type, TupleListCalc tupleListCalc, Calc calc) {
+            this(type, tupleListCalc, calc, null);
         }
 
         @Override
@@ -130,7 +130,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             evaluator.getTiming().markStart(AggregateFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
-                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
+                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
                 if (member != null) {
                     evaluator.setContext(member);
                 }
@@ -311,7 +311,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         public static TupleList removeOverlappingTupleEntries(
             TupleList list)
         {
-            TupleList trimmedList = list.cloneList(list.size());
+            TupleList trimmedList = list.copyList(list.size());
             Member[] tuple1 = new Member[list.getArity()];
             Member[] tuple2 = new Member[list.getArity()];
             final TupleCursor cursor1 = list.tupleCursor();

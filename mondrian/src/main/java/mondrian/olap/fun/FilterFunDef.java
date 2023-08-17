@@ -15,13 +15,12 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
-import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
@@ -90,10 +89,10 @@ class FilterFunDef extends FunDefBase {
     }
 
     /**
-     * Returns an IterCalc.
+     * Returns an TupleIteratorCalc.
      *
-     * <p>Here we would like to get either a IterCalc or ListCalc (mutable)
-     * from the inner expression. For the IterCalc, its Iterator
+     * <p>Here we would like to get either a TupleIteratorCalc or TupleListCalc (mutable)
+     * from the inner expression. For the TupleIteratorCalc, its Iterator
      * can be wrapped with another Iterator that filters each element.
      * For the mutable list, remove all members that are filtered.
      *
@@ -101,7 +100,7 @@ class FilterFunDef extends FunDefBase {
      * @param compiler Compiler
      * @return Implementation of this function call in the Iterable result style
      */
-    protected IterCalc compileCallIterable(
+    protected TupleIteratorCalc compileCallIterable(
         final ResolvedFunCall call,
         ExpCompiler compiler)
     {
@@ -163,7 +162,7 @@ class FilterFunDef extends FunDefBase {
     private static class MutableIterCalc extends BaseIterCalc {
         MutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
             super(call, calcs);
-            assert calcs[0] instanceof ListCalc;
+            assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
 
@@ -173,7 +172,7 @@ class FilterFunDef extends FunDefBase {
             final int savepoint = evaluator.savepoint();
             try {
                 Calc[] calcs = getChildCalcs();
-                ListCalc lcalc = (ListCalc) calcs[0];
+                TupleListCalc lcalc = (TupleListCalc) calcs[0];
                 BooleanCalc bcalc = (BooleanCalc) calcs[1];
 
                 TupleList list = lcalc.evaluateList(evaluator);
@@ -206,19 +205,19 @@ class FilterFunDef extends FunDefBase {
     private static class ImmutableIterCalc extends BaseIterCalc {
         ImmutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
             super(call, calcs);
-            assert calcs[0] instanceof ListCalc;
+            assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
 
         @Override
 		protected TupleIterable makeIterable(Evaluator evaluator) {
             Calc[] calcs = getChildCalcs();
-            ListCalc lcalc = (ListCalc) calcs[0];
+            TupleListCalc lcalc = (TupleListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
             TupleList members = lcalc.evaluateList(evaluator);
 
             // Not mutable, must create new list
-            TupleList result = members.cloneList(members.size() / 2);
+            TupleList result = members.copyList(members.size() / 2);
             final int savepoint = evaluator.savepoint();
             try {
                 evaluator.setNonEmpty(false);
@@ -246,14 +245,14 @@ class FilterFunDef extends FunDefBase {
     {
         IterIterCalc(ResolvedFunCall call, Calc[] calcs) {
             super(call, calcs);
-            assert calcs[0] instanceof IterCalc;
+            assert calcs[0] instanceof TupleIteratorCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
 
         @Override
 		protected TupleIterable makeIterable(Evaluator evaluator) {
             Calc[] calcs = getChildCalcs();
-            IterCalc icalc = (IterCalc) calcs[0];
+            TupleIteratorCalc icalc = (TupleIteratorCalc) calcs[0];
             final BooleanCalc bcalc = (BooleanCalc) calcs[1];
 
             // This does dynamics, just in time,
@@ -295,13 +294,13 @@ class FilterFunDef extends FunDefBase {
 
 
     /**
-     * Returns a ListCalc.
+     * Returns a TupleListCalc.
      *
      * @param call Call
      * @param compiler Compiler
      * @return Implementation of this function call in the List result style
      */
-    protected ListCalc compileCallList(
+    protected TupleListCalc compileCallList(
         final ResolvedFunCall call,
         ExpCompiler compiler)
     {
@@ -309,7 +308,7 @@ class FilterFunDef extends FunDefBase {
         BooleanCalc bcalc = compiler.compileBoolean(call.getArg(1));
         Calc[] calcs = new Calc[] {ilcalc, bcalc};
 
-        // Note that all of the ListCalc's return will be mutable
+        // Note that all of the TupleListCalc's return will be mutable
         if (ResultStyle.LIST.equals(ilcalc.getResultStyle())) {
             return new ImmutableListCalc(call, calcs);
         } else if (ResultStyle.MUTABLE_LIST.equals(ilcalc.getResultStyle())) {
@@ -354,20 +353,20 @@ class FilterFunDef extends FunDefBase {
     private static class MutableListCalc extends BaseListCalc {
         MutableListCalc(ResolvedFunCall call, Calc[] calcs) {
             super(call, calcs);
-            assert calcs[0] instanceof ListCalc;
+            assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
 
         @Override
 		protected TupleList makeList(Evaluator evaluator) {
             Calc[] calcs = getChildCalcs();
-            ListCalc lcalc = (ListCalc) calcs[0];
+            TupleListCalc lcalc = (TupleListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
             TupleList members0 = lcalc.evaluateList(evaluator);
 
             // make list mutable;
             // for capacity planning, guess selectivity = .5
-            TupleList result = members0.cloneList(members0.size() / 2);
+            TupleList result = members0.copyList(members0.size() / 2);
             final int savepoint = evaluator.savepoint();
             try {
                 evaluator.setNonEmpty(false);
@@ -393,7 +392,7 @@ class FilterFunDef extends FunDefBase {
     private static class ImmutableListCalc extends BaseListCalc {
         ImmutableListCalc(ResolvedFunCall call, Calc[] calcs) {
             super(call, calcs);
-            assert calcs[0] instanceof ListCalc;
+            assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
         }
 
@@ -403,13 +402,13 @@ class FilterFunDef extends FunDefBase {
             final int savepoint = evaluator.savepoint();
             try {
                 Calc[] calcs = getChildCalcs();
-                ListCalc lcalc = (ListCalc) calcs[0];
+                TupleListCalc lcalc = (TupleListCalc) calcs[0];
                 BooleanCalc bcalc = (BooleanCalc) calcs[1];
                 TupleList members0 = lcalc.evaluateList(evaluator);
 
                 // Not mutable, must create new list;
                 // for capacity planning, guess selectivity = .5
-                TupleList result = members0.cloneList(members0.size() / 2);
+                TupleList result = members0.copyList(members0.size() / 2);
                 evaluator.setNonEmpty(false);
                 final TupleCursor cursor = members0.tupleCursor();
                 int currentIteration = 0;

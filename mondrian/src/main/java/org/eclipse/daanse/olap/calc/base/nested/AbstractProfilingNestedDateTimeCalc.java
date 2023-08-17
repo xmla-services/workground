@@ -11,10 +11,10 @@ package org.eclipse.daanse.olap.calc.base.nested;
 
 import java.util.Date;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
 

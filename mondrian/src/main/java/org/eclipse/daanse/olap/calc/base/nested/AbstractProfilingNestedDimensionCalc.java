@@ -15,10 +15,10 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.Type;
 
@@ -30,7 +30,8 @@ implements DimensionCalc
 
     protected AbstractProfilingNestedDimensionCalc(Type type, C[] calcs) {
         super(type, calcs);
-        assert getType() instanceof DimensionType;
+        
+        requiresType(DimensionType.class);
     }
 
 

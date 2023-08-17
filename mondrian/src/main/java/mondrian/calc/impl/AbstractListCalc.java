@@ -9,13 +9,13 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
@@ -32,7 +32,7 @@ import mondrian.olap.type.Type;
  */
 public abstract class AbstractListCalc
 extends AbstractProfilingNestedCalc<Object,Calc<?>>
-implements ListCalc {
+implements TupleListCalc {
     private final boolean mutable;
 
     /**

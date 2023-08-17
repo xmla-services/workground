@@ -9,7 +9,8 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Exp;
 import mondrian.olap.fun.AggregateFunDef;

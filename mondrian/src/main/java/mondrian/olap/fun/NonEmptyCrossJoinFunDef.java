@@ -14,10 +14,10 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -51,8 +51,8 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
 
     @Override
 	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
-        final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
+        final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
+        final TupleListCalc listCalc2 = compiler.compileList(call.getArg(1));
         return new AbstractListCalc(
         		call.getType(), new Calc[] {listCalc1, listCalc2}, false)
         {

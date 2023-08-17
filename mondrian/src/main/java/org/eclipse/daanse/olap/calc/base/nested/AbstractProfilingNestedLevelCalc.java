@@ -15,18 +15,19 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
-public abstract class AbstractProfilingNestedLevelCalc<C   extends Calc<?> > extends AbstractProfilingNestedCalc<Level,C> implements LevelCalc {
+public abstract class AbstractProfilingNestedLevelCalc<C extends Calc<?>> extends AbstractProfilingNestedCalc<Level, C>
+		implements LevelCalc {
 
 	protected AbstractProfilingNestedLevelCalc(Type type, C[] calcs) {
-		super( type, calcs);
-		assert getType() instanceof LevelType;
+		super(type, calcs);
+		requiresType(LevelType.class);
 	}
 
 }

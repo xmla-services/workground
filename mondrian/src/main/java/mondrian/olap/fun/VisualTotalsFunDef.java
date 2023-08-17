@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -79,33 +79,33 @@ public class VisualTotalsFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final StringCalc stringCalc =
             call.getArgCount() > 1
             ? compiler.compileString(call.getArg(1))
             : null;
-        return new CalcImpl(call, listCalc, stringCalc);
+        return new CalcImpl(call, tupleListCalc, stringCalc);
     }
 
     /**
      * Calc implementation of the <code>VisualTotals</code> function.
      */
     private static class CalcImpl extends AbstractListCalc {
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final StringCalc stringCalc;
 
         public CalcImpl(
-            ResolvedFunCall call, ListCalc listCalc, StringCalc stringCalc)
+            ResolvedFunCall call, TupleListCalc tupleListCalc, StringCalc stringCalc)
         {
-            super(call.getType(), new Calc[] {listCalc, stringCalc});
-            this.listCalc = listCalc;
+            super(call.getType(), new Calc[] {tupleListCalc, stringCalc});
+            this.tupleListCalc = tupleListCalc;
             this.stringCalc = stringCalc;
         }
 
         @Override
 		public TupleList evaluateList(Evaluator evaluator) {
             final List<Member> list =
-                listCalc.evaluateList(evaluator).slice(0);
+                tupleListCalc.evaluateList(evaluator).slice(0);
             final List<Member> resultList = new ArrayList<>(list);
             final int memberCount = list.size();
             for (int i = memberCount - 1; i >= 0; --i) {

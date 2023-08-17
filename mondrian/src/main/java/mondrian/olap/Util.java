@@ -102,6 +102,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
@@ -115,7 +116,6 @@ import org.olap4j.mdx.Quoting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.LevelExpr;

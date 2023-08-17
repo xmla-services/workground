@@ -11,10 +11,10 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;

@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -42,7 +42,7 @@ class SubsetFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc startCalc =
             compiler.compileInteger(call.getArg(1));
@@ -51,14 +51,14 @@ class SubsetFunDef extends FunDefBase {
             ? compiler.compileInteger(call.getArg(2))
             : null;
         return new AbstractListCalc(
-        		call.getType(), new Calc[] {listCalc, startCalc, countCalc})
+        		call.getType(), new Calc[] {tupleListCalc, startCalc, countCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final TupleList list = listCalc.evaluateList(evaluator);
+                    final TupleList list = tupleListCalc.evaluateList(evaluator);
                     final Integer start = startCalc.evaluate(evaluator);
                     int end;
                     if (countCalc != null) {

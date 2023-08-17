@@ -12,7 +12,8 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;

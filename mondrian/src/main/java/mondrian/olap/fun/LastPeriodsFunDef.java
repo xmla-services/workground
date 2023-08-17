@@ -14,10 +14,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;

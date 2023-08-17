@@ -23,11 +23,11 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;

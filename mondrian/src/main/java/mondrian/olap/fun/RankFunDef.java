@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
@@ -28,9 +29,8 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -77,9 +77,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
   public Calc compileCall3( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
-    final ListCalc listCalc = compiler.compileList( call.getArg( 1 ) );
+    final TupleListCalc tupleListCalc = compiler.compileList( call.getArg( 1 ) );
     final Calc keyCalc = compiler.compileScalar( call.getArg( 2 ), true );
-    Calc sortedListCalc = new SortedListCalc( call.getType(), listCalc, keyCalc );
+    Calc sortedListCalc = new SortedListCalc( call.getType(), tupleListCalc, keyCalc );
     final ExpCacheDescriptor cacheDescriptor = new ExpCacheDescriptor( call, sortedListCalc, compiler.getEvaluator() );
     if ( type0 instanceof TupleType ) {
       final TupleCalc tupleCalc = compiler.compileTuple( call.getArg( 0 ) );
@@ -93,7 +93,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   public Calc compileCall2( ResolvedFunCall call, ExpCompiler compiler ) {
     final boolean tuple = call.getArg( 0 ).getType() instanceof TupleType;
     final Exp listExp = call.getArg( 1 );
-    final ListCalc listCalc0 = compiler.compileList( listExp );
+    final TupleListCalc listCalc0 = compiler.compileList( listExp );
     Calc listCalc1 = new RankedListCalc( listCalc0, tuple );
     final Calc listCalc;
     if ( MondrianProperties.instance().EnableExpCache.get() ) {
@@ -377,7 +377,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * <code>Rank</code> function efficiently.
    */
   private static class SortedListCalc extends AbstractProfilingNestedCalc {
-    private final ListCalc listCalc;
+    private final TupleListCalc tupleListCalc;
     private final Calc keyCalc;
 
     private static final Integer ONE = 1;
@@ -387,14 +387,14 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
      *
      * @param exp
      *          Source expression
-     * @param listCalc
+     * @param tupleListCalc
      *          Compiled expression to compute the list
      * @param keyCalc
      *          Compiled expression to compute the sort key
      */
-    public SortedListCalc( Type type, ListCalc listCalc, Calc keyCalc ) {
-      super( type, new Calc[] { listCalc, keyCalc } );
-      this.listCalc = listCalc;
+    public SortedListCalc( Type type, TupleListCalc tupleListCalc, Calc keyCalc ) {
+      super( type, new Calc[] { tupleListCalc, keyCalc } );
+      this.tupleListCalc = tupleListCalc;
       this.keyCalc = keyCalc;
     }
 
@@ -421,7 +421,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // Construct an array containing the value of the expression
         // for each member.
 
-        list = listCalc.evaluateList( evaluator );
+        list = tupleListCalc.evaluateList( evaluator );
         assert list != null;
         if ( list.isEmpty() ) {
           return list.getArity() == 1 ? new MemberSortResult( new Object[0], Collections.<Member, Integer>emptyMap() )
@@ -610,20 +610,20 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * {@link mondrian.olap.fun.RankFunDef.RankedTupleList}, or null if the list is empty.
    */
   private static class RankedListCalc extends AbstractProfilingNestedCalc {
-    private final ListCalc listCalc;
+    private final TupleListCalc tupleListCalc;
     private final boolean tuple;
 
     /**
      * Creates a RankedListCalc.
      *
-     * @param listCalc
+     * @param tupleListCalc
      *          Compiled expression to compute the list
      * @param tuple
      *          Whether elements of the list are tuples (as opposed to members)
      */
-    public RankedListCalc( ListCalc listCalc, boolean tuple ) {
-      super(  listCalc.getType() , new Calc[] { listCalc } );
-      this.listCalc = listCalc;
+    public RankedListCalc( TupleListCalc tupleListCalc, boolean tuple ) {
+      super(  tupleListCalc.getType() , new Calc[] { tupleListCalc } );
+      this.tupleListCalc = tupleListCalc;
       this.tuple = tuple;
     }
 
@@ -631,7 +631,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 	public Object evaluate( Evaluator evaluator ) {
       // Construct an array containing the value of the expression
       // for each member.
-      TupleList tupleList = listCalc.evaluateList( evaluator );
+      TupleList tupleList = tupleListCalc.evaluateList( evaluator );
       assert tupleList != null;
       if ( tuple ) {
         return new RankedTupleList( tupleList );

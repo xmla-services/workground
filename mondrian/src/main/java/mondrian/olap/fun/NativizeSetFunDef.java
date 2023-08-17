@@ -34,17 +34,16 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
@@ -149,7 +148,7 @@ public class NativizeSetFunDef extends FunDefBase {
         final int arity = calcs[0].getType().getArity();
         assert arity >= 0;
         if (arity == 1 || substitutionMap.isEmpty()) {
-            IterCalc calc = (IterCalc) funArg.accept(compiler);
+            TupleIteratorCalc calc = (TupleIteratorCalc) funArg.accept(compiler);
             final boolean highCardinality =
                 arity == 1
                 && isHighCardinality(funArg, compiler.getEvaluator());
@@ -157,8 +156,8 @@ public class NativizeSetFunDef extends FunDefBase {
                 // This can happen under JDK1.4: caller wants iterator
                 // implementation, but compiler can only provide list.
                 // Fall through and use native.
-            } else if (calc instanceof ListCalc) {
-                return new NonNativeListCalc((ListCalc) calc, highCardinality);
+            } else if (calc instanceof TupleListCalc) {
+                return new NonNativeListCalc((TupleListCalc) calc, highCardinality);
             } else {
                 return new NonNativeIterCalc(calc, highCardinality);
             }
@@ -277,14 +276,14 @@ public class NativizeSetFunDef extends FunDefBase {
 
     static class NonNativeIterCalc
         extends NonNativeCalc
-        implements IterCalc
+        implements TupleIteratorCalc
     {
-        protected NonNativeIterCalc(IterCalc parent, boolean highCardinality) {
+        protected NonNativeIterCalc(TupleIteratorCalc parent, boolean highCardinality) {
             super(parent, highCardinality);
         }
 
-        IterCalc parent() {
-            return (IterCalc) parent;
+        TupleIteratorCalc parent() {
+            return (TupleIteratorCalc) parent;
         }
 
         @Override
@@ -296,14 +295,14 @@ public class NativizeSetFunDef extends FunDefBase {
 
     static class NonNativeListCalc
         extends NonNativeCalc
-        implements ListCalc
+        implements TupleListCalc
     {
-        protected NonNativeListCalc(ListCalc parent, boolean highCardinality) {
+        protected NonNativeListCalc(TupleListCalc parent, boolean highCardinality) {
             super(parent, highCardinality);
         }
 
-        ListCalc parent() {
-            return (ListCalc) parent;
+        TupleListCalc parent() {
+            return (TupleListCalc) parent;
         }
 
         @Override
@@ -320,7 +319,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
     public static class NativeListCalc extends AbstractListCalc {
         private final SubstitutionMap substitutionMap;
-        private final ListCalc simpleCalc;
+        private final TupleListCalc simpleCalc;
         private final ExpCompiler compiler;
 
         private final Exp originalExp;
@@ -335,7 +334,7 @@ public class NativizeSetFunDef extends FunDefBase {
             super(call.getType(), calcs);
             NativizeSetFunDef.LOGGER.debug("---- NativeListCalc constructor");
             this.substitutionMap = substitutionMap;
-            this.simpleCalc = (ListCalc) calcs[0];
+            this.simpleCalc = (TupleListCalc) calcs[0];
             this.compiler = compiler;
             this.originalExp = originalExp;
         }
@@ -374,7 +373,7 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "Disabling native evaluation. originalExp="
                     + originalExp);
-            ListCalc calc =
+            TupleListCalc calc =
                 compiler.compileList(getOriginalExp(evaluator.getQuery()));
             final int savepoint = evaluator.savepoint();
             try {
@@ -496,7 +495,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 evaluator.getQuery().getConnection()
                     .parseExpression(crossJoinExpression);
             Exp resolved = compiler.getValidator().validate(unresolved, false);
-            ListCalc calc = compiler.compileList(resolved);
+            TupleListCalc calc = compiler.compileList(resolved);
             return calc.evaluateList(evaluator);
         }
     }

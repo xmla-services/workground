@@ -77,7 +77,7 @@ extends List<List<Member>>, TupleIterable
      * @param capacity Capacity
      * @return Copy of list, empty if capacity is non-negative
      */
-    TupleList cloneList(int capacity);
+    TupleList copyList(int capacity);
 
     void addTuple(Member... members);
 

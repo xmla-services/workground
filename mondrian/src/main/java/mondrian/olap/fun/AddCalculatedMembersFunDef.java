@@ -17,10 +17,10 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -63,12 +63,12 @@ class AddCalculatedMembersFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
-        return new AbstractListCalc(call.getType(), new Calc[] {listCalc}) {
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
+        return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 final TupleList list =
-                    listCalc.evaluateList(evaluator);
+                    tupleListCalc.evaluateList(evaluator);
                 return new UnaryTupleList(
                     addCalculatedMembers(list.slice(0), evaluator));
             }

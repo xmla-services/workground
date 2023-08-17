@@ -14,7 +14,5 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
-
 public interface VoidCalc extends Calc<Void> {
 }

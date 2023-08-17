@@ -16,8 +16,6 @@ package org.eclipse.daanse.olap.calc.api;
 
 import java.util.Date;
 
-import mondrian.calc.Calc;
-
 
 public interface DateTimeCalc extends Calc<Date> {
 

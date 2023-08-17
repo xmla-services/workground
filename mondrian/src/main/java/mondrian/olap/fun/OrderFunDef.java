@@ -18,15 +18,15 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -66,7 +66,7 @@ class OrderFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final IterCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
+    final TupleIteratorCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
     List<SortKeySpec> keySpecList = new ArrayList<>();
     buildKeySpecList( keySpecList, call, compiler );
     final int keySpecCount = keySpecList.size();
@@ -139,7 +139,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   private static class CurrentMemberCalc extends AbstractListCalc implements CalcWithDual {
-    private final IterCalc iterCalc;
+    private final TupleIteratorCalc tupleIteratorCalc;
     private final Calc sortKeyCalc;
     private final List<SortKeySpec> keySpecList;
     private final int originalKeySpecCount;
@@ -147,7 +147,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     public CurrentMemberCalc( Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
       super( type, calcList );
-      this.iterCalc = (IterCalc) calcList[0];
+      this.tupleIteratorCalc = (TupleIteratorCalc) calcList[0];
       this.sortKeyCalc = calcList[1];
       this.keySpecList = keySpecList;
       this.originalKeySpecCount = keySpecList.size();
@@ -157,12 +157,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     @Override
 	public TupleList evaluateDual( Evaluator rootEvaluator, Evaluator subEvaluator ) {
       assert originalKeySpecCount == 1;
-      final TupleIterable iterable = iterCalc.evaluateIterable( rootEvaluator );
+      final TupleIterable iterable = tupleIteratorCalc.evaluateIterable( rootEvaluator );
       // REVIEW: If iterable happens to be a list, we'd like to pass it,
       // but we cannot yet guarantee that it is mutable.
       // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code
       final TupleList list = null;
-      XOMUtil.discard( iterCalc.getResultStyle() );
+      XOMUtil.discard( tupleIteratorCalc.getResultStyle() );
       return handleSortWithOneKeySpec( subEvaluator, iterable, list );
     }
 
@@ -170,7 +170,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 	public TupleList evaluateList( Evaluator evaluator ) {
       evaluator.getTiming().markStart( OrderFunDef.TIMING_NAME );
       try {
-        final TupleIterable iterable = iterCalc.evaluateIterable( evaluator );
+        final TupleIterable iterable = tupleIteratorCalc.evaluateIterable( evaluator );
         // REVIEW: If iterable happens to be a list, we'd like to pass it,
         // but we cannot yet guarantee that it is mutable.
         // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code list all time null

@@ -13,7 +13,8 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ParameterCompilable;
 import mondrian.calc.ParameterSlot;

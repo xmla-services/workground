@@ -27,8 +27,8 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapUtil;
 

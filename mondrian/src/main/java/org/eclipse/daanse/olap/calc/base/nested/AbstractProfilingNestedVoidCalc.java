@@ -14,10 +14,10 @@
 
 package org.eclipse.daanse.olap.calc.base.nested;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.VoidCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.Type;
 
 /**

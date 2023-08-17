@@ -16,10 +16,10 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 
-import mondrian.calc.Calc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;

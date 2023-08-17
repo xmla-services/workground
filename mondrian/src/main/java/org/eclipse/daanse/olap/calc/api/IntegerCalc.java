@@ -13,13 +13,12 @@
 */
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 
 /**
  * @author: Stefan Bischof 
  * 
- * Marker interface to check the returning type of an {@link mondrian.calc.Calc}
+ * Marker interface to check the returning type of an {@link org.eclipse.daanse.olap.calc.api.Calc}
  *  Returns {@link mondrian.olap.fun.FunUtil#INTEGER_NULL} If result {@link #evaluate(Evaluator)} would be null
  */
 public interface IntegerCalc extends Calc<Integer> {

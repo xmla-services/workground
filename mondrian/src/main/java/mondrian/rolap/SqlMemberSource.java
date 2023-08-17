@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import mondrian.rolap.TupleReader.MemberBuilder;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
@@ -45,6 +44,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
+import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.aggmatcher.AggStar;

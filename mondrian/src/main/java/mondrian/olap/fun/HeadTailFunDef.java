@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -56,7 +56,7 @@ class HeadTailFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc integerCalc =
             call.getArgCount() > 1
@@ -64,14 +64,14 @@ class HeadTailFunDef extends FunDefBase {
             : new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         if (head) {
             return new AbstractListCalc(
-            		call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {tupleListCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);
-                        TupleList list = listCalc.evaluateList(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
                         Integer count = integerCalc.evaluate(evaluator);
                         return HeadTailFunDef.head(count, list);
                     } finally {
@@ -81,14 +81,14 @@ class HeadTailFunDef extends FunDefBase {
             };
         } else {
             return new AbstractListCalc(
-            		call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {tupleListCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);
-                        TupleList list = listCalc.evaluateList(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
                         Integer count = integerCalc.evaluate(evaluator);
                         return HeadTailFunDef.tail(count, list);
                     } finally {

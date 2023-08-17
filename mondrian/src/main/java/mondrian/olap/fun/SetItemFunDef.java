@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -109,17 +109,17 @@ class SetItemFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Type elementType =
-            ((SetType) listCalc.getType()).getElementType();
+            ((SetType) tupleListCalc.getType()).getElementType();
         final boolean isString =
             call.getArgCount() < 2
             || call.getArg(1).getType() instanceof StringType;
         final IntegerCalc indexCalc;
         final StringCalc[] stringCalcs;
         List<Calc> calcList = new ArrayList<>();
-        calcList.add(listCalc);
+        calcList.add(tupleListCalc);
         if (isString) {
             indexCalc = null;
             stringCalcs = new StringCalc[call.getArgCount() - 1];
@@ -143,7 +143,7 @@ class SetItemFunDef extends FunDefBase {
                         final TupleList list;
                         try {
                             evaluator.setNonEmpty(false);
-                            list = listCalc.evaluateList(evaluator);
+                            list = tupleListCalc.evaluateList(evaluator);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);
@@ -184,7 +184,7 @@ class SetItemFunDef extends FunDefBase {
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator);
+                                tupleListCalc.evaluateList(evaluator);
                         } finally {
                             evaluator.restore(savepoint);
                         }
@@ -219,7 +219,7 @@ class SetItemFunDef extends FunDefBase {
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator).slice(0);
+                                tupleListCalc.evaluateList(evaluator).slice(0);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);
@@ -247,7 +247,7 @@ class SetItemFunDef extends FunDefBase {
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator).slice(0);
+                                tupleListCalc.evaluateList(evaluator).slice(0);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);

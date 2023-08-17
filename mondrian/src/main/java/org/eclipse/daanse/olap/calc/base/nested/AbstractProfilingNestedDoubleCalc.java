@@ -14,10 +14,10 @@
 
 package org.eclipse.daanse.olap.calc.base.nested;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.NumericType;
@@ -39,7 +39,7 @@ implements DoubleCalc
      */
     protected AbstractProfilingNestedDoubleCalc(Type type, C[] calcs) {
         super(type, calcs);
-        assert getType() instanceof NumericType;
+        requiresType(NumericType.class);
     }
 
     @Override

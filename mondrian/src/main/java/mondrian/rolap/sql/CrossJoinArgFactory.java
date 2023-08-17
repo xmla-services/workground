@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.mdx.LevelExpr;
 import mondrian.mdx.MemberExpr;
@@ -956,7 +956,7 @@ public class CrossJoinArgFactory {
         if (shouldExpandNonEmpty(exp)
             && evaluator.getActiveNativeExpansions().add(exp))
         {
-            ListCalc listCalc0 = compiler.compileList(exp);
+            TupleListCalc listCalc0 = compiler.compileList(exp);
             final TupleList tupleList = listCalc0.evaluateList(evaluator);
 
             // Prevent the case when the second argument size is too large

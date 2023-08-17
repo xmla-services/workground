@@ -26,7 +26,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.collections.Predicate;
 
-import mondrian.olap.Util;
 import mondrian.rolap.cache.SmartCache;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.sql.MemberChildrenConstraint;

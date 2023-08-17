@@ -12,7 +12,8 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ParameterCompilable;
 import mondrian.olap.Category;

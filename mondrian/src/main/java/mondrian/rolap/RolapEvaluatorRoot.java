@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;

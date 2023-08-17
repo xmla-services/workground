@@ -17,8 +17,8 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -79,19 +79,19 @@ public class AbstractAggregateFunDef extends FunDefBase {
      * across all parent evaluation contexts will exceed the limit set in the
      * properties file.
      *
-     * @param listCalc  calculator used to evaluate the member list
+     * @param tupleListCalc  calculator used to evaluate the member list
      * @param evaluator current evaluation context
      * @return list of evaluated members or tuples
      */
     protected static TupleList evaluateCurrentList(
-        ListCalc listCalc,
+        TupleListCalc tupleListCalc,
         Evaluator evaluator)
     {
         final int savepoint = evaluator.savepoint();
         TupleList tuples;
         try {
             evaluator.setNonEmpty(false);
-            tuples = listCalc.evaluateList(evaluator);
+            tuples = tupleListCalc.evaluateList(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }
@@ -107,7 +107,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
     }
 
     protected TupleIterable evaluateCurrentIterable(
-        IterCalc iterCalc,
+        TupleIteratorCalc tupleIteratorCalc,
         Evaluator evaluator)
     {
         final int savepoint = evaluator.savepoint();
@@ -115,7 +115,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         TupleIterable iterable;
         try {
             evaluator.setNonEmpty(false);
-            iterable = iterCalc.evaluateIterable(evaluator);
+            iterable = tupleIteratorCalc.evaluateIterable(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }

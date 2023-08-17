@@ -13,9 +13,9 @@
 package org.eclipse.daanse.olap.udf.impl;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
-import mondrian.calc.Calc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;

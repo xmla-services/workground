@@ -50,6 +50,7 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
 import org.junit.jupiter.api.Assertions;
@@ -62,7 +63,6 @@ import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;

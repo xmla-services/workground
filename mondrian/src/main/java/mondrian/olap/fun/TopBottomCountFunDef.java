@@ -16,12 +16,12 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
@@ -79,7 +79,7 @@ class TopBottomCountFunDef extends FunDefBase {
 public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to sort it later.
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final IntegerCalc integerCalc =
       compiler.compileInteger( call.getArg( 1 ) );
@@ -90,7 +90,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     final int arity = call.getType().getArity();
     return new AbstractListCalc(
     		call.getType(),
-      new Calc[] { listCalc, integerCalc, orderCalc } ) {
+      new Calc[] { tupleListCalc, integerCalc, orderCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         // Use a native evaluator, if more efficient.
@@ -109,7 +109,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
           return TupleCollections.emptyList( arity );
         }
 
-        TupleList list = listCalc.evaluateList( evaluator );
+        TupleList list = tupleListCalc.evaluateList( evaluator );
         assert list.getArity() == arity;
         if ( list.isEmpty() ) {
           return list;

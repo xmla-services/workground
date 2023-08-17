@@ -37,6 +37,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
@@ -54,9 +55,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -958,7 +958,7 @@ public class RolapHierarchy extends HierarchyBase {
                         null,
                         null);
                 SetType setType = new SetType(memberType1);
-                ListCalc listCalc =
+                TupleListCalc tupleListCalc =
                     new AbstractListCalc(
                          setType, new Calc[0])
                     {
@@ -978,7 +978,7 @@ public class RolapHierarchy extends HierarchyBase {
                         }
                     };
                 final Calc partialCalc =
-                    new LimitedRollupAggregateCalc(returnType, listCalc);
+                    new LimitedRollupAggregateCalc(returnType, tupleListCalc);
 
                 final Exp partialExp =
                     new ResolvedFunCall(
@@ -1576,11 +1576,11 @@ public class RolapHierarchy extends HierarchyBase {
     {
         public LimitedRollupAggregateCalc(
             Type returnType,
-            ListCalc listCalc)
+            TupleListCalc tupleListCalc)
         {
             super(
                 returnType,
-                listCalc,
+                tupleListCalc,
                 new ValueCalc(returnType));
         }
     }

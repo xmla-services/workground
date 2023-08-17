@@ -15,15 +15,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -165,13 +164,13 @@ public abstract class LinReg extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final DoubleCalc yCalc = compiler.compileDouble(call.getArg(1));
         final DoubleCalc xCalc =
             call.getArgCount() > 2
             ? compiler.compileDouble(call.getArg(2))
             : new CurrentValueDoubleCalc(call.getType());
-        return new LinRegCalc(call, listCalc, yCalc, xCalc, regType);
+        return new LinRegCalc(call, tupleListCalc, yCalc, xCalc, regType);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -282,33 +281,33 @@ public abstract class LinReg extends FunDefBase {
 		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
             final DoubleCalc xPointCalc =
                 compiler.compileDouble(call.getArg(0));
-            final ListCalc listCalc = compiler.compileList(call.getArg(1));
+            final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(1));
             final DoubleCalc yCalc = compiler.compileDouble(call.getArg(2));
             final DoubleCalc xCalc =
                 call.getArgCount() > 3
                 ? compiler.compileDouble(call.getArg(3))
                 : new CurrentValueDoubleCalc(call.getType());
             return new PointCalc(
-                call, xPointCalc, listCalc, yCalc, xCalc);
+                call, xPointCalc, tupleListCalc, yCalc, xCalc);
         }
     }
 
     private static class PointCalc extends AbstractProfilingNestedDoubleCalc {
         private final DoubleCalc xPointCalc;
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final DoubleCalc yCalc;
         private final DoubleCalc xCalc;
 
         public PointCalc(
             ResolvedFunCall call,
             DoubleCalc xPointCalc,
-            ListCalc listCalc,
+            TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc)
         {
-            super(call.getType(), new Calc[]{xPointCalc, listCalc, yCalc, xCalc});
+            super(call.getType(), new Calc[]{xPointCalc, tupleListCalc, yCalc, xCalc});
             this.xPointCalc = xPointCalc;
-            this.listCalc = listCalc;
+            this.tupleListCalc = tupleListCalc;
             this.yCalc = yCalc;
             this.xCalc = xCalc;
         }
@@ -316,7 +315,7 @@ public abstract class LinReg extends FunDefBase {
         @Override
 		public Double evaluate(Evaluator evaluator) {
             Double xPoint = xPointCalc.evaluate(evaluator);
-            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
+            Value value = LinReg.process(evaluator, tupleListCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DOUBLE_NULL;
             }
@@ -383,7 +382,7 @@ public abstract class LinReg extends FunDefBase {
 
     protected static LinReg.Value process(
         Evaluator evaluator,
-        ListCalc listCalc,
+        TupleListCalc tupleListCalc,
         DoubleCalc yCalc,
         DoubleCalc xCalc)
     {
@@ -391,7 +390,7 @@ public abstract class LinReg extends FunDefBase {
         TupleList members;
         try {
             evaluator.setNonEmpty(false);
-            members = listCalc.evaluateList(evaluator);
+            members = tupleListCalc.evaluateList(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }
@@ -585,20 +584,20 @@ public abstract class LinReg extends FunDefBase {
     }
 
     private static class LinRegCalc extends AbstractProfilingNestedDoubleCalc {
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final DoubleCalc yCalc;
         private final DoubleCalc xCalc;
         private final int regType;
 
         public LinRegCalc(
             ResolvedFunCall call,
-            ListCalc listCalc,
+            TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc,
             int regType)
         {
-            super(call.getType(), new Calc[]{listCalc, yCalc, xCalc});
-            this.listCalc = listCalc;
+            super(call.getType(), new Calc[]{tupleListCalc, yCalc, xCalc});
+            this.tupleListCalc = tupleListCalc;
             this.yCalc = yCalc;
             this.xCalc = xCalc;
             this.regType = regType;
@@ -606,7 +605,7 @@ public abstract class LinReg extends FunDefBase {
 
         @Override
 		public Double evaluate(Evaluator evaluator) {
-            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
+            Value value = LinReg.process(evaluator, tupleListCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DOUBLE_NULL;
             }

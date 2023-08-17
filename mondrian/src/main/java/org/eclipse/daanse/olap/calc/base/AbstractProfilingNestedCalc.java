@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 

@@ -9,9 +9,10 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -42,14 +43,14 @@ class HierarchizeFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     String order = FunUtil.getLiteralArg( call, 1, "PRE", HierarchizeFunDef.prePost );
     final boolean post = order.equals( "POST" );
-    return new AbstractListCalc( call.getType(), new Calc[] { listCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { tupleListCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
-        TupleList list = listCalc.evaluateList( evaluator );
+        TupleList list = tupleListCalc.evaluateList( evaluator );
         return Sorter.hierarchizeTupleList( list, post );
       }
     };
