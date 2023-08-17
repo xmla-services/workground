@@ -13,13 +13,10 @@
 */
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
-
-
 /**
  * @author: Stefan Bischof 
  * 
- * Marker interface to check the returning type of an {@link mondrian.calc.Calc}
+ * Marker interface to check the returning type of an {@link org.eclipse.daanse.olap.calc.api.Calc}
  */
 
 

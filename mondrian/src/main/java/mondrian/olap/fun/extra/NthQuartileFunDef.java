@@ -10,16 +10,15 @@
 package mondrian.olap.fun.extra;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
@@ -63,20 +62,20 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final DoubleCalc doubleCalc =
             call.getArgCount() > 1
             ? compiler.compileDouble(call.getArg(1))
             : new CurrentValueDoubleCalc(call.getType());
-        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {listCalc, doubleCalc}) {
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, doubleCalc}) {
             @Override
 			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
                     TupleList members =
-                        evaluateCurrentList(listCalc, evaluator);
+                        evaluateCurrentList(tupleListCalc, evaluator);
                     return
                         FunUtil.quartile(
                             evaluator, members, doubleCalc, range);

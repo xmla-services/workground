@@ -22,13 +22,13 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
@@ -164,7 +164,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   ///////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
-  protected IterCalc compileCallIterable( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleIteratorCalc compileCallIterable( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -173,15 +173,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallIterableArray(call, compiler, calcs);
   }
 
-  protected IterCalc compileCallIterableArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs) {
-    IterCalc iterCalc = compileCallIterableLeaf(call, calcs[0], calcs[1]);
+  protected TupleIteratorCalc compileCallIterableArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs) {
+    TupleIteratorCalc tupleIteratorCalc = compileCallIterableLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return iterCalc;
+      return tupleIteratorCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = iterCalc;
+      nextClasls[0] = tupleIteratorCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -189,7 +189,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected IterCalc compileCallIterableLeaf( final ResolvedFunCall call,
+  protected TupleIteratorCalc compileCallIterableLeaf( final ResolvedFunCall call,
                                                 final Calc  calc1, final Calc calc2) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -210,10 +210,10 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // a mutable list.
     final Type type = exp.getType();
     if ( type instanceof SetType ) {
-      // this can return an IterCalc or ListCalc
+      // this can return an TupleIteratorCalc or TupleListCalc
       return compiler.compileAs( exp, null, ResultStyle.ITERABLE_LIST_MUTABLELIST );
     } else {
-      // this always returns an IterCalc
+      // this always returns an TupleIteratorCalc
       return new SetFunDef.ExprIterCalc(  new SetType( type ) , new Exp[] { exp }, compiler,
           ResultStyle.ITERABLE_LIST_MUTABLELIST );
     }
@@ -239,8 +239,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       }
 
       Calc[] calcs = getChildCalcs();
-      IterCalc calc1 = (IterCalc) calcs[0];
-      IterCalc calc2 = (IterCalc) calcs[1];
+      TupleIteratorCalc calc1 = (TupleIteratorCalc) calcs[0];
+      TupleIteratorCalc calc2 = (TupleIteratorCalc) calcs[1];
 
       TupleIterable o1 = calc1.evaluateIterable( evaluator );
       if ( o1 instanceof TupleList l1 ) {
@@ -333,7 +333,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   // Immutable List
   ///////////////////////////////////////////////////////////////////////////
 
-  protected ListCalc compileCallImmutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleListCalc compileCallImmutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -342,15 +342,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallImmutableListArray(call, compiler, calcs);
   }
 
-  protected ListCalc compileCallImmutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallImmutableListLeaf(call, calcs[0], calcs[1]);
+  protected TupleListCalc compileCallImmutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
+    TupleListCalc tupleListCalc = compileCallImmutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return listCalc;
+      return tupleListCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = listCalc;
+      nextClasls[0] = tupleListCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -358,7 +358,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallImmutableListLeaf( final ResolvedFunCall call,
+  protected TupleListCalc compileCallImmutableListLeaf( final ResolvedFunCall call,
                                                    final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -384,7 +384,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
    *          Expression
    * @return Compiled expression that yields a list or mutable list
    */
-  private ListCalc toList( ExpCompiler compiler, final Exp exp ) {
+  private TupleListCalc toList( ExpCompiler compiler, final Exp exp ) {
     // Want immutable list or mutable list in that order
     // It is assumed that an immutable list is easier to get than
     // a mutable list.
@@ -394,7 +394,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       if ( calc == null ) {
         return compiler.compileList( exp, false );
       }
-      return (ListCalc) calc;
+      return (TupleListCalc) calc;
     } else {
       return new SetFunDef.SetListCalc(  new SetType( type ), new Exp[] { exp }, compiler,
           ResultStyle.LIST_MUTABLELIST );
@@ -420,8 +420,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       }
 
       Calc[] calcs = getChildCalcs();
-      ListCalc listCalc1 = (ListCalc) calcs[0];
-      ListCalc listCalc2 = (ListCalc) calcs[1];
+      TupleListCalc listCalc1 = (TupleListCalc) calcs[0];
+      TupleListCalc listCalc2 = (TupleListCalc) calcs[1];
 
       TupleList l1 = listCalc1.evaluateList( evaluator );
       // check if size of first list already exceeds limit
@@ -475,7 +475,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallMutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleListCalc compileCallMutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -484,15 +484,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallMutableListArray(call, compiler, calcs);
   }
 
-  protected ListCalc compileCallMutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallMutableListLeaf(call, calcs[0], calcs[1]);
+  protected TupleListCalc compileCallMutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
+    TupleListCalc tupleListCalc = compileCallMutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return listCalc;
+      return tupleListCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = listCalc;
+      nextClasls[0] = tupleListCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -500,7 +500,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallMutableListLeaf( final ResolvedFunCall call,
+  protected TupleListCalc compileCallMutableListLeaf( final ResolvedFunCall call,
                                                  final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and

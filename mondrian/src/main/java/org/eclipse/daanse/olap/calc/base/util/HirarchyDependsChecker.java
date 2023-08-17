@@ -18,8 +18,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
-
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
 public class HirarchyDependsChecker {
 	/**

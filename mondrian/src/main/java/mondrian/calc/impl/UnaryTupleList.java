@@ -122,7 +122,7 @@ implements TupleList
     }
 
     @Override
-    public TupleList cloneList(int capacity) {
+    public TupleList copyList(int capacity) {
         return new UnaryTupleList(
                 capacity < 0
                 ? new ArrayList<>(list)

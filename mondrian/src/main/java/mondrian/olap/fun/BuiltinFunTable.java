@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
@@ -39,9 +40,8 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
@@ -744,12 +744,12 @@ public class BuiltinFunTable extends FunTableImpl {
             @Override
 			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
             {
-                final ListCalc listCalc =
+                final TupleListCalc tupleListCalc =
                         compiler.compileList(call.getArg(0));
-                return new AbstractProfilingNestedIntegerCalc(call.getType(), new Calc[] {listCalc}) {
+                return new AbstractProfilingNestedIntegerCalc(call.getType(), new Calc[] {tupleListCalc}) {
                     @Override
 					public Integer evaluate(Evaluator evaluator) {
-                        TupleList list = listCalc.evaluateList(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
                         return FunUtil.count(evaluator, list, true);
                     }
                 };
@@ -1126,13 +1126,13 @@ public class BuiltinFunTable extends FunTableImpl {
             @Override
 			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
             {
-                final ListCalc listCalc =
+                final TupleListCalc tupleListCalc =
                     compiler.compileList(call.getArg(0));
-                return new AbstractListCalc(call.getType(), new Calc[] {listCalc}) {
+                return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc}) {
                     @Override
 					public TupleList evaluateList(Evaluator evaluator)
                     {
-                        TupleList list = listCalc.evaluateList(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
                         return FunUtil.removeCalculatedMembers(list);
                     }
                 };

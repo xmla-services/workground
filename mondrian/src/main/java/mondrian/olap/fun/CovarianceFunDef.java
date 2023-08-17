@@ -10,12 +10,12 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -55,7 +55,7 @@ class CovarianceFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc1 =
             compiler.compileScalar(call.getArg(1), true);
@@ -63,11 +63,11 @@ class CovarianceFunDef extends FunDefBase {
             call.getArgCount() > 2
             ? compiler.compileScalar(call.getArg(2), true)
             : new ValueCalc(call.getType());
-        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {listCalc, calc1, calc2})
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, calc1, calc2})
         {
             @Override
 			public Double evaluate(Evaluator evaluator) {
-                TupleList memberList = listCalc.evaluateList(evaluator);
+                TupleList memberList = tupleListCalc.evaluateList(evaluator);
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);

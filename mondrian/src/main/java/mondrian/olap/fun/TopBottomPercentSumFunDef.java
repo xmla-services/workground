@@ -15,12 +15,12 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -84,11 +84,11 @@ class TopBottomPercentSumFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final DoubleCalc doubleCalc = compiler.compileDouble( call.getArg( 1 ) );
     final Calc calc = compiler.compileScalar( call.getArg( 2 ), true );
-    return new CalcImpl( call, listCalc, doubleCalc, calc );
+    return new CalcImpl( call, tupleListCalc, doubleCalc, calc );
   }
 
   private static class ResolverImpl extends MultiResolver {
@@ -111,24 +111,24 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   }
 
   private class CalcImpl extends AbstractListCalc {
-    private final ListCalc listCalc;
+    private final TupleListCalc tupleListCalc;
     private final DoubleCalc doubleCalc;
     private final Calc calc;
 
     public CalcImpl(
       ResolvedFunCall call,
-      ListCalc listCalc,
+      TupleListCalc tupleListCalc,
       DoubleCalc doubleCalc,
       Calc calc ) {
-      super( call.getType(), new Calc[] { listCalc, doubleCalc, calc } );
-      this.listCalc = listCalc;
+      super( call.getType(), new Calc[] { tupleListCalc, doubleCalc, calc } );
+      this.tupleListCalc = tupleListCalc;
       this.doubleCalc = doubleCalc;
       this.calc = calc;
     }
 
     @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
-      TupleList list = listCalc.evaluateList( evaluator );
+      TupleList list = tupleListCalc.evaluateList( evaluator );
       Double target = doubleCalc.evaluate( evaluator );
       if ( list.isEmpty() ) {
         return list;

@@ -14,9 +14,6 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
-
-
 public interface StringCalc extends Calc<String> {
 
 }

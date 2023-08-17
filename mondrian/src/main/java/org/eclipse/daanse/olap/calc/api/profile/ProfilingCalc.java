@@ -13,7 +13,8 @@
 */
 package org.eclipse.daanse.olap.calc.api.profile;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.olap.Evaluator;
 
 public interface ProfilingCalc<E> extends Calc<E> {

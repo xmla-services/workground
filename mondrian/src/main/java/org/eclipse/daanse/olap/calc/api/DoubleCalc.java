@@ -14,8 +14,6 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
-
 public interface DoubleCalc extends Calc<Double> {
 
 }

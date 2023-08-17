@@ -15,10 +15,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -52,7 +52,7 @@ public class ExistingFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final IterCalc setArg = compiler.compileIter(call.getArg(0));
+        final TupleIteratorCalc setArg = compiler.compileIter(call.getArg(0));
         final Type myType = call.getArg(0).getType();
 
         return new AbstractListCalc(call.getType(), new Calc[] {setArg}) {

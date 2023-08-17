@@ -46,6 +46,8 @@ import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.xmltests.ResourceTestCase;
 import org.opencube.junit5.xmltests.XmlResourceRoot;
 import org.opencube.junit5.xmltests.XmlResourceTestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import aQute.bnd.annotation.Cardinality;
 import aQute.bnd.annotation.spi.ServiceConsumer;
@@ -54,8 +56,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ServiceConsumer(cardinality = Cardinality.MULTIPLE, value = DatabaseProvider.class)
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {

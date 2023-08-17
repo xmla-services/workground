@@ -18,10 +18,10 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
@@ -197,21 +197,21 @@ class ExtractFunDef extends FunDefBase {
         Util.assertTrue(
             extractedOrdinalList.size() == extractedHierarchyList.size());
         Exp arg = call.getArg(0);
-        final ListCalc listCalc = compiler.compileList(arg, false);
+        final TupleListCalc tupleListCalc = compiler.compileList(arg, false);
         int inArity = arg.getType().getArity();
         final int outArity = extractedOrdinalList.size();
         if (inArity == 1) {
             // LHS is a set of members, RHS is the same hierarchy. Extract boils
             // down to eliminating duplicate members.
             Util.assertTrue(outArity == 1);
-            return new DistinctFunDef.CalcImpl(call, listCalc);
+            return new DistinctFunDef.CalcImpl(call, tupleListCalc);
         }
         final int[] extractedOrdinals = ExtractFunDef.toIntArray(extractedOrdinalList);
-        return new AbstractListCalc(call.getType(), new Calc[]{listCalc}) {
+        return new AbstractListCalc(call.getType(), new Calc[]{tupleListCalc}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList result = TupleCollections.createList(outArity);
-                TupleList list = listCalc.evaluateList(evaluator);
+                TupleList list = tupleListCalc.evaluateList(evaluator);
                 Set<List<Member>> emittedTuples = new HashSet<>();
                 for (List<Member> members : list.project(extractedOrdinals)) {
                     if (emittedTuples.add(members)) {

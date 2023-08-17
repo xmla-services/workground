@@ -11,9 +11,9 @@ package mondrian.calc.impl;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.TupleFunDef;
 import mondrian.olap.type.TupleType;

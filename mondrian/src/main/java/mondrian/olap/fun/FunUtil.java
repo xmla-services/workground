@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.Access;
@@ -28,11 +27,11 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.IdentifierParser.Builder;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -51,7 +50,6 @@ import mondrian.olap.FunDef;
 import mondrian.olap.Id;
 import mondrian.olap.Literal;
 import mondrian.olap.MatchType;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
@@ -343,7 +341,7 @@ public class FunUtil extends Util {
         FunUtil.removeCalculatedMembers(
           memberList.slice( 0 ) ) );
     } else {
-      final TupleList clone = memberList.cloneList( memberList.size() );
+      final TupleList clone = memberList.copyList( memberList.size() );
       outer:
       for ( List<Member> members : memberList ) {
         for ( Member member : members ) {

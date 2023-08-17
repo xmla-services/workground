@@ -15,10 +15,10 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 
@@ -30,7 +30,7 @@ implements MemberCalc
 
     protected AbstractProfilingNestedMemberCalc(Type type, C[] calcs) {
         super(type, calcs);
-        assert getType() instanceof MemberType;
+        requiresType(MemberType.class);
     }
 
 

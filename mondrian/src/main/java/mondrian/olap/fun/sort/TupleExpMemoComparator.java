@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;

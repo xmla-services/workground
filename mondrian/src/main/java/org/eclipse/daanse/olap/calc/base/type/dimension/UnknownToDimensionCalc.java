@@ -15,9 +15,9 @@
 package org.eclipse.daanse.olap.calc.base.type.dimension;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 

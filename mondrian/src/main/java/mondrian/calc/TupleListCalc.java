@@ -17,7 +17,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public interface ListCalc extends IterCalc {
+public interface TupleListCalc extends TupleIteratorCalc {
     /**
      * Evaluates an expression to yield a list of tuples.
      *

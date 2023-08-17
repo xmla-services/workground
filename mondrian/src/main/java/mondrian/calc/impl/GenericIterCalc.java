@@ -9,15 +9,11 @@
 
 package mondrian.calc.impl;
 
-import java.time.Instant;
-import java.util.Collection;
-import java.util.Map;
-
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -35,7 +31,7 @@ import mondrian.olap.type.Type;
  */
 public abstract class GenericIterCalc
 extends AbstractProfilingNestedCalc<Object,Calc<?>>
-implements ListCalc, IterCalc
+implements TupleListCalc, TupleIteratorCalc
 {
     /**
      * Creates a GenericIterCalc without specifying child calculated

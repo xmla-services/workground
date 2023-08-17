@@ -9,7 +9,7 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
 /**
  * Entry in the evaluation context that indicates a calculation that needs to

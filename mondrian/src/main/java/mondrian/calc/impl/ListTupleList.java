@@ -145,7 +145,7 @@ public class ListTupleList extends AbstractEndToEndTupleList
     }
 
     @Override
-    public TupleList cloneList(int capacity) {
+    public TupleList copyList(int capacity) {
         return new ListTupleList(
                 arity,
                 capacity < 0

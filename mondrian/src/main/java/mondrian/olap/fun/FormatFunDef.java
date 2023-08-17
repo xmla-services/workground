@@ -11,10 +11,10 @@ package mondrian.olap.fun;
 
 import java.util.Locale;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;

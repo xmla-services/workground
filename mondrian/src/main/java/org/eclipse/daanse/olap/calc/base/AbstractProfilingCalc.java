@@ -92,5 +92,13 @@ public abstract class AbstractProfilingCalc<T> implements ProfilingCalc<T> {
 	public Type getType() {
 		return type;
 	}
+	
+	 protected void requiresType(Class<? extends Type> typeClass) {
+		Type type = getType();
+		if (!typeClass.isInstance(type)) {
+			throw new RuntimeException("Expecting Type " + typeClass + " but was " + type);
+		}
+
+	}
 
 }

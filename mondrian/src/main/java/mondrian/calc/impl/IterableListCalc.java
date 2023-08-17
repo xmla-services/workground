@@ -9,8 +9,9 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -18,30 +19,30 @@ import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 
 /**
- * Adapter that converts a {@link mondrian.calc.IterCalc} to a
- * {@link mondrian.calc.ListCalc}.
+ * Adapter that converts a {@link mondrian.calc.TupleIteratorCalc} to a
+ * {@link mondrian.calc.TupleListCalc}.
  *
  * @author jhyde
  * @since Oct 23, 2008
  */
 public class IterableListCalc extends AbstractListCalc {
-    private final IterCalc iterCalc;
+    private final TupleIteratorCalc tupleIteratorCalc;
 
     /**
      * Creates an IterableListCalc.
      *
-     * @param iterCalc Calculation that returns an iterable.
+     * @param tupleIteratorCalc Calculation that returns an iterable.
      */
-    public IterableListCalc(IterCalc iterCalc) {
-        super(iterCalc.getType(), new Calc[] {iterCalc});
-        this.iterCalc = iterCalc;
+    public IterableListCalc(TupleIteratorCalc tupleIteratorCalc) {
+        super(tupleIteratorCalc.getType(), new Calc[] {tupleIteratorCalc});
+        this.tupleIteratorCalc = tupleIteratorCalc;
     }
 
     @Override
     public TupleList evaluateList(Evaluator evaluator) {
         // A TupleIterCalc is allowed to return a list. If so, save the copy.
         final TupleIterable iterable =
-                iterCalc.evaluateIterable(evaluator);
+                tupleIteratorCalc.evaluateIterable(evaluator);
         if (iterable instanceof TupleList tupleList) {
             return tupleList;
         }

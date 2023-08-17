@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.model.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.sql.TupleConstraint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Helper class for {@link mondrian.rolap.HighCardSqlTupleReader} that

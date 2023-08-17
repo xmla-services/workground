@@ -11,6 +11,8 @@
 */
 package mondrian.rolap;
 
+import static org.eigenbase.xom.XOMUtil.discard;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,11 +34,11 @@ import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
@@ -84,8 +86,6 @@ import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
-
-import static org.eigenbase.xom.XOMUtil.discard;
 
 /**
  * A <code>RolapResult</code> is the result of running a query.
@@ -282,7 +282,7 @@ public class RolapResult extends ResultBase {
                         null,
                         null);
         SetType setType = new SetType(memberType1);
-        mondrian.calc.ListCalc listCalc =
+        mondrian.calc.TupleListCalc tupleListCalc =
                 new mondrian.calc.impl.AbstractListCalc(
                         setType, new Calc[0])
                 {
@@ -313,7 +313,7 @@ public class RolapResult extends ResultBase {
                 };
         final mondrian.olap.type.NumericType returnType = new mondrian.olap.type.NumericType();
         final Calc partialCalc =
-                new RolapHierarchy.LimitedRollupAggregateCalc(returnType, listCalc);
+                new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
         Exp partialExp =
                 new ResolvedFunCall(
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
@@ -332,7 +332,7 @@ public class RolapResult extends ResultBase {
                         new Exp[0],
                         returnType);
 
-        final TupleIterable iterable = ( (IterCalc) calc ).evaluateIterable( evaluator );
+        final TupleIterable iterable = ( (TupleIteratorCalc) calc ).evaluateIterable( evaluator );
         TupleCursor cursor;
         if ( iterable instanceof TupleList list ) {
           cursor = list.tupleCursor();
@@ -1046,7 +1046,7 @@ public Cell getCell( int[] pos ) {
     try {
       evaluator.setNonEmpty( queryAxis.isNonEmpty() );
       evaluator.setEvalAxes( true );
-      final TupleIterable iterable = ( (IterCalc) axisCalc ).evaluateIterable( evaluator );
+      final TupleIterable iterable = ( (TupleIteratorCalc) axisCalc ).evaluateIterable( evaluator );
       if ( axisCalc.getClass().getName().indexOf( "OrderFunDef" ) != -1 ) {
         queryAxis.setOrdered( true );
       }

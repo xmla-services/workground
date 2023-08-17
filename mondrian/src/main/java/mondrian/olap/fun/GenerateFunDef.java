@@ -17,15 +17,15 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -88,7 +88,7 @@ class GenerateFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final IterCalc iterCalc = compiler.compileIter(call.getArg(0));
+        final TupleIteratorCalc tupleIteratorCalc = compiler.compileIter(call.getArg(0));
         if (call.getArg(1).getType() instanceof StringType
                 || call.getArg(1).getType() instanceof NumericType) {
             final StringCalc stringCalc;
@@ -110,33 +110,33 @@ class GenerateFunDef extends FunDefBase {
             }
 
             return new GenerateStringCalcImpl(
-                call, iterCalc, stringCalc, delimCalc);
+                call, tupleIteratorCalc, stringCalc, delimCalc);
         } else {
-            final ListCalc listCalc2 =
+            final TupleListCalc listCalc2 =
                 compiler.compileList(call.getArg(1));
             final String literalArg = FunUtil.getLiteralArg(call, 2, "", GenerateFunDef.ReservedWords);
             final boolean all = literalArg.equalsIgnoreCase("ALL");
             final int arityOut = call.getType().getArity();
             return new GenerateListCalcImpl(
-                call, iterCalc, listCalc2, arityOut, all);
+                call, tupleIteratorCalc, listCalc2, arityOut, all);
         }
     }
 
     private static class GenerateListCalcImpl extends AbstractListCalc {
-        private final IterCalc iterCalc1;
-        private final ListCalc listCalc2;
+        private final TupleIteratorCalc iterCalc1;
+        private final TupleListCalc listCalc2;
         private final int arityOut;
         private final boolean all;
 
         public GenerateListCalcImpl(
             ResolvedFunCall call,
-            IterCalc iterCalc,
-            ListCalc listCalc2,
+            TupleIteratorCalc tupleIteratorCalc,
+            TupleListCalc listCalc2,
             int arityOut,
             boolean all)
         {
-            super(call.getType(), new Calc[]{iterCalc, listCalc2});
-            this.iterCalc1 = iterCalc;
+            super(call.getType(), new Calc[]{tupleIteratorCalc, listCalc2});
+            this.iterCalc1 = tupleIteratorCalc;
             this.listCalc2 = listCalc2;
             this.arityOut = arityOut;
             this.all = all;
@@ -204,18 +204,18 @@ class GenerateFunDef extends FunDefBase {
     }
 
     private static class GenerateStringCalcImpl extends AbstractProfilingNestedStringCalc {
-        private final IterCalc iterCalc;
+        private final TupleIteratorCalc tupleIteratorCalc;
         private final StringCalc stringCalc;
         private final StringCalc sepCalc;
 
         public GenerateStringCalcImpl(
             ResolvedFunCall call,
-            IterCalc iterCalc,
+            TupleIteratorCalc tupleIteratorCalc,
             StringCalc stringCalc,
             StringCalc sepCalc)
         {
-            super(call.getType(), new Calc[]{iterCalc, stringCalc});
-            this.iterCalc = iterCalc;
+            super(call.getType(), new Calc[]{tupleIteratorCalc, stringCalc});
+            this.tupleIteratorCalc = tupleIteratorCalc;
             this.stringCalc = stringCalc;
             this.sepCalc = sepCalc;
         }
@@ -227,7 +227,7 @@ class GenerateFunDef extends FunDefBase {
                 StringBuilder buf = new StringBuilder();
                 int k = 0;
                 final TupleIterable iter11 =
-                    iterCalc.evaluateIterable(evaluator);
+                    tupleIteratorCalc.evaluateIterable(evaluator);
                 final TupleCursor cursor = iter11.tupleCursor();
                 int currentIteration = 0;
                 Execution execution =

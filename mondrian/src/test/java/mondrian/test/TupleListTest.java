@@ -260,10 +260,10 @@ class TupleListTest {
             fm.project(new int[] {1}).toString());
 
         // Also check cloneList.
-        assertEquals(0, fm.cloneList(100).size());
-        assertEquals(fm.size(), fm.cloneList(-1).size());
-        assertEquals(fm, fm.cloneList(-1));
-        assertNotSame(fm, fm.cloneList(-1));
+        assertEquals(0, fm.copyList(100).size());
+        assertEquals(fm.size(), fm.copyList(-1).size());
+        assertEquals(fm, fm.copyList(-1));
+        assertNotSame(fm, fm.copyList(-1));
     }
 
     /**

@@ -19,6 +19,7 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
@@ -48,10 +49,9 @@ import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
@@ -199,13 +199,13 @@ public class AbstractExpCompiler implements ExpCompiler {
             }
             final Calc<?> calc = compile(exp);
             if (substitutions > 0) {
-                final IterCalc iterCalc = (IterCalc) calc;
-                if (iterCalc == null) {
+                final TupleIteratorCalc tupleIteratorCalc = (TupleIteratorCalc) calc;
+                if (tupleIteratorCalc == null) {
                     resultStyles =
                             Collections.singletonList(ResultStyle.ITERABLE);
                     return compile(exp);
                 }
-                return iterCalc;
+                return tupleIteratorCalc;
             }
             return calc;
         } finally {
@@ -388,12 +388,12 @@ public class AbstractExpCompiler implements ExpCompiler {
     }
 
     @Override
-    public ListCalc compileList(Exp exp) {
+    public TupleListCalc compileList(Exp exp) {
         return compileList(exp, false);
     }
 
     @Override
-    public ListCalc compileList(Exp exp, boolean mutable) {
+    public TupleListCalc compileList(Exp exp, boolean mutable) {
         if (!(exp.getType() instanceof SetType)) {
             throw new IllegalArgumentException("must be a set: " + exp);
         }
@@ -404,21 +404,21 @@ public class AbstractExpCompiler implements ExpCompiler {
             resultStyleList = ResultStyle.LIST_ONLY;
         }
         Calc<?> calc = compileAs(exp, null, resultStyleList);
-        if (calc instanceof ListCalc listCalc) {
-            return listCalc;
+        if (calc instanceof TupleListCalc tupleListCalc) {
+            return tupleListCalc;
         }
         if (calc == null) {
             calc = compileAs(exp, null, ResultStyle.ITERABLE_ANY);
             assert calc != null;
         }
-        if (calc instanceof ListCalc listCalc) {
-        	return listCalc;
+        if (calc instanceof TupleListCalc tupleListCalc) {
+        	return tupleListCalc;
         }
         // If expression is an iterator, convert it to a list. Don't check
-        // 'calc instanceof IterCalc' because some generic calcs implement both
-        // ListCalc and IterCalc.
-        if (!(calc instanceof ListCalc)) {
-            return toList((IterCalc) calc);
+        // 'calc instanceof TupleIteratorCalc' because some generic calcs implement both
+        // TupleListCalc and TupleIteratorCalc.
+        if (!(calc instanceof TupleListCalc)) {
+            return toList((TupleIteratorCalc) calc);
         }
         // A set can only be implemented as a list or an iterable.
         throw Util.newInternal("Cannot convert calc to list: " + calc);
@@ -430,16 +430,16 @@ public class AbstractExpCompiler implements ExpCompiler {
      * @param calc Calc
      * @return List calculation.
      */
-    public ListCalc toList(IterCalc calc) {
+    public TupleListCalc toList(TupleIteratorCalc calc) {
         return new IterableListCalc(calc);
     }
 
     @Override
-    public IterCalc compileIter(Exp exp) {
-        IterCalc calc =
-                (IterCalc) compileAs(exp, null, ResultStyle.ITERABLE_ONLY);
+    public TupleIteratorCalc compileIter(Exp exp) {
+        TupleIteratorCalc calc =
+                (TupleIteratorCalc) compileAs(exp, null, ResultStyle.ITERABLE_ONLY);
         if (calc == null) {
-            calc = (IterCalc) compileAs(exp, null, ResultStyle.ANY_ONLY);
+            calc = (TupleIteratorCalc) compileAs(exp, null, ResultStyle.ANY_ONLY);
             assert calc != null;
         }
         return calc;

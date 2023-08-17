@@ -29,10 +29,10 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;

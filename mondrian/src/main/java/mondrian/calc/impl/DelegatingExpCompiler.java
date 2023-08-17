@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -23,10 +24,9 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
@@ -130,20 +130,20 @@ public class DelegatingExpCompiler implements ExpCompiler {
     }
 
     @Override
-    public final ListCalc compileList(Exp exp) {
+    public final TupleListCalc compileList(Exp exp) {
         return compileList(exp, false);
     }
 
     @Override
-    public ListCalc compileList(Exp exp, boolean mutable) {
-        final ListCalc calc = parent.compileList(wrap(exp), mutable);
-        return (ListCalc) afterCompile(exp, calc, mutable);
+    public TupleListCalc compileList(Exp exp, boolean mutable) {
+        final TupleListCalc calc = parent.compileList(wrap(exp), mutable);
+        return (TupleListCalc) afterCompile(exp, calc, mutable);
     }
 
     @Override
-    public IterCalc compileIter(Exp exp) {
-        final IterCalc calc = parent.compileIter(wrap(exp));
-        return (IterCalc) afterCompile(exp, calc, false);
+    public TupleIteratorCalc compileIter(Exp exp) {
+        final TupleIteratorCalc calc = parent.compileIter(wrap(exp));
+        return (TupleIteratorCalc) afterCompile(exp, calc, false);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -136,7 +137,7 @@ public interface ExpCompiler {
      *
      * <p>Always equivalent to <code>{@link #compileList}(exp, false)</code>.
      */
-    ListCalc compileList(Exp exp);
+    TupleListCalc compileList(Exp exp);
 
     /**
      * Compiles an expression which yields {@link TupleList} result.
@@ -149,7 +150,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @param mutable Whether resulting list is mutable
      */
-    ListCalc compileList(Exp exp, boolean mutable);
+    TupleListCalc compileList(Exp exp, boolean mutable);
 
     /**
      * Compiles an expression which yields an immutable {@link Iterable} result.
@@ -157,7 +158,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @return Calculator which yields an Iterable
      */
-    IterCalc compileIter(Exp exp);
+    TupleIteratorCalc compileIter(Exp exp);
 
     /**
      * Compiles an expression which yields a <code>boolean</code> result.

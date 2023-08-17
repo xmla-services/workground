@@ -13,8 +13,6 @@
 */
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.Calc;
-
 /**
  * Marker Interface for {@link Calc} that returns the same value on each call of
  * {@link #evaluate(mondrian.olap.Evaluator)} method.

@@ -10,12 +10,12 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -56,13 +56,13 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         try {
           evaluator.setNonEmpty( false );
           final int count;
-          if ( calc instanceof IterCalc iterCalc ) {
-            TupleIterable iterable = evaluateCurrentIterable( iterCalc, evaluator );
+          if ( calc instanceof TupleIteratorCalc tupleIteratorCalc ) {
+            TupleIterable iterable = evaluateCurrentIterable( tupleIteratorCalc, evaluator );
             count = FunUtil.count( evaluator, iterable, includeEmpty );
           } else {
-            // must be ListCalc
-            ListCalc listCalc = (ListCalc) calc;
-            TupleList list = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
+            // must be TupleListCalc
+            TupleListCalc tupleListCalc = (TupleListCalc) calc;
+            TupleList list = AbstractAggregateFunDef.evaluateCurrentList( tupleListCalc, evaluator );
             count = FunUtil.count( evaluator, list, includeEmpty );
           }
           return count;

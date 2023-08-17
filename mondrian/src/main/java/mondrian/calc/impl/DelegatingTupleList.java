@@ -94,7 +94,7 @@ public class DelegatingTupleList extends AbstractTupleList
     }
 
     @Override
-    public TupleList cloneList(int capacity) {
+    public TupleList copyList(int capacity) {
         return new DelegatingTupleList(
                 arity,
                 capacity < 0
