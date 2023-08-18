@@ -31,8 +31,9 @@
     <module>provider.sample.steelwheels.record</module>
     <module>provider.sample.population.xml</module>
     <module>provider.sample.population.record</module>
-    <module>provider.sample.test1.xml</module>
-    <module>provider.sample.test1.record</module>
+    <module>provider.sample.expressivenames.xml</module>
+    <module>provider.sample.expressivenames.record</module>
+    <module>provider.sample.minimal.record</module>
     <module>verifyer.api</module>
     <module>verifyer.basic</module>
     <module>dbcreator.api</module>
