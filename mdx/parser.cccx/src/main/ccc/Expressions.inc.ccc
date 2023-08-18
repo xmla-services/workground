@@ -89,6 +89,7 @@ KeyObjectIdentifier :
 
 INJECT CompoundId :
     import static PARSER_PACKAGE.PARSER_CLASS.stripQuotes;
+    import java.util.List;
     implements Expression,
                org.eclipse.daanse.mdx.model.api.expression.CompoundId,
                org.eclipse.daanse.mdx.model.api.expression.CallExpression
@@ -112,6 +113,33 @@ INJECT CompoundId :
            default -> image;
         };
     }
+
+    public List<org.eclipse.daanse.mdx.model.api.expression.Expression> expressions() {
+        if (Type.PROPERTY.equals(type()) && isChildrenHaveQuoted()) {
+            CompoundId compoundId = new CompoundId();
+            List<ObjectIdentifier> list = childrenOfType(ObjectIdentifier.class);
+            if (!list.isEmpty()) {
+                for (int i = 0; i < list.size() - 1; i++) {
+                    compoundId.addChild(list.get(i));
+                }
+            }
+            return List.of(compoundId);
+        } else {
+            return super.expressions();
+        }
+    }
+
+    private boolean isChildrenHaveQuoted() {
+        for (int i = 0; i < getChildCount(); i++) {
+            Node child = getChild(i);
+            char firstChar = child.getSource().charAt(0);
+            if (firstChar == '[') {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 CompoundId :
