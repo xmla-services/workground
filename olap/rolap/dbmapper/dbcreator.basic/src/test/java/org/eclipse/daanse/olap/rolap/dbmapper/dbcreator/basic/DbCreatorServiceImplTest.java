@@ -526,6 +526,243 @@ class DbCreatorServiceImplTest {
 
     }
 
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testCreatorForExpressiveNamesSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+                                        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=ExpressiveNames))") DbMappingSchemaProvider provider) throws SQLException {
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
+
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("ExpressiveNames");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(12);
+        org.eclipse.daanse.db.jdbc.util.impl.Table t;
+        org.eclipse.daanse.db.jdbc.util.impl.Column c;
+
+        t = getTable(dbStructure.getTables(), "D1H1L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains(
+        		"D1H1L1_NAME",
+        		"D1H1L1_Ordinal",
+        		"D1H1L1"
+        		);
+
+        c = getColumn(t.getColumns(), "D1H1L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+        c = getColumn(t.getColumns(), "D1H1L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D1H1L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);        
+
+        t = getTable(dbStructure.getTables(), "D2H1L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+        .extracting(Column::name)
+        .contains(
+        		"D2H1L1_NAME",
+        		"D2H1L1_Ordinal",
+        		"D2H1L1"
+        		);
+
+        c = getColumn(t.getColumns(), "D2H1L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+        c = getColumn(t.getColumns(), "D2H1L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2H1L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);        
+
+        t = getTable(dbStructure.getTables(), "D2H1L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains(
+            		"D2H1L1_NAME",
+            		"D2H1L1_Ordinal",
+            		"D2H1L1"
+            		);
+
+        c = getColumn(t.getColumns(), "D2H1L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D2H1L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2H1L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        t = getTable(dbStructure.getTables(), "D2H2L2Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(1);
+        //??? 1 column if name column is absent?
+
+        c = getColumn(t.getColumns(), "D2H2L2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "D2H2L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(6);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains(
+            		"D2H2L1_NAME", "D2H2L2_NAME",
+            		"D2H2L1_Ordinal", "D2H2L2_Ordinal",
+            		"D2H2L1", "D2H2L2"
+            		);
+
+        c = getColumn(t.getColumns(), "D2H2L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D2H2L2_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D2H2L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2H2L2_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2H2L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2H2L2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "D3H1L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+
+        c = getColumn(t.getColumns(), "D3H1L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D3H1L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D3H1L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "D3H2L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+
+        c = getColumn(t.getColumns(), "D3H2L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D3H2L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H2L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        t = getTable(dbStructure.getTables(), "D3H3L1Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+
+        c = getColumn(t.getColumns(), "D3H3L1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H3L1_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H3L1_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        t = getTable(dbStructure.getTables(), "D3H3L2Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(4);
+
+        c = getColumn(t.getColumns(), "D3H3L2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H3L1_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        
+        c = getColumn(t.getColumns(), "D3H3L2_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+        c = getColumn(t.getColumns(), "D3H3L2_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        
+        t = getTable(dbStructure.getTables(), "D3H3L3Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(4);
+
+        c = getColumn(t.getColumns(), "D3H3L3");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H3L2_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+        
+        c = getColumn(t.getColumns(), "D3H3L3_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+        c = getColumn(t.getColumns(), "D3H3L3_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);        
+
+        t = getTable(dbStructure.getTables(), "Cube1Fact");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(4);
+
+        c = getColumn(t.getColumns(), "M1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+        c = getColumn(t.getColumns(), "D1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+    }
+
     private org.eclipse.daanse.db.jdbc.util.impl.Table getTable(
         List<org.eclipse.daanse.db.jdbc.util.impl.Table> tables,
         String name) {
