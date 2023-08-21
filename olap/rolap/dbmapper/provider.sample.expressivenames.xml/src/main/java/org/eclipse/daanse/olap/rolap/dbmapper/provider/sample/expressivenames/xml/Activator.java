@@ -48,7 +48,7 @@ public class Activator {
 
 		Dictionary<String, Object> ht = new Hashtable<>();
 		ht.put("url", url.toString());
-		ht.put("sample.name", "Test1");
+		ht.put("sample.name", "ExpressiveNames");
 		ht.put("sample.type", "xml");
 
 		c.update(ht);
