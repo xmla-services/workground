@@ -16,14 +16,19 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.minimal.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
@@ -37,49 +42,78 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
 	private static final String CUBE_NAME = "OnlyCube";
 	private static final TableR CUBE_TABLE_FACT = new TableR("OnlyCubeFact");
     public static final String LEVEL_NAME = "OnlyLevel";
-    public static final String KEY_NAME = "KEY";
+    public static final String KEY_NAME = "KEY_NAME";
+    public static final String KEY_ID = "KEY";
+    public static final String KEY_ORDER = "KEY_ORDER";
     public static final String VALUE_NAME = "VALUE";
-  
-  
- 
+    public static final String VALUE_NAME1 = "VALUE_COUNT";
+
+
+
     private static final LevelR LEVEL = LevelRBuilder
         .builder()
         .name(LEVEL_NAME)
-        .column(KEY_NAME)
+        .column(KEY_ID)
         .nameColumn(KEY_NAME)
+        .ordinalColumn(KEY_ORDER)
         .build();
 
 
     private static final HierarchyR HIERARCHY = HierarchyRBuilder
         .builder()
         .hasAll(true)
-        .name("OnlyHirarchy")
+        .name("OnlyHierarchy")
         .primaryKey(KEY_NAME)
         .relation(CUBE_TABLE_FACT)
         .levels(List.of(LEVEL))
         .build();
 
- 
-    private static final PrivateDimensionR DIMENSION = PrivateDimensionRBuilder
+    public static final String ONLY_DIMENSION = "OnlyDimension";
+    private static final PrivateDimensionR DIMENSION_SCHEMA = PrivateDimensionRBuilder
         .builder()
-        .name("OnlyDimension")
+        .name(ONLY_DIMENSION)
         .foreignKey(LEVEL_NAME)
         .hierarchies(List.of(HIERARCHY))
         .build();
 
-  
+    private static final DimensionUsage DIMENSION_USAGE = DimensionUsageRBuilder
+        .builder()
+        .name(ONLY_DIMENSION)
+        .source(ONLY_DIMENSION)
+        .foreignKey("D1")
+        .build();
+
+    private static final MeasureR MEASURE1 = MeasureRBuilder
+        .builder()
+        .name("Measure")
+        .column(VALUE_NAME)
+        .aggregator("sum")
+        .formatString("#,###.00")
+        .datatype(MeasureDataTypeEnum.INTEGER)
+        .build();
+
+    private static final MeasureR MEASURE2 = MeasureRBuilder
+        .builder()
+        .name("Measure1")
+        .column(VALUE_NAME1)
+        .aggregator("count")
+        .formatString("Standard")
+        .build();
+
 
     private static final Cube CUBE = CubeRBuilder
         .builder()
         .name(CUBE_NAME)
         .fact(CUBE_TABLE_FACT)
         .dimensionUsageOrDimensions(List.of(
-            DIMENSION))
+            DIMENSION_USAGE))
+        .measures(List.of(MEASURE1, MEASURE2))
         .build();
 
     private static final Schema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
+        .dimensions(List.of(DIMENSION_SCHEMA))
         .cubes(List.of(CUBE))
         .build();
 
