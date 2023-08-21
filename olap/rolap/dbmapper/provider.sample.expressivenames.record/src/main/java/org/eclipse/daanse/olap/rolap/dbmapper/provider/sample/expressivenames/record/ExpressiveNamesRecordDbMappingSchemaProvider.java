@@ -16,17 +16,21 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.r
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.LevelR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.MeasureR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.PrivateDimensionR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.DimensionUsageRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
@@ -40,11 +44,13 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
 
 	private static final String CUBE_1_NAME = "Cube1";
 	private static final TableR CUBE_1_TABLE_FACT = new TableR("Cube1Fact");
-    public static final String DIMENSION_2 = "Dimension2";
     public static final String D_3_H_3_L_2 = "D3H3L2";
     public static final String D_1_H_1_L_1 = "D1H1L1";
     public static final String D_2_H_1_L_1 = "D2H1L1";
     public static final String D_2_H_2_L_2 = "D2H2L2";
+    public static final String DIMENSION_1 = "Dimension1";
+    public static final String DIMENSION_2 = "Dimension2";
+    public static final String DIMENSION_3 = "Dimension3";
 
     private static final TableR TABLE1 = new TableR("D1H1L1Table");
     private static final TableR TABLE2 = new TableR("D2H1L1Table");
@@ -236,7 +242,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .levels(List.of(LEVEL331, LEVEL332, LEVEL333))
         .build();
 
-    private static final PrivateDimensionR DIMENSION1 = PrivateDimensionRBuilder
+    private static final PrivateDimensionR DIMENSION_SCHEMA1 = PrivateDimensionRBuilder
         .builder()
         .name("D1H1")
         .foreignKey(D_1_H_1_L_1)
@@ -244,18 +250,47 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .hierarchies(List.of(HIERARCHY1))
         .build();
 
-    private static final PrivateDimensionR DIMENSION2 = PrivateDimensionRBuilder
+    private static final PrivateDimensionR DIMENSION_SCHEMA2 = PrivateDimensionRBuilder
         .builder()
         .name(DIMENSION_2)
         .foreignKey("D2")
         .hierarchies(List.of(HIERARCHY21, HIERARCHY22))
         .build();
 
-    private static final PrivateDimensionR DIMENSION3 = PrivateDimensionRBuilder
+    private static final PrivateDimensionR DIMENSION_SCHEMA3 = PrivateDimensionRBuilder
         .builder()
-        .name("Dimension3")
+        .name(DIMENSION_3)
         .foreignKey("D3")
         .hierarchies(List.of(HIERARCHY31, HIERARCHY32, HIERARCHY33))
+        .build();
+
+    private static final DimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
+        .builder()
+        .name(DIMENSION_1)
+        .source(DIMENSION_1)
+        .foreignKey("D1")
+        .build();
+
+    private static final DimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
+        .builder()
+        .name(DIMENSION_2)
+        .source(DIMENSION_2)
+        .foreignKey("D2")
+        .build();
+
+    private static final DimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
+        .builder()
+        .name(DIMENSION_3)
+        .source(DIMENSION_3)
+        .foreignKey("D2")
+        .build();
+
+    private static final MeasureR MEASURE_1_1 = MeasureRBuilder
+        .builder()
+        .name("Measure1")
+        .column("M1")
+        .aggregator("sum")
+        .formatString("Standard")
         .build();
 
     private static final Cube CUBE = CubeRBuilder
@@ -264,14 +299,20 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .description("Test Cube")
         .fact(CUBE_1_TABLE_FACT)
         .dimensionUsageOrDimensions(List.of(
-            DIMENSION1,
-            DIMENSION2,
-            DIMENSION3))
+            DIMENSION_USAGE_1,
+            DIMENSION_USAGE_2,
+            DIMENSION_USAGE_3))
+        .measures(List.of(MEASURE_1_1))
         .build();
 
     private static final Schema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
+        .dimensions(List.of(
+            DIMENSION_SCHEMA1,
+            DIMENSION_SCHEMA2,
+            DIMENSION_SCHEMA3
+        ))
         .cubes(List.of(CUBE))
         .build();
 
