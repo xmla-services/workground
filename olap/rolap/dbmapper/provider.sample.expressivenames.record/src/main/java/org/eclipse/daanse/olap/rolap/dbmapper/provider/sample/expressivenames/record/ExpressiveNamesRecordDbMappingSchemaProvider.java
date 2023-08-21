@@ -45,6 +45,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
 	private static final String CUBE_1_NAME = "Cube1";
 	private static final TableR CUBE_1_TABLE_FACT = new TableR("Cube1Fact");
     public static final String D_3_H_3_L_2 = "D3H3L2";
+    public static final String D_3_H_3_L_3 = "D3H3L3";
     public static final String D_1_H_1_L_1 = "D1H1L1";
     public static final String D_2_H_1_L_1 = "D2H1L1";
     public static final String D_2_H_2_L_2 = "D2H2L2";
@@ -170,10 +171,10 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
 
     private static final LevelR LEVEL333 = LevelRBuilder
         .builder()
-        .name("D3H3L3")
-        .column(D_3_H_3_L_2)
-        .nameColumn("D3H3L2_NAME")
-        .ordinalColumn("D3H3L2_Ordinal")
+        .name(D_3_H_3_L_3)
+        .column(D_3_H_3_L_3)
+        .nameColumn("D3H3L3_NAME")
+        .ordinalColumn("D3H3L3_Ordinal")
         .type(TypeEnum.INTEGER)
         .table("D3H3L3Table")
         .description("Level 3 Hierarchy3 Dimension 3")
@@ -236,7 +237,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .builder()
         .hasAll(true)
         .name("D3H3")
-        .primaryKey("D3H3L3")
+        .primaryKey(D_3_H_3_L_3)
         .description("Hierarchy 1 Dimension 3")
         .relation(JOIN)
         .levels(List.of(LEVEL331, LEVEL332, LEVEL333))
@@ -282,7 +283,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .builder()
         .name(DIMENSION_3)
         .source(DIMENSION_3)
-        .foreignKey("D2")
+        .foreignKey("D3")
         .build();
 
     private static final MeasureR MEASURE_1_1 = MeasureRBuilder

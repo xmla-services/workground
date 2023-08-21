@@ -6,7 +6,7 @@
 
 -tester: biz.aQute.tester.junit-platform
 
-# JaCoCo calculates test coverage    
+# JaCoCo calculates test coverage
 -runpath.jacoco:\
 	org.jacoco.agent,\
 	org.jacoco.agent.rt
@@ -27,7 +27,8 @@
 	bnd.identity;id='${project.artifactId}-tests',\
 	bnd.identity;id=junit-jupiter-engine,\
 	bnd.identity;id=junit-platform-launcher,\
-	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.record'
+	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.record',\
+	bnd.identity;id='org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.record'
 
 # -runbundles is calculated by the bnd-resolver-maven-plugin
 -runbundles: \
@@ -50,6 +51,7 @@
 	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.expressivenames.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.olap.rolap.dbmapper.utils;version='[0.0.1,0.0.2)',\
 	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\
