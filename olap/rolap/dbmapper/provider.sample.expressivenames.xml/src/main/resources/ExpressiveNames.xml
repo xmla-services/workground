@@ -16,7 +16,7 @@
 
     <Hierarchy hasAll="true" name="D2H2" primaryKey="D2H2L2" description = "Hierarchy 2 Dimension 2">
       <Table name="D2H2L2Table"/>
-      <Level name="D2H2L1" column="D2H2L1" nameColumn="D2H2L1_NAME" ordinalColumn="D2H2L1_Ordinal" type="Integer" table="D2H2L1Table" description = "Level 1 Hierarchy 2 Dimension 2"/>
+      <Level name="D2H2L1" column="D2H2L1" nameColumn="D2H2L1_NAME" ordinalColumn="D2H2L1_Ordinal" type="Integer" table="D2H2L2Table" description = "Level 1 Hierarchy 2 Dimension 2"/>
       <Level name="D2H2L2" column="D2H2L2" nameColumn="D2H2L2_NAME" ordinalColumn="D2H2L2_Ordinal" type="Integer" table="D2H2L2Table" description = "Level 2 Hierarchy 2 Dimension 2"/>
     </Hierarchy>
   </Dimension>
@@ -29,6 +29,11 @@
 
     <Hierarchy hasAll="true" name="D3H2" primaryKey="D3H2L2" description = "Hierarchy 2 Dimension 3">
       <Table name="D3H2L2Table"/>
+      <Join leftKey="D3H2L1_id" rightKey="D3H2L1">
+        <Table name="D3H2L2Table"/>
+        <Table name="D3H2L1Table"/>
+      </Join>
+
       <Level name="D3H2L1" column="D3H2L1" nameColumn="D3H2L1_NAME" ordinalColumn="D3H2L1_Ordinal" type="Integer" table="D3H2L1Table" description = "Level 1 Hierarchy2 Dimension 3"/>
       <Level name="D3H2L2" column="D3H2L2" nameColumn="D3H2L2_NAME" ordinalColumn="D3H2L2_Ordinal" type="Integer" table="D3H2L2Table" description = "Level 2 Hierarchy2 Dimension 3"/>
     </Hierarchy>
