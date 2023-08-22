@@ -40,7 +40,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
 	private static final String SCHEMA_NAME = "Minimal";
 	private static final String CUBE_NAME = "OnlyCube";
-	private static final TableR CUBE_TABLE_FACT = new TableR("OnlyCubeFact");
+	private static final TableR CUBE_TABLE_FACT = new TableR("Cube1Fact");
+    private static final TableR ONLY_CUBE_TABLE_FACT = new TableR("OnlyCubeFact");
     public static final String LEVEL_NAME = "OnlyLevel";
     public static final String KEY_NAME = "KEY_NAME";
     public static final String KEY_ID = "KEY";
@@ -64,7 +65,7 @@ public class MinimalRecordDbMappingSchemaProvider implements DbMappingSchemaProv
         .hasAll(true)
         .name("OnlyHierarchy")
         .primaryKey(KEY_NAME)
-        .relation(CUBE_TABLE_FACT)
+        .relation(ONLY_CUBE_TABLE_FACT)
         .levels(List.of(LEVEL))
         .build();
 
