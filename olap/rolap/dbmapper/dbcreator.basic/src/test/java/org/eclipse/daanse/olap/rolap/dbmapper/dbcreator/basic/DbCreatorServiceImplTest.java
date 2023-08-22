@@ -796,7 +796,7 @@ class DbCreatorServiceImplTest {
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
         
-
+        //2
         t = getTable(dbStructure.getTables(), "Cube1Fact");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
