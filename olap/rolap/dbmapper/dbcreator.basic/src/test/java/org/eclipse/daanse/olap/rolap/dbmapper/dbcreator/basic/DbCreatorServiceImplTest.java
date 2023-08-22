@@ -95,7 +95,6 @@ class DbCreatorServiceImplTest {
     ColumnDef columnDef1 = mock(ColumnDef.class);
     ColumnDef columnDef2 = mock(ColumnDef.class);
 
-
     @BeforeEach
     void beforeEach() throws SQLException {
         bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("ds", "1"));
@@ -129,8 +128,6 @@ class DbCreatorServiceImplTest {
         when(property1.column()).thenReturn("property1Column");
         when(property11.column()).thenReturn("property11Column");
         when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
-
-
 
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(schema);
@@ -207,8 +204,6 @@ class DbCreatorServiceImplTest {
         when(measure1.column()).thenReturn("measure1Column");
         when(measure2.column()).thenReturn("measure2Column");
         when(measure1.datatype()).thenReturn(MeasureDataTypeEnum.NUMERIC);
-
-
 
         when(tableFact.name()).thenReturn("tableFact");
         when(dimensionUsage.foreignKey()).thenReturn("tableFactId");
@@ -394,8 +389,10 @@ class DbCreatorServiceImplTest {
 
     @Test
     @SuppressWarnings("java:S5961")
-    void testCreatorForPopulationSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
-                                        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider) throws SQLException {
+    void testCreatorForPopulationSchema(
+        @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider
+    ) throws SQLException {
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
 
@@ -410,8 +407,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(2);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("id", "name");
+            .extracting(Column::name)
+            .contains("id", "name");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
@@ -423,8 +420,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("id", "name", "continent_id");
+            .extracting(Column::name)
+            .contains("id", "name", "continent_id");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
@@ -439,8 +436,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(2);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("gender_id", "name");
+            .extracting(Column::name)
+            .contains("gender_id", "name");
         c = getColumn(t.getColumns(), "gender_id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
@@ -452,8 +449,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(2);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("year", "ordinal");
+            .extracting(Column::name)
+            .contains("year", "ordinal");
         c = getColumn(t.getColumns(), "year");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
@@ -465,8 +462,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("id", "name", "contry_id");
+            .extracting(Column::name)
+            .contains("id", "name", "contry_id");
         c = getColumn(t.getColumns(), "id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
@@ -481,8 +478,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(7);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("age", "H1", "H1_Order", "H2", "H2_Order", "H9", "H9_Order");
+            .extracting(Column::name)
+            .contains("age", "H1", "H1_Order", "H2", "H2_Order", "H9", "H9_Order");
         c = getColumn(t.getColumns(), "age");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
@@ -509,8 +506,8 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(4);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains("year", "state_id", "gender_id", "age");
+            .extracting(Column::name)
+            .contains("year", "state_id", "gender_id", "age");
         c = getColumn(t.getColumns(), "year");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
@@ -528,8 +525,10 @@ class DbCreatorServiceImplTest {
 
     @Test
     @SuppressWarnings("java:S5961")
-    void testCreatorForExpressiveNamesSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
-                                        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=ExpressiveNames))") DbMappingSchemaProvider provider) throws SQLException {
+    void testCreatorForExpressiveNamesSchema(
+        @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=ExpressiveNames))") DbMappingSchemaProvider provider
+    ) throws SQLException {
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
 
@@ -545,12 +544,12 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains(
-        		"D1H1L1_NAME",
-        		"D1H1L1_Ordinal",
-        		"D1H1L1"
-        		);
+            .extracting(Column::name)
+            .contains(
+                "D1H1L1_NAME",
+                "D1H1L1_Ordinal",
+                "D1H1L1"
+            );
 
         c = getColumn(t.getColumns(), "D1H1L1_NAME");
         assertThat(c).isNotNull();
@@ -569,12 +568,12 @@ class DbCreatorServiceImplTest {
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
         assertThat(t.getColumns())
-        .extracting(Column::name)
-        .contains(
-        		"D2H1L1_NAME",
-        		"D2H1L1_Ordinal",
-        		"D2H1L1"
-        		);
+            .extracting(Column::name)
+            .contains(
+                "D2H1L1_NAME",
+                "D2H1L1_Ordinal",
+                "D2H1L1"
+            );
 
         c = getColumn(t.getColumns(), "D2H1L1_NAME");
         assertThat(c).isNotNull();
@@ -758,6 +757,68 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "D3");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+    }
+    @Test
+    @SuppressWarnings("java:S5961")
+    void testCreatorForMinimalSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+                                             @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Minimal))") DbMappingSchemaProvider provider) throws SQLException {
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
+
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("Minimal");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(2);
+        org.eclipse.daanse.db.jdbc.util.impl.Table t;
+        org.eclipse.daanse.db.jdbc.util.impl.Column c;
+        //1
+        t = getTable(dbStructure.getTables(), "OnlyCubeFact");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains(
+            	"KEY_NAME",
+                "KEY_ORDER",
+                "KEY"
+            );
+
+        c = getColumn(t.getColumns(), "KEY_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "KEY_ORDER");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "KEY");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+        
+
+        t = getTable(dbStructure.getTables(), "Cube1Fact");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(3);
+        assertThat(t.getColumns())
+            .extracting(Column::name)
+            .contains(
+                "VALUE",
+                "D1",              
+                "VALUE_COUNT"
+            );
+        
+        c = getColumn(t.getColumns(), "VALUE");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D1");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "VALUE_COUNT");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
 
     }
 
