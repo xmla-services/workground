@@ -35,7 +35,7 @@ public class ExpressiveNamesDataLoader implements DataLoader {
         //2
         new DataLoaderUtil.Table(null, "D2H1L1Table",
             List.of(
-                new DataLoaderUtil.Constraint("D2H1L1", false, new String[] { "D1H1L1" })
+                new DataLoaderUtil.Constraint("D2H1L1", false, new String[] { "D2H1L1" })
             ),
             new DataLoaderUtil.Column("D2H1L1", DataLoaderUtil.Type.Integer, false),
             new DataLoaderUtil.Column("D2H1L1_NAME", DataLoaderUtil.Type.Varchar255, false),
