@@ -44,11 +44,19 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
 
 	private static final String CUBE_1_NAME = "Cube1";
 	private static final TableR CUBE_1_TABLE_FACT = new TableR("Cube1Fact");
-    public static final String D_3_H_3_L_2 = "D3H3L2";
-    public static final String D_3_H_3_L_3 = "D3H3L3";
     public static final String D_1_H_1_L_1 = "D1H1L1";
+
     public static final String D_2_H_1_L_1 = "D2H1L1";
     public static final String D_2_H_2_L_2 = "D2H2L2";
+
+    public static final String D_3_H_1_L_1 = "D3H1L1";
+    public static final String D_3_H_2_L_1 = "D3H2L1";
+    public static final String D_3_H_3_L_1 = "D3H3L1";
+    public static final String D_3_H_3_L_2 = "D3H3L2";
+    public static final String D_3_H_3_L_3 = "D3H3L3";
+    public static final String D_3_H_2_L_2 = "D3H2L2";
+
+
     public static final String DIMENSION_1 = "Dimension1";
     public static final String DIMENSION_2 = "Dimension2";
     public static final String DIMENSION_3 = "Dimension3";
@@ -57,11 +65,11 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
     private static final TableR TABLE2 = new TableR("D2H1L1Table");
     private static final TableR TABLE3 = new TableR("D2H2L2Table");
     private static final TableR TABLE4 = new TableR("D3H1L1Table");
-    private static final TableR TABLE5 = new TableR("D3H2L2Table");
+    private static final TableR TABLE5_1 = new TableR("D3H2L2Table");
+    private static final TableR TABLE5_2 = new TableR("D3H2L1Table");
     private static final TableR TABLE6 = new TableR("D3H3L3Table");
     private static final TableR TABLE7 = new TableR("D3H3L2Table");
     private static final TableR TABLE8 = new TableR("D3H3L1Table");
-    public static final String D_3_H_3_L_1 = "D3H3L1";
     private static final Join JOIN1 = new JoinR(List.of(TABLE7, TABLE8),
         null,
         "D3H3L1_id",
@@ -73,6 +81,12 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         "D3H3L2_id",
         null,
         D_3_H_3_L_2);
+
+    private static final JoinR JOIN0 = new JoinR(List.of(TABLE5_1, TABLE5_2),
+        null,
+        "D3H2L1_id",
+        null,
+        D_3_H_2_L_1);
 
     private static final LevelR LEVEL1 = LevelRBuilder
         .builder()
@@ -90,6 +104,8 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .nameColumn("D2H1L1_NAME")
         .ordinalColumn("D2H1L1_Ordinal")
         .description("Level 1 Hierarchy 1 Dimension 2")
+        .type(TypeEnum.INTEGER)
+        .table("D2H1L1Table")
         .build();
 
     private static final LevelR LEVEL221 = LevelRBuilder
@@ -100,7 +116,6 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .ordinalColumn("D2H2L1_Ordinal")
         .description("Level 2 Hierarchy 2 Dimension 2")
         .type(TypeEnum.INTEGER)
-        .table("D2H2L1Table")
         .build();
 
     private static final LevelR LEVEL222 = LevelRBuilder
@@ -111,10 +126,8 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .ordinalColumn("D2H2L2_Ordinal")
         .description("Level 2 Dimension 3")
         .type(TypeEnum.INTEGER)
-        .table("D2H2L1Table")
         .build();
 
-    public static final String D_3_H_1_L_1 = "D3H1L1";
     private static final LevelR LEVEL31 = LevelRBuilder
         .builder()
         .name(D_3_H_1_L_1)
@@ -126,8 +139,8 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
 
     private static final LevelR LEVEL321 = LevelRBuilder
         .builder()
-        .name("D3H2L1")
-        .column("D3H2L1")
+        .name(D_3_H_2_L_1)
+        .column(D_3_H_2_L_1)
         .nameColumn("D3H2L1_NAME")
         .ordinalColumn("D3H2L1_Ordinal")
         .type(TypeEnum.INTEGER)
@@ -135,7 +148,6 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .description("Level 1 Hierarchy2 Dimension 3")
         .build();
 
-    public static final String D_3_H_2_L_2 = "D3H2L2";
     private static final LevelR LEVEL322 = LevelRBuilder
         .builder()
         .name(D_3_H_2_L_2)
@@ -195,7 +207,6 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .hasAll(true)
         .name("D2H1")
         .primaryKey(D_2_H_1_L_1)
-        .primaryKeyTable(D_2_H_1_L_1)
         .description("Hierarchy 1 Dimension 2")
         .relation(TABLE2)
         .levels(List.of(LEVEL21))
@@ -229,7 +240,7 @@ public class ExpressiveNamesRecordDbMappingSchemaProvider implements DbMappingSc
         .name("D3H2")
         .primaryKey(D_3_H_2_L_2)
         .description("Hierarchy 2 Dimension 3")
-        .relation(TABLE5)
+        .relation(JOIN0)
         .levels(List.of(LEVEL321, LEVEL322))
         .build();
 

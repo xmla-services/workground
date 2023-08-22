@@ -536,10 +536,11 @@ class DbCreatorServiceImplTest {
         assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
             .isNotNull().isEqualTo("ExpressiveNames");
         assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
-        assertThat(dbStructure.getTables()).isNotNull().hasSize(12);
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(10);
         org.eclipse.daanse.db.jdbc.util.impl.Table t;
         org.eclipse.daanse.db.jdbc.util.impl.Column c;
 
+        //1
         t = getTable(dbStructure.getTables(), "D1H1L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
@@ -554,15 +555,16 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "D1H1L1_NAME");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
+
         c = getColumn(t.getColumns(), "D1H1L1_Ordinal");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
 
         c = getColumn(t.getColumns(), "D1H1L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);        
+        assertThat(c.type()).isEqualTo(Type.STRING);
 
+        //2
         t = getTable(dbStructure.getTables(), "D2H1L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
@@ -577,29 +579,6 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "D2H1L1_NAME");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
-        c = getColumn(t.getColumns(), "D2H1L1_Ordinal");
-        assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
-
-        c = getColumn(t.getColumns(), "D2H1L1");
-        assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);        
-
-        t = getTable(dbStructure.getTables(), "D2H1L1Table");
-        assertThat(t).isNotNull();
-        assertThat(t.getColumns()).isNotNull().hasSize(3);
-        assertThat(t.getColumns())
-            .extracting(Column::name)
-            .contains(
-            		"D2H1L1_NAME",
-            		"D2H1L1_Ordinal",
-            		"D2H1L1"
-            		);
-
-        c = getColumn(t.getColumns(), "D2H1L1_NAME");
-        assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
 
         c = getColumn(t.getColumns(), "D2H1L1_Ordinal");
         assertThat(c).isNotNull();
@@ -607,27 +586,19 @@ class DbCreatorServiceImplTest {
 
         c = getColumn(t.getColumns(), "D2H1L1");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.STRING);
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
 
+        //3
         t = getTable(dbStructure.getTables(), "D2H2L2Table");
-        assertThat(t).isNotNull();
-        assertThat(t.getColumns()).isNotNull().hasSize(1);
-        //??? 1 column if name column is absent?
-
-        c = getColumn(t.getColumns(), "D2H2L2");
-        assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);
-
-        t = getTable(dbStructure.getTables(), "D2H2L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(6);
         assertThat(t.getColumns())
             .extracting(Column::name)
             .contains(
-            		"D2H2L1_NAME", "D2H2L2_NAME",
-            		"D2H2L1_Ordinal", "D2H2L2_Ordinal",
-            		"D2H2L1", "D2H2L2"
-            		);
+                "D2H2L1_NAME", "D2H2L2_NAME",
+                "D2H2L1_Ordinal", "D2H2L2_Ordinal",
+                "D2H2L1", "D2H2L2"
+            );
 
         c = getColumn(t.getColumns(), "D2H2L1_NAME");
         assertThat(c).isNotNull();
@@ -653,6 +624,7 @@ class DbCreatorServiceImplTest {
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
 
+        //4
         t = getTable(dbStructure.getTables(), "D3H1L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
@@ -669,6 +641,7 @@ class DbCreatorServiceImplTest {
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
 
+        //5
         t = getTable(dbStructure.getTables(), "D3H2L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
@@ -685,6 +658,28 @@ class DbCreatorServiceImplTest {
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
 
+        //6
+        t = getTable(dbStructure.getTables(), "D3H2L2Table");
+        assertThat(t).isNotNull();
+        assertThat(t.getColumns()).isNotNull().hasSize(4);
+
+        c = getColumn(t.getColumns(), "D3H2L2_NAME");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.STRING);
+
+        c = getColumn(t.getColumns(), "D3H2L2");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H2L1_id");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        c = getColumn(t.getColumns(), "D3H2L2_Ordinal");
+        assertThat(c).isNotNull();
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
+
+        //7
         t = getTable(dbStructure.getTables(), "D3H3L1Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(3);
@@ -701,6 +696,7 @@ class DbCreatorServiceImplTest {
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
 
+        //8
         t = getTable(dbStructure.getTables(), "D3H3L2Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(4);
@@ -712,15 +708,16 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "D3H3L1_id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
-        
+
         c = getColumn(t.getColumns(), "D3H3L2_NAME");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
+
         c = getColumn(t.getColumns(), "D3H3L2_Ordinal");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
-        
+
+        //9
         t = getTable(dbStructure.getTables(), "D3H3L3Table");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(4);
@@ -732,15 +729,16 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "D3H3L2_id");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
-        
+
         c = getColumn(t.getColumns(), "D3H3L3_NAME");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
+
         c = getColumn(t.getColumns(), "D3H3L3_Ordinal");
         assertThat(c).isNotNull();
-        assertThat(c.type()).isEqualTo(Type.INTEGER);        
+        assertThat(c.type()).isEqualTo(Type.INTEGER);
 
+        //10
         t = getTable(dbStructure.getTables(), "Cube1Fact");
         assertThat(t).isNotNull();
         assertThat(t.getColumns()).isNotNull().hasSize(4);
@@ -748,7 +746,7 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "M1");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
+
         c = getColumn(t.getColumns(), "D1");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);
