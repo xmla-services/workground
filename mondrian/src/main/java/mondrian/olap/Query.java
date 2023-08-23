@@ -40,7 +40,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.olap4j.impl.IdentifierParser;
 import org.olap4j.mdx.IdentifierSegment;
 
@@ -783,7 +783,7 @@ public class Query extends QueryPart {
 
     @Override
     public void explain(PrintWriter pw) {
-    	SimpleProfileResultWriter spw = new SimpleProfileResultWriter(pw);
+    	SimpleCalculationProfileWriter spw = new SimpleCalculationProfileWriter(pw);
         final boolean profiling = getStatement().getProfileHandler() != null;
         for (Formula formula : formulas) {
             formula.getMdxMember(); // TODO:
