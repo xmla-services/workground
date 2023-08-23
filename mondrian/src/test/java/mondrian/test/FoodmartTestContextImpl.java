@@ -52,7 +52,7 @@ import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -1030,7 +1030,7 @@ public String compileExpression( String expression, final boolean scalar ) {
     final StringWriter sw = new StringWriter();
     final PrintWriter pw = new PrintWriter( sw );
     
-    SimpleProfileResultWriter w=new SimpleProfileResultWriter(pw);
+    SimpleCalculationProfileWriter w=new SimpleCalculationProfileWriter(pw);
     
 	if (calc instanceof ProfilingCalc pc) {
 		w.write(pc.getCalculationProfile());

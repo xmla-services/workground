@@ -105,7 +105,7 @@ import org.eclipse.daanse.olap.api.model.Schema;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
-import org.eclipse.daanse.olap.calc.base.profile.SimpleProfileResultWriter;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -4463,7 +4463,7 @@ public class Util extends XOMUtil {
     final StringWriter stringWriter = new StringWriter();
     final PrintWriter printWriter = new PrintWriter( stringWriter );
     
-	SimpleProfileResultWriter spw = new SimpleProfileResultWriter(printWriter);
+	SimpleCalculationProfileWriter spw = new SimpleCalculationProfileWriter(printWriter);
 
     printWriter.println( title );
     if ( calc != null ) {
