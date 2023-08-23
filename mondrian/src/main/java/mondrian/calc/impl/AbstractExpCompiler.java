@@ -39,6 +39,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCal
 import org.eclipse.daanse.olap.calc.base.type.booleanx.DoubleToBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.type.booleanx.IntgegerToBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.type.booleanx.UnknownToBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.type.datetime.UnknownToDateTimeCalc;
 import org.eclipse.daanse.olap.calc.base.type.dimension.UnknownToDimensionCalc;
 import org.eclipse.daanse.olap.calc.base.type.doublex.IntegerToDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.type.hierarchy.DimensionDefaultHierarchyCalc;
@@ -382,10 +383,15 @@ public class AbstractExpCompiler implements ExpCompiler {
 		}
 	}
 
-    @Override
-    public DateTimeCalc compileDateTime(Exp exp) {
-        return (DateTimeCalc) compileScalar(exp, false);
-    }
+	@Override
+	public DateTimeCalc compileDateTime(Exp exp) {
+
+		Calc<?> calc = compileScalar(exp, false);
+		if (calc instanceof DateTimeCalc dtc) {
+			return dtc;
+		}
+		return new UnknownToDateTimeCalc(calc.getType(), calc);
+	}
 
     @Override
     public TupleListCalc compileList(Exp exp) {
