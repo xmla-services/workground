@@ -19,6 +19,7 @@ import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 
 import java.util.ArrayList;
@@ -76,25 +77,24 @@ public class GrabberUtils {
         return List.of();
     }
 
-    static List<Column> getFactColumns(String cubeName, List<MdSchemaDimensionsResponseRow> dimensions, List<MdSchemaHierarchiesResponseRow> hierarchies) {
+    static List<Column> getFactColumns(String cubeName, List<MdSchemaDimensionsResponseRow> dimensions, List<MdSchemaMeasuresResponseRow> measures) {
         List<Column> columns = new ArrayList<>();
         dimensions.forEach(it -> {
             if (it.cubeName().isPresent() && cubeName.equals(it.cubeName().get()) &&
-                it.dimensionName().isPresent() && it.dimensionUniqueName().isPresent()) {
-                List<MdSchemaHierarchiesResponseRow> dimensionHierarchies =
-                    hierarchies.stream()
-                        .filter(h -> h.hierarchyName().isPresent() &&
-                            h.dimensionUniqueName().isPresent() &&
-                            h.dimensionUniqueName().get().equals(it.dimensionUniqueName().get())
-                        ).toList();
-                columns.addAll(dimensionHierarchies.stream().map(dh ->
+                it.dimensionName().isPresent()) {
+                columns.add(
                     new Column(
-                        getFactTableColumnName(it.dimensionName().get(),
-                            dh.hierarchyName().get()), Type.LONG))
-                    .toList());
-                columns.add(new Column("source_id", Type.LONG));
+                        getFactTableColumnName(it.dimensionName().get()), Type.LONG));
             }
         });
+        measures.forEach(m -> {
+            if (m.cubeName().isPresent() && cubeName.equals(m.cubeName().get()) && m.measureName().isPresent()) {
+                columns.add(
+                    new Column(
+                        getFactTableColumnName(m.measureName().get()), getType(m.dataType())));
+            }
+        });
+        columns.add(new Column("source_id", Type.LONG));
         return columns;
     }
 
@@ -102,15 +102,19 @@ public class GrabberUtils {
         return cubeName;
     }
 
-    private static String getFactTableColumnName(String dimensionName, String hierarchyName) {
-        return new StringBuilder(dimensionName).append("_").append(hierarchyName).toString();
+    private static String getFactTableColumnName(String dimensionName) {
+        return dimensionName;
     }
 
     private static Type getType(Optional<LevelDbTypeEnum> dataType) {
         if (dataType.isPresent()) {
             switch (dataType.get()) {
-                case DBTYPE_WSTR:
+                case DBTYPE_WSTR, DBTYPE_STR:
+                    return Type.NUMERIC;
+                case DBTYPE_R8:
                     return Type.STRING;
+                case DBTYPE_DBDATE:
+                    return Type.DATE;
                 //TODO
                 default:
                     return Type.STRING;

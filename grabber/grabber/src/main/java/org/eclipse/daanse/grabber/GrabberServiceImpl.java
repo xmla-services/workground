@@ -28,6 +28,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponse
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.CellType;
@@ -65,6 +66,7 @@ import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaCube
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaDimensions;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaHierarchies;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaLevels;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaMeasures;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaProperties;
 
 @Designate(ocd = GrabberServiceConfig.class, factory = true)
@@ -117,6 +119,7 @@ public class GrabberServiceImpl implements GrabberService {
             } catch (SQLException exception) {
                 throw new GrabberException("grabbing error " + exception.getMessage());
             }
+            // load dictionary with sources
             Map<Long, String> sourceMap = loadSourceTable(gid.getSourcesEndPoints());
             sourceMap.entrySet().forEach(
                 this::grabData
@@ -153,6 +156,7 @@ public class GrabberServiceImpl implements GrabberService {
         List<MdSchemaPropertiesResponseRow> properties = getMdSchemaProperties(endPointUrl);
         List<MdSchemaDimensionsResponseRow> dimensions = getMdSchemaDimensions(endPointUrl);
         List<MdSchemaHierarchiesResponseRow> hierarchies = getMdSchemaHierarchies(endPointUrl);
+        List<MdSchemaMeasuresResponseRow> measures = getMdSchemaMeasures(endPointUrl);
         List<MdSchemaCubesResponseRow> cubes = getMdSchemaCubes(endPointUrl);
 
         List<MdSchemaLevelsResponseRow> regularLevels = levels.stream()
@@ -162,20 +166,21 @@ public class GrabberServiceImpl implements GrabberService {
         regularLevels.forEach(it -> {
             String dimensionName = getDimensionNameByUniqueName(dimensions, it.dimensionUniqueName().get());
             String hierarchy = getHierarchyNameByUniqueName(hierarchies, it.hierarchyUniqueName().get());
-            List<String> columns = getPropertyColumns(properties, it).stream().map(Column::getName).toList();
+            List<String> propertyColumns = getPropertyColumns(properties, it).stream().map(Column::getName).toList();
             String mdxQuery = getMdxDictionaryQuery(it, properties);
-            String sqlQuery = getInsertDictionaryQuery(it, dimensionName, hierarchy, columns);
+            String sqlQuery = getInsertDictionaryQuery(it, dimensionName, hierarchy, propertyColumns);
             StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-            executeTargetDatabaseQuery(statementResponse, 2 + columns.size(), sqlQuery);
+            // 2 -> key, caption;
+            executeTargetDatabaseQuery(statementResponse.mdDataSet().cellData().cell(), 2 + propertyColumns.size(), sqlQuery);
         });
         cubes.forEach(c ->{
             Optional<String> optionalCubeName = c.cubeName();
             if (optionalCubeName.isPresent()) {
-                List<Column> factColumns = getFactColumns(optionalCubeName.get(), dimensions, hierarchies);
+                List<Column> factColumns = getFactColumns(optionalCubeName.get(), dimensions, measures);
                 String mdxQuery = getMdxFactQuery(c, levels);
                 String sqlQuery = getInsertFactQuery(c, factColumns);
                 StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-                executeTargetDatabaseQuery(statementResponse, factColumns.size() - 1 , sqlQuery);
+
             }
         });
 
@@ -255,8 +260,8 @@ public class GrabberServiceImpl implements GrabberService {
     }
 
     private void executeTargetDatabaseQuery(
-        StatementResponse statementResponse,
-        int portion,
+        List<CellType> cellList,
+        int rowPortion,
         String sqlQuery
     ) {
         try (final Connection connection = dataSource.getConnection();
@@ -266,9 +271,9 @@ public class GrabberServiceImpl implements GrabberService {
             if (dialectOptional.isPresent()) {
                 Dialect dialect = dialectOptional.get();
                 if (dialect.supportBatchOperations()) {
-                    batchExecute(ps, portion, statementResponse.mdDataSet().cellData().cell());
+                    batchExecute(ps, rowPortion, cellList);
                 } else {
-                    execute(ps, portion, statementResponse.mdDataSet().cellData().cell());
+                    execute(ps, rowPortion, cellList);
                 }
             }
         } catch (SQLException throwables) {

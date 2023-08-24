@@ -24,6 +24,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponse
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaCube
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaDimensions;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaHierarchies;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaLevels;
+import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaMeasures;
 import static org.eclipse.daanse.grabber.XmlaServiceClientHelper.getMdSchemaProperties;
 
 public class StructureProviderServiceImpl implements StructureProviderService {
@@ -83,9 +85,13 @@ public class StructureProviderServiceImpl implements StructureProviderService {
         List<MdSchemaCubesResponseRow> cubes = getMdSchemaCubes(ep);
         List<MdSchemaDimensionsResponseRow> dimensions = getMdSchemaDimensions(ep);
         List<MdSchemaHierarchiesResponseRow> hierarchies = getMdSchemaHierarchies(ep);
+        List<MdSchemaMeasuresResponseRow> measures = getMdSchemaMeasures(ep);
         if (cubes != null) {
             List<Table> tables = cubes.stream().map(it ->
-                new Table(targetSchemaName, getFactTableName(it.cubeName().get()), getFactConstraints(it.cubeName().get(), dimensions, hierarchies), getFactColumns(it.cubeName().get(), dimensions, hierarchies))).toList();
+                new Table(targetSchemaName,
+                    getFactTableName(it.cubeName().get()),
+                    getFactConstraints(it.cubeName().get(), dimensions, hierarchies),
+                    getFactColumns(it.cubeName().get(), dimensions, measures))).toList();
 
             tables.forEach(it -> {
                 map.computeIfPresent(it.getTableName(), (key, value) -> unionTable(value, it));

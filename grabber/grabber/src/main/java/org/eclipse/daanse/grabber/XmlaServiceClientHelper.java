@@ -24,6 +24,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarc
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
@@ -38,6 +40,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSche
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
@@ -123,7 +127,23 @@ public class XmlaServiceClientHelper {
         );
         MdSchemaHierarchiesRequest request = new MdSchemaHierarchiesRequestR(properties, restrictions);
         return client.discover().mdSchemaHierarchies(request);
+    }
 
+    static List<MdSchemaMeasuresResponseRow> getMdSchemaMeasures(String endPointUrl) {
+        XmlaService client = new XmlaServiceClientImpl(endPointUrl);
+        PropertiesR properties = new PropertiesR();
+        MdSchemaMeasuresRestrictionsR restrictions = new MdSchemaMeasuresRestrictionsR(
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.of(CubeSourceEnum.CUBE),
+            Optional.of(VisibilityEnum.VISIBLE)
+        );
+        MdSchemaMeasuresRequest request = new MdSchemaMeasuresRequestR(properties, restrictions);
+        return client.discover().mdSchemaMeasures(request);
     }
 
     static List<MdSchemaCubesResponseRow> getMdSchemaCubes(String endPointUrl) {
