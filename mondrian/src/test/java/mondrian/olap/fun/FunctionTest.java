@@ -582,7 +582,7 @@ class FunctionTest {//extends FoodMartTestCase {
     TestUtil.assertExprReturns(connection, "1-NULL", "1" );
     TestUtil.assertExprReturns(connection, "NULL-1", "-1" );
   }
-  
+
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -6164,7 +6164,7 @@ class FunctionTest {//extends FoodMartTestCase {
         new Double[] { 8.963D, 8.963D }
       },
       result,
-      0.001 ); 
+      0.001 );
 }
 
   @ParameterizedTest
@@ -6280,13 +6280,13 @@ class FunctionTest {//extends FoodMartTestCase {
 		// constructing a tuple.
 		String expr = "([Gender].[M], [Time].[Time].Children.Item(2), [Measures].[Unit Sales])";
 		String expectedCalc = """
-				MemberArrayValueCalc(name=MemberArrayValueCalc, class=class mondrian.calc.impl.MemberArrayValueCalc, type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
-				    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Gender].[M]>, resultStyle=VALUE_NOT_NULL, value=[Gender].[M], callCount=0, callMillis=0)
-				    Item(name=Item, class=class mondrian.olap.fun.SetItemFunDef$-anonymous-class-, type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
-				        Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$-anonymous-class-$-anonymous-class-, type=SetType<MemberType<hierarchy=[Time]>>, resultStyle=LIST, callCount=0, callMillis=0, elementCount=0, elementSquaredCount=0)
-				            CurrentMemberFixed(hierarchy=[Time], name=CurrentMemberFixed, class=class mondrian.olap.fun.HierarchyCurrentMemberFunDef$FixedCalcImpl, type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
-				        Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=DecimalType(0), resultStyle=VALUE_NOT_NULL, value=2, callCount=0, callMillis=0)
-				    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures].[Unit Sales]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Unit Sales], callCount=0, callMillis=0)
+mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
+    org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc(type=MemberType<member=[Gender].[M]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
+    mondrian.olap.fun.SetItemFunDef$5(type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
+        mondrian.olap.fun.BuiltinFunTable$21$1(type=SetType<MemberType<hierarchy=[Time]>>, resultStyle=LIST, callCount=0, callMillis=0)
+            mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Time]>, resultStyle=VALUE, callCount=0, callMillis=0)
+        org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc(type=DecimalType(0), resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
+    org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc(type=MemberType<member=[Measures].[Unit Sales]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
 							""";
 		assertExprCompilesTo(context.createConnection(), expr, expectedCalc);
   }
@@ -7137,14 +7137,14 @@ class FunctionTest {//extends FoodMartTestCase {
     assertExprReturns(context.createConnection(), NullNumericExpr + " + " + NullNumericExpr, "" );
     assertExprReturns(context.createConnection(), NullNumericExpr + " + 0", "0" );
   }
-  
-  
+
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testPlus_NULL_plus_1(TestingContext context) {
 	  assertExprReturns(context.createConnection(),  "null + 1", "1" );
   }
-  
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testPlus_NULL_plus_0(TestingContext context) {
@@ -8538,14 +8538,13 @@ class FunctionTest {//extends FoodMartTestCase {
 
 		String expr = "order([Product].children, ([Time].[1997], [Product].CurrentMember.Parent))";
 		String expected = """
-				ContextCalc(name=ContextCalc, class=class mondrian.olap.fun.OrderFunDef$ContextCalc, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, callCount=0, callMillis=0, elementCount=0, elementSquaredCount=0)
-				    Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Time].[1997]>, resultStyle=VALUE_NOT_NULL, value=[Time].[1997], callCount=0, callMillis=0)
-				    CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC)
-				        Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$-anonymous-class-$-anonymous-class-, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST, callCount=0, callMillis=0, elementCount=0, elementSquaredCount=0)
-				            CurrentMemberFixed(hierarchy=[Product], name=CurrentMemberFixed, class=class mondrian.olap.fun.HierarchyCurrentMemberFunDef$FixedCalcImpl, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
-				        MemberValueCalc(name=MemberValueCalc, class=class mondrian.calc.impl.MemberValueCalc, type=SCALAR, resultStyle=VALUE)
-				            Parent(name=Parent, class=class mondrian.olap.fun.BuiltinFunTable$-anonymous-class-$-anonymous-class-, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
-				                CurrentMemberFixed(hierarchy=[Product], name=CurrentMemberFixed, class=class mondrian.olap.fun.HierarchyCurrentMemberFunDef$FixedCalcImpl, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, callCount=0, callMillis=0, direction=ASC)
+    mondrian.olap.fun.BuiltinFunTable$21$1(type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST, callCount=0, callMillis=0)
+        mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+    mondrian.calc.impl.MemberArrayValueCalc(type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
+        org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc(type=MemberType<member=[Time].[1997]>, resultStyle=VALUE_NOT_NULL, callCount=0, callMillis=0)
+        mondrian.olap.fun.BuiltinFunTable$14$1(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+            mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
 				""";
 		// [Time].[1997] is constant, and is evaluated in a ContextCalc.
 		// [Product].Parent is variable, and is evaluated inside the loop.
@@ -8559,12 +8558,12 @@ class FunctionTest {//extends FoodMartTestCase {
 		// No ContextCalc this time. All members are non-variable.
 		String expr = "order([Product].children, [Product].CurrentMember.Parent)";
 		String expected = """
-				CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.OrderFunDef$CalcImpl, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, direction=ASC, callCount=0, callMillis=0, elementCount=0, elementSquaredCount=0)
-				    Children(name=Children, class=class mondrian.olap.fun.BuiltinFunTable$-anonymous-class-$-anonymous-class-, type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST, callCount=0, callMillis=0, elementCount=0, elementSquaredCount=0)
-				        CurrentMemberFixed(hierarchy=[Product], name=CurrentMemberFixed, class=class mondrian.olap.fun.HierarchyCurrentMemberFunDef$FixedCalcImpl, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
-				    MemberValueCalc(name=MemberValueCalc, class=class mondrian.calc.impl.MemberValueCalc, type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
-				        Parent(name=Parent, class=class mondrian.olap.fun.BuiltinFunTable$-anonymous-class-$-anonymous-class-, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE)
-				            CurrentMemberFixed(hierarchy=[Product], name=CurrentMemberFixed, class=class mondrian.olap.fun.HierarchyCurrentMemberFunDef$FixedCalcImpl, type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+mondrian.olap.fun.OrderFunDef$CurrentMemberCalc(type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=MUTABLE_LIST, callCount=0, callMillis=0, direction=ASC)
+    mondrian.olap.fun.BuiltinFunTable$21$1(type=SetType<MemberType<hierarchy=[Product]>>, resultStyle=LIST, callCount=0, callMillis=0)
+        mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+    mondrian.calc.impl.MemberValueCalc(type=SCALAR, resultStyle=VALUE, callCount=0, callMillis=0)
+        mondrian.olap.fun.BuiltinFunTable$14$1(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
+            mondrian.olap.fun.HierarchyCurrentMemberFunDef$CurrentMemberFixedCalc(type=MemberType<hierarchy=[Product]>, resultStyle=VALUE, callCount=0, callMillis=0)
 						""";
 		assertAxisCompilesTo(connection, expr, expected);
 	}
@@ -12571,7 +12570,7 @@ Intel platforms):
 	    // false
 	    assertExprReturns(context.createConnection(), "1=1 AND Cast(NULL AS Boolean)", "false" );
   }
-  
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testCastNull(TestingContext context) {
@@ -12580,31 +12579,31 @@ Intel platforms):
 	    // false
 	    assertExprReturns(context.createConnection(), "Cast(NULL AS Boolean)", "false" );
   }
-  
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testBool1(TestingContext context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND 1=0", "false" );
-	  
-	  
+
+
   }
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testBool2(TestingContext context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND 1=1", "true" );
-	  
-	  
+
+
   }
-  
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   void testBool3(TestingContext context) {
 
 	    assertExprReturns(context.createConnection(), "1=1 AND null", "false" );
-	  
-	  
+
+
   }
   /**
    * Testcase for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-524"> MONDRIAN-524, "VB functions: expected
