@@ -9,7 +9,7 @@
 // All Rights Reserved.
 */
 
-package org.eclipse.daanse.function.functiontable;
+package org.eclipse.daanse.function;
 
 
 
@@ -27,4 +27,6 @@ public interface FunDef {
     int getReturnCategory();
 
     int[] getParameterCategories();
+
+    String getDescription();
 }

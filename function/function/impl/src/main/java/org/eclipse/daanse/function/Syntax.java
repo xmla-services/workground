@@ -9,7 +9,7 @@
 // All Rights Reserved.
 */
 
-package org.eclipse.daanse.function.functiontable;
+package org.eclipse.daanse.function;
 
 import java.io.PrintWriter;
 
@@ -109,5 +109,9 @@ public enum Syntax {
      *  [Measures].[Unit Sales])</code>
      * </blockquote>
      */
-    Empty
+    Empty;
+
+    public String getSignature(String name, int returnType, int[] parameterType) {
+        return null;
+    }
 }

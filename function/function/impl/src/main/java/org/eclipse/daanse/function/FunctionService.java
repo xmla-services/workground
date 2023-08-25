@@ -1,12 +1,12 @@
-package org.eclipse.daanse.function.functiontable;
+package org.eclipse.daanse.function;
 
 import java.util.List;
 
-public interface FunctionTableService {
+public interface FunctionService {
 
-    void addResolver();
+    void addResolver(Resolver resolver);
 
-    void removeResolver();
+    void removeResolver(Resolver resolver);
 
     /**
      * Returns whether a string is a reserved word.
