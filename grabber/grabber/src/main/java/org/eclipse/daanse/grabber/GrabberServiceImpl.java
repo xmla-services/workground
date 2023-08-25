@@ -32,6 +32,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRe
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.CellType;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRow;
+import org.eclipse.daanse.xmla.api.mddataset.RowSetRowItem;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -52,6 +54,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -164,14 +167,28 @@ public class GrabberServiceImpl implements GrabberService {
                 && it.levelType().get().equals(LevelTypeEnum.REGULAR))
             .toList();
         regularLevels.forEach(it -> {
+            String cubeName = it.cubeName().get();
+            String levelName = it.levelName().get();
             String dimensionName = getDimensionNameByUniqueName(dimensions, it.dimensionUniqueName().get());
             String hierarchy = getHierarchyNameByUniqueName(hierarchies, it.hierarchyUniqueName().get());
             List<String> propertyColumns = getPropertyColumns(properties, it).stream().map(Column::getName).toList();
             String mdxQuery = getMdxDictionaryQuery(it, properties);
             String sqlQuery = getInsertDictionaryQuery(it, dimensionName, hierarchy, propertyColumns);
             StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-            // 2 -> key, caption;
-            executeTargetDatabaseQuery(statementResponse.mdDataSet().cellData().cell(), 2 + propertyColumns.size(), sqlQuery);
+            if (statementResponse != null && statementResponse.mdDataSet() != null
+                && statementResponse.mdDataSet().cellData() != null
+                && statementResponse.mdDataSet().cellData().cell() != null) {
+                // 2 -> key, caption;
+                executeQueryForDictionaryTable(statementResponse.mdDataSet().cellData().cell(), 2 + propertyColumns.size(), sqlQuery);
+            } else {
+                String msg = new StringBuilder("Data for dictionary table ")
+                    .append(getDictionaryTableName(cubeName, dimensionName, hierarchy, levelName))
+                    .append(" for ")
+                    .append(endPointUrl)
+                    .append(" is absent ")
+                    .toString();
+                LOGGER.debug(msg);
+            }
         });
         cubes.forEach(c ->{
             Optional<String> optionalCubeName = c.cubeName();
@@ -180,7 +197,8 @@ public class GrabberServiceImpl implements GrabberService {
                 String mdxQuery = getMdxFactQuery(c, levels);
                 String sqlQuery = getInsertFactQuery(c, factColumns);
                 StatementResponse statementResponse = executeStatement(endPointUrl, mdxQuery);
-
+                Map<String, String> columnNameMap = Map.of();
+                executeQueryForTableOfFact(statementResponse.rowSet().rowSetRows(), columnNameMap, sourceId, sqlQuery);
             }
         });
 
@@ -259,7 +277,7 @@ public class GrabberServiceImpl implements GrabberService {
             .append(hierarchyName).append("_").append(levelName).toString();
     }
 
-    private void executeTargetDatabaseQuery(
+    private void executeQueryForDictionaryTable(
         List<CellType> cellList,
         int rowPortion,
         String sqlQuery
@@ -279,6 +297,65 @@ public class GrabberServiceImpl implements GrabberService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    private void executeQueryForTableOfFact(List<RowSetRow> rowSetRows, Map<String, String> columnNameMap, Long sourceId, String sqlQuery) {
+        try (final Connection connection = dataSource.getConnection();
+             final PreparedStatement ps = connection.prepareStatement(sqlQuery)
+        ) {
+            Optional<Dialect> dialectOptional = dialectResolver.resolve(dataSource);
+            if (dialectOptional.isPresent()) {
+                Dialect dialect = dialectOptional.get();
+                if (dialect.supportBatchOperations()) {
+                    batchExecute(ps, columnNameMap, sourceId, rowSetRows);
+                } else {
+                    execute(ps, columnNameMap, sourceId, rowSetRows);
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private void execute(PreparedStatement ps, Map<String, String> columnNameMap, Long sourceId, List<RowSetRow> rowSetRows) throws SQLException {
+    }
+
+    private void batchExecute(PreparedStatement ps, Map<String, String> columnNameMap, Long sourceId, List<RowSetRow> rowSetRows) throws SQLException {
+        long start = System.currentTimeMillis();
+        long startBatch = start;
+        ps.clearParameters();
+        int count = 0;
+        for (RowSetRow row : rowSetRows) {
+            Set<Data> dataSet =  getRowData(row.rowSetRowItem(), columnNameMap);
+            int i = 0;
+            for (Data data :  dataSet) {
+                i++;
+                ps.setString(i + 1, data.getValue());
+            }
+            ps.addBatch();
+            count++;
+            if (count % config.batchSize() == 0) {
+                ps.executeBatch();
+                LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - startBatch));
+                ps.getConnection().commit();
+                LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - startBatch));
+                startBatch = System.currentTimeMillis();
+            }
+        }
+        LOGGER.debug("---");
+        ps.executeBatch();
+        LOGGER.debug("execute batch time {}", (System.currentTimeMillis() - startBatch));
+
+        ps.getConnection().commit();
+        LOGGER.debug("execute commit time {}", (System.currentTimeMillis() - startBatch));
+        ps.getConnection().setAutoCommit(true);
+        LOGGER.debug("---");
+        LOGGER.debug("execute time {}", (System.currentTimeMillis() - start));
+    }
+
+    private Set<Data> getRowData(List<RowSetRowItem> rowSetRowItem, Map<String, String> columnNameMap) {
+        //TODO
+        return Set.of();
     }
 
     private void batchExecute(PreparedStatement ps, int portion, List<CellType> cell) throws SQLException {
