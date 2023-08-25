@@ -4,20 +4,20 @@
 // http://www.eclipse.org/legal/epl-v10.html.
 // You must accept the terms of that agreement to use this software.
 //
-// Copyright (C) 2002-2005 Julian Hyde
+// Copyright (C) 1999-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
 // All Rights Reserved.
 */
 
-package org.eclipse.daanse.function.functiontable;
+package org.eclipse.daanse.function;
 
 /**
- * A <code>Resolver</code> converts a function name, invocation type, and set
- * of arguments into a {@link FunDef}.
+ * An <code>Exp</code> is an MDX expression.
  *
- * @author jhyde
- * @since 3 March, 2002
+ * @author jhyde, 20 January, 1999
+ * @since 1.0
  */
-public interface Resolver {
+public interface Exp {
 
+    int getCategory();
 }

@@ -5,15 +5,14 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 2005-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2005-2017 Hitachi Vantara
 // All Rights Reserved.
 */
+package org.eclipse.daanse.function;
 
-package org.eclipse.daanse.function.functiontable;
+import java.util.List;
 
-public class FunInfo  {
+public interface Validator {
 
-    FunInfo(FunDef funDef) {
-    }
-
+    boolean canConvert(int i, Exp arg, int parameterType, List<Resolver.Conversion> conversions);
 }

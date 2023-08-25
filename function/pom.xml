@@ -23,6 +23,6 @@
   <modules>
   	<module>core</module>
   	<module>user</module>
-  	<module>functiontable</module>
+  	<module>function</module>
   </modules>
 </project>
