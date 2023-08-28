@@ -163,4 +163,20 @@ public class FunUtil {
         return new FunDefBase( resolver, returnCategory, argCategories ) {
         };
     }
+
+    /**
+     * Creates an exception which indicates that an error has occurred while executing a given function.
+     *
+     * @param funDef  Function being executed
+     * @param message Explanatory message
+     * @return Exception that can be used as a cell result
+     */
+    public static RuntimeException newEvalException(
+        FunDef funDef,
+        String message ) {
+        //XOMUtil.discard( funDef ); // TODO: use this
+        return new RuntimeException( message );
+    }
+
+
 }

@@ -11,6 +11,8 @@
 
 package org.eclipse.daanse.function;
 
+import mondrian.olap.type.Type;
+
 /**
  * An <code>Exp</code> is an MDX expression.
  *
@@ -20,4 +22,6 @@ package org.eclipse.daanse.function;
 public interface Exp {
 
     int getCategory();
+
+    Type getType();
 }
