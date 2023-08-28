@@ -14,12 +14,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.function</artifactId>
+    <artifactId>org.eclipse.daanse.function.definition</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.function.function</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>impl</module>
-  </modules>
+  <artifactId>org.eclipse.daanse.function.definition.vba</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.function.api</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 </project>

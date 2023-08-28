@@ -63,7 +63,7 @@ public class FunctionServiceImpl implements FunctionService {
     @Override
     @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
     public void addResolver(FunctionResolver resolver) {
-        funInfoList.add(FunInfo.make(resolver));
+        funInfoList.add(FunInfoImpl.make(resolver));
         if (resolver.getSyntax() == Syntax.Property) {
             propertyWords.add(resolver.getName().toUpperCase());
         }
@@ -75,7 +75,7 @@ public class FunctionServiceImpl implements FunctionService {
     @Override
     @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
     public void removeResolver(FunctionResolver resolver) {
-        FunInfo funInfo = FunInfo.make(resolver);
+        FunInfo funInfo = FunInfoImpl.make(resolver);
         funInfoList.removeIf(f -> f.compareTo(funInfo) == 0);
         resolverList.removeIf(r -> r.compareTo(resolver) == 0);
         if (resolver.getSyntax() == Syntax.Property) {
