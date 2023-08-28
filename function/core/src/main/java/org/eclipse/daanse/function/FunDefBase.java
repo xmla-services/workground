@@ -11,6 +11,11 @@
 
 package org.eclipse.daanse.function;
 
+import mondrian.calc.ExpCompiler;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Util;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 /**
  * <code>FunDefBase</code> is the default implementation of {@link FunDef}.
  *
@@ -84,7 +89,7 @@ public  class FunDefBase implements FunDef {
      * @param returnType Return type
      * @param parameterTypes Parameter types
      */
-    FunDefBase(FunctionResolver resolver, int returnType, int[] parameterTypes) {
+    public FunDefBase(FunctionResolver resolver, int returnType, int[] parameterTypes) {
         this(
             resolver.getName(),
             null,
@@ -92,6 +97,37 @@ public  class FunDefBase implements FunDef {
             resolver.getSyntax(),
             returnType,
             parameterTypes);
+    }
+
+    /**
+     * Creates an operator.
+     *
+     * @param name        Name of the function, for example "Members".
+     * @param description Description of the function, for example
+     *                    "Returns the set of all members in a dimension."
+     * @param flags       Encoding of the syntactic type, return type,
+     *                    and parameter types of this operator. The
+     *                    "Members" operator has a syntactic type
+     *                    "pxd" which means "an operator with
+     *                    {@link Syntax#Property property} syntax (p) which
+     *                    returns a set (x) and takes a dimension (d) as its
+     *                    argument".
+     *                    See {@link FunUtil#decodeSyntacticType(String)},
+     *                    {@link FunUtil#decodeReturnCategory(String)},
+     *                    {@link FunUtil#decodeParameterCategories(String)}.
+     */
+    public FunDefBase(
+        String name,
+        String description,
+        String flags)
+    {
+        this(
+            name,
+            null,
+            description,
+            FunUtil.decodeSyntacticType(flags),
+            FunUtil.decodeReturnCategory(flags),
+            FunUtil.decodeParameterCategories(flags));
     }
 
     /**
@@ -109,7 +145,7 @@ public  class FunDefBase implements FunDef {
      * @param parameterCategories An array of {@link Category} codes, one for
      *                       each parameter.
      */
-    FunDefBase(
+    public FunDefBase(
         String name,
         String signature,
         String description,
@@ -151,4 +187,20 @@ public  class FunDefBase implements FunDef {
     public String getDescription() {
         return this.description;
     }
+
+    @Override
+    public String getSignature() {
+        return getSyntax().getSignature(
+            getName(),
+            getReturnCategory(),
+            getParameterCategories());
+    }
+
+    @Override
+    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        throw Util.newInternal(
+            new StringBuilder("function '").append( getSignature())
+                .append("' has not been implemented").toString());
+    }
+
 }

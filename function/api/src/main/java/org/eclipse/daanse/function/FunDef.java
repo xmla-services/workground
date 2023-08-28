@@ -11,7 +11,9 @@
 
 package org.eclipse.daanse.function;
 
-
+import mondrian.calc.ExpCompiler;
+import mondrian.mdx.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
 /**
  * Definition of an MDX function..
@@ -29,4 +31,16 @@ public interface FunDef {
     int[] getParameterCategories();
 
     String getDescription();
+
+    String getSignature();
+
+    /**
+     * Converts a call to this function into executable objects.
+     *
+     * <p>The result must implement the appropriate interface for the result
+     * type. For example, a function which returns an integer must return
+     * an object which implements {@link org.eclipse.daanse.olap.calc.api.IntegerCalc}.
+     */
+    Calc compileCall(ResolvedFunCall call, ExpCompiler compiler);
+
 }
