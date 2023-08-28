@@ -24,10 +24,12 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(service = FunctionServiceImpl.class, scope = ServiceScope.SINGLETON)
@@ -38,14 +40,14 @@ public class FunctionServiceImpl implements FunctionService {
     /**
      * Maps the upper-case name of a function plus its
      * {@link Syntax} to an array of
-     * {@link Resolver} objects for that name.
+     * {@link FunctionResolver} objects for that name.
      */
-    private Map<Pair<String, Syntax>, List<Resolver>> mapNameToResolvers;
+    private Map<Pair<String, Syntax>, List<FunctionResolver>> mapNameToResolvers;
     private Set<String> reservedWordSet = new HashSet<>();
     private List<String> reservedWordList = new ArrayList<>();
     private Set<String> propertyWords = new HashSet<>();
     private List<FunInfo> funInfoList = new ArrayList<>();
-    private final List<Resolver> resolverList = new ArrayList<>();
+    private final List<FunctionResolver> resolverList = new ArrayList<>();
 
     @Activate
     public FunctionServiceImpl(Map<String, Object> coniguration) {
@@ -59,23 +61,38 @@ public class FunctionServiceImpl implements FunctionService {
     }
 
     @Override
-    @Reference(service = Resolver.class, cardinality = ReferenceCardinality.MULTIPLE )
-    public void addResolver(Resolver resolver) {
+    @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
+    public void addResolver(FunctionResolver resolver) {
         funInfoList.add(FunInfo.make(resolver));
         if (resolver.getSyntax() == Syntax.Property) {
             propertyWords.add(resolver.getName().toUpperCase());
         }
         resolverList.add(resolver);
         final String[] reservedWordsInner = resolver.getReservedWords();
-        for (String reservedWord : reservedWordsInner) {
-            reservedWordList.add(reservedWord);
-        }
-
+        Collections.addAll(reservedWordList, reservedWordsInner);
     }
 
     @Override
-    @Reference(service = Resolver.class, cardinality = ReferenceCardinality.MULTIPLE )
-    public void removeResolver(Resolver resolver) {
+    @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
+    public void removeResolver(FunctionResolver resolver) {
+        FunInfo funInfo = FunInfo.make(resolver);
+        funInfoList.removeIf(f -> f.compareTo(funInfo) == 0);
+        resolverList.removeIf(r -> r.compareTo(resolver) == 0);
+        if (resolver.getSyntax() == Syntax.Property) {
+            final String pw = resolver.getName().toUpperCase();
+            // check if other resolvers have property words
+            if (resolverList.stream().noneMatch(r -> r.getSyntax() == Syntax.Property
+                && pw.equals(r.getName().toUpperCase()))) {
+                propertyWords.remove(pw);
+            }
+        }
+        final String[] reservedWordsInner = resolver.getReservedWords();
+        for (String reservedWord : reservedWordsInner) {
+            if (resolverList.stream().noneMatch(r ->
+                Stream.of(r.getReservedWords()).anyMatch(w -> w.equals(reservedWord)))) {
+                reservedWordList.remove(reservedWord);
+            }
+        }
     }
 
     @Override
@@ -94,18 +111,18 @@ public class FunctionServiceImpl implements FunctionService {
     }
 
     @Override
-    public List<Resolver> getResolvers() {
-        final List<Resolver> list = new ArrayList<>();
-        for (List<Resolver> resolvers : mapNameToResolvers.values()) {
+    public List<FunctionResolver> getResolvers() {
+        final List<FunctionResolver> list = new ArrayList<>();
+        for (List<FunctionResolver> resolvers : mapNameToResolvers.values()) {
             list.addAll(resolvers);
         }
         return list;
     }
 
     @Override
-    public List<Resolver> getResolvers(String name, Syntax syntax) {
-        final List<Resolver> list = new ArrayList<>();
-        for (List<Resolver> resolvers : mapNameToResolvers.values()) {
+    public List<FunctionResolver> getResolvers(String name, Syntax syntax) {
+        final List<FunctionResolver> list = new ArrayList<>();
+        for (List<FunctionResolver> resolvers : mapNameToResolvers.values()) {
             list.addAll(resolvers);
         }
         return list;

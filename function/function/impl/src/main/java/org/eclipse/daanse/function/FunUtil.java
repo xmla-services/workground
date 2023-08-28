@@ -4,6 +4,10 @@ public class FunUtil {
 
     static final String[] emptyStringArray = new String[ 0 ];
 
+    private FunUtil() {
+        // constructor
+    }
+
     public static int[] decodeParameterCategories(String flags) {
         int[] parameterCategories = new int[ flags.length() - 2 ];
         for ( int i = 0; i < parameterCategories.length; i++ ) {
@@ -152,7 +156,7 @@ public class FunUtil {
     }
 
     static FunDef createDummyFunDef(
-        Resolver resolver,
+        FunctionResolver resolver,
         int returnCategory,
         Exp[] args ) {
         final int[] argCategories = ExpBase.getTypes( args );

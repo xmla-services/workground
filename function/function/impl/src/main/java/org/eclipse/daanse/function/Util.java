@@ -2,6 +2,10 @@ package org.eclipse.daanse.function;
 
 public class Util {
 
+    private Util() {
+        // constructor
+    }
+
     /**
      * Checks that a precondition (declared using the javadoc <code>@pre</code>
      * tag) is satisfied. For example,
@@ -53,5 +57,21 @@ public class Util {
      */
     public static RuntimeException newInternal(String message) {
         return new RuntimeException(message);
+    }
+
+    /**
+     * Combines two integers into a hash code.
+     */
+    public static int hash(int i, int j) {
+        return (i << 4) ^ j;
+    }
+
+    /**
+     * Computes a hash code from an existing hash code and an object (which
+     * may be null).
+     */
+    public static int hash(int h, Object o) {
+        int k = (o == null) ? 0 : o.hashCode();
+        return ((h << 4) | h) ^ k;
     }
 }

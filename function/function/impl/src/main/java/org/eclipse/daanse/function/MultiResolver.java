@@ -22,7 +22,7 @@ import java.util.List;
  * @author jhyde
  * @since Feb 12, 2003
  */
-public abstract class MultiResolver implements Resolver {
+public abstract class MultiResolver implements FunctionResolver {
     private final String name;
     private final String signature;
     private final String description;
@@ -103,8 +103,8 @@ public abstract class MultiResolver implements Resolver {
         List<Conversion> conversions)
     {
 outer:
-        for (String signature : signatures) {
-            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        for (String signatureInner : signatures) {
+            int[] parameterTypes = FunUtil.decodeParameterCategories(signatureInner);
             if (parameterTypes.length != args.length) {
                 continue;
             }
@@ -116,7 +116,7 @@ outer:
                     continue outer;
                 }
             }
-            int returnType = FunUtil.decodeReturnCategory(signature);
+            int returnType = FunUtil.decodeReturnCategory(signatureInner);
             FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return createFunDef(args, dummy);
         }
@@ -125,8 +125,8 @@ outer:
 
     @Override
 	public boolean requiresExpression(int k) {
-        for (String signature : signatures) {
-            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        for (String signatureInner : signatures) {
+            int[] parameterTypes = FunUtil.decodeParameterCategories(signatureInner);
             if ((k < parameterTypes.length)
                 && parameterTypes[k] == Category.SET)
             {

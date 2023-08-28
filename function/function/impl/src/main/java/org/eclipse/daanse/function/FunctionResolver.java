@@ -20,7 +20,7 @@ import java.util.List;
  * @author jhyde
  * @since 3 March, 2002
  */
-public interface Resolver {
+public interface FunctionResolver {
     /**
      * Returns the name of the function or operator.
      */
@@ -89,6 +89,13 @@ public interface Resolver {
      * a way to describe itself in more detail.
      */
     FunDef getRepresentativeFunDef();
+
+    /**
+     * Compare
+     * @param resolver
+     * @return
+     */
+    int compareTo(FunctionResolver resolver);
 
     /**
      * Description of an implicit conversion that occurred while resolving an
