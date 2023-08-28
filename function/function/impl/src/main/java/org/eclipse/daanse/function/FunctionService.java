@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface FunctionService {
 
-    void addResolver(Resolver resolver);
+    void addResolver(FunctionResolver resolver);
 
-    void removeResolver(Resolver resolver);
+    void removeResolver(FunctionResolver resolver);
 
     /**
      * Returns whether a string is a reserved word.
@@ -27,9 +27,9 @@ public interface FunctionService {
     List<String> getReservedWords();
 
     /**
-     * Returns a list of {@link Resolver} objects.
+     * Returns a list of {@link FunctionResolver} objects.
      */
-    List<Resolver> getResolvers();
+    List<FunctionResolver> getResolvers();
 
     /**
      * Returns a list of resolvers for an operator with a given name and syntax.
@@ -39,7 +39,7 @@ public interface FunctionService {
      * @param syntax Operator syntax
      * @return List of resolvers for the operator
      */
-    List<Resolver> getResolvers(
+    List<FunctionResolver> getResolvers(
         String name,
         Syntax syntax);
 

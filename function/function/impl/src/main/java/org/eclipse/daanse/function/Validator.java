@@ -14,5 +14,5 @@ import java.util.List;
 
 public interface Validator {
 
-    boolean canConvert(int i, Exp arg, int parameterType, List<Resolver.Conversion> conversions);
+    boolean canConvert(int i, Exp arg, int parameterType, List<FunctionResolver.Conversion> conversions);
 }

@@ -78,13 +78,13 @@ public  class FunDefBase implements FunDef {
 
 
     /**
-     * Convenience constructor when we are created by a {@link Resolver}.
+     * Convenience constructor when we are created by a {@link FunctionResolver}.
      *
      * @param resolver Resolver
      * @param returnType Return type
      * @param parameterTypes Parameter types
      */
-    FunDefBase(Resolver resolver, int returnType, int[] parameterTypes) {
+    FunDefBase(FunctionResolver resolver, int returnType, int[] parameterTypes) {
         this(
             resolver.getName(),
             null,
