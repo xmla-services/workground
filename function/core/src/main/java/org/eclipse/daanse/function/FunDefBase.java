@@ -186,6 +186,44 @@ public  class FunDefBase implements FunDef {
     }
 
     /**
+     * Creates an operator with an explicit signature.
+     *
+     * <p>In most cases, the signature can be generated automatically, and
+     * you should use the constructor which creates an implicit signature,
+     * {@link #FunDefBase(String, String, String, String)}
+     * instead.
+     *
+     * @param name        Name of the function, for example "Members".
+     * @param signature   Signature of the function, for example
+     *                    "&lt;Dimension&gt;.Members".
+     * @param description Description of the function, for example
+     *                    "Returns the set of all members in a dimension."
+     * @param flags       Encoding of the syntactic type, return type, and
+     *                    parameter types of this operator. The "Members"
+     *                    operator has a syntactic type "pxd" which means "an
+     *                    operator with {@link Syntax#Property property} syntax
+     *                    (p) which returns a set (x) and takes a dimension (d)
+     *                    as its argument".  See
+     *                    {@link mondrian.olap.fun.FunUtil#decodeSyntacticType(String)},
+     *                    {@link mondrian.olap.fun.FunUtil#decodeReturnCategory(String)},
+     *                    {@link mondrian.olap.fun.FunUtil#decodeParameterCategories(String)}.
+     */
+    protected FunDefBase(
+        String name,
+        String signature,
+        String description,
+        String flags)
+    {
+        this(
+            name,
+            signature,
+            description,
+            mondrian.olap.fun.FunUtil.decodeSyntacticType(flags),
+            mondrian.olap.fun.FunUtil.decodeReturnCategory(flags),
+            mondrian.olap.fun.FunUtil.decodeParameterCategories(flags));
+    }
+
+    /**
      * Copy constructor.
      *
      * @param funDef Function definition to copy
