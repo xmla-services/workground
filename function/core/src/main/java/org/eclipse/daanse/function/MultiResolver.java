@@ -12,6 +12,11 @@
 package org.eclipse.daanse.function;
 
 
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+
 import java.util.List;
 
 /**

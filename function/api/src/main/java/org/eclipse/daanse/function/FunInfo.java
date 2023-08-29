@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.function;
 
+import mondrian.olap.Syntax;
+
 public interface FunInfo extends Comparable<FunInfo>{
 
     String[] getSignatures();

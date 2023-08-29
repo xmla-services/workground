@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.function;
 
+import mondrian.olap.Syntax;
+import mondrian.util.Pair;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
