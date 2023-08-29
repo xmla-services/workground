@@ -17,27 +17,10 @@
     <artifactId>org.eclipse.daanse.function</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.function.core</artifactId>
-  <dependencies>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.metatype.annotations</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.metatype.annotations</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.util.converter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.function.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
+  <artifactId>org.eclipse.daanse.function.definition</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>math</module>
+    <module>vba</module>
+  </modules>
 </project>
