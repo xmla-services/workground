@@ -13,8 +13,30 @@ package org.eclipse.daanse.function;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.Syntax;
 import mondrian.olap.Util;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.CubeType;
+import mondrian.olap.type.DateTimeType;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.DimensionType;
+import mondrian.olap.type.EmptyType;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.LevelType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.ScalarType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.SymbolType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.calc.api.Calc;
+
+import java.io.PrintWriter;
 
 /**
  * <code>FunDefBase</code> is the default implementation of {@link FunDef}.
@@ -163,6 +185,18 @@ public  class FunDefBase implements FunDef {
         this.parameterCategories = parameterCategories;
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param funDef Function definition to copy
+     */
+    public FunDefBase(FunDef funDef) {
+        this(
+            funDef.getName(), funDef.getSignature(),
+            funDef.getDescription(), funDef.getSyntax(),
+            funDef.getReturnCategory(), funDef.getParameterCategories());
+    }
+
     @Override
     public Syntax getSyntax() {
         return syntax;
@@ -201,6 +235,150 @@ public  class FunDefBase implements FunDef {
         throw Util.newInternal(
             new StringBuilder("function '").append( getSignature())
                 .append("' has not been implemented").toString());
+    }
+
+    /**
+     * Returns the type of a call to this function with a given set of
+     * arguments.<p/>
+     *
+     * The default implementation makes the coarse assumption that the return
+     * type is in some way related to the type of the first argument.
+     * Operators whose arguments don't follow the requirements of this
+     * implementation should override this method.<p/>
+     *
+     * If the function definition says it returns a literal type (numeric,
+     * string, symbol) then it's a fair guess that the function call
+     * returns the same kind of value.<p/>
+     *
+     * If the function definition says it returns an object type (cube,
+     * dimension, hierarchy, level, member) then we check the first
+     * argument of the function. Suppose that the function definition says
+     * that it returns a hierarchy, and the first argument of the function
+     * happens to be a member. Then it's reasonable to assume that this
+     * function returns a member.
+     *
+     * @param validator Validator
+     * @param args Arguments to the call to this operator
+     * @return result type of a call this function
+     */
+    public Type getResultType(Validator validator, Exp[] args) {
+        Type firstArgType =
+            args.length > 0
+                ? args[0].getType()
+                : null;
+        Type type = FunDefBase.castType(firstArgType, getReturnCategory());
+        if (type != null) {
+            return type;
+        }
+        throw Util.newInternal(
+            new StringBuilder("Cannot deduce type of call to function '")
+                .append(this.name).append("'").toString());
+    }
+
+    /**
+     * Converts a type to a different category, maintaining as much type
+     * information as possible.
+     *
+     * For example, given <code>LevelType(dimension=Time, hierarchy=unknown,
+     * level=unkown)</code> and category=Hierarchy, returns
+     * <code>HierarchyType(dimension=Time)</code>.
+     *
+     * @param type Type
+     * @param category Desired category
+     * @return Type after conversion to desired category
+     */
+    static Type castType(Type type, int category) {
+        switch (category) {
+            case Category.LOGICAL:
+                return new BooleanType();
+            case Category.NUMERIC:
+                return new NumericType();
+            case Category.NUMERIC | Category.INTEGER:
+                return new DecimalType(Integer.MAX_VALUE, 0);
+            case Category.STRING:
+                return new StringType();
+            case Category.DATE_TIME:
+                return new DateTimeType();
+            case Category.SYMBOL:
+                return new SymbolType();
+            case Category.VALUE:
+                return new ScalarType();
+            case Category.CUBE:
+                if (type instanceof Cube cube) {
+                    return new CubeType(cube);
+                }
+                return null;
+            case Category.DIMENSION:
+                if (type != null) {
+                    return DimensionType.forType(type);
+                }
+                return null;
+            case Category.HIERARCHY:
+                if (type != null) {
+                    return HierarchyType.forType(type);
+                }
+                return null;
+            case Category.LEVEL:
+                if (type != null) {
+                    return LevelType.forType(type);
+                }
+                return null;
+            case Category.MEMBER:
+                if (type != null) {
+                    final MemberType memberType = TypeUtil.toMemberType(type);
+                    if (memberType != null) {
+                        return memberType;
+                    }
+                }
+                // Take a wild guess.
+                return MemberType.Unknown;
+            case Category.TUPLE:
+                if (type != null) {
+                    final Type memberType = TypeUtil.toMemberOrTupleType(type);
+                    if (memberType != null) {
+                        return memberType;
+                    }
+                }
+                return null;
+            case Category.SET:
+                if (type != null) {
+                    final Type memberType = TypeUtil.toMemberOrTupleType(type);
+                    if (memberType != null) {
+                        return new SetType(memberType);
+                    }
+                }
+                return null;
+            case Category.EMPTY:
+                return new EmptyType();
+            default:
+                throw Category.instance.badValue(category);
+        }
+    }
+
+    /**
+     * Validates an argument to a call to this function.
+     *
+     * <p>The default implementation of this method adds an implicit
+     * conversion to the correct type. Derived classes may override.
+     *
+     * @param validator Validator
+     * @param args Arguments to this function
+     * @param i Ordinal of argument
+     * @param category Expected {@link Category category} of argument
+     * @return Validated argument
+     */
+    protected Exp validateArg(
+        Validator validator,
+        Exp[] args,
+        int i,
+        int category)
+    {
+        return args[i];
+    }
+
+    @Override
+    public void unparse(Exp[] args, PrintWriter pw) {
+        getSyntax().unparse(getName(), args, pw);
     }
 
 }

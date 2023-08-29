@@ -13,7 +13,11 @@ package org.eclipse.daanse.function;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Exp;
+import mondrian.olap.Syntax;
 import org.eclipse.daanse.olap.calc.api.Calc;
+
+import java.io.PrintWriter;
 
 /**
  * Definition of an MDX function..
@@ -43,4 +47,5 @@ public interface FunDef {
      */
     Calc compileCall(ResolvedFunCall call, ExpCompiler compiler);
 
+    void unparse(Exp[] args, PrintWriter pw);
 }

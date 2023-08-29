@@ -44,9 +44,6 @@ import java.util.Set;
  */
 class AddCalculatedMembersFunDef extends FunDefBase {
 
-    private static final AddCalculatedMembersFunDef instance =
-        new AddCalculatedMembersFunDef();
-
     public static final String FLAG = "fxx";
 
     public AddCalculatedMembersFunDef() {
