@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 public class Refresh extends QueryPart {
     private final String cubeName;
 
-    Refresh(
+    public Refresh(
             String cubeName)
     {
         this.cubeName = cubeName;
