@@ -34,7 +34,7 @@ public class DrillThrough extends QueryPart {
      * @param firstRowOrdinal Ordinal of first row to return, or -1
      * @param returnList List of columns to return
      */
-    DrillThrough(
+    public DrillThrough(
         Query query,
         int maxRowCount,
         int firstRowOrdinal,
