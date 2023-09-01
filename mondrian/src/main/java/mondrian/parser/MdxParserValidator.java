@@ -15,18 +15,20 @@ import java.util.List;
 
 import mondrian.olap.CalculatedFormula;
 import mondrian.olap.DmvQuery;
-import mondrian.olap.DrillThrough;
+import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.Exp;
-import mondrian.olap.Explain;
+import mondrian.olap.ExplainImpl;
 import mondrian.olap.Formula;
 import mondrian.olap.FunTable;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
-import mondrian.olap.QueryPart;
 import mondrian.olap.Refresh;
 import mondrian.olap.Subcube;
 import mondrian.olap.TransactionCommand;
 import mondrian.olap.Update;
+import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryPart;
 import mondrian.server.Statement;
 
 /**
@@ -40,7 +42,7 @@ import mondrian.server.Statement;
 public interface MdxParserValidator {
 
     /**
-      * Parses a string to create a {@link mondrian.olap.Query}.
+      * Parses a string to create a {@link mondrian.olap.QueryImpl}.
       * Called only by {@link mondrian.olap.ConnectionBase#parseQuery}.
       */
     QueryPart parseInternal(
@@ -59,7 +61,7 @@ public interface MdxParserValidator {
     interface QueryPartFactory {
 
         /**
-         * Creates a {@link mondrian.olap.Query} object.
+         * Creates a {@link mondrian.olap.QueryImpl} object.
          * Override this function to make your kind of query.
          */
         Query makeQuery(
@@ -72,7 +74,7 @@ public interface MdxParserValidator {
             boolean strictValidation);
 
         /**
-         * Creates a {@link mondrian.olap.DrillThrough} object.
+         * Creates a {@link DrillThrough} object.
          */
         DrillThrough makeDrillThrough(
             Query query,
@@ -85,7 +87,7 @@ public interface MdxParserValidator {
                 Formula e);
 
         /**
-         * Creates an {@link mondrian.olap.Explain} object.
+         * Creates an {@link ExplainImpl} object.
          */
         Explain makeExplain(
             QueryPart query);

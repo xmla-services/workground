@@ -19,6 +19,10 @@ import java.util.*;
 import java.math.BigDecimal;
 
 import mondrian.mdx.*;
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Query;
 import mondrian.parser.MdxParserValidator;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
@@ -170,7 +174,7 @@ parser code {:
                     : new QueryAxis(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
                         QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
-            return new Query(
+            return new QueryImpl(
                 statement, formulae, axes, subcube, slicerAxis, cellProps,
                 strictValidation);
         }
@@ -181,7 +185,7 @@ parser code {:
             int firstRowOrdinal,
             List<Exp> returnList)
         {
-            return new DrillThrough(
+            return new DrillThroughImpl(
                 query, maxRowCount, firstRowOrdinal, returnList);
         }
 
@@ -198,7 +202,7 @@ parser code {:
         public Explain makeExplain(
             QueryPart query)
         {
-            return new Explain(query);
+            return new ExplainImpl(query);
         }
 
         public Refresh makeRefresh(

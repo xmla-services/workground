@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subcube extends QueryPart {
+public class Subcube extends AbstractQueryPart {
     private final String cubeName;
     private final Subcube subcube;
     private final QueryAxis[] axes;

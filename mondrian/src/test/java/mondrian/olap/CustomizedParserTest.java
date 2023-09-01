@@ -75,7 +75,7 @@ class CustomizedParserTest {
         assertEquals(expectedErrorMsg, actualMsg);
     }
 
-    private Query getParsedQueryForExpr(TestingContext foodMartContext,
+    private QueryImpl getParsedQueryForExpr(TestingContext foodMartContext,
         CustomizedFunctionTable cftab,
         String expr,
         boolean strictValidation)
@@ -85,7 +85,7 @@ class CustomizedParserTest {
         final Statement statement =
             connectionBase.getInternalStatement();
         try {
-            return (Query) connectionBase.parseStatement(
+            return (QueryImpl) connectionBase.parseStatement(
                 statement, mdx, cftab, strictValidation);
         } finally {
         	connectionBase.close();
@@ -93,7 +93,7 @@ class CustomizedParserTest {
         }
     }
 
-    private Query getParsedQueryForExpr(TestingContext foodMartContext,
+    private QueryImpl getParsedQueryForExpr(TestingContext foodMartContext,
         CustomizedFunctionTable cftab,
         String expr)
     {
@@ -108,7 +108,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] + [Measures].[Unit Sales])");
@@ -126,7 +126,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] - [Measures].[Unit Sales])");
@@ -144,7 +144,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "[Measures].[Store Cost] * [Measures].[Unit Sales]");
@@ -162,7 +162,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] * [Measures].[Unit Sales] * [Measures].[Store Sales])");
@@ -180,7 +180,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] + 10)");
@@ -198,7 +198,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "'[Measures].[Store Cost] + [Measures].[Unit Salese]'");
@@ -244,7 +244,7 @@ class CustomizedParserTest {
 
 
         try {
-            Query q = getParsedQueryForExpr(foodMartContext,
+            QueryImpl q = getParsedQueryForExpr(foodMartContext,
                 cftab,
                 "'[Measures].[Store Cost] + [Measures].[Unit Salese]'",
                 strictValidation);
@@ -275,7 +275,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] * [Measures].[Unit Sales])");
@@ -297,7 +297,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] + [Store].[Store Country])");
@@ -322,7 +322,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "CrossJoin([Measures].[Store Cost], [Measures].[Unit Sales])");
@@ -347,7 +347,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost], [Gender].[F])");
@@ -372,7 +372,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Store].[USA], [Gender].[F])");
@@ -403,7 +403,7 @@ class CustomizedParserTest {
             getCustomizedFunctionTable(functionNameSet);
 
         try {
-            Query q =
+            QueryImpl q =
                 getParsedQueryForExpr(foodMartContext,
                     cftab,
                     "([Measures].[Store Cost] + [Store].[USA])");

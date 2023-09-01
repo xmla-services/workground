@@ -18,7 +18,7 @@ import java.io.PrintWriter;
  *
  * @author jhyde, 1 March, 2000
  */
-public class MemberProperty extends QueryPart {
+public class MemberProperty extends AbstractQueryPart {
 
     private final String name;
     private Exp exp;

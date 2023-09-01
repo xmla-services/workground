@@ -12,6 +12,7 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
@@ -33,7 +34,7 @@ import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
-import mondrian.olap.QueryPart;
+import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
@@ -205,7 +206,7 @@ public class DelegatingExpCompiler implements ExpCompiler {
     /**
      * See {@link mondrian.calc.impl.DelegatingExpCompiler#wrap}.
      */
-    private static class WrapExp extends QueryPart implements Exp{
+    private static class WrapExp extends AbstractQueryPart implements Exp{
         private final Exp e;
         private final ExpCompiler wrappingCompiler;
 

@@ -13,8 +13,8 @@ import mondrian.olap.Exp;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Parser;
-import mondrian.olap.QueryPart;
 import mondrian.olap.Util;
+import mondrian.olap.interfaces.QueryPart;
 import mondrian.server.Statement;
 
 /**

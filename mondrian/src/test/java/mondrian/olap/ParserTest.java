@@ -26,6 +26,10 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -183,7 +187,7 @@ class ParserTest {
     }
 
     private void checkUnparse(Connection connection, String queryString, final String expected) {
-        final Query query = connection.parseQuery(queryString);
+        final QueryImpl query = connection.parseQuery(queryString);
         String unparsedQueryString = Util.unparse(query);
         assertEqualsVerbose(expected, unparsedQueryString);
     }
@@ -435,8 +439,8 @@ class ParserTest {
                     new Parser.FactoryImpl(),
                     statement, mdx, false,
                     funTable, false);
-            assertTrue(query instanceof Query);
-            ((Query) query).resolve();
+            assertTrue(query instanceof QueryImpl);
+            ((QueryImpl) query).resolve();
         } finally {
             statement.close();
         }
@@ -550,14 +554,14 @@ class ParserTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testCloneQuery(TestingContext context) {
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "select {[Measures].Members} on columns,\n"
             + " {[Store].Members} on rows\n"
             + "from [Sales]\n"
             + "where ([Gender].[M])");
 
-        Object queryClone = new Query(query);
-        assertTrue(queryClone instanceof Query);
+        Object queryClone = new QueryImpl(query);
+        assertTrue(queryClone instanceof QueryImpl);
         assertEquals(query.toString(), queryClone.toString());
     }
 
@@ -1132,7 +1136,7 @@ class ParserTest {
         }
 
         @Override
-		public Explain makeExplain(QueryPart query) {
+		public ExplainImpl makeExplain(QueryPart query) {
             this.explain = true;
             return null;
         }

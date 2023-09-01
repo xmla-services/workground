@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;
@@ -62,7 +63,7 @@ import mondrian.mdx.MemberExpr;
 public final class IdBatchResolver {
     static final Logger LOGGER = LoggerFactory.getLogger(IdBatchResolver.class);
 
-    private final Query query;
+    private final QueryImpl query;
     private final Formula[] formulas;
     private final QueryAxis[] axes;
     private final Cube cube;
@@ -82,7 +83,7 @@ public final class IdBatchResolver {
     // first on segment length (shortest to longest), then alphabetically.
     private  SortedSet<Id> identifiers = new TreeSet<>(new IdComparator());
 
-    public IdBatchResolver(Query query) {
+    public IdBatchResolver(QueryImpl query) {
         this.query = query;
         formulas = query.getFormulas();
         axes = query.getAxes();

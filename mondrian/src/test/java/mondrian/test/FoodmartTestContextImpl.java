@@ -70,7 +70,7 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianInprocProxy;
@@ -517,7 +517,7 @@ public String getRawSchema() {
 public Result executeQuery( String queryString ) {
     Connection connection = getConnection();
     queryString = upgradeQuery( queryString );
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     final Result result = connection.execute( query );
 
     // If we're deep testing, check that we never return the dummy null
@@ -874,7 +874,7 @@ public void assertParameterizedExprReturns(
     Object... paramValues ) {
     Connection connection = getConnection();
     String queryString = generateExpression( expr );
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     assert paramValues.length % 2 == 0;
     for ( int i = 0; i < paramValues.length; ) {
       final String paramName = (String) paramValues[ i++ ];
@@ -1019,7 +1019,7 @@ public String compileExpression( String expression, final boolean scalar ) {
         "SELECT {" + expression + "} ON COLUMNS FROM " + cubeName;
     }
     Connection connection = getConnection();
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     final Exp exp;
     if ( scalar ) {
       exp = query.getFormulas()[ 0 ].getExpression();
@@ -1099,7 +1099,7 @@ public void assertAxisThrows(
       final String cubeName = getDefaultCubeName();
       final String queryString =
         "select {" + expression + "} on columns from " + cubeName;
-      Query query = connection.parseQuery( queryString );
+      QueryImpl query = connection.parseQuery( queryString );
       connection.execute( query );
     } catch ( Throwable e ) {
       throwable = e;
@@ -1697,7 +1697,7 @@ public void assertSetExprDependsOn( String expr, String dimList ) {
     final Connection connection = getConnection();
     final String queryString =
       "SELECT {" + expr + "} ON COLUMNS FROM [Sales]";
-    final Query query = connection.parseQuery( queryString );
+    final QueryImpl query = connection.parseQuery( queryString );
     query.resolve();
     final Exp expression = query.getAxes()[ 0 ].getSet();
 
@@ -1726,7 +1726,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
       "WITH MEMBER [Measures].[Foo] AS "
         + Util.singleQuoteString( expr )
         + " SELECT FROM [Sales]";
-    final Query query = connection.parseQuery( queryString );
+    final QueryImpl query = connection.parseQuery( queryString );
     query.resolve();
     final Formula formula = query.getFormulas()[ 0 ];
     final Exp expression = formula.getExpression();
@@ -1737,7 +1737,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
   }
 
   private void checkDependsOn(
-    final Query query,
+    final QueryImpl query,
     final Exp expression,
     String expectedHierList,
     final boolean scalar ) {
@@ -2037,7 +2037,7 @@ public boolean databaseIsValid() {
       if ( cubeName.indexOf( ' ' ) >= 0 ) {
         cubeName = Util.quoteMdxIdentifier( cubeName );
       }
-      Query query = connection.parseQuery( "select from " + cubeName );
+      QueryImpl query = connection.parseQuery( "select from " + cubeName );
       Result result = connection.execute( query );
       Util.discard( result );
       connection.close();

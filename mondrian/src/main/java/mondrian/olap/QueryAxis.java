@@ -37,7 +37,7 @@ import mondrian.resource.MondrianResource;
  *
  * @author jhyde, 20 January, 1999
  */
-public class QueryAxis extends QueryPart {
+public class QueryAxis extends AbstractQueryPart {
 
     private boolean nonEmpty;
     private boolean ordered;

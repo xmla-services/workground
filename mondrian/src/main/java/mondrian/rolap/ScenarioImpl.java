@@ -24,7 +24,7 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Formula;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;
 
@@ -298,7 +298,7 @@ public final class ScenarioImpl implements Scenario {
         final String mdx = buf.toString();
         final RolapConnection connection =
             cube.getSchema().getInternalConnection();
-        final Query query = connection.parseQuery(mdx);
+        final QueryImpl query = connection.parseQuery(mdx);
         final Result result = connection.execute(query);
         final Object o = result.getCell(new int[0]).getValue();
         return o instanceof Number

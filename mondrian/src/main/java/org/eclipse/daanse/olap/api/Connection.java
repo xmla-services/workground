@@ -7,7 +7,7 @@
  * Copyright (C) 2000-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *   SmartCity Jena - refactor, clean API
  */
@@ -19,17 +19,17 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Schema;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.DrillThrough;
+import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
-import mondrian.olap.Query;
-import mondrian.olap.QueryPart;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -78,8 +78,8 @@ public interface Connection {
      * to use olap4j and explicitly create a statement.
      */
     @Deprecated
-	Result execute(Query query);
-    
+	Result execute(QueryImpl query);
+
     Statement createStatement();
 
     /**
@@ -98,13 +98,13 @@ public interface Connection {
     /**
      * Parses a query.
      */
-    Query parseQuery(String s);
+    QueryImpl parseQuery(String s);
 
     /**
      * Parses a statement.
      *
      * @param mdx MDX string
-     * @return A {@link Query} if it is a SELECT statement, a
+     * @return A {@link QueryImpl} if it is a SELECT statement, a
      *   {@link DrillThrough} if it is a DRILLTHROUGH statement
      */
     QueryPart parseStatement(String mdx);

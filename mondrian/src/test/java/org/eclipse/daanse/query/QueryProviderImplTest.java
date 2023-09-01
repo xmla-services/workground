@@ -1,7 +1,8 @@
 package org.eclipse.daanse.query;
 
-import mondrian.olap.QueryPart;
+import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.Refresh;
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;

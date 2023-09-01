@@ -22,7 +22,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-public class TransactionCommand extends QueryPart {
+public class TransactionCommand extends AbstractQueryPart {
 
     public enum Command {
         BEGIN,

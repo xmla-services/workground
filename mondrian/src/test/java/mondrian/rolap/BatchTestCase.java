@@ -41,7 +41,7 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
 import mondrian.rolap.RolapNative.NativeEvent;
@@ -498,7 +498,7 @@ public class BatchTestCase{
                     //connection =
                     //    testContext.withSchemaPool(false).getConnection();
                 }
-                final Query query = connection.parseQuery(mdxQuery);
+                final QueryImpl query = connection.parseQuery(mdxQuery);
                 if (clearCache) {
                     clearCache(connection, (RolapCube)query.getCube());
                 }
@@ -998,7 +998,7 @@ public class BatchTestCase{
     }
 
     public Result executeQuery(String mdx, Connection connection) {
-        Query query = connection.parseQuery(mdx);
+        QueryImpl query = connection.parseQuery(mdx);
         query.setResultStyle(ResultStyle.LIST);
         return connection.execute(query);
     }

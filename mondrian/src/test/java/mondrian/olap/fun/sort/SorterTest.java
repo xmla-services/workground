@@ -40,7 +40,7 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
@@ -48,7 +48,7 @@ import mondrian.server.Statement;
 class SorterTest{
 
   @Mock Evaluator evaluator;
-  @Mock Query query;
+  @Mock QueryImpl query;
   @Mock Statement statement;
   @Mock Execution execution;
   @Mock SortKeySpec sortKeySpec1;

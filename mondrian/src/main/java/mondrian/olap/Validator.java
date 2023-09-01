@@ -28,9 +28,9 @@ import mondrian.olap.type.Type;
  */
 public interface Validator {
     /**
-     * Returns the {@link Query} which is being validated.
+     * Returns the {@link QueryImpl} which is being validated.
      */
-    Query getQuery();
+    QueryImpl getQuery();
 
     /**
      * Validates an expression, and returns the expression it resolves to.

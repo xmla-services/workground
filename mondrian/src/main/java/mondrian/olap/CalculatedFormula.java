@@ -22,7 +22,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-public class CalculatedFormula extends QueryPart {
+public class CalculatedFormula extends AbstractQueryPart {
     private final String cubeName;
     private final Formula e;
 

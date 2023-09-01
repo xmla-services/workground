@@ -41,7 +41,7 @@ public interface ParameterSlot {
      *
      * <p>NOTE: This method will be removed when we store parameter values
      * in the {@link org.eclipse.daanse.olap.api.result.Result} rather than in the
-     * {@link mondrian.olap.Query}.
+     * {@link mondrian.olap.QueryImpl}.
      *
      * @param value New value
      * @param assigned Whether {@link #isParameterSet()} should return true;
@@ -55,7 +55,7 @@ public interface ParameterSlot {
      *
      * <p>NOTE: This method will be removed when we store parameter values
      * in the {@link org.eclipse.daanse.olap.api.result.Result} rather than in the
-     * {@link mondrian.olap.Query}.
+     * {@link mondrian.olap.QueryImpl}.
      */
     Object getParameterValue();
 

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -55,7 +56,7 @@ import mondrian.test.PropertySaver5;
 class IdBatchResolverTest  {
 
 	@Mock
-     Query query;
+     QueryImpl query;
 
     @Captor
      ArgumentCaptor<List<Id.NameSegment>> childNames;
@@ -470,7 +471,7 @@ class IdBatchResolverTest  {
         return new IdBatchResolver(query);
     }
 
-    private class QueryTestWrapper extends Query {
+    private class QueryTestWrapper extends QueryImpl {
         private SchemaReader spyReader;
 
         public QueryTestWrapper(
@@ -519,7 +520,7 @@ class IdBatchResolverTest  {
     class FactoryImplTestWrapper extends Parser.FactoryImpl {
 
         @Override
-        public Query makeQuery(
+        public QueryImpl makeQuery(
             Statement statement,
             Formula[] formulae,
             QueryAxis[] axes,

@@ -51,7 +51,7 @@ import org.olap4j.type.TupleType;
 import org.olap4j.type.Type;
 
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.util.Pair;
 
 import static org.eigenbase.xom.XOMUtil.discard;
@@ -87,7 +87,7 @@ abstract class MondrianOlap4jPreparedStatement
         throws OlapException
     {
         super(olap4jConnection);
-        final Pair<Query, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
+        final Pair<QueryImpl, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
         this.query = pair.left;
         this.cellSetMetaData = pair.right;
     }

@@ -23,6 +23,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 
 import mondrian.olap.*;
+import mondrian.olap.interfaces.*;
 import mondrian.mdx.*;
 import mondrian.parser.*;
 import mondrian.resource.MondrianResource;

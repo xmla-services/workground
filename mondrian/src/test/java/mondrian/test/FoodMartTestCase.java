@@ -29,7 +29,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -83,7 +83,7 @@ public class FoodMartTestCase {
      * Executes a query in a given connection.
      */
     public static Result execute(Connection connection, String queryString) {
-        Query query = connection.parseQuery(queryString);
+        QueryImpl query = connection.parseQuery(queryString);
         return connection.execute(query);
     }
 

@@ -98,7 +98,7 @@ import mondrian.olap.Literal;
 import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
@@ -794,7 +794,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(exp);
     }
 
-    SelectNode toOlap4j(Query query) {
+    SelectNode toOlap4j(QueryImpl query) {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(query);
     }
 
@@ -1047,7 +1047,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                 StringWriter sw = new StringWriter();
                 selectNode.unparse(new ParseTreeWriter(new PrintWriter(sw)));
                 String mdx = sw.toString();
-                Query query =
+                QueryImpl query =
                     connection.mondrianConnection
                         .parseQuery(mdx);
                 query.resolve();
@@ -1067,7 +1067,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             this.olap4jConnection = olap4jConnection;
         }
 
-        public SelectNode toOlap4j(Query query) {
+        public SelectNode toOlap4j(QueryImpl query) {
             List<IdentifierNode> list = Collections.emptyList();
             return new SelectNode(
                 null,

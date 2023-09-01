@@ -53,7 +53,7 @@ import mondrian.olap.Id;
 import mondrian.olap.Literal;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
@@ -810,7 +810,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(Query query) {
+		public Object visit(QueryImpl query) {
             throw Util.newInternal("not valid here: " + query);
         }
 

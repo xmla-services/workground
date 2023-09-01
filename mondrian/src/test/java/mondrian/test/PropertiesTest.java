@@ -29,7 +29,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.SchemaReader;
 
@@ -284,7 +284,7 @@ class PropertiesTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testMandatoryCellProperties(TestingContext context) {
         Connection connection = context.createConnection();
-        Query salesCube = connection.parseQuery(
+        QueryImpl salesCube = connection.parseQuery(
             "select \n"
             + " {[Measures].[Store Sales], [Measures].[Unit Sales]} on columns, \n"
             + " {[Gender].members} on rows \n"

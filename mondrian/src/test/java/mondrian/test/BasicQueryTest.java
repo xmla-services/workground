@@ -92,7 +92,7 @@ import mondrian.olap.Id;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -1769,7 +1769,7 @@ public class BasicQueryTest {
             + " Crossjoin ({([Gender].[All Gender].[F],\n" + " [Marital Status].[All Marital Status],\n"
             + " [Customers].[All Customers].[USA])},\n"
             + " [Product].[All Products].Children))) ON rows  from [Sales]  where [Time].[1997]";
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     // If this call took longer than 10 seconds, the performance bug has
     // probably resurfaced again.
     final long afterParseMillis = System.currentTimeMillis();
@@ -2371,7 +2371,7 @@ public class BasicQueryTest {
 
     String queryString =
         "select {[Measures].[Unit Sales]} on columns,\n" + "{[Customers].members} on rows\n" + "from Sales";
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     Result result = connection.execute( query );
     assertEquals( 10407, result.getAxes()[1].getPositions().size() );
   }
@@ -2380,7 +2380,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testUnparse(TestingContext context) {
     Connection connection = context.createConnection();
-    Query query =
+    QueryImpl query =
         connection.parseQuery( "with member [Measures].[Rendite] as \n"
             + " '(([Measures].[Store Sales] - [Measures].[Store Cost])) / [Measures].[Store Cost]',\n"
             + " format_string = iif(([Measures].[Store Sales] - [Measures].[Store Cost]) / [Measures].[Store Cost] * 100 "
@@ -2409,7 +2409,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testUnparse2(TestingContext context) {
       Connection connection = context.createConnection();
-    Query query =
+    QueryImpl query =
         connection.parseQuery( "with member [Measures].[Foo] as '1', " + "format_string='##0.00', "
             + "funny=IIf(1=1,\"x\"\"y\",\"foo\") " + "select {[Measures].[Foo]} on columns from Sales" );
     final String s = query.toString();
@@ -4359,7 +4359,7 @@ public class BasicQueryTest {
     withSchema(context, schema);
     Connection connection = context.createConnection();
 
-    final Query query = connection.parseQuery( queryString );
+    final QueryImpl query = connection.parseQuery( queryString );
     final Throwable[] throwables = { null };
     if ( waitMillis == 0 ) {
       // cancel immediately
@@ -4700,7 +4700,7 @@ public class BasicQueryTest {
     Throwable throwable = null;
     Connection connection = context.createConnection();
     try {
-      Query query = connection.parseQuery( queryString );
+      QueryImpl query = connection.parseQuery( queryString );
       query.setResultStyle( ResultStyle.LIST );
       connection.execute( query );
     } catch ( Throwable ex ) {
@@ -5614,7 +5614,7 @@ public class BasicQueryTest {
     // should succeed.
     runMondrian1506(context, new Mondrian1506Lambda() {
       @Override
-	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+	public void run( ExecutorService exec, QueryImpl q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5656,7 +5656,7 @@ public class BasicQueryTest {
     // after the call to cancel() returns. Same result as test 1.
     runMondrian1506(context, new Mondrian1506Lambda() {
       @Override
-	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+	public void run( ExecutorService exec, QueryImpl q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5690,7 +5690,7 @@ public class BasicQueryTest {
   }
 
   private interface Mondrian1506Lambda {
-    void run( final ExecutorService exec, final Query q1, final AtomicBoolean fail, final AtomicBoolean success,
+    void run( final ExecutorService exec, final QueryImpl q1, final AtomicBoolean fail, final AtomicBoolean success,
         final Runnable r1, final Runnable r2 ) throws Exception;
   }
 
@@ -5719,8 +5719,8 @@ public class BasicQueryTest {
 
     // We are testing the old Query API.
     final Connection connection = context.createConnection();
-    final Query q1 = connection.parseQuery( mdx );
-    final Query q2 = connection.parseQuery( mdx );
+    final QueryImpl q1 = connection.parseQuery( mdx );
+    final QueryImpl q2 = connection.parseQuery( mdx );
 
     // Some flags to test.
     final AtomicBoolean fail = new AtomicBoolean( false );

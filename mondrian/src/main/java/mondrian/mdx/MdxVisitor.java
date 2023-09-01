@@ -12,7 +12,7 @@ package mondrian.mdx;
 import mondrian.olap.Formula;
 import mondrian.olap.Id;
 import mondrian.olap.Literal;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 
 /**
@@ -30,9 +30,9 @@ public interface MdxVisitor {
     /**
      * Visits a Query.
      *
-     * @see Query#accept(MdxVisitor)
+     * @see QueryImpl#accept(MdxVisitor)
      */
-    Object visit(Query query);
+    Object visit(QueryImpl query);
 
     /**
      * Visits a QueryAxis.

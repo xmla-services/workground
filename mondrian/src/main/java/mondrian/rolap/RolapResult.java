@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -63,7 +65,6 @@ import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
@@ -143,7 +144,7 @@ public class RolapResult extends ResultBase {
 
     this.batchingReader = new FastBatchingCellReader( execution, cube, aggMgr );
 
-    this.cellInfos = ( query.axes.length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.axes.length );
+    this.cellInfos = ( query.getAxes().length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.getAxes().length );
 
     if ( !execute ) {
       return;
@@ -266,7 +267,7 @@ public class RolapResult extends ResultBase {
       //
       HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
 
-      for(Map.Entry<Hierarchy, Calc> entry : query.subcubeHierarchyCalcs.entrySet()) {
+      for(Map.Entry<Hierarchy, Calc> entry : query.getSubcubeHierarchyCalcs().entrySet()) {
         Hierarchy hierarchy = entry.getKey();
         org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
         org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
@@ -362,7 +363,7 @@ public class RolapResult extends ResultBase {
         subcubeHierarchies.put(hierarchy, subcubeHierarchyMembers);
 
       }
-      query.subcubeHierarchies = subcubeHierarchies;
+      query.setSubcubeHierarchies(subcubeHierarchies);
 
       query.replaceSubcubeMembers();
       query.resolve();
@@ -400,7 +401,7 @@ public class RolapResult extends ResultBase {
       // Determine Slicer
       //
       axisMembers.setSlicer( true );
-      loadMembers( emptyNonAllMembers, evaluator, query.getSlicerAxis(), query.slicerCalc, axisMembers );
+      loadMembers( emptyNonAllMembers, evaluator, query.getSlicerAxis(), query.getSlicerCalc(), axisMembers );
       axisMembers.setSlicer( false );
 
       // Save unadulterated context for the next time we need to evaluate
@@ -433,7 +434,7 @@ public class RolapResult extends ResultBase {
       do {
         TupleIterable tupleIterable =
             evalExecute( nonAllMembers, nonAllMembers.size() - 1, savedEvaluator, query.getSlicerAxis(),
-                query.slicerCalc );
+                query.getSlicerCalc() );
         // Materialize the iterable as a list. Although it may take
         // memory, we need the first member below, and besides, slicer
         // axes are generally small.
@@ -460,7 +461,7 @@ public class RolapResult extends ResultBase {
 
           final List<Member> prevSlicerMembers = new ArrayList<>();
 
-          final Calc calcCached = new GenericCalc( query.slicerCalc.getType() ) {
+          final Calc calcCached = new GenericCalc( query.getSlicerCalc().getType() ) {
             @Override
 			public Object evaluate( Evaluator evaluator ) {
               try {
@@ -511,7 +512,7 @@ public class RolapResult extends ResultBase {
           Member placeholder =
               setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( 0 ), calc, true, tupleList );
 
-          Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (FILTER):", query.slicerCalc, evaluator
+          Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (FILTER):", query.getSlicerCalc(), evaluator
               .getTiming() );
 
           evaluator.setContext( placeholder );
@@ -530,8 +531,8 @@ public class RolapResult extends ResultBase {
       axisMembers.clearTotalCellCount();
 
       for ( int i = 0; i < axes.length; i++ ) {
-        final QueryAxis axis = query.axes[i];
-        final Calc calc = query.axisCalcs[i];
+        final QueryAxis axis = query.getAxes()[i];
+        final Calc calc = query.getAxisCalcs()[i];
         loadMembers( emptyNonAllMembers, evaluator, axis, calc, axisMembers );
       }
 
@@ -557,8 +558,8 @@ public class RolapResult extends ResultBase {
         final int savepoint = evaluator.savepoint();
         try {
           for ( int i = 0; i < axes.length; i++ ) {
-            final QueryAxis axis = query.axes[i];
-            final Calc calc = query.axisCalcs[i];
+            final QueryAxis axis = query.getAxes()[i];
+            final Calc calc = query.getAxisCalcs()[i];
             loadMembers( nonAllMembers, evaluator, axis, calc, axisMembers );
             evaluator.restore( savepoint );
           }
@@ -581,8 +582,8 @@ public class RolapResult extends ResultBase {
             evaluator.restore( savepoint );
             redo = false;
             for ( int i = 0; i < axes.length; i++ ) {
-              QueryAxis axis = query.axes[i];
-              final Calc calc = query.axisCalcs[i];
+              QueryAxis axis = query.getAxes()[i];
+              final Calc calc = query.getAxisCalcs()[i];
               TupleIterable tupleIterable =
                   evalExecute( nonAllMembers, nonAllMembers.size() - 1, evaluator, axis, calc );
 
@@ -625,7 +626,7 @@ public class RolapResult extends ResultBase {
 
       // Get value for each Cell
       // Cells will not be calculated if only CELL_ORDINAL requested.
-      mondrian.olap.QueryPart[] cellProperties = query.getCellProperties();
+      QueryPart[] cellProperties = query.getCellProperties();
       if(!(cellProperties.length == 1
               && ((mondrian.olap.Id.NameSegment)
               mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).name.equalsIgnoreCase(
@@ -1067,7 +1068,7 @@ public Cell getCell( int[] pos ) {
     }
   }
 
-  private void executeBody( RolapEvaluator evaluator, Query query, final int[] pos ) {
+  private void executeBody(RolapEvaluator evaluator, Query query, final int[] pos ) {
     // Compute the cells several times. The first time, use a dummy
     // evaluator which collects requests.
     int count = 0;
@@ -1075,7 +1076,7 @@ public Cell getCell( int[] pos ) {
     while ( true ) {
       evaluator.setCellReader( batchingReader );
       try {
-        executeStripe( query.axes.length - 1, evaluator, pos );
+        executeStripe( query.getAxes().length - 1, evaluator, pos );
       } catch ( CellRequestQuantumExceededException e ) {
         // Safe to ignore. Need to call 'phase' and loop again.
         // Decrement count because it wasn't a recursive formula that
