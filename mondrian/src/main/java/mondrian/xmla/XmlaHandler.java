@@ -74,6 +74,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -108,10 +109,9 @@ import org.xml.sax.SAXException;
 
 import mondrian.olap.CalculatedFormula;
 import mondrian.olap.DmvQuery;
-import mondrian.olap.DrillThrough;
+import mondrian.olap.DrillThroughImpl;
 import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.QueryPart;
 import mondrian.olap.Refresh;
 import mondrian.olap.TransactionCommand;
 import mondrian.olap.Update;
@@ -972,7 +972,7 @@ public class XmlaHandler {
                     queryPart = rolapConnection.parseStatement(mdx);
                 }
 
-                if (queryPart instanceof DrillThrough) {
+                if (queryPart instanceof DrillThroughImpl) {
                     result = executeDrillThroughQuery(request);
                 } else if (queryPart instanceof CalculatedFormula calculatedFormula) {
                     Formula formula = calculatedFormula.getFormula();

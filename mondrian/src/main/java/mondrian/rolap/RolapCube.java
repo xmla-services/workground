@@ -106,9 +106,9 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
-import mondrian.olap.QueryPart;
+import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
@@ -833,7 +833,7 @@ public class RolapCube extends CubeBase {
             RolapCube baseCube = entry.getKey();
             List<CalculatedMember> xmlCalculatedMemberList =
                 calculatedMembersMap.get(baseCube);
-            Query queryExp =
+            QueryImpl queryExp =
                 resolveCalcMembers(
                     xmlCalculatedMemberList,
                     Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
@@ -1162,7 +1162,7 @@ public class RolapCube extends CubeBase {
         RolapCube cube,
         boolean errOnDups)
     {
-        final Query queryExp =
+        final QueryImpl queryExp =
             resolveCalcMembers(
                 xmlCalcMembers,
                 xmlNamedSets,
@@ -1185,7 +1185,7 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    private Query resolveCalcMembers(
+    private QueryImpl resolveCalcMembers(
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember> xmlCalcMembers,
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         RolapCube cube,
@@ -1224,10 +1224,10 @@ public class RolapCube extends CubeBase {
             return Locus.execute(
                 conn,
                 "RolapCube.resolveCalcMembers",
-                new Locus.Action<Query>() {
+                new Locus.Action<QueryImpl>() {
                     @Override
-					public Query execute() {
-                        final Query queryExp =
+					public QueryImpl execute() {
+                        final QueryImpl queryExp =
                             conn.parseQuery(queryString);
                         queryExp.resolve();
                         return queryExp;
@@ -1243,7 +1243,7 @@ public class RolapCube extends CubeBase {
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         final int offset,
         int i,
-        final Query queryExp,
+        final QueryImpl queryExp,
         List<Formula> formulaList)
     {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet = xmlNamedSets.get(i);
@@ -1296,7 +1296,7 @@ public class RolapCube extends CubeBase {
     private void postCalcMember(
         List<? extends CalculatedMember> xmlCalcMembers,
         int i,
-        final Query queryExp,
+        final QueryImpl queryExp,
         List<RolapMember> memberList)
     {
         CalculatedMember xmlCalcMember = xmlCalcMembers.get(i);
@@ -3105,14 +3105,14 @@ public class RolapCube extends CubeBase {
         final Statement statement =
             schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                new Query(
+            final QueryImpl query =
+                new QueryImpl(
                     statement,
                     this,
                     new Formula[] {formula},
                     new QueryAxis[0],
                     null,
-                    new QueryPart[0],
+                    new AbstractQueryPart[0],
                     new Parameter[0],
                     false);
             query.createValidator().validate(formula);
@@ -3129,14 +3129,14 @@ public class RolapCube extends CubeBase {
         final Statement statement =
                 schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                    new Query(
+            final QueryImpl query =
+                    new QueryImpl(
                             statement,
                             this,
                             new Formula[] {formula},
                             new QueryAxis[0],
                             null,
-                            new QueryPart[0],
+                            new AbstractQueryPart[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);
@@ -3152,14 +3152,14 @@ public class RolapCube extends CubeBase {
         final Statement statement =
                 schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                    new Query(
+            final QueryImpl query =
+                    new QueryImpl(
                             statement,
                             this,
                             new Formula[] {formula},
                             new QueryAxis[0],
                             null,
-                            new QueryPart[0],
+                            new AbstractQueryPart[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);

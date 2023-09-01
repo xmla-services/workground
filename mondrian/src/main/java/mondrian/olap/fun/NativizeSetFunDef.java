@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -63,7 +64,6 @@ import mondrian.olap.FunDef;
 import mondrian.olap.Id;
 import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -221,7 +221,7 @@ public class NativizeSetFunDef extends FunDefBase {
         protected NonNativeCalc(Calc parent, final boolean nativeEnabled) {
             super(parent.getType());
         	assert parent != null;
-            
+
             this.parent = parent;
             this.nativeEnabled = nativeEnabled;
         }
@@ -242,7 +242,7 @@ public class NativizeSetFunDef extends FunDefBase {
 //            return parent.getType();
 //        }
 
-  
+
 
         @Override
 		public ResultStyle getResultStyle() {

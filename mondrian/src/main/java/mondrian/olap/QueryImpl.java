@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryPart;
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -98,14 +100,14 @@ import mondrian.util.ArrayStack;
  * <li>At any time while a query is executing, another thread can cancel the
  *     query by calling
  *     {@link #getStatement()}.{@link Statement#cancel() cancel()}.
- *     The call to {@link Connection#execute(Query)}
+ *     The call to {@link Connection#execute(QueryImpl)}
  *     will throw an exception.</li>
  *
  * </ul>
  *
  * @author jhyde, 20 January, 1999
  */
-public class Query extends QueryPart {
+public class QueryImpl extends AbstractQueryPart implements Query {
 
     private Formula[] formulas;
 
@@ -195,8 +197,8 @@ public class Query extends QueryPart {
   /**
    * Creates a Query.
    */
-  public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, String cubeName, QueryAxis slicerAxis,
-                QueryPart[] cellProps, boolean strictValidation ) {
+  public QueryImpl(Statement statement, Formula[] formulas, QueryAxis[] axes, String cubeName, QueryAxis slicerAxis,
+               QueryPart[] cellProps, boolean strictValidation ) {
       this(
               statement,
               Util.lookupCube( statement.getSchemaReader(), cubeName, true ),
@@ -209,8 +211,8 @@ public class Query extends QueryPart {
               strictValidation );
   }
 
-  public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
-      QueryPart[] cellProps, boolean strictValidation ) {
+  public QueryImpl(Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
+               QueryPart[] cellProps, boolean strictValidation ) {
     this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, subcube, axes, slicerAxis, cellProps,
         new Parameter[0], strictValidation );
   }
@@ -218,7 +220,7 @@ public class Query extends QueryPart {
     /**
      * Creates a Query.
      */
-    public Query(
+    public QueryImpl(
             Statement statement,
             Cube mdxCube,
             Formula[] formulas,
@@ -241,7 +243,7 @@ public class Query extends QueryPart {
 
     }
 
-    public Query(
+    public QueryImpl(
         Statement statement,
         Cube mdxCube,
         Formula[] formulas,
@@ -287,7 +289,7 @@ public class Query extends QueryPart {
         }
     }
 
-    public Query(Query query) {
+    public QueryImpl(QueryImpl query) {
         this(
             query.statement,
             query.cube,
@@ -425,7 +427,7 @@ public class Query extends QueryPart {
         return new QueryValidator(
             functionTable,
             alwaysResolveFunDef,
-            Query.this,
+            QueryImpl.this,
             new HashMap<>());
     }
 
@@ -438,17 +440,17 @@ public class Query extends QueryPart {
         return new QueryValidator(
             functionTable,
             alwaysResolveFunDef,
-            Query.this,
+            QueryImpl.this,
             resolvedIdentifiers);
     }
 
     /**
-     * @deprecated Please use {@link #Query(Query)}; this method will be removed in
+     * @deprecated Please use {@link #Query(QueryImpl)}; this method will be removed in
      * mondrian-4.0
      */
     @Deprecated
-	public Query safeClone() {
-        return new Query(this);
+	public QueryImpl safeClone() {
+        return new QueryImpl(this);
     }
 
     public Connection getConnection() {
@@ -790,12 +792,12 @@ public class Query extends QueryPart {
         }
         if (slicerCalc != null) {
             pw.println("Axis (FILTER):");
-            
+
 			if (slicerCalc instanceof ProfilingCalc pc) {
 
 				CalculationProfile calcProfile = pc.getCalculationProfile();
 				spw.write(calcProfile);
-				
+
 			} else {
 				pw.println("UNPROFILED: " + slicerCalc.getClass().getName());
 
@@ -807,12 +809,12 @@ public class Query extends QueryPart {
             ++i;
 			Calc<?> axisCalc = axisCalcs[i];
             pw.println(new StringBuilder("Axis (").append(axis.getAxisName()).append("):").toString());
-            
+
 			if (axisCalc instanceof ProfilingCalc pc) {
 
 				CalculationProfile calcProfile = pc.getCalculationProfile();
 				spw.write(calcProfile);
-				
+
 			} else {
 				pw.println("UNPROFILED: " + axisCalc.getClass().getName());
 
@@ -889,7 +891,7 @@ public class Query extends QueryPart {
 	public Object[] getChildren() {
         // Chidren are axes, slicer, and formulas (in that order, to be
         // consistent with replaceChild).
-        List<QueryPart> list = new ArrayList<>();
+        List<AbstractQueryPart> list = new ArrayList<>();
         list.addAll(Arrays.asList(axes));
         if (slicerAxis != null) {
             list.add(slicerAxis);
@@ -995,7 +997,7 @@ public class Query extends QueryPart {
                 @Override
 				public Object execute() {
                     return quickParse(
-                        parameterName, param.getType(), value, Query.this);
+                        parameterName, param.getType(), value, QueryImpl.this);
                 }
             }
         );
@@ -1025,7 +1027,7 @@ public class Query extends QueryPart {
         String parameterName,
         Type type,
         Object value,
-        Query query)
+        QueryImpl query)
         throws NumberFormatException
     {
         int category = TypeUtil.typeToCategory(type);
@@ -1166,7 +1168,7 @@ public class Query extends QueryPart {
             role = null;
         }
         final SchemaReader cubeSchemaReader = cube.getSchemaReader(role);
-        return new QuerySchemaReader(cubeSchemaReader, Query.this);
+        return new QuerySchemaReader(cubeSchemaReader, QueryImpl.this);
     }
 
     /**
@@ -1304,7 +1306,7 @@ public class Query extends QueryPart {
                 Object parent = walker.getAncestor(i);
                 Object grandParent = walker.getAncestor(i + 1);
                 while ((parent != null) && (grandParent != null)) {
-                    if (grandParent instanceof Query) {
+                    if (grandParent instanceof QueryImpl) {
                         if (parent instanceof Axis) {
                             throw MondrianResource.instance()
                                 .MdxCalculatedFormulaUsedOnAxis.ex(
@@ -1677,9 +1679,9 @@ public class Query extends QueryPart {
         extends DelegatingSchemaReader
         implements NameResolver.Namespace
     {
-        private final Query query;
+        private final QueryImpl query;
 
-        public QuerySchemaReader(SchemaReader cubeSchemaReader, Query query) {
+        public QuerySchemaReader(SchemaReader cubeSchemaReader, QueryImpl query) {
             super(cubeSchemaReader);
             this.query = query;
         }
@@ -2072,7 +2074,7 @@ public class Query extends QueryPart {
      */
     private static class QueryValidator extends ValidatorImpl {
         private final boolean alwaysResolveFunDef;
-        private Query query;
+        private QueryImpl query;
         private final SchemaReader schemaReader;
 
         /**
@@ -2084,7 +2086,7 @@ public class Query extends QueryPart {
          * @param query Query
          */
         public QueryValidator(
-            FunTable functionTable, boolean alwaysResolveFunDef, Query query,
+            FunTable functionTable, boolean alwaysResolveFunDef, QueryImpl query,
             Map<QueryPart, QueryPart> resolvedIdentifiers)
         {
             super(functionTable, resolvedIdentifiers);
@@ -2106,7 +2108,7 @@ public class Query extends QueryPart {
         }
 
         @Override
-		public Query getQuery() {
+		public QueryImpl getQuery() {
             return query;
         }
 
@@ -2458,6 +2460,26 @@ public class Query extends QueryPart {
                 formula.setExpression(replaceSubcubeMember(exp));
             }
         }
+    }
+
+    @Override
+    public Map<Hierarchy, Calc> getSubcubeHierarchyCalcs() {
+        return subcubeHierarchyCalcs;
+    }
+
+    @Override
+    public Calc getSlicerCalc() {
+        return slicerCalc;
+    }
+
+    @Override
+    public Calc[] getAxisCalcs() {
+        return axisCalcs;
+    }
+
+    @Override
+    public void setSubcubeHierarchies(HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies) {
+        this.subcubeHierarchies =  subcubeHierarchies;
     }
 
     private List<Member> getSubcubeMembers(List<Member> members, boolean addNullMember) {

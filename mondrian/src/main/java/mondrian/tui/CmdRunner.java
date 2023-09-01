@@ -55,7 +55,7 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
@@ -244,7 +244,7 @@ public class CmdRunner {
         }
     }
 
-    public void loadParameters(Query query) {
+    public void loadParameters(QueryImpl query) {
         Parameter[] params = query.getParameters();
         for (Parameter param : params) {
             loadParameter(query, param);
@@ -335,7 +335,7 @@ public class CmdRunner {
         }
     }
 
-    public void loadParameter(Query query, Parameter param) {
+    public void loadParameter(QueryImpl query, Parameter param) {
         int category = TypeUtil.typeToCategory(param.getType());
         String name = param.getName();
         String value = CmdRunner.paraNameValues.get(name);
@@ -426,7 +426,7 @@ public class CmdRunner {
         }
 
         debug("parseParameter. MEMBER_TYPE: " + trimmed);
-        Query query = this.connection.parseQuery(this.mdxCmd);
+        QueryImpl query = this.connection.parseQuery(this.mdxCmd);
 
         // assume member, dimension, hierarchy, level
         OlapElement element = Util.lookup(query, Util.parseIdentifier(trimmed));
@@ -619,7 +619,7 @@ public class CmdRunner {
         try {
             this.connection = getConnection();
             debug("CmdRunner.runQuery: AFTER getConnection");
-            Query query = this.connection.parseQuery(queryString);
+            QueryImpl query = this.connection.parseQuery(queryString);
             debug("CmdRunner.runQuery: AFTER parseQuery");
             if (loadParams) {
                 loadParameters(query);

@@ -30,7 +30,7 @@ import org.opencube.junit5.context.SQLLiteContext;
 import org.sqlite.SQLiteDataSource;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
@@ -75,7 +75,7 @@ class MondrianTest {
 		System.out.println(c);
 		System.out.println(c.getCatalogName());
 
-		Query q = c.parseQuery(query);
+		QueryImpl q = c.parseQuery(query);
 		Statement s = q.getStatement();
 		Result r = s.getMondrianConnection().execute(new Execution(s, 1000l));
 		java.io.StringWriter sw = new java.io.StringWriter();
@@ -108,7 +108,7 @@ class MondrianTest {
 
 		Connection c = DriverManager.getConnection(propertyList, catalogLocator);
 
-		Query q = c.parseQuery(query);
+		QueryImpl q = c.parseQuery(query);
 		Statement s = q.getStatement();
 		Result r = s.getMondrianConnection().execute(new Execution(s, 1000l));
 		java.io.StringWriter sw = new java.io.StringWriter();

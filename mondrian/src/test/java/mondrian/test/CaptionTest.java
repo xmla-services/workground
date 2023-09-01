@@ -27,7 +27,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.spi.DynamicSchemaProcessor;
 
@@ -50,7 +50,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Time].[1997].[Q1]} ON ROWS FROM [Sales]";
-        Query monQuery = monConnection.parseQuery(mdxQuery);
+        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[0].getPositions();
@@ -71,7 +71,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Promotion Media].[All Media]} ON ROWS FROM [Sales]";
-        Query monQuery = monConnection.parseQuery(mdxQuery);
+        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
@@ -94,7 +94,7 @@ class CaptionTest{
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
-        Query monQuery = monConnection.parseQuery(mdxQuery);
+        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
@@ -134,7 +134,7 @@ class CaptionTest{
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Time].[Year].Members} ON ROWS FROM [Sales]";
-        Query monQuery = monConnection.parseQuery(mdxQuery);
+        QueryImpl monQuery = monConnection.parseQuery(mdxQuery);
         Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();

@@ -22,7 +22,7 @@ package mondrian.olap;
 
 import java.util.List;
 
-public class DmvQuery extends QueryPart {
+public class DmvQuery extends AbstractQueryPart {
     private final String tableName;
     private final List<String> columns;
     private final Exp whereExpression;

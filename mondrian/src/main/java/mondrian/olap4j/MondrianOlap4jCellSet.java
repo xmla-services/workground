@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.Cell;
@@ -39,7 +40,6 @@ import org.olap4j.Position;
 
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Query;
 import mondrian.olap.QueryAxis;
 import mondrian.rolap.RolapAxis;
 import mondrian.rolap.RolapCell;

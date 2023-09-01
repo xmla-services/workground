@@ -53,7 +53,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Evaluator.SetEvaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.AggregateFunDef;
@@ -400,7 +400,7 @@ class SqlConstraintUtilsTest {
             + "FROM [Sales] "
             + "WHERE [Time].[1997]";
 
-        final Query query = connection.parseQuery(queryText);
+        final QueryImpl query = connection.parseQuery(queryText);
         final QueryAxis querySlicerAxis = query.getSlicerAxis();
         final Member slicerMember =
             ((MemberExpr)querySlicerAxis.getSet()).getMember();
@@ -622,7 +622,7 @@ class SqlConstraintUtilsTest {
           + "FROM [Sales] "
           + "WHERE [Time].[1997]";
 
-      final Query query = connection.parseQuery(queryText);
+      final QueryImpl query = connection.parseQuery(queryText);
       final QueryAxis querySlicerAxis = query.getSlicerAxis();
       final Member slicerMember =
           ((MemberExpr)querySlicerAxis.getSet()).getMember();

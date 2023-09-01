@@ -19,9 +19,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
+import mondrian.olap.interfaces.Query;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.agg.SegmentCacheManager;
@@ -161,7 +161,7 @@ public class Execution {
   /**
    * This method will change the state of this execution to {@link State#ERROR} and will set the message to display.
    * Cleanup of the resources used by this execution instance will be performed in the background later on.
-   * 
+   *
    * @param msg
    *          The message to display to the user, describing the problem encountered with the memory space.
    */
@@ -178,7 +178,7 @@ public class Execution {
    * the user thread.
    * <p>
    * It won't throw anything if the query has successfully completed.
-   * 
+   *
    * @throws MondrianException
    *           The exception encountered.
    */
@@ -237,7 +237,7 @@ public class Execution {
   /**
    * Returns whether this execution is currently in a failed state and will throw an exception as soon as the next check
    * is performed using {@link Execution#checkCancelOrTimeout()}.
-   * 
+   *
    * @return True or false, depending on the timeout state.
    */
   public boolean isCancelOrTimeout() {
@@ -376,7 +376,7 @@ public class Execution {
   /**
    * This method is typically called by SqlStatement at construction time. It ties all Statement objects to a particular
    * Execution instance so that we can audit, monitor and gracefully cancel an execution.
-   * 
+   *
    * @param statement
    *          The statement used by this execution.
    */

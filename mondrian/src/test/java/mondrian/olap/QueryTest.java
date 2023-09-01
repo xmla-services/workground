@@ -16,6 +16,7 @@ package mondrian.olap;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import mondrian.olap.interfaces.QueryPart;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -36,8 +37,8 @@ class QueryTest {
     };
     private QueryAxis[] axes = new QueryAxis[0];
     private Formula[] formulas = new Formula[0];
-    private Query queryWithCellProps;
-    private Query queryWithoutCellProps;
+    private QueryImpl queryWithCellProps;
+    private QueryImpl queryWithoutCellProps;
 
 
     private void beforeTest(TestingContext context)
@@ -50,11 +51,11 @@ class QueryTest {
 
         try {
             queryWithCellProps =
-                    new Query(
+                    new QueryImpl(
                             statement, formulas, axes, "Sales",
                             null, cellProps, false);
             queryWithoutCellProps =
-                    new Query(
+                    new QueryImpl(
                             statement, formulas, axes, "Sales",
                             null, new QueryPart[0], false);
         } finally {

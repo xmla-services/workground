@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
 /**
@@ -20,7 +22,7 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
  *
  * @author jhyde
  */
-public class DrillThrough extends QueryPart {
+public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough {
     private final Query query;
     private final int maxRowCount;
     private final int firstRowOrdinal;
@@ -34,7 +36,7 @@ public class DrillThrough extends QueryPart {
      * @param firstRowOrdinal Ordinal of first row to return, or -1
      * @param returnList List of columns to return
      */
-    public DrillThrough(
+    public DrillThroughImpl(
         Query query,
         int maxRowCount,
         int firstRowOrdinal,

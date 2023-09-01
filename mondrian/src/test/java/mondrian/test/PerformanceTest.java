@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;
@@ -325,7 +325,7 @@ public class PerformanceTest {
 
     // Much more efficient technique. Use a parameter, and bind to array.
     // Cuts out a lot of parsing, so takes 2.4s as opposed to 65s.
-    Query query =
+    QueryImpl query =
             connection.parseQuery(
         "WITH SET [Selected Customers]\n"
           + "  AS Parameter('Foo', [Customers], {}, 'Description')\n"

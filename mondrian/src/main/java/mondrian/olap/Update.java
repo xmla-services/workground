@@ -23,7 +23,7 @@ package mondrian.olap;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class Update extends QueryPart {
+public class Update extends AbstractQueryPart {
     private final String cubeName;
     private List<UpdateClause> updateClauses;
 
@@ -59,7 +59,7 @@ public class Update extends QueryPart {
         USE_WEIGHTED_INCREMENT
     }
 
-    public static class UpdateClause extends QueryPart {
+    public static class UpdateClause extends AbstractQueryPart {
         private final Exp tuple;
         private Exp value;
         private Allocation allocation;

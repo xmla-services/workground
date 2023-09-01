@@ -79,7 +79,7 @@ class HierarchyBugTest {
             + "from [Sales]";
 
         Connection conn = foodMartContext.createConnection();
-        Query query = conn.parseQuery(queryString);
+        QueryImpl query = conn.parseQuery(queryString);
 
         String failStr = null;
         int len = query.getAxes().length;

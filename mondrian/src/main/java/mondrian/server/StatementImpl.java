@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.interfaces.Query;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
 

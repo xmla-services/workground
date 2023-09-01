@@ -20,7 +20,7 @@ import java.util.List;
  * @since 08 May, 2007
  */
 
-public class CellProperty extends QueryPart {
+public class CellProperty extends AbstractQueryPart {
     private String name;
 
     public CellProperty(List<Id.Segment> segments) {

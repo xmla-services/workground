@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import mondrian.olap.Syntax;
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.MetaElement;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -39,7 +40,6 @@ import mondrian.olap.FunTable;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap.fun.FunInfo;

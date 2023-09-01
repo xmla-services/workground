@@ -29,7 +29,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 
 /**
  * Test case for {@link ObjectPool}.
@@ -325,7 +325,7 @@ Does not work without the notify on add feature.
 //System.out.println("BEFORE");
             for (int i = 0; i < MAX; i++) {
 //System.out.println("i=" +i);
-                Query query = conn.parseQuery(queryString);
+                QueryImpl query = conn.parseQuery(queryString);
                 query.setResultStyle(ResultStyle.MUTABLE_LIST);
                 Result result = conn.execute(query);
 

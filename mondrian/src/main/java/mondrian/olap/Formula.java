@@ -39,7 +39,7 @@ import mondrian.rolap.RolapCalculatedMember;
  * A <code>Formula</code> is a clause in an MDX query which defines a Set or a
  * Member.
  */
-public class Formula extends QueryPart {
+public class Formula extends AbstractQueryPart {
 
     /** name of set or member */
     private final Id id;
@@ -182,7 +182,7 @@ public class Formula extends QueryPart {
      * Creates the {@link Member} or {@link NamedSet} object which this formula
      * defines.
      */
-    void createElement(Query q) {
+    void createElement(QueryImpl q) {
         // first resolve the name, bit by bit
         final List<Id.Segment> segments = id.getSegments();
         if (isMember) {

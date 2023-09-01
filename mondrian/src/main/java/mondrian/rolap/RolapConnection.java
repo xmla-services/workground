@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -49,10 +51,9 @@ import mondrian.olap.Exp;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryPart;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.ResultBase;
@@ -474,7 +475,7 @@ public CacheControl getCacheControl( PrintWriter pw ) {
    */
   @Deprecated(since = "this method will be removed in mondrian-4.0")
 @Override
-public Result execute( Query query ) {
+public Result execute( QueryImpl query ) {
     final Statement statement = query.getStatement();
     Execution execution =
       new Execution( statement, statement.getQueryTimeoutMillis() );
@@ -637,7 +638,7 @@ public Role getRole() {
   }
 
   @Override
-public QueryPart parseStatement( String query ) {
+public QueryPart parseStatement(String query ) {
     Statement statement = createInternalStatement( false );
     final Locus locus =
       new Locus(
@@ -648,7 +649,7 @@ public QueryPart parseStatement( String query ) {
     try {
       QueryPart queryPart =
         parseStatement( statement, query, null, false );
-      if ( queryPart instanceof Query q) {
+      if ( queryPart instanceof QueryImpl q) {
           q.setOwnStatement( true );
         statement = null;
       }

@@ -9,6 +9,10 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.QueryPart;
+
 import java.io.PrintWriter;
 
 /**
@@ -16,7 +20,7 @@ import java.io.PrintWriter;
  *
  * @author jhyde
  */
-public class Explain extends QueryPart {
+public class ExplainImpl extends AbstractQueryPart implements Explain {
     private final QueryPart query;
 
     /**
@@ -24,12 +28,12 @@ public class Explain extends QueryPart {
      *
      * @param query Query (SELECT or DRILLTHROUGH)
      */
-    public Explain(
+    public ExplainImpl(
         QueryPart query)
     {
         this.query = query;
         assert this.query != null;
-        assert this.query instanceof Query
+        assert this.query instanceof QueryImpl
             || this.query instanceof DrillThrough;
     }
 

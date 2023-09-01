@@ -22,7 +22,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-public class Refresh extends QueryPart {
+public class Refresh extends AbstractQueryPart {
     private final String cubeName;
 
     public Refresh(

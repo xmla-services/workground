@@ -51,7 +51,7 @@ import mondrian.olap.Id;
 import mondrian.olap.Literal;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -1501,7 +1501,7 @@ public class FunUtil extends Util {
     //
     // Also, the Set and Parentheses functions are ok since they're
     // essentially just containers.
-    Query query = validator.getQuery();
+    QueryImpl query = validator.getQuery();
     if ( !( funDef instanceof SetFunDef )
       && !( funDef instanceof ParenthesesFunDef )
       && query != null

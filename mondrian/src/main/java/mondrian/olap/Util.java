@@ -85,6 +85,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import mondrian.olap.interfaces.Query;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -3027,7 +3028,7 @@ public class Util extends XOMUtil {
     public static Validator createSimpleValidator(final FunTable funTable) {
         return new Validator() {
             @Override
-			public Query getQuery() {
+			public QueryImpl getQuery() {
                 return null;
             }
 
@@ -4462,17 +4463,17 @@ public class Util extends XOMUtil {
     }
     final StringWriter stringWriter = new StringWriter();
     final PrintWriter printWriter = new PrintWriter( stringWriter );
-    
+
 	SimpleCalculationProfileWriter spw = new SimpleCalculationProfileWriter(printWriter);
 
     printWriter.println( title );
     if ( calc != null ) {
-    	
+
     	if (calc instanceof ProfilingCalc pc) {
 
 			CalculationProfile calcProfile = pc.getCalculationProfile();
 			spw.write(calcProfile);
-			
+
 		} else {
 			printWriter.println("UNPROFILED: " + calc.getClass().getName());
 

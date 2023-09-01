@@ -13,7 +13,7 @@ import mondrian.olap.Exp;
 import mondrian.olap.Formula;
 import mondrian.olap.Id;
 import mondrian.olap.Literal;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxis;
 
 /**
@@ -44,7 +44,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(Query query) {
+	public Object visit(QueryImpl query) {
         return null;
     }
 

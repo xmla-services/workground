@@ -19,6 +19,7 @@ import mondrian.mdx.ParameterExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.fun.Resolver;
+import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
@@ -84,10 +85,10 @@ abstract class ValidatorImpl implements Validator {
                 stack.push((QueryPart) exp);
                 // To prevent recursion, put in a placeholder while we're
                 // resolving.
-                resolvedNodes.put((QueryPart) exp, placeHolder);
+                resolvedNodes.put((AbstractQueryPart) exp, placeHolder);
                 resolved = exp.accept(this);
                 Util.assertTrue(resolved != null);
-                resolvedNodes.put((QueryPart) exp, (QueryPart) resolved);
+                resolvedNodes.put((AbstractQueryPart) exp, (QueryPart) resolved);
             } finally {
             	if (!stack.isEmpty()) {
             		stack.pop();

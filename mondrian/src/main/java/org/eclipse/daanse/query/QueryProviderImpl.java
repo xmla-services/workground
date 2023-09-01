@@ -4,14 +4,17 @@ import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellProperty;
 import mondrian.olap.DmvQuery;
-import mondrian.olap.DrillThrough;
+import mondrian.olap.DrillThroughImpl;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.Exp;
-import mondrian.olap.Explain;
+import mondrian.olap.ExplainImpl;
 import mondrian.olap.Formula;
 import mondrian.olap.Id;
-import mondrian.olap.Query;
+import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Query;
 import mondrian.olap.QueryAxis;
-import mondrian.olap.QueryPart;
+import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.Refresh;
 import mondrian.olap.Subcube;
 import mondrian.olap.Syntax;
@@ -112,13 +115,13 @@ public class QueryProviderImpl implements QueryProvider {
 
     private Explain explainStatementToQuery(ExplainStatement explainStatement) {
         QueryPart queryPart = createQuery(explainStatement.mdxStatement());
-        return new Explain(queryPart);
+        return new ExplainImpl(queryPart);
     }
 
     private DrillThrough drillthroughStatementToQuery(DrillthroughStatement drillthroughStatement) {
         Query query = selectStatementToQuery(drillthroughStatement.selectStatement());
         List<Exp> returnList = List.of();
-        return new DrillThrough(query,
+        return new DrillThroughImpl(query,
             drillthroughStatement.maxRows().orElse(0),
             drillthroughStatement.firstRowSet().orElse(0),
             returnList);
@@ -133,7 +136,7 @@ public class QueryProviderImpl implements QueryProvider {
         QueryAxis slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
         List<QueryPart> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
 
-        return new Query(
+        return new QueryImpl(
             statement,
             formulaList.toArray(Formula[]::new),
             axesList.toArray(QueryAxis[]::new),
