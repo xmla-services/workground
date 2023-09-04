@@ -15,10 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.ParameterExprImpl;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.fun.Resolver;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.ParameterExpr;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
@@ -48,7 +52,7 @@ abstract class ValidatorImpl implements Validator {
     private final FunTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
         new HashMap<>();
-    private static final QueryPart placeHolder = Literal.zero;
+    private static final QueryPart placeHolder = LiteralImpl.zero;
 
     /**
      * Creates a ValidatorImpl.
@@ -109,7 +113,7 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public void validate(ParameterExpr parameterExpr) {
+	public void validate(ParameterExprImpl parameterExpr) {
         ParameterExpr resolved =
             (ParameterExpr) resolvedNodes.get(parameterExpr);
         if (resolved != null) {
@@ -145,7 +149,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public void validate(QueryAxis axis) {
-        final QueryAxis resolved = (QueryAxis) resolvedNodes.get(axis);
+        final QueryAxisImpl resolved = (QueryAxisImpl) resolvedNodes.get(axis);
         if (resolved != null) {
             return; // already resolved
         }

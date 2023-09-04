@@ -13,7 +13,9 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+public interface Literal extends QueryPart {
 
-    QueryPart getQuery();
+    Object getValue();
+
+    int getIntValue();
 }

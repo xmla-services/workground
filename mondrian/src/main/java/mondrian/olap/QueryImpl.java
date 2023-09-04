@@ -24,8 +24,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.mdx.LevelExprImpl;
+import mondrian.olap.interfaces.CellProperty;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.interfaces.ParameterExpr;
 import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Subcube;
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -51,8 +59,6 @@ import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ParameterExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.fun.ParameterFunDef;
@@ -203,7 +209,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
               statement,
               Util.lookupCube( statement.getSchemaReader(), cubeName, true ),
               formulas,
-              new Subcube(cubeName, null, new QueryAxis[] {}, null),
+              new SubcubeImpl(cubeName, null, new QueryAxisImpl[] {}, null),
               axes,
               slicerAxis,
               cellProps,
@@ -212,7 +218,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
   }
 
   public QueryImpl(Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
-               QueryPart[] cellProps, boolean strictValidation ) {
+                   QueryPart[] cellProps, boolean strictValidation ) {
     this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, subcube, axes, slicerAxis, cellProps,
         new Parameter[0], strictValidation );
   }
@@ -225,7 +231,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             Cube mdxCube,
             Formula[] formulas,
             QueryAxis[] axes,
-            QueryAxis slicerAxis,
+            QueryAxisImpl slicerAxis,
             QueryPart[] cellProps,
             Parameter[] parameters,
             boolean strictValidation)
@@ -293,10 +299,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         this(
             query.statement,
             query.cube,
-            Formula.cloneArray(query.formulas),
+            FormulaImpl.cloneArray(query.formulas),
             query.subcube,
-            QueryAxis.cloneArray(query.axes),
-            (query.slicerAxis == null) ? null : new QueryAxis(query.slicerAxis),
+            QueryAxisImpl.cloneArray(query.axes),
+            (query.slicerAxis == null) ? null : new QueryAxisImpl(query.slicerAxis),
             query.cellProps,
             query.parameters.toArray(new Parameter[query.parameters.size()]),
             query.strictValidation);
@@ -345,7 +351,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void addFormula(Id id, Exp exp) {
         addFormula(
-            new Formula(false, id, exp, new MemberProperty[0], null, null));
+            new FormulaImpl(false, id, exp, new MemberProperty[0], null, null));
     }
 
     /**
@@ -361,7 +367,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         Exp exp,
         MemberProperty[] memberProperties)
     {
-        addFormula(new Formula(true, id, exp, memberProperties, null, null));
+        addFormula(new FormulaImpl(true, id, exp, memberProperties, null, null));
     }
 
     /**
@@ -445,7 +451,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
     /**
-     * @deprecated Please use {@link #Query(QueryImpl)}; this method will be removed in
+     * @deprecated Please use {@link Query)}; this method will be removed in
      * mondrian-4.0
      */
     @Deprecated
@@ -634,7 +640,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
                 org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
                 org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
-                mondrian.mdx.LevelExpr levelExpr = new mondrian.mdx.LevelExpr(lastLevel);
+                LevelExprImpl levelExpr = new LevelExprImpl(lastLevel);
                 Exp levelMembers = new UnresolvedFunCall(
                   "AllMembers",
                   Syntax.Property,
@@ -891,7 +897,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 	public Object[] getChildren() {
         // Chidren are axes, slicer, and formulas (in that order, to be
         // consistent with replaceChild).
-        List<AbstractQueryPart> list = new ArrayList<>();
+        List<QueryPart> list = new ArrayList<>();
         list.addAll(Arrays.asList(axes));
         if (slicerAxis != null) {
             list.add(slicerAxis);
@@ -1306,13 +1312,13 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 Object parent = walker.getAncestor(i);
                 Object grandParent = walker.getAncestor(i + 1);
                 while ((parent != null) && (grandParent != null)) {
-                    if (grandParent instanceof QueryImpl) {
+                    if (grandParent instanceof Query) {
                         if (parent instanceof Axis) {
                             throw MondrianResource.instance()
                                 .MdxCalculatedFormulaUsedOnAxis.ex(
                                     formulaType,
                                     uniqueName,
-                                    ((QueryAxis) parent).getAxisName());
+                                    ((QueryAxisImpl) parent).getAxisName());
 
                         } else if (parent instanceof Formula form) {
                             String parentFormulaType =
@@ -1395,6 +1401,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @param uniqueName Unique name of calculated member or set
      * @return formula defining calculated member, or null if not found
      */
+    @Override
     public Formula findFormula(String uniqueName) {
         for (Formula formula : formulas) {
             if (formula.getUniqueName().equalsIgnoreCase(uniqueName)) {
@@ -1456,7 +1463,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return collectHierarchies(queryAxis.getSet());
     }
 
-    public Hierarchy[] getMdxHierarchiesOnAxis(QueryAxis axis) {
+    public Hierarchy[] getMdxHierarchiesOnAxis(QueryAxisImpl axis) {
         if(axis == null) {
             return new Hierarchy[0];
         }
@@ -1943,7 +1950,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                     // This is a calculated member defined against the cube.
                     // Create a free-standing formula using the same
                     // expression, then use the member defined in that formula.
-                    final Formula formulaClone = new Formula(formula);
+                    final Formula formulaClone = new FormulaImpl(formula);
                     formulaClone.createElement(query);
                     formulaClone.accept(query.createValidator());
                     olapElement = formulaClone.getMdxMember();
@@ -1975,8 +1982,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // TODO: Don't assume it's a string.
                 // TODO: Create expression which will get the value from the
                 //  statement at the time the query is executed.
-                Literal defaultValue =
-                    Literal.createString(String.valueOf(value));
+                LiteralImpl defaultValue =
+                    LiteralImpl.createString(String.valueOf(value));
                 return new ConnectionParameterImpl(name, defaultValue);
             }
 
@@ -2047,7 +2054,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     private static class ConnectionParameterImpl
         extends ParameterImpl
     {
-        public ConnectionParameterImpl(String name, Literal defaultValue) {
+        public ConnectionParameterImpl(String name, LiteralImpl defaultValue) {
             super(name, defaultValue, "Connection property", new StringType());
         }
 
@@ -2367,7 +2374,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // Create a temporary parameter. We don't know its
                 // type yet. The default of NULL is temporary.
                 Parameter parameter = new ParameterImpl(
-                    parameterName, Literal.nullValue, null, type);
+                    parameterName, LiteralImpl.nullValue, null, type);
                 parameters.add(parameter);
                 parametersByName.put(parameterName, parameter);
             }
@@ -2382,7 +2389,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private class AliasedExpressionFinder extends MdxVisitorImpl {
         @Override
-        public Object visit(QueryAxis queryAxis) {
+        public Object visit(QueryAxisImpl queryAxis) {
             registerAlias(queryAxis, queryAxis.getSet());
             return super.visit(queryAxis);
         }

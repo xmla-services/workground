@@ -20,14 +20,16 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.DmvQuery;
+
 import java.util.List;
 
-public class DmvQuery extends AbstractQueryPart {
+public class DmvQueryImpl extends AbstractQueryPart implements DmvQuery {
     private final String tableName;
     private final List<String> columns;
     private final Exp whereExpression;
 
-    public DmvQuery(
+    public DmvQueryImpl(
             String tableName,
             List<String> columns,
             Exp whereExpression)
@@ -37,14 +39,17 @@ public class DmvQuery extends AbstractQueryPart {
         this.whereExpression = whereExpression;
     }
 
+    @Override
     public String getTableName() {
         return this.tableName;
     }
 
+    @Override
     public Exp getWhereExpression() {
         return this.whereExpression;
     }
 
+    @Override
     public List<String> getColumns() {
         return columns;
     }

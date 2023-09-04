@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Subcube;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -39,6 +41,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.olap4j.query.QueryAxis;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
@@ -477,9 +480,9 @@ class IdBatchResolverTest  {
         public QueryTestWrapper(
             Statement statement,
             Formula[] formulas,
-            QueryAxis[] axes,
+            mondrian.olap.interfaces.QueryAxis[] axes,
             String cube,
-            QueryAxis slicerAxis,
+            QueryAxisImpl slicerAxis,
             QueryPart[] cellProps,
             boolean strictValidation)
         {
@@ -523,18 +526,18 @@ class IdBatchResolverTest  {
         public QueryImpl makeQuery(
             Statement statement,
             Formula[] formulae,
-            QueryAxis[] axes,
+            mondrian.olap.interfaces.QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
             QueryPart[] cellProps,
             boolean strictValidation)
         {
-            final QueryAxis slicerAxis =
+            final QueryAxisImpl slicerAxis =
                 slicer == null
                     ? null
-                    : new QueryAxis(
+                    : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
+                        QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
             return new QueryTestWrapper(
                 statement, formulae, axes, subcube.getCubeName(), slicerAxis, cellProps,
                 strictValidation);

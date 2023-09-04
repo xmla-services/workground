@@ -13,7 +13,8 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import org.eclipse.daanse.olap.api.model.Level;
 
-    QueryPart getQuery();
+public interface LevelExpr extends QueryPart{
+    Level getLevel();
 }

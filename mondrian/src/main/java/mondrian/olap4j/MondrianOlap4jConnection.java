@@ -30,6 +30,11 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -85,21 +90,17 @@ import org.olap4j.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
 import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
@@ -1127,7 +1128,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));
             }
-            if (exp instanceof Literal literal) {
+            if (exp instanceof LiteralImpl literal) {
                 final Object value = literal.getValue();
                 if (literal.getCategory() == Category.SYMBOL) {
                     return LiteralNode.createSymbol(

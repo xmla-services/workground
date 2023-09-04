@@ -13,7 +13,10 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+public interface CalculatedFormula extends QueryPart {
 
-    QueryPart getQuery();
+    String getCubeName();
+
+    Formula getFormula();
+
 }

@@ -11,6 +11,8 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.MemberProperty;
+
 import java.io.PrintWriter;
 
 /**
@@ -18,36 +20,39 @@ import java.io.PrintWriter;
  *
  * @author jhyde, 1 March, 2000
  */
-public class MemberProperty extends AbstractQueryPart {
+public class MemberPropertyImpl extends AbstractQueryPart implements MemberProperty {
 
     private final String name;
     private Exp exp;
 
-    public MemberProperty(String name, Exp exp) {
+    public MemberPropertyImpl(String name, Exp exp) {
         this.name = name;
         this.exp = exp;
     }
 
-    public MemberProperty(MemberProperty memberProperty) {
-        this(memberProperty.name, memberProperty.exp.cloneExp());
+    public MemberPropertyImpl(MemberProperty memberProperty) {
+        this(memberProperty.getName(), memberProperty.getExp().cloneExp());
     }
 
     static MemberProperty[] cloneArray(MemberProperty[] x) {
         MemberProperty[] x2 = new MemberProperty[x.length];
         for (int i = 0; i < x.length; i++) {
-            x2[i] = new MemberProperty(x[i]);
+            x2[i] = new MemberPropertyImpl(x[i]);
         }
         return x2;
     }
 
-    void resolve(Validator validator) {
+    @Override
+    public void resolve(Validator validator) {
         exp = validator.validate(exp, false);
     }
 
+    @Override
     public Exp getExp() {
         return exp;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -69,8 +74,8 @@ public class MemberProperty extends AbstractQueryPart {
     static Exp get(MemberProperty[] a, String name) {
         // TODO: Linear search may be a performance problem.
         for (int i = 0; i < a.length; i++) {
-            if (Util.equalName(a[i].name, name)) {
-                return a[i].exp;
+            if (Util.equalName(a[i].getName(), name)) {
+                return a[i].getExp();
             }
         }
         return null;

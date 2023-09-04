@@ -20,12 +20,14 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.Refresh;
+
 import java.io.PrintWriter;
 
-public class Refresh extends AbstractQueryPart {
+public class RefreshImpl extends AbstractQueryPart implements Refresh {
     private final String cubeName;
 
-    public Refresh(
+    public RefreshImpl(
             String cubeName)
     {
         this.cubeName = cubeName;
@@ -43,6 +45,7 @@ public class Refresh extends AbstractQueryPart {
         return new Object[] {cubeName};
     }
 
+    @Override
     public String getCubeName() {
         return cubeName;
     }

@@ -12,6 +12,7 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
+import mondrian.olap.interfaces.ParameterExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -32,7 +33,7 @@ import mondrian.olap.type.TypeUtil;
  *
  * @author jhyde
  */
-public class ParameterExpr extends ExpBase {
+public class ParameterExprImpl extends ExpBase implements ParameterExpr {
 
     private Parameter parameter;
 
@@ -41,7 +42,7 @@ public class ParameterExpr extends ExpBase {
      *
      * @param parameter Parameter
      */
-    public ParameterExpr(Parameter parameter)
+    public ParameterExprImpl(Parameter parameter)
     {
         this.parameter = parameter;
     }
@@ -93,8 +94,8 @@ public class ParameterExpr extends ExpBase {
     }
 
     @Override
-	public ParameterExpr cloneExp() {
-        return new ParameterExpr(parameter);
+	public ParameterExprImpl cloneExp() {
+        return new ParameterExprImpl(parameter);
     }
 
     /**
@@ -202,7 +203,7 @@ public class ParameterExpr extends ExpBase {
         if (!(other instanceof ParameterExpr that)) {
             return false;
         }
-        return this.parameter == that.parameter;
+        return this.parameter == that.getParameter();
     }
 
     @Override
@@ -224,6 +225,7 @@ public class ParameterExpr extends ExpBase {
      *
      * @return parameter used by this expression
      */
+    @Override
     public Parameter getParameter() {
         return parameter;
     }

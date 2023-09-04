@@ -74,7 +74,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import mondrian.olap.interfaces.CalculatedFormula;
+import mondrian.olap.interfaces.DmvQuery;
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Literal;
 import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Refresh;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -107,12 +113,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import mondrian.olap.CalculatedFormula;
-import mondrian.olap.DmvQuery;
-import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Refresh;
 import mondrian.olap.TransactionCommand;
 import mondrian.olap.Update;
 import mondrian.olap.Util;
@@ -972,7 +973,7 @@ public class XmlaHandler {
                     queryPart = rolapConnection.parseStatement(mdx);
                 }
 
-                if (queryPart instanceof DrillThroughImpl) {
+                if (queryPart instanceof DrillThrough) {
                     result = executeDrillThroughQuery(request);
                 } else if (queryPart instanceof CalculatedFormula calculatedFormula) {
                     Formula formula = calculatedFormula.getFormula();
@@ -2287,7 +2288,7 @@ public class XmlaHandler {
             final mondrian.server.Statement statement =
                     (mondrian.server.Statement) cellSet.getStatement();
             for(QueryPart queryPart: statement.getQuery().getCellProperties()){
-                mondrian.olap.CellProperty cellProperty = (mondrian.olap.CellProperty)queryPart;
+                CellProperty cellProperty = (CellProperty)queryPart;
                 mondrian.olap.Property property = mondrian.olap.Property.lookup(cellProperty.toString(), matchCase);
                 String propertyName = ((mondrian.olap.Id.NameSegment)
                         mondrian.olap.Util.parseIdentifier(cellProperty.toString()).get(0)).name;
@@ -3527,8 +3528,8 @@ public class XmlaHandler {
                 return value;
             }
         }
-        else if(exp instanceof  mondrian.olap.Literal) {
-            Object value = ((mondrian.olap.Literal)exp).getValue();
+        else if(exp instanceof Literal) {
+            Object value = ((Literal)exp).getValue();
             if(value != null) { value = value.toString(); }
             return value;
         }

@@ -21,17 +21,20 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.interfaces.Subcube;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subcube extends AbstractQueryPart {
+public class SubcubeImpl extends AbstractQueryPart implements Subcube {
     private final String cubeName;
     private final Subcube subcube;
     private final QueryAxis[] axes;
     private final QueryAxis slicerAxis;
 
-    public Subcube(
+    public SubcubeImpl(
             String cubeName,
             Subcube subcube,
             QueryAxis[] axes,
@@ -88,6 +91,7 @@ public class Subcube extends AbstractQueryPart {
         return new Object[] {cubeName};
     }
 
+    @Override
     public String getCubeName() {
         if(this.subcube != null) {
             return this.subcube.getCubeName();
@@ -97,6 +101,7 @@ public class Subcube extends AbstractQueryPart {
         }
     }
 
+    @Override
     public List<Exp> getAxisExps() {
         ArrayList<Exp> exps = new ArrayList<>();
         if(this.subcube != null) {

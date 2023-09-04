@@ -13,22 +13,21 @@ package mondrian.parser;
 
 import java.util.List;
 
-import mondrian.olap.CalculatedFormula;
-import mondrian.olap.DmvQuery;
+import mondrian.olap.interfaces.CalculatedFormula;
+import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
-import mondrian.olap.Formula;
 import mondrian.olap.FunTable;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
-import mondrian.olap.Refresh;
-import mondrian.olap.Subcube;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.TransactionCommand;
 import mondrian.olap.Update;
 import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Refresh;
+import mondrian.olap.interfaces.Subcube;
 import mondrian.server.Statement;
 
 /**

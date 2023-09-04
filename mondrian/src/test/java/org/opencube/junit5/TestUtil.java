@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import mondrian.olap.interfaces.Formula;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -71,7 +72,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
@@ -1344,9 +1344,9 @@ public class TestUtil {
 		final Calc calc = query.compileExpression( exp, scalar, null );
 		final StringWriter sw = new StringWriter();
 		final PrintWriter pw = new PrintWriter( sw );
-		
+
 		   SimpleCalculationProfileWriter w=new SimpleCalculationProfileWriter(pw);
-		    
+
 			if (calc instanceof ProfilingCalc pc) {
 				w.write(pc.getCalculationProfile());
 			}else {

@@ -18,6 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -39,7 +43,7 @@ import mondrian.rolap.RolapCalculatedMember;
  * A <code>Formula</code> is a clause in an MDX query which defines a Set or a
  * Member.
  */
-public class Formula extends AbstractQueryPart {
+public class FormulaImpl extends AbstractQueryPart implements Formula {
 
     /** name of set or member */
     private final Id id;
@@ -60,7 +64,7 @@ public class Formula extends AbstractQueryPart {
     /**
      * Constructs formula specifying a set.
      */
-    public Formula(Id id, Exp exp) {
+    public FormulaImpl(Id id, Exp exp) {
         this(false, id, exp, new MemberProperty[0], null, null);
         createElement(null);
     }
@@ -68,7 +72,7 @@ public class Formula extends AbstractQueryPart {
     /**
      * Constructs a formula specifying a member.
      */
-    public Formula(
+    public FormulaImpl(
         Id id,
         Exp exp,
         MemberProperty[] memberProperties)
@@ -76,7 +80,7 @@ public class Formula extends AbstractQueryPart {
         this(true, id, exp, memberProperties, null, null);
     }
 
-    Formula(
+    FormulaImpl(
         boolean isMember,
         Id id,
         Exp exp,
@@ -94,19 +98,19 @@ public class Formula extends AbstractQueryPart {
         assert !(isMember && mdxSet != null);
     }
 
-    public Formula(Formula formula) {
-        this(formula.isMember,
-            formula.id,
-            formula.exp.cloneExp(),
-            MemberProperty.cloneArray(formula.memberProperties),
-            formula.mdxMember,
-            formula.mdxSet);
+    public FormulaImpl(Formula formula) {
+        this(formula.isMember(),
+            formula.getId(),
+            formula.getExp().cloneExp(),
+            MemberPropertyImpl.cloneArray(formula.getPemberProperties()),
+            formula.getMdxMember(),
+            formula.getMdxSet());
     }
 
     static Formula[] cloneArray(Formula[] x) {
         Formula[] x2 = new Formula[x.length];
         for (int i = 0; i < x.length; i++) {
-            x2[i] = new Formula(x[i]);
+            x2[i] = new FormulaImpl(x[i]);
         }
         return x2;
     }
@@ -117,7 +121,8 @@ public class Formula extends AbstractQueryPart {
      * @param validator Validation context to resolve the identifiers in this
      *   formula
      */
-    void accept(Validator validator) {
+    @Override
+    public void accept(Validator validator) {
         final boolean scalar = isMember;
         exp = validator.validate(exp, scalar);
         String idInner = this.id.toString();
@@ -182,7 +187,8 @@ public class Formula extends AbstractQueryPart {
      * Creates the {@link Member} or {@link NamedSet} object which this formula
      * defines.
      */
-    void createElement(QueryImpl q) {
+    @Override
+    public void createElement(Query q) {
         // first resolve the name, bit by bit
         final List<Id.Segment> segments = id.getSegments();
         if (isMember) {
@@ -324,10 +330,12 @@ public class Formula extends AbstractQueryPart {
         }
     }
 
+    @Override
     public boolean isMember() {
         return isMember;
     }
 
+    @Override
     public NamedSet getNamedSet() {
         return mdxSet;
     }
@@ -338,11 +346,13 @@ public class Formula extends AbstractQueryPart {
      *
      * @return Identifier
      */
+    @Override
     public Id getIdentifier() {
         return id;
     }
 
     /** Returns this formula's name. */
+    @Override
     public String getName() {
         return (isMember)
             ? mdxMember.getName()
@@ -350,6 +360,7 @@ public class Formula extends AbstractQueryPart {
     }
 
     /** Returns this formula's caption. */
+    @Override
     public String getCaption() {
         return (isMember)
             ? mdxMember.getCaption()
@@ -362,7 +373,8 @@ public class Formula extends AbstractQueryPart {
      * and the member or set is renamed from <code>Ghi</code> to
      * <code>Xyz</code>.
      */
-    void rename(String newName)
+    @Override
+    public void rename(String newName)
     {
         String oldName = getElement().getName();
         final List<Id.Segment> segments = this.id.getSegments();
@@ -380,28 +392,32 @@ public class Formula extends AbstractQueryPart {
     }
 
     /** Returns the unique name of the member or set. */
-    String getUniqueName() {
+    @Override
+    public String getUniqueName() {
         return (isMember)
             ? mdxMember.getUniqueName()
             : mdxSet.getUniqueName();
     }
 
-    OlapElement getElement() {
+    @Override
+    public OlapElement getElement() {
         return (isMember)
             ? (OlapElement) mdxMember
             : (OlapElement) mdxSet;
     }
 
+    @Override
     public Exp getExpression() {
         return exp;
     }
 
+    @Override
     public Exp setExpression(Exp exp) {
         return this.exp = exp;
     }
 
     private Exp getMemberProperty(String name) {
-        return MemberProperty.get(memberProperties, name);
+        return MemberPropertyImpl.get(memberProperties, name);
     }
 
     /**
@@ -410,6 +426,7 @@ public class Formula extends AbstractQueryPart {
      * @pre isMember()
      * @post return != null
      */
+    @Override
     public Member getMdxMember() {
         return mdxMember;
     }
@@ -421,6 +438,7 @@ public class Formula extends AbstractQueryPart {
      * @return Solve order, or null if SOLVE_ORDER property is not specified
      *   or is not a number or is not constant
      */
+    @Override
     public Number getSolveOrder() {
         return getIntegerMemberProperty(Property.SOLVE_ORDER.name);
     }
@@ -502,7 +520,7 @@ public class Formula extends AbstractQueryPart {
                     formatString = new StringBuilder(formatString).append("0").toString();
                 }
             }
-            return Literal.createString(formatString);
+            return LiteralImpl.createString(formatString);
         }
 
         if (!mdxMember.isMeasure()) {
@@ -523,17 +541,39 @@ public class Formula extends AbstractQueryPart {
         }
     }
 
+    @Override
     public void compile() {
         // nothing to do
+    }
+
+    @Override
+    public Id getId() {
+        return id;
+    }
+
+    @Override
+    public Exp getExp() {
+        return exp;
+    }
+
+    @Override
+    public NamedSet getMdxSet() {
+        return mdxSet;
+    }
+
+    @Override
+    public MemberProperty[] getPemberProperties() {
+        return memberProperties;
     }
 
     /**
      * Accepts a visitor to this Formula.
      * The default implementation dispatches to the
-     * {@link MdxVisitor#visit(Formula)} method.
+     * {@link MdxVisitor#visit(FormulaImpl)} method.
      *
      * @param visitor Visitor
      */
+    @Override
     public Object accept(MdxVisitor visitor) {
         final Object o = visitor.visit(this);
 

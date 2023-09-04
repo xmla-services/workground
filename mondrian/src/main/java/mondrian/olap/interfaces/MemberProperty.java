@@ -13,7 +13,14 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import mondrian.olap.Exp;
+import mondrian.olap.Validator;
 
-    QueryPart getQuery();
+public interface MemberProperty extends QueryPart{
+
+    Exp getExp();
+
+    String getName();
+
+    void resolve(Validator validator);
 }

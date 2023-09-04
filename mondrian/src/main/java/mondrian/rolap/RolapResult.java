@@ -26,7 +26,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -52,7 +54,6 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
@@ -65,7 +66,7 @@ import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.SchemaReader;
@@ -854,8 +855,8 @@ public final Execution getExecution() {
     return changed;
   }
 
-  protected void loadMembers( List<List<Member>> nonAllMembers, RolapEvaluator evaluator, QueryAxis axis, Calc calc,
-      AxisMemberList axisMembers ) {
+  protected void loadMembers(List<List<Member>> nonAllMembers, RolapEvaluator evaluator, QueryAxis axis, Calc calc,
+                             AxisMemberList axisMembers ) {
     int attempt = 0;
     evaluator.setCellReader( batchingReader );
     while ( true ) {

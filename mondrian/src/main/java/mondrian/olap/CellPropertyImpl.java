@@ -11,6 +11,8 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.CellProperty;
+
 import java.util.List;
 
 /**
@@ -20,10 +22,10 @@ import java.util.List;
  * @since 08 May, 2007
  */
 
-public class CellProperty extends AbstractQueryPart {
+public class CellPropertyImpl extends AbstractQueryPart implements CellProperty {
     private String name;
 
-    public CellProperty(List<Id.Segment> segments) {
+    public CellPropertyImpl(List<Id.Segment> segments) {
         this.name = Util.implode(segments);
     }
 
@@ -32,6 +34,7 @@ public class CellProperty extends AbstractQueryPart {
      * It adds '[' and ']' before and after the propertyName before comparing.
      * The comparison is case insensitive.
      */
+    @Override
     public boolean isNameEquals(String propertyName) {
         return name.equalsIgnoreCase(Util.quoteMdxIdentifier(propertyName));
     }

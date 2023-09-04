@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.MemberProperty;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -97,17 +99,16 @@ import mondrian.olap.CubeBase;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.Id;
 import mondrian.olap.MatchType;
-import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
@@ -1150,7 +1151,7 @@ public class RolapCube extends CubeBase {
      * @param xmlCalcMembers XML objects representing members
      * @param xmlNamedSets Array of XML definition of named set
      * @param memberList Output list of {@link org.eclipse.daanse.olap.api.model.Member} objects
-     * @param formulaList Output list of {@link mondrian.olap.Formula} objects
+     * @param formulaList Output list of {@link mondrian.olap.FormulaImpl} objects
      * @param cube the cube that the calculated members originate from
      * @param errOnDups throws an error if a duplicate member is found
      */
@@ -3098,7 +3099,7 @@ public class RolapCube extends CubeBase {
     {
         final List<Id.Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
         segmentList.add(new Id.NameSegment(name));
-        final Formula formula = new Formula(
+        final Formula formula = new FormulaImpl(
             new Id(segmentList),
             createDummyExp(calc),
             new MemberProperty[0]);
@@ -3110,7 +3111,7 @@ public class RolapCube extends CubeBase {
                     statement,
                     this,
                     new Formula[] {formula},
-                    new QueryAxis[0],
+                    new QueryAxisImpl[0],
                     null,
                     new AbstractQueryPart[0],
                     new Parameter[0],
@@ -3134,7 +3135,7 @@ public class RolapCube extends CubeBase {
                             statement,
                             this,
                             new Formula[] {formula},
-                            new QueryAxis[0],
+                            new QueryAxisImpl[0],
                             null,
                             new AbstractQueryPart[0],
                             new Parameter[0],
@@ -3157,7 +3158,7 @@ public class RolapCube extends CubeBase {
                             statement,
                             this,
                             new Formula[] {formula},
-                            new QueryAxis[0],
+                            new QueryAxisImpl[0],
                             null,
                             new AbstractQueryPart[0],
                             new Parameter[0],

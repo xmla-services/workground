@@ -13,7 +13,15 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import mondrian.olap.Exp;
 
-    QueryPart getQuery();
+import java.util.List;
+
+public interface DmvQuery extends QueryPart {
+
+    String getTableName();
+
+    public Exp getWhereExpression();
+
+    public List<String> getColumns();
 }

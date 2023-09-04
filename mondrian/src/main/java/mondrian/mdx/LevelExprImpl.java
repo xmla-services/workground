@@ -9,6 +9,7 @@
 
 package mondrian.mdx;
 
+import mondrian.olap.interfaces.LevelExpr;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;
@@ -28,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class LevelExpr extends ExpBase implements Exp {
+public class LevelExprImpl extends ExpBase implements Exp, LevelExpr {
     private final Level level;
 
     /**
@@ -37,7 +38,7 @@ public class LevelExpr extends ExpBase implements Exp {
      * @param level Level
      * @pre level != null
      */
-    public LevelExpr(Level level) {
+    public LevelExprImpl(Level level) {
         Util.assertPrecondition(level != null, "level != null");
         this.level = level;
     }
@@ -47,6 +48,7 @@ public class LevelExpr extends ExpBase implements Exp {
      *
      * @post return != null
      */
+    @Override
     public Level getLevel() {
         return level;
     }
@@ -62,8 +64,8 @@ public class LevelExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public LevelExpr cloneExp() {
-        return new LevelExpr(level);
+	public LevelExprImpl cloneExp() {
+        return new LevelExprImpl(level);
     }
 
     @Override

@@ -110,7 +110,7 @@ public class Id
             if (s.quoting == Quoting.UNQUOTED) {
                 NameSegment nameSegment = (NameSegment) s;
                 if (validator.getFunTable().isReserved(nameSegment.getName())) {
-                    return Literal.createSymbol(
+                    return LiteralImpl.createSymbol(
                         nameSegment.getName().toUpperCase());
                 }
             }

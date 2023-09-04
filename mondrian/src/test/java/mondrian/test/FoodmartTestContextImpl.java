@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.interfaces.Formula;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -68,7 +69,6 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
@@ -79,7 +79,6 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
-//import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.DelegatingInvocationHandler;
@@ -1029,9 +1028,9 @@ public String compileExpression( String expression, final boolean scalar ) {
     final Calc calc = query.compileExpression( exp, scalar, null );
     final StringWriter sw = new StringWriter();
     final PrintWriter pw = new PrintWriter( sw );
-    
+
     SimpleCalculationProfileWriter w=new SimpleCalculationProfileWriter(pw);
-    
+
 	if (calc instanceof ProfilingCalc pc) {
 		w.write(pc.getCalculationProfile());
 	}else {

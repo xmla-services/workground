@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import mondrian.olap.interfaces.Literal;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
@@ -37,7 +38,7 @@ import mondrian.olap.type.Type;
  *
  * @author jhyde, 21 January, 1999
  */
-public class Literal extends ExpBase {
+public class LiteralImpl extends ExpBase implements Literal {
 
     // Data members.
 
@@ -47,26 +48,26 @@ public class Literal extends ExpBase {
 
     // Constants for commonly used literals.
 
-    public static final Literal nullValue = new Literal(Category.NULL, null);
+    public static final LiteralImpl nullValue = new LiteralImpl(Category.NULL, null);
 
-    public static final Literal emptyString = new Literal(Category.STRING, "");
+    public static final LiteralImpl emptyString = new LiteralImpl(Category.STRING, "");
 
-    public static final Literal zero =
-        new Literal(Category.NUMERIC, BigDecimal.ZERO);
+    public static final LiteralImpl zero =
+        new LiteralImpl(Category.NUMERIC, BigDecimal.ZERO);
 
-    public static final Literal one =
-        new Literal(Category.NUMERIC, BigDecimal.ONE);
+    public static final LiteralImpl one =
+        new LiteralImpl(Category.NUMERIC, BigDecimal.ONE);
 
-    public static final Literal negativeOne =
-        new Literal(Category.NUMERIC, BigDecimal.ONE.negate());
+    public static final LiteralImpl negativeOne =
+        new LiteralImpl(Category.NUMERIC, BigDecimal.ONE.negate());
 
-    public static final Literal doubleZero = zero;
+    public static final LiteralImpl doubleZero = zero;
 
-    public static final Literal doubleOne = one;
+    public static final LiteralImpl doubleOne = one;
 
-    public static final Literal doubleNegativeOne = negativeOne;
+    public static final LiteralImpl doubleNegativeOne = negativeOne;
 
-    private static final Map<BigDecimal, Literal> MAP =
+    private static final Map<BigDecimal, LiteralImpl> MAP =
         UnmodifiableArrayMap.of(
             BigDecimal.ZERO, zero,
             BigDecimal.ONE, one,
@@ -77,7 +78,7 @@ public class Literal extends ExpBase {
      *
      * <p>Use the creation methods {@link #createString(String)} etc.
      */
-    private Literal(int type, Object o) {
+    private LiteralImpl(int type, Object o) {
         this.category = type;
         this.o = o;
     }
@@ -86,10 +87,10 @@ public class Literal extends ExpBase {
      * Creates a string literal.
      * @see #createSymbol
      */
-    public static Literal createString(String s) {
+    public static LiteralImpl createString(String s) {
         return (s.equals(""))
             ? emptyString
-            : new Literal(Category.STRING, s);
+            : new LiteralImpl(Category.STRING, s);
     }
 
     /**
@@ -97,8 +98,8 @@ public class Literal extends ExpBase {
      *
      * @see #createString
      */
-    public static Literal createSymbol(String s) {
-        return new Literal(Category.SYMBOL, s);
+    public static LiteralImpl createSymbol(String s) {
+        return new LiteralImpl(Category.SYMBOL, s);
     }
 
     /**
@@ -107,8 +108,8 @@ public class Literal extends ExpBase {
      * @deprecated Use {@link #create(java.math.BigDecimal)}
      */
     @Deprecated
-	public static Literal create(Double d) {
-        return new Literal(Category.NUMERIC, BigDecimal.valueOf(d));
+	public static LiteralImpl create(Double d) {
+        return new LiteralImpl(Category.NUMERIC, BigDecimal.valueOf(d));
     }
 
     /**
@@ -117,8 +118,8 @@ public class Literal extends ExpBase {
      * @deprecated Use {@link #create(java.math.BigDecimal)}
      */
     @Deprecated
-	public static Literal create(Integer i) {
-        return new Literal(Category.NUMERIC, new BigDecimal(i));
+	public static LiteralImpl create(Integer i) {
+        return new LiteralImpl(Category.NUMERIC, new BigDecimal(i));
     }
 
     /**
@@ -129,16 +130,16 @@ public class Literal extends ExpBase {
      * {@code double} or {@code int} later on, but parse time is not the time to
      * be throwing away information.
      */
-    public static Literal create(BigDecimal d) {
-        final Literal literal = MAP.get(d);
+    public static LiteralImpl create(BigDecimal d) {
+        final LiteralImpl literal = MAP.get(d);
         if (literal != null) {
             return literal;
         }
-        return new Literal(Category.NUMERIC, d);
+        return new LiteralImpl(Category.NUMERIC, d);
     }
 
     @Override
-	public Literal cloneExp() {
+	public LiteralImpl cloneExp() {
         return this;
     }
 
@@ -208,10 +209,12 @@ public class Literal extends ExpBase {
         return visitor.visit(this);
     }
 
+    @Override
     public Object getValue() {
         return o;
     }
 
+    @Override
     public int getIntValue() {
         if (o instanceof Number number) {
             return number.intValue();

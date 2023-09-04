@@ -15,13 +15,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
+import mondrian.olap.interfaces.Formula;
 
 /**
  * A <code>RolapCalculatedMember</code> is a member based upon a
- * {@link Formula}.
+ * {@link FormulaImpl}.
  *
  * <p>It is created before the formula has been resolved; the formula is
  * responsible for setting the "format_string" property.
