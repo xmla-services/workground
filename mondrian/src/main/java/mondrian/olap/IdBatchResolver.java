@@ -24,6 +24,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -36,7 +39,6 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MemberExpr;

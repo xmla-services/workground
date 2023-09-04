@@ -10,11 +10,15 @@
 package mondrian.mdx;
 
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
 import mondrian.olap.Id;
-import mondrian.olap.Literal;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.interfaces.ParameterExpr;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.
@@ -49,7 +53,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(QueryAxis queryAxis) {
+	public Object visit(QueryAxisImpl queryAxis) {
         return null;
     }
 

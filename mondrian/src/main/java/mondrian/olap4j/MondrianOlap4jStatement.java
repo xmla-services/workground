@@ -18,6 +18,8 @@ import java.sql.SQLWarning;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.interfaces.Explain;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryPart;
 import org.eclipse.daanse.olap.api.model.OlapElement;
@@ -31,10 +33,7 @@ import org.olap4j.mdx.ParseTreeWriter;
 import org.olap4j.mdx.SelectNode;
 
 import mondrian.calc.ResultStyle;
-import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.ExplainImpl;
 import mondrian.olap.MondrianException;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.rolap.RolapConnection;
@@ -102,7 +101,7 @@ abstract class MondrianOlap4jStatement
             throw olap4jConnection.helper.createException(
                 "mondrian gave exception while parsing query", e);
         }
-        if (parseTree instanceof DrillThroughImpl drillThrough) {
+        if (parseTree instanceof DrillThrough drillThrough) {
             final Query query = drillThrough.getQuery();
             query.setResultStyle(ResultStyle.LIST);
             setQuery(query);
@@ -137,7 +136,7 @@ abstract class MondrianOlap4jStatement
                     "Cannot do DrillThrough operation on the cell");
             }
             return resultSet;
-        } else if (parseTree instanceof ExplainImpl explain) {
+        } else if (parseTree instanceof Explain explain) {
             String plan = explainInternal(explain.getQuery());
             return olap4jConnection.factory.newFixedResultSet(
                 olap4jConnection,
@@ -413,11 +412,11 @@ abstract class MondrianOlap4jStatement
 
     @Override
 	public CellSet executeOlapQuery(final String mdx) throws OlapException {
-        final Pair<QueryImpl, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
+        final Pair<Query, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
         return executeOlapQueryInternal(pair.left, pair.right);
     }
 
-    protected Pair<QueryImpl, MondrianOlap4jCellSetMetaData>
+    protected Pair<Query, MondrianOlap4jCellSetMetaData>
     parseQuery(final String mdx)
         throws OlapException
     {
@@ -426,12 +425,12 @@ abstract class MondrianOlap4jStatement
             return Locus.execute(
                 mondrianConnection,
                 "Parsing query",
-                new Locus.Action<Pair<QueryImpl, MondrianOlap4jCellSetMetaData>>() {
+                new Locus.Action<Pair<Query, MondrianOlap4jCellSetMetaData>>() {
                     @Override
-					public Pair<QueryImpl, MondrianOlap4jCellSetMetaData> execute()
+					public Pair<Query, MondrianOlap4jCellSetMetaData> execute()
                     {
-                        final QueryImpl query =
-                            (QueryImpl) mondrianConnection.parseStatement(
+                        final Query query =
+                            (Query) mondrianConnection.parseStatement(
                                 MondrianOlap4jStatement.this,
                                 mdx,
                                 null,

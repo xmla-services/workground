@@ -9,11 +9,17 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.interfaces.ParameterExpr;
 
 /**
  * Interface for a visitor to an MDX parse tree.
@@ -37,14 +43,14 @@ public interface MdxVisitor {
     /**
      * Visits a QueryAxis.
      *
-     * @see QueryAxis#accept(MdxVisitor)
+     * @see QueryAxisImpl#accept(MdxVisitor)
      */
-    Object visit(QueryAxis queryAxis);
+    Object visit(QueryAxisImpl queryAxis);
 
     /**
      * Visits a Formula.
      *
-     * @see Formula#accept(MdxVisitor)
+     * @see FormulaImpl#accept(MdxVisitor)
      */
     Object visit(Formula formula);
 
@@ -72,14 +78,14 @@ public interface MdxVisitor {
     /**
      * Visits a Parameter.
      *
-     * @see ParameterExpr#accept(MdxVisitor)
+     * @see ParameterExpr)
      */
     Object visit(ParameterExpr parameterExpr);
 
     /**
      * Visits a DimensionExpr.
      *
-     * @see DimensionExpr#accept(MdxVisitor)
+     * @see DimensionExpr(MdxVisitor)
      */
     Object visit(DimensionExpr dimensionExpr);
 
@@ -93,7 +99,7 @@ public interface MdxVisitor {
     /**
      * Visits a LevelExpr.
      *
-     * @see LevelExpr#accept(MdxVisitor)
+     * @see LevelExpr(MdxVisitor)
      */
     Object visit(LevelExpr levelExpr);
 
@@ -107,14 +113,14 @@ public interface MdxVisitor {
     /**
      * Visits a NamedSetExpr.
      *
-     * @see NamedSetExpr#accept(MdxVisitor)
+     * @see NamedSetExpr)
      */
     Object visit(NamedSetExpr namedSetExpr);
 
     /**
      * Visits a Literal.
      *
-     * @see Literal#accept(MdxVisitor)
+     * @see LiteralImpl#accept(MdxVisitor)
      */
     Object visit(Literal literal);
 }

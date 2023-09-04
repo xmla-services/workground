@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Formula;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -653,7 +654,7 @@ public class RolapHierarchy extends HierarchyBase {
         Member parent,
         Level level,
         String name,
-        mondrian.olap.Formula formula)
+        Formula formula)
     {
         if (formula == null) {
             return new RolapMemberBase(
@@ -1351,7 +1352,7 @@ public class RolapHierarchy extends HierarchyBase {
         private RolapResult.ValueFormatter cellFormatter;
 
         public RolapCalculatedMeasure(
-            RolapMember parent, RolapLevel level, String name, mondrian.olap.Formula formula)
+            RolapMember parent, RolapLevel level, String name, Formula formula)
         {
             super(parent, level, name, formula);
         }

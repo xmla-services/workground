@@ -13,7 +13,9 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import mondrian.olap.Parameter;
 
-    QueryPart getQuery();
+public interface ParameterExpr extends QueryPart {
+
+    Parameter getParameter();
 }

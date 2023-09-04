@@ -169,7 +169,7 @@ public class Property extends EnumeratedValues.BasicValue {
     public static final int FORMULA_ORDINAL = 5;
     /**
      * Definition of the internal property which
-     * returns a calculated member's {@link Formula} object.
+     * returns a calculated member's {@link FormulaImpl} object.
      */
     public static final Property FORMULA =
         new Property(

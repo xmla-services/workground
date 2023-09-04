@@ -26,14 +26,20 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.CalculatedFormula;
+import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.interfaces.Refresh;
+import mondrian.olap.interfaces.Subcube;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import mondrian.olap.interfaces.QueryAxis;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -1136,7 +1142,7 @@ class ParserTest {
         }
 
         @Override
-		public ExplainImpl makeExplain(QueryPart query) {
+		public Explain makeExplain(QueryPart query) {
             this.explain = true;
             return null;
         }

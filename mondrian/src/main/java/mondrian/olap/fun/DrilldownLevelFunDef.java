@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import mondrian.olap.interfaces.Literal;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -32,7 +33,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
 import mondrian.olap.SchemaReader;
 
 /**

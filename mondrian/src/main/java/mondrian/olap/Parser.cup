@@ -19,10 +19,17 @@ import java.util.*;
 import java.math.BigDecimal;
 
 import mondrian.mdx.*;
+import mondrian.olap.interfaces.CalculatedFormula;
+import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.Subcube;
+import mondrian.olap.interfaces.Refresh;
 import mondrian.parser.MdxParserValidator;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
@@ -171,9 +178,9 @@ parser code {:
             final QueryAxis slicerAxis =
                 slicer == null
                     ? null
-                    : new QueryAxis(
+                    : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
+                        QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
             return new QueryImpl(
                 statement, formulae, axes, subcube, slicerAxis, cellProps,
                 strictValidation);
@@ -193,7 +200,7 @@ parser code {:
             String cubeName,
             Formula e)
         {
-            return new CalculatedFormula(cubeName, e);
+            return new CalculatedFormulaImpl(cubeName, e);
         }
 
         /**
@@ -208,7 +215,7 @@ parser code {:
         public Refresh makeRefresh(
                 String cubeName)
         {
-            return new Refresh(cubeName);
+            return new RefreshImpl(cubeName);
         }
 
         public Update makeUpdate(
@@ -223,7 +230,7 @@ parser code {:
                 List<String> columns,
                 Exp whereExpression)
         {
-            return new DmvQuery(tableName, columns, whereExpression);
+            return new DmvQueryImpl(tableName, columns, whereExpression);
         }
 
         public TransactionCommand makeTransactionCommand(
@@ -924,10 +931,10 @@ factor ::=
 //                             |  <conditional_expression>
 value_expression_primary ::=
         STRING:s {:
-            RESULT = Literal.createString(s);
+            RESULT = LiteralImpl.createString(s);
         :}
     |   NUMBER:d {:
-            RESULT = Literal.create(d);
+            RESULT = LiteralImpl.create(d);
         :}
     |   identifier:i {:
             RESULT = new Id(i);
@@ -975,7 +982,7 @@ value_expression_primary ::=
             RESULT = new UnresolvedFunCall(
                 "CAST", Syntax.Cast, new Exp[] {
                     e,
-                    Literal.createSymbol(t.name)});
+                    LiteralImpl.createSymbol(t.name)});
         :}
     |   LPAREN exp_list:lis RPAREN {:
             // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
@@ -988,7 +995,7 @@ value_expression_primary ::=
                 "{}", Syntax.Braces, Parser.toExpArray(lis));
         :}
     |  NULL {:
-            RESULT = Literal.nullValue;
+            RESULT = LiteralImpl.nullValue;
         :}
     |   case_expression
     ;
@@ -1437,7 +1444,7 @@ select_statement ::=
                 parser.statement,
                 Parser.toFormulaArray(f),
                 Parser.toQueryAxisArray(a),
-                new Subcube(cubeName, null, null, null),
+                new SubcubeImpl(cubeName, null, null, null),
                 w,
                 Parser.toQueryPartArray(cp),
                 parser.strictValidation);
@@ -1509,14 +1516,14 @@ member_specification ::=
         MEMBER member_name:m AS FORMULA_STRING:s
         comma_member_property_def_list_opt:l {:
             Exp e = parser.recursivelyParseExp(s);
-            RESULT = new Formula(
+            RESULT = new FormulaImpl(
                 m,
                 e,
                 Parser.toMemberPropertyArray(l));
         :}
     |   MEMBER member_name:m AS value_expression:e
         comma_member_property_def_list_opt:l {:
-            RESULT = new Formula(
+            RESULT = new FormulaImpl(
                 m,
                 e,
                 Parser.toMemberPropertyArray(l));
@@ -1562,7 +1569,7 @@ member_name ::= compound_id;
 // <member_property_definition> ::= <identifier> = <value_expression>
 member_property_definition ::=
         identifier:id EQ value_expression:e {:
-            RESULT = new MemberProperty(id.name, e);
+            RESULT = new MemberPropertyImpl(id.name, e);
         :}
     ;
 //
@@ -1575,10 +1582,10 @@ member_property_definition ::=
 set_specification ::=
         SET set_name:n AS FORMULA_STRING:s {:
             Exp e = parser.recursivelyParseExp(s);
-            RESULT = new Formula(n, e);
+            RESULT = new FormulaImpl(n, e);
         :}
     |   SET set_name:n AS expression:e {:
-            RESULT = new Formula(n, e);
+            RESULT = new FormulaImpl(n, e);
         :}
     ;
 //
@@ -1593,9 +1600,9 @@ set_name ::= compound_id ;
 // <axis_specification> ::= [NON EMPTY] <set> [<dim_props>] ON <axis_name>
 axis_specification ::=
         non_empty_opt:b expression:s dim_props_opt:dp ON axis_name:a {:
-            RESULT = new QueryAxis(
+            RESULT = new QueryAxisImpl(
                     b.booleanValue(), s, a,
-                    QueryAxis.SubtotalVisibility.Undefined,
+                    QueryAxisImpl.SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     |   non_empty_opt:b expression:s dim_props_opt:dp ON axis_number:n {:
@@ -1613,9 +1620,9 @@ axis_specification ::=
             AxisOrdinal axis =
                 AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(index);
             RESULT =
-                new QueryAxis(
+                new QueryAxisImpl(
                     b.booleanValue(), s, axis,
-                    QueryAxis.SubtotalVisibility.Undefined,
+                    QueryAxisImpl.SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     ;
@@ -1711,10 +1718,10 @@ cell_opt ::=
 cell_property_list ::=
     cell_property:p {:
         RESULT = new LinkedList();
-        RESULT.add(new CellProperty(p.getSegments()));
+        RESULT.add(new CellPropertyImpl(p.getSegments()));
     :}
     |   cell_property:p COMMA cell_property_list:p1 {:
-        p1.add(0, new CellProperty(p.getSegments()));
+        p1.add(0, new CellPropertyImpl(p.getSegments()));
         RESULT = p1;
     :}
 ;

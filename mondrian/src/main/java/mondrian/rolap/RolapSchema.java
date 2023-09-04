@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Formula;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -66,7 +67,7 @@ import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunTable;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
@@ -727,7 +728,7 @@ public class RolapSchema implements Schema {
                 xmlNamedSet.name(), e);
         }
         final Formula formula =
-            new Formula(
+            new FormulaImpl(
                 new Id(
                     new Id.NameSegment(
                         xmlNamedSet.name(),

@@ -13,6 +13,7 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
+import mondrian.olap.interfaces.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -34,7 +35,7 @@ import mondrian.server.Locus;
  */
 class MondrianOlap4jCellSetAxis implements CellSetAxis {
     private final MondrianOlap4jCellSet olap4jCellSet;
-    private final mondrian.olap.QueryAxis queryAxis;
+    private final QueryAxis queryAxis;
     private final RolapAxis axis;
 
     /**
@@ -46,7 +47,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
      */
     MondrianOlap4jCellSetAxis(
         MondrianOlap4jCellSet olap4jCellSet,
-        mondrian.olap.QueryAxis queryAxis,
+        QueryAxis queryAxis,
         RolapAxis axis)
     {
         assert olap4jCellSet != null;

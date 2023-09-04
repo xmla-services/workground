@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.interfaces.Literal;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
@@ -22,7 +23,6 @@ import mondrian.calc.TupleList;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
 
 /**
  * Definition of the <code>Count</code> MDX function.

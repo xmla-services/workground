@@ -13,7 +13,12 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
-    QueryPart getQuery();
+public interface NamedSetExpr extends QueryPart {
+
+    NamedSet getNamedSet();
+
+    Evaluator.NamedSetEvaluator getEval(Evaluator evaluator);
 }

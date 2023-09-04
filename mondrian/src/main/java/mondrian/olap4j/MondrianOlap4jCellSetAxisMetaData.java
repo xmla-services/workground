@@ -14,18 +14,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.Exp;
 import mondrian.olap.Id;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
 
@@ -52,9 +54,9 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         QueryAxis queryAxis)
     {
         if (queryAxis == null) {
-            queryAxis = new QueryAxis(
+            queryAxis = new QueryAxisImpl(
                 false, null, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                QueryAxis.SubtotalVisibility.Undefined);
+                QueryAxisImpl.SubtotalVisibility.Undefined);
         }
         this.queryAxis = queryAxis;
         this.cellSetMetaData = cellSetMetaData;

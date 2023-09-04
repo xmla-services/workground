@@ -44,7 +44,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
@@ -857,7 +857,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         public SystemPropertyParameter(String name, boolean system) {
             super(
                 name,
-                Literal.nullValue,
+                LiteralImpl.nullValue,
                 new StringBuilder("System property '").append(name).append("'").toString(),
                 new StringType());
             this.system = system;

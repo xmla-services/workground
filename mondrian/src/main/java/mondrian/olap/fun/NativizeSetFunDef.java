@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.interfaces.NamedSetExpr;
 import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -51,18 +55,16 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunDef;
 import mondrian.olap.Id;
-import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -514,7 +516,7 @@ public class NativizeSetFunDef extends FunDefBase {
         @Override
         public Object visit(ResolvedFunCall call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
-                if (call.getArg(0) instanceof LevelExpr) {
+                if (call.getArg(0) instanceof LevelExprImpl) {
                     Level level = ((LevelExpr) call.getArg(0)).getLevel();
                     substitutionMap.put(NativizeSetFunDef.createMemberId(level), level);
                     dimensions.add(level.getDimension());
@@ -565,10 +567,10 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void addFormulasToQuery() {
             NativizeSetFunDef.LOGGER.debug("FormulaResolvingVisitor addFormulas");
-            List<Formula> formulas = new ArrayList<>();
+            List<FormulaImpl> formulas = new ArrayList<>();
 
             for (Level level : levels) {
-                Formula memberFormula = createDefaultMemberFormula(level);
+                FormulaImpl memberFormula = createDefaultMemberFormula(level);
                 formulas.add(memberFormula);
                 formulas.add(createNamedSetFormula(level, memberFormula));
             }
@@ -578,10 +580,10 @@ public class NativizeSetFunDef extends FunDefBase {
                 formulas.add(createSentinelFormula(level));
             }
 
-            query.addFormulas(formulas.toArray(new Formula[formulas.size()]));
+            query.addFormulas(formulas.toArray(new FormulaImpl[formulas.size()]));
         }
 
-        private Formula createSentinelFormula(Level level) {
+        private FormulaImpl createSentinelFormula(Level level) {
             Id memberId = NativizeSetFunDef.createSentinelId(level);
             Exp memberExpr = query.getConnection()
                 .parseExpression("101010");
@@ -589,10 +591,10 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createSentinelFormula memberId={} memberExpr={}"
                 , memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createDefaultMemberFormula(Level level) {
+        private FormulaImpl createDefaultMemberFormula(Level level) {
             Id memberId = NativizeSetFunDef.createMemberId(level);
             Exp memberExpr =
                 new UnresolvedFunCall(
@@ -603,11 +605,11 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createLevelMembersFormulas memberId={} memberExpr={}",
                 memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createNamedSetFormula(
-            Level level, Formula memberFormula)
+        private FormulaImpl createNamedSetFormula(
+            Level level, FormulaImpl memberFormula)
         {
             Id setId = NativizeSetFunDef.createSetId(level);
             Exp setExpr = query.getConnection()
@@ -619,7 +621,7 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createNamedSetFormula setId={} setExpr={}",
                 setId, setExpr);
-            return new Formula(setId, setExpr);
+            return new FormulaImpl(setId, setExpr);
         }
     }
 
@@ -891,7 +893,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 new ArrayList<>(arity);
 
             for (int i = 0; i < arity; i++) {
-                nativeMembers.add(new LinkedHashSet<String>());
+                nativeMembers.add(new LinkedHashSet<>());
             }
 
             findNativeMembers(reassemblyGuide, nativeMembers);

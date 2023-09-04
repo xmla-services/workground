@@ -773,18 +773,18 @@ Exp segmentOrFuncall(Exp left) :
     }
 }
 
-Literal numericLiteral() :
+LiteralImpl numericLiteral() :
 {
 }
 {
     <DECIMAL_NUMERIC_LITERAL> {
-        return Literal.create(new BigDecimal(token.image));
+        return LiteralImpl.create(new BigDecimal(token.image));
     }
 |   <UNSIGNED_INTEGER_LITERAL> {
-        return Literal.create(new BigDecimal(token.image));
+        return LiteralImpl.create(new BigDecimal(token.image));
     }
 |   <APPROX_NUMERIC_LITERAL> {
-        return Literal.create(new BigDecimal(token.image));
+        return LiteralImpl.create(new BigDecimal(token.image));
     }
 }
 
@@ -796,16 +796,16 @@ Exp atom() :
 }
 {
     <SINGLE_QUOTED_STRING> {
-        return Literal.createString(stripQuotes(token.image, "'", "'", "''"));
+        return LiteralImpl.createString(stripQuotes(token.image, "'", "'", "''"));
     }
 |   <DOUBLE_QUOTED_STRING> {
-        return Literal.createString(stripQuotes(token.image, DQ, DQ, DQDQ));
+        return LiteralImpl.createString(stripQuotes(token.image, DQ, DQ, DQDQ));
     }
 |   e = numericLiteral() {
         return e;
     }
 |   <NULL> {
-        return Literal.nullValue;
+        return LiteralImpl.nullValue;
     }
 |   <CAST> <LPAREN> e = unaliasedExpression()
     <AS> segment = nameSegment() <RPAREN>
@@ -813,7 +813,7 @@ Exp atom() :
         return new UnresolvedFunCall(
             "CAST", Syntax.Cast, new Exp[] {
                 e,
-                Literal.createSymbol(segment.name)});
+                LiteralImpl.createSymbol(segment.name)});
     }
 |   <LPAREN> lis = expList() <RPAREN> {
         // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
@@ -1124,12 +1124,12 @@ Query selectStatement() :
         (<CELL>)?
         <PROPERTIES>
         p = compoundId() {
-            cellPropList.add(new CellProperty(p.getSegments()));
+            cellPropList.add(new CellPropertyImpl(p.getSegments()));
         }
         (
             <COMMA>
             p = compoundId() {
-                cellPropList.add(new CellProperty(p.getSegments()));
+                cellPropList.add(new CellPropertyImpl(p.getSegments()));
             }
         )*
     )?
@@ -1192,10 +1192,10 @@ Subcube selectSubcubeClause() :
         final QueryAxis slicerAxis =
             w == null
                 ? null
-                : new QueryAxis(
+                : new QueryAxisImpl(
                     false, w, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                    QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
-        return new Subcube(
+                    QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
+        return new SubcubeImpl(
             cubeName,
             subcube,
             toQueryAxisArray(a),
@@ -1231,10 +1231,10 @@ QueryPart createFormula() :
         String cubeName = cubeId.name;
         Formula formula;
         if(isMember) {
-            formula = new Formula(m, e, toMemberPropertyArray(l));
+            formula = new FormulaImpl(m, e, toMemberPropertyArray(l));
         }
         else {
-            formula = new Formula(m, e);
+            formula = new FormulaImpl(m, e);
         }
         return factory.makeCalculatedFormula(cubeName, formula);
     }
@@ -1344,7 +1344,7 @@ Formula memberSpecification() :
         }
     )*
     {
-        return new Formula(m, e, toMemberPropertyArray(l));
+        return new FormulaImpl(m, e, toMemberPropertyArray(l));
     }
 }
 
@@ -1372,7 +1372,7 @@ MemberProperty memberPropertyDefinition() :
 }
 {
     id = nameSegment() <EQ> e = expression() {
-        return new MemberProperty(id.name, e);
+        return new MemberPropertyImpl(id.name, e);
     }
 }
 
@@ -1383,7 +1383,7 @@ Formula setSpecification() :
 }
 {
     <SET> n = compoundId() <AS> e = formulaExpression() {
-        return new Formula(n, e);
+        return new FormulaImpl(n, e);
     }
 }
 
@@ -1457,9 +1457,9 @@ QueryAxis axisSpecification() :
         }
     )
     {
-        return new QueryAxis(
+        return new QueryAxisImpl(
             nonEmpty, e, axis,
-            QueryAxis.SubtotalVisibility.Undefined,
+            QueryAxisImpl.SubtotalVisibility.Undefined,
             toIdArray(dp));
     }
 }

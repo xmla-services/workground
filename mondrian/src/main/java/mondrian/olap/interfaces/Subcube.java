@@ -13,7 +13,13 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+import mondrian.olap.Exp;
 
-    QueryPart getQuery();
+import java.util.List;
+
+public interface Subcube extends QueryPart{
+
+    String getCubeName();
+
+    List<Exp> getAxisExps();
 }

@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -37,9 +41,8 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -48,10 +51,8 @@ import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunDef;
 import mondrian.olap.Id;
-import mondrian.olap.Literal;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -186,7 +187,7 @@ public class FunUtil extends Util {
       }
     }
     Exp arg = call.getArg( i );
-    if ( !( arg instanceof Literal )
+    if ( !( arg instanceof Literal)
       || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
@@ -289,7 +290,7 @@ public class FunUtil extends Util {
 
 
 
-	
+
 
   static List<Member> addMembers(
     final SchemaReader schemaReader,
@@ -1501,7 +1502,7 @@ public class FunUtil extends Util {
     //
     // Also, the Set and Parentheses functions are ok since they're
     // essentially just containers.
-    QueryImpl query = validator.getQuery();
+    Query query = validator.getQuery();
     if ( !( funDef instanceof SetFunDef )
       && !( funDef instanceof ParenthesesFunDef )
       && query != null
@@ -1811,7 +1812,7 @@ public class FunUtil extends Util {
     if ( exp instanceof MemberExpr
       || exp instanceof LevelExpr
       || exp instanceof HierarchyExpr
-      || exp instanceof DimensionExpr ) {
+      || exp instanceof DimensionExpr) {
       return false;
     }
     if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {

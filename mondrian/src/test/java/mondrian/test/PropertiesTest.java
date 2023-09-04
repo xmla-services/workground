@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -30,7 +31,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.SchemaReader;
 
 /**

@@ -12,6 +12,7 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.interfaces.Formula;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -23,7 +24,6 @@ import org.olap4j.Scenario;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Formula;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;

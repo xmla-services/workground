@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.interfaces.DimensionExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;

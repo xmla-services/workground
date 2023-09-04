@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.Literal;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
@@ -30,7 +32,6 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunCall;
-import mondrian.olap.Literal;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;

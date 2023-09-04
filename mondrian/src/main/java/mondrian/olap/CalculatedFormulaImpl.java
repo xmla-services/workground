@@ -20,13 +20,16 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.CalculatedFormula;
+import mondrian.olap.interfaces.Formula;
+
 import java.io.PrintWriter;
 
-public class CalculatedFormula extends AbstractQueryPart {
+public class CalculatedFormulaImpl extends AbstractQueryPart implements CalculatedFormula {
     private final String cubeName;
     private final Formula e;
 
-    CalculatedFormula(String cubeName, Formula e)
+    CalculatedFormulaImpl(String cubeName, Formula e)
     {
         this.cubeName = cubeName;
         this.e = e;
@@ -51,10 +54,12 @@ public class CalculatedFormula extends AbstractQueryPart {
         return new Object[] {e};
     }
 
+    @Override
     public String getCubeName() {
         return cubeName;
     }
 
+    @Override
     public Formula getFormula() {
         return e;
     }

@@ -9,6 +9,7 @@
 
 package mondrian.mdx;
 
+import mondrian.olap.interfaces.DimensionExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
@@ -28,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class DimensionExpr extends ExpBase implements Exp {
+public class DimensionExprImpl extends ExpBase implements Exp, DimensionExpr {
     private final Dimension dimension;
 
     /**
@@ -37,7 +38,7 @@ public class DimensionExpr extends ExpBase implements Exp {
      * @param dimension Dimension
      * @pre dimension != null
      */
-    public DimensionExpr(Dimension dimension) {
+    public DimensionExprImpl(Dimension dimension) {
         Util.assertPrecondition(dimension != null, "dimension != null");
         this.dimension = dimension;
     }
@@ -47,6 +48,7 @@ public class DimensionExpr extends ExpBase implements Exp {
      *
      * @post return != null
      */
+    @Override
     public Dimension getDimension() {
         return dimension;
     }
@@ -62,8 +64,8 @@ public class DimensionExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public DimensionExpr cloneExp() {
-        return new DimensionExpr(dimension);
+	public DimensionExprImpl cloneExp() {
+        return new DimensionExprImpl(dimension);
     }
 
     @Override

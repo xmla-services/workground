@@ -2,22 +2,26 @@ package org.eclipse.daanse.query;
 
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.AxisOrdinal;
-import mondrian.olap.CellProperty;
-import mondrian.olap.DmvQuery;
+import mondrian.olap.CellPropertyImpl;
+import mondrian.olap.DmvQueryImpl;
 import mondrian.olap.DrillThroughImpl;
 import mondrian.olap.QueryImpl;
+import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.Id;
 import mondrian.olap.interfaces.Explain;
+import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.interfaces.QueryPart;
-import mondrian.olap.Refresh;
-import mondrian.olap.Subcube;
+import mondrian.olap.RefreshImpl;
+import mondrian.olap.SubcubeImpl;
 import mondrian.olap.Syntax;
+import mondrian.olap.interfaces.Refresh;
+import mondrian.olap.interfaces.Subcube;
 import mondrian.server.Statement;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
@@ -80,7 +84,7 @@ public class QueryProviderImpl implements QueryProvider {
 
     private Refresh refreshStatementToQuery(RefreshStatement refreshStatement) {
         getName(refreshStatement.cubeName());
-        return new Refresh(getName(refreshStatement.cubeName()));
+        return new RefreshImpl(getName(refreshStatement.cubeName()));
     }
 
     private DmvQuery dmvStatementToQuery(DMVStatement dmvStatement) {
@@ -90,7 +94,7 @@ public class QueryProviderImpl implements QueryProvider {
             dmvStatement.columns().forEach(c -> columns.addAll(getColumns(c.objectIdentifiers())));
         }
         Exp whereExpression = null;
-        return new DmvQuery(tableName,
+        return new DmvQueryImpl(tableName,
             columns,
             whereExpression);
     }
@@ -132,14 +136,14 @@ public class QueryProviderImpl implements QueryProvider {
         boolean strictValidation = false;
         Subcube subcube = getSubcube(selectStatement.selectSubcubeClause());
         List<Formula> formulaList = getFormulaList(selectStatement.selectWithClauses());
-        List<QueryAxis> axesList = getQueryAxisList(selectStatement.selectQueryClause());
-        QueryAxis slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
+        List<QueryAxisImpl> axesList = getQueryAxisList(selectStatement.selectQueryClause());
+        QueryAxisImpl slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
         List<QueryPart> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
 
         return new QueryImpl(
             statement,
             formulaList.toArray(Formula[]::new),
-            axesList.toArray(QueryAxis[]::new),
+            axesList.toArray(QueryAxisImpl[]::new),
             subcube,
             slicerAxis,
             cellProps.toArray(QueryPart[]::new),
@@ -152,13 +156,13 @@ public class QueryProviderImpl implements QueryProvider {
             if (selectCellPropertyListClause.properties() != null) {
                 List<Id.Segment> list = selectCellPropertyListClause.properties()
                     .stream().map(p -> ((Id.Segment) new Id.NameSegment(p))).toList();
-                return List.of(new CellProperty(list));
+                return List.of(new CellPropertyImpl(list));
             }
         }
         return List.of();
     }
 
-    private QueryAxis getQueryAxis(Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOptional) {
+    private QueryAxisImpl getQueryAxis(Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOptional) {
         if (selectSlicerAxisClauseOptional.isPresent()) {
             SelectSlicerAxisClause selectSlicerAxisClause = selectSlicerAxisClauseOptional.get();
             Expression expression = selectSlicerAxisClause.expression();
@@ -166,17 +170,17 @@ public class QueryProviderImpl implements QueryProvider {
             boolean nonEmpty = false;
             Id[] dimensionProperties = new Id[0];
 
-            new QueryAxis(
+            new QueryAxisImpl(
                 nonEmpty,
                 exp,
                 AxisOrdinal.StandardAxisOrdinal.SLICER,
-                QueryAxis.SubtotalVisibility.Undefined,
+                QueryAxisImpl.SubtotalVisibility.Undefined,
                 dimensionProperties);
         }
         return null;
     }
 
-    private List<QueryAxis> getQueryAxisList(SelectQueryClause selectQueryClause) {
+    private List<QueryAxisImpl> getQueryAxisList(SelectQueryClause selectQueryClause) {
         if (selectQueryClause instanceof SelectQueryAsteriskClause) {
             return selectQueryAsteriskClauseToQueryAxisList();
         }
@@ -189,11 +193,11 @@ public class QueryProviderImpl implements QueryProvider {
         return List.of();
     }
 
-    private List<QueryAxis> selectQueryEmptyClauseToQueryAxisList() {
+    private List<QueryAxisImpl> selectQueryEmptyClauseToQueryAxisList() {
         return List.of();
     }
 
-    private List<QueryAxis> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
+    private List<QueryAxisImpl> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
         if (selectQueryAxesClause.selectQueryAxisClauses() != null) {
             return selectQueryAxesClause.selectQueryAxisClauses().stream()
                 .map(this::selectQueryAxisClauseToQueryAxisList).toList();
@@ -201,17 +205,17 @@ public class QueryProviderImpl implements QueryProvider {
         return List.of();
     }
 
-    private QueryAxis selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
+    private QueryAxisImpl selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
         Exp exp = getExp(selectQueryAxisClause.expression());
         AxisOrdinal axisOrdinal = getAxisOrdinal(selectQueryAxisClause.axis());
         List<Id> dimensionProperties =
             getDimensionProperties(selectQueryAxisClause.selectDimensionPropertyListClause());
 
-        return new QueryAxis(
+        return new QueryAxisImpl(
             selectQueryAxisClause.nonEmpty(),
             exp,
             axisOrdinal,
-            QueryAxis.SubtotalVisibility.Undefined,
+            QueryAxisImpl.SubtotalVisibility.Undefined,
             dimensionProperties.stream().toArray(Id[]::new)
         );
     }
@@ -228,7 +232,7 @@ public class QueryProviderImpl implements QueryProvider {
         return AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(axis.ordinal());
     }
 
-    private List<QueryAxis> selectQueryAsteriskClauseToQueryAxisList() {
+    private List<QueryAxisImpl> selectQueryAsteriskClauseToQueryAxisList() {
         return List.of();
     }
 
@@ -244,16 +248,16 @@ public class QueryProviderImpl implements QueryProvider {
 
     private Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
         Subcube subcube = getSubcube(selectSubcubeClauseStatement.selectSubcubeClause());
-        List<QueryAxis> axes = getQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
+        List<QueryAxisImpl> axes = getQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
         String cubeName = null;
-        QueryAxis slicerAxis = getQueryAxis(selectSubcubeClauseStatement.selectSlicerAxisClause());
-        return new Subcube(cubeName, subcube, axes.stream().toArray(QueryAxis[]::new), slicerAxis);
+        QueryAxisImpl slicerAxis = getQueryAxis(selectSubcubeClauseStatement.selectSlicerAxisClause());
+        return new SubcubeImpl(cubeName, subcube, axes.stream().toArray(QueryAxisImpl[]::new), slicerAxis);
     }
 
     private Subcube getSubcubeBySelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName) {
         NameObjectIdentifier nameObjectIdentifier = selectSubcubeClauseName.cubeName();
         String cubeName = getName(nameObjectIdentifier);
-        return new Subcube(cubeName, null, null, null);
+        return new SubcubeImpl(cubeName, null, null, null);
     }
 
     private List<Formula> getFormulaList(List<? extends SelectWithClause> selectWithClauses) {
@@ -263,12 +267,12 @@ public class QueryProviderImpl implements QueryProvider {
                 if (swc instanceof CreateMemberBodyClause createMemberBodyClause) {
                     Id id = getId(createMemberBodyClause.compoundId());
                     Exp exp = getExp(createMemberBodyClause.expression());
-                    formulaList.add(new Formula(id, exp));
+                    formulaList.add(new FormulaImpl(id, exp));
                 }
                 if (swc instanceof CreateSetBodyClause createSetBodyClause) {
                     Id id = getId(createSetBodyClause.compoundId());
                     Exp exp = getExp(createSetBodyClause.expression());
-                    formulaList.add(new Formula(id, exp));
+                    formulaList.add(new FormulaImpl(id, exp));
                 }
             }
         }
@@ -335,16 +339,16 @@ public class QueryProviderImpl implements QueryProvider {
 
     private Exp getExpByLiteral(Literal literal) {
         if (literal instanceof NumericLiteral numericLiteral) {
-            return mondrian.olap.Literal.create(numericLiteral.value());
+            return mondrian.olap.LiteralImpl.create(numericLiteral.value());
         }
         if (literal instanceof StringLiteral stringLiteral) {
-            return mondrian.olap.Literal.createString(stringLiteral.value());
+            return mondrian.olap.LiteralImpl.createString(stringLiteral.value());
         }
         if (literal instanceof NullLiteral) {
-            return mondrian.olap.Literal.nullValue;
+            return mondrian.olap.LiteralImpl.nullValue;
         }
         if (literal instanceof SymbolLiteral symbolLiteral) {
-            return mondrian.olap.Literal.createSymbol(symbolLiteral.value());
+            return mondrian.olap.LiteralImpl.createSymbol(symbolLiteral.value());
         }
         return null;
     }

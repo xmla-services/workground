@@ -16,7 +16,7 @@ import mondrian.olap.type.Type;
 /**
  * Parameter to a Query.
  *
- * <p>A parameter is not an expression; see {@link mondrian.mdx.ParameterExpr}.
+ * <p>A parameter is not an expression; see {@link ParameterExpr}.
  *
  * @author jhyde
  * @since Jul 22, 2006

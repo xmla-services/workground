@@ -11,12 +11,12 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import mondrian.olap.interfaces.NamedSetExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.NamedSetExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;

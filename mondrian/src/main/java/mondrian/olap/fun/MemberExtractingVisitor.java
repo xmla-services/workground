@@ -14,15 +14,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.ParameterExpr;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ParameterExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;

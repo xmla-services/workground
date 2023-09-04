@@ -13,9 +13,9 @@
 
 package org.eclipse.daanse.olap.api.model;
 
-import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.interfaces.Formula;
 
 /**
  * A <code>Hierarchy</code> is a set of members, organized into levels.

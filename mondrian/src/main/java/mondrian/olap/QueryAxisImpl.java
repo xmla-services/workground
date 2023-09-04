@@ -13,14 +13,16 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.type.DimensionType;
@@ -37,7 +39,7 @@ import mondrian.resource.MondrianResource;
  *
  * @author jhyde, 20 January, 1999
  */
-public class QueryAxis extends AbstractQueryPart {
+public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
 
     private boolean nonEmpty;
     private boolean ordered;
@@ -61,7 +63,7 @@ public class QueryAxis extends AbstractQueryPart {
      * @param subtotalVisibility Whether to show subtotals
      * @param dimensionProperties List of dimension properties
      */
-    public QueryAxis(
+    public QueryAxisImpl(
         boolean nonEmpty,
         Exp set,
         AxisOrdinal axisOrdinal,
@@ -84,9 +86,9 @@ public class QueryAxis extends AbstractQueryPart {
     /**
      * Creates an axis with no dimension properties.
      *
-     * @see #QueryAxis(boolean,Exp,AxisOrdinal,mondrian.olap.QueryAxis.SubtotalVisibility,Id[])
+     * @see QueryAxis(boolean,Exp,AxisOrdinal,mondrian.olap.QueryAxisImpl.SubtotalVisibility,Id[])
      */
-    public QueryAxis(
+    public QueryAxisImpl(
         boolean nonEmpty,
         Exp set,
         AxisOrdinal axisOrdinal,
@@ -95,16 +97,16 @@ public class QueryAxis extends AbstractQueryPart {
         this(nonEmpty, set, axisOrdinal, subtotalVisibility, new Id[0]);
     }
 
-    public QueryAxis(QueryAxis queryAxis) {
+    public QueryAxisImpl(QueryAxis queryAxis) {
         this(
-            queryAxis.nonEmpty, queryAxis.exp.cloneExp(), queryAxis.axisOrdinal,
-            queryAxis.subtotalVisibility, queryAxis.dimensionProperties.clone());
+            queryAxis.isNonEmpty(), queryAxis.getSet().cloneExp(), queryAxis.getAxisOrdinal(),
+            queryAxis.getSubtotalVisibility(), queryAxis.getDimensionProperties().clone());
     }
 
     static QueryAxis[] cloneArray(QueryAxis[] a) {
-        QueryAxis[] a2 = new QueryAxis[a.length];
+        QueryAxisImpl[] a2 = new QueryAxisImpl[a.length];
         for (int i = 0; i < a.length; i++) {
-            a2[i] = new QueryAxis(a[i]);
+            a2[i] = new QueryAxisImpl(a[i]);
         }
         return a2;
     }
@@ -119,6 +121,7 @@ public class QueryAxis extends AbstractQueryPart {
         return o;
     }
 
+    @Override
     public Calc compile(ExpCompiler compiler, ResultStyle resultStyle) {
         Exp expInner = this.exp;
         if (axisOrdinal.isFilter()) {
@@ -166,6 +169,7 @@ public class QueryAxis extends AbstractQueryPart {
         return slicer;
     }
 
+    @Override
     public String getAxisName() {
         return axisOrdinal.name();
     }
@@ -174,6 +178,7 @@ public class QueryAxis extends AbstractQueryPart {
      * Returns the ordinal of this axis, for example
      * {@link mondrian.olap.AxisOrdinal.StandardAxisOrdinal#ROWS}.
      */
+    @Override
     public AxisOrdinal getAxisOrdinal() {
         return axisOrdinal;
     }
@@ -181,6 +186,7 @@ public class QueryAxis extends AbstractQueryPart {
     /**
      * Returns whether the axis has the <code>NON EMPTY</code> property set.
      */
+    @Override
     public boolean isNonEmpty() {
         return nonEmpty;
     }
@@ -196,6 +202,7 @@ public class QueryAxis extends AbstractQueryPart {
      /**
      * Returns whether the axis has the <code>ORDER</code> property set.
      */
+    @Override
     public boolean isOrdered() {
         return ordered;
     }
@@ -203,6 +210,7 @@ public class QueryAxis extends AbstractQueryPart {
     /**
      * Sets whether the axis has the <code>ORDER</code> property set.
      */
+    @Override
     public void setOrdered(boolean ordered) {
         this.ordered = ordered;
     }
@@ -210,18 +218,23 @@ public class QueryAxis extends AbstractQueryPart {
     /**
      * Returns the expression which is used to compute the value of this axis.
      */
+    @Override
     public Exp getSet() {
         return exp;
     }
+
+
 
     /**
      * Sets the expression which is used to compute the value of this axis.
      * See {@link #getSet()}.
      */
+    @Override
     public void setSet(Exp set) {
         this.exp = set;
     }
 
+    @Override
     public void resolve(Validator validator) {
         exp = validator.validate(exp, false);
         final Type type = exp.getType();
@@ -275,6 +288,7 @@ public class QueryAxis extends AbstractQueryPart {
         }
     }
 
+    @Override
     public void addLevel(Level level) {
         Util.assertTrue(level != null, "addLevel needs level");
         exp = new UnresolvedFunCall(
@@ -282,7 +296,7 @@ public class QueryAxis extends AbstractQueryPart {
                 exp,
                 new UnresolvedFunCall(
                     "Members", Syntax.Property, new Exp[] {
-                        new LevelExpr(level)})});
+                        new LevelExprImpl(level)})});
     }
 
     void setSubtotalVisibility(boolean bShowSubtotals) {
@@ -300,6 +314,7 @@ public class QueryAxis extends AbstractQueryPart {
         this.subtotalVisibility = SubtotalVisibility.Undefined;
     }
 
+    @Override
     public void validate(Validator validator) {
         if (axisOrdinal.isFilter() && exp != null) {
             exp = validator.validate(exp, false);

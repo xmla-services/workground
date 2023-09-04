@@ -85,7 +85,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import mondrian.mdx.ParameterExprImpl;
+import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryAxis;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -117,12 +123,11 @@ import org.olap4j.mdx.Quoting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.DimensionExprImpl;
 import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.NamedSetExprImpl;
 import mondrian.mdx.QueryPrintWriter;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
@@ -1007,13 +1012,13 @@ public class Util extends XOMUtil {
         if (element instanceof Member member) {
             return new MemberExpr(member);
         } else if (element instanceof Level level) {
-            return new LevelExpr(level);
+            return new LevelExprImpl(level);
         } else if (element instanceof Hierarchy hierarchy) {
             return new HierarchyExpr(hierarchy);
         } else if (element instanceof Dimension dimension) {
-            return new DimensionExpr(dimension);
+            return new DimensionExprImpl(dimension);
         } else if (element instanceof NamedSet namedSet) {
-            return new NamedSetExpr(namedSet);
+            return new NamedSetExprImpl(namedSet);
         } else {
             throw Util.newInternal("Unexpected element type: " + element);
         }
@@ -3028,7 +3033,7 @@ public class Util extends XOMUtil {
     public static Validator createSimpleValidator(final FunTable funTable) {
         return new Validator() {
             @Override
-			public QueryImpl getQuery() {
+			public Query getQuery() {
                 return null;
             }
 
@@ -3043,7 +3048,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public void validate(ParameterExpr parameterExpr) {
+			public void validate(ParameterExprImpl parameterExpr) {
                 //empty
             }
 

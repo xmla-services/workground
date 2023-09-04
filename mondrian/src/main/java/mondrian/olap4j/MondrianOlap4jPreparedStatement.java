@@ -25,6 +25,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 
+import mondrian.olap.interfaces.Query;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetMetaData;
 import org.olap4j.OlapException;
@@ -51,7 +52,6 @@ import org.olap4j.type.TupleType;
 import org.olap4j.type.Type;
 
 import mondrian.olap.Parameter;
-import mondrian.olap.QueryImpl;
 import mondrian.util.Pair;
 
 import static org.eigenbase.xom.XOMUtil.discard;
@@ -87,7 +87,7 @@ abstract class MondrianOlap4jPreparedStatement
         throws OlapException
     {
         super(olap4jConnection);
-        final Pair<QueryImpl, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
+        final Pair<Query, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
         this.query = pair.left;
         this.cellSetMetaData = pair.right;
     }

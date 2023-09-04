@@ -12,6 +12,7 @@ package mondrian.olap4j;
 import java.sql.SQLException;
 
 import mondrian.olap.interfaces.Query;
+import mondrian.olap.interfaces.QueryAxis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.CellSetMetaData;
 import org.olap4j.impl.ArrayNamedListImpl;
@@ -19,7 +20,7 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 
 /**
  * Implementation of {@link org.olap4j.CellSetMetaData}
