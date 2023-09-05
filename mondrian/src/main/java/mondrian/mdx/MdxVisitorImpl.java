@@ -101,7 +101,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExprImpl memberExpr) {
         // do nothing
         return null;
     }

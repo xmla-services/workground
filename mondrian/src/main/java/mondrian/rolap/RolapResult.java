@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
@@ -56,7 +57,7 @@ import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
@@ -828,7 +829,7 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( MemberExpr memberExpr ) {
+	public Object visit( MemberExprImpl memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;

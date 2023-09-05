@@ -14,7 +14,7 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 
@@ -45,7 +45,7 @@ public class ResolvedFunCallFinder
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExprImpl memberExpr) {
         Member member = memberExpr.getMember();
         if (member.isCalculated()) {
             if (activeMembers.add(member)) {

@@ -21,6 +21,7 @@ import java.util.Map;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -32,7 +33,7 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
@@ -609,7 +610,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         }
 
         @Override
-		public Object visit(MemberExpr memberExpr) {
+		public Object visit(MemberExprImpl memberExpr) {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()

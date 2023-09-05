@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.Query;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;

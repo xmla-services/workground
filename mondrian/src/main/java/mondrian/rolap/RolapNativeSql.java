@@ -19,13 +19,12 @@ import java.util.regex.Pattern;
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
 import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.LevelExprImpl;
-import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;

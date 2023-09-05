@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
@@ -95,7 +95,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExprImpl memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);

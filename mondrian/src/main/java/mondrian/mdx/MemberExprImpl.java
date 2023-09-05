@@ -9,6 +9,7 @@
 
 package mondrian.mdx;
 
+import mondrian.olap.interfaces.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
@@ -28,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class MemberExpr extends ExpBase implements Exp {
+public class MemberExprImpl extends ExpBase implements Exp, MemberExpr {
     private final Member member;
     private MemberType type;
 
@@ -38,7 +39,7 @@ public class MemberExpr extends ExpBase implements Exp {
      * @param member Member
      * @pre member != null
      */
-    public MemberExpr(Member member) {
+    public MemberExprImpl(Member member) {
         Util.assertPrecondition(member != null, "member != null");
         this.member = member;
     }
@@ -48,6 +49,7 @@ public class MemberExpr extends ExpBase implements Exp {
      *
      * @post return != null
      */
+    @Override
     public Member getMember() {
         return member;
     }
@@ -66,8 +68,8 @@ public class MemberExpr extends ExpBase implements Exp {
     }
 
     @Override
-	public MemberExpr cloneExp() {
-        return new MemberExpr(member);
+	public MemberExprImpl cloneExp() {
+        return new MemberExprImpl(member);
     }
 
     @Override

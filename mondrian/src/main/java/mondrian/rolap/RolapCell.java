@@ -25,6 +25,7 @@ import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.NamedSetExpr;
 import mondrian.olap.interfaces.ParameterExpr;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -45,7 +46,7 @@ import org.slf4j.Logger;
 
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -751,7 +752,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(MemberExpr memberExpr) {
+		public Object visit(MemberExprImpl memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }

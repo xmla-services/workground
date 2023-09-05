@@ -28,6 +28,7 @@ import mondrian.mdx.LevelExprImpl;
 import mondrian.olap.interfaces.CellProperty;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.NamedSetExpr;
 import mondrian.olap.interfaces.ParameterExpr;
@@ -59,7 +60,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.ParameterFunDef;
@@ -2536,7 +2537,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     private Exp replaceSubcubeMember(Exp exp) {
         if(exp instanceof MemberExpr memberExpr) {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
-            return new MemberExpr(subcubeMember);
+            return new MemberExprImpl(subcubeMember);
         }
         if(exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {
