@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.olap.Category;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -67,7 +67,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
         }
 
         protected Member resolveMember(Hierarchy expectedHierarchy) {
-            final List<Id.Segment> mondrianSegmentList =
+            final List<IdImpl.Segment> mondrianSegmentList =
                 Util.convert(this.segmentList);
             Member member =
                 (Member) Util.lookupCompound(
@@ -81,7 +81,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
                     // Guess the intended hierarchy from the largest valid
                     // prefix.
                     for (int i = mondrianSegmentList.size() - 1; i > 0; --i) {
-                        List<Id.Segment> partialName =
+                        List<IdImpl.Segment> partialName =
                             mondrianSegmentList.subList(0, i);
                         OlapElement olapElement =
                             schemaReader.lookupCompound(

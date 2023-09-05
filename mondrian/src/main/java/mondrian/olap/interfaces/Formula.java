@@ -15,13 +15,12 @@ package mondrian.olap.interfaces;
 
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
 import mondrian.olap.Validator;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
-public interface Formula extends QueryPart {
+public non-sealed interface Formula extends QueryPart {
 
     boolean isMember();
 

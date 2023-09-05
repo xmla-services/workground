@@ -16,7 +16,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 
 /**
@@ -36,7 +36,7 @@ class MemberDimensionFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
     {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));

@@ -16,13 +16,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.interfaces.Id;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.opencube.junit5.TestUtil;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
 
 
@@ -311,7 +312,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
         try {
             String[] tsegments =
                 new String[] {"Time", "1997"};
-            Id tid = new Id(Id.Segment.toList(tsegments));
+            Id tid = new IdImpl(IdImpl.Segment.toList(tsegments));
 
             Member memberTime97 =
                 schemaReader.getMemberByUniqueName(tid.getSegments(), false);
@@ -324,7 +325,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
 
             String[] ssegments =
                 new String[] {"Customers", "All Customers", "USA", states[idx]};
-            Id sid = new Id(Id.Segment.toList(ssegments));
+            Id sid = new IdImpl(IdImpl.Segment.toList(ssegments));
 
             Member memberCustomerState =
                 schemaReader.getMemberByUniqueName(sid.getSegments(), false);

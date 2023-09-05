@@ -18,7 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 
 /**
  * todo:
@@ -111,12 +111,12 @@ class Test {
 
         RolapHierarchy genderHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new Id.NameSegment("Gender"), false);
+                new IdImpl.NameSegment("Gender"), false);
         testMemberReader(genderHierarchy.getMemberReader());
 
         RolapHierarchy customerHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new Id.NameSegment("Customers"), false);
+                new IdImpl.NameSegment("Customers"), false);
         testMemberReader(customerHierarchy.getMemberReader());
     }
     void testMemberReader(MemberReader reader)

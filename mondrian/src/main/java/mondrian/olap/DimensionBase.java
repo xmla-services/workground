@@ -108,10 +108,10 @@ public abstract class DimensionBase
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
     {
         OlapElement oe = null;
-        if (s instanceof Id.NameSegment nameSegment) {
+        if (s instanceof IdImpl.NameSegment nameSegment) {
             oe = lookupHierarchy(nameSegment);
         }
 
@@ -153,7 +153,7 @@ public abstract class DimensionBase
         return this.highCardinality;
     }
 
-    private Hierarchy lookupHierarchy(Id.NameSegment s) {
+    private Hierarchy lookupHierarchy(IdImpl.NameSegment s) {
         for (Hierarchy hierarchy : hierarchies) {
             if (Util.equalName(hierarchy.getName(), s.getName())) {
                 return hierarchy;

@@ -10,12 +10,13 @@
 package mondrian.mdx;
 
 import mondrian.olap.FormulaImpl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.LiteralImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
 import mondrian.olap.interfaces.NamedSetExpr;
@@ -57,21 +58,21 @@ public interface MdxVisitor {
     /**
      * Visits an UnresolvedFunCall.
      *
-     * @see UnresolvedFunCall#accept(MdxVisitor)
+     * @see UnresolvedFunCallImpl#accept(MdxVisitor)
      */
-    Object visit(UnresolvedFunCall call);
+    Object visit(UnresolvedFunCallImpl call);
 
     /**
      * Visits a ResolvedFunCall.
      *
-     * @see ResolvedFunCall#accept(MdxVisitor)
+     * @see ResolvedFunCallImpl#accept(MdxVisitor)
      */
-    Object visit(ResolvedFunCall call);
+    Object visit(ResolvedFunCallImpl call);
 
     /**
      * Visits an Id.
      *
-     * @see Id#accept(MdxVisitor)
+     * @see IdImpl#accept(MdxVisitor)
      */
     Object visit(Id id);
 
@@ -92,9 +93,9 @@ public interface MdxVisitor {
     /**
      * Visits a HierarchyExpr.
      *
-     * @see HierarchyExpr#accept(MdxVisitor)
+     * @see HierarchyExprImpl#accept(MdxVisitor)
      */
-    Object visit(HierarchyExpr hierarchyExpr);
+    Object visit(HierarchyExprImpl hierarchyExpr);
 
     /**
      * Visits a LevelExpr.

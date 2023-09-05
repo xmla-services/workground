@@ -39,7 +39,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.cache.HardSmartCache;
@@ -532,7 +532,7 @@ class DataSourceChangeListenerTest {
             (RolapSchemaReader) cube.getSchemaReader();
         RolapHierarchy hierarchy =
             (RolapHierarchy) cube.lookupHierarchy(
-                new Id.NameSegment(hierName, Id.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
         assertNotNull(hierarchy);
         return
             (SmartMemberReader) hierarchy.createMemberReader(
@@ -548,7 +548,7 @@ class DataSourceChangeListenerTest {
             (RolapSchemaReader) cube.getSchemaReader();
         RolapCubeHierarchy hierarchy =
             (RolapCubeHierarchy) cube.lookupHierarchy(
-                new Id.NameSegment(hierName, Id.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
         assertNotNull(hierarchy);
         return (SmartMemberReader) hierarchy.getRolapHierarchy()
             .createMemberReader(schemaReader.getRole());

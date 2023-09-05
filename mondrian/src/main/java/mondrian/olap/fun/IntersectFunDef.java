@@ -25,7 +25,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 
@@ -54,7 +54,7 @@ class IntersectFunDef extends FunDefBase
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final String literalArg = FunUtil.getLiteralArg(call, 2, "", IntersectFunDef.ReservedWords);
         final boolean all = literalArg.equalsIgnoreCase("ALL");
         final int arity = call.getType().getArity();

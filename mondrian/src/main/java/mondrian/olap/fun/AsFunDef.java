@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -56,7 +56,7 @@ class AsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         // Argument 0, the definition of the set, has been resolved since the
         // scoped named set was created. Implicit conversions, like converting
         // a member to a set, have been performed. Use the new expression.

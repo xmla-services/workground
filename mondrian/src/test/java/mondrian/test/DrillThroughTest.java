@@ -58,7 +58,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapCube;
@@ -396,7 +396,7 @@ class DrillThroughTest {
 
         Hierarchy h =
             cube.lookupHierarchy(
-                new Id.NameSegment(hierName, Id.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
         if (h == null) {
             return null;
         }

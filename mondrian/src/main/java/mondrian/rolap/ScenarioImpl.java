@@ -22,7 +22,7 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
@@ -185,8 +185,8 @@ public final class ScenarioImpl implements Scenario {
         if (isScenario(member.getHierarchy())) {
             final Formula formula = ((RolapCalculatedMember) member)
                 .getFormula();
-            final ResolvedFunCall resolvedFunCall =
-                (ResolvedFunCall) formula.getExpression();
+            final ResolvedFunCallImpl resolvedFunCall =
+                (ResolvedFunCallImpl) formula.getExpression();
             final Calc calc = resolvedFunCall.getFunDef()
                 .compileCall(null, null);
             return ((ScenarioCalc) calc).getScenario();

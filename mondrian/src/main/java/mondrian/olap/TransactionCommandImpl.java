@@ -20,18 +20,20 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.TransactionCommand;
+
 import java.io.PrintWriter;
 
-public class TransactionCommand extends AbstractQueryPart {
+public class TransactionCommandImpl extends AbstractQueryPart implements TransactionCommand {
 
     public enum Command {
         BEGIN,
         COMMIT,
         ROLLBACK
     }
-    private final TransactionCommand.Command command;
+    private final TransactionCommandImpl.Command command;
 
-    TransactionCommand(TransactionCommand.Command command)
+    TransactionCommandImpl(TransactionCommandImpl.Command command)
     {
         this.command = command;
     }
@@ -46,7 +48,8 @@ public class TransactionCommand extends AbstractQueryPart {
         return new Object[] {this.command};
     }
 
-    public TransactionCommand.Command getCommand() {
+    @Override
+    public TransactionCommandImpl.Command getCommand() {
         return this.command;
     }
 }

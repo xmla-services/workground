@@ -20,14 +20,16 @@ import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.FunTable;
 import mondrian.olap.interfaces.QueryAxis;
-import mondrian.olap.TransactionCommand;
-import mondrian.olap.Update;
+import mondrian.olap.TransactionCommandImpl;
+import mondrian.olap.UpdateImpl;
 import mondrian.olap.interfaces.Explain;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.interfaces.Refresh;
 import mondrian.olap.interfaces.Subcube;
+import mondrian.olap.interfaces.TransactionCommand;
+import mondrian.olap.interfaces.Update;
 import mondrian.server.Statement;
 
 /**
@@ -96,7 +98,7 @@ public interface MdxParserValidator {
 
         Update makeUpdate(
                 String cubeName,
-                List<Update.UpdateClause> list);
+                List<UpdateImpl.UpdateClause> list);
 
         DmvQuery makeDmvQuery(
                 String tableName,
@@ -104,6 +106,6 @@ public interface MdxParserValidator {
                 Exp whereExpression);
 
         TransactionCommand makeTransactionCommand(
-                TransactionCommand.Command c);
+                TransactionCommandImpl.Command c);
     }
 }

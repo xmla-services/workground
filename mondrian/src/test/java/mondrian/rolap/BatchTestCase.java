@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
@@ -586,7 +586,7 @@ public class BatchTestCase{
         if (salesCube != null) {
             RolapHierarchy hierarchy =
                     (RolapHierarchy) salesCube.lookupHierarchy(
-                            new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
+                            new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED),
                             false);
             if (hierarchy != null) {
                 SmartMemberReader memberReader =

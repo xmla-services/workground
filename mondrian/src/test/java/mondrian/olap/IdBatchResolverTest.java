@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.interfaces.Subcube;
 import org.apache.commons.collections.CollectionUtils;
@@ -62,7 +63,7 @@ class IdBatchResolverTest  {
      QueryImpl query;
 
     @Captor
-     ArgumentCaptor<List<Id.NameSegment>> childNames;
+     ArgumentCaptor<List<IdImpl.NameSegment>> childNames;
 
     @Captor
      ArgumentCaptor<Member> parentMember;
@@ -425,12 +426,12 @@ class IdBatchResolverTest  {
         return resolvedNames;
     }
 
-    private String sortedNames(List<Id.NameSegment> items) {
+    private String sortedNames(List<IdImpl.NameSegment> items) {
         Collections.sort(
-            items, new Comparator<Id.NameSegment>()
+            items, new Comparator<IdImpl.NameSegment>()
         {
             @Override
-			public int compare(Id.NameSegment o1, Id.NameSegment o2) {
+			public int compare(IdImpl.NameSegment o1, IdImpl.NameSegment o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });

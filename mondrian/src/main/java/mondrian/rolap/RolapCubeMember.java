@@ -13,10 +13,10 @@ package mondrian.rolap;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -238,12 +238,12 @@ public class RolapCubeMember
     @Override
 	public Exp getExpression() {
         Exp exp = member.getExpression();
-        if (exp instanceof ResolvedFunCall fcall) {
+        if (exp instanceof ResolvedFunCallImpl fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
-                if (fcall.getArg(i) instanceof HierarchyExpr expr && expr.getHierarchy().equals(
+                if (fcall.getArg(i) instanceof HierarchyExprImpl expr && expr.getHierarchy().equals(
                     member.getHierarchy())) {
                     fcall.getArgs()[i] =
-                        new HierarchyExpr(this.getHierarchy());
+                        new HierarchyExprImpl(this.getHierarchy());
                 }
             }
         }
@@ -253,7 +253,7 @@ public class RolapCubeMember
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        Id.Segment childName,
+        IdImpl.Segment childName,
         MatchType matchType)
     {
         return

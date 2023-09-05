@@ -40,7 +40,7 @@ import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -102,7 +102,7 @@ public class SetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         if (args.length == 0) {
             // Special treatment for empty set, because we don't know whether it
@@ -196,7 +196,7 @@ public class SetFunDef extends FunDefBase {
 
                 };
             } else if (type instanceof mondrian.olap.type.LevelType) {
-                mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
+                mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "Members",
                         mondrian.olap.Syntax.Property,
                         new Exp[] {arg});
@@ -322,7 +322,7 @@ public class SetFunDef extends FunDefBase {
                 calc.getResultStyle());
         } else if (TypeUtil.couldBeMember(type)) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
-            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
+            final ResolvedFunCallImpl call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(type, new Calc[] {memberCalc}) {
             	// name "Sublist..."// name "Sublist..."
                 @Override
@@ -340,7 +340,7 @@ public class SetFunDef extends FunDefBase {
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
-            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
+            final ResolvedFunCallImpl call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(call.getType(), new Calc[] {tupleCalc}) {
                 @Override
 				public TupleIterable evaluateIterable(
@@ -366,7 +366,7 @@ public class SetFunDef extends FunDefBase {
      * @param args Expressions
      * @return Call to set operator
      */
-    public static ResolvedFunCall wrapAsSet(Exp... args) {
+    public static ResolvedFunCallImpl wrapAsSet(Exp... args) {
         assert args.length > 0;
         final int[] categories = new int[args.length];
         Type type = null;
@@ -380,7 +380,7 @@ public class SetFunDef extends FunDefBase {
                 type = argType;
             }
         }
-        return new ResolvedFunCall(
+        return new ResolvedFunCallImpl(
             new SetFunDef(SetFunDef.Resolver, categories),
             args,
             new SetType(type));
@@ -520,7 +520,7 @@ public class SetFunDef extends FunDefBase {
          *
          * @param call Expression which was compiled
          */
-        EmptyListCalc(ResolvedFunCall call) {
+        EmptyListCalc(ResolvedFunCallImpl call) {
             super(call.getType(), new Calc[0]);
 
             list = TupleCollections.emptyList(call.getType().getArity());

@@ -18,7 +18,7 @@ import java.util.Map;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 
@@ -153,7 +153,7 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
 
     @Override
     public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return substitute(

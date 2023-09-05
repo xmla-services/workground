@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
@@ -206,7 +206,7 @@ public class SqlContextConstraint
             } else if (member instanceof RolapCalculatedMember) {
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
-        } else if (exp instanceof ResolvedFunCall funCall) {
+        } else if (exp instanceof ResolvedFunCallImpl funCall) {
             Exp [] args = funCall.getArgs();
             for (Exp arg : args) {
                 findMeasures(arg, baseCubes, baseCubeList);

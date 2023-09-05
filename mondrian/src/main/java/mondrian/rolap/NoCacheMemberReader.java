@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -209,7 +209,7 @@ public class NoCacheMemberReader implements MemberReader, MemberCache {
 
     @Override
 	public RolapMember lookupMember(
-        final List<Id.Segment> uniqueNameParts,
+        final List<IdImpl.Segment> uniqueNameParts,
         final boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);

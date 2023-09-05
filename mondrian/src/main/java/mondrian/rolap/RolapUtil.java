@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -255,7 +255,7 @@ public class RolapUtil {
 
     static RolapMember lookupMember(
         MemberReader reader,
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         RolapMember member =
@@ -281,13 +281,13 @@ public class RolapUtil {
     }
 
     private static RolapMember lookupMemberInternal(
-        List<Id.Segment> segments,
+        List<IdImpl.Segment> segments,
         RolapMember member,
         MemberReader reader,
         boolean failIfNotFound)
     {
-        for (Id.Segment segment : segments) {
-            if (!(segment instanceof Id.NameSegment nameSegment)) {
+        for (IdImpl.Segment segment : segments) {
+            if (!(segment instanceof IdImpl.NameSegment nameSegment)) {
                 break;
             }
             List<RolapMember> children;
@@ -479,10 +479,10 @@ public class RolapUtil {
         List<? extends Member> members,
         RolapMember parent,
         RolapLevel level,
-        Id.Segment searchName,
+        IdImpl.Segment searchName,
         MatchType matchType)
     {
-        if (!(searchName instanceof Id.NameSegment nameSegment)) {
+        if (!(searchName instanceof IdImpl.NameSegment nameSegment)) {
             return null;
         }
         switch (matchType) {
@@ -502,7 +502,7 @@ public class RolapUtil {
         Member bestMatch = null;
         for (Member member : members) {
             int rc;
-            if (searchName.quoting == Id.Quoting.KEY
+            if (searchName.quoting == IdImpl.Quoting.KEY
                 && member instanceof RolapMember rolapMember
                 && rolapMember.getKey().toString().equals(
                 nameSegment.name))

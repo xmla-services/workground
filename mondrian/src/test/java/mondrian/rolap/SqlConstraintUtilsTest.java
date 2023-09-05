@@ -48,7 +48,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Evaluator.SetEvaluator;
@@ -179,7 +179,7 @@ class SqlConstraintUtilsTest {
     }
 
     private Exp makeUnsupportedExpressionForCalculatedMember() {
-        Exp nullFunDefExpr = new ResolvedFunCall(
+        Exp nullFunDefExpr = new ResolvedFunCallImpl(
             new NullFunDef(), new Exp[]{}, new NullType());
         assertEquals(
             false,
@@ -226,7 +226,7 @@ class SqlConstraintUtilsTest {
         FunDef funDef = new AggregateFunDef(dummy);
         Exp[] args = new Exp[]{aggregateArg0};
         Type returnType = new DecimalType(1, 1);
-        Exp memberExp = new ResolvedFunCall(funDef, args, returnType);
+        Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
 
         Mockito.doReturn(memberExp).when(member).getExpression();
 
@@ -256,7 +256,7 @@ class SqlConstraintUtilsTest {
         FunDef funDef = new ParenthesesFunDef(Category.MEMBER);
         Exp[] args = new Exp[]{parenthesesArg};
         Type returnType = new DecimalType(1, 1);
-        Exp memberExp = new ResolvedFunCall(funDef, args, returnType);
+        Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
 
         Mockito.doReturn(memberExp).when(member).getExpression();
 
@@ -281,7 +281,7 @@ class SqlConstraintUtilsTest {
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 memberExpr), "MemberExpr");
 
-        Exp nullFunDefExpr = new ResolvedFunCall(
+        Exp nullFunDefExpr = new ResolvedFunCallImpl(
             new NullFunDef(), new Exp[]{}, new NullType());
         assertEquals(
             false,
@@ -289,7 +289,7 @@ class SqlConstraintUtilsTest {
                 nullFunDefExpr), "ResolvedFunCall-NullFunDef");
 
         // ResolvedFunCall arguments
-        final Exp argUnsupported = new ResolvedFunCall(
+        final Exp argUnsupported = new ResolvedFunCallImpl(
             new NullFunDef(), new Exp[]{}, new NullType());
         final Exp argSupported = new MemberExpr(Mockito.mock(Member.class));
         assertEquals(
@@ -308,7 +308,7 @@ class SqlConstraintUtilsTest {
         final ParenthesesFunDef parenthesesFunDef =
             new ParenthesesFunDef(Category.MEMBER);
         Type parenthesesReturnType = new DecimalType(1, 1);
-        Exp parenthesesExpr = new ResolvedFunCall(
+        Exp parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, noArgs, parenthesesReturnType);
         assertEquals(
             true,
@@ -316,20 +316,20 @@ class SqlConstraintUtilsTest {
                 parenthesesExpr),
                 "ResolvedFunCall-Parentheses()");
 
-        parenthesesExpr = new ResolvedFunCall(
+        parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, args1Unsupported, parenthesesReturnType);
         assertEquals(
             false, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 parenthesesExpr),
                 "ResolvedFunCall-Parentheses(N)");
 
-        parenthesesExpr = new ResolvedFunCall(
+        parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, args1Supported, parenthesesReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 parenthesesExpr),  "ResolvedFunCall-Parentheses(Y)");
 
-        parenthesesExpr = new ResolvedFunCall(
+        parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, args2Different, parenthesesReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -341,25 +341,25 @@ class SqlConstraintUtilsTest {
         FunDef aggregateFunDef = new AggregateFunDef(dummy);
         Type aggregateReturnType = new DecimalType(1, 1);
 
-        Exp aggregateExpr = new ResolvedFunCall(
+        Exp aggregateExpr = new ResolvedFunCallImpl(
             aggregateFunDef, noArgs, aggregateReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 aggregateExpr), "ResolvedFunCall-Aggregate()");
 
-        aggregateExpr = new ResolvedFunCall(
+        aggregateExpr = new ResolvedFunCallImpl(
             aggregateFunDef, args1Unsupported, aggregateReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 aggregateExpr), "ResolvedFunCall-Aggregate(N)");
 
-        aggregateExpr = new ResolvedFunCall(
+        aggregateExpr = new ResolvedFunCallImpl(
             aggregateFunDef, args1Supported, aggregateReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 aggregateExpr), "ResolvedFunCall-Aggregate(Y)");
 
-        aggregateExpr = new ResolvedFunCall(
+        aggregateExpr = new ResolvedFunCallImpl(
             aggregateFunDef, args2Different, aggregateReturnType);
         assertEquals(
             true,
@@ -720,12 +720,12 @@ class SqlConstraintUtilsTest {
         Member memberMock = mock(Member.class);
 
         Exp[] funCallArgExps = new Exp[0];
-        ResolvedFunCall funCallArgMock = new ResolvedFunCall(
+        ResolvedFunCallImpl funCallArgMock = new ResolvedFunCallImpl(
             mock(FunDef.class),
             funCallArgExps, mock(TupleType.class));
 
         Exp[] funCallExps = {funCallArgMock};
-        ResolvedFunCall funCallMock = new ResolvedFunCall(
+        ResolvedFunCallImpl funCallMock = new ResolvedFunCallImpl(
             mock(FunDef.class), funCallExps, mock(TupleType.class));
 
         when(memberMock.getExpression()).thenReturn(funCallMock);

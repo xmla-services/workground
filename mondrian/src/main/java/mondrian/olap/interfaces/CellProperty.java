@@ -13,7 +13,7 @@
  */
 package mondrian.olap.interfaces;
 
-public interface CellProperty extends QueryPart {
+public non-sealed interface CellProperty extends QueryPart {
 
     boolean isNameEquals(String propertyName);
 }

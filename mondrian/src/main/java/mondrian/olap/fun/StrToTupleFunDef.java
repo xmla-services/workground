@@ -22,8 +22,8 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -56,7 +56,7 @@ class StrToTupleFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
@@ -99,8 +99,8 @@ class StrToTupleFunDef extends FunDefBase {
             final Exp arg = args[i];
             if (arg instanceof DimensionExpr dimensionExpr) {
                 Dimension dimension = dimensionExpr.getDimension();
-                args[i] = new HierarchyExpr(dimension.getHierarchy());
-            } else if (arg instanceof HierarchyExpr) {
+                args[i] = new HierarchyExprImpl(dimension.getHierarchy());
+            } else if (arg instanceof HierarchyExprImpl) {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
@@ -174,7 +174,7 @@ class StrToTupleFunDef extends FunDefBase {
             for (int i = 1; i < args.length; i++) {
                 Exp exp = args[i];
                 if (!(exp instanceof DimensionExpr
-                    || exp instanceof HierarchyExpr))
+                    || exp instanceof HierarchyExprImpl))
                 {
                     return null;
                 }

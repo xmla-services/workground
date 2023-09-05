@@ -62,15 +62,15 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.HierarchyBase;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.LevelType;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
@@ -463,15 +463,15 @@ public class RolapHierarchy extends HierarchyBase {
             ((RolapLevel) level).init(xmlDimension);
         }
         if (defaultMemberName != null) {
-            List<Id.Segment> uniqueNameParts;
+            List<IdImpl.Segment> uniqueNameParts;
             if (defaultMemberName.contains("[")) {
                 uniqueNameParts = Util.parseIdentifier(defaultMemberName);
             } else {
                 uniqueNameParts =
-                    Collections.<Id.Segment>singletonList(
-                        new Id.NameSegment(
+                    Collections.<IdImpl.Segment>singletonList(
+                        new IdImpl.NameSegment(
                             defaultMemberName,
-                            Id.Quoting.UNQUOTED));
+                            IdImpl.Quoting.UNQUOTED));
             }
 
             // First look up from within this hierarchy. Works for unqualified
@@ -982,11 +982,11 @@ public class RolapHierarchy extends HierarchyBase {
                     new LimitedRollupAggregateCalc(returnType, tupleListCalc);
 
                 final Exp partialExp =
-                    new ResolvedFunCall(
+                    new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCall call,
+                                ResolvedFunCallImpl call,
                                 ExpCompiler compiler)
                             {
                                 return partialCalc;
@@ -1004,11 +1004,11 @@ public class RolapHierarchy extends HierarchyBase {
 
             case HIDDEN:
                 Exp hiddenExp =
-                    new ResolvedFunCall(
+                    new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCall call, ExpCompiler compiler)
+                                ResolvedFunCallImpl call, ExpCompiler compiler)
                             {
                                 return ConstantCalcs.nullCalcOf(returnType);
                             }
@@ -1112,10 +1112,10 @@ public class RolapHierarchy extends HierarchyBase {
      */
     synchronized Exp getAggregateChildrenExpression() {
         if (aggregateChildrenExpression == null) {
-            UnresolvedFunCall fc = new UnresolvedFunCall(
+            UnresolvedFunCallImpl fc = new UnresolvedFunCallImpl(
                 "$AggregateChildren",
                 Syntax.Internal,
-                new Exp[] {new HierarchyExpr(this)});
+                new Exp[] {new HierarchyExprImpl(this)});
             Validator validator =
                     Util.createSimpleValidator(BuiltinFunTable.instance());
             aggregateChildrenExpression = fc.accept(validator);
@@ -1610,10 +1610,10 @@ public class RolapHierarchy extends HierarchyBase {
         @Override
 		public OlapElement lookupChild(
             SchemaReader schemaReader,
-            Id.Segment s,
+            IdImpl.Segment s,
             MatchType matchType)
         {
-            if (!(s instanceof Id.NameSegment nameSegment)) {
+            if (!(s instanceof IdImpl.NameSegment nameSegment)) {
                 return null;
             }
             if (Util.equalName(nameSegment.name, dimension.getName())) {

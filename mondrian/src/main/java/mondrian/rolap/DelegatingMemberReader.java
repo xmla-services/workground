@@ -17,7 +17,7 @@ import java.util.Map;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
@@ -148,7 +148,7 @@ class DelegatingMemberReader implements MemberReader {
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return memberReader.lookupMember(uniqueNameParts, failIfNotFound);

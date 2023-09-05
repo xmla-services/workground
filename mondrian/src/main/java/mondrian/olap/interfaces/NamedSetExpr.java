@@ -16,7 +16,7 @@ package mondrian.olap.interfaces;
 import mondrian.olap.Evaluator;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 
-public interface NamedSetExpr extends QueryPart {
+public non-sealed interface NamedSetExpr extends QueryPart {
 
     NamedSet getNamedSet();
 

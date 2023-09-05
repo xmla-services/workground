@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ParameterExprImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FunCall;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
 import mondrian.olap.Parameter;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -93,7 +93,7 @@ public class ParameterFunDef extends FunDefBase {
             // e.g. "[Time].[Quarter]"
             return true;
         }
-        if (typeArg instanceof HierarchyExpr) {
+        if (typeArg instanceof HierarchyExprImpl) {
             // e.g. "[Time].[By Week]"
             return true;
         }

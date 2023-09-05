@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.QueryAxis;
@@ -90,17 +91,15 @@ import org.olap4j.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
 import mondrian.olap.LiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
@@ -1105,7 +1104,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             if (exp instanceof Id id) {
                 return toOlap4j(id);
             }
-            if (exp instanceof ResolvedFunCall call) {
+            if (exp instanceof ResolvedFunCallImpl call) {
                 return toOlap4j(call);
             }
             if (exp instanceof DimensionExpr dimensionExpr) {
@@ -1113,7 +1112,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     null,
                     olap4jConnection.toOlap4j(dimensionExpr.getDimension()));
             }
-            if (exp instanceof HierarchyExpr hierarchyExpr) {
+            if (exp instanceof HierarchyExprImpl hierarchyExpr) {
                 return new HierarchyNode(
                     null,
                     olap4jConnection.toOlap4j(hierarchyExpr.getHierarchy()));
@@ -1175,7 +1174,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
         }
 
-        private ParseTreeNode toOlap4j(ResolvedFunCall call) {
+        private ParseTreeNode toOlap4j(ResolvedFunCallImpl call) {
             final CallNode callNode = new CallNode(
                 null,
                 call.getFunName(),

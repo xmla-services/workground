@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -28,7 +29,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
@@ -54,7 +55,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null).withLocus();
         Member member =
             scr.getMemberByUniqueName(
-                Id.Segment.toList("Customers", "All Customers", "USA", "CA"),
+                IdImpl.Segment.toList("Customers", "All Customers", "USA", "CA"),
                 true);
         final boolean caseSensitive =
             MondrianProperties.instance().CaseSensitive.get();
@@ -195,7 +196,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null);
         Member memberForCardinalityTest =
             scr.getMemberByUniqueName(
-                Id.Segment.toList("Marital Status", "All Marital Status"),
+                IdImpl.Segment.toList("Marital Status", "All Marital Status"),
                 true);
         Integer intPropValue =
             (Integer) memberForCardinalityTest.getPropertyValue(

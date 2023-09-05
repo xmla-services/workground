@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.DimensionType;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.LevelBase;
 import mondrian.olap.LevelType;
 import mondrian.olap.MatchType;
@@ -553,17 +553,17 @@ public class RolapLevel extends LevelBase {
         IfParentsName
     }
 
-    public OlapElement lookupChild(SchemaReader schemaReader, Id.Segment name) {
+    public OlapElement lookupChild(SchemaReader schemaReader, IdImpl.Segment name) {
         return lookupChild(schemaReader, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment name, MatchType matchType)
+        SchemaReader schemaReader, IdImpl.Segment name, MatchType matchType)
     {
-        if (name instanceof Id.KeySegment keySegment) {
+        if (name instanceof IdImpl.KeySegment keySegment) {
             List<Comparable> keyValues = new ArrayList<>();
-            for (Id.NameSegment nameSegment : keySegment.getKeyParts()) {
+            for (IdImpl.NameSegment nameSegment : keySegment.getKeyParts()) {
                 final String keyValue = nameSegment.name;
                 if (RolapUtil.mdxNullLiteral().equalsIgnoreCase(keyValue)) {
                     keyValues.add(RolapUtil.sqlNullValue);

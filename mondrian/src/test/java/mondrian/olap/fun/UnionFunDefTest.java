@@ -33,7 +33,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.type.SetType;
@@ -88,8 +88,8 @@ class UnionFunDefTest {
         new CrossJoinFunDef(new CrossJoinTest.NullFunDef());
     Exp[] expMock = new Exp[1];
     expMock[0] = mock(Exp.class);
-    ResolvedFunCall resolvedFunCall =
-        new ResolvedFunCall(mock(FunDef.class), expMock, mock(SetType.class));
+    ResolvedFunCallImpl resolvedFunCall =
+        new ResolvedFunCallImpl(mock(FunDef.class), expMock, mock(SetType.class));
     Calc[] calcs = new Calc[1];
     calcs[0] = Mockito.mock(Calc.class);
     CrossJoinFunDef.ImmutableListCalc immutableListCalc =

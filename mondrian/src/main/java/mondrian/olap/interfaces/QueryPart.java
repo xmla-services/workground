@@ -15,7 +15,17 @@ package mondrian.olap.interfaces;
 
 import java.io.PrintWriter;
 
-public interface QueryPart {
+public sealed interface QueryPart permits
+    CalculatedFormula, CellProperty,
+    DimensionExpr, DmvQuery,
+    DrillThrough, Explain,
+    Formula, HierarchyExpr,
+    Id, LevelExpr, Literal,
+    MemberProperty, NamedSetExpr,
+    ParameterExpr, Query,
+    QueryAxis, Refresh, ResolvedFunCall,
+    Subcube, TransactionCommand,
+    UnresolvedFunCall, Update{
 
     /**
      * Returns an array of the object's children.  Those which are not are ignored.

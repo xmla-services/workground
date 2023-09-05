@@ -45,7 +45,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Category;
 import mondrian.olap.DelegatingRole;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
@@ -117,7 +117,7 @@ class AccessControlTest {
         final SchemaReader schemaReader = salesCube.getSchemaReader(role);
         Dimension genderDimension =
             (Dimension) schemaReader.lookupCompound(
-                salesCube, Id.Segment.toList("Gender"), true,
+                salesCube, IdImpl.Segment.toList("Gender"), true,
                 Category.DIMENSION);
         role.grant(genderDimension, Access.NONE);
         role.makeImmutable();
@@ -1138,9 +1138,9 @@ class AccessControlTest {
         Cube salesCube = schema.lookupCube("Sales", mustGet);
         Cube warehouseCube = schema.lookupCube("Warehouse", mustGet);
         Hierarchy measuresInSales = salesCube.lookupHierarchy(
-            new Id.NameSegment("Measures", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegment("Measures", IdImpl.Quoting.UNQUOTED), false);
         Hierarchy storeInWarehouse = warehouseCube.lookupHierarchy(
-            new Id.NameSegment("Store", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED), false);
 
         RoleImpl role = new RoleImpl();
         role.grant(schema, Access.NONE);
@@ -1191,7 +1191,7 @@ class AccessControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         Hierarchy storeHierarchy = salesCube.lookupHierarchy(
-            new Id.NameSegment("Store", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED), false);
         role.grant(schema, Access.ALL_DIMENSIONS);
         role.grant(salesCube, Access.ALL);
         Level nationLevel =
@@ -1235,7 +1235,7 @@ class AccessControlTest {
         if (restrictCustomers) {
             Hierarchy customersHierarchy =
                 salesCube.lookupHierarchy(
-                    new Id.NameSegment("Customers", Id.Quoting.UNQUOTED),
+                    new IdImpl.NameSegment("Customers", IdImpl.Quoting.UNQUOTED),
                     false);
             Level stateProvinceLevel =
                 Util.lookupHierarchyLevel(customersHierarchy, "State Province");
@@ -1892,7 +1892,7 @@ class AccessControlTest {
         final HierarchyAccess accessDetails =
             connection.getRole().getAccessDetails(
                 cube.lookupHierarchy(
-                    new Id.NameSegment("Customers", Id.Quoting.UNQUOTED),
+                    new IdImpl.NameSegment("Customers", IdImpl.Quoting.UNQUOTED),
                     false));
         final SchemaReader scr =
             cube.getSchemaReader(null).withLocus();
@@ -3240,7 +3240,7 @@ class AccessControlTest {
             role.grant(cube, Access.ALL);
 
             Hierarchy hierarchy = cube.lookupHierarchy(
-                new Id.NameSegment("Employees"), false);
+                new IdImpl.NameSegment("Employees"), false);
 
             Level[] levels = hierarchy.getLevels();
             Level topLevel = levels[1];

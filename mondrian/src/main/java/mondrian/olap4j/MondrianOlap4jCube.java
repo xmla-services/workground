@@ -222,7 +222,7 @@ class MondrianOlap4jCube
         SchemaReader schemaReader,
         List<IdentifierSegment> nameParts)
     {
-        final List<mondrian.olap.Id.Segment> segmentList =
+        final List<mondrian.olap.IdImpl.Segment> segmentList =
             new ArrayList<>();
         for (IdentifierSegment namePart : nameParts) {
             segmentList.add(Util.convert(namePart));

@@ -118,7 +118,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
     }
 
     @Override
-	public Hierarchy lookupHierarchy(Id.NameSegment s, boolean unique) {
+	public Hierarchy lookupHierarchy(IdImpl.NameSegment s, boolean unique) {
         for (Dimension dimension : dimensions) {
             Hierarchy[] hierarchies = dimension.getHierarchies();
             for (Hierarchy hierarchy : hierarchies) {
@@ -135,7 +135,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        Id.Segment s,
+        IdImpl.Segment s,
         MatchType matchType)
     {
         Dimension mdxDimension = lookupDimension(s);
@@ -146,7 +146,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
         final List<Dimension> dimensionsInner = schemaReader.getCubeDimensions(this);
 
         // Look for hierarchies named '[dimension.hierarchy]'.
-        if (s instanceof Id.NameSegment nameSegment) {
+        if (s instanceof IdImpl.NameSegment nameSegment) {
             Hierarchy hierarchy = lookupHierarchy(nameSegment, false);
             if (hierarchy != null) {
                 return hierarchy;
@@ -179,8 +179,8 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
      * @param s Name segment
      * @return Dimension, or null if not found
      */
-    public Dimension lookupDimension(Id.Segment s) {
-        if (!(s instanceof Id.NameSegment nameSegment)) {
+    public Dimension lookupDimension(IdImpl.Segment s) {
+        if (!(s instanceof IdImpl.NameSegment nameSegment)) {
             return null;
         }
         for (Dimension dimension : dimensions) {

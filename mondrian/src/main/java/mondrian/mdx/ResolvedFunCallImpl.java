@@ -13,6 +13,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
+import mondrian.olap.interfaces.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -34,7 +35,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Jan 6, 2006
  */
-public final class ResolvedFunCall extends ExpBase implements FunCall {
+public final class ResolvedFunCallImpl extends ExpBase implements FunCall, ResolvedFunCall {
 
     /**
      * The arguments to the function call.  Note that for methods, 0-th arg is
@@ -59,7 +60,7 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
      * @param args Arguments
      * @param returnType Return type
      */
-    public ResolvedFunCall(FunDef funDef, Exp[] args, Type returnType) {
+    public ResolvedFunCallImpl(FunDef funDef, Exp[] args, Type returnType) {
         if (funDef == null || args == null || returnType == null) {
             throw new IllegalArgumentException("ResolvedFunCall params be not null");
         }
@@ -75,8 +76,8 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
-    public ResolvedFunCall cloneExp() {
-        return new ResolvedFunCall(
+    public ResolvedFunCallImpl cloneExp() {
+        return new ResolvedFunCallImpl(
             funDef, ExpBase.cloneArray(args), returnType);
     }
 

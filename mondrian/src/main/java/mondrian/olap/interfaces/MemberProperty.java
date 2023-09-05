@@ -16,7 +16,7 @@ package mondrian.olap.interfaces;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
 
-public interface MemberProperty extends QueryPart{
+public non-sealed interface MemberProperty extends QueryPart{
 
     Exp getExp();
 

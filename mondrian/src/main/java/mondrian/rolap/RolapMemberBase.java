@@ -28,10 +28,10 @@ import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -967,8 +967,8 @@ public class RolapMemberBase
         String name;
         if (key == null || RolapUtil.sqlNullValue.equals(key)) {
             name = RolapUtil.mdxNullLiteral();
-        } else if (key instanceof Id.NameSegment) {
-            name = ((Id.NameSegment) key).name;
+        } else if (key instanceof IdImpl.NameSegment) {
+            name = ((IdImpl.NameSegment) key).name;
         } else {
             name = key.toString();
         }
@@ -1116,7 +1116,7 @@ public class RolapMemberBase
      * @return Whether expression contains a call to an aggregate function.
      */
     private static boolean foundAggregateFunction(Exp exp) {
-        if (exp instanceof ResolvedFunCall resolvedFunCall) {
+        if (exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             if (resolvedFunCall.getFunDef() instanceof AggregateFunDef) {
                 return true;
             } else {

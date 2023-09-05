@@ -15,9 +15,9 @@ package mondrian.olap;
  * A <code>FunCall</code> is a function applied to a list of operands.
  *
  * <p>The parser creates function calls as an
- * {@link mondrian.mdx.UnresolvedFunCall unresolved  function call}.
+ * {@link mondrian.mdx.UnresolvedFunCallImpl unresolved  function call}.
  * The validator converts it to a
- * {@link  mondrian.mdx.ResolvedFunCall resolved function call},
+ * {@link  mondrian.mdx.ResolvedFunCallImpl resolved function call},
  * which has a {@link FunDef function definition} and extra type information.
  *
  * @author jhyde

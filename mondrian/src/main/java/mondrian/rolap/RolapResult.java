@@ -54,10 +54,10 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -317,11 +317,11 @@ public class RolapResult extends ResultBase {
         final Calc partialCalc =
                 new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
         Exp partialExp =
-                new ResolvedFunCall(
+                new ResolvedFunCallImpl(
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
                           @Override
 						public Calc compileCall(
-                                  ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
+                                  ResolvedFunCallImpl call, mondrian.calc.ExpCompiler compiler)
                           {
                             return partialCalc;
                           }
@@ -629,7 +629,7 @@ public class RolapResult extends ResultBase {
       // Cells will not be calculated if only CELL_ORDINAL requested.
       QueryPart[] cellProperties = query.getCellProperties();
       if(!(cellProperties.length == 1
-              && ((mondrian.olap.Id.NameSegment)
+              && ((mondrian.olap.IdImpl.NameSegment)
               mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).name.equalsIgnoreCase(
               mondrian.olap.Property.CELL_ORDINAL.getName()    ))) {
         final Locus locus = new Locus( execution, null, "Loading cells" );
@@ -821,7 +821,7 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( HierarchyExpr hierarchyExpr ) {
+	public Object visit( HierarchyExprImpl hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
@@ -1449,7 +1449,7 @@ public Cell getCell( int[] pos ) {
       Exp exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
     } else if ( o instanceof Exp exp && !( o instanceof MemberExpr ) ) {
-      ResolvedFunCall funCall = (ResolvedFunCall) exp;
+      ResolvedFunCallImpl funCall = (ResolvedFunCallImpl) exp;
       Exp[] exps = funCall.getArgs();
       processMemberExpr( exps, exprMembers );
     } else if ( o instanceof Exp[] exps ) {

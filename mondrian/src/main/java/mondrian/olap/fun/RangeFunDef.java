@@ -21,7 +21,7 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.type.NullType;
@@ -94,7 +94,7 @@ class RangeFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(final ResolvedFunCallImpl call, ExpCompiler compiler) {
         final MemberCalc[] memberCalcs =
             compileMembers(call.getArg(0), call.getArg(1), compiler);
         return new AbstractListCalc(
