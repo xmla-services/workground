@@ -11,8 +11,9 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-public non-sealed interface UnresolvedFunCall extends QueryPart {
+public non-sealed interface Refresh extends QueryPart {
 
+    String getCubeName();
 }

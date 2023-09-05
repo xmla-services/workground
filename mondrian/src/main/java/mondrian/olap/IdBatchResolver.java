@@ -24,12 +24,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import mondrian.olap.interfaces.DimensionExpr;
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.MemberExpr;
-import mondrian.olap.interfaces.QueryAxis;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.QueryPart;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;

@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
-import mondrian.olap.interfaces.Literal;
+import mondrian.olap.api.Literal;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

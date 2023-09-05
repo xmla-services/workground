@@ -16,8 +16,8 @@ package mondrian.olap;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.QueryPart;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;

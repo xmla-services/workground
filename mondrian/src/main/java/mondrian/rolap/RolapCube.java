@@ -34,9 +34,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.MemberProperty;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;

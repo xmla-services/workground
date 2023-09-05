@@ -12,7 +12,7 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.interfaces.Formula;
+import mondrian.olap.api.Formula;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;

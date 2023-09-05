@@ -19,14 +19,14 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Schema;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.interfaces.DrillThrough;
+import mondrian.olap.api.DrillThrough;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;

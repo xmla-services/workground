@@ -15,10 +15,10 @@ import java.util.List;
 
 import mondrian.mdx.ParameterExprImpl;
 import mondrian.olap.fun.Resolver;
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.MemberProperty;
-import mondrian.olap.interfaces.Query;
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryAxis;
 import mondrian.olap.type.Type;
 
 /**

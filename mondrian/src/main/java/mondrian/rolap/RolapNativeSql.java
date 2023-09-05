@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mondrian.olap.interfaces.DimensionExpr;
-import mondrian.olap.interfaces.LevelExpr;
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;

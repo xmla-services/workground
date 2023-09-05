@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.Set;
 
 import mondrian.mdx.MemberExprImpl;
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.ParameterExpr;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;

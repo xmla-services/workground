@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.interfaces.Id;
+import mondrian.olap.api.Id;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import mondrian.mdx.MdxVisitor;

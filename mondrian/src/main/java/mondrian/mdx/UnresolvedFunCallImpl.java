@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.interfaces.UnresolvedFunCall;
+import mondrian.olap.api.UnresolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.api.LevelExpr;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;

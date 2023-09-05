@@ -13,7 +13,7 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;

@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.interfaces.MemberExpr;
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

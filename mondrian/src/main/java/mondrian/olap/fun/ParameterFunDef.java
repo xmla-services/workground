@@ -14,11 +14,11 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.interfaces.DimensionExpr;
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.LevelExpr;
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.mdx.HierarchyExprImpl;

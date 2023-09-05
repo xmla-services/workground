@@ -11,7 +11,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.olap.api.Connection;
 import org.slf4j.Logger;
 

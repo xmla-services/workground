@@ -20,7 +20,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.Update;
+import mondrian.olap.api.Update;
 
 import java.io.PrintWriter;
 import java.util.List;

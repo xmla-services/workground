@@ -11,16 +11,19 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import mondrian.olap.Exp;
-import mondrian.olap.Validator;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 
-public non-sealed interface MemberProperty extends QueryPart{
+import java.util.List;
 
-    Exp getExp();
+public non-sealed interface DrillThrough extends QueryPart {
 
-    String getName();
+    Query getQuery();
 
-    void resolve(Validator validator);
+    int getMaxRowCount();
+
+    int getFirstRowOrdinal();
+
+    List<OlapElement> getReturnList();
 }

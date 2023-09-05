@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import mondrian.olap.interfaces.Literal;
+import mondrian.olap.api.Literal;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;

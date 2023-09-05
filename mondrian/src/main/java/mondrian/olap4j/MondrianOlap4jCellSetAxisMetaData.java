@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.LevelExpr;
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;

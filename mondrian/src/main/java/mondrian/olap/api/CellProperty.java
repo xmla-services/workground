@@ -11,8 +11,9 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-public non-sealed interface HierarchyExpr extends QueryPart {
+public non-sealed interface CellProperty extends QueryPart {
 
+    boolean isNameEquals(String propertyName);
 }

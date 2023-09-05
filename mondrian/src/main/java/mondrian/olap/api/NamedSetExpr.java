@@ -11,12 +11,14 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-public non-sealed interface CalculatedFormula extends QueryPart {
+import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
-    String getCubeName();
+public non-sealed interface NamedSetExpr extends QueryPart {
 
-    Formula getFormula();
+    NamedSet getNamedSet();
 
+    Evaluator.NamedSetEvaluator getEval(Evaluator evaluator);
 }

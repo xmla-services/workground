@@ -13,7 +13,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.interfaces.ResolvedFunCall;
+import mondrian.olap.api.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

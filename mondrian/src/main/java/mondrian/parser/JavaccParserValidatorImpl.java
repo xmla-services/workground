@@ -14,7 +14,7 @@ import mondrian.olap.FunTable;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Parser;
 import mondrian.olap.Util;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.QueryPart;
 import mondrian.server.Statement;
 
 /**

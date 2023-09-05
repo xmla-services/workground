@@ -27,8 +27,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.interfaces.Query;
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.Cell;

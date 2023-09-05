@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.interfaces.DrillThrough;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.DrillThrough;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
 /**
