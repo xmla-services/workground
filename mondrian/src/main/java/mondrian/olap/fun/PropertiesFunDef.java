@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -55,7 +55,7 @@ class PropertiesFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
         return new GenericCalc(call.getType()) {

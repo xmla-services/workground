@@ -69,7 +69,7 @@ import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunTable;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Parameter;
@@ -729,10 +729,10 @@ public class RolapSchema implements Schema {
         }
         final Formula formula =
             new FormulaImpl(
-                new Id(
-                    new Id.NameSegment(
+                new IdImpl(
+                    new IdImpl.NameSegment(
                         xmlNamedSet.name(),
-                        Id.Quoting.UNQUOTED)),
+                        IdImpl.Quoting.UNQUOTED)),
                 exp);
         return formula.getNamedSet();
     }
@@ -891,7 +891,7 @@ public class RolapSchema implements Schema {
         int category,
         String id)
     {
-        List<Id.Segment> segments = Util.parseIdentifier(id);
+        List<IdImpl.Segment> segments = Util.parseIdentifier(id);
         //noinspection unchecked
         return (T) reader.lookupCompound(cube, segments, true, category);
     }

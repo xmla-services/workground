@@ -16,7 +16,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -51,7 +51,7 @@ class DimensionsStringFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
     {
         final StringCalc stringCalc =
             compiler.compileString(call.getArg(0));

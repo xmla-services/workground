@@ -41,7 +41,7 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.MondrianProperties;
@@ -404,7 +404,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     return list;
   }
 
-  protected ResolvedFunCall getResolvedFunCall() {
+  protected ResolvedFunCallImpl getResolvedFunCall() {
     FunDef funDef = new TestFunDef();
     Exp[] args = new Exp[ 0 ];
     Type returnType =
@@ -413,7 +413,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
           new Type[] {
             new MemberType( null, null, null, null ),
             new MemberType( null, null, null, null ) } ) );
-    return new ResolvedFunCall( funDef, args, returnType );
+    return new ResolvedFunCallImpl( funDef, args, returnType );
   }
 
   ////////////////////////////////////////////////////////////////////////
@@ -464,7 +464,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+	public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
       throw new UnsupportedOperationException();
     }
   }
@@ -514,7 +514,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+	public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
       return null;
     }
   }

@@ -155,21 +155,21 @@ public class MdxParserImpl
 
     private Exp createCall(
         Exp left,
-        Id.Segment segment,
+        IdImpl.Segment segment,
         List<Exp> argList)
     {
-        final String name = segment instanceof Id.NameSegment
-            ? ((Id.NameSegment) segment).name
+        final String name = segment instanceof IdImpl.NameSegment
+            ? ((IdImpl.NameSegment) segment).name
             : null;
         if (argList != null) {
             if (left != null) {
                 // Method syntax: "x.foo(arg1, arg2)" or "x.foo()"
                 argList.add(0, left);
-                return new UnresolvedFunCall(
+                return  new UnresolvedFunCallImpl(
                     name, Syntax.Method, toExpArray(argList));
             } else {
                 // Function syntax: "foo(arg1, arg2)" or "foo()"
-                return new UnresolvedFunCall(
+                return  new UnresolvedFunCallImpl(
                     name, Syntax.Function, toExpArray(argList));
             }
         } else {
@@ -189,12 +189,12 @@ public class MdxParserImpl
                 syntax = Syntax.AmpersandQuotedProperty;
                 break;
             }
-            if (left instanceof Id && !call) {
-                return ((Id) left).append(segment);
+            if (left instanceof IdImpl && !call) {
+                return ((IdImpl) left).append(segment);
             } else if (left == null) {
-                return new Id(segment);
+                return  new IdImpl(segment);
             } else {
-                return new UnresolvedFunCall(
+                return  new UnresolvedFunCallImpl(
                     name, syntax, new Exp[] {left});
             }
         }
@@ -453,9 +453,9 @@ Exp expressionEof() :
 //
 // <identifier> ::= <regularIdentifier> | <delimitedIdentifier>
 
-Id.Segment identifier() :
+IdImpl.Segment identifier() :
 {
-    Id.Segment segment;
+    IdImpl.Segment segment;
 }
 {
     (
@@ -468,7 +468,7 @@ Id.Segment identifier() :
     }
 }
 
-Id.NameSegment nameSegment() :
+IdImpl.NameSegment nameSegment() :
 {
     String id;
 }
@@ -476,26 +476,26 @@ Id.NameSegment nameSegment() :
     id = keyword() {
         // Allow a non-reserved keyword to be converted back into an identifier
         // if it is not in a context where it is meaningful.
-        return new Id.NameSegment(id, Id.Quoting.UNQUOTED);
+        return new IdImpl.NameSegment(id, IdImpl.Quoting.UNQUOTED);
     }
 |   <ID> {
-        return new Id.NameSegment(token.image, Id.Quoting.UNQUOTED);
+        return new IdImpl.NameSegment(token.image, IdImpl.Quoting.UNQUOTED);
     }
 |   <ATSIGN><ID> {
-        return new Id.NameSegment("@" + token.image, Id.Quoting.UNQUOTED);
+        return new IdImpl.NameSegment("@" + token.image, IdImpl.Quoting.UNQUOTED);
     }
 |   <QUOTED_ID> {
-        return new Id.NameSegment(
+        return new IdImpl.NameSegment(
             stripQuotes(token.image, "[", "]", "]]"),
-            Id.Quoting.QUOTED);
+            IdImpl.Quoting.QUOTED);
     }
 }
 
 // for example '&foo&[1]&bar' in '[x].&foo&[1]&bar.[y]'
-Id.KeySegment keyIdentifier() :
+IdImpl.KeySegment keyIdentifier() :
 {
-    List<Id.NameSegment> list = new ArrayList<Id.NameSegment>();
-    Id.NameSegment key;
+    List<IdImpl.NameSegment> list = new ArrayList<IdImpl.NameSegment>();
+    IdImpl.NameSegment key;
 }
 {
     (
@@ -504,24 +504,24 @@ Id.KeySegment keyIdentifier() :
         }
     )+
     {
-        return new Id.KeySegment(list);
+        return new IdImpl.KeySegment(list);
     }
 }
 
-Id.NameSegment ampId() :
+IdImpl.NameSegment ampId() :
 {
 }
 {
     <AMP_QUOTED_ID> {
-        return new Id.NameSegment(
+        return new IdImpl.NameSegment(
             stripQuotes(token.image, "&[", "]", "]]"),
-            Id.Quoting.QUOTED);
+            IdImpl.Quoting.QUOTED);
     }
 |
     <AMP_UNQUOTED_ID> {
-        return new Id.NameSegment(
+        return new IdImpl.NameSegment(
             token.image.substring(1),
-            Id.Quoting.UNQUOTED);
+            IdImpl.Quoting.UNQUOTED);
     }
 }
 
@@ -539,10 +539,10 @@ String keyword() :
     }
 }
 
-Id compoundId() :
+IdImpl compoundId() :
 {
-    Id.Segment i;
-    List<Id.Segment> list = new ArrayList<Id.Segment>();
+    IdImpl.Segment i;
+    List<IdImpl.Segment> list = new ArrayList<IdImpl.Segment>();
 }
 {
     i = identifier() {
@@ -555,7 +555,7 @@ Id compoundId() :
         }
     )*
     {
-        return new Id(list);
+        return  new IdImpl(list);
     }
 }
 
@@ -569,15 +569,15 @@ Exp unaliasedExpression() :
     x = term5()
     (
         <OR> y = term5() {
-            x = new UnresolvedFunCall("OR", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("OR", Syntax.Infix, new Exp[] {x, y});
         }
     |   <XOR> y = term5() {
-            x = new UnresolvedFunCall("XOR", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("XOR", Syntax.Infix, new Exp[] {x, y});
         }
     |
         // range 'm1 : m2' yields set of members
         <COLON> y = term5() {
-            x = new UnresolvedFunCall(":", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl(":", Syntax.Infix, new Exp[] {x, y});
         }
     )*
     {
@@ -593,7 +593,7 @@ Exp term5() :
     x = term4()
     (
         <AND> y = term4() {
-            x = new UnresolvedFunCall("AND", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("AND", Syntax.Infix, new Exp[] {x, y});
         }
     )*
     {
@@ -610,7 +610,7 @@ Exp term4() :
         return x;
     }
 |   <NOT> x = term4() {
-        return new UnresolvedFunCall("NOT", Syntax.Prefix, new Exp[] {x});
+        return  new UnresolvedFunCallImpl("NOT", Syntax.Prefix, new Exp[] {x});
     }
 }
 
@@ -632,42 +632,42 @@ Exp term3() :
         |   <GE>  { op = token; }
         )
         y = term2() {
-            x = new UnresolvedFunCall(op.image, Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl(op.image, Syntax.Infix, new Exp[] {x, y});
         }
     |
         // We expect a shift-reduce conflict here, because NULL is a literal and
         // so is a valid argument to the IS operator. We want to shift.
         LOOKAHEAD(2)
         <IS> <NULL> {
-            x = new UnresolvedFunCall("IS NULL", Syntax.Postfix, new Exp[] {x});
+            x =  new UnresolvedFunCallImpl("IS NULL", Syntax.Postfix, new Exp[] {x});
         }
     |
         // e.g. "x IS y"; but "x IS NULL" is handled elsewhere
         LOOKAHEAD(2)
         <IS> y = term2() {
-            x = new UnresolvedFunCall("IS", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("IS", Syntax.Infix, new Exp[] {x, y});
         }
     |   <IS> <EMPTY> {
-            x = new UnresolvedFunCall(
+            x =  new UnresolvedFunCallImpl(
                 "IS EMPTY", Syntax.Postfix, new Exp[] {x});
         }
     |   <MATCHES> y = term2() {
-            x = new UnresolvedFunCall("MATCHES", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("MATCHES", Syntax.Infix, new Exp[] {x, y});
         }
     |   LOOKAHEAD(2)
         <NOT> <MATCHES> y = term2() {
-            x = new UnresolvedFunCall(
+            x =  new UnresolvedFunCallImpl(
                 "NOT", Syntax.Prefix, new Exp[] {
-                    new UnresolvedFunCall(
+                     new UnresolvedFunCallImpl(
                         "MATCHES", Syntax.Infix, new Exp[] {x, y})});
         }
     |   <IN> y = term2() {
-            x = new UnresolvedFunCall("IN", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("IN", Syntax.Infix, new Exp[] {x, y});
         }
     |   <NOT> <IN> y = term2() {
-            x = new UnresolvedFunCall(
+            x =  new UnresolvedFunCallImpl(
                 "NOT", Syntax.Prefix, new Exp[] {
-                    new UnresolvedFunCall(
+                     new UnresolvedFunCallImpl(
                         "IN", Syntax.Infix, new Exp[] {x, y})});
         }
     )*
@@ -684,13 +684,13 @@ Exp term2() :
     x = term()
     (
         <PLUS> y = term() {
-            x = new UnresolvedFunCall("+", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("+", Syntax.Infix, new Exp[] {x, y});
         }
     |   <MINUS> y = term() {
-            x = new UnresolvedFunCall("-", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("-", Syntax.Infix, new Exp[] {x, y});
         }
     |   <CONCAT> y = term() {
-            x = new UnresolvedFunCall("||", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("||", Syntax.Infix, new Exp[] {x, y});
         }
     )*
     {
@@ -706,10 +706,10 @@ Exp term() :
     x = factor()
     (
         <ASTERISK> y = factor() {
-            x = new UnresolvedFunCall("*", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("*", Syntax.Infix, new Exp[] {x, y});
         }
     |   <SOLIDUS> y = factor() {
-            x = new UnresolvedFunCall("/", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("/", Syntax.Infix, new Exp[] {x, y});
         }
     )*
     {
@@ -729,10 +729,10 @@ Exp factor() :
         return p;
     }
 |   <MINUS> p = primary() {
-        return new UnresolvedFunCall("-", Syntax.Prefix, new Exp[] {p});
+        return  new UnresolvedFunCallImpl("-", Syntax.Prefix, new Exp[] {p});
     }
 |   <EXISTING> p = primary() {
-        return new UnresolvedFunCall("Existing", Syntax.Prefix, new Exp[] {p});
+        return  new UnresolvedFunCallImpl("Existing", Syntax.Prefix, new Exp[] {p});
     }
 }
 
@@ -752,7 +752,7 @@ Exp primary() :
 
 Exp segmentOrFuncall(Exp left) :
 {
-    Id.Segment segment;
+    IdImpl.Segment segment;
     List<Exp> argList = null;
 }
 {
@@ -791,7 +791,7 @@ LiteralImpl numericLiteral() :
 Exp atom() :
 {
     Exp e;
-    Id.NameSegment segment;
+    IdImpl.NameSegment segment;
     List<Exp> lis;
 }
 {
@@ -810,7 +810,7 @@ Exp atom() :
 |   <CAST> <LPAREN> e = unaliasedExpression()
     <AS> segment = nameSegment() <RPAREN>
     {
-        return new UnresolvedFunCall(
+        return  new UnresolvedFunCallImpl(
             "CAST", Syntax.Cast, new Exp[] {
                 e,
                 LiteralImpl.createSymbol(segment.name)});
@@ -818,7 +818,7 @@ Exp atom() :
 |   <LPAREN> lis = expList() <RPAREN> {
         // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
         // are just expressions.
-        return new UnresolvedFunCall(
+        return  new UnresolvedFunCallImpl(
             "()", Syntax.Parentheses, toExpArray(lis));
     }
 |
@@ -832,7 +832,7 @@ Exp atom() :
         lis = expList()
     )
     <RBRACE> {
-        return new UnresolvedFunCall(
+        return  new UnresolvedFunCallImpl(
             "{}", Syntax.Braces, toExpArray(lis));
     }
 |   e = caseExpression() {
@@ -896,10 +896,10 @@ Exp caseExpression() :
     <END>
     {
         if (match) {
-            return new UnresolvedFunCall(
+            return  new UnresolvedFunCallImpl(
                 "_CaseMatch", Syntax.Case, toExpArray(list));
         } else {
-            return new UnresolvedFunCall(
+            return  new UnresolvedFunCallImpl(
                 "_CaseTest", Syntax.Case, toExpArray(list));
         }
     }
@@ -911,14 +911,14 @@ Exp caseExpression() :
 Exp expression() :
 {
     Exp e;
-    Id.Segment i;
+    IdImpl.Segment i;
 }
 {
     e = unaliasedExpression()
     (
         <AS> i = identifier() {
-            Id id = new Id(i);
-            e = new UnresolvedFunCall("AS", Syntax.Infix, new Exp[] {e, id});
+            IdImpl id =  new IdImpl(i);
+            e =  new UnresolvedFunCallImpl("AS", Syntax.Infix, new Exp[] {e, id});
         }
     )*
     {
@@ -935,7 +935,7 @@ Exp expressionOrEmpty() :
         return e;
     }
 |   /* empty */ {
-        return new UnresolvedFunCall("", Syntax.Empty, new Exp[] {});
+        return  new UnresolvedFunCallImpl("", Syntax.Empty, new Exp[] {});
     }
 }
 
@@ -1051,7 +1051,7 @@ QueryPart selectOrDrillthroughStatement() :
 
 QueryPart dmvSelectStatement() :
 {
-    Id.NameSegment tableId;
+    IdImpl.NameSegment tableId;
     Id c;
     List<Id> columns = new ArrayList<Id>();
     Exp w = null;
@@ -1074,7 +1074,7 @@ QueryPart dmvSelectStatement() :
         String tableName = tableId.name;
         List<String> returnList = new ArrayList<String>();
         for(Id id: columns) {
-            returnList.add(((Id.NameSegment) id.getElement(0)).name);
+            returnList.add(((IdImpl.NameSegment) id.getElement(0)).name);
         }
         return factory.makeDmvQuery(tableName, returnList, w);
     }
@@ -1187,7 +1187,7 @@ Subcube selectSubcubeClause() :
     {
         String cubeName = null;
         if(c != null) {
-            cubeName = ((Id.NameSegment) c.getElement(0)).name;
+            cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
         }
         final QueryAxis slicerAxis =
             w == null
@@ -1206,7 +1206,7 @@ Subcube selectSubcubeClause() :
 QueryPart createFormula() :
 {
     boolean isMember = true;
-    Id.NameSegment cubeId;
+    IdImpl.NameSegment cubeId;
     Id m;
     Exp e;
     List<MemberProperty> l = new ArrayList<MemberProperty>();
@@ -1247,7 +1247,7 @@ QueryPart refreshStatement() :
 {
     <REFRESH> <CUBE>  c = compoundId()
     {
-        String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        String cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
         return factory.makeRefresh(cubeName);
     }
 }
@@ -1255,8 +1255,8 @@ QueryPart refreshStatement() :
 QueryPart updateStatement() :
 {
     Id c;
-    Update.UpdateClause uc;
-    List<Update.UpdateClause> list = new ArrayList<Update.UpdateClause>();
+    UpdateImpl.UpdateClause uc;
+    List<UpdateImpl.UpdateClause> list = new ArrayList<UpdateImpl.UpdateClause>();
 }
 {
     <UPDATE> (<CUBE>)?  c = compoundId()
@@ -1271,15 +1271,15 @@ QueryPart updateStatement() :
         }
     )*
     {
-        String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        String cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
         return factory.makeUpdate(cubeName, list);
     }
 }
 
-Update.UpdateClause updateClause() :
+UpdateImpl.UpdateClause updateClause() :
 {
     Exp t, v, w = null;
-    Update.Allocation a = Update.Allocation.NO_ALLOCATION;
+    UpdateImpl.Allocation a = UpdateImpl.Allocation.NO_ALLOCATION;
 }
 {
 
@@ -1288,35 +1288,35 @@ Update.UpdateClause updateClause() :
     v = unaliasedExpression()
     (
         <USE_EQUAL_ALLOCATION>
-        { a = Update.Allocation.USE_EQUAL_ALLOCATION; }
+        { a = UpdateImpl.Allocation.USE_EQUAL_ALLOCATION; }
         |
         <USE_EQUAL_INCREMENT>
-        { a = Update.Allocation.USE_EQUAL_INCREMENT; }
+        { a = UpdateImpl.Allocation.USE_EQUAL_INCREMENT; }
         |
         <USE_WEIGHTED_ALLOCATION>
-        { a = Update.Allocation.USE_WEIGHTED_ALLOCATION; }
+        { a = UpdateImpl.Allocation.USE_WEIGHTED_ALLOCATION; }
         (<BY> w = unaliasedExpression())?
         |
         <USE_WEIGHTED_INCREMENT>
-        { a = Update.Allocation.USE_WEIGHTED_INCREMENT; }
+        { a = UpdateImpl.Allocation.USE_WEIGHTED_INCREMENT; }
         (<BY> w = unaliasedExpression())?
     )?
     {
-        return new Update.UpdateClause(t, v, a, w);
+        return new UpdateImpl.UpdateClause(t, v, a, w);
     }
 }
 
 QueryPart transactionCommandStatement() :
 {
-     TransactionCommand.Command c;
+     TransactionCommandImpl.Command c;
 }
 {
     (
-        <BEGIN>  { c = TransactionCommand.Command.BEGIN; }
+        <BEGIN>  { c = TransactionCommandImpl.Command.BEGIN; }
         |
-        <COMMIT>  { c = TransactionCommand.Command.COMMIT; }
+        <COMMIT>  { c = TransactionCommandImpl.Command.COMMIT; }
         |
-        <ROLLBACK>  { c = TransactionCommand.Command.ROLLBACK; }
+        <ROLLBACK>  { c = TransactionCommandImpl.Command.ROLLBACK; }
     )
     (<TRANSACTION> | <TRAN>)
     {
@@ -1367,7 +1367,7 @@ Exp formulaExpression() :
 
 MemberProperty memberPropertyDefinition() :
 {
-    Id.NameSegment id;
+    IdImpl.NameSegment id;
     Exp e;
 }
 {
@@ -1494,7 +1494,7 @@ QueryPart drillthroughStatement() :
 List<Exp> returnItemList() :
 {
     List<Exp> list = new ArrayList<Exp>();
-    Id i;
+    IdImpl i;
 }
 {
     i = returnItem() {
@@ -1511,9 +1511,9 @@ List<Exp> returnItemList() :
     }
 }
 
-Id returnItem() :
+IdImpl returnItem() :
 {
-    Id i;
+    IdImpl i;
 }
 {
     // TODO: allow NAME(id) etc.

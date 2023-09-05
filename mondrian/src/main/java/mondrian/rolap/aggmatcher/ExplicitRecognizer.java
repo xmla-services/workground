@@ -22,7 +22,7 @@ import java.util.TreeMap;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.HierarchyUsage;
@@ -129,11 +129,11 @@ class ExplicitRecognizer extends Recognizer {
                     if (measure.getColumnName().equalsIgnoreCase(aggColumnName))
                     {
                         String name = measure.getName();
-                        List<Id.Segment> parts = Util.parseIdentifier(name);
-                        Id.Segment nameLast = Util.last(parts);
+                        List<IdImpl.Segment> parts = Util.parseIdentifier(name);
+                        IdImpl.Segment nameLast = Util.last(parts);
 
                         RolapStar.Measure m = null;
-                        if (nameLast instanceof Id.NameSegment nameSegment) {
+                        if (nameLast instanceof IdImpl.NameSegment nameSegment) {
                             m = star.getFactTable().lookupMeasureByName(
                                 cube.getName(),
                                 nameSegment.name);

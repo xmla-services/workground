@@ -26,8 +26,8 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -151,7 +151,7 @@ class ExtractFunDef extends FunDefBase {
         for (int i = 1; i < args.length; i++) {
             Exp arg = args[i];
             Hierarchy extractedHierarchy = null;
-            if (arg instanceof HierarchyExpr hierarchyExpr) {
+            if (arg instanceof HierarchyExprImpl hierarchyExpr) {
                 extractedHierarchy = hierarchyExpr.getHierarchy();
             } else if (arg instanceof DimensionExpr dimensionExpr) {
                 extractedHierarchy =
@@ -187,7 +187,7 @@ class ExtractFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         List<Hierarchy> extractedHierarchyList = new ArrayList<>();
         List<Integer> extractedOrdinalList = new ArrayList<>();
         ExtractFunDef.findExtractedHierarchies(

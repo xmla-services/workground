@@ -355,10 +355,10 @@ import mondrian.util.UnionIterator;
         assertEquals(
             "[Store].[USA].[California]",
             Util.quoteMdxIdentifier(
-                Arrays.<Id.Segment>asList(
-                    new Id.NameSegment("Store"),
-                    new Id.NameSegment("USA"),
-                    new Id.NameSegment("California"))));
+                Arrays.<IdImpl.Segment>asList(
+                    new IdImpl.NameSegment("Store"),
+                    new IdImpl.NameSegment("USA"),
+                    new IdImpl.NameSegment("California"))));
     }
 
     @Test
@@ -426,18 +426,18 @@ import mondrian.util.UnionIterator;
 
     @Test
      void testImplode() {
-        List<Id.Segment> fooBar = Arrays.<Id.Segment>asList(
-            new Id.NameSegment("foo", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("bar", Id.Quoting.UNQUOTED));
+        List<IdImpl.Segment> fooBar = Arrays.<IdImpl.Segment>asList(
+            new IdImpl.NameSegment("foo", IdImpl.Quoting.UNQUOTED),
+            new IdImpl.NameSegment("bar", IdImpl.Quoting.UNQUOTED));
         assertEquals("[foo].[bar]", Util.implode(fooBar));
 
-        List<Id.Segment> empty = Collections.emptyList();
+        List<IdImpl.Segment> empty = Collections.emptyList();
         assertEquals("", Util.implode(empty));
 
-        List<Id.Segment> nasty = Arrays.<Id.Segment>asList(
-            new Id.NameSegment("string", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("with", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("a [bracket] in it", Id.Quoting.UNQUOTED));
+        List<IdImpl.Segment> nasty = Arrays.<IdImpl.Segment>asList(
+            new IdImpl.NameSegment("string", IdImpl.Quoting.UNQUOTED),
+            new IdImpl.NameSegment("with", IdImpl.Quoting.UNQUOTED),
+            new IdImpl.NameSegment("a [bracket] in it", IdImpl.Quoting.UNQUOTED));
         assertEquals(
             "[string].[with].[a [bracket]] in it]",
             Util.implode(nasty));
@@ -445,7 +445,7 @@ import mondrian.util.UnionIterator;
 
     @Test
      void testParseIdentifier() {
-        List<Id.Segment> strings =
+        List<IdImpl.Segment> strings =
                 Util.parseIdentifier("[string].[with].[a [bracket]] in it]");
         assertEquals(3, strings.size());
         assertEquals("a [bracket] in it", name(strings, 2));
@@ -505,9 +505,9 @@ import mondrian.util.UnionIterator;
         }
     }
 
-    private String name(List<Id.Segment> strings, int index) {
-        final Id.Segment segment = strings.get(index);
-        return ((Id.NameSegment) segment).name;
+    private String name(List<IdImpl.Segment> strings, int index) {
+        final IdImpl.Segment segment = strings.get(index);
+        return ((IdImpl.NameSegment) segment).name;
     }
 
     @Test

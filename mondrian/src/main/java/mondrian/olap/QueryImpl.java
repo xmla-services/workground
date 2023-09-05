@@ -27,6 +27,7 @@ import java.util.Set;
 import mondrian.mdx.LevelExprImpl;
 import mondrian.olap.interfaces.CellProperty;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.NamedSetExpr;
 import mondrian.olap.interfaces.ParameterExpr;
@@ -59,8 +60,8 @@ import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.ParameterFunDef;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -641,7 +642,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
                 org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
                 LevelExprImpl levelExpr = new LevelExprImpl(lastLevel);
-                Exp levelMembers = new UnresolvedFunCall(
+                Exp levelMembers = new UnresolvedFunCallImpl(
                   "AllMembers",
                   Syntax.Property,
                   new Exp[] {levelExpr}
@@ -668,10 +669,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                         prevExp = resultExp;
                     }
                     Exp axisInBracesExp =
-                            new UnresolvedFunCall(
+                            new UnresolvedFunCallImpl(
                                     "{}", Syntax.Braces, new Exp[] {hierarchyExp});
                     if(hierarchyExps.size() > 1) {
-                        resultExp = new UnresolvedFunCall(
+                        resultExp = new UnresolvedFunCallImpl(
                                 "Exists",
                                 Syntax.Function,
                                 new Exp[] {prevExp, axisInBracesExp}
@@ -683,14 +684,14 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
 
                 if(resultExp != null) {
-                    mondrian.mdx.HierarchyExpr hierarchyExpr = new mondrian.mdx.HierarchyExpr(hierarchy);
-                    Exp hierarchyAllMembersExp = new UnresolvedFunCall(
+                    mondrian.mdx.HierarchyExprImpl hierarchyExpr = new mondrian.mdx.HierarchyExprImpl(hierarchy);
+                    Exp hierarchyAllMembersExp = new UnresolvedFunCallImpl(
                             "AllMembers",
                             Syntax.Property,
                             new Exp[] {hierarchyExpr}
                     );
 
-                    resultExp = new UnresolvedFunCall(
+                    resultExp = new UnresolvedFunCallImpl(
                             "Exists",
                             Syntax.Function,
                             new Exp[] {hierarchyAllMembersExp, resultExp}
@@ -1097,9 +1098,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 value = Util.parseIdentifier(str);
             }
             if (value instanceof List l
-                && Util.canCast(l, Id.Segment.class))
+                && Util.canCast(l, IdImpl.Segment.class))
             {
-                final List<Id.Segment> segmentList = Util.cast(l);
+                final List<IdImpl.Segment> segmentList = Util.cast(l);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
                 if (olapElement instanceof Member) {
                     value = olapElement;
@@ -1110,7 +1111,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             {
                 final List<IdentifierSegment> olap4jSegmentList =
                     Util.cast(l);
-                final List<Id.Segment> segmentList =
+                final List<IdImpl.Segment> segmentList =
                     Util.convert(olap4jSegmentList);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
                 if (olapElement instanceof Member) {
@@ -1210,8 +1211,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     /**
      * Looks up a named set.
      */
-    private NamedSet lookupNamedSet(Id.Segment segment) {
-        if (!(segment instanceof Id.NameSegment nameSegment)) {
+    private NamedSet lookupNamedSet(IdImpl.Segment segment) {
+        if (!(segment instanceof IdImpl.NameSegment nameSegment)) {
             return null;
         }
         for (Formula formula : formulas) {
@@ -1247,16 +1248,16 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @param scopeList Parse tree node where name is used (last in list) and
      */
     ScopedNamedSet lookupScopedNamedSet(
-        List<Id.Segment> nameParts,
+        List<IdImpl.Segment> nameParts,
         ArrayStack<QueryPart> scopeList)
     {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof Id.NameSegment)) {
+        if (!(nameParts.get(0) instanceof IdImpl.NameSegment)) {
             return null;
         }
-        String name = ((Id.NameSegment) nameParts.get(0)).getName();
+        String name = ((IdImpl.NameSegment) nameParts.get(0)).getName();
         ScopedNamedSet bestScopedNamedSet = null;
         int bestScopeOrdinal = -1;
         for (ScopedNamedSet scopedNamedSet : scopedNamedSets) {
@@ -1701,7 +1702,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public Member getMemberByUniqueName(
-            List<Id.Segment> uniqueNameParts,
+            List<IdImpl.Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
         {
@@ -1815,7 +1816,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Member getCalculatedMember(List<Id.Segment> nameParts) {
+		public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
             for (final Formula formula : query.formulas) {
                 if (!formula.isMember()) {
                     continue;
@@ -1872,7 +1873,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public OlapElement getElementChild(OlapElement parent, Id.Segment s)
+		public OlapElement getElementChild(OlapElement parent, IdImpl.Segment s)
         {
             return getElementChild(parent, s, MatchType.EXACT);
         }
@@ -1880,7 +1881,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
 		public OlapElement getElementChild(
             OlapElement parent,
-            Id.Segment s,
+            IdImpl.Segment s,
             MatchType matchType)
         {
             // first look in cube
@@ -1892,10 +1893,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             // then look in defined members (fixes MONDRIAN-77)
 
             // then in defined sets
-            if (!(s instanceof Id.NameSegment)) {
+            if (!(s instanceof IdImpl.NameSegment)) {
                 return null;
             }
-            String name = ((Id.NameSegment) s).getName();
+            String name = ((IdImpl.NameSegment) s).getName();
             for (Formula formula : query.formulas) {
                 if (formula.isMember()) {
                     continue;       // have already done these
@@ -1914,7 +1915,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
         public OlapElement lookupCompoundInternal(
             OlapElement parent,
-            List<Id.Segment> names,
+            List<IdImpl.Segment> names,
             boolean failIfNotFound,
             int category,
             MatchType matchType)
@@ -1960,7 +1961,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+		public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
             if (nameParts.size() != 1) {
                 return null;
             }
@@ -2178,7 +2179,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
         public OlapElement lookupCompoundInternal(
             OlapElement parent,
-            final List<Id.Segment> names,
+            final List<IdImpl.Segment> names,
             boolean failIfNotFound,
             int category,
             MatchType matchType)
@@ -2285,7 +2286,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 || type instanceof TupleType)
             {
                 newExpr =
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}", Syntax.Braces, new Exp[] {newExpr})
                     .accept(validator);
             }
@@ -2306,7 +2307,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public OlapElement lookupChild(
-            SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+            SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
         {
             throw new UnsupportedOperationException();
         }
@@ -2358,7 +2359,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visit(UnresolvedFunCallImpl call) {
             if (call.getFunName().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
@@ -2395,13 +2396,13 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visit(UnresolvedFunCallImpl call) {
             registerAliasArgs(call);
             return super.visit(call);
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
+		public Object visit(ResolvedFunCallImpl call) {
             registerAliasArgs(call);
             return super.visit(call);
         }
@@ -2434,7 +2435,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 assert call2.getArgCount() == 2;
                 if (call2.getArg(1) instanceof Id id) {
                     createScopedNamedSet(
-                        ((Id.NameSegment) id.getSegments().get(0))
+                        ((IdImpl.NameSegment) id.getSegments().get(0))
                             .getName(),
                         parent,
                         call2.getArg(0));
@@ -2537,7 +2538,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
             return new MemberExpr(subcubeMember);
         }
-        if(exp instanceof ResolvedFunCall resolvedFunCall) {
+        if(exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {
                 resolvedFunCall.getArgs()[i] = replaceSubcubeMember(resolvedFunCall.getArgs()[i]);
             }

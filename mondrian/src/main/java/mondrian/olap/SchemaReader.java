@@ -228,7 +228,7 @@ public interface SchemaReader {
      * @return The member, or null if not found
      */
     Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType);
 
@@ -245,7 +245,7 @@ public interface SchemaReader {
      * @return The member, or null if not found
      */
     Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound);
 
     /**
@@ -270,7 +270,7 @@ public interface SchemaReader {
      */
     OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType);
@@ -295,7 +295,7 @@ public interface SchemaReader {
      */
     OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category);
 
@@ -325,13 +325,13 @@ public interface SchemaReader {
      * Looks up a calculated member by name. If the name is not found in the
      * current scope, returns null.
      */
-    Member getCalculatedMember(List<Id.Segment> nameParts);
+    Member getCalculatedMember(List<IdImpl.Segment> nameParts);
 
     /**
      * Looks up a set by name. If the name is not found in the current scope,
      * returns null.
      */
-    NamedSet getNamedSet(List<Id.Segment> nameParts);
+    NamedSet getNamedSet(List<IdImpl.Segment> nameParts);
 
     /**
      * Appends to <code>list</code> all members between <code>startMember</code>
@@ -376,7 +376,7 @@ public interface SchemaReader {
      */
     OlapElement getElementChild(
         OlapElement parent,
-        Id.Segment name,
+        IdImpl.Segment name,
         MatchType matchType);
 
     /**
@@ -393,7 +393,7 @@ public interface SchemaReader {
      */
     OlapElement getElementChild(
         OlapElement parent,
-        Id.Segment name);
+        IdImpl.Segment name);
 
     /**
      * Returns the members of a level, optionally including calculated members.
@@ -474,7 +474,7 @@ public interface SchemaReader {
      */
     Member lookupMemberChildByName(
         Member parent,
-        Id.Segment childName,
+        IdImpl.Segment childName,
         MatchType matchType);
 
     /**
@@ -482,7 +482,7 @@ public interface SchemaReader {
      */
     List<Member> lookupMemberChildrenByNames(
         Member parent,
-        List<Id.NameSegment> childNames,
+        List<IdImpl.NameSegment> childNames,
         MatchType matchType);
 
     /**

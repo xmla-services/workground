@@ -21,7 +21,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.NativeEvaluator;
@@ -50,7 +50,7 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
     }
 
     @Override
-	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(final ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final TupleListCalc listCalc2 = compiler.compileList(call.getArg(1));
         return new AbstractListCalc(

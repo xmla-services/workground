@@ -32,7 +32,7 @@ import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -94,7 +94,7 @@ public class JavaFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(
-        ResolvedFunCall call,
+        ResolvedFunCallImpl call,
         ExpCompiler compiler)
     {
         final Calc[] calcs = new Calc[parameterCategories.length];
@@ -374,7 +374,7 @@ public class JavaFunDef extends FunDefBase {
          * @param method Method to call
          */
         public JavaMethodCalc(
-            ResolvedFunCall call, Calc[] calcs, Method method)
+            ResolvedFunCallImpl call, Calc[] calcs, Method method)
         {
             super(call.getType(), calcs);
             this.method = method;

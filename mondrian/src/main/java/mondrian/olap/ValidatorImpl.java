@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import mondrian.mdx.ParameterExprImpl;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.Resolver;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.MemberProperty;
@@ -89,10 +89,10 @@ abstract class ValidatorImpl implements Validator {
                 stack.push((QueryPart) exp);
                 // To prevent recursion, put in a placeholder while we're
                 // resolving.
-                resolvedNodes.put((AbstractQueryPart) exp, placeHolder);
+                resolvedNodes.put((QueryPart) exp, placeHolder);
                 resolved = exp.accept(this);
                 Util.assertTrue(resolved != null);
-                resolvedNodes.put((AbstractQueryPart) exp, (QueryPart) resolved);
+                resolvedNodes.put((QueryPart) exp, (QueryPart) resolved);
             } finally {
             	if (!stack.isEmpty()) {
             		stack.pop();
@@ -288,7 +288,7 @@ abstract class ValidatorImpl implements Validator {
         final Object parent = stack.get(n - 1);
         if (parent instanceof Formula formula) {
             return formula.isMember();
-        } else if (parent instanceof ResolvedFunCall funCall) {
+        } else if (parent instanceof ResolvedFunCallImpl funCall) {
             if (funCall.getFunDef().getSyntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);
             } else {
@@ -304,7 +304,7 @@ abstract class ValidatorImpl implements Validator {
                 final int[] parameterTypes = funDef.getParameterCategories();
                 return parameterTypes[k] != Category.SET;
             }
-        } else if (parent instanceof UnresolvedFunCall funCall) {
+        } else if (parent instanceof UnresolvedFunCallImpl funCall) {
             if (funCall.getSyntax() == Syntax.Parentheses
                 || funCall.getFunName().equals("*"))
             {
@@ -330,7 +330,7 @@ abstract class ValidatorImpl implements Validator {
      * has to be an expression.
      */
     boolean requiresExpression(
-        UnresolvedFunCall funCall,
+        UnresolvedFunCallImpl funCall,
         int k)
     {
         // The function call has not been resolved yet. In fact, this method

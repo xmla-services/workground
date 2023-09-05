@@ -11,8 +11,6 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.QueryPart;
-
 import java.io.PrintWriter;
 
 /**
@@ -20,7 +18,7 @@ import java.io.PrintWriter;
  *
  * @author jhyde, 23 January, 1999
  */
-public abstract class AbstractQueryPart implements Walkable, QueryPart {
+public abstract class AbstractQueryPart implements Walkable {
     /**
      * Creates a QueryPart.
      */

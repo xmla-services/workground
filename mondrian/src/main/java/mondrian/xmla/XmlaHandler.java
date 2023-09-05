@@ -78,9 +78,12 @@ import mondrian.olap.interfaces.CalculatedFormula;
 import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.Literal;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.interfaces.Refresh;
+import mondrian.olap.interfaces.TransactionCommand;
+import mondrian.olap.interfaces.Update;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -114,8 +117,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.TransactionCommand;
-import mondrian.olap.Update;
+import mondrian.olap.TransactionCommandImpl;
+import mondrian.olap.UpdateImpl;
 import mondrian.olap.Util;
 import mondrian.olap4j.IMondrianOlap4jProperty;
 import mondrian.server.Locus;
@@ -942,7 +945,7 @@ public class XmlaHandler {
                                     null
                             );
 
-                            String filePath = java.net.URI.create(catalogUrl).getPath();;
+                            String filePath = java.net.URI.create(catalogUrl).getPath();
                             try( java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath)) ) {
                                 out.write(objectDefinition);
                             }
@@ -1030,7 +1033,7 @@ public class XmlaHandler {
                     cube.flushCache(rolapConnection);
                 } else if (queryPart instanceof Update update) {
                     final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
-                    for(Update.UpdateClause updateClause: update.getUpdateClauses()) {
+                    for(UpdateImpl.UpdateClause updateClause: update.getUpdateClauses()) {
                         StringWriter sw = new StringWriter();
                         PrintWriter pw = new mondrian.mdx.QueryPrintWriter(sw);
                         updateClause.getTupleExp().unparse(pw);
@@ -1074,14 +1077,14 @@ public class XmlaHandler {
                 } else if (queryPart instanceof TransactionCommand transactionCommand) {
                     String sessionId = request.getSessionId();
                     Session session = Session.get(sessionId);
-                    if(transactionCommand.getCommand() == TransactionCommand.Command.BEGIN) {
+                    if(transactionCommand.getCommand() == TransactionCommandImpl.Command.BEGIN) {
                         Scenario scenario = connection.createScenario();
                         session.setScenario(scenario);
                     }
-                    else if(transactionCommand.getCommand() == TransactionCommand.Command.ROLLBACK) {
+                    else if(transactionCommand.getCommand() == TransactionCommandImpl.Command.ROLLBACK) {
                         session.setScenario(null);
                     }
-                    else if(transactionCommand.getCommand() == TransactionCommand.Command.COMMIT) {
+                    else if(transactionCommand.getCommand() == TransactionCommandImpl.Command.COMMIT) {
                         session.setScenario(null);
                     }
 
@@ -2290,7 +2293,7 @@ public class XmlaHandler {
             for(QueryPart queryPart: statement.getQuery().getCellProperties()){
                 CellProperty cellProperty = (CellProperty)queryPart;
                 mondrian.olap.Property property = mondrian.olap.Property.lookup(cellProperty.toString(), matchCase);
-                String propertyName = ((mondrian.olap.Id.NameSegment)
+                String propertyName = ((mondrian.olap.IdImpl.NameSegment)
                         mondrian.olap.Util.parseIdentifier(cellProperty.toString()).get(0)).name;
                 queryCellPropertyNames.add(propertyName);
             }
@@ -3471,7 +3474,7 @@ public class XmlaHandler {
             return true;
         }
 
-        if(exp instanceof mondrian.mdx.UnresolvedFunCall unresolvedFunCall) {
+        if(exp instanceof mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall) {
             final String functionName = unresolvedFunCall.getFunName();
 
             Object o1, o2;
@@ -3502,7 +3505,7 @@ public class XmlaHandler {
                     return true;
             }
         }
-        else if (exp instanceof  mondrian.olap.Id) {
+        else if (exp instanceof Id) {
             Object value = getValue(row, exp, parameters);
             return value != null && value.equals("true");
         }
@@ -3511,8 +3514,8 @@ public class XmlaHandler {
     }
 
     private Object getValue(Rowset.Row row, mondrian.olap.Exp exp, Map<String, String> parameters) {
-        if(exp instanceof  mondrian.olap.Id) {
-            String columnName = ((mondrian.olap.Id.NameSegment)((mondrian.olap.Id)exp).getElement(0)).getName();
+        if(exp instanceof Id) {
+            String columnName = ((mondrian.olap.IdImpl.NameSegment)((mondrian.olap.IdImpl)exp).getElement(0)).getName();
 
             if(columnName.startsWith("@")) {
                 columnName = columnName.substring(1);

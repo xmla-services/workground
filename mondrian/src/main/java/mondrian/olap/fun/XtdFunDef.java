@@ -20,7 +20,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -105,7 +105,7 @@ public Type getResultType( Validator validator, Exp[] args ) {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final Level level = getLevel( compiler.getEvaluator() );
     switch ( call.getArgCount() ) {
       case 0:

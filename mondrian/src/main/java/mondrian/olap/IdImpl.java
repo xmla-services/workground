@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.Id;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import mondrian.mdx.MdxVisitor;
@@ -26,9 +27,9 @@ import mondrian.olap.type.Type;
  *
  * @author jhyde, 21 January, 1999
  */
-public class Id
+public class IdImpl
     extends ExpBase
-    implements Cloneable
+    implements Cloneable, Id
 {
 
     private final List<Segment> segments;
@@ -38,11 +39,11 @@ public class Id
      *
      * @param segment Segment, consisting of a name and quoting style
      */
-    public Id(Segment segment) {
+    public IdImpl(Segment segment) {
         segments = Collections.singletonList(segment);
     }
 
-    public Id(List<Segment> segments) {
+    public IdImpl(List<Segment> segments) {
         this.segments = segments;
         if (segments.isEmpty()) {
             throw new IllegalArgumentException();
@@ -50,7 +51,7 @@ public class Id
     }
 
     @Override
-	public Id cloneExp() {
+	public IdImpl cloneExp() {
         // This is immutable, so no need to clone.
         return this;
     }
@@ -73,6 +74,7 @@ public class Id
         return buf.toString();
     }
 
+    @Override
     public String[] toStringArray() {
         String[] names = new String[segments.size()];
         int k = 0;
@@ -82,11 +84,13 @@ public class Id
         return names;
     }
 
+    @Override
     public List<Segment> getSegments() {
         return Collections.unmodifiableList(this.segments);
     }
 
-    public Id.Segment getElement(int i) {
+    @Override
+    public IdImpl.Segment getElement(int i) {
         return segments.get(i);
     }
 
@@ -97,10 +101,10 @@ public class Id
      * @param segment Name of segment
      * @return New identifier
      */
-    public Id append(Segment segment) {
+    public IdImpl append(Segment segment) {
         List<Segment> newSegments = new ArrayList<>(segments);
         newSegments.add(segment);
-        return new Id(newSegments);
+        return new IdImpl(newSegments);
     }
 
     @Override
@@ -144,10 +148,10 @@ public class Id
      *
      * <p>For example, the identifier
      * <code>[Store].USA.[New Mexico].&[45]</code> has four segments:<ul>
-     * <li>"Store", {@link mondrian.olap.Id.Quoting#QUOTED}</li>
-     * <li>"USA", {@link mondrian.olap.Id.Quoting#UNQUOTED}</li>
-     * <li>"New Mexico", {@link mondrian.olap.Id.Quoting#QUOTED}</li>
-     * <li>"45", {@link mondrian.olap.Id.Quoting#KEY}</li>
+     * <li>"Store", {@link mondrian.olap.IdImpl.Quoting#QUOTED}</li>
+     * <li>"USA", {@link mondrian.olap.IdImpl.Quoting#UNQUOTED}</li>
+     * <li>"New Mexico", {@link mondrian.olap.IdImpl.Quoting#QUOTED}</li>
+     * <li>"45", {@link mondrian.olap.IdImpl.Quoting#KEY}</li>
      * </ul>
      */
     public static abstract class Segment {

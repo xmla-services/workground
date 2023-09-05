@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.type.TypeUtil;
@@ -59,7 +59,7 @@ public class ValidMeasureFunDef extends FunDefBase
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Calc calc;
         final Exp arg = call.getArg(0);
         if (TypeUtil.couldBeMember(arg.getType())) {
@@ -75,7 +75,7 @@ public class ValidMeasureFunDef extends FunDefBase
     {
         private final Calc calc;
 
-        public CalcImpl(ResolvedFunCall call, Calc calc) {
+        public CalcImpl(ResolvedFunCallImpl call, Calc calc) {
             super(call.getType());
             this.calc = calc;
         }

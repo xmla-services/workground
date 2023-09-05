@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -22,11 +23,9 @@ import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
-import mondrian.mdx.LevelExprImpl;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
@@ -79,8 +78,8 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
                 }
             }
             if (olap4jProperty == null) {
-                final UnresolvedFunCall call =
-                    (UnresolvedFunCall)
+                final UnresolvedFunCallImpl call =
+                    (UnresolvedFunCallImpl)
                         Util.lookup(
                             cellSetMetaData.query, id.getSegments(), true);
                 Level level = ((LevelExpr) call.getArg(0)).getLevel();

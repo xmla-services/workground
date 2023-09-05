@@ -30,7 +30,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -167,7 +167,7 @@ public class UdfResolver implements Resolver {
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
             final Exp[] args = call.getArgs();
             Calc[] calcs = new Calc[args.length];
             UserDefinedFunction.Argument[] expCalcs =
@@ -216,7 +216,7 @@ public class UdfResolver implements Resolver {
         private final UserDefinedFunction.Argument[] args;
 
         public ScalarCalcImpl(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             Calc[] calcs,
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
@@ -261,7 +261,7 @@ public class UdfResolver implements Resolver {
         private final UserDefinedFunction.Argument[] args;
 
         public ListCalcImpl(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             Calc[] calcs,
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)

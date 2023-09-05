@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
 import mondrian.olap.interfaces.NamedSetExpr;
@@ -42,15 +43,14 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
@@ -481,10 +481,10 @@ public class RolapCell implements Cell {
             return;
         }
         // "Aggregate({m})" is equivalent to "m"
-        if (expr instanceof ResolvedFunCall call) {
+        if (expr instanceof ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof AggregateFunDef) {
                 final Exp[] args = call.getArgs();
-                if (args[0] instanceof ResolvedFunCall arg0) {
+                if (args[0] instanceof ResolvedFunCallImpl arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
                             && arg0.getArg(0) instanceof MemberExpr)
@@ -757,7 +757,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
+		public Object visit(ResolvedFunCallImpl call) {
             final FunDef def = call.getFunDef();
             final Exp[] args = call.getArgs();
             final String name = def.getName();
@@ -825,7 +825,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visit(UnresolvedFunCallImpl call) {
             throw Util.newInternal("expected resolved expression");
         }
 
@@ -847,7 +847,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(HierarchyExpr hierarchyExpr) {
+		public Object visit(HierarchyExprImpl hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

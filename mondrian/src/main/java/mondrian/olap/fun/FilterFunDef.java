@@ -30,7 +30,7 @@ import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.AbstractTupleIterable;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
@@ -64,11 +64,11 @@ class FilterFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(final ResolvedFunCallImpl call, ExpCompiler compiler) {
         // Ignore the caller's priority. We prefer to return iterable, because
         // it makes NamedSet.CurrentOrdinal work.
         List<ResultStyle> styles = compiler.getAcceptableResultStyles();
-        if (call.getArg(0) instanceof ResolvedFunCall resolvedFunCall
+        if (call.getArg(0) instanceof ResolvedFunCallImpl resolvedFunCall
             && resolvedFunCall.getFunName().equals("AS"))
         {
             styles = ResultStyle.ITERABLE_ONLY;
@@ -101,7 +101,7 @@ class FilterFunDef extends FunDefBase {
      * @return Implementation of this function call in the Iterable result style
      */
     protected TupleIteratorCalc compileCallIterable(
-        final ResolvedFunCall call,
+        final ResolvedFunCallImpl call,
         ExpCompiler compiler)
     {
         // want iterable, mutable list or immutable list in that order
@@ -123,9 +123,9 @@ class FilterFunDef extends FunDefBase {
     }
 
     private abstract static class BaseIterCalc extends AbstractIterCalc {
-        private ResolvedFunCall call;
+        private ResolvedFunCallImpl call;
 
-		protected BaseIterCalc(ResolvedFunCall call, Calc[] calcs) {
+		protected BaseIterCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call.getType(), calcs);
             this.call=call;
         }
@@ -160,7 +160,7 @@ class FilterFunDef extends FunDefBase {
     }
 
     private static class MutableIterCalc extends BaseIterCalc {
-        MutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
+        MutableIterCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call, calcs);
             assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
@@ -203,7 +203,7 @@ class FilterFunDef extends FunDefBase {
     }
 
     private static class ImmutableIterCalc extends BaseIterCalc {
-        ImmutableIterCalc(ResolvedFunCall call, Calc[] calcs) {
+        ImmutableIterCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call, calcs);
             assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
@@ -243,7 +243,7 @@ class FilterFunDef extends FunDefBase {
     private static class IterIterCalc
         extends BaseIterCalc
     {
-        IterIterCalc(ResolvedFunCall call, Calc[] calcs) {
+        IterIterCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call, calcs);
             assert calcs[0] instanceof TupleIteratorCalc;
             assert calcs[1] instanceof BooleanCalc;
@@ -301,7 +301,7 @@ class FilterFunDef extends FunDefBase {
      * @return Implementation of this function call in the List result style
      */
     protected TupleListCalc compileCallList(
-        final ResolvedFunCall call,
+        final ResolvedFunCallImpl call,
         ExpCompiler compiler)
     {
         Calc ilcalc = compiler.compileList(call.getArg(0), false);
@@ -320,9 +320,9 @@ class FilterFunDef extends FunDefBase {
     }
 
     private abstract static class BaseListCalc extends AbstractListCalc {
-        private ResolvedFunCall call;
+        private ResolvedFunCallImpl call;
 
-		protected BaseListCalc(ResolvedFunCall call, Calc[] calcs) {
+		protected BaseListCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call.getType(), calcs);
             this.call=call;
         }
@@ -351,7 +351,7 @@ class FilterFunDef extends FunDefBase {
     }
 
     private static class MutableListCalc extends BaseListCalc {
-        MutableListCalc(ResolvedFunCall call, Calc[] calcs) {
+        MutableListCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call, calcs);
             assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;
@@ -390,7 +390,7 @@ class FilterFunDef extends FunDefBase {
     }
 
     private static class ImmutableListCalc extends BaseListCalc {
-        ImmutableListCalc(ResolvedFunCall call, Calc[] calcs) {
+        ImmutableListCalc(ResolvedFunCallImpl call, Calc[] calcs) {
             super(call, calcs);
             assert calcs[0] instanceof TupleListCalc;
             assert calcs[1] instanceof BooleanCalc;

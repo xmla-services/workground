@@ -25,7 +25,7 @@ import java.util.List;
 public class CellPropertyImpl extends AbstractQueryPart implements CellProperty {
     private String name;
 
-    public CellPropertyImpl(List<Id.Segment> segments) {
+    public CellPropertyImpl(List<IdImpl.Segment> segments) {
         this.name = Util.implode(segments);
     }
 

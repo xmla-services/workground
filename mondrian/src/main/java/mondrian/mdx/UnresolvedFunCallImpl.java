@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
+import mondrian.olap.interfaces.UnresolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -32,7 +33,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 28, 2005
  */
-public class UnresolvedFunCall extends ExpBase implements FunCall {
+public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall, FunCall {
     private final String name;
     private final Syntax syntax;
     private final Exp[] args;
@@ -40,14 +41,14 @@ public class UnresolvedFunCall extends ExpBase implements FunCall {
     /**
      * Creates a function call with {@link Syntax#Function} syntax.
      */
-    public UnresolvedFunCall(String name, Exp[] args) {
+    public UnresolvedFunCallImpl(String name, Exp[] args) {
         this(name, Syntax.Function, args);
     }
 
     /**
      * Creates a function call.
      */
-    public UnresolvedFunCall(String name, Syntax syntax, Exp[] args) {
+    public UnresolvedFunCallImpl(String name, Syntax syntax, Exp[] args) {
         if (name == null || syntax == null || args == null) {
             throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
         }
@@ -78,8 +79,8 @@ public class UnresolvedFunCall extends ExpBase implements FunCall {
 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
-    public UnresolvedFunCall cloneExp() {
-        return new UnresolvedFunCall(name, syntax, ExpBase.cloneArray(args));
+    public UnresolvedFunCallImpl cloneExp() {
+        return new UnresolvedFunCallImpl(name, syntax, ExpBase.cloneArray(args));
     }
 
     @Override

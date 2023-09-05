@@ -133,10 +133,10 @@ public abstract class LevelBase
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
     {
         if (areMembersUnique()
-            && s instanceof Id.NameSegment nameSegment)
+            && s instanceof IdImpl.NameSegment nameSegment)
         {
             return Util.lookupHierarchyRootMember(
                 schemaReader, hierarchy, nameSegment, matchType);

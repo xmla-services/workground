@@ -58,7 +58,7 @@ import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -595,7 +595,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (type instanceof ScalarType) {
             if (!defaultExp.getType().equals(type)) {
                 defaultExp =
-                        new UnresolvedFunCall(
+                        new UnresolvedFunCallImpl(
                                 "Cast",
                                 Syntax.Cast,
                                 new Exp[] {

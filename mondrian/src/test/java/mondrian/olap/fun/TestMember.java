@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.model.Schema;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -210,7 +210,7 @@ public String getDescription() {
 
   @Override
 public OlapElement lookupChild(
-    SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
+    SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
     throw new UnsupportedOperationException();
   }
 
@@ -295,7 +295,7 @@ public Dimension getDimension() {
     @Override
 	public OlapElement lookupChild(
       SchemaReader schemaReader,
-      Id.Segment s, MatchType matchType ) {
+      IdImpl.Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

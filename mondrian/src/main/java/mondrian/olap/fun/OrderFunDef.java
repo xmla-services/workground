@@ -36,7 +36,7 @@ import mondrian.calc.impl.MemberArrayValueCalc;
 import mondrian.calc.impl.MemberValueCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -65,7 +65,7 @@ class OrderFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final TupleIteratorCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
     List<SortKeySpec> keySpecList = new ArrayList<>();
     buildKeySpecList( keySpecList, call, compiler );
@@ -114,7 +114,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     return new CurrentMemberCalc( call.getType(), calcList, keySpecList );
   }
 
-  private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
+  private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final int argCount = call.getArgs().length;
     int j = 1; // args[0] is the input set
     Calc key;

@@ -18,7 +18,6 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Parameter;
-import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Validator;
 import mondrian.rolap.RolapCube;
@@ -36,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface Query extends QueryPart {
+public non-sealed interface Query extends QueryPart {
 
     SchemaReader getSchemaReader(boolean b);
 

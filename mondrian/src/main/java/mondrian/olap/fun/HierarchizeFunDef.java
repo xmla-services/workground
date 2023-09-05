@@ -15,7 +15,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.fun.sort.Sorter;
@@ -42,7 +42,7 @@ class HierarchizeFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     String order = FunUtil.getLiteralArg( call, 1, "PRE", HierarchizeFunDef.prePost );

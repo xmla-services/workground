@@ -31,10 +31,13 @@ import mondrian.olap.interfaces.DmvQuery;
 import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.interfaces.Explain;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryPart;
 import mondrian.olap.interfaces.Refresh;
 import mondrian.olap.interfaces.Subcube;
+import mondrian.olap.interfaces.TransactionCommand;
+import mondrian.olap.interfaces.Update;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -46,7 +49,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.mdx.QueryPrintWriter;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
@@ -259,17 +262,17 @@ class ParserTest {
         Exp colsSetExpr = axes[0].getSet();
         assertNotNull(colsSetExpr, "Column tuples");
 
-        UnresolvedFunCall fun = (UnresolvedFunCall)colsSetExpr;
+        UnresolvedFunCallImpl fun = (UnresolvedFunCallImpl)colsSetExpr;
         Id arg0 = (Id) (fun.getArgs()[0]);
-        Id.NameSegment id = (Id.NameSegment) arg0.getElement(0);
+        IdImpl.NameSegment id = (IdImpl.NameSegment) arg0.getElement(0);
         assertEquals("axis0mbr", id.name, "Correct member on axis");
 
         Exp rowsSetExpr = axes[1].getSet();
         assertNotNull(rowsSetExpr, "Row tuples");
 
-        fun = (UnresolvedFunCall) rowsSetExpr;
+        fun = (UnresolvedFunCallImpl) rowsSetExpr;
         arg0 = (Id) (fun.getArgs()[0]);
-        id = (Id.NameSegment) arg0.getElement(0);
+        id = (IdImpl.NameSegment) arg0.getElement(0);
         assertEquals("axis1mbr", id.name, "Correct member on axis");
     }
 
@@ -484,33 +487,33 @@ class ParserTest {
         Id id = (Id) expr;
         assertEquals(3, id.getSegments().size());
 
-        final Id.NameSegment seg0 = (Id.NameSegment) id.getSegments().get(0);
+        final IdImpl.NameSegment seg0 = (IdImpl.NameSegment) id.getSegments().get(0);
         assertEquals("Foo", seg0.getName());
-        assertEquals(Id.Quoting.QUOTED, seg0.getQuoting());
+        assertEquals(IdImpl.Quoting.QUOTED, seg0.getQuoting());
 
-        final Id.KeySegment seg1 = (Id.KeySegment) id.getSegments().get(1);
-        assertEquals(Id.Quoting.KEY, seg1.getQuoting());
-        List<Id.NameSegment> keyParts = seg1.getKeyParts();
+        final IdImpl.KeySegment seg1 = (IdImpl.KeySegment) id.getSegments().get(1);
+        assertEquals(IdImpl.Quoting.KEY, seg1.getQuoting());
+        List<IdImpl.NameSegment> keyParts = seg1.getKeyParts();
         assertNotNull(keyParts);
         assertEquals(2, keyParts.size());
         assertEquals("Key1", keyParts.get(0).getName());
         assertEquals(
-            Id.Quoting.UNQUOTED, keyParts.get(0).getQuoting());
+            IdImpl.Quoting.UNQUOTED, keyParts.get(0).getQuoting());
         assertEquals("Key2", keyParts.get(1).getName());
         assertEquals(
-            Id.Quoting.UNQUOTED, keyParts.get(1).getQuoting());
+            IdImpl.Quoting.UNQUOTED, keyParts.get(1).getQuoting());
 
-        final Id.Segment seg2 = id.getSegments().get(2);
-        assertEquals(Id.Quoting.KEY, seg2.getQuoting());
-        List<Id.NameSegment> keyParts2 = seg2.getKeyParts();
+        final IdImpl.Segment seg2 = id.getSegments().get(2);
+        assertEquals(IdImpl.Quoting.KEY, seg2.getQuoting());
+        List<IdImpl.NameSegment> keyParts2 = seg2.getKeyParts();
         assertNotNull(keyParts2);
         assertEquals(3, keyParts2.size());
         assertEquals(
-            Id.Quoting.QUOTED, keyParts2.get(0).getQuoting());
+            IdImpl.Quoting.QUOTED, keyParts2.get(0).getQuoting());
         assertEquals(
-            Id.Quoting.UNQUOTED, keyParts2.get(1).getQuoting());
+            IdImpl.Quoting.UNQUOTED, keyParts2.get(1).getQuoting());
         assertEquals(
-            Id.Quoting.QUOTED, keyParts2.get(2).getQuoting());
+            IdImpl.Quoting.QUOTED, keyParts2.get(2).getQuoting());
         assertEquals("5", keyParts2.get(2).getName());
 
         final String actual = expr.toString();
@@ -652,29 +655,29 @@ class ParserTest {
     @Test
     void testIdentifier() {
         // must have at least one segment
-        Id id;
-        List<Id.Segment> list  = Collections.<Id.Segment>emptyList();
+        IdImpl id;
+        List<IdImpl.Segment> list  = Collections.<IdImpl.Segment>emptyList();
         try {
-            id = new Id(list);
+            id = new IdImpl(list);
             fail("expected exception, got " + id);
         } catch (IllegalArgumentException e) {
             assertInstanceOf(IllegalArgumentException.class, e);
         }
 
-        id = new Id(new Id.NameSegment("foo"));
+        id = new IdImpl(new IdImpl.NameSegment("foo"));
         assertEquals("[foo]", id.toString());
 
         // append does not mutate
         Id id2 = id.append(
-            new Id.KeySegment(
-                new Id.NameSegment(
-                    "bar", Id.Quoting.QUOTED)));
+            new IdImpl.KeySegment(
+                new IdImpl.NameSegment(
+                    "bar", IdImpl.Quoting.QUOTED)));
         assertNotSame(id, id2);
         assertEquals("[foo]", id.toString());
         assertEquals("[foo].&[bar]", id2.toString());
 
         // cannot mutate segment list
-        final List<Id.Segment> segments = id.getSegments();
+        final List<IdImpl.Segment> segments = id.getSegments();
         try {
             segments.remove(0);
             fail("expected exception");
@@ -687,7 +690,7 @@ class ParserTest {
         } catch (UnsupportedOperationException e) {
             // ok
         }
-        Id.NameSegment nameSegment = new Id.NameSegment("baz");
+        IdImpl.NameSegment nameSegment = new IdImpl.NameSegment("baz");
         try {
             segments.add(
                 nameSegment);
@@ -1157,7 +1160,7 @@ class ParserTest {
         @Override
 		public Update makeUpdate(
                 String cubeName,
-                List<Update.UpdateClause> list)
+                List<UpdateImpl.UpdateClause> list)
         {
             return null;
         }
@@ -1173,7 +1176,7 @@ class ParserTest {
 
         @Override
 		public TransactionCommand makeTransactionCommand(
-                TransactionCommand.Command c)
+                TransactionCommandImpl.Command c)
         {
             return null;
         }

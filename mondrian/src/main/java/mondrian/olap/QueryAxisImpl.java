@@ -14,6 +14,7 @@ package mondrian.olap;
 import java.io.PrintWriter;
 
 import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -21,10 +22,10 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MdxVisitor;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;
@@ -143,10 +144,10 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     private static Exp normalizeSlicerExpression(Exp exp) {
         Exp slicer = exp;
         if (slicer instanceof LevelExpr
-            || slicer instanceof HierarchyExpr
+            || slicer instanceof HierarchyExprImpl
             || slicer instanceof DimensionExpr)
         {
-            slicer = new UnresolvedFunCall(
+            slicer = new UnresolvedFunCallImpl(
                 "DefaultMember", Syntax.Property, new Exp[] {
                     slicer});
         }
@@ -155,13 +156,13 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
             && funCall.getSyntax() == Syntax.Parentheses)
         {
             slicer =
-                new UnresolvedFunCall(
+                new UnresolvedFunCallImpl(
                     "{}", Syntax.Braces, new Exp[] {slicer});
         } else {
             slicer =
-                new UnresolvedFunCall(
+                new UnresolvedFunCallImpl(
                     "{}", Syntax.Braces, new Exp[] {
-                        new UnresolvedFunCall(
+                        new UnresolvedFunCallImpl(
                             "()", Syntax.Parentheses, new Exp[] {
                                 slicer})});
         }
@@ -248,7 +249,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                 || type instanceof HierarchyType)
             {
                 exp =
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
                         new Exp[] {exp});
@@ -291,10 +292,10 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     @Override
     public void addLevel(Level level) {
         Util.assertTrue(level != null, "addLevel needs level");
-        exp = new UnresolvedFunCall(
+        exp = new UnresolvedFunCallImpl(
             "Crossjoin", Syntax.Function, new Exp[] {
                 exp,
-                new UnresolvedFunCall(
+                new UnresolvedFunCallImpl(
                     "Members", Syntax.Property, new Exp[] {
                         new LevelExprImpl(level)})});
     }

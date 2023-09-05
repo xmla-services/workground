@@ -50,7 +50,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.rolap.RolapConnection.NonEmptyResult;
@@ -5318,7 +5318,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapHierarchy hierarchy =
       (RolapHierarchy) cube.lookupHierarchy(
-        new Id.NameSegment( hierName, Id.Quoting.UNQUOTED ),
+        new IdImpl.NameSegment( hierName, IdImpl.Quoting.UNQUOTED ),
         false );
     assertNotNull( hierarchy );
     return (SmartMemberReader)
@@ -5332,7 +5332,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapCubeHierarchy hierarchy =
       (RolapCubeHierarchy) cube.lookupHierarchy(
-        new Id.NameSegment( hierName, Id.Quoting.UNQUOTED ), false );
+        new IdImpl.NameSegment( hierName, IdImpl.Quoting.UNQUOTED ), false );
     assertNotNull( hierarchy );
     return (SmartMemberReader) hierarchy.getRolapHierarchy()
       .createMemberReader( schemaReader.getRole() );

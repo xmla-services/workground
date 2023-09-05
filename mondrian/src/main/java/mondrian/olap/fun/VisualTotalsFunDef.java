@@ -22,8 +22,8 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -78,7 +78,7 @@ public class VisualTotalsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final StringCalc stringCalc =
             call.getArgCount() > 1
@@ -95,7 +95,7 @@ public class VisualTotalsFunDef extends FunDefBase {
         private final StringCalc stringCalc;
 
         public CalcImpl(
-            ResolvedFunCall call, TupleListCalc tupleListCalc, StringCalc stringCalc)
+            ResolvedFunCallImpl call, TupleListCalc tupleListCalc, StringCalc stringCalc)
         {
             super(call.getType(), new Calc[] {tupleListCalc, stringCalc});
             this.tupleListCalc = tupleListCalc;
@@ -195,10 +195,10 @@ public class VisualTotalsFunDef extends FunDefBase {
                 final Member childMember = (Member) childMemberList.get(i);
                 memberExprs[i] = new MemberExpr(childMember);
             }
-            return new UnresolvedFunCall(
+            return new UnresolvedFunCallImpl(
                 "Aggregate",
                 new Exp[] {
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
                         memberExprs)
@@ -308,10 +308,10 @@ public class VisualTotalsFunDef extends FunDefBase {
                 final Member childMember = (Member) childMemberList.get(i);
                 memberExprs[i] = new MemberExpr(childMember);
             }
-            return new UnresolvedFunCall(
+            return new UnresolvedFunCallImpl(
                 "Aggregate",
                 new Exp[] {
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
                         memberExprs)

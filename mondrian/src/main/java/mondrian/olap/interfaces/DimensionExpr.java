@@ -15,7 +15,7 @@ package mondrian.olap.interfaces;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
 
-public interface DimensionExpr extends QueryPart {
+public non-sealed interface DimensionExpr extends QueryPart {
 
     Dimension getDimension();
 }

@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -43,7 +43,7 @@ class FormatFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final Calc calc = compiler.compileScalar(call.getArg(0), true);
         final Locale locale = compiler.getEvaluator().getConnectionLocale();

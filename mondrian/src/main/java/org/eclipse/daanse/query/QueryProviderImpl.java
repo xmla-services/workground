@@ -1,6 +1,6 @@
 package org.eclipse.daanse.query;
 
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellPropertyImpl;
 import mondrian.olap.DmvQueryImpl;
@@ -11,9 +11,10 @@ import mondrian.olap.interfaces.DrillThrough;
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.FormulaImpl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.interfaces.Explain;
 import mondrian.olap.interfaces.Formula;
+import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.interfaces.QueryPart;
@@ -154,8 +155,8 @@ public class QueryProviderImpl implements QueryProvider {
         if (selectCellPropertyListClauseOptional.isPresent()) {
             SelectCellPropertyListClause selectCellPropertyListClause = selectCellPropertyListClauseOptional.get();
             if (selectCellPropertyListClause.properties() != null) {
-                List<Id.Segment> list = selectCellPropertyListClause.properties()
-                    .stream().map(p -> ((Id.Segment) new Id.NameSegment(p))).toList();
+                List<IdImpl.Segment> list = selectCellPropertyListClause.properties()
+                    .stream().map(p -> ((IdImpl.Segment) new IdImpl.NameSegment(p))).toList();
                 return List.of(new CellPropertyImpl(list));
             }
         }
@@ -208,7 +209,7 @@ public class QueryProviderImpl implements QueryProvider {
     private QueryAxisImpl selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
         Exp exp = getExp(selectQueryAxisClause.expression());
         AxisOrdinal axisOrdinal = getAxisOrdinal(selectQueryAxisClause.axis());
-        List<Id> dimensionProperties =
+        List<IdImpl> dimensionProperties =
             getDimensionProperties(selectQueryAxisClause.selectDimensionPropertyListClause());
 
         return new QueryAxisImpl(
@@ -216,11 +217,11 @@ public class QueryProviderImpl implements QueryProvider {
             exp,
             axisOrdinal,
             QueryAxisImpl.SubtotalVisibility.Undefined,
-            dimensionProperties.stream().toArray(Id[]::new)
+            dimensionProperties.stream().toArray(IdImpl[]::new)
         );
     }
 
-    private List<Id> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
+    private List<IdImpl> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
         if (selectDimensionPropertyListClause.properties() != null) {
             return selectDimensionPropertyListClause.properties().stream()
                 .map(this::getExpByCompoundId).toList();
@@ -265,12 +266,12 @@ public class QueryProviderImpl implements QueryProvider {
         if (selectWithClauses != null) {
             for (SelectWithClause swc : selectWithClauses) {
                 if (swc instanceof CreateMemberBodyClause createMemberBodyClause) {
-                    Id id = getId(createMemberBodyClause.compoundId());
+                    IdImpl id = getId(createMemberBodyClause.compoundId());
                     Exp exp = getExp(createMemberBodyClause.expression());
                     formulaList.add(new FormulaImpl(id, exp));
                 }
                 if (swc instanceof CreateSetBodyClause createSetBodyClause) {
-                    Id id = getId(createSetBodyClause.compoundId());
+                    IdImpl id = getId(createSetBodyClause.compoundId());
                     Exp exp = getExp(createSetBodyClause.expression());
                     formulaList.add(new FormulaImpl(id, exp));
                 }
@@ -297,33 +298,33 @@ public class QueryProviderImpl implements QueryProvider {
 
     private Exp getExpByObjectIdentifier(ObjectIdentifier objectIdentifier) {
         if (objectIdentifier instanceof KeyObjectIdentifier keyObjectIdentifier) {
-            return new Id(getExpByKeyObjectIdentifier(keyObjectIdentifier));
+            return new IdImpl(getExpByKeyObjectIdentifier(keyObjectIdentifier));
         }
         if (objectIdentifier instanceof NameObjectIdentifier nameObjectIdentifier) {
-            return new Id(getExpByNameObjectIdentifier(nameObjectIdentifier));
+            return new IdImpl(getExpByNameObjectIdentifier(nameObjectIdentifier));
         }
         return null;
     }
 
-    private Id.Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
+    private IdImpl.Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
         switch (nameObjectIdentifier.quoting()) {
             case QUOTED:
-                return new Id.NameSegment(nameObjectIdentifier.name(), Id.Quoting.QUOTED);
+                return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.QUOTED);
             case UNQUOTED:
-                return new Id.NameSegment(nameObjectIdentifier.name(), Id.Quoting.UNQUOTED);
+                return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.UNQUOTED);
             case KEY:
-                return new Id.KeySegment(new Id.NameSegment(nameObjectIdentifier.name()));
+                return new IdImpl.KeySegment(new IdImpl.NameSegment(nameObjectIdentifier.name()));
         }
         return null;
     }
 
-    private List<Id.Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
+    private List<IdImpl.Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
         return keyObjectIdentifier.nameObjectIdentifiers()
             .stream().map(this::getExpByNameObjectIdentifier).toList();
     }
 
-    private Id getExpByCompoundId(CompoundId compoundId) {
-        List<Id.Segment> list = new ArrayList<>();
+    private IdImpl getExpByCompoundId(CompoundId compoundId) {
+        List<IdImpl.Segment> list = new ArrayList<>();
         compoundId.objectIdentifiers().forEach(it ->
             {
                 if (it instanceof KeyObjectIdentifier keyObjectIdentifier) {
@@ -334,7 +335,7 @@ public class QueryProviderImpl implements QueryProvider {
                 }
             }
         );
-        return new Id(list);
+        return new IdImpl(list);
     }
 
     private Exp getExpByLiteral(Literal literal) {
@@ -361,45 +362,45 @@ public class QueryProviderImpl implements QueryProvider {
             case TERM_INFIX:
                 x = getExp(callExpression.expressions().get(0));
                 y = getExp(callExpression.expressions().get(1));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Infix, new Exp[]{x, y});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Infix, new Exp[]{x, y});
             case TERM_PREFIX:
                 x = getExp(callExpression.expressions().get(0));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Prefix, new Exp[]{x});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Prefix, new Exp[]{x});
             case FUNCTION:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Function, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Function, list.stream().toArray(Exp[]::new));
             case PROPERTY:
                 x = getExp(callExpression.expressions().get(0));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Property, new Exp[]{x});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Property, new Exp[]{x});
             case PROPERTY_QUOTED:
                 x = getExp(callExpression.expressions().get(0));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.QuotedProperty, new Exp[]{x});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.QuotedProperty, new Exp[]{x});
             case PROPERTY_AMPERS_AND_QUOTED:
                 x = getExp(callExpression.expressions().get(0));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.AmpersandQuotedProperty, new Exp[]{x});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.AmpersandQuotedProperty, new Exp[]{x});
             case METHOD:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Method, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Method, list.stream().toArray(Exp[]::new));
             case BRACES:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Braces, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Braces, list.stream().toArray(Exp[]::new));
             case PARENTHESES:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Parentheses, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Parentheses, list.stream().toArray(Exp[]::new));
             case INTERNAL:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Internal, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Internal, list.stream().toArray(Exp[]::new));
             case EMPTY:
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Empty, new Exp[]{});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Empty, new Exp[]{});
             case TERM_POSTFIX:
                 x = getExp(callExpression.expressions().get(0));
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Postfix, new Exp[]{x});
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Postfix, new Exp[]{x});
             case TERM_CASE:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Case, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Case, list.stream().toArray(Exp[]::new));
             case CAST:
                 list = getExpList(callExpression.expressions());
-                return new UnresolvedFunCall(callExpression.name(), Syntax.Cast, list.stream().toArray(Exp[]::new));
+                return new UnresolvedFunCallImpl(callExpression.name(), Syntax.Cast, list.stream().toArray(Exp[]::new));
         }
         return null;
     }
@@ -411,13 +412,13 @@ public class QueryProviderImpl implements QueryProvider {
         return List.of();
     }
 
-    private Id getId(CompoundId compoundId) {
-        List<Id.Segment> segmentList = getIdSegmentList(compoundId.objectIdentifiers());
-        return new Id(segmentList);
+    private IdImpl getId(CompoundId compoundId) {
+        List<IdImpl.Segment> segmentList = getIdSegmentList(compoundId.objectIdentifiers());
+        return new IdImpl(segmentList);
     }
 
-    private List<Id.Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
-        List<Id.Segment> segmentList = new ArrayList<>();
+    private List<IdImpl.Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
+        List<IdImpl.Segment> segmentList = new ArrayList<>();
         if (objectIdentifiers != null) {
             for (ObjectIdentifier oi : objectIdentifiers) {
                 segmentList.add(getIdSegment(oi));
@@ -426,36 +427,36 @@ public class QueryProviderImpl implements QueryProvider {
         return segmentList;
     }
 
-    private Id.Segment getIdSegment(ObjectIdentifier oi) {
+    private IdImpl.Segment getIdSegment(ObjectIdentifier oi) {
         if (oi instanceof KeyObjectIdentifier keyObjectIdentifier) {
-            return new Id.KeySegment(getNameSegmentList(keyObjectIdentifier.nameObjectIdentifiers()));
+            return new IdImpl.KeySegment(getNameSegmentList(keyObjectIdentifier.nameObjectIdentifiers()));
         }
         if (oi instanceof NameObjectIdentifier nameObjectIdentifier) {
-            return new Id.NameSegment(nameObjectIdentifier.name(), Id.Quoting.UNQUOTED);
+            return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.UNQUOTED);
         }
         return null;
     }
 
-    private List<Id.NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
-        List<Id.NameSegment> res = new ArrayList<>();
+    private List<IdImpl.NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
+        List<IdImpl.NameSegment> res = new ArrayList<>();
         if (nameObjectIdentifiers != null) {
             for (NameObjectIdentifier noi : nameObjectIdentifiers) {
-                res.add(new Id.NameSegment(noi.name(), getQuoting(noi.quoting())));
+                res.add(new IdImpl.NameSegment(noi.name(), getQuoting(noi.quoting())));
             }
         }
         return res;
     }
 
-    private Id.Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
+    private IdImpl.Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
         switch (quoting) {
             case QUOTED:
-                return Id.Quoting.QUOTED;
+                return IdImpl.Quoting.QUOTED;
             case UNQUOTED:
-                return Id.Quoting.UNQUOTED;
+                return IdImpl.Quoting.UNQUOTED;
             case KEY:
-                return Id.Quoting.KEY;
+                return IdImpl.Quoting.KEY;
             default:
-                return Id.Quoting.UNQUOTED;
+                return IdImpl.Quoting.UNQUOTED;
         }
     }
 

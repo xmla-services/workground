@@ -28,7 +28,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.MondrianException;
@@ -144,7 +144,7 @@ class CancellationTest {
 		public TupleList nonEmptyList(
             Evaluator evaluator,
             TupleList list,
-            ResolvedFunCall call)
+            ResolvedFunCallImpl call)
         {
             return super.nonEmptyList(evaluator, list, call);
         }

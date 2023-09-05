@@ -15,7 +15,7 @@ import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 
 /**
@@ -25,18 +25,18 @@ import mondrian.olap.Exp;
 public class ResolvedFunCallFinder
     extends MdxVisitorImpl
 {
-    private final ResolvedFunCall call;
+    private final ResolvedFunCallImpl call;
     public boolean found;
     private final Set<Member> activeMembers = new HashSet<>();
 
-    public ResolvedFunCallFinder(ResolvedFunCall call)
+    public ResolvedFunCallFinder(ResolvedFunCallImpl call)
     {
         this.call = call;
         found = false;
     }
 
     @Override
-	public Object visit(ResolvedFunCall funCall)
+	public Object visit(ResolvedFunCallImpl funCall)
     {
         if (funCall == call) {
             found = true;

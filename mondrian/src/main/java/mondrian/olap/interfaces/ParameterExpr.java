@@ -15,7 +15,7 @@ package mondrian.olap.interfaces;
 
 import mondrian.olap.Parameter;
 
-public interface ParameterExpr extends QueryPart {
+public non-sealed interface ParameterExpr extends QueryPart {
 
     Parameter getParameter();
 }

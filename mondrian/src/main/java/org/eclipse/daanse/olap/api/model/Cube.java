@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.Role;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -51,7 +51,7 @@ public interface Cube extends OlapElement, MetaElement {
      * Finds a hierarchy whose name (or unique name, if <code>unique</code> is
      * true) equals <code>s</code>.
      */
-    Hierarchy lookupHierarchy(Id.NameSegment s, boolean unique);
+    Hierarchy lookupHierarchy(IdImpl.NameSegment s, boolean unique);
 
     /**
      * Returns Member[]. It builds Member[] by analyzing cellset, which

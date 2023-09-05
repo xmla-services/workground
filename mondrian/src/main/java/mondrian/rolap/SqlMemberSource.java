@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
@@ -164,7 +164,7 @@ class SqlMemberSource
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         throw new UnsupportedOperationException();

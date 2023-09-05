@@ -17,11 +17,11 @@ import mondrian.olap.Exp;
 
 import java.util.List;
 
-public interface DmvQuery extends QueryPart {
+public non-sealed interface DmvQuery extends QueryPart {
 
     String getTableName();
 
-    public Exp getWhereExpression();
+    Exp getWhereExpression();
 
-    public List<String> getColumns();
+    List<String> getColumns();
 }

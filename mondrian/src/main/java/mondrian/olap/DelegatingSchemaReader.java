@@ -119,7 +119,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public final Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return getMemberByUniqueName(
@@ -128,7 +128,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
     {
@@ -138,7 +138,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public final OlapElement lookupCompound(
-        OlapElement parent, List<Id.Segment> names,
+        OlapElement parent, List<IdImpl.Segment> names,
         boolean failIfNotFound, int category)
     {
         return lookupCompound(
@@ -148,7 +148,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -176,7 +176,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     public OlapElement lookupCompoundInternal(
-        OlapElement parent, List<Id.Segment> names,
+        OlapElement parent, List<IdImpl.Segment> names,
         boolean failIfNotFound, int category, MatchType matchType)
     {
         return schemaReader.lookupCompound(
@@ -184,12 +184,12 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     @Override
-	public Member getCalculatedMember(List<Id.Segment> nameParts) {
+	public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
         return schemaReader.getCalculatedMember(nameParts);
     }
 
     @Override
-	public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+	public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
         return schemaReader.getNamedSet(nameParts);
     }
 
@@ -214,13 +214,13 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     @Override
-	public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
+	public OlapElement getElementChild(OlapElement parent, IdImpl.Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement getElementChild(
-        OlapElement parent, Id.Segment name, MatchType matchType)
+        OlapElement parent, IdImpl.Segment name, MatchType matchType)
     {
         return schemaReader.getElementChild(parent, name, matchType);
     }
@@ -316,7 +316,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public Member lookupMemberChildByName(
-        Member member, Id.Segment memberName, MatchType matchType)
+        Member member, IdImpl.Segment memberName, MatchType matchType)
     {
         return schemaReader.lookupMemberChildByName(
             member, memberName, matchType);
@@ -324,7 +324,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public List<Member> lookupMemberChildrenByNames(
-        Member parent, List<Id.NameSegment> childNames, MatchType matchType)
+        Member parent, List<IdImpl.NameSegment> childNames, MatchType matchType)
     {
         return schemaReader.lookupMemberChildrenByNames(
             parent, childNames, matchType);

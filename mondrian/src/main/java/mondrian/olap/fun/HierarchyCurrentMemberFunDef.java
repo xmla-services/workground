@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -46,7 +46,7 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final HierarchyCalc hierarchyCalc = compiler.compileHierarchy( call.getArg( 0 ) );
     final Hierarchy hierarchy = hierarchyCalc.getType().getHierarchy();
     if ( hierarchy != null ) {

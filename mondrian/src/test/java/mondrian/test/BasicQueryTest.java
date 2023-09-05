@@ -88,7 +88,7 @@ import org.slf4j.Logger;
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -3843,15 +3843,15 @@ public class BasicQueryTest {
             + "  </CalculatedMember>\n" + "</Cube>", null, null, null, null );
     withSchema(context, schema);
     SchemaReader scr = context.createConnection().getSchema().lookupCube( cubeName, true ).getSchemaReader( null );
-    Member member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Unit Sales" ), true );
+    Member member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Unit Sales" ), true );
     Object visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
 
-    member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Store Cost" ), true );
+    member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Store Cost" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.TRUE, visible );
 
-    member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Profit" ), true );
+    member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Profit" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
   }

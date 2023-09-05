@@ -28,9 +28,9 @@ import mondrian.olap.MondrianProperties;
  *
  * <dl>
  *
- * <dt>Obsolete {@link mondrian.olap.Id.Segment}</dt>
+ * <dt>Obsolete {@link mondrian.olap.IdImpl.Segment}</dt>
  * <dd>Replace it by {@link org.olap4j.mdx.IdentifierSegment}. Likewise
- * {@link mondrian.olap.Id.Quoting} with {@link org.olap4j.mdx.Quoting}.
+ * {@link mondrian.olap.IdImpl.Quoting} with {@link org.olap4j.mdx.Quoting}.
  * Should wait until after the mondrian 4 'big bang', because there are ~300
  * uses of Segment in the code.</dd>
  *

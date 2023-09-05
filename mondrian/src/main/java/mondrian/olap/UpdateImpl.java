@@ -20,14 +20,16 @@
 
 package mondrian.olap;
 
+import mondrian.olap.interfaces.Update;
+
 import java.io.PrintWriter;
 import java.util.List;
 
-public class Update extends AbstractQueryPart {
+public class UpdateImpl extends AbstractQueryPart implements Update {
     private final String cubeName;
     private List<UpdateClause> updateClauses;
 
-    Update(String cubeName, List<UpdateClause> updateClauses)
+    UpdateImpl(String cubeName, List<UpdateClause> updateClauses)
     {
         this.cubeName = cubeName;
         this.updateClauses = updateClauses;
@@ -43,10 +45,12 @@ public class Update extends AbstractQueryPart {
         return new Object[] {cubeName};
     }
 
+    @Override
     public String getCubeName() {
         return cubeName;
     }
 
+    @Override
     public List<UpdateClause> getUpdateClauses() {
         return this.updateClauses;
     }

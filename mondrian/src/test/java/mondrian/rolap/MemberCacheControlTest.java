@@ -51,7 +51,7 @@ import org.slf4j.Logger;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CacheControl;
 import mondrian.olap.CacheControl.MemberEditCommand;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -174,7 +174,7 @@ class MemberCacheControlTest {
         Cube cube = connection.getSchema().lookupCube(cubeName, true);
         SchemaReader scr = cube.getSchemaReader(null).withLocus();
         return (RolapMember)
-            scr.getMemberByUniqueName(Id.Segment.toList(names), true);
+            scr.getMemberByUniqueName(IdImpl.Segment.toList(names), true);
     }
 
     /**

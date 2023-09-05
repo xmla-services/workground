@@ -15,7 +15,7 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 
 /**
  * A <code>MemberSource</code> has the basic operations to read the members of a
@@ -114,6 +114,6 @@ public interface MemberSource {
      * Finds a member based upon its unique name.
      */
     RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound);
 }

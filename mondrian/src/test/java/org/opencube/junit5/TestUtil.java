@@ -72,7 +72,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
@@ -128,48 +128,48 @@ public class TestUtil {
 		    {
 		        return new UnaryTupleList(Arrays.asList(
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "High Quality"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                Id.Segment.toList(
+		                IdImpl.Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Sunset"),
 		                salesCubeSchemaReader)));
 		    }
 	    public static Member member(
-	            List<Id.Segment> segmentList,
+	            List<IdImpl.Segment> segmentList,
 	            SchemaReader salesCubeSchemaReader)
 	        {
 	            return salesCubeSchemaReader.getMemberByUniqueName(segmentList, true);
@@ -1857,7 +1857,7 @@ public class TestUtil {
 				connection.getSchema().lookupCube("Sales", true);
 		RolapHierarchy hierarchy =
 				(RolapHierarchy) salesCube.lookupHierarchy(
-						new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
+						new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED),
 						false);
 		if (hierarchy != null) {
 			SmartMemberReader memberReader =

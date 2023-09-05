@@ -29,7 +29,7 @@ class CellPropertyTest{
     @BeforeEach
     protected void setUp() throws Exception {
 
-        cellProperty = new CellPropertyImpl(Id.Segment.toList("Format_String"));
+        cellProperty = new CellPropertyImpl(IdImpl.Segment.toList("Format_String"));
     }
 
     @Test

@@ -13,7 +13,7 @@
  */
 package mondrian.olap.interfaces;
 
-public interface Explain extends QueryPart {
+public non-sealed interface Explain extends QueryPart {
 
     QueryPart getQuery();
 }
