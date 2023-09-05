@@ -51,11 +51,11 @@ import org.slf4j.Logger;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CacheControl;
 import mondrian.olap.CacheControl.MemberEditCommand;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Execution;
@@ -174,7 +174,7 @@ class MemberCacheControlTest {
         Cube cube = connection.getSchema().lookupCube(cubeName, true);
         SchemaReader scr = cube.getSchemaReader(null).withLocus();
         return (RolapMember)
-            scr.getMemberByUniqueName(Id.Segment.toList(names), true);
+            scr.getMemberByUniqueName(IdImpl.Segment.toList(names), true);
     }
 
     /**
@@ -360,7 +360,7 @@ class MemberCacheControlTest {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Store].[USA].[CA].[San Francisco].[Store 14]}"
             + " ON ROWS FROM [Sales]";
-        Query q = conn.parseQuery(mdx);
+        QueryImpl q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",
@@ -413,7 +413,7 @@ class MemberCacheControlTest {
         String mdx = "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Retail].Members} ON ROWS "
             + "FROM [Sales]";
-        Query q = conn.parseQuery(mdx);
+        QueryImpl q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",

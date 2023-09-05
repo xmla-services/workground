@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
@@ -25,7 +26,6 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;

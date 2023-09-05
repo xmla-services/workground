@@ -12,7 +12,7 @@ package mondrian.parser;
 import mondrian.olap.Exp;
 import mondrian.olap.FunTable;
 import mondrian.olap.Parser;
-import mondrian.olap.QueryPart;
+import mondrian.olap.api.QueryPart;
 import mondrian.server.Statement;
 
 /**

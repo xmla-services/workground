@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.compute.api.ComputationContext;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

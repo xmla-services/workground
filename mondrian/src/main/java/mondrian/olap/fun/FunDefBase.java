@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -277,7 +277,7 @@ public abstract class FunDefBase implements FunDef {
         if (type == null) {
             throw Util.newInternal("could not derive type");
         }
-        return new ResolvedFunCall(this, args, type);
+        return new ResolvedFunCallImpl(this, args, type);
     }
 
     /**
@@ -420,7 +420,7 @@ public abstract class FunDefBase implements FunDef {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         throw Util.newInternal(
             new StringBuilder("function '").append( getSignature())
                 .append("' has not been implemented").toString());

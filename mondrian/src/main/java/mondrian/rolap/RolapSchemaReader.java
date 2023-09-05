@@ -43,8 +43,8 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.IdImpl;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
@@ -422,20 +422,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
+	public OlapElement getElementChild(OlapElement parent, IdImpl.Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement getElementChild(
-        OlapElement parent, Id.Segment name, MatchType matchType)
+        OlapElement parent, IdImpl.Segment name, MatchType matchType)
     {
         return parent.lookupChild(this, name, matchType);
     }
 
     @Override
 	public final Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return getMemberByUniqueName(
@@ -444,7 +444,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
     {
@@ -456,7 +456,7 @@ public class RolapSchemaReader
     @Override
 	public OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category)
     {
@@ -467,7 +467,7 @@ public class RolapSchemaReader
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -491,7 +491,7 @@ public class RolapSchemaReader
 
     public final OlapElement lookupCompoundInternal(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<IdImpl.Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -537,7 +537,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member lookupMemberChildByName(
-        Member parent, Id.Segment childName, MatchType matchType)
+        Member parent, IdImpl.Segment childName, MatchType matchType)
     {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
@@ -546,11 +546,11 @@ public class RolapSchemaReader
         assert !(parent instanceof RolapHierarchy.LimitedRollupMember);
         try {
             MemberChildrenConstraint constraint;
-            if (childName instanceof Id.NameSegment
+            if (childName instanceof IdImpl.NameSegment
                 && matchType.isExact())
             {
                 constraint = sqlConstraintFactory.getChildByNameConstraint(
-                    (RolapMember) parent, (Id.NameSegment) childName);
+                    (RolapMember) parent, (IdImpl.NameSegment) childName);
             } else {
                 constraint =
                     sqlConstraintFactory.getMemberChildrenConstraint(null);
@@ -585,7 +585,7 @@ public class RolapSchemaReader
 
     @Override
 	public List<Member> lookupMemberChildrenByNames(
-        Member parent, List<Id.NameSegment> childNames, MatchType matchType)
+        Member parent, List<IdImpl.NameSegment> childNames, MatchType matchType)
     {
         MemberChildrenConstraint constraint = sqlConstraintFactory
             .getChildrenByNamesConstraint(
@@ -598,20 +598,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public Member getCalculatedMember(List<Id.Segment> nameParts) {
+	public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
         // There are no calculated members defined against a schema.
         return null;
     }
 
     @Override
-	public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+	public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof Id.NameSegment)) {
+        if (!(nameParts.get(0) instanceof IdImpl.NameSegment)) {
             return null;
         }
-        final String name = ((Id.NameSegment) nameParts.get(0)).name;
+        final String name = ((IdImpl.NameSegment) nameParts.get(0)).name;
         return schema.getNamedSet(name);
     }
 
@@ -857,7 +857,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         public SystemPropertyParameter(String name, boolean system) {
             super(
                 name,
-                Literal.nullValue,
+                LiteralImpl.nullValue,
                 new StringBuilder("System property '").append(name).append("'").toString(),
                 new StringType());
             this.system = system;

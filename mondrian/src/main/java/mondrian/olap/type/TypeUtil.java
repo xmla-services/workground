@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.Syntax;
@@ -543,7 +543,7 @@ public class TypeUtil {
             if ((from == Category.MEMBER || from == Category.TUPLE) && to == Category.SET) {
                 final Exp newArg =
                     validator.validate(
-                        new UnresolvedFunCall(
+                        new UnresolvedFunCallImpl(
                             "{}", Syntax.Braces, new Exp[]{arg}), false);
                 args.set(ordinal, newArg);
             }

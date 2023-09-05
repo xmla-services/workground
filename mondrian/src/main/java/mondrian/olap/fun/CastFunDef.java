@@ -12,16 +12,16 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
+import mondrian.olap.api.Literal;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -56,7 +56,7 @@ public class CastFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Type targetType = call.getType();
         final Exp arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
@@ -200,7 +200,7 @@ public class CastFunDef extends FunDefBase {
             }
         }
 
-        
+
 		public String evaluateString(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             if (o == null) {
@@ -209,13 +209,13 @@ public class CastFunDef extends FunDefBase {
             return String.valueOf(o);
         }
 
-        
+
 		public Integer evaluateInteger(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toInt(o, targetType);
         }
 
-        
+
 		public Double evaluateDouble(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toDouble(o, targetType);

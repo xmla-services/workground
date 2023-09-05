@@ -12,6 +12,7 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.Formula;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -21,10 +22,9 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Formula;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;
 
@@ -185,8 +185,8 @@ public final class ScenarioImpl implements Scenario {
         if (isScenario(member.getHierarchy())) {
             final Formula formula = ((RolapCalculatedMember) member)
                 .getFormula();
-            final ResolvedFunCall resolvedFunCall =
-                (ResolvedFunCall) formula.getExpression();
+            final ResolvedFunCallImpl resolvedFunCall =
+                (ResolvedFunCallImpl) formula.getExpression();
             final Calc calc = resolvedFunCall.getFunDef()
                 .compileCall(null, null);
             return ((ScenarioCalc) calc).getScenario();
@@ -298,7 +298,7 @@ public final class ScenarioImpl implements Scenario {
         final String mdx = buf.toString();
         final RolapConnection connection =
             cube.getSchema().getInternalConnection();
-        final Query query = connection.parseQuery(mdx);
+        final QueryImpl query = connection.parseQuery(mdx);
         final Result result = connection.execute(query);
         final Object o = result.getCell(new int[0]).getValue();
         return o instanceof Number

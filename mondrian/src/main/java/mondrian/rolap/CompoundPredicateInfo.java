@@ -19,7 +19,7 @@ import java.util.Map;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.TupleIterable;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
@@ -344,9 +344,9 @@ public class CompoundPredicateInfo {
 
   private StarPredicate makeCalculatedMemberPredicate( RolapCubeMember member, RolapCube baseCube,
       Evaluator evaluator ) {
-    assert member.getExpression() instanceof ResolvedFunCall;
+    assert member.getExpression() instanceof ResolvedFunCallImpl;
 
-    ResolvedFunCall fun = (ResolvedFunCall) member.getExpression();
+    ResolvedFunCallImpl fun = (ResolvedFunCallImpl) member.getExpression();
 
     final Exp exp = fun.getArg( 0 );
     final Type type = exp.getType();

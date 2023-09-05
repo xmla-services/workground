@@ -22,7 +22,7 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -236,7 +236,7 @@ public class SmartMemberReader implements MemberReader {
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);

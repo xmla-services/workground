@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.test.PropertySaver5;
@@ -80,7 +80,7 @@ class AggGenTest {
         propSaver.set(props.GenerateAggregateSql, true);
 
         final RolapConnection rolapConn = (RolapConnection) context.createConnection();
-        Query query =
+        QueryImpl query =
             rolapConn.parseQuery(
                 "select {[Measures].[Count]} on columns from [HR]");
         rolapConn.execute(query);

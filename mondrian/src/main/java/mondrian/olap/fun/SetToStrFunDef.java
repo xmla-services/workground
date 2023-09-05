@@ -19,7 +19,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 
@@ -37,7 +37,7 @@ class SetToStrFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         Exp arg = call.getArg(0);
         final TupleListCalc tupleListCalc = compiler.compileList(arg);
         return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[]{tupleListCalc}) {

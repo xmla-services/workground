@@ -51,10 +51,10 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
@@ -71,7 +71,7 @@ class ParameterTest {
     // -- Helper methods ----------
 
     private void assertSetPropertyFails(Connection connection, String propName, String scope) {
-        Query q = connection.parseQuery("select from [Sales]");
+        QueryImpl q = connection.parseQuery("select from [Sales]");
         try {
             q.setParameter(propName, "foo");
             fail(
@@ -93,11 +93,11 @@ class ParameterTest {
         String mdx =
             "select {Parameter(\"Foo\",[Time],[Time].[1997],\"Foo\")} "
             + "ON COLUMNS from [Sales]";
-        Query query = context.createConnection().parseQuery(mdx);
+        QueryImpl query = context.createConnection().parseQuery(mdx);
         SchemaReader sr = query.getSchemaReader(false).withLocus();
         Member m =
             sr.getMemberByUniqueName(
-                Id.Segment.toList("Time", "1997", "Q2", "5"), true);
+                IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true);
         Parameter p = sr.getParameter("Foo");
         p.setValue(m);
         assertEquals(m, p.getValue());
@@ -138,7 +138,7 @@ class ParameterTest {
 
         // this used to crash
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(queryString);
+        QueryImpl query = connection.parseQuery(queryString);
         query.toString();
     }
 
@@ -266,7 +266,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testNullStrToMember(TestingContext context) {
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "select NON EMPTY {[Time].[1997]} ON COLUMNS, "
             + "NON EMPTY {StrToMember(Parameter(\"sProduct\", STRING, \"[Gender].[Gender].[F]\"))} ON ROWS "
             + "from [Sales]");
@@ -324,7 +324,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSetUnsetParameter(TestingContext context) {
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "with member [Measures].[Foo] as\n"
             + " len(Parameter(\"sProduct\", STRING, \"foobar\"))\n"
             + "select {[Measures].[Foo]} ON COLUMNS\n"
@@ -669,7 +669,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testParameterMetadata(TestingContext context) {
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "with member [Measures].[A string] as \n"
             + "   Parameter(\"S\",STRING,\"x\" || \"y\",\"A string parameter\")\n"
             + " member [Measures].[A number] as \n"
@@ -686,7 +686,7 @@ class ParameterTest {
         assertEquals("Q", parameters[3].getName());
         final Member member =
             query.getSchemaReader(true).getMemberByUniqueName(
-                Id.Segment.toList("Gender", "M"), true);
+                IdImpl.Segment.toList("Gender", "M"), true);
         parameters[2].setValue(member);
         assertEqualsVerbose(
             "with member [Measures].[A string] as 'Parameter(\"S\", STRING, (\"x\" || \"y\"), \"A string parameter\")'\n"
@@ -701,7 +701,7 @@ class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testTwoParametersBug1425153(TestingContext context) {
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "select \n"
             + "{[Measures].[Unit Sales]} on columns, \n"
             + "{Parameter(\"ProductMember\", [Product], [Product].[All Products].[Food], \"wat willste?\").children} ON rows \n"
@@ -895,14 +895,14 @@ class ParameterTest {
         // Member of wrong hierarchy.
         assertAssignParameter(connection,
             para, false, sr.getMemberByUniqueName(
-                Id.Segment.toList("Time", "1997", "Q2", "5"), true),
+                IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true),
             "Invalid value '[Time].[1997].[Q2].[5]' for parameter 'x', "
             + "type MemberType<hierarchy=[Customers]>");
 
         // Member of right hierarchy.
         assertAssignParameter(connection,
             para, false, sr.getMemberByUniqueName(
-                Id.Segment.toList("Customers", "All Customers"), true),
+                IdImpl.Segment.toList("Customers", "All Customers"), true),
             null);
 
         // Member of wrong level of right hierarchy.
@@ -910,7 +910,7 @@ class ParameterTest {
             "Parameter(\"x\", [Customers].[State Province], [Customers].[USA].[CA])",
             false,
             sr.getMemberByUniqueName(
-                Id.Segment.toList("Customers", "USA"), true),
+                IdImpl.Segment.toList("Customers", "USA"), true),
             "Invalid value '[Customers].[USA]' for parameter "
             + "'x', type MemberType<level=[Customers].[State Province]>");
 
@@ -926,7 +926,7 @@ class ParameterTest {
             "Parameter(\"x\", [Customers].[State Province], [Customers].[USA].[CA])",
             false,
             sr.getMemberByUniqueName(
-                Id.Segment.toList("Customers", "USA", "OR"), true),
+                IdImpl.Segment.toList("Customers", "USA", "OR"), true),
             null);
     }
 
@@ -1014,9 +1014,9 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "Mexico"), true),
+                    IdImpl.Segment.toList("Customers", "Mexico"), true),
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Time", "1997", "Q2", "5"), true));
+                    IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true));
         assertAssignParameter(connection,
                 para, true, list,
             "Invalid value '[Time].[1997].[Q2].[5]' for parameter 'x', "
@@ -1033,18 +1033,18 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "Mexico"), true),
+                    IdImpl.Segment.toList("Customers", "Mexico"), true),
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "Canada"), true));
+                    IdImpl.Segment.toList("Customers", "Canada"), true));
         assertAssignParameter(connection, para, true, list, null);
 
         // List that contains member of wrong level of right hierarchy.
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "USA", "CA"), true),
+                    IdImpl.Segment.toList("Customers", "USA", "CA"), true),
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "Mexico"), true));
+                    IdImpl.Segment.toList("Customers", "Mexico"), true));
         assertAssignParameter(connection,
                 "Parameter(\"x\", [Customers].[State Province], {[Customers].[USA].[CA]})",
             true,
@@ -1064,10 +1064,10 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "USA", "CA"), true),
+                    IdImpl.Segment.toList("Customers", "USA", "CA"), true),
                 null,
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Customers", "USA", "OR"), true));
+                    IdImpl.Segment.toList("Customers", "USA", "OR"), true));
         assertAssignParameter(connection,
                 "Parameter(\"x\", [Customers].[State Province], {[Customers].[USA].[CA]})",
             true,
@@ -1104,7 +1104,7 @@ class ParameterTest {
                   + "select {[Measures].[s]} on columns,\n"
                   + "{Time.Time.Children} on rows\n"
                   + "from [Sales]";
-            Query query = connection.parseQuery(mdx);
+            QueryImpl query = connection.parseQuery(mdx);
             if (expectedMsg == null) {
                 query.setParameter("x", value);
                 final Result result = connection.execute(query);
@@ -1135,14 +1135,14 @@ class ParameterTest {
                 "select [Measures].[Unit Sales] on 0,\n"
                 + " Parameter(\"Foo\", [Time], {}, \"Foo\") on 1\n"
                 + "from [Sales]";
-            Query query = connection.parseQuery(mdx);
+            QueryImpl query = connection.parseQuery(mdx);
             SchemaReader sr = query.getSchemaReader(false);
             Member m1 =
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Time", "1997", "Q2", "5"), true);
+                    IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true);
             Member m2 =
                 sr.getMemberByUniqueName(
-                    Id.Segment.toList("Time", "1997", "Q3"), true);
+                    IdImpl.Segment.toList("Time", "1997", "Q3"), true);
             Parameter p = sr.getParameter("Foo");
             final List<Member> list = Arrays.asList(m1, m2);
             p.setValue(list);

@@ -21,6 +21,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -37,21 +42,16 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -172,7 +172,7 @@ public class FunUtil extends Util {
    * Returns an argument whose value is a literal.
    */
   static String getLiteralArg(
-    ResolvedFunCall call,
+    ResolvedFunCallImpl call,
     int i,
     String defaultValue,
     String[] allowedValues ) {
@@ -186,7 +186,7 @@ public class FunUtil extends Util {
       }
     }
     Exp arg = call.getArg( i );
-    if ( !( arg instanceof Literal )
+    if ( !( arg instanceof Literal)
       || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
@@ -214,7 +214,7 @@ public class FunUtil extends Util {
    * -1.
    */
   static <E extends Enum<E>> E getLiteralArg(
-    ResolvedFunCall call,
+    ResolvedFunCallImpl call,
     int i,
     E defaultValue,
     Class<E> allowedValues ) {
@@ -289,7 +289,7 @@ public class FunUtil extends Util {
 
 
 
-	
+
 
   static List<Member> addMembers(
     final SchemaReader schemaReader,
@@ -1810,11 +1810,11 @@ public class FunUtil extends Util {
     // caching.
     if ( exp instanceof MemberExpr
       || exp instanceof LevelExpr
-      || exp instanceof HierarchyExpr
-      || exp instanceof DimensionExpr ) {
+      || exp instanceof HierarchyExprImpl
+      || exp instanceof DimensionExpr) {
       return false;
     }
-    if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
+    if ( exp instanceof ResolvedFunCallImpl call && call.getFunDef() instanceof SetFunDef) {
       // A set of literals is not worth caching.
       for ( Exp setArg : call.getArgs() ) {
           if ( FunUtil.worthCaching( setArg ) ) {
@@ -2107,7 +2107,7 @@ public class FunUtil extends Util {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
+      SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

@@ -27,6 +27,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.Cell;
@@ -39,8 +41,7 @@ import org.olap4j.Position;
 
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.rolap.RolapAxis;
 import mondrian.rolap.RolapCell;
 import mondrian.server.Execution;
@@ -122,9 +123,9 @@ abstract class MondrianOlap4jCellSet
         if (queryAxis == null) {
             // Dummy slicer axis.
             queryAxis =
-                new QueryAxis(
+                new QueryAxisImpl(
                     false, null, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                    QueryAxis.SubtotalVisibility.Undefined);
+                    QueryAxisImpl.SubtotalVisibility.Undefined);
         }
         filterAxis =
             new MondrianOlap4jCellSetAxis(this, queryAxis, (RolapAxis) axis);

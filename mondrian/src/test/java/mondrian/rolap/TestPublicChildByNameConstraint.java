@@ -20,7 +20,7 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import mondrian.olap.Id.NameSegment;
+import mondrian.olap.IdImpl.NameSegment;
 
 public class TestPublicChildByNameConstraint extends ChildByNameConstraint {
 

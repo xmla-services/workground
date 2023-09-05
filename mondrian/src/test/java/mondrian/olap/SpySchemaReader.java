@@ -36,8 +36,8 @@ import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.Id.NameSegment;
-import mondrian.olap.Id.Segment;
+import mondrian.olap.IdImpl.NameSegment;
+import mondrian.olap.IdImpl.Segment;
 import mondrian.olap.NameResolver.Namespace;
 import mondrian.rolap.RolapSchema;
 

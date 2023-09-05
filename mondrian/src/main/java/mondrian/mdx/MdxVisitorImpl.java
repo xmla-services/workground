@@ -10,11 +10,15 @@
 package mondrian.mdx;
 
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.ParameterExpr;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.
@@ -44,12 +48,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(Query query) {
+	public Object visit(QueryImpl query) {
         return null;
     }
 
     @Override
-	public Object visit(QueryAxis queryAxis) {
+	public Object visit(QueryAxisImpl queryAxis) {
         return null;
     }
 
@@ -59,12 +63,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(UnresolvedFunCall call) {
+	public Object visit(UnresolvedFunCallImpl call) {
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCall call) {
+	public Object visit(ResolvedFunCallImpl call) {
         return null;
     }
 
@@ -85,7 +89,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(HierarchyExpr hierarchyExpr) {
+	public Object visit(HierarchyExprImpl hierarchyExpr) {
         // do nothing
         return null;
     }
@@ -97,7 +101,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExprImpl memberExpr) {
         // do nothing
         return null;
     }

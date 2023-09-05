@@ -9,12 +9,12 @@
 
 package mondrian.olap.fun;
 
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -49,7 +49,7 @@ public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Exp arg0 = call.getArg(0);
         assert arg0 instanceof NamedSetExpr : "checked this in createCall";
         final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;

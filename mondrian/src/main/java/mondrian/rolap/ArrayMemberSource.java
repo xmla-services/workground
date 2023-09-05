@@ -16,7 +16,7 @@ package mondrian.rolap;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 
@@ -76,7 +76,7 @@ abstract class ArrayMemberSource implements MemberSource {
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<IdImpl.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         String uniqueName = Util.implode(uniqueNameParts);

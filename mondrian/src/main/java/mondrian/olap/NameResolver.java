@@ -11,6 +11,7 @@ package mondrian.olap;
 
 import java.util.List;
 
+import mondrian.olap.api.Formula;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

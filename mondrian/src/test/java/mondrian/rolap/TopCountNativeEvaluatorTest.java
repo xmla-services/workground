@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.test.PropertySaver5;
@@ -89,7 +89,7 @@ class TopCountNativeEvaluatorTest {
 
         Exp[] arguments = new Exp[] {
             new TypeWrapperExp(new EmptyType()),
-            Literal.create(BigDecimal.ONE)
+            LiteralImpl.create(BigDecimal.ONE)
         };
 
         assertNull(

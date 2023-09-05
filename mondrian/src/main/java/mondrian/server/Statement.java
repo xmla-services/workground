@@ -11,8 +11,8 @@ package mondrian.server;
 
 import java.sql.SQLException;
 
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.api.Query;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;

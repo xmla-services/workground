@@ -43,7 +43,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -425,16 +425,16 @@ class RolapCubeTest {
     private List<Member> warehouseMembersCanadaMexicoUsa(SchemaReader reader)
     {
         return Arrays.asList(
-                member(Id.Segment.toList(
+                member(IdImpl.Segment.toList(
                         "Warehouse", "All Warehouses", "Canada"), reader),
-                member(Id.Segment.toList(
+                member(IdImpl.Segment.toList(
                         "Warehouse", "All Warehouses", "Mexico"), reader),
-                member(Id.Segment.toList(
+                member(IdImpl.Segment.toList(
                         "Warehouse", "All Warehouses", "USA"), reader));
     }
 
     private Member member(
-            List<Id.Segment> segmentList,
+            List<IdImpl.Segment> segmentList,
             SchemaReader salesCubeSchemaReader)
     {
         return salesCubeSchemaReader.getMemberByUniqueName(segmentList, true);
@@ -445,40 +445,40 @@ class RolapCubeTest {
     {
         return new UnaryTupleList(Arrays.asList(
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills",
                                 "Store 6"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Los Angeles"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        IdImpl.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                         salesCubeSchemaReader)));
     }

@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -46,7 +47,6 @@ import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.resource.MondrianResource;

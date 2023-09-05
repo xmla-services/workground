@@ -15,10 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ParameterExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.Resolver;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.QueryPart;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
@@ -47,7 +52,7 @@ abstract class ValidatorImpl implements Validator {
     private final FunTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
         new HashMap<>();
-    private static final QueryPart placeHolder = Literal.zero;
+    private static final QueryPart placeHolder = LiteralImpl.zero;
 
     /**
      * Creates a ValidatorImpl.
@@ -108,7 +113,7 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public void validate(ParameterExpr parameterExpr) {
+	public void validate(ParameterExprImpl parameterExpr) {
         ParameterExpr resolved =
             (ParameterExpr) resolvedNodes.get(parameterExpr);
         if (resolved != null) {
@@ -144,7 +149,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public void validate(QueryAxis axis) {
-        final QueryAxis resolved = (QueryAxis) resolvedNodes.get(axis);
+        final QueryAxisImpl resolved = (QueryAxisImpl) resolvedNodes.get(axis);
         if (resolved != null) {
             return; // already resolved
         }
@@ -283,7 +288,7 @@ abstract class ValidatorImpl implements Validator {
         final Object parent = stack.get(n - 1);
         if (parent instanceof Formula formula) {
             return formula.isMember();
-        } else if (parent instanceof ResolvedFunCall funCall) {
+        } else if (parent instanceof ResolvedFunCallImpl funCall) {
             if (funCall.getFunDef().getSyntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);
             } else {
@@ -299,7 +304,7 @@ abstract class ValidatorImpl implements Validator {
                 final int[] parameterTypes = funDef.getParameterCategories();
                 return parameterTypes[k] != Category.SET;
             }
-        } else if (parent instanceof UnresolvedFunCall funCall) {
+        } else if (parent instanceof UnresolvedFunCallImpl funCall) {
             if (funCall.getSyntax() == Syntax.Parentheses
                 || funCall.getFunName().equals("*"))
             {
@@ -325,7 +330,7 @@ abstract class ValidatorImpl implements Validator {
      * has to be an expression.
      */
     boolean requiresExpression(
-        UnresolvedFunCall funCall,
+        UnresolvedFunCallImpl funCall,
         int k)
     {
         // The function call has not been resolved yet. In fact, this method

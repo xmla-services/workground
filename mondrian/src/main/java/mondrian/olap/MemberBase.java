@@ -185,7 +185,7 @@ public boolean isEvaluated() {
   @Override
 public OlapElement lookupChild(
     SchemaReader schemaReader,
-    Id.Segment childName,
+    IdImpl.Segment childName,
     MatchType matchType ) {
     return schemaReader.lookupMemberChildByName(
       this, childName, matchType );

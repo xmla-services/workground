@@ -23,7 +23,7 @@ import mondrian.calc.ExpCompiler;
  * @author jhyde, 20 January, 1999
  */
 public abstract class ExpBase
-    extends QueryPart
+    extends AbstractQueryPart
     implements Exp
 {
 

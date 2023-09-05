@@ -17,16 +17,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
@@ -206,7 +206,7 @@ public class SqlContextConstraint
             } else if (member instanceof RolapCalculatedMember) {
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
-        } else if (exp instanceof ResolvedFunCall funCall) {
+        } else if (exp instanceof ResolvedFunCallImpl funCall) {
             Exp [] args = funCall.getArgs();
             for (Exp arg : args) {
                 findMeasures(arg, baseCubes, baseCubeList);

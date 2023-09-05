@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import mondrian.olap.api.Formula;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -66,9 +67,9 @@ import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunTable;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Parameter;
@@ -727,11 +728,11 @@ public class RolapSchema implements Schema {
                 xmlNamedSet.name(), e);
         }
         final Formula formula =
-            new Formula(
-                new Id(
-                    new Id.NameSegment(
+            new FormulaImpl(
+                new IdImpl(
+                    new IdImpl.NameSegment(
                         xmlNamedSet.name(),
-                        Id.Quoting.UNQUOTED)),
+                        IdImpl.Quoting.UNQUOTED)),
                 exp);
         return formula.getNamedSet();
     }
@@ -890,7 +891,7 @@ public class RolapSchema implements Schema {
         int category,
         String id)
     {
-        List<Id.Segment> segments = Util.parseIdentifier(id);
+        List<IdImpl.Segment> segments = Util.parseIdentifier(id);
         //noinspection unchecked
         return (T) reader.lookupCompound(cube, segments, true, category);
     }

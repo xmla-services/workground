@@ -109,7 +109,7 @@ public class CubeAccess {
     {
         if (bMember) {
             boolean fail = false;
-            List<Id.Segment> sMembers = Util.parseIdentifier(sMember);
+            List<IdImpl.Segment> sMembers = Util.parseIdentifier(sMember);
             SchemaReader schemaReader = mdxCube.getSchemaReader(null);
             Member member = schemaReader.getMemberByUniqueName(sMembers, fail);
             if (member == null) {
@@ -124,7 +124,7 @@ public class CubeAccess {
             boolean fail = false;
             Hierarchy hierarchy =
                 mdxCube.lookupHierarchy(
-                    new Id.NameSegment(sHierarchy),
+                    new IdImpl.NameSegment(sHierarchy),
                     fail);
             if (hierarchy == null) {
                 throw MondrianResource.instance().MdxCubeSlicerHierarchyError

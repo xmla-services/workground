@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Test;
  * @since 08 May, 2007
  */
 class CellPropertyTest{
-    private CellProperty cellProperty;
+    private CellPropertyImpl cellProperty;
 
     @BeforeEach
     protected void setUp() throws Exception {
 
-        cellProperty = new CellProperty(Id.Segment.toList("Format_String"));
+        cellProperty = new CellPropertyImpl(IdImpl.Segment.toList("Format_String"));
     }
 
     @Test

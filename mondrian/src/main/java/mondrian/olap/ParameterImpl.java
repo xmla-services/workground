@@ -13,6 +13,8 @@ package mondrian.olap;
 
 import java.util.List;
 
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -22,7 +24,6 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.MemberExpr;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;

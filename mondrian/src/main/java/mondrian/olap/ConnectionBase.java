@@ -11,6 +11,7 @@
 
 package mondrian.olap;
 
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.olap.api.Connection;
 import org.slf4j.Logger;
 
@@ -55,8 +56,8 @@ public abstract class ConnectionBase implements Connection {
     public abstract Statement getInternalStatement();
 
     @Override
-	public Query parseQuery(String query) {
-        return (Query) parseStatement(query);
+	public QueryImpl parseQuery(String query) {
+        return (QueryImpl) parseStatement(query);
     }
 
     /**

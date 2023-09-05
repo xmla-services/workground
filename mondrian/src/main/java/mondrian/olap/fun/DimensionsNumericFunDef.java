@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -53,7 +53,7 @@ class DimensionsNumericFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
     {
         final IntegerCalc integerCalc =
             compiler.compileInteger(call.getArg(0));

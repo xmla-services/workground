@@ -19,7 +19,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -81,7 +81,7 @@ public class IifFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final BooleanCalc booleanCalc =
             compiler.compileBoolean(call.getArg(0));
         final Calc calc1 =
@@ -135,7 +135,7 @@ public class IifFunDef extends FunDefBase {
         "fSbSS")
     {
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final StringCalc calc1 = compiler.compileString(call.getArg(1));
@@ -161,7 +161,7 @@ public class IifFunDef extends FunDefBase {
             "fnbnn")
         {
             @Override
-			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+			public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
@@ -192,7 +192,7 @@ public class IifFunDef extends FunDefBase {
             "ftbtt")
         {
             @Override
-			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+			public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
@@ -222,7 +222,7 @@ public class IifFunDef extends FunDefBase {
         "fbbbb")
     {
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final BooleanCalc booleanCalc1 =

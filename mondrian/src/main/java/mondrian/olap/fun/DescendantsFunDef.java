@@ -29,9 +29,9 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -81,7 +81,7 @@ class DescendantsFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     if ( type0 instanceof SetType setType ) {
       if ( setType.getElementType() instanceof TupleType ) {
@@ -100,19 +100,19 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       //   Generate(<set>, Descendants(<dimension>.CurrentMember, <args>))
       Exp[] descendantsArgs = call.getArgs().clone();
       descendantsArgs[ 0 ] =
-        new UnresolvedFunCall(
+        new UnresolvedFunCallImpl(
           "CurrentMember",
           Syntax.Property,
           new Exp[] {
-            new HierarchyExpr( hierarchy )
+            new HierarchyExprImpl( hierarchy )
           } );
-      final ResolvedFunCall generateCall =
-        (ResolvedFunCall) compiler.getValidator().validate(
-          new UnresolvedFunCall(
+      final ResolvedFunCallImpl generateCall =
+        (ResolvedFunCallImpl) compiler.getValidator().validate(
+          new UnresolvedFunCallImpl(
             "Generate",
             new Exp[] {
               call.getArg( 0 ),
-              new UnresolvedFunCall(
+              new UnresolvedFunCallImpl(
                 DESCENDANTS,
                 descendantsArgs )
             } ),

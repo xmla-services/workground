@@ -29,6 +29,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -50,20 +57,17 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -126,14 +130,14 @@ public class NativizeSetFunDef extends FunDefBase {
     @Override
 	public Exp createCall(Validator validator, Exp[] args) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef createCall");
-        ResolvedFunCall call =
-            (ResolvedFunCall) super.createCall(validator, args);
+        ResolvedFunCallImpl call =
+            (ResolvedFunCallImpl) super.createCall(validator, args);
         call.accept(new FindLevelsVisitor(substitutionMap, dimensions));
         return call;
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
@@ -221,7 +225,7 @@ public class NativizeSetFunDef extends FunDefBase {
         protected NonNativeCalc(Calc parent, final boolean nativeEnabled) {
             super(parent.getType());
         	assert parent != null;
-            
+
             this.parent = parent;
             this.nativeEnabled = nativeEnabled;
         }
@@ -242,7 +246,7 @@ public class NativizeSetFunDef extends FunDefBase {
 //            return parent.getType();
 //        }
 
-  
+
 
         @Override
 		public ResultStyle getResultStyle() {
@@ -325,7 +329,7 @@ public class NativizeSetFunDef extends FunDefBase {
         private final Exp originalExp;
 
         protected NativeListCalc(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             Calc[] calcs,
             ExpCompiler compiler,
             SubstitutionMap substitutionMap,
@@ -512,9 +516,9 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
-                if (call.getArg(0) instanceof LevelExpr) {
+                if (call.getArg(0) instanceof LevelExprImpl) {
                     Level level = ((LevelExpr) call.getArg(0)).getLevel();
                     substitutionMap.put(NativizeSetFunDef.createMemberId(level), level);
                     dimensions.add(level.getDimension());
@@ -532,7 +536,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExpr member) {
+        public Object visit(MemberExprImpl member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
@@ -555,7 +559,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof NativizeSetFunDef) {
                 addFormulasToQuery();
             }
@@ -565,10 +569,10 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void addFormulasToQuery() {
             NativizeSetFunDef.LOGGER.debug("FormulaResolvingVisitor addFormulas");
-            List<Formula> formulas = new ArrayList<>();
+            List<FormulaImpl> formulas = new ArrayList<>();
 
             for (Level level : levels) {
-                Formula memberFormula = createDefaultMemberFormula(level);
+                FormulaImpl memberFormula = createDefaultMemberFormula(level);
                 formulas.add(memberFormula);
                 formulas.add(createNamedSetFormula(level, memberFormula));
             }
@@ -578,10 +582,10 @@ public class NativizeSetFunDef extends FunDefBase {
                 formulas.add(createSentinelFormula(level));
             }
 
-            query.addFormulas(formulas.toArray(new Formula[formulas.size()]));
+            query.addFormulas(formulas.toArray(new FormulaImpl[formulas.size()]));
         }
 
-        private Formula createSentinelFormula(Level level) {
+        private FormulaImpl createSentinelFormula(Level level) {
             Id memberId = NativizeSetFunDef.createSentinelId(level);
             Exp memberExpr = query.getConnection()
                 .parseExpression("101010");
@@ -589,13 +593,13 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createSentinelFormula memberId={} memberExpr={}"
                 , memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createDefaultMemberFormula(Level level) {
+        private FormulaImpl createDefaultMemberFormula(Level level) {
             Id memberId = NativizeSetFunDef.createMemberId(level);
             Exp memberExpr =
-                new UnresolvedFunCall(
+                new UnresolvedFunCallImpl(
                     "DEFAULTMEMBER",
                     Syntax.Property,
                     new Exp[] {NativizeSetFunDef.hierarchyId(level)});
@@ -603,11 +607,11 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createLevelMembersFormulas memberId={} memberExpr={}",
                 memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createNamedSetFormula(
-            Level level, Formula memberFormula)
+        private FormulaImpl createNamedSetFormula(
+            Level level, FormulaImpl memberFormula)
         {
             Id setId = NativizeSetFunDef.createSetId(level);
             Exp setExpr = query.getConnection()
@@ -619,7 +623,7 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createNamedSetFormula setId={} setExpr={}",
                 setId, setExpr);
-            return new Formula(setId, setExpr);
+            return new FormulaImpl(setId, setExpr);
         }
     }
 
@@ -632,7 +636,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result = null;
             if (call.getFunDef() instanceof LevelMembersFunDef) {
@@ -646,7 +650,7 @@ public class NativizeSetFunDef extends FunDefBase {
             return result;
         }
 
-        private Object replaceLevelMembersReferences(ResolvedFunCall call) {
+        private Object replaceLevelMembersReferences(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("replaceLevelMembersReferences " + call);
             Level level = ((LevelExpr) call.getArg(0)).getLevel();
             Id setId = NativizeSetFunDef.createSetId(level);
@@ -655,7 +659,7 @@ public class NativizeSetFunDef extends FunDefBase {
             return query.createValidator().validate(exp, false);
         }
 
-        private Object visitCallArguments(ResolvedFunCall call) {
+        private Object visitCallArguments(ResolvedFunCallImpl call) {
             Exp[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
@@ -674,12 +678,12 @@ public class NativizeSetFunDef extends FunDefBase {
             return null;
         }
 
-        private Object flattenSetFunDef(ResolvedFunCall call) {
+        private Object flattenSetFunDef(ResolvedFunCallImpl call) {
             List<Exp> newArgs = new ArrayList<>();
             flattenSetMembers(newArgs, call.getArgs());
             addSentinelMembers(newArgs);
             if (newArgs.size() != call.getArgCount()) {
-                return new ResolvedFunCall(
+                return new ResolvedFunCallImpl(
                     call.getFunDef(),
                     newArgs.toArray(new Exp[newArgs.size()]),
                     call.getType());
@@ -689,10 +693,10 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void flattenSetMembers(List<Exp> result, Exp[] args) {
             for (Exp arg : args) {
-                if (arg instanceof ResolvedFunCall
-                    && ((ResolvedFunCall)arg).getFunDef() instanceof SetFunDef)
+                if (arg instanceof ResolvedFunCallImpl
+                    && ((ResolvedFunCallImpl)arg).getFunDef() instanceof SetFunDef)
                 {
-                    flattenSetMembers(result, ((ResolvedFunCall)arg).getArgs());
+                    flattenSetMembers(result, ((ResolvedFunCallImpl)arg).getArgs());
                 } else {
                     result.add(arg);
                 }
@@ -734,7 +738,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result;
             result = visitCallArguments(call);
@@ -764,7 +768,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
 
-        private Object visitCallArguments(ResolvedFunCall call) {
+        private Object visitCallArguments(ResolvedFunCallImpl call) {
             Exp[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
@@ -891,7 +895,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 new ArrayList<>(arity);
 
             for (int i = 0; i < arity; i++) {
-                nativeMembers.add(new LinkedHashSet<String>());
+                nativeMembers.add(new LinkedHashSet<>());
             }
 
             findNativeMembers(reassemblyGuide, nativeMembers);
@@ -1596,20 +1600,20 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     private static Id createSetId(Level level) {
-        return new Id(
+        return new IdImpl(
             NativizeSetFunDef.q(NativizeSetFunDef.createMangledName(level, NativizeSetFunDef.SET_NAME_PREFIX)));
     }
 
-    private static Id hierarchyId(Level level) {
-        Id id = new Id(NativizeSetFunDef.q(level.getDimension().getName()));
+    private static IdImpl hierarchyId(Level level) {
+        IdImpl id = new IdImpl(NativizeSetFunDef.q(level.getDimension().getName()));
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             id = id.append(NativizeSetFunDef.q(level.getHierarchy().getName()));
         }
         return id;
     }
 
-    private static Id.Segment q(String s) {
-        return new Id.NameSegment(s);
+    private static IdImpl.Segment q(String s) {
+        return new IdImpl.NameSegment(s);
     }
 
     private static String createMangledName(Level level, String prefix) {

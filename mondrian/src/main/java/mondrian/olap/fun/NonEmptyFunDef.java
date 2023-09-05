@@ -23,7 +23,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -51,7 +51,7 @@ class NonEmptyFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
         TupleListCalc listCalc2 = null;
         if(call.getArgCount() == 2) {
@@ -66,7 +66,7 @@ class NonEmptyFunDef extends FunDefBase {
         private final TupleListCalc listCalc2;
 
         public NonEmptyListCalcImpl(
-                ResolvedFunCall call,
+                ResolvedFunCallImpl call,
                 TupleListCalc listCalc1,
                 TupleListCalc listCalc2)
         {

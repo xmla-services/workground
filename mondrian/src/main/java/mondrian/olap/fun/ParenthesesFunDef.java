@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.Syntax;
@@ -62,7 +62,7 @@ public class ParenthesesFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         return compiler.compile(call.getArg(0));
     }
 }

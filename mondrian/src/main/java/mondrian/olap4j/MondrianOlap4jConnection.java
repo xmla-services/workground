@@ -30,6 +30,13 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -85,21 +92,14 @@ import org.olap4j.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
@@ -794,7 +794,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(exp);
     }
 
-    SelectNode toOlap4j(Query query) {
+    SelectNode toOlap4j(QueryImpl query) {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(query);
     }
 
@@ -1047,7 +1047,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                 StringWriter sw = new StringWriter();
                 selectNode.unparse(new ParseTreeWriter(new PrintWriter(sw)));
                 String mdx = sw.toString();
-                Query query =
+                QueryImpl query =
                     connection.mondrianConnection
                         .parseQuery(mdx);
                 query.resolve();
@@ -1067,7 +1067,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             this.olap4jConnection = olap4jConnection;
         }
 
-        public SelectNode toOlap4j(Query query) {
+        public SelectNode toOlap4j(QueryImpl query) {
             List<IdentifierNode> list = Collections.emptyList();
             return new SelectNode(
                 null,
@@ -1104,7 +1104,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             if (exp instanceof Id id) {
                 return toOlap4j(id);
             }
-            if (exp instanceof ResolvedFunCall call) {
+            if (exp instanceof ResolvedFunCallImpl call) {
                 return toOlap4j(call);
             }
             if (exp instanceof DimensionExpr dimensionExpr) {
@@ -1112,7 +1112,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     null,
                     olap4jConnection.toOlap4j(dimensionExpr.getDimension()));
             }
-            if (exp instanceof HierarchyExpr hierarchyExpr) {
+            if (exp instanceof HierarchyExprImpl hierarchyExpr) {
                 return new HierarchyNode(
                     null,
                     olap4jConnection.toOlap4j(hierarchyExpr.getHierarchy()));
@@ -1127,7 +1127,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));
             }
-            if (exp instanceof Literal literal) {
+            if (exp instanceof LiteralImpl literal) {
                 final Object value = literal.getValue();
                 if (literal.getCategory() == Category.SYMBOL) {
                     return LiteralNode.createSymbol(
@@ -1174,7 +1174,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
         }
 
-        private ParseTreeNode toOlap4j(ResolvedFunCall call) {
+        private ParseTreeNode toOlap4j(ResolvedFunCallImpl call) {
             final CallNode callNode = new CallNode(
                 null,
                 call.getFunName(),

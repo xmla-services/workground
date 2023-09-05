@@ -30,7 +30,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -89,7 +89,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to insert members into it later.
     final TupleListCalc tupleListCalc =

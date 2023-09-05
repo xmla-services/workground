@@ -11,18 +11,18 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 
@@ -39,14 +39,14 @@ import mondrian.olap.Validator;
  */
 class AsFunDef extends FunDefBase {
     public static final Resolver RESOLVER = new ResolverImpl();
-    private final Query.ScopedNamedSet scopedNamedSet;
+    private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
     /**
      * Creates an AsFunDef.
      *
      * @param scopedNamedSet Named set definition
      */
-    private AsFunDef(Query.ScopedNamedSet scopedNamedSet) {
+    private AsFunDef(QueryImpl.ScopedNamedSet scopedNamedSet) {
         super(
             "AS",
             "<Expression> AS <Name>",
@@ -56,7 +56,7 @@ class AsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         // Argument 0, the definition of the set, has been resolved since the
         // scoped named set was created. Implicit conversions, like converting
         // a member to a set, have been performed. Use the new expression.
@@ -97,8 +97,8 @@ class AsFunDef extends FunDefBase {
             // was not visible in the scope that defines it. But we can work
             // with this.
 
-            final Query.ScopedNamedSet scopedNamedSet =
-                (Query.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
+            final QueryImpl.ScopedNamedSet scopedNamedSet =
+                (QueryImpl.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
             return new AsFunDef(scopedNamedSet);
         }
     }

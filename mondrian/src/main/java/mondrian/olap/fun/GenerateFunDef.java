@@ -31,7 +31,7 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -87,7 +87,7 @@ class GenerateFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleIteratorCalc tupleIteratorCalc = compiler.compileIter(call.getArg(0));
         if (call.getArg(1).getType() instanceof StringType
                 || call.getArg(1).getType() instanceof NumericType) {
@@ -96,7 +96,7 @@ class GenerateFunDef extends FunDefBase {
                 stringCalc = compiler.compileString(call.getArg(1));
             } else {
                 //NumericType
-                mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
+                mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "str",
                         mondrian.olap.Syntax.Function,
                         new Exp[] {call.getArg(1)});
@@ -129,7 +129,7 @@ class GenerateFunDef extends FunDefBase {
         private final boolean all;
 
         public GenerateListCalcImpl(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             TupleIteratorCalc tupleIteratorCalc,
             TupleListCalc listCalc2,
             int arityOut,
@@ -209,7 +209,7 @@ class GenerateFunDef extends FunDefBase {
         private final StringCalc sepCalc;
 
         public GenerateStringCalcImpl(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             TupleIteratorCalc tupleIteratorCalc,
             StringCalc stringCalc,
             StringCalc sepCalc)

@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -84,7 +84,7 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
             matchType = MatchType.EXACT;
         }
 
-        List<Id.Segment> uniqueNames = Util.parseIdentifier(currDateStr);
+        List<IdImpl.Segment> uniqueNames = Util.parseIdentifier(currDateStr);
         resultDateMember =
             evaluator.getSchemaReader().getMemberByUniqueName(
                 uniqueNames, false, matchType);

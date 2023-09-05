@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.model;
 
 import java.util.Locale;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.SchemaReader;
 
@@ -37,7 +37,7 @@ public interface OlapElement {
      */
     OlapElement lookupChild(
         SchemaReader schemaReader,
-        Id.Segment s,
+        IdImpl.Segment s,
         MatchType matchType);
 
     /**

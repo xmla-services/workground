@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -108,7 +108,7 @@ class SetItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Type elementType =

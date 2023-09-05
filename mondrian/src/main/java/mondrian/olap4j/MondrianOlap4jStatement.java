@@ -18,6 +18,10 @@ import java.sql.SQLWarning;
 import java.util.Collections;
 import java.util.List;
 
+import mondrian.olap.api.DrillThrough;
+import mondrian.olap.api.Explain;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetListener;
@@ -29,12 +33,8 @@ import org.olap4j.mdx.ParseTreeWriter;
 import org.olap4j.mdx.SelectNode;
 
 import mondrian.calc.ResultStyle;
-import mondrian.olap.DrillThrough;
-import mondrian.olap.Explain;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Query;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryPart;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Execution;

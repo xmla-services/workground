@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
@@ -56,12 +58,11 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Literal;
+import mondrian.olap.LiteralImpl;
 import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -228,13 +229,13 @@ public class AbstractExpCompiler implements ExpCompiler {
             return hierarchyToMember(hierarchyCalc);
         }
         assert type instanceof MemberType : type;
-        
+
         Calc<?>calc= compile(exp);
-        
+
         if(calc instanceof MemberCalc membCalc) {
         	return membCalc;
         }
-        	
+
 		MemberCalc mCalc = new UnknownToMemberCalc(type, calc);
 		return mCalc;
     }
@@ -284,7 +285,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
         assert type instanceof DimensionType : type;
         Calc<?> calc=	compile(exp);
-        
+
         if(calc instanceof DimensionCalc dimCalc) {
         	return dimCalc;
         }
@@ -341,7 +342,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			if (calc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc<?> constantCalc) {
 				//no evaluate on constantCalc  result is null and constant - nothing expected while evaluate
 				return new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), null);
-			}		
+			}
 
 		}
 		if (type instanceof NumericType) {
@@ -361,7 +362,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 		} else {
 			return new UnknownToIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0),calc);
 		}
-        
+
         return (IntegerCalc) calc;
     }
 
@@ -461,7 +462,7 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (calc instanceof ConstantCalc constantCalc)
         {
         	Object o=constantCalc.evaluate(null);
-        	
+
         	Boolean b = null;
         	if( o ==null) {
         		b=FunUtil.BOOLEAN_NULL;
@@ -475,8 +476,8 @@ public class AbstractExpCompiler implements ExpCompiler {
             return 	new ConstantBooleanCalc(b);
         }
         //
-        
-        
+
+
         if (calc instanceof DoubleCalc doubleCalc) {
             return new DoubleToBooleanCalc(exp.getType(),  doubleCalc);
         } else if (calc instanceof IntegerCalc integerCalc) {
@@ -493,7 +494,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                 && !(calc.evaluate(null) instanceof Double))
         {
         	Object o=constantCalc.evaluate(null);
-        	
+
         	Double d = null;
         	if( o ==null) {
         		d=FunUtil.DOUBLE_NULL;
@@ -504,7 +505,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 			}else {
 				throw new RuntimeException("wring type. was: "+o);
 			}
-        
+
             return 	new ConstantDoubleCalc(new NumericType(),d);
 
         }
@@ -594,12 +595,12 @@ public class AbstractExpCompiler implements ExpCompiler {
         if (type instanceof ScalarType) {
             if (!defaultExp.getType().equals(type)) {
                 defaultExp =
-                        new UnresolvedFunCall(
+                        new UnresolvedFunCallImpl(
                                 "Cast",
                                 Syntax.Cast,
                                 new Exp[] {
                                         defaultExp,
-                                        Literal.createSymbol(
+                                        LiteralImpl.createSymbol(
                                                 Category.instance.getName(
                                                         TypeUtil.typeToCategory(type)))});
                 defaultExp = getValidator().validate(defaultExp, true);
@@ -623,7 +624,6 @@ public class AbstractExpCompiler implements ExpCompiler {
 
 
 
-	
 
 
 
@@ -639,7 +639,8 @@ public class AbstractExpCompiler implements ExpCompiler {
 
 
 
-	
+
+
 
 
 
@@ -763,5 +764,5 @@ public class AbstractExpCompiler implements ExpCompiler {
         }
     }
 
-    
+
 }

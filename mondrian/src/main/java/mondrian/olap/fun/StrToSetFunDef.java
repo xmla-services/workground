@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.DimensionExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -21,9 +22,8 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -57,7 +57,7 @@ class StrToSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         SetType type = (SetType) call.getType();
         Type elementType = type.getElementType();
@@ -102,8 +102,8 @@ class StrToSetFunDef extends FunDefBase {
             final Exp arg = args[i];
             if (arg instanceof DimensionExpr dimensionExpr) {
                 Dimension dimension = dimensionExpr.getDimension();
-                args[i] = new HierarchyExpr(dimension.getHierarchy());
-            } else if (arg instanceof HierarchyExpr) {
+                args[i] = new HierarchyExprImpl(dimension.getHierarchy());
+            } else if (arg instanceof HierarchyExprImpl) {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
@@ -181,7 +181,7 @@ class StrToSetFunDef extends FunDefBase {
             for (int i = 1; i < args.length; i++) {
                 Exp exp = args[i];
                 if (!(exp instanceof DimensionExpr
-                      || exp instanceof HierarchyExpr))
+                      || exp instanceof HierarchyExprImpl))
                 {
                     return null;
                 }

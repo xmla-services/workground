@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.Util;
@@ -163,7 +163,7 @@ public abstract class LinReg extends FunDefBase {
 
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final DoubleCalc yCalc = compiler.compileDouble(call.getArg(1));
         final DoubleCalc xCalc =
@@ -278,7 +278,7 @@ public abstract class LinReg extends FunDefBase {
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
             final DoubleCalc xPointCalc =
                 compiler.compileDouble(call.getArg(0));
             final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(1));
@@ -299,7 +299,7 @@ public abstract class LinReg extends FunDefBase {
         private final DoubleCalc xCalc;
 
         public PointCalc(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             DoubleCalc xPointCalc,
             TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
@@ -590,7 +590,7 @@ public abstract class LinReg extends FunDefBase {
         private final int regType;
 
         public LinRegCalc(
-            ResolvedFunCall call,
+            ResolvedFunCallImpl call,
             TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc,

@@ -19,6 +19,20 @@ import java.util.*;
 import java.math.BigDecimal;
 
 import mondrian.mdx.*;
+import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.DmvQuery;
+import mondrian.olap.api.DrillThrough;
+import mondrian.olap.api.Explain;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.Subcube;
+import mondrian.olap.api.Refresh;
+import mondrian.olap.api.TransactionCommand;
+import mondrian.olap.api.Update;
 import mondrian.parser.MdxParserValidator;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
@@ -167,10 +181,10 @@ parser code {:
             final QueryAxis slicerAxis =
                 slicer == null
                     ? null
-                    : new QueryAxis(
+                    : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
-            return new Query(
+                        QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
+            return new QueryImpl(
                 statement, formulae, axes, subcube, slicerAxis, cellProps,
                 strictValidation);
         }
@@ -181,7 +195,7 @@ parser code {:
             int firstRowOrdinal,
             List<Exp> returnList)
         {
-            return new DrillThrough(
+            return new DrillThroughImpl(
                 query, maxRowCount, firstRowOrdinal, returnList);
         }
 
@@ -189,7 +203,7 @@ parser code {:
             String cubeName,
             Formula e)
         {
-            return new CalculatedFormula(cubeName, e);
+            return new CalculatedFormulaImpl(cubeName, e);
         }
 
         /**
@@ -198,20 +212,20 @@ parser code {:
         public Explain makeExplain(
             QueryPart query)
         {
-            return new Explain(query);
+            return new ExplainImpl(query);
         }
 
         public Refresh makeRefresh(
                 String cubeName)
         {
-            return new Refresh(cubeName);
+            return new RefreshImpl(cubeName);
         }
 
         public Update makeUpdate(
                 String cubeName,
-                List<Update.UpdateClause> list)
+                List<UpdateImpl.UpdateClause> list)
         {
-            return new Update(cubeName, list);
+            return new UpdateImpl(cubeName, list);
         }
 
         public DmvQuery makeDmvQuery(
@@ -219,13 +233,13 @@ parser code {:
                 List<String> columns,
                 Exp whereExpression)
         {
-            return new DmvQuery(tableName, columns, whereExpression);
+            return new DmvQueryImpl(tableName, columns, whereExpression);
         }
 
         public TransactionCommand makeTransactionCommand(
-                TransactionCommand.Command c)
+                TransactionCommandImpl.Command c)
         {
-            return new TransactionCommand(c);
+            return new TransactionCommandImpl(c);
         }
     }
 
@@ -430,7 +444,7 @@ terminal String UNKNOWN; // a token the lexer doesn't like!
 // Non terminals
 non terminal QueryAxis
     axis_specification;
-non terminal UnresolvedFunCall
+non terminal UnresolvedFunCallImpl
     aliasedExpression;
 non terminal Exp
     case_expression,
@@ -456,7 +470,7 @@ non terminal QueryPart
     select_or_drillthrough_statement,
     drillthrough_statement,
     explain_statement;
-non terminal Id
+non terminal IdImpl
     bang_compound_id,
     cell_property,
     compound_id,
@@ -469,7 +483,7 @@ non terminal AxisOrdinal.StandardAxisOrdinal
 non terminal String
     comp_op,
     keyword;
-non terminal Id.NameSegment
+non terminal  IdImpl.NameSegment
     identifier,
     quoted_identifier,
     unquoted_identifier,
@@ -528,22 +542,22 @@ start with statement;
 
 quoted_identifier ::=
         QUOTED_ID:i  {:
-            RESULT = new Id.NameSegment(i, Id.Quoting.QUOTED);
+            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.QUOTED);
         :}
     ;
 
 amp_quoted_identifier ::=
         AMP_QUOTED_ID:i {:
-            RESULT = new Id.NameSegment(i, Id.Quoting.KEY); // yuck
+            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.KEY); // yuck
         :}
     ;
 
 unquoted_identifier ::=
         ID:i {:
-            RESULT = new Id.NameSegment(i, Id.Quoting.UNQUOTED);
+            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.UNQUOTED);
         :}
     |   keyword:i {:
-            RESULT = new Id.NameSegment(i, Id.Quoting.UNQUOTED);
+            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.UNQUOTED);
         :}
     ;
 
@@ -565,7 +579,7 @@ keyword ::=
 
 compound_id ::=
         identifier:i {:
-            RESULT = new Id(i);
+            RESULT =  new IdImpl(i);
         :}
     |   compound_id:hd DOT identifier:tl {:
             RESULT = hd.append(tl);
@@ -574,7 +588,7 @@ compound_id ::=
 
 bang_compound_id ::=
         identifier:i {:
-            RESULT = new Id(i);
+            RESULT =  new IdImpl(i);
         :}
     |   bang_compound_id:hd BANG identifier:tl {:
             RESULT = hd.append(tl);
@@ -787,11 +801,11 @@ value_expression ::=
         term5
     |   value_expression:x OR term5:y {:
             RESULT =
-                new UnresolvedFunCall("OR", Syntax.Infix, new Exp[] {x, y});
+                  new UnresolvedFunCallImpl("OR", Syntax.Infix, new Exp[] {x, y});
         :}
     |   value_expression:x XOR term5:y {:
             RESULT =
-                new UnresolvedFunCall("XOR", Syntax.Infix, new Exp[] {x, y});
+                  new UnresolvedFunCallImpl("XOR", Syntax.Infix, new Exp[] {x, y});
         :}
     ;
 
@@ -799,21 +813,21 @@ term5 ::=
         term4
     |   term5:x AND term4:y {:
             RESULT =
-                new UnresolvedFunCall("AND", Syntax.Infix, new Exp[] {x, y});
+                  new UnresolvedFunCallImpl("AND", Syntax.Infix, new Exp[] {x, y});
         :}
     ;
 
 term4 ::=
         term3
     |   NOT term4:p {:
-            RESULT = new UnresolvedFunCall("NOT", Syntax.Prefix, new Exp[] {p});
+            RESULT =   new UnresolvedFunCallImpl("NOT", Syntax.Prefix, new Exp[] {p});
         :}
     ;
 
 term3 ::=
         term2
     |   term3:x comp_op:op term2:y {: // e.g. "1 < 5"
-            RESULT = new UnresolvedFunCall(op, Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl(op, Syntax.Infix, new Exp[] {x, y});
         :}
     |
         // We expect a shift-reduce conflict here, because NULL is a literal and
@@ -822,37 +836,37 @@ term3 ::=
         // to ignore the conflicts and continue.
         term3:x IS NULL {:
             RESULT =
-                new UnresolvedFunCall("IS NULL", Syntax.Postfix, new Exp[] {x});
+                  new UnresolvedFunCallImpl("IS NULL", Syntax.Postfix, new Exp[] {x});
         :}
     |   term3:x IS term2:y {:
             // e.g. "x IS y"; but "x IS NULL" is handled elsewhere
             RESULT =
-                new UnresolvedFunCall("IS", Syntax.Infix, new Exp[] {x, y});
+                  new UnresolvedFunCallImpl("IS", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term3:x IS EMPTY {:
             RESULT =
-                new UnresolvedFunCall(
+                  new UnresolvedFunCallImpl(
                     "IS EMPTY", Syntax.Postfix, new Exp[] {x});
         :}
     |   term3:x MATCHES term2:y {:
             RESULT =
-                new UnresolvedFunCall(
+                  new UnresolvedFunCallImpl(
                     "MATCHES", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term3:x NOT MATCHES term2:y {:
-            RESULT = new UnresolvedFunCall(
+            RESULT =   new UnresolvedFunCallImpl(
                 "NOT", Syntax.Prefix, new Exp[] {
-                    new UnresolvedFunCall(
+                      new UnresolvedFunCallImpl(
                         "MATCHES", Syntax.Infix, new Exp[] {x, y})});
         :}
     |   term3:x IN term2:y {:
             RESULT =
-                new UnresolvedFunCall("IN", Syntax.Infix, new Exp[] {x, y});
+                  new UnresolvedFunCallImpl("IN", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term3:x NOT IN term2:y {:
-            RESULT = new UnresolvedFunCall(
+            RESULT =   new UnresolvedFunCallImpl(
                 "NOT", Syntax.Prefix, new Exp[] {
-                    new UnresolvedFunCall(
+                      new UnresolvedFunCallImpl(
                         "IN", Syntax.Infix, new Exp[] {x, y})});
         :}
     ;
@@ -860,14 +874,14 @@ term3 ::=
 term2 ::=
         term
     |   term2:x PLUS term:y {:
-            RESULT = new UnresolvedFunCall("+", Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl("+", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term2:x MINUS term:y {:
-            RESULT = new UnresolvedFunCall("-", Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl("-", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term2:x CONCAT term:y {:
             RESULT =
-                 new UnresolvedFunCall("||", Syntax.Infix, new Exp[] {x, y});
+                   new UnresolvedFunCallImpl("||", Syntax.Infix, new Exp[] {x, y});
         :}
     ;
 
@@ -876,10 +890,10 @@ term2 ::=
 term ::=
         factor
     |   term:x ASTERISK factor:y {:
-            RESULT = new UnresolvedFunCall("*", Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl("*", Syntax.Infix, new Exp[] {x, y});
         :}
     |   term:x SOLIDUS factor:y {:
-            RESULT = new UnresolvedFunCall("/", Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl("/", Syntax.Infix, new Exp[] {x, y});
         :}
     ;
 //
@@ -891,7 +905,7 @@ factor ::=
             RESULT = p;
         :}
     |   MINUS value_expression_primary:p {:
-            RESULT = new UnresolvedFunCall("-", Syntax.Prefix, new Exp[] {p});
+            RESULT =   new UnresolvedFunCallImpl("-", Syntax.Prefix, new Exp[] {p});
         :}
     ;
 
@@ -920,71 +934,71 @@ factor ::=
 //                             |  <conditional_expression>
 value_expression_primary ::=
         STRING:s {:
-            RESULT = Literal.createString(s);
+            RESULT = LiteralImpl.createString(s);
         :}
     |   NUMBER:d {:
-            RESULT = Literal.create(d);
+            RESULT = LiteralImpl.create(d);
         :}
     |   identifier:i {:
-            RESULT = new Id(i);
+            RESULT =  new IdImpl(i);
         :}
     |   value_expression_primary:i DOT unquoted_identifier:j {:
             if (i instanceof Id && !parser.isFunCall(j.name)) {
-                RESULT = ((Id) i).append(j);
+                RESULT =  ((IdImpl) i).append(j);
             } else {
                 RESULT =
-                    new UnresolvedFunCall(
+                      new UnresolvedFunCallImpl(
                         j.name, Syntax.Property, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT quoted_identifier:j {:
             if (i instanceof Id) {
-                RESULT = ((Id) i).append(j);
+                RESULT =  ((IdImpl) i).append(j);
             } else {
-                RESULT = new UnresolvedFunCall(
+                RESULT =   new UnresolvedFunCallImpl(
                     j.name, Syntax.QuotedProperty, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT amp_quoted_identifier:j {:
             if (i instanceof Id) {
-                RESULT = ((Id) i).append(j);
+                RESULT =  ((IdImpl) i).append(j);
             } else {
-                RESULT = new UnresolvedFunCall(
+                RESULT =   new UnresolvedFunCallImpl(
                     j.name, Syntax.AmpersandQuotedProperty, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT identifier:j LPAREN exp_list_opt:lis
         RPAREN {:
             lis.add(0, i);
-            RESULT = new UnresolvedFunCall(
+            RESULT =   new UnresolvedFunCallImpl(
                 j.name, Syntax.Method, Parser.toExpArray(lis));
         :}
     |   bang_compound_id:i LPAREN exp_list_opt:lis RPAREN {:
-            RESULT = new UnresolvedFunCall(
-                ((Id.NameSegment) Util.last(i.getSegments())).name,
+            RESULT =   new UnresolvedFunCallImpl(
+                (( IdImpl.NameSegment) Util.last(i.getSegments())).name,
                 Syntax.Function, Parser.toExpArray(lis));
         :}
     |   CAST LPAREN aliasedExpression:ae RPAREN {:
             assert ae.getArgCount() == 2;
             Exp e = ae.getArg(0);
-            Id.NameSegment t = (Id.NameSegment) ((Id) ae.getArg(1)).getSegments().get(0);
-            RESULT = new UnresolvedFunCall(
+             IdImpl.NameSegment t = ( IdImpl.NameSegment) ((Id) ae.getArg(1)).getSegments().get(0);
+            RESULT =   new UnresolvedFunCallImpl(
                 "CAST", Syntax.Cast, new Exp[] {
                     e,
-                    Literal.createSymbol(t.name)});
+                    LiteralImpl.createSymbol(t.name)});
         :}
     |   LPAREN exp_list:lis RPAREN {:
             // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
             // are just expressions.
-            RESULT = new UnresolvedFunCall(
+            RESULT =   new UnresolvedFunCallImpl(
                 "()", Syntax.Parentheses, Parser.toExpArray(lis));
         :}
     |   LBRACE exp_list_opt:lis RBRACE {: // set built from sets/tuples
-            RESULT = new UnresolvedFunCall(
+            RESULT =   new UnresolvedFunCallImpl(
                 "{}", Syntax.Braces, Parser.toExpArray(lis));
         :}
     |  NULL {:
-            RESULT = Literal.nullValue;
+            RESULT = LiteralImpl.nullValue;
         :}
     |   case_expression
     ;
@@ -1008,10 +1022,10 @@ case_expression ::=
                 v.add(z);
             }
             if (x == null) {
-                RESULT = new UnresolvedFunCall(
+                RESULT =   new UnresolvedFunCallImpl(
                     "_CaseTest", Syntax.Case, Parser.toExpArray(v));
             } else {
-                RESULT = new UnresolvedFunCall(
+                RESULT =   new UnresolvedFunCallImpl(
                     "_CaseMatch", Syntax.Case, Parser.toExpArray(v));
             }
         :}
@@ -1306,7 +1320,7 @@ comp_op ::=
 //                                              [, <member>]]])
 expression ::=
         expression:x COLON value_expression:y {: // range yields set
-            RESULT = new UnresolvedFunCall(":", Syntax.Infix, new Exp[] {x, y});
+            RESULT =   new UnresolvedFunCallImpl(":", Syntax.Infix, new Exp[] {x, y});
         :}
     |   aliasedExpression
     |   value_expression
@@ -1315,7 +1329,7 @@ expression ::=
 expression_or_empty ::=
         expression
     |   /* empty */ {:
-            RESULT = new UnresolvedFunCall("", Syntax.Empty, new Exp[] {});
+            RESULT =   new UnresolvedFunCallImpl("", Syntax.Empty, new Exp[] {});
         :}
     ;
 
@@ -1338,9 +1352,9 @@ exp_list ::=
 
 aliasedExpression ::=
         expression:x AS identifier:i {:
-            Id id = new Id(i);
+            IdImpl id =  new IdImpl(i);
             RESULT =
-                new UnresolvedFunCall("AS", Syntax.Infix, new Exp[] {x, id});
+                  new UnresolvedFunCallImpl("AS", Syntax.Infix, new Exp[] {x, id});
         :}
     ;
 
@@ -1428,12 +1442,12 @@ select_statement ::=
             Parser parser = (Parser) CUP$Parser$parser;
             // We want 'Sales', not '[Sales]', and can't handle 'Schema.Sales'
             // yet.
-            String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+            String cubeName = (( IdImpl.NameSegment) c.getElement(0)).name;
             RESULT = parser.factory.makeQuery(
                 parser.statement,
                 Parser.toFormulaArray(f),
                 Parser.toQueryAxisArray(a),
-                new Subcube(cubeName, null, null, null),
+                new SubcubeImpl(cubeName, null, null, null),
                 w,
                 Parser.toQueryPartArray(cp),
                 parser.strictValidation);
@@ -1505,14 +1519,14 @@ member_specification ::=
         MEMBER member_name:m AS FORMULA_STRING:s
         comma_member_property_def_list_opt:l {:
             Exp e = parser.recursivelyParseExp(s);
-            RESULT = new Formula(
+            RESULT = new FormulaImpl(
                 m,
                 e,
                 Parser.toMemberPropertyArray(l));
         :}
     |   MEMBER member_name:m AS value_expression:e
         comma_member_property_def_list_opt:l {:
-            RESULT = new Formula(
+            RESULT = new FormulaImpl(
                 m,
                 e,
                 Parser.toMemberPropertyArray(l));
@@ -1558,7 +1572,7 @@ member_name ::= compound_id;
 // <member_property_definition> ::= <identifier> = <value_expression>
 member_property_definition ::=
         identifier:id EQ value_expression:e {:
-            RESULT = new MemberProperty(id.name, e);
+            RESULT = new MemberPropertyImpl(id.name, e);
         :}
     ;
 //
@@ -1571,10 +1585,10 @@ member_property_definition ::=
 set_specification ::=
         SET set_name:n AS FORMULA_STRING:s {:
             Exp e = parser.recursivelyParseExp(s);
-            RESULT = new Formula(n, e);
+            RESULT = new FormulaImpl(n, e);
         :}
     |   SET set_name:n AS expression:e {:
-            RESULT = new Formula(n, e);
+            RESULT = new FormulaImpl(n, e);
         :}
     ;
 //
@@ -1589,9 +1603,9 @@ set_name ::= compound_id ;
 // <axis_specification> ::= [NON EMPTY] <set> [<dim_props>] ON <axis_name>
 axis_specification ::=
         non_empty_opt:b expression:s dim_props_opt:dp ON axis_name:a {:
-            RESULT = new QueryAxis(
+            RESULT = new QueryAxisImpl(
                     b.booleanValue(), s, a,
-                    QueryAxis.SubtotalVisibility.Undefined,
+                    QueryAxisImpl.SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     |   non_empty_opt:b expression:s dim_props_opt:dp ON axis_number:n {:
@@ -1609,9 +1623,9 @@ axis_specification ::=
             AxisOrdinal axis =
                 AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(index);
             RESULT =
-                new QueryAxis(
+                new QueryAxisImpl(
                     b.booleanValue(), s, axis,
-                    QueryAxis.SubtotalVisibility.Undefined,
+                    QueryAxisImpl.SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     ;
@@ -1707,10 +1721,10 @@ cell_opt ::=
 cell_property_list ::=
     cell_property:p {:
         RESULT = new LinkedList();
-        RESULT.add(new CellProperty(p.getSegments()));
+        RESULT.add(new CellPropertyImpl(p.getSegments()));
     :}
     |   cell_property:p COMMA cell_property_list:p1 {:
-        p1.add(0, new CellProperty(p.getSegments()));
+        p1.add(0, new CellPropertyImpl(p.getSegments()));
         RESULT = p1;
     :}
 ;

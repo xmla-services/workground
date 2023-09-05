@@ -20,6 +20,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.ParameterExpr;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Connection;
@@ -36,25 +44,18 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
 import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.SetFunDef;
@@ -481,10 +482,10 @@ public class RolapCell implements Cell {
             return;
         }
         // "Aggregate({m})" is equivalent to "m"
-        if (expr instanceof ResolvedFunCall call) {
+        if (expr instanceof ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof AggregateFunDef) {
                 final Exp[] args = call.getArgs();
-                if (args[0] instanceof ResolvedFunCall arg0) {
+                if (args[0] instanceof ResolvedFunCallImpl arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
                             && arg0.getArg(0) instanceof MemberExpr)
@@ -751,13 +752,13 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(MemberExpr memberExpr) {
+		public Object visit(MemberExprImpl memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
+		public Object visit(ResolvedFunCallImpl call) {
             final FunDef def = call.getFunDef();
             final Exp[] args = call.getArgs();
             final String name = def.getName();
@@ -810,12 +811,12 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(Query query) {
+		public Object visit(QueryImpl query) {
             throw Util.newInternal("not valid here: " + query);
         }
 
         @Override
-		public Object visit(QueryAxis queryAxis) {
+		public Object visit(QueryAxisImpl queryAxis) {
             throw Util.newInternal("not valid here: " + queryAxis);
         }
 
@@ -825,7 +826,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visit(UnresolvedFunCallImpl call) {
             throw Util.newInternal("expected resolved expression");
         }
 
@@ -847,7 +848,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(HierarchyExpr hierarchyExpr) {
+		public Object visit(HierarchyExprImpl hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

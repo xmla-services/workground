@@ -14,12 +14,12 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.engine.api.Context;
 
-import mondrian.mdx.MemberExpr;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;

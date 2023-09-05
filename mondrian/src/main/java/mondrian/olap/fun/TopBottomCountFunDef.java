@@ -28,7 +28,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -76,7 +76,7 @@ class TopBottomCountFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to sort it later.
     final TupleListCalc tupleListCalc =

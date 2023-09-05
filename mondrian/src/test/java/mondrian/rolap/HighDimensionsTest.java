@@ -39,7 +39,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.test.PropertySaver5;
 import mondrian.util.Bug;
 
@@ -70,7 +70,7 @@ class HighDimensionsTest {
             return;
         }
         final Connection connection = context.createConnection();
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "with set necj as "
             + "NonEmptyCrossJoin(NonEmptyCrossJoin("
             + "[Customers].[Name].members,[Store].[Store Name].members),"
@@ -168,7 +168,7 @@ class HighDimensionsTest {
     public void _testTopCount(TestingContext context) throws Exception {
         final Connection connection = context.createConnection();
         final StringBuffer buffer = new StringBuffer();
-        Query query =
+        QueryImpl query =
             connection.parseQuery(
                 "select {[Measures].[Unit Sales]} on columns,\n"
                 + "TopCount({[Promotions].[Promotion Name].Members},41, "
@@ -318,7 +318,7 @@ class HighDimensionsTest {
                 + "</Dimension>"));
 
         final Connection connection = context.createConnection();
-        final Query query = connection.parseQuery(queryString);
+        final QueryImpl query = connection.parseQuery(queryString);
         query.setResultStyle(ResultStyle.ITERABLE);
         Result result = connection.execute(query);
         StringBuffer buffer = new StringBuffer();

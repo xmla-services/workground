@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.api.model.Member;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.server.Locus;

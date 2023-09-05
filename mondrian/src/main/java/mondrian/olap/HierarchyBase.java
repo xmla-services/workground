@@ -177,11 +177,11 @@ public abstract class HierarchyBase
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        Id.Segment s,
+        IdImpl.Segment s,
         MatchType matchType)
     {
         OlapElement oe;
-        if (s instanceof Id.NameSegment nameSegment) {
+        if (s instanceof IdImpl.NameSegment nameSegment) {
             oe = Util.lookupHierarchyLevel(this, nameSegment.getName());
             if (oe == null) {
                 oe = Util.lookupHierarchyRootMember(
@@ -190,7 +190,7 @@ public abstract class HierarchyBase
         } else {
             // Key segment searches bottom level by default. For example,
             // [Products].&[1] is shorthand for [Products].[Product Name].&[1].
-            final Id.KeySegment keySegment = (Id.KeySegment) s;
+            final IdImpl.KeySegment keySegment = (IdImpl.KeySegment) s;
             oe = levels[levels.length - 1]
                 .lookupChild(schemaReader, keySegment, matchType);
         }

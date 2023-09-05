@@ -14,16 +14,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.ParameterExpr;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
@@ -50,7 +50,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     private final Set<Member> memberSet;
     private final ResolvedFunCallFinder finder;
     private final Set<Member> activeMembers = new HashSet<>();
-    private final ResolvedFunCall call;
+    private final ResolvedFunCallImpl call;
     private final boolean mapToAllMember;
 
     /**
@@ -69,7 +69,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         Arrays.asList(MemberExtractingVisitor.unsafeFuncNames));
 
     public MemberExtractingVisitor(
-        Set<Member> memberSet, ResolvedFunCall call, boolean mapToAllMember)
+        Set<Member> memberSet, ResolvedFunCallImpl call, boolean mapToAllMember)
     {
         this.memberSet = memberSet;
         this.finder = new ResolvedFunCallFinder(call);
@@ -95,7 +95,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExprImpl memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);
@@ -121,7 +121,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(HierarchyExpr hierarchyExpr) {
+	public Object visit(HierarchyExprImpl hierarchyExpr) {
         addToDimMemberSet(hierarchyExpr.getHierarchy());
         return null;
     }
@@ -133,7 +133,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(ResolvedFunCall funCall) {
+	public Object visit(ResolvedFunCallImpl funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
         } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {

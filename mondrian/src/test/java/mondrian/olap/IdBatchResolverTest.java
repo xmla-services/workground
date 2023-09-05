@@ -28,6 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Subcube;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -55,10 +60,10 @@ import mondrian.test.PropertySaver5;
 class IdBatchResolverTest  {
 
 	@Mock
-     Query query;
+     QueryImpl query;
 
     @Captor
-     ArgumentCaptor<List<Id.NameSegment>> childNames;
+     ArgumentCaptor<List<IdImpl.NameSegment>> childNames;
 
     @Captor
      ArgumentCaptor<Member> parentMember;
@@ -421,12 +426,12 @@ class IdBatchResolverTest  {
         return resolvedNames;
     }
 
-    private String sortedNames(List<Id.NameSegment> items) {
+    private String sortedNames(List<IdImpl.NameSegment> items) {
         Collections.sort(
-            items, new Comparator<Id.NameSegment>()
+            items, new Comparator<IdImpl.NameSegment>()
         {
             @Override
-			public int compare(Id.NameSegment o1, Id.NameSegment o2) {
+			public int compare(IdImpl.NameSegment o1, IdImpl.NameSegment o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
@@ -470,7 +475,7 @@ class IdBatchResolverTest  {
         return new IdBatchResolver(query);
     }
 
-    private class QueryTestWrapper extends Query {
+    private class QueryTestWrapper extends QueryImpl {
         private SchemaReader spyReader;
 
         public QueryTestWrapper(
@@ -478,7 +483,7 @@ class IdBatchResolverTest  {
             Formula[] formulas,
             QueryAxis[] axes,
             String cube,
-            QueryAxis slicerAxis,
+            QueryAxisImpl slicerAxis,
             QueryPart[] cellProps,
             boolean strictValidation)
         {
@@ -519,7 +524,7 @@ class IdBatchResolverTest  {
     class FactoryImplTestWrapper extends Parser.FactoryImpl {
 
         @Override
-        public Query makeQuery(
+        public QueryImpl makeQuery(
             Statement statement,
             Formula[] formulae,
             QueryAxis[] axes,
@@ -528,12 +533,12 @@ class IdBatchResolverTest  {
             QueryPart[] cellProps,
             boolean strictValidation)
         {
-            final QueryAxis slicerAxis =
+            final QueryAxisImpl slicerAxis =
                 slicer == null
                     ? null
-                    : new QueryAxis(
+                    : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
+                        QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
             return new QueryTestWrapper(
                 statement, formulae, axes, subcube.getCubeName(), slicerAxis, cellProps,
                 strictValidation);

@@ -35,7 +35,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.DimensionType;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 
 public class StandAlone {
     private static final String[] indents = new String[]{
@@ -111,7 +111,7 @@ public class StandAlone {
                         printResults = true;
                     }
 
-                    Query query = cxn.parseQuery(queryString);
+                    QueryImpl query = cxn.parseQuery(queryString);
                     Result result = cxn.execute(query);
                     displayElapsedTime(queryStart, "Elapsed time");
 

@@ -23,7 +23,7 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -57,7 +57,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
             Exp arg = args[0];
             if (FunUtil.worthCaching(arg)) {
                 final Exp cacheCall =
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         CacheFunDef.NAME,
                         Syntax.Function,
                         new Exp[] {arg});

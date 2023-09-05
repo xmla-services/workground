@@ -37,7 +37,7 @@ import org.eclipse.daanse.olap.api.model.Schema;
 import org.eigenbase.util.property.BooleanProperty;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
@@ -1868,7 +1868,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new Id.NameSegment(member.getName()));
+                        new IdImpl.NameSegment(member.getName()));
 
                 // Remove the member from its parent's lists. First try the
                 // unconstrained cache.
@@ -1942,7 +1942,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new Id.NameSegment(member.getName()));
+                        new IdImpl.NameSegment(member.getName()));
 
                 // Check if there is already a list in cache
                 // constrained by a wildcard.
