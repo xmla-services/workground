@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
@@ -57,7 +58,6 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
-import mondrian.mdx.MemberExpr;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;

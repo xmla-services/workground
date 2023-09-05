@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import org.eclipse.daanse.engine.api.Context;
 
-import mondrian.mdx.MemberExpr;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.MondrianProperties;

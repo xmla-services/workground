@@ -18,10 +18,10 @@ import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
 import mondrian.olap.interfaces.Literal;
+import mondrian.olap.interfaces.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ParameterExprImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;

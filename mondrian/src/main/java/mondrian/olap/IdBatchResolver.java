@@ -27,6 +27,7 @@ import java.util.TreeSet;
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.QueryAxis;
 import mondrian.olap.interfaces.QueryPart;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitor;
-import mondrian.mdx.MemberExpr;
 
 /**
  * Used to collect and resolve identifiers in groups of children

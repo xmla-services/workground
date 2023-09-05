@@ -25,7 +25,8 @@ public sealed interface QueryPart permits
     ParameterExpr, Query,
     QueryAxis, Refresh, ResolvedFunCall,
     Subcube, TransactionCommand,
-    UnresolvedFunCall, Update{
+    UnresolvedFunCall, Update,
+    MemberExpr {
 
     /**
      * Returns an array of the object's children.  Those which are not are ignored.

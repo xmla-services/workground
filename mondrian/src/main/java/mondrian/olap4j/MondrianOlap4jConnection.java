@@ -34,6 +34,7 @@ import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.QueryAxis;
 import org.eclipse.daanse.engine.api.Context;
@@ -92,7 +93,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;

@@ -89,6 +89,7 @@ import mondrian.mdx.ParameterExprImpl;
 import mondrian.olap.interfaces.DimensionExpr;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.Query;
 import mondrian.olap.interfaces.QueryAxis;
@@ -126,7 +127,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.mdx.DimensionExprImpl;
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.LevelExprImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.NamedSetExprImpl;
 import mondrian.mdx.QueryPrintWriter;
 import mondrian.mdx.ResolvedFunCallImpl;
@@ -1010,7 +1011,7 @@ public class Util extends XOMUtil {
     public static Exp createExpr(OlapElement element)
     {
         if (element instanceof Member member) {
-            return new MemberExpr(member);
+            return new MemberExprImpl(member);
         } else if (element instanceof Level level) {
             return new LevelExprImpl(level);
         } else if (element instanceof Hierarchy hierarchy) {

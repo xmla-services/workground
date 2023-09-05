@@ -107,9 +107,9 @@ public interface MdxVisitor {
     /**
      * Visits a MemberExpr.
      *
-     * @see MemberExpr#accept(MdxVisitor)
+     * @see MemberExprImpl#accept(MdxVisitor)
      */
-    Object visit(MemberExpr memberExpr);
+    Object visit(MemberExprImpl memberExpr);
 
     /**
      * Visits a NamedSetExpr.

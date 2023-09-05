@@ -32,6 +32,7 @@ import java.util.Set;
 import mondrian.olap.interfaces.Formula;
 import mondrian.olap.interfaces.Id;
 import mondrian.olap.interfaces.LevelExpr;
+import mondrian.olap.interfaces.MemberExpr;
 import mondrian.olap.interfaces.MemberProperty;
 import mondrian.olap.interfaces.NamedSetExpr;
 import mondrian.olap.interfaces.Query;
@@ -58,7 +59,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.mdx.LevelExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -535,7 +536,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExpr member) {
+        public Object visit(MemberExprImpl member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
