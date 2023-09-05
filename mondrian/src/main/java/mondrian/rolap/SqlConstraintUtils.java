@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.interfaces.MemberExpr;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.access.Access;

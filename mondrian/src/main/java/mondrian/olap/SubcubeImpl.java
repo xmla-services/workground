@@ -21,8 +21,8 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.QueryAxis;
-import mondrian.olap.interfaces.Subcube;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.Subcube;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;

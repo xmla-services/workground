@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.api.DimensionExpr;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;

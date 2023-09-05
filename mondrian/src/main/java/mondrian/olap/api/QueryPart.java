@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
 import java.io.PrintWriter;
 

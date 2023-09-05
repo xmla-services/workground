@@ -11,8 +11,10 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-public non-sealed interface WrapExp extends QueryPart {
+import mondrian.olap.TransactionCommandImpl;
 
+public non-sealed interface TransactionCommand extends QueryPart{
+    TransactionCommandImpl.Command getCommand();
 }

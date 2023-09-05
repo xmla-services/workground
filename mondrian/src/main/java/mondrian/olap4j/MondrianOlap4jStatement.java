@@ -18,10 +18,10 @@ import java.sql.SQLWarning;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.interfaces.DrillThrough;
-import mondrian.olap.interfaces.Explain;
-import mondrian.olap.interfaces.Query;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.DrillThrough;
+import mondrian.olap.api.Explain;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetListener;

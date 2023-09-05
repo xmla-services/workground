@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

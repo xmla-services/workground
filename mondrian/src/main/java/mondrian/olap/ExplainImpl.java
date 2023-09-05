@@ -9,10 +9,10 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.DrillThrough;
-import mondrian.olap.interfaces.Explain;
-import mondrian.olap.interfaces.Query;
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.DrillThrough;
+import mondrian.olap.api.Explain;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryPart;
 
 import java.io.PrintWriter;
 

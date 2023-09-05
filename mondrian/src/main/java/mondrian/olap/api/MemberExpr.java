@@ -1,4 +1,4 @@
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
 import org.eclipse.daanse.olap.api.model.Member;
 

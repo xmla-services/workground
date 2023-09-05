@@ -11,18 +11,11 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import mondrian.olap.IdImpl;
+public non-sealed interface Literal extends QueryPart {
 
-import java.util.List;
+    Object getValue();
 
-public non-sealed interface Id extends QueryPart {
-
-    String[] toStringArray();
-
-    List<IdImpl.Segment> getSegments();
-
-    IdImpl.Segment getElement(int i);
-
+    int getIntValue();
 }

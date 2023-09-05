@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.interfaces.DimensionExpr;
+import mondrian.olap.api.DimensionExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;

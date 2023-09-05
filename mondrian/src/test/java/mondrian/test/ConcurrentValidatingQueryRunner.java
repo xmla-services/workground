@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.interfaces.Id;
+import mondrian.olap.api.Id;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Member;

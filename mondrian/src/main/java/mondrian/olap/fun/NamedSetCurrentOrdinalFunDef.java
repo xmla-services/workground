@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 

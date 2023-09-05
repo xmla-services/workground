@@ -11,19 +11,18 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import mondrian.olap.IdImpl;
 
 import java.util.List;
 
-public non-sealed interface DrillThrough extends QueryPart {
+public non-sealed interface Id extends QueryPart {
 
-    Query getQuery();
+    String[] toStringArray();
 
-    int getMaxRowCount();
+    List<IdImpl.Segment> getSegments();
 
-    int getFirstRowOrdinal();
+    IdImpl.Segment getElement(int i);
 
-    List<OlapElement> getReturnList();
 }

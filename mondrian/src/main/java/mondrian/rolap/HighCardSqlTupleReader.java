@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Member;

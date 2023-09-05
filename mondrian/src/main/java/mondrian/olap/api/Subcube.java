@@ -11,11 +11,15 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import mondrian.olap.Exp;
 
-public non-sealed interface LevelExpr extends QueryPart {
+import java.util.List;
 
-    Level getLevel();
+public non-sealed interface Subcube extends QueryPart{
+
+    String getCubeName();
+
+    List<Exp> getAxisExps();
 }

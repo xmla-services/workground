@@ -20,7 +20,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.DmvQuery;
+import mondrian.olap.api.DmvQuery;
 
 import java.util.List;
 

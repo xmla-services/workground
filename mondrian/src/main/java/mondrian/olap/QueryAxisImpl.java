@@ -13,10 +13,10 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.interfaces.DimensionExpr;
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.LevelExpr;
-import mondrian.olap.interfaces.QueryAxis;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 

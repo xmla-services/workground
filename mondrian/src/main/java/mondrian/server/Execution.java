@@ -21,7 +21,7 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Query;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.agg.SegmentCacheManager;

@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.Locale;
 
-import mondrian.olap.interfaces.Literal;
+import mondrian.olap.api.Literal;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;

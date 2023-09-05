@@ -20,8 +20,8 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.CalculatedFormula;
-import mondrian.olap.interfaces.Formula;
+import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.Formula;
 
 import java.io.PrintWriter;
 

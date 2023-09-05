@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.interfaces.DimensionExpr;
-import mondrian.olap.interfaces.LevelExpr;
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;

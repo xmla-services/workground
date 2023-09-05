@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.interfaces.Formula;
+import mondrian.olap.api.Formula;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;

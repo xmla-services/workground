@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Level;

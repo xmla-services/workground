@@ -12,7 +12,7 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
-import mondrian.olap.interfaces.ParameterExpr;
+import mondrian.olap.api.ParameterExpr;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

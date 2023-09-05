@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.interfaces.Formula;
+import mondrian.olap.api.Formula;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;

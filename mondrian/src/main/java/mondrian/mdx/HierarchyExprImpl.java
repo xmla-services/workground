@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.interfaces.HierarchyExpr;
+import mondrian.olap.api.HierarchyExpr;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;

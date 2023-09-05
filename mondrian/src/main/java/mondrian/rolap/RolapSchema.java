@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import mondrian.olap.interfaces.Formula;
+import mondrian.olap.api.Formula;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;

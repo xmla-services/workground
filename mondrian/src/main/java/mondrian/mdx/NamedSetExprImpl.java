@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import java.util.List;
 
-import mondrian.olap.interfaces.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.calc.api.Calc;

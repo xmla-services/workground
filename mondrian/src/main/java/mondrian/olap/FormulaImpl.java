@@ -18,12 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
-import mondrian.olap.interfaces.MemberProperty;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;

@@ -28,10 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.interfaces.Formula;
-import mondrian.olap.interfaces.Id;
-import mondrian.olap.interfaces.QueryPart;
-import mondrian.olap.interfaces.Subcube;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Subcube;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -42,7 +43,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.olap4j.query.QueryAxis;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
@@ -481,7 +481,7 @@ class IdBatchResolverTest  {
         public QueryTestWrapper(
             Statement statement,
             Formula[] formulas,
-            mondrian.olap.interfaces.QueryAxis[] axes,
+            QueryAxis[] axes,
             String cube,
             QueryAxisImpl slicerAxis,
             QueryPart[] cellProps,
@@ -527,7 +527,7 @@ class IdBatchResolverTest  {
         public QueryImpl makeQuery(
             Statement statement,
             Formula[] formulae,
-            mondrian.olap.interfaces.QueryAxis[] axes,
+            QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
             QueryPart[] cellProps,

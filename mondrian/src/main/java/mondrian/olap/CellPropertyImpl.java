@@ -11,7 +11,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.CellProperty;
+import mondrian.olap.api.CellProperty;
 
 import java.util.List;
 

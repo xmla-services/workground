@@ -1,6 +1,6 @@
 package org.eclipse.daanse.query;
 
-import mondrian.olap.interfaces.QueryPart;
+import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 
 public interface QueryProvider {

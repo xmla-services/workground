@@ -11,16 +11,8 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import mondrian.olap.UpdateImpl;
-
-import java.util.List;
-
-public non-sealed interface Update extends QueryPart {
-
-    String getCubeName();
-
-    List<UpdateImpl.UpdateClause> getUpdateClauses();
+public non-sealed interface WrapExp extends QueryPart {
 
 }

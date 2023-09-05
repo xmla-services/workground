@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.interfaces.MemberExpr;
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;

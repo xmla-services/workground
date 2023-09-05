@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.interfaces.Query;
+import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.Connection;
 
 /**

@@ -14,8 +14,8 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.Exp;

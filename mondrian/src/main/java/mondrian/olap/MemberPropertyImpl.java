@@ -11,7 +11,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.MemberProperty;
+import mondrian.olap.api.MemberProperty;
 
 import java.io.PrintWriter;
 

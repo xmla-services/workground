@@ -20,7 +20,7 @@
 
 package mondrian.olap;
 
-import mondrian.olap.interfaces.TransactionCommand;
+import mondrian.olap.api.TransactionCommand;
 
 import java.io.PrintWriter;
 

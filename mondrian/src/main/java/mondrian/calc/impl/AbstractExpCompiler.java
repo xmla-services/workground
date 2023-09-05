@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import mondrian.olap.interfaces.Literal;
-import mondrian.olap.interfaces.MemberExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;

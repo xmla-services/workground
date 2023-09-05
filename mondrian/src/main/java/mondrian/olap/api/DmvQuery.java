@@ -11,10 +11,17 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import mondrian.olap.TransactionCommandImpl;
+import mondrian.olap.Exp;
 
-public non-sealed interface TransactionCommand extends QueryPart{
-    TransactionCommandImpl.Command getCommand();
+import java.util.List;
+
+public non-sealed interface DmvQuery extends QueryPart {
+
+    String getTableName();
+
+    Exp getWhereExpression();
+
+    List<String> getColumns();
 }

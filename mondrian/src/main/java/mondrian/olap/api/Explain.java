@@ -11,11 +11,9 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.interfaces;
+package mondrian.olap.api;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
+public non-sealed interface Explain extends QueryPart {
 
-public non-sealed interface DimensionExpr extends QueryPart {
-
-    Dimension getDimension();
+    QueryPart getQuery();
 }
