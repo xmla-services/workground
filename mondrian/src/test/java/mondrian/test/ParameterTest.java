@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -97,7 +98,7 @@ class ParameterTest {
         SchemaReader sr = query.getSchemaReader(false).withLocus();
         Member m =
             sr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true);
+                Segment.toList("Time", "1997", "Q2", "5"), true);
         Parameter p = sr.getParameter("Foo");
         p.setValue(m);
         assertEquals(m, p.getValue());
@@ -686,7 +687,7 @@ class ParameterTest {
         assertEquals("Q", parameters[3].getName());
         final Member member =
             query.getSchemaReader(true).getMemberByUniqueName(
-                IdImpl.Segment.toList("Gender", "M"), true);
+                Segment.toList("Gender", "M"), true);
         parameters[2].setValue(member);
         assertEqualsVerbose(
             "with member [Measures].[A string] as 'Parameter(\"S\", STRING, (\"x\" || \"y\"), \"A string parameter\")'\n"
@@ -895,14 +896,14 @@ class ParameterTest {
         // Member of wrong hierarchy.
         assertAssignParameter(connection,
             para, false, sr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true),
+                Segment.toList("Time", "1997", "Q2", "5"), true),
             "Invalid value '[Time].[1997].[Q2].[5]' for parameter 'x', "
             + "type MemberType<hierarchy=[Customers]>");
 
         // Member of right hierarchy.
         assertAssignParameter(connection,
             para, false, sr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Customers", "All Customers"), true),
+                Segment.toList("Customers", "All Customers"), true),
             null);
 
         // Member of wrong level of right hierarchy.
@@ -910,7 +911,7 @@ class ParameterTest {
             "Parameter(\"x\", [Customers].[State Province], [Customers].[USA].[CA])",
             false,
             sr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Customers", "USA"), true),
+                Segment.toList("Customers", "USA"), true),
             "Invalid value '[Customers].[USA]' for parameter "
             + "'x', type MemberType<level=[Customers].[State Province]>");
 
@@ -926,7 +927,7 @@ class ParameterTest {
             "Parameter(\"x\", [Customers].[State Province], [Customers].[USA].[CA])",
             false,
             sr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Customers", "USA", "OR"), true),
+                Segment.toList("Customers", "USA", "OR"), true),
             null);
     }
 
@@ -1014,9 +1015,9 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "Mexico"), true),
+                    Segment.toList("Customers", "Mexico"), true),
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true));
+                    Segment.toList("Time", "1997", "Q2", "5"), true));
         assertAssignParameter(connection,
                 para, true, list,
             "Invalid value '[Time].[1997].[Q2].[5]' for parameter 'x', "
@@ -1033,18 +1034,18 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "Mexico"), true),
+                    Segment.toList("Customers", "Mexico"), true),
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "Canada"), true));
+                    Segment.toList("Customers", "Canada"), true));
         assertAssignParameter(connection, para, true, list, null);
 
         // List that contains member of wrong level of right hierarchy.
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "USA", "CA"), true),
+                    Segment.toList("Customers", "USA", "CA"), true),
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "Mexico"), true));
+                    Segment.toList("Customers", "Mexico"), true));
         assertAssignParameter(connection,
                 "Parameter(\"x\", [Customers].[State Province], {[Customers].[USA].[CA]})",
             true,
@@ -1064,10 +1065,10 @@ class ParameterTest {
         list =
             Arrays.asList(
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "USA", "CA"), true),
+                    Segment.toList("Customers", "USA", "CA"), true),
                 null,
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Customers", "USA", "OR"), true));
+                    Segment.toList("Customers", "USA", "OR"), true));
         assertAssignParameter(connection,
                 "Parameter(\"x\", [Customers].[State Province], {[Customers].[USA].[CA]})",
             true,
@@ -1139,10 +1140,10 @@ class ParameterTest {
             SchemaReader sr = query.getSchemaReader(false);
             Member m1 =
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Time", "1997", "Q2", "5"), true);
+                    Segment.toList("Time", "1997", "Q2", "5"), true);
             Member m2 =
                 sr.getMemberByUniqueName(
-                    IdImpl.Segment.toList("Time", "1997", "Q3"), true);
+                    Segment.toList("Time", "1997", "Q3"), true);
             Parameter p = sr.getParameter("Foo");
             final List<Member> list = Arrays.asList(m1, m2);
             p.setValue(list);

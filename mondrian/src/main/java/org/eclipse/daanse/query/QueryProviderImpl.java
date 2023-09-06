@@ -15,14 +15,18 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.api.Explain;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.api.QueryPart;
 import mondrian.olap.RefreshImpl;
 import mondrian.olap.SubcubeImpl;
 import mondrian.olap.Syntax;
+import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Refresh;
+import mondrian.olap.api.Segment;
 import mondrian.olap.api.Subcube;
+import mondrian.olap.api.SubtotalVisibility;
 import mondrian.server.Statement;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
@@ -155,8 +159,8 @@ public class QueryProviderImpl implements QueryProvider {
         if (selectCellPropertyListClauseOptional.isPresent()) {
             SelectCellPropertyListClause selectCellPropertyListClause = selectCellPropertyListClauseOptional.get();
             if (selectCellPropertyListClause.properties() != null) {
-                List<IdImpl.Segment> list = selectCellPropertyListClause.properties()
-                    .stream().map(p -> ((IdImpl.Segment) new IdImpl.NameSegment(p))).toList();
+                List<Segment> list = selectCellPropertyListClause.properties()
+                    .stream().map(p -> ((Segment) new IdImpl.NameSegmentImpl(p))).toList();
                 return List.of(new CellPropertyImpl(list));
             }
         }
@@ -175,7 +179,7 @@ public class QueryProviderImpl implements QueryProvider {
                 nonEmpty,
                 exp,
                 AxisOrdinal.StandardAxisOrdinal.SLICER,
-                QueryAxisImpl.SubtotalVisibility.Undefined,
+                SubtotalVisibility.Undefined,
                 dimensionProperties);
         }
         return null;
@@ -216,7 +220,7 @@ public class QueryProviderImpl implements QueryProvider {
             selectQueryAxisClause.nonEmpty(),
             exp,
             axisOrdinal,
-            QueryAxisImpl.SubtotalVisibility.Undefined,
+            SubtotalVisibility.Undefined,
             dimensionProperties.stream().toArray(IdImpl[]::new)
         );
     }
@@ -306,25 +310,25 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private IdImpl.Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
+    private Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
         switch (nameObjectIdentifier.quoting()) {
             case QUOTED:
-                return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.QUOTED);
+                return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.QUOTED);
             case UNQUOTED:
-                return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.UNQUOTED);
+                return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.UNQUOTED);
             case KEY:
-                return new IdImpl.KeySegment(new IdImpl.NameSegment(nameObjectIdentifier.name()));
+                return new IdImpl.KeySegment(new IdImpl.NameSegmentImpl(nameObjectIdentifier.name()));
         }
         return null;
     }
 
-    private List<IdImpl.Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
+    private List<Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
         return keyObjectIdentifier.nameObjectIdentifiers()
             .stream().map(this::getExpByNameObjectIdentifier).toList();
     }
 
     private IdImpl getExpByCompoundId(CompoundId compoundId) {
-        List<IdImpl.Segment> list = new ArrayList<>();
+        List<Segment> list = new ArrayList<>();
         compoundId.objectIdentifiers().forEach(it ->
             {
                 if (it instanceof KeyObjectIdentifier keyObjectIdentifier) {
@@ -413,12 +417,12 @@ public class QueryProviderImpl implements QueryProvider {
     }
 
     private IdImpl getId(CompoundId compoundId) {
-        List<IdImpl.Segment> segmentList = getIdSegmentList(compoundId.objectIdentifiers());
+        List<Segment> segmentList = getIdSegmentList(compoundId.objectIdentifiers());
         return new IdImpl(segmentList);
     }
 
-    private List<IdImpl.Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
-        List<IdImpl.Segment> segmentList = new ArrayList<>();
+    private List<Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
+        List<Segment> segmentList = new ArrayList<>();
         if (objectIdentifiers != null) {
             for (ObjectIdentifier oi : objectIdentifiers) {
                 segmentList.add(getIdSegment(oi));
@@ -427,36 +431,36 @@ public class QueryProviderImpl implements QueryProvider {
         return segmentList;
     }
 
-    private IdImpl.Segment getIdSegment(ObjectIdentifier oi) {
+    private Segment getIdSegment(ObjectIdentifier oi) {
         if (oi instanceof KeyObjectIdentifier keyObjectIdentifier) {
             return new IdImpl.KeySegment(getNameSegmentList(keyObjectIdentifier.nameObjectIdentifiers()));
         }
         if (oi instanceof NameObjectIdentifier nameObjectIdentifier) {
-            return new IdImpl.NameSegment(nameObjectIdentifier.name(), IdImpl.Quoting.UNQUOTED);
+            return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.UNQUOTED);
         }
         return null;
     }
 
-    private List<IdImpl.NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
-        List<IdImpl.NameSegment> res = new ArrayList<>();
+    private List<NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
+        List<NameSegment> res = new ArrayList<>();
         if (nameObjectIdentifiers != null) {
             for (NameObjectIdentifier noi : nameObjectIdentifiers) {
-                res.add(new IdImpl.NameSegment(noi.name(), getQuoting(noi.quoting())));
+                res.add(new IdImpl.NameSegmentImpl(noi.name(), getQuoting(noi.quoting())));
             }
         }
         return res;
     }
 
-    private IdImpl.Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
+    private Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
         switch (quoting) {
             case QUOTED:
-                return IdImpl.Quoting.QUOTED;
+                return Quoting.QUOTED;
             case UNQUOTED:
-                return IdImpl.Quoting.UNQUOTED;
+                return Quoting.UNQUOTED;
             case KEY:
-                return IdImpl.Quoting.KEY;
+                return Quoting.KEY;
             default:
-                return IdImpl.Quoting.UNQUOTED;
+                return Quoting.UNQUOTED;
         }
     }
 

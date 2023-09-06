@@ -8,7 +8,7 @@
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * Copyright (C) 2021 Sergei Semenkov
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *  SmartCity Jena - refactor, clean API
  */
@@ -18,9 +18,9 @@ package org.eclipse.daanse.olap.api.model;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.access.Role;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -51,7 +51,7 @@ public interface Cube extends OlapElement, MetaElement {
      * Finds a hierarchy whose name (or unique name, if <code>unique</code> is
      * true) equals <code>s</code>.
      */
-    Hierarchy lookupHierarchy(IdImpl.NameSegment s, boolean unique);
+    Hierarchy lookupHierarchy(NameSegment s, boolean unique);
 
     /**
      * Returns Member[]. It builds Member[] by analyzing cellset, which

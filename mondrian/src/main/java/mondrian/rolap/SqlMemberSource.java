@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
@@ -164,7 +165,7 @@ class SqlMemberSource
 
     @Override
 	public RolapMember lookupMember(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         throw new UnsupportedOperationException();

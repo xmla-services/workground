@@ -17,6 +17,7 @@ import java.util.List;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.LevelExpr;
 import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;
@@ -55,7 +56,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         if (queryAxis == null) {
             queryAxis = new QueryAxisImpl(
                 false, null, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                QueryAxisImpl.SubtotalVisibility.Undefined);
+                SubtotalVisibility.Undefined);
         }
         this.queryAxis = queryAxis;
         this.cellSetMetaData = cellSetMetaData;

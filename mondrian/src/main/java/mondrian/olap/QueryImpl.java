@@ -30,11 +30,13 @@ import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.MemberExpr;
 import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.NamedSetExpr;
 import mondrian.olap.api.ParameterExpr;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Segment;
 import mondrian.olap.api.Subcube;
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
@@ -1099,9 +1101,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 value = Util.parseIdentifier(str);
             }
             if (value instanceof List l
-                && Util.canCast(l, IdImpl.Segment.class))
+                && Util.canCast(l, Segment.class))
             {
-                final List<IdImpl.Segment> segmentList = Util.cast(l);
+                final List<Segment> segmentList = Util.cast(l);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
                 if (olapElement instanceof Member) {
                     value = olapElement;
@@ -1112,7 +1114,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             {
                 final List<IdentifierSegment> olap4jSegmentList =
                     Util.cast(l);
-                final List<IdImpl.Segment> segmentList =
+                final List<Segment> segmentList =
                     Util.convert(olap4jSegmentList);
                 final OlapElement olapElement = Util.lookup(query, segmentList);
                 if (olapElement instanceof Member) {
@@ -1212,8 +1214,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     /**
      * Looks up a named set.
      */
-    private NamedSet lookupNamedSet(IdImpl.Segment segment) {
-        if (!(segment instanceof IdImpl.NameSegment nameSegment)) {
+    private NamedSet lookupNamedSet(Segment segment) {
+        if (!(segment instanceof NameSegment nameSegment)) {
             return null;
         }
         for (Formula formula : formulas) {
@@ -1249,16 +1251,16 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @param scopeList Parse tree node where name is used (last in list) and
      */
     ScopedNamedSet lookupScopedNamedSet(
-        List<IdImpl.Segment> nameParts,
+        List<Segment> nameParts,
         ArrayStack<QueryPart> scopeList)
     {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof IdImpl.NameSegment)) {
+        if (!(nameParts.get(0) instanceof NameSegment)) {
             return null;
         }
-        String name = ((IdImpl.NameSegment) nameParts.get(0)).getName();
+        String name = ((NameSegment) nameParts.get(0)).getName();
         ScopedNamedSet bestScopedNamedSet = null;
         int bestScopeOrdinal = -1;
         for (ScopedNamedSet scopedNamedSet : scopedNamedSets) {
@@ -1703,7 +1705,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public Member getMemberByUniqueName(
-            List<IdImpl.Segment> uniqueNameParts,
+            List<Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
         {
@@ -1817,7 +1819,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
+		public Member getCalculatedMember(List<Segment> nameParts) {
             for (final Formula formula : query.formulas) {
                 if (!formula.isMember()) {
                     continue;
@@ -1874,7 +1876,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public OlapElement getElementChild(OlapElement parent, IdImpl.Segment s)
+		public OlapElement getElementChild(OlapElement parent, Segment s)
         {
             return getElementChild(parent, s, MatchType.EXACT);
         }
@@ -1882,7 +1884,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
 		public OlapElement getElementChild(
             OlapElement parent,
-            IdImpl.Segment s,
+            Segment s,
             MatchType matchType)
         {
             // first look in cube
@@ -1894,10 +1896,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             // then look in defined members (fixes MONDRIAN-77)
 
             // then in defined sets
-            if (!(s instanceof IdImpl.NameSegment)) {
+            if (!(s instanceof NameSegment)) {
                 return null;
             }
-            String name = ((IdImpl.NameSegment) s).getName();
+            String name = ((NameSegment) s).getName();
             for (Formula formula : query.formulas) {
                 if (formula.isMember()) {
                     continue;       // have already done these
@@ -1916,7 +1918,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
         public OlapElement lookupCompoundInternal(
             OlapElement parent,
-            List<IdImpl.Segment> names,
+            List<Segment> names,
             boolean failIfNotFound,
             int category,
             MatchType matchType)
@@ -1962,7 +1964,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
+		public NamedSet getNamedSet(List<Segment> nameParts) {
             if (nameParts.size() != 1) {
                 return null;
             }
@@ -2180,7 +2182,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         @Override
         public OlapElement lookupCompoundInternal(
             OlapElement parent,
-            final List<IdImpl.Segment> names,
+            final List<Segment> names,
             boolean failIfNotFound,
             int category,
             MatchType matchType)
@@ -2308,7 +2310,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public OlapElement lookupChild(
-            SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
+                SchemaReader schemaReader, Segment s, MatchType matchType)
         {
             throw new UnsupportedOperationException();
         }
@@ -2436,7 +2438,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 assert call2.getArgCount() == 2;
                 if (call2.getArg(1) instanceof Id id) {
                     createScopedNamedSet(
-                        ((IdImpl.NameSegment) id.getSegments().get(0))
+                        ((NameSegment) id.getSegments().get(0))
                             .getName(),
                         parent,
                         call2.getArg(0));

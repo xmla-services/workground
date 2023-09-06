@@ -17,6 +17,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -119,7 +121,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public final Member getMemberByUniqueName(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return getMemberByUniqueName(
@@ -128,7 +130,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public Member getMemberByUniqueName(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
     {
@@ -138,7 +140,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public final OlapElement lookupCompound(
-        OlapElement parent, List<IdImpl.Segment> names,
+        OlapElement parent, List<Segment> names,
         boolean failIfNotFound, int category)
     {
         return lookupCompound(
@@ -148,7 +150,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent,
-        List<IdImpl.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -176,7 +178,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     public OlapElement lookupCompoundInternal(
-        OlapElement parent, List<IdImpl.Segment> names,
+        OlapElement parent, List<Segment> names,
         boolean failIfNotFound, int category, MatchType matchType)
     {
         return schemaReader.lookupCompound(
@@ -184,12 +186,12 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     @Override
-	public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
+	public Member getCalculatedMember(List<Segment> nameParts) {
         return schemaReader.getCalculatedMember(nameParts);
     }
 
     @Override
-	public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
+	public NamedSet getNamedSet(List<Segment> nameParts) {
         return schemaReader.getNamedSet(nameParts);
     }
 
@@ -214,13 +216,13 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     @Override
-	public OlapElement getElementChild(OlapElement parent, IdImpl.Segment name) {
+	public OlapElement getElementChild(OlapElement parent, Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement getElementChild(
-        OlapElement parent, IdImpl.Segment name, MatchType matchType)
+            OlapElement parent, Segment name, MatchType matchType)
     {
         return schemaReader.getElementChild(parent, name, matchType);
     }
@@ -316,7 +318,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public Member lookupMemberChildByName(
-        Member member, IdImpl.Segment memberName, MatchType matchType)
+            Member member, Segment memberName, MatchType matchType)
     {
         return schemaReader.lookupMemberChildByName(
             member, memberName, matchType);
@@ -324,7 +326,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public List<Member> lookupMemberChildrenByNames(
-        Member parent, List<IdImpl.NameSegment> childNames, MatchType matchType)
+        Member parent, List<NameSegment> childNames, MatchType matchType)
     {
         return schemaReader.lookupMemberChildrenByNames(
             parent, childNames, matchType);

@@ -14,6 +14,7 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -109,7 +110,7 @@ public class CubeAccess {
     {
         if (bMember) {
             boolean fail = false;
-            List<IdImpl.Segment> sMembers = Util.parseIdentifier(sMember);
+            List<Segment> sMembers = Util.parseIdentifier(sMember);
             SchemaReader schemaReader = mdxCube.getSchemaReader(null);
             Member member = schemaReader.getMemberByUniqueName(sMembers, fail);
             if (member == null) {
@@ -124,7 +125,7 @@ public class CubeAccess {
             boolean fail = false;
             Hierarchy hierarchy =
                 mdxCube.lookupHierarchy(
-                    new IdImpl.NameSegment(sHierarchy),
+                    new IdImpl.NameSegmentImpl(sHierarchy),
                     fail);
             if (hierarchy == null) {
                 throw MondrianResource.instance().MdxCubeSlicerHierarchyError

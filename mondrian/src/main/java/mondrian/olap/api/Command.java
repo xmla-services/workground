@@ -13,14 +13,8 @@
  */
 package mondrian.olap.api;
 
-import java.util.List;
-
-public non-sealed interface Id extends QueryPart {
-
-    String[] toStringArray();
-
-    List<Segment> getSegments();
-
-    Segment getElement(int i);
-
+public enum Command {
+    BEGIN,
+    COMMIT,
+    ROLLBACK
 }

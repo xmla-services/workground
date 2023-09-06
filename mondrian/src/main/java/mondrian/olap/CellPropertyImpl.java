@@ -12,6 +12,7 @@
 package mondrian.olap;
 
 import mondrian.olap.api.CellProperty;
+import mondrian.olap.api.Segment;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 public class CellPropertyImpl extends AbstractQueryPart implements CellProperty {
     private String name;
 
-    public CellPropertyImpl(List<IdImpl.Segment> segments) {
+    public CellPropertyImpl(List<Segment> segments) {
         this.name = Util.implode(segments);
     }
 

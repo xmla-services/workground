@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -36,8 +37,7 @@ import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.IdImpl.NameSegment;
-import mondrian.olap.IdImpl.Segment;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.NameResolver.Namespace;
 import mondrian.rolap.RolapSchema;
 
@@ -141,7 +141,7 @@ public class SpySchemaReader implements SchemaReader {
 
 	@Override
 	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, int category,
-			MatchType matchType) {
+                                      MatchType matchType) {
 		return delegate.lookupCompound(parent, names, failIfNotFound, category, matchType);
 	}
 

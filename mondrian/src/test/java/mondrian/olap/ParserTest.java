@@ -27,17 +27,22 @@ import java.util.Collections;
 import java.util.List;
 
 import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.Command;
 import mondrian.olap.api.DmvQuery;
 import mondrian.olap.api.DrillThrough;
 import mondrian.olap.api.Explain;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Refresh;
+import mondrian.olap.api.Segment;
 import mondrian.olap.api.Subcube;
 import mondrian.olap.api.TransactionCommand;
 import mondrian.olap.api.Update;
+import mondrian.olap.api.UpdateClause;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -264,16 +269,16 @@ class ParserTest {
 
         UnresolvedFunCallImpl fun = (UnresolvedFunCallImpl)colsSetExpr;
         Id arg0 = (Id) (fun.getArgs()[0]);
-        IdImpl.NameSegment id = (IdImpl.NameSegment) arg0.getElement(0);
-        assertEquals("axis0mbr", id.name, "Correct member on axis");
+        NameSegment id = (NameSegment) arg0.getElement(0);
+        assertEquals("axis0mbr", id.getName(), "Correct member on axis");
 
         Exp rowsSetExpr = axes[1].getSet();
         assertNotNull(rowsSetExpr, "Row tuples");
 
         fun = (UnresolvedFunCallImpl) rowsSetExpr;
         arg0 = (Id) (fun.getArgs()[0]);
-        id = (IdImpl.NameSegment) arg0.getElement(0);
-        assertEquals("axis1mbr", id.name, "Correct member on axis");
+        id = (NameSegment) arg0.getElement(0);
+        assertEquals("axis1mbr", id.getName(), "Correct member on axis");
     }
 
     /**
@@ -487,33 +492,33 @@ class ParserTest {
         Id id = (Id) expr;
         assertEquals(3, id.getSegments().size());
 
-        final IdImpl.NameSegment seg0 = (IdImpl.NameSegment) id.getSegments().get(0);
+        final NameSegment seg0 = (NameSegment) id.getSegments().get(0);
         assertEquals("Foo", seg0.getName());
-        assertEquals(IdImpl.Quoting.QUOTED, seg0.getQuoting());
+        assertEquals(Quoting.QUOTED, seg0.getQuoting());
 
         final IdImpl.KeySegment seg1 = (IdImpl.KeySegment) id.getSegments().get(1);
-        assertEquals(IdImpl.Quoting.KEY, seg1.getQuoting());
-        List<IdImpl.NameSegment> keyParts = seg1.getKeyParts();
+        assertEquals(Quoting.KEY, seg1.getQuoting());
+        List<NameSegment> keyParts = seg1.getKeyParts();
         assertNotNull(keyParts);
         assertEquals(2, keyParts.size());
         assertEquals("Key1", keyParts.get(0).getName());
         assertEquals(
-            IdImpl.Quoting.UNQUOTED, keyParts.get(0).getQuoting());
+            Quoting.UNQUOTED, keyParts.get(0).getQuoting());
         assertEquals("Key2", keyParts.get(1).getName());
         assertEquals(
-            IdImpl.Quoting.UNQUOTED, keyParts.get(1).getQuoting());
+            Quoting.UNQUOTED, keyParts.get(1).getQuoting());
 
-        final IdImpl.Segment seg2 = id.getSegments().get(2);
-        assertEquals(IdImpl.Quoting.KEY, seg2.getQuoting());
-        List<IdImpl.NameSegment> keyParts2 = seg2.getKeyParts();
+        final Segment seg2 = id.getSegments().get(2);
+        assertEquals(Quoting.KEY, seg2.getQuoting());
+        List<NameSegment> keyParts2 = seg2.getKeyParts();
         assertNotNull(keyParts2);
         assertEquals(3, keyParts2.size());
         assertEquals(
-            IdImpl.Quoting.QUOTED, keyParts2.get(0).getQuoting());
+            Quoting.QUOTED, keyParts2.get(0).getQuoting());
         assertEquals(
-            IdImpl.Quoting.UNQUOTED, keyParts2.get(1).getQuoting());
+            Quoting.UNQUOTED, keyParts2.get(1).getQuoting());
         assertEquals(
-            IdImpl.Quoting.QUOTED, keyParts2.get(2).getQuoting());
+            Quoting.QUOTED, keyParts2.get(2).getQuoting());
         assertEquals("5", keyParts2.get(2).getName());
 
         final String actual = expr.toString();
@@ -656,7 +661,7 @@ class ParserTest {
     void testIdentifier() {
         // must have at least one segment
         IdImpl id;
-        List<IdImpl.Segment> list  = Collections.<IdImpl.Segment>emptyList();
+        List<Segment> list  = Collections.<Segment>emptyList();
         try {
             id = new IdImpl(list);
             fail("expected exception, got " + id);
@@ -664,20 +669,20 @@ class ParserTest {
             assertInstanceOf(IllegalArgumentException.class, e);
         }
 
-        id = new IdImpl(new IdImpl.NameSegment("foo"));
+        id = new IdImpl(new IdImpl.NameSegmentImpl("foo"));
         assertEquals("[foo]", id.toString());
 
         // append does not mutate
         Id id2 = id.append(
             new IdImpl.KeySegment(
-                new IdImpl.NameSegment(
-                    "bar", IdImpl.Quoting.QUOTED)));
+                new IdImpl.NameSegmentImpl(
+                    "bar", Quoting.QUOTED)));
         assertNotSame(id, id2);
         assertEquals("[foo]", id.toString());
         assertEquals("[foo].&[bar]", id2.toString());
 
         // cannot mutate segment list
-        final List<IdImpl.Segment> segments = id.getSegments();
+        final List<Segment> segments = id.getSegments();
         try {
             segments.remove(0);
             fail("expected exception");
@@ -690,7 +695,7 @@ class ParserTest {
         } catch (UnsupportedOperationException e) {
             // ok
         }
-        IdImpl.NameSegment nameSegment = new IdImpl.NameSegment("baz");
+        NameSegment nameSegment = new IdImpl.NameSegmentImpl("baz");
         try {
             segments.add(
                 nameSegment);
@@ -1160,7 +1165,7 @@ class ParserTest {
         @Override
 		public Update makeUpdate(
                 String cubeName,
-                List<UpdateImpl.UpdateClause> list)
+                List<UpdateClause> list)
         {
             return null;
         }
@@ -1176,7 +1181,7 @@ class ParserTest {
 
         @Override
 		public TransactionCommand makeTransactionCommand(
-                TransactionCommandImpl.Command c)
+                Command c)
         {
             return null;
         }

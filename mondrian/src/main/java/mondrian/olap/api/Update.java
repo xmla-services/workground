@@ -13,14 +13,12 @@
  */
 package mondrian.olap.api;
 
-import mondrian.olap.UpdateImpl;
-
 import java.util.List;
 
 public non-sealed interface Update extends QueryPart {
 
     String getCubeName();
 
-    List<UpdateImpl.UpdateClause> getUpdateClauses();
+    List<UpdateClause> getUpdateClauses();
 
 }

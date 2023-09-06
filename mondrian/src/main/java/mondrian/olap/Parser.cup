@@ -20,19 +20,24 @@ import java.math.BigDecimal;
 
 import mondrian.mdx.*;
 import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.Command;
 import mondrian.olap.api.DmvQuery;
 import mondrian.olap.api.DrillThrough;
 import mondrian.olap.api.Explain;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.Subcube;
 import mondrian.olap.api.Refresh;
+import mondrian.olap.api.SubtotalVisibility;
 import mondrian.olap.api.TransactionCommand;
 import mondrian.olap.api.Update;
+import mondrian.olap.api.UpdateClause;
 import mondrian.parser.MdxParserValidator;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
@@ -183,7 +188,7 @@ parser code {:
                     ? null
                     : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
+                        SubtotalVisibility.Undefined, new Id[0]);
             return new QueryImpl(
                 statement, formulae, axes, subcube, slicerAxis, cellProps,
                 strictValidation);
@@ -223,7 +228,7 @@ parser code {:
 
         public Update makeUpdate(
                 String cubeName,
-                List<UpdateImpl.UpdateClause> list)
+                List<UpdateClause> list)
         {
             return new UpdateImpl(cubeName, list);
         }
@@ -237,7 +242,7 @@ parser code {:
         }
 
         public TransactionCommand makeTransactionCommand(
-                TransactionCommandImpl.Command c)
+                Command c)
         {
             return new TransactionCommandImpl(c);
         }
@@ -483,7 +488,7 @@ non terminal AxisOrdinal.StandardAxisOrdinal
 non terminal String
     comp_op,
     keyword;
-non terminal  IdImpl.NameSegment
+non terminal  IdImpl.NameSegmentImpl
     identifier,
     quoted_identifier,
     unquoted_identifier,
@@ -542,22 +547,22 @@ start with statement;
 
 quoted_identifier ::=
         QUOTED_ID:i  {:
-            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.QUOTED);
+            RESULT = new  IdImpl.NameSegmentImpl(i,  Quoting.QUOTED);
         :}
     ;
 
 amp_quoted_identifier ::=
         AMP_QUOTED_ID:i {:
-            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.KEY); // yuck
+            RESULT = new  IdImpl.NameSegmentImpl(i,  Quoting.KEY); // yuck
         :}
     ;
 
 unquoted_identifier ::=
         ID:i {:
-            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.UNQUOTED);
+            RESULT = new  IdImpl.NameSegmentImpl(i,  Quoting.UNQUOTED);
         :}
     |   keyword:i {:
-            RESULT = new  IdImpl.NameSegment(i,  IdImpl.Quoting.UNQUOTED);
+            RESULT = new  IdImpl.NameSegmentImpl(i,  Quoting.UNQUOTED);
         :}
     ;
 
@@ -943,12 +948,12 @@ value_expression_primary ::=
             RESULT =  new IdImpl(i);
         :}
     |   value_expression_primary:i DOT unquoted_identifier:j {:
-            if (i instanceof Id && !parser.isFunCall(j.name)) {
+            if (i instanceof Id && !parser.isFunCall(j.getName())) {
                 RESULT =  ((IdImpl) i).append(j);
             } else {
                 RESULT =
                       new UnresolvedFunCallImpl(
-                        j.name, Syntax.Property, new Exp[] {i});
+                        j.getName(), Syntax.Property, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT quoted_identifier:j {:
@@ -956,7 +961,7 @@ value_expression_primary ::=
                 RESULT =  ((IdImpl) i).append(j);
             } else {
                 RESULT =   new UnresolvedFunCallImpl(
-                    j.name, Syntax.QuotedProperty, new Exp[] {i});
+                    j.getName(), Syntax.QuotedProperty, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT amp_quoted_identifier:j {:
@@ -964,28 +969,28 @@ value_expression_primary ::=
                 RESULT =  ((IdImpl) i).append(j);
             } else {
                 RESULT =   new UnresolvedFunCallImpl(
-                    j.name, Syntax.AmpersandQuotedProperty, new Exp[] {i});
+                    j.getName(), Syntax.AmpersandQuotedProperty, new Exp[] {i});
             }
         :}
     |   value_expression_primary:i DOT identifier:j LPAREN exp_list_opt:lis
         RPAREN {:
             lis.add(0, i);
             RESULT =   new UnresolvedFunCallImpl(
-                j.name, Syntax.Method, Parser.toExpArray(lis));
+                j.getName(), Syntax.Method, Parser.toExpArray(lis));
         :}
     |   bang_compound_id:i LPAREN exp_list_opt:lis RPAREN {:
             RESULT =   new UnresolvedFunCallImpl(
-                (( IdImpl.NameSegment) Util.last(i.getSegments())).name,
+                (( NameSegment) Util.last(i.getSegments())).getName(),
                 Syntax.Function, Parser.toExpArray(lis));
         :}
     |   CAST LPAREN aliasedExpression:ae RPAREN {:
             assert ae.getArgCount() == 2;
             Exp e = ae.getArg(0);
-             IdImpl.NameSegment t = ( IdImpl.NameSegment) ((Id) ae.getArg(1)).getSegments().get(0);
+             NameSegment t = ( NameSegment) ((Id) ae.getArg(1)).getSegments().get(0);
             RESULT =   new UnresolvedFunCallImpl(
                 "CAST", Syntax.Cast, new Exp[] {
                     e,
-                    LiteralImpl.createSymbol(t.name)});
+                    LiteralImpl.createSymbol(t.getName())});
         :}
     |   LPAREN exp_list:lis RPAREN {:
             // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
@@ -1442,7 +1447,7 @@ select_statement ::=
             Parser parser = (Parser) CUP$Parser$parser;
             // We want 'Sales', not '[Sales]', and can't handle 'Schema.Sales'
             // yet.
-            String cubeName = (( IdImpl.NameSegment) c.getElement(0)).name;
+            String cubeName = (( NameSegment) c.getElement(0)).getName();
             RESULT = parser.factory.makeQuery(
                 parser.statement,
                 Parser.toFormulaArray(f),
@@ -1572,7 +1577,7 @@ member_name ::= compound_id;
 // <member_property_definition> ::= <identifier> = <value_expression>
 member_property_definition ::=
         identifier:id EQ value_expression:e {:
-            RESULT = new MemberPropertyImpl(id.name, e);
+            RESULT = new MemberPropertyImpl(id.getName(), e);
         :}
     ;
 //
@@ -1605,7 +1610,7 @@ axis_specification ::=
         non_empty_opt:b expression:s dim_props_opt:dp ON axis_name:a {:
             RESULT = new QueryAxisImpl(
                     b.booleanValue(), s, a,
-                    QueryAxisImpl.SubtotalVisibility.Undefined,
+                    SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     |   non_empty_opt:b expression:s dim_props_opt:dp ON axis_number:n {:
@@ -1625,7 +1630,7 @@ axis_specification ::=
             RESULT =
                 new QueryAxisImpl(
                     b.booleanValue(), s, axis,
-                    QueryAxisImpl.SubtotalVisibility.Undefined,
+                    SubtotalVisibility.Undefined,
                     Parser.toIdArray(dp));
         :}
     ;

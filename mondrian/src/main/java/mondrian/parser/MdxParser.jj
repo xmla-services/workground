@@ -155,11 +155,11 @@ public class MdxParserImpl
 
     private Exp createCall(
         Exp left,
-        IdImpl.Segment segment,
+        Segment segment,
         List<Exp> argList)
     {
-        final String name = segment instanceof IdImpl.NameSegment
-            ? ((IdImpl.NameSegment) segment).name
+        final String name = segment instanceof NameSegment
+            ? ((NameSegment) segment).getName()
             : null;
         if (argList != null) {
             if (left != null) {
@@ -177,7 +177,7 @@ public class MdxParserImpl
             // or property syntax: "foo.RESERVED_WORD"
             Syntax syntax;
             boolean call = false;
-            switch (segment.quoting) {
+            switch (segment.getQuoting()) {
             case UNQUOTED:
                 syntax = Syntax.Property;
                 call = funTable.isProperty(name);
@@ -453,9 +453,9 @@ Exp expressionEof() :
 //
 // <identifier> ::= <regularIdentifier> | <delimitedIdentifier>
 
-IdImpl.Segment identifier() :
+Segment identifier() :
 {
-    IdImpl.Segment segment;
+    Segment segment;
 }
 {
     (
@@ -468,7 +468,7 @@ IdImpl.Segment identifier() :
     }
 }
 
-IdImpl.NameSegment nameSegment() :
+NameSegment nameSegment() :
 {
     String id;
 }
@@ -476,26 +476,26 @@ IdImpl.NameSegment nameSegment() :
     id = keyword() {
         // Allow a non-reserved keyword to be converted back into an identifier
         // if it is not in a context where it is meaningful.
-        return new IdImpl.NameSegment(id, IdImpl.Quoting.UNQUOTED);
+        return new IdImpl.NameSegmentImpl(id, Quoting.UNQUOTED);
     }
 |   <ID> {
-        return new IdImpl.NameSegment(token.image, IdImpl.Quoting.UNQUOTED);
+        return new IdImpl.NameSegmentImpl(token.image, Quoting.UNQUOTED);
     }
 |   <ATSIGN><ID> {
-        return new IdImpl.NameSegment("@" + token.image, IdImpl.Quoting.UNQUOTED);
+        return new IdImpl.NameSegmentImpl("@" + token.image, Quoting.UNQUOTED);
     }
 |   <QUOTED_ID> {
-        return new IdImpl.NameSegment(
+        return new IdImpl.NameSegmentImpl(
             stripQuotes(token.image, "[", "]", "]]"),
-            IdImpl.Quoting.QUOTED);
+            Quoting.QUOTED);
     }
 }
 
 // for example '&foo&[1]&bar' in '[x].&foo&[1]&bar.[y]'
 IdImpl.KeySegment keyIdentifier() :
 {
-    List<IdImpl.NameSegment> list = new ArrayList<IdImpl.NameSegment>();
-    IdImpl.NameSegment key;
+    List<NameSegment> list = new ArrayList<NameSegment>();
+    NameSegment key;
 }
 {
     (
@@ -508,20 +508,20 @@ IdImpl.KeySegment keyIdentifier() :
     }
 }
 
-IdImpl.NameSegment ampId() :
+NameSegment ampId() :
 {
 }
 {
     <AMP_QUOTED_ID> {
-        return new IdImpl.NameSegment(
+        return new IdImpl.NameSegmentImpl(
             stripQuotes(token.image, "&[", "]", "]]"),
-            IdImpl.Quoting.QUOTED);
+            Quoting.QUOTED);
     }
 |
     <AMP_UNQUOTED_ID> {
-        return new IdImpl.NameSegment(
+        return new IdImpl.NameSegmentImpl(
             token.image.substring(1),
-            IdImpl.Quoting.UNQUOTED);
+            Quoting.UNQUOTED);
     }
 }
 
@@ -541,8 +541,8 @@ String keyword() :
 
 IdImpl compoundId() :
 {
-    IdImpl.Segment i;
-    List<IdImpl.Segment> list = new ArrayList<IdImpl.Segment>();
+    Segment i;
+    List<Segment> list = new ArrayList<Segment>();
 }
 {
     i = identifier() {
@@ -752,7 +752,7 @@ Exp primary() :
 
 Exp segmentOrFuncall(Exp left) :
 {
-    IdImpl.Segment segment;
+    Segment segment;
     List<Exp> argList = null;
 }
 {
@@ -791,7 +791,7 @@ LiteralImpl numericLiteral() :
 Exp atom() :
 {
     Exp e;
-    IdImpl.NameSegment segment;
+    NameSegment segment;
     List<Exp> lis;
 }
 {
@@ -813,7 +813,7 @@ Exp atom() :
         return  new UnresolvedFunCallImpl(
             "CAST", Syntax.Cast, new Exp[] {
                 e,
-                LiteralImpl.createSymbol(segment.name)});
+                LiteralImpl.createSymbol(segment.getName())});
     }
 |   <LPAREN> lis = expList() <RPAREN> {
         // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
@@ -911,7 +911,7 @@ Exp caseExpression() :
 Exp expression() :
 {
     Exp e;
-    IdImpl.Segment i;
+    Segment i;
 }
 {
     e = unaliasedExpression()
@@ -1051,7 +1051,7 @@ QueryPart selectOrDrillthroughStatement() :
 
 QueryPart dmvSelectStatement() :
 {
-    IdImpl.NameSegment tableId;
+    NameSegment tableId;
     Id c;
     List<Id> columns = new ArrayList<Id>();
     Exp w = null;
@@ -1071,10 +1071,10 @@ QueryPart dmvSelectStatement() :
         <WHERE> w = expression()
     )?
     {
-        String tableName = tableId.name;
+        String tableName = tableId.getName();
         List<String> returnList = new ArrayList<String>();
         for(Id id: columns) {
-            returnList.add(((IdImpl.NameSegment) id.getElement(0)).name);
+            returnList.add(((NameSegment) id.getElement(0)).getName());
         }
         return factory.makeDmvQuery(tableName, returnList, w);
     }
@@ -1187,14 +1187,14 @@ Subcube selectSubcubeClause() :
     {
         String cubeName = null;
         if(c != null) {
-            cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
+            cubeName = ((NameSegment) c.getElement(0)).getName();
         }
         final QueryAxis slicerAxis =
             w == null
                 ? null
                 : new QueryAxisImpl(
                     false, w, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                    QueryAxisImpl.SubtotalVisibility.Undefined, new Id[0]);
+                    SubtotalVisibility.Undefined, new Id[0]);
         return new SubcubeImpl(
             cubeName,
             subcube,
@@ -1206,7 +1206,7 @@ Subcube selectSubcubeClause() :
 QueryPart createFormula() :
 {
     boolean isMember = true;
-    IdImpl.NameSegment cubeId;
+    NameSegment cubeId;
     Id m;
     Exp e;
     List<MemberProperty> l = new ArrayList<MemberProperty>();
@@ -1228,7 +1228,7 @@ QueryPart createFormula() :
         }
     )*
     {
-        String cubeName = cubeId.name;
+        String cubeName = cubeId.getName();
         Formula formula;
         if(isMember) {
             formula = new FormulaImpl(m, e, toMemberPropertyArray(l));
@@ -1247,7 +1247,7 @@ QueryPart refreshStatement() :
 {
     <REFRESH> <CUBE>  c = compoundId()
     {
-        String cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
+        String cubeName = ((NameSegment) c.getElement(0)).getName();
         return factory.makeRefresh(cubeName);
     }
 }
@@ -1255,8 +1255,8 @@ QueryPart refreshStatement() :
 QueryPart updateStatement() :
 {
     Id c;
-    UpdateImpl.UpdateClause uc;
-    List<UpdateImpl.UpdateClause> list = new ArrayList<UpdateImpl.UpdateClause>();
+    UpdateClause uc;
+    List<UpdateClause> list = new ArrayList<UpdateClause>();
 }
 {
     <UPDATE> (<CUBE>)?  c = compoundId()
@@ -1271,12 +1271,12 @@ QueryPart updateStatement() :
         }
     )*
     {
-        String cubeName = ((IdImpl.NameSegment) c.getElement(0)).name;
+        String cubeName = ((NameSegment) c.getElement(0)).getName();
         return factory.makeUpdate(cubeName, list);
     }
 }
 
-UpdateImpl.UpdateClause updateClause() :
+UpdateClause updateClause() :
 {
     Exp t, v, w = null;
     UpdateImpl.Allocation a = UpdateImpl.Allocation.NO_ALLOCATION;
@@ -1302,21 +1302,21 @@ UpdateImpl.UpdateClause updateClause() :
         (<BY> w = unaliasedExpression())?
     )?
     {
-        return new UpdateImpl.UpdateClause(t, v, a, w);
+        return new UpdateImpl.UpdateClauseImpl(t, v, a, w);
     }
 }
 
 QueryPart transactionCommandStatement() :
 {
-     TransactionCommandImpl.Command c;
+     Command c;
 }
 {
     (
-        <BEGIN>  { c = TransactionCommandImpl.Command.BEGIN; }
+        <BEGIN>  { c = Command.BEGIN; }
         |
-        <COMMIT>  { c = TransactionCommandImpl.Command.COMMIT; }
+        <COMMIT>  { c = Command.COMMIT; }
         |
-        <ROLLBACK>  { c = TransactionCommandImpl.Command.ROLLBACK; }
+        <ROLLBACK>  { c = Command.ROLLBACK; }
     )
     (<TRANSACTION> | <TRAN>)
     {
@@ -1367,12 +1367,12 @@ Exp formulaExpression() :
 
 MemberProperty memberPropertyDefinition() :
 {
-    IdImpl.NameSegment id;
+    NameSegment id;
     Exp e;
 }
 {
     id = nameSegment() <EQ> e = expression() {
-        return new MemberPropertyImpl(id.name, e);
+        return new MemberPropertyImpl(id.getName(), e);
     }
 }
 
@@ -1459,7 +1459,7 @@ QueryAxis axisSpecification() :
     {
         return new QueryAxisImpl(
             nonEmpty, e, axis,
-            QueryAxisImpl.SubtotalVisibility.Undefined,
+            SubtotalVisibility.Undefined,
             toIdArray(dp));
     }
 }

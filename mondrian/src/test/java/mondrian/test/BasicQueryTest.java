@@ -58,6 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -3843,15 +3844,15 @@ public class BasicQueryTest {
             + "  </CalculatedMember>\n" + "</Cube>", null, null, null, null );
     withSchema(context, schema);
     SchemaReader scr = context.createConnection().getSchema().lookupCube( cubeName, true ).getSchemaReader( null );
-    Member member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Unit Sales" ), true );
+    Member member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Unit Sales" ), true );
     Object visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
 
-    member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Store Cost" ), true );
+    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Store Cost" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.TRUE, visible );
 
-    member = scr.getMemberByUniqueName( IdImpl.Segment.toList( "Measures", "Profit" ), true );
+    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Profit" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
   }

@@ -13,14 +13,12 @@
  */
 package mondrian.olap.api;
 
-import java.util.List;
-
-public non-sealed interface Id extends QueryPart {
-
-    String[] toStringArray();
-
-    List<Segment> getSegments();
-
-    Segment getElement(int i);
-
+/**
+ * <code>SubtotalVisibility</code> enumerates the allowed values of
+ * whether subtotals are visible.
+ */
+public enum SubtotalVisibility {
+    Undefined,
+    Hide,
+    Show;
 }

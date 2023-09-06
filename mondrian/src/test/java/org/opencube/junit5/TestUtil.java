@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import mondrian.olap.api.Formula;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -128,48 +130,48 @@ public class TestUtil {
 		    {
 		        return new UnaryTupleList(Arrays.asList(
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pot Scrubbers", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Cormorant"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Denny"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "High Quality"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Red Wing"),
 		                salesCubeSchemaReader),
 		            member(
-		                IdImpl.Segment.toList(
+		                Segment.toList(
 		                    "Product", "All Products", "Non-Consumable", "Household",
 		                    "Kitchen Products", "Pots and Pans", "Sunset"),
 		                salesCubeSchemaReader)));
 		    }
 	    public static Member member(
-	            List<IdImpl.Segment> segmentList,
+	            List<Segment> segmentList,
 	            SchemaReader salesCubeSchemaReader)
 	        {
 	            return salesCubeSchemaReader.getMemberByUniqueName(segmentList, true);
@@ -1857,7 +1859,7 @@ public class TestUtil {
 				connection.getSchema().lookupCube("Sales", true);
 		RolapHierarchy hierarchy =
 				(RolapHierarchy) salesCube.lookupHierarchy(
-						new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED),
+						new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED),
 						false);
 		if (hierarchy != null) {
 			SmartMemberReader memberReader =

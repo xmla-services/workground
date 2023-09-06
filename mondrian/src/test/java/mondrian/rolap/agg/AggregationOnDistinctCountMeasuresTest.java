@@ -1286,7 +1286,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1295,7 +1295,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers"),
                     salesCubeSchemaReader)));
@@ -1303,7 +1303,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1312,7 +1312,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                     salesCubeSchemaReader)));
@@ -1336,14 +1336,14 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Store", "All Stores", "USA", "OR", "Portland"),
                     salesCubeSchemaReader)));
         assertTrue(
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList("Store", "All Stores", "USA", "OR"),
+                    mondrian.olap.api.Segment.toList("Store", "All Stores", "USA", "OR"),
                     salesCubeSchemaReader)));
         assertEquals(16, tuples.size());
     }
@@ -1364,7 +1364,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1373,7 +1373,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                 salesCubeSchemaReader)));
@@ -1381,7 +1381,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1407,10 +1407,10 @@ class AggregationOnDistinctCountMeasuresTest {
   void testShouldNotRemoveDuplicateTuples(TestingContext context) {
       prepareContext(context);
         Member maleChildMember = member(
-            IdImpl.Segment.toList("Gender", "All Gender", "M"),
+            mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
             salesCubeSchemaReader);
         Member femaleChildMember = member(
-            IdImpl.Segment.toList("Gender", "All Gender", "F"),
+            mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
             salesCubeSchemaReader);
 
         List<Member> memberList = new ArrayList<>();
@@ -1449,15 +1449,15 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member maleChild =
             member(
-                IdImpl.Segment.toList("Gender", "All Gender", "M"),
+                mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
                 salesCubeSchemaReader);
         Member femaleChild =
             member(
-                IdImpl.Segment.toList("Gender", "All Gender", "F"),
+                mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member mexicoMember =
             member(
-                IdImpl.Segment.toList("Store", "All Stores", "Mexico"),
+                mondrian.olap.api.Segment.toList("Store", "All Stores", "Mexico"),
                 salesCubeSchemaReader);
 
         TupleList memberList =
@@ -1588,22 +1588,22 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member caMember =
             member(
-                IdImpl.Segment.toList(
+                mondrian.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "CA"),
                 salesCubeSchemaReader);
         Member orMember =
             member(
-                IdImpl.Segment.toList(
+                mondrian.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "OR"),
                 salesCubeSchemaReader);
         Member waMember =
             member(
-                IdImpl.Segment.toList(
+                mondrian.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "WA"),
                 salesCubeSchemaReader);
         Member femaleMember =
             member(
-                IdImpl.Segment.toList("Gender", "All Gender", "F"),
+                mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member [] tupleMembersArity1 =
             new Member[] {
@@ -1960,11 +1960,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member maleMember =
                 member(
-                        IdImpl.Segment.toList("Gender", "All Gender", "M"),
+                    mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
                         salesCubeSchemaReader);
         Member femaleMember =
                 member(
-                        IdImpl.Segment.toList("Gender", "All Gender", "F"),
+                    mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
@@ -1983,40 +1983,40 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         return new UnaryTupleList(Arrays.asList(
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills",
                                 "Store 6"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Los Angeles"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem"),
                         salesCubeSchemaReader),
                 member(
-                        IdImpl.Segment.toList(
+                    mondrian.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                         salesCubeSchemaReader)));
     }
@@ -2028,11 +2028,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member usaMember =
                 member(
-                        IdImpl.Segment.toList("Store", "All Stores", "USA"),
+                    mondrian.olap.api.Segment.toList("Store", "All Stores", "USA"),
                         salesCubeSchemaReader);
         Member canadaMember =
                 member(
-                        IdImpl.Segment.toList("Store", "All Stores", "CANADA"),
+                    mondrian.olap.api.Segment.toList("Store", "All Stores", "CANADA"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
