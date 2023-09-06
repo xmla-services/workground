@@ -28,8 +28,10 @@ import mondrian.olap.api.DimensionExpr;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Segment;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;
@@ -201,7 +203,7 @@ public final class IdBatchResolver {
         Map<QueryPart, QueryPart> resolvedIdentifiers)
     {
         final List<Id> children = findChildIds(parent, identifiers);
-        final List<IdImpl.NameSegment> childNameSegments =
+        final List<NameSegment> childNameSegments =
             collectChildrenNameSegments(parentMember, children);
 
         if (!childNameSegments.isEmpty()) {
@@ -251,7 +253,7 @@ public final class IdBatchResolver {
      */
     private List<Member> lookupChildrenByNames(
         Member parentMember,
-        List<IdImpl.NameSegment> childNameSegments)
+        List<NameSegment> childNameSegments)
     {
         try {
             return query.getSchemaReader(true)
@@ -275,7 +277,7 @@ public final class IdBatchResolver {
      * we think we can batch resolve, then transforms the Id list
      * to the corresponding NameSegment.
      */
-    private List<IdImpl.NameSegment> collectChildrenNameSegments(
+    private List<NameSegment> collectChildrenNameSegments(
         final Member parentMember, List<Id> children)
     {
         filter(
@@ -302,7 +304,7 @@ public final class IdBatchResolver {
         }));
     }
 
-    private IdImpl.Segment getLastSegment(Id id) {
+    private Segment getLastSegment(Id id) {
         int segSize = id.getSegments().size();
         return id.getSegments().get(segSize - 1);
     }
@@ -312,8 +314,8 @@ public final class IdBatchResolver {
      * the given identifier is likely to be resolvable at this point.
      */
     private boolean supportedIdentifier(Id id) {
-        IdImpl.Segment seg = getLastSegment(id);
-        if (!(seg instanceof IdImpl.NameSegment)) {
+        Segment seg = getLastSegment(id);
+        if (!(seg instanceof NameSegment)) {
             // we can't batch resolve members identified by key
             return false;
         }
@@ -404,7 +406,7 @@ public final class IdBatchResolver {
     }
 
     private boolean segListMatchInUniqueNames(
-        List<IdImpl.Segment> segments, Collection<String> names)
+        List<Segment> segments, Collection<String> names)
     {
         String segUniqueName = Util.implode(segments);
         for (String name : names) {
@@ -416,7 +418,7 @@ public final class IdBatchResolver {
     }
 
     private boolean segMatchInNames(
-        IdImpl.Segment seg, Collection<String> names)
+        Segment seg, Collection<String> names)
     {
         for (String name : names) {
             if (seg.matches(name)) {
@@ -426,7 +428,7 @@ public final class IdBatchResolver {
         return false;
     }
 
-    private boolean segmentIsCalcMember(final List<IdImpl.Segment> checkSegments) {
+    private boolean segmentIsCalcMember(final List<Segment> checkSegments) {
         return query.getSchemaReader(true)
             .getCalculatedMember(checkSegments) != null;
     }
@@ -434,8 +436,8 @@ public final class IdBatchResolver {
     private List<Id> findChildIds(Id parent, SortedSet<Id> identifiers) {
         List<Id> childIds = new ArrayList<>();
         for (Id id : identifiers) {
-            final List<IdImpl.Segment> idSeg = id.getSegments();
-            final List<IdImpl.Segment> parentSegments = parent.getSegments();
+            final List<Segment> idSeg = id.getSegments();
+            final List<Segment> parentSegments = parent.getSegments();
             final int parentSegSize = parentSegments.size();
             if (idSeg.size() == parentSegSize + 1
                 && parent.getSegments().equals(
@@ -468,8 +470,8 @@ public final class IdBatchResolver {
     private static class IdComparator implements Comparator<Id> {
         @Override
 		public int compare(Id o1, Id o2) {
-            List<IdImpl.Segment> o1Seg = o1.getSegments();
-            List<IdImpl.Segment> o2Seg = o2.getSegments();
+            List<Segment> o1Seg = o1.getSegments();
+            List<Segment> o2Seg = o2.getSegments();
 
             if (o1Seg.size() > o2Seg.size()) {
                 return 1;

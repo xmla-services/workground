@@ -13,8 +13,7 @@
  */
 package mondrian.olap.api;
 
-import mondrian.olap.TransactionCommandImpl;
+public non-sealed interface TransactionCommand extends QueryPart {
 
-public non-sealed interface TransactionCommand extends QueryPart{
-    TransactionCommandImpl.Command getCommand();
+    Command getCommand();
 }

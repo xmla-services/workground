@@ -7,7 +7,7 @@
  * Copyright (C) 1998-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *  SmartCity Jena - refactor, clean API
  */
@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.api.model;
 
 import java.util.Locale;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.api.Segment;
 
 /**
  * An <code>OlapElement</code> is a catalog object (dimension, hierarchy,
@@ -37,7 +37,7 @@ public interface OlapElement {
      */
     OlapElement lookupChild(
         SchemaReader schemaReader,
-        IdImpl.Segment s,
+        Segment s,
         MatchType matchType);
 
     /**

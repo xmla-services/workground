@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -177,7 +177,7 @@ class CacheMemberReader implements MemberReader, MemberCache {
 
     @Override
 	public RolapMember lookupMember(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);

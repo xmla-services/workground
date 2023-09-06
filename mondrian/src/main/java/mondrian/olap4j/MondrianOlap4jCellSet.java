@@ -29,6 +29,7 @@ import java.util.Map;
 
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.Cell;
@@ -125,7 +126,7 @@ abstract class MondrianOlap4jCellSet
             queryAxis =
                 new QueryAxisImpl(
                     false, null, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                    QueryAxisImpl.SubtotalVisibility.Undefined);
+                    SubtotalVisibility.Undefined);
         }
         filterAxis =
             new MondrianOlap4jCellSetAxis(this, queryAxis, (RolapAxis) axis);

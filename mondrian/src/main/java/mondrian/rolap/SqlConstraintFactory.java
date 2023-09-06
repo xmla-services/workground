@@ -13,10 +13,10 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.olap.Evaluator;
-import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.sql.CrossJoinArg;
@@ -141,7 +141,7 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildByNameConstraint(
         RolapMember parent,
-        IdImpl.NameSegment childName)
+        NameSegment childName)
     {
         // Ragged hierarchies span multiple levels, so SQL WHERE does not work
         // there
@@ -153,7 +153,7 @@ public class SqlConstraintFactory {
 
     public MemberChildrenConstraint getChildrenByNamesConstraint(
         RolapMember parent,
-        List<IdImpl.NameSegment> childNames)
+        List<NameSegment> childNames)
     {
         if (useDefaultMemberChildrenConstraint(parent)) {
             return DefaultMemberChildrenConstraint.instance();

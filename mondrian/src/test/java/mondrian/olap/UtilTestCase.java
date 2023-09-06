@@ -37,6 +37,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -355,10 +358,10 @@ import mondrian.util.UnionIterator;
         assertEquals(
             "[Store].[USA].[California]",
             Util.quoteMdxIdentifier(
-                Arrays.<IdImpl.Segment>asList(
-                    new IdImpl.NameSegment("Store"),
-                    new IdImpl.NameSegment("USA"),
-                    new IdImpl.NameSegment("California"))));
+                Arrays.<Segment>asList(
+                    new IdImpl.NameSegmentImpl("Store"),
+                    new IdImpl.NameSegmentImpl("USA"),
+                    new IdImpl.NameSegmentImpl("California"))));
     }
 
     @Test
@@ -426,18 +429,18 @@ import mondrian.util.UnionIterator;
 
     @Test
      void testImplode() {
-        List<IdImpl.Segment> fooBar = Arrays.<IdImpl.Segment>asList(
-            new IdImpl.NameSegment("foo", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("bar", IdImpl.Quoting.UNQUOTED));
+        List<Segment> fooBar = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("foo", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("bar", Quoting.UNQUOTED));
         assertEquals("[foo].[bar]", Util.implode(fooBar));
 
-        List<IdImpl.Segment> empty = Collections.emptyList();
+        List<Segment> empty = Collections.emptyList();
         assertEquals("", Util.implode(empty));
 
-        List<IdImpl.Segment> nasty = Arrays.<IdImpl.Segment>asList(
-            new IdImpl.NameSegment("string", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("with", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("a [bracket] in it", IdImpl.Quoting.UNQUOTED));
+        List<Segment> nasty = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("string", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("with", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("a [bracket] in it", Quoting.UNQUOTED));
         assertEquals(
             "[string].[with].[a [bracket]] in it]",
             Util.implode(nasty));
@@ -445,7 +448,7 @@ import mondrian.util.UnionIterator;
 
     @Test
      void testParseIdentifier() {
-        List<IdImpl.Segment> strings =
+        List<Segment> strings =
                 Util.parseIdentifier("[string].[with].[a [bracket]] in it]");
         assertEquals(3, strings.size());
         assertEquals("a [bracket] in it", name(strings, 2));
@@ -505,9 +508,9 @@ import mondrian.util.UnionIterator;
         }
     }
 
-    private String name(List<IdImpl.Segment> strings, int index) {
-        final IdImpl.Segment segment = strings.get(index);
-        return ((IdImpl.NameSegment) segment).name;
+    private String name(List<Segment> strings, int index) {
+        final Segment segment = strings.get(index);
+        return ((NameSegment) segment).getName();
     }
 
     @Test

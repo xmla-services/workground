@@ -16,6 +16,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
 import mondrian.olap.api.Id;
 import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -54,7 +55,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null).withLocus();
         Member member =
             scr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Customers", "All Customers", "USA", "CA"),
+                Segment.toList("Customers", "All Customers", "USA", "CA"),
                 true);
         final boolean caseSensitive =
             MondrianProperties.instance().CaseSensitive.get();
@@ -195,7 +196,7 @@ class PropertiesTest {
         SchemaReader scr = salesCube.getSchemaReader(null);
         Member memberForCardinalityTest =
             scr.getMemberByUniqueName(
-                IdImpl.Segment.toList("Marital Status", "All Marital Status"),
+                Segment.toList("Marital Status", "All Marital Status"),
                 true);
         Integer intPropValue =
             (Integer) memberForCardinalityTest.getPropertyValue(

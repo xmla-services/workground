@@ -16,17 +16,31 @@ package mondrian.olap.api;
 import java.io.PrintWriter;
 
 public sealed interface QueryPart permits
-    CalculatedFormula, CellProperty,
-    DimensionExpr, DmvQuery,
-    DrillThrough, Explain,
-    Formula, HierarchyExpr,
-    Id, LevelExpr, Literal,
-    MemberProperty, NamedSetExpr,
-    ParameterExpr, Query,
-    QueryAxis, Refresh, ResolvedFunCall,
-    Subcube, TransactionCommand,
-    UnresolvedFunCall, Update,
-    MemberExpr, WrapExp {
+    CalculatedFormula,
+    CellProperty,
+    DimensionExpr,
+    DmvQuery,
+    DrillThrough,
+    Explain,
+    Formula,
+    HierarchyExpr,
+    Id,
+    LevelExpr,
+    Literal,
+    MemberProperty,
+    NamedSetExpr,
+    ParameterExpr,
+    Query,
+    QueryAxis,
+    Refresh,
+    ResolvedFunCall,
+    Subcube,
+    TransactionCommand,
+    UnresolvedFunCall,
+    Update,
+    MemberExpr,
+    WrapExp,
+    UpdateClause {
 
     /**
      * Returns an array of the object's children.  Those which are not are ignored.

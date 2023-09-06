@@ -21,6 +21,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -622,14 +624,14 @@ class CacheControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         final Member memberQ1 = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Time", "1997", "Q1"), true);
+            Segment.toList("Time", "1997", "Q1"), true);
         final Member memberBeer = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList(
+            Segment.toList(
                 "Product", "Drink", "Alcoholic Beverages", "Beer and Wine",
                 "Beer"),
             true);
         final Member memberDairy = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Product", "Drink", "Dairy"), true);
+            Segment.toList("Product", "Drink", "Dairy"), true);
 
         final CellRegion regionTimeQ1 =
             cacheControl.createMemberRegion(memberQ1, true);
@@ -693,7 +695,7 @@ class CacheControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         final Member memberQ1 = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Time", "1997", "Q1"), true);
+            Segment.toList("Time", "1997", "Q1"), true);
 
         final CellRegion regionTimeQ1 =
             cacheControl.createMemberRegion(memberQ1, true);
@@ -723,7 +725,7 @@ class CacheControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         final Member memberApril = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Time", "1997", "Q2", "4"), true);
+            Segment.toList("Time", "1997", "Q2", "4"), true);
 
         final CellRegion regionTimeApril =
             cacheControl.createMemberRegion(
@@ -755,7 +757,7 @@ class CacheControlTest {
         // Region consists of [Time].[1997] and its children.
         final SchemaReader schemaReader = salesCube.getSchemaReader(null);
         final Member member1997 = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Time", "1997"), true);
+            Segment.toList("Time", "1997"), true);
 
         final CellRegion region1997 =
             cacheControl.createMemberRegion(member1997, true);
@@ -788,11 +790,11 @@ class CacheControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         final Member memberFood = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Product", "Food"), true);
+            Segment.toList("Product", "Food"), true);
         final Member memberDrink = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Product", "Drink"), true);
+            Segment.toList("Product", "Drink"), true);
         final Member memberFemale = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Gender", "F"), true);
+            Segment.toList("Gender", "F"), true);
 
         final CellRegion regionProductFoodDrink =
             cacheControl.createMemberRegion(
@@ -823,7 +825,7 @@ class CacheControlTest {
             salesCube.getSchemaReader(null).withLocus();
         final Member memberFemale =
             schemaReader.getMemberByUniqueName(
-                IdImpl.Segment.toList("Gender", "F"), true);
+                Segment.toList("Gender", "F"), true);
 
         final CellRegion regionFemale =
             cacheControl.createMemberRegion(memberFemale, true);
@@ -846,7 +848,7 @@ class CacheControlTest {
             salesCube.getSchemaReader(null).withLocus();
         final Member memberFemale =
             schemaReader.getMemberByUniqueName(
-                IdImpl.Segment.toList("Gender", "M"), true);
+                Segment.toList("Gender", "M"), true);
 
         final CellRegion regionFemale =
             cacheControl.createMemberRegion(memberFemale, true);
@@ -882,15 +884,15 @@ class CacheControlTest {
         final CacheControl cacheControl = connection.getCacheControl(null);
         final Member memberQ1 =
             schemaReader.withLocus().getMemberByUniqueName(
-                IdImpl.Segment.toList("Time", "1997", "Q1"), true);
+                Segment.toList("Time", "1997", "Q1"), true);
         final Member memberBeer =
             schemaReader.withLocus().getMemberByUniqueName(
-                IdImpl.Segment.toList(
+                Segment.toList(
                     "Product", "Drink", "Alcoholic Beverages", "Beer and Wine"),
             true);
         final Member memberDairy =
             schemaReader.withLocus().getMemberByUniqueName(
-                IdImpl.Segment.toList("Product", "Drink", "Dairy"), true);
+                Segment.toList("Product", "Drink", "Dairy"), true);
 
         final CellRegion regionTimeQ1 =
             cacheControl.createMemberRegion(memberQ1, false);
@@ -1031,9 +1033,9 @@ class CacheControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         final Member memberQ1 = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Time", "1997", "Q1"), true);
+            Segment.toList("Time", "1997", "Q1"), true);
         final Member memberBeer = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList(
+            Segment.toList(
                 "Product", "Drink", "Alcoholic Beverages", "Beer and Wine",
                 "Beer"),
             true);
@@ -1041,7 +1043,7 @@ class CacheControlTest {
             cacheControl.createMemberRegion(memberBeer, false);
 
         final Member memberFemale = schemaReader.getMemberByUniqueName(
-            IdImpl.Segment.toList("Gender", "F"), true);
+            Segment.toList("Gender", "F"), true);
         final CellRegion regionGenderFemale =
             cacheControl.createMemberRegion(memberFemale, false);
 
@@ -1109,12 +1111,12 @@ class CacheControlTest {
      */
     private CellRegion memberRegion(Connection connection, String uniqueName) {
         final String[] names = uniqueName.split("\\.");
-        final List<IdImpl.Segment> ids = new ArrayList<>(names.length);
+        final List<Segment> ids = new ArrayList<>(names.length);
         for (int i = 0; i < names.length; i++) {
             String name = names[i];
             assert name.startsWith("[") && name.endsWith("]");
             names[i] = name.substring(1, name.length() - 1);
-            ids.add(new IdImpl.NameSegment(names[i]));
+            ids.add(new IdImpl.NameSegmentImpl(names[i]));
         }
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
         final CacheControl cacheControl = connection.getCacheControl(null);
@@ -1266,9 +1268,9 @@ class CacheControlTest {
                 connection.getSchema().lookupCube("Sales", true);
         final Hierarchy storeHierarchy =
             salesCube.lookupHierarchy(
-                new IdImpl.NameSegment(
+                new IdImpl.NameSegmentImpl(
                     "Store",
-                    IdImpl.Quoting.UNQUOTED),
+                    Quoting.UNQUOTED),
                 false);
         final CellRegion measuresRegion =
             cacheControl.createMeasuresRegion(salesCube);

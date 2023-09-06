@@ -36,7 +36,10 @@ import java.util.TreeSet;
 
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -1002,9 +1005,9 @@ public class RolapCube extends CubeBase {
             if (xmlCalcMember.dimension() != null) {
                 Dimension dimension =
                     lookupDimension(
-                        new IdImpl.NameSegment(
+                        new IdImpl.NameSegmentImpl(
                             xmlCalcMember.dimension(),
-                            IdImpl.Quoting.UNQUOTED));
+                            Quoting.UNQUOTED));
                 if (dimension != null
                     && dimension.getHierarchy() != null)
                 {
@@ -1013,9 +1016,9 @@ public class RolapCube extends CubeBase {
             } else if (xmlCalcMember.hierarchy() != null) {
                 hierarchy =
                     lookupHierarchy(
-                        new IdImpl.NameSegment(
+                        new IdImpl.NameSegmentImpl(
                             xmlCalcMember.hierarchy(),
-                            IdImpl.Quoting.UNQUOTED),
+                            Quoting.UNQUOTED),
                         true);
             }
             if (formula.getName().equals(xmlCalcMember.name())
@@ -1369,9 +1372,9 @@ public class RolapCube extends CubeBase {
             dimName = xmlCalcMember.dimension();
             final Dimension dimension =
                 lookupDimension(
-                    new IdImpl.NameSegment(
+                    new IdImpl.NameSegmentImpl(
                         xmlCalcMember.dimension(),
-                        IdImpl.Quoting.UNQUOTED));
+                        Quoting.UNQUOTED));
             if (dimension != null) {
                 hierarchy = dimension.getHierarchy();
             }
@@ -2903,15 +2906,15 @@ public class RolapCube extends CubeBase {
         return dimension;
     }
 
-    public OlapElement lookupChild(SchemaReader schemaReader, IdImpl.Segment s) {
+    public OlapElement lookupChild(SchemaReader schemaReader, Segment s) {
         return lookupChild(schemaReader, s, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
-        if (!(s instanceof IdImpl.NameSegment nameSegment)) {
+        if (!(s instanceof NameSegment nameSegment)) {
             return null;
         }
         // Note that non-exact matches aren't supported at this level,
@@ -2927,7 +2930,7 @@ public class RolapCube extends CubeBase {
         }
 
         if (oe == null) {
-            HierarchyUsage[] usages = getUsagesBySource(nameSegment.name);
+            HierarchyUsage[] usages = getUsagesBySource(nameSegment.getName());
             if (usages.length > 0) {
                 StringBuilder buf = new StringBuilder(64);
                 buf.append("RolapCube.lookupChild: ");
@@ -2961,7 +2964,7 @@ public class RolapCube extends CubeBase {
 
         if (getLogger().isDebugEnabled()) {
             if (!nameSegment.matches("Measures")) {
-                HierarchyUsage hierUsage = getUsageByName(nameSegment.name);
+                HierarchyUsage hierUsage = getUsageByName(nameSegment.getName());
                 if (hierUsage == null) {
                     status = "hierUsage == null";
                 } else {
@@ -3097,8 +3100,8 @@ public class RolapCube extends CubeBase {
         String name,
         Calc calc)
     {
-        final List<IdImpl.Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
-        segmentList.add(new IdImpl.NameSegment(name));
+        final List<Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
+        segmentList.add(new IdImpl.NameSegmentImpl(name));
         final Formula formula = new FormulaImpl(
             new IdImpl(segmentList),
             createDummyExp(calc),
@@ -3207,7 +3210,7 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
+		public Member getCalculatedMember(List<Segment> nameParts) {
             final String uniqueName = Util.implode(nameParts);
             for (Formula formula : calculatedMemberList) {
                 final String formulaUniqueName =
@@ -3222,9 +3225,9 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public NamedSet getNamedSet(List<IdImpl.Segment> segments) {
+		public NamedSet getNamedSet(List<Segment> segments) {
             if (segments.size() == 1) {
-                IdImpl.Segment segment = segments.get(0);
+                Segment segment = segments.get(0);
                 for (Formula namedSet : namedSetList) {
                     if (segment.matches(namedSet.getName())) {
                         return namedSet.getNamedSet();
@@ -3307,7 +3310,7 @@ public class RolapCube extends CubeBase {
 
         @Override
 		public Member getMemberByUniqueName(
-            List<IdImpl.Segment> uniqueNameParts,
+            List<Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
         {

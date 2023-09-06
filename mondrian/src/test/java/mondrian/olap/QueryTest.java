@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -32,9 +33,9 @@ import mondrian.server.Statement;
  */
 class QueryTest {
     private QueryPart[] cellProps = {
-        new CellPropertyImpl(IdImpl.Segment.toList("Value")),
-        new CellPropertyImpl(IdImpl.Segment.toList("Formatted_Value")),
-        new CellPropertyImpl(IdImpl.Segment.toList("Format_String")),
+        new CellPropertyImpl(Segment.toList("Value")),
+        new CellPropertyImpl(Segment.toList("Formatted_Value")),
+        new CellPropertyImpl(Segment.toList("Format_String")),
     };
     private QueryAxisImpl[] axes = new QueryAxisImpl[0];
     private Formula[] formulas = new Formula[0];

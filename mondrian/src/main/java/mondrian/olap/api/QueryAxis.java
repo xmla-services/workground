@@ -43,7 +43,7 @@ public non-sealed interface QueryAxis extends QueryPart {
 
     Id[] getDimensionProperties();
 
-    QueryAxisImpl.SubtotalVisibility getSubtotalVisibility();
+    SubtotalVisibility getSubtotalVisibility();
 
     void validate(Validator validator);
 

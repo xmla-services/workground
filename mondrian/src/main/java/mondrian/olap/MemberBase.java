@@ -13,6 +13,7 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -185,7 +186,7 @@ public boolean isEvaluated() {
   @Override
 public OlapElement lookupChild(
     SchemaReader schemaReader,
-    IdImpl.Segment childName,
+    Segment childName,
     MatchType matchType ) {
     return schemaReader.lookupMemberChildByName(
       this, childName, matchType );

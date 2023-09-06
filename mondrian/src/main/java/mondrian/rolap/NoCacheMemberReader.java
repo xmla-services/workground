@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.slf4j.Logger;
@@ -209,7 +210,7 @@ public class NoCacheMemberReader implements MemberReader, MemberCache {
 
     @Override
 	public RolapMember lookupMember(
-        final List<IdImpl.Segment> uniqueNameParts,
+        final List<Segment> uniqueNameParts,
         final boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);

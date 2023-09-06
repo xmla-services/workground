@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 
 import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import mondrian.mdx.MdxVisitor;
@@ -79,7 +82,7 @@ public class IdImpl
         String[] names = new String[segments.size()];
         int k = 0;
         for (Segment segment : segments) {
-            names[k++] = ((NameSegment) segment).getName();
+            names[k++] = ((NameSegmentImpl) segment).getName();
         }
         return names;
     }
@@ -90,7 +93,7 @@ public class IdImpl
     }
 
     @Override
-    public IdImpl.Segment getElement(int i) {
+    public Segment getElement(int i) {
         return segments.get(i);
     }
 
@@ -111,8 +114,8 @@ public class IdImpl
 	public Exp accept(Validator validator) {
         if (segments.size() == 1) {
             final Segment s = segments.get(0);
-            if (s.quoting == Quoting.UNQUOTED) {
-                NameSegment nameSegment = (NameSegment) s;
+            if (s.getQuoting() == Quoting.UNQUOTED) {
+                NameSegmentImpl nameSegment = (NameSegmentImpl) s;
                 if (validator.getFunTable().isReserved(nameSegment.getName())) {
                     return LiteralImpl.createSymbol(
                         nameSegment.getName().toUpperCase());
@@ -148,16 +151,16 @@ public class IdImpl
      *
      * <p>For example, the identifier
      * <code>[Store].USA.[New Mexico].&[45]</code> has four segments:<ul>
-     * <li>"Store", {@link mondrian.olap.IdImpl.Quoting#QUOTED}</li>
-     * <li>"USA", {@link mondrian.olap.IdImpl.Quoting#UNQUOTED}</li>
-     * <li>"New Mexico", {@link mondrian.olap.IdImpl.Quoting#QUOTED}</li>
-     * <li>"45", {@link mondrian.olap.IdImpl.Quoting#KEY}</li>
+     * <li>"Store", {@link mondrian.olap.Quoting#QUOTED}</li>
+     * <li>"USA", {@link mondrian.olap.Quoting#UNQUOTED}</li>
+     * <li>"New Mexico", {@link mondrian.olap.Quoting#QUOTED}</li>
+     * <li>"45", {@link mondrian.olap.Quoting#KEY}</li>
      * </ul>
      */
-    public static abstract class Segment {
-        public final Quoting quoting;
+    public static abstract class AbstractSegment implements Segment {
+        private final Quoting quoting;
 
-        protected Segment(Quoting quoting) {
+        protected AbstractSegment(Quoting quoting) {
             this.quoting = quoting;
         }
 
@@ -168,10 +171,12 @@ public class IdImpl
             return buf.toString();
         }
 
+        @Override
         public Quoting getQuoting() {
             return quoting;
         }
 
+        @Override
         public abstract List<NameSegment> getKeyParts();
 
         /**
@@ -180,11 +185,11 @@ public class IdImpl
          * @param nameParts Array of names
          * @return List of segments
          */
-        public static List<Segment> toList(String... nameParts) {
-            final List<Segment> segments =
+        public static List<AbstractSegment> toList(String... nameParts) {
+            final List<AbstractSegment> segments =
                 new ArrayList<>(nameParts.length);
             for (String namePart : nameParts) {
-                segments.add(new NameSegment(namePart));
+                segments.add(new NameSegmentImpl(namePart));
             }
             return segments;
         }
@@ -196,6 +201,7 @@ public class IdImpl
          * @param name Name to match
          * @return Whether matches
          */
+        @Override
         public abstract boolean matches(String name);
 
         /**
@@ -203,6 +209,7 @@ public class IdImpl
          *
          * @param buf String builder to write to
          */
+        @Override
         public abstract void toString(StringBuilder buf);
     }
 
@@ -212,8 +219,8 @@ public class IdImpl
      *
      * @see KeySegment
      */
-    public static class NameSegment extends Segment {
-        public final String name;
+    public static class NameSegmentImpl extends AbstractSegment implements NameSegment {
+        private final String name;
 
         /**
          * Creates a name segment with the given quoting.
@@ -221,7 +228,7 @@ public class IdImpl
          * @param name Name
          * @param quoting Quoting style
          */
-        public NameSegment(String name, Quoting quoting) {
+        public NameSegmentImpl(String name, Quoting quoting) {
             super(quoting);
             this.name = name;
             if (name == null) {
@@ -237,7 +244,7 @@ public class IdImpl
          *
          * @param name Name
          */
-        public NameSegment(String name) {
+        public NameSegmentImpl(String name) {
             this(name, Quoting.QUOTED);
         }
 
@@ -246,7 +253,7 @@ public class IdImpl
             if (this == o) {
                 return true;
             }
-            if (!(o instanceof NameSegment that)) {
+            if (!(o instanceof NameSegmentImpl that)) {
                 return false;
             }
             return that.name.equals(this.name);
@@ -257,6 +264,7 @@ public class IdImpl
             return name.hashCode();
         }
 
+        @Override
         public String getName() {
             return name;
         }
@@ -268,7 +276,7 @@ public class IdImpl
 
         @Override
 		public void toString(StringBuilder buf) {
-            switch (quoting) {
+            switch (getQuoting()) {
             case UNQUOTED:
                 buf.append(name);
                 return;
@@ -276,13 +284,13 @@ public class IdImpl
                 Util.quoteMdxIdentifier(name, buf);
                 return;
             default:
-                throw Util.unexpected(quoting);
+                throw Util.unexpected(getQuoting());
             }
         }
 
         @Override
 		public boolean matches(String name) {
-            switch (quoting) {
+            switch (getQuoting()) {
             case UNQUOTED:
                 return Util.equalName(this.name, name);
             case QUOTED:
@@ -296,7 +304,7 @@ public class IdImpl
     /**
      * Identifier segment representing a key, possibly composite.
      */
-    public static class KeySegment extends Segment {
+    public static class KeySegment extends AbstractSegment {
         public final List<NameSegment> subSegmentList;
 
         /**
@@ -304,7 +312,7 @@ public class IdImpl
          *
          * @param subSegments Array of sub-segments
          */
-        public KeySegment(NameSegment... subSegments) {
+        public KeySegment(NameSegmentImpl... subSegments) {
             super(Quoting.KEY);
             if (subSegments.length < 1) {
                 throw new IllegalArgumentException();
@@ -325,7 +333,7 @@ public class IdImpl
             this.subSegmentList =
                 new UnmodifiableArrayList<>(
                     subSegmentList.toArray(
-                        new NameSegment[subSegmentList.size()]));
+                        new NameSegmentImpl[subSegmentList.size()]));
         }
 
         @Override
@@ -363,22 +371,4 @@ public class IdImpl
         }
     }
 
-    public enum Quoting {
-
-        /**
-         * Unquoted identifier, for example "Measures".
-         */
-        UNQUOTED,
-
-        /**
-         * Quoted identifier, for example "[Measures]".
-         */
-        QUOTED,
-
-        /**
-         * Identifier quoted with an ampersand to indicate a key value, for
-         * example the second segment in "[Employees].&amp;[89]".
-         */
-        KEY
-    }
 }

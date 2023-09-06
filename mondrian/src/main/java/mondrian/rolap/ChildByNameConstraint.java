@@ -13,7 +13,7 @@ package mondrian.rolap;
 import java.util.Arrays;
 import java.util.List;
 
-import mondrian.olap.IdImpl;
+import mondrian.olap.api.NameSegment;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 
@@ -34,16 +34,16 @@ class ChildByNameConstraint extends DefaultMemberChildrenConstraint {
      *
      * @param childName Name of child
      */
-    public ChildByNameConstraint(IdImpl.NameSegment childName) {
-        this.childNames = new String[]{childName.name};
+    public ChildByNameConstraint(NameSegment childName) {
+        this.childNames = new String[]{childName.getName()};
         this.cacheKey = Arrays.asList(ChildByNameConstraint.class, childName);
     }
 
-    public ChildByNameConstraint(List<IdImpl.NameSegment> childNames) {
+    public ChildByNameConstraint(List<NameSegment> childNames) {
         this.childNames = new String[childNames.size()];
         int i = 0;
-        for (IdImpl.NameSegment name : childNames) {
-            this.childNames[i++] = name.name;
+        for (NameSegment name : childNames) {
+            this.childNames[i++] = name.getName();
         }
         this.cacheKey = Arrays.asList(
             ChildByNameConstraint.class, this.childNames);

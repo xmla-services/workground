@@ -28,6 +28,7 @@ import java.util.Set;
 
 import mondrian.olap.api.DimensionExpr;
 import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
@@ -629,8 +630,8 @@ public class RolapResult extends ResultBase {
       // Cells will not be calculated if only CELL_ORDINAL requested.
       QueryPart[] cellProperties = query.getCellProperties();
       if(!(cellProperties.length == 1
-              && ((mondrian.olap.IdImpl.NameSegment)
-              mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).name.equalsIgnoreCase(
+              && ((NameSegment)
+              mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).getName().equalsIgnoreCase(
               mondrian.olap.Property.CELL_ORDINAL.getName()    ))) {
         final Locus locus = new Locus( execution, null, "Loading cells" );
         Locus.push( locus );

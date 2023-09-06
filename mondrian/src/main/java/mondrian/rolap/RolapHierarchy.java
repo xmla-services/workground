@@ -29,6 +29,9 @@ import java.util.Map;
 import java.util.Set;
 
 import mondrian.olap.api.Formula;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -463,15 +466,15 @@ public class RolapHierarchy extends HierarchyBase {
             ((RolapLevel) level).init(xmlDimension);
         }
         if (defaultMemberName != null) {
-            List<IdImpl.Segment> uniqueNameParts;
+            List<Segment> uniqueNameParts;
             if (defaultMemberName.contains("[")) {
                 uniqueNameParts = Util.parseIdentifier(defaultMemberName);
             } else {
                 uniqueNameParts =
-                    Collections.<IdImpl.Segment>singletonList(
-                        new IdImpl.NameSegment(
+                    Collections.<Segment>singletonList(
+                        new IdImpl.NameSegmentImpl(
                             defaultMemberName,
-                            IdImpl.Quoting.UNQUOTED));
+                            Quoting.UNQUOTED));
             }
 
             // First look up from within this hierarchy. Works for unqualified
@@ -1610,19 +1613,19 @@ public class RolapHierarchy extends HierarchyBase {
         @Override
 		public OlapElement lookupChild(
             SchemaReader schemaReader,
-            IdImpl.Segment s,
+            Segment s,
             MatchType matchType)
         {
-            if (!(s instanceof IdImpl.NameSegment nameSegment)) {
+            if (!(s instanceof NameSegment nameSegment)) {
                 return null;
             }
-            if (Util.equalName(nameSegment.name, dimension.getName())) {
+            if (Util.equalName(nameSegment.getName(), dimension.getName())) {
                 return dimension;
             }
             // Archaic form <dimension>.<hierarchy>, e.g. [Time.Weekly].[1997]
             if (!MondrianProperties.instance().SsasCompatibleNaming.get()
                 && Util.equalName(
-                    nameSegment.name,
+                    nameSegment.getName(),
                 new StringBuilder(dimension.getName()).append(".").append(subName).toString()))
             {
                 return RolapHierarchy.this;

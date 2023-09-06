@@ -35,6 +35,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.function.Consumer;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -255,7 +258,7 @@ public class RolapUtil {
 
     static RolapMember lookupMember(
         MemberReader reader,
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         RolapMember member =
@@ -281,13 +284,13 @@ public class RolapUtil {
     }
 
     private static RolapMember lookupMemberInternal(
-        List<IdImpl.Segment> segments,
+        List<Segment> segments,
         RolapMember member,
         MemberReader reader,
         boolean failIfNotFound)
     {
-        for (IdImpl.Segment segment : segments) {
-            if (!(segment instanceof IdImpl.NameSegment nameSegment)) {
+        for (Segment segment : segments) {
+            if (!(segment instanceof NameSegment nameSegment)) {
                 break;
             }
             List<RolapMember> children;
@@ -299,7 +302,7 @@ public class RolapUtil {
                 member = null;
             }
             for (RolapMember child : children) {
-                if (child.getName().equals(nameSegment.name)) {
+                if (child.getName().equals(nameSegment.getName())) {
                     member = child;
                     break;
                 }
@@ -479,10 +482,10 @@ public class RolapUtil {
         List<? extends Member> members,
         RolapMember parent,
         RolapLevel level,
-        IdImpl.Segment searchName,
+        Segment searchName,
         MatchType matchType)
     {
-        if (!(searchName instanceof IdImpl.NameSegment nameSegment)) {
+        if (!(searchName instanceof NameSegment nameSegment)) {
             return null;
         }
         switch (matchType) {
@@ -498,19 +501,19 @@ public class RolapUtil {
         // the members array
         Member searchMember =
             level.getHierarchy().createMember(
-                parent, level, nameSegment.name, null);
+                parent, level, nameSegment.getName(), null);
         Member bestMatch = null;
         for (Member member : members) {
             int rc;
-            if (searchName.quoting == IdImpl.Quoting.KEY
+            if (searchName.getQuoting() == Quoting.KEY
                 && member instanceof RolapMember rolapMember
                 && rolapMember.getKey().toString().equals(
-                nameSegment.name))
+                nameSegment.getName()))
             {
                 return member;
             }
             if (matchType.isExact()) {
-                rc = Util.compareName(member.getName(), nameSegment.name);
+                rc = Util.compareName(member.getName(), nameSegment.getName());
             } else {
                 rc =
                     FunUtil.compareSiblingMembers(

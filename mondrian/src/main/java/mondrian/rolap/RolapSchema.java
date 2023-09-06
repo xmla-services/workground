@@ -32,6 +32,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import mondrian.olap.api.Formula;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -730,9 +732,9 @@ public class RolapSchema implements Schema {
         final Formula formula =
             new FormulaImpl(
                 new IdImpl(
-                    new IdImpl.NameSegment(
+                    new IdImpl.NameSegmentImpl(
                         xmlNamedSet.name(),
-                        IdImpl.Quoting.UNQUOTED)),
+                        Quoting.UNQUOTED)),
                 exp);
         return formula.getNamedSet();
     }
@@ -891,7 +893,7 @@ public class RolapSchema implements Schema {
         int category,
         String id)
     {
-        List<IdImpl.Segment> segments = Util.parseIdentifier(id);
+        List<Segment> segments = Util.parseIdentifier(id);
         //noinspection unchecked
         return (T) reader.lookupCompound(cube, segments, true, category);
     }

@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -553,18 +555,18 @@ public class RolapLevel extends LevelBase {
         IfParentsName
     }
 
-    public OlapElement lookupChild(SchemaReader schemaReader, IdImpl.Segment name) {
+    public OlapElement lookupChild(SchemaReader schemaReader, Segment name) {
         return lookupChild(schemaReader, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, IdImpl.Segment name, MatchType matchType)
+            SchemaReader schemaReader, Segment name, MatchType matchType)
     {
         if (name instanceof IdImpl.KeySegment keySegment) {
             List<Comparable> keyValues = new ArrayList<>();
-            for (IdImpl.NameSegment nameSegment : keySegment.getKeyParts()) {
-                final String keyValue = nameSegment.name;
+            for (NameSegment nameSegment : keySegment.getKeyParts()) {
+                final String keyValue = nameSegment.getName();
                 if (RolapUtil.mdxNullLiteral().equalsIgnoreCase(keyValue)) {
                     keyValues.add(RolapUtil.sqlNullValue);
                 } else {

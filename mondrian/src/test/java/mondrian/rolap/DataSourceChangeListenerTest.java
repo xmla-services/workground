@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -532,7 +533,7 @@ class DataSourceChangeListenerTest {
             (RolapSchemaReader) cube.getSchemaReader();
         RolapHierarchy hierarchy =
             (RolapHierarchy) cube.lookupHierarchy(
-                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegmentImpl(hierName, Quoting.UNQUOTED), false);
         assertNotNull(hierarchy);
         return
             (SmartMemberReader) hierarchy.createMemberReader(
@@ -548,7 +549,7 @@ class DataSourceChangeListenerTest {
             (RolapSchemaReader) cube.getSchemaReader();
         RolapCubeHierarchy hierarchy =
             (RolapCubeHierarchy) cube.lookupHierarchy(
-                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegmentImpl(hierName, Quoting.UNQUOTED), false);
         assertNotNull(hierarchy);
         return (SmartMemberReader) hierarchy.getRolapHierarchy()
             .createMemberReader(schemaReader.getRole());

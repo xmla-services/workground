@@ -38,6 +38,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -396,7 +397,7 @@ class DrillThroughTest {
 
         Hierarchy h =
             cube.lookupHierarchy(
-                new IdImpl.NameSegment(hierName, IdImpl.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegmentImpl(hierName, Quoting.UNQUOTED), false);
         if (h == null) {
             return null;
         }

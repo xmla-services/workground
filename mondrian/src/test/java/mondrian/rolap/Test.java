@@ -111,12 +111,12 @@ class Test {
 
         RolapHierarchy genderHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new IdImpl.NameSegment("Gender"), false);
+                new IdImpl.NameSegmentImpl("Gender"), false);
         testMemberReader(genderHierarchy.getMemberReader());
 
         RolapHierarchy customerHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new IdImpl.NameSegment("Customers"), false);
+                new IdImpl.NameSegmentImpl("Customers"), false);
         testMemberReader(customerHierarchy.getMemberReader());
     }
     void testMemberReader(MemberReader reader)

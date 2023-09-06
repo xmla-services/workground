@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -275,11 +277,11 @@ class TypeTest {
     }
 
     private Member getStoreChild(Connection connection) {
-        List<IdImpl.Segment> storeParts = Arrays.<IdImpl.Segment>asList(
-            new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("All Stores", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("USA", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("CA", IdImpl.Quoting.UNQUOTED));
+        List<Segment> storeParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("All Stores", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("USA", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("CA", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             storeParts, false);
     }
@@ -301,17 +303,17 @@ class TypeTest {
     }
 
     private Member getMaleChild(Connection connection) {
-        List<IdImpl.Segment> genderParts = Arrays.<IdImpl.Segment>asList(
-            new IdImpl.NameSegment("Gender", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("M", IdImpl.Quoting.UNQUOTED));
+        List<Segment> genderParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Gender", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("M", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             genderParts, false);
     }
 
     private static Member getUnitSalesMeasure(Connection connection) {
-        List<IdImpl.Segment> measureParts = Arrays.<IdImpl.Segment>asList(
-            new IdImpl.NameSegment("Measures", IdImpl.Quoting.UNQUOTED),
-            new IdImpl.NameSegment("Unit Sales", IdImpl.Quoting.UNQUOTED));
+        List<Segment> measureParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Measures", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("Unit Sales", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             measureParts, false);
     }

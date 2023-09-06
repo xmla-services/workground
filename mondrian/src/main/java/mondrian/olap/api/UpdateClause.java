@@ -13,14 +13,12 @@
  */
 package mondrian.olap.api;
 
-import java.util.List;
+import mondrian.olap.Exp;
 
-public non-sealed interface Id extends QueryPart {
+public non-sealed interface UpdateClause extends QueryPart {
 
-    String[] toStringArray();
+    Exp getTupleExp();
 
-    List<Segment> getSegments();
-
-    Segment getElement(int i);
+    Exp getValueExp();
 
 }

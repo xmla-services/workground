@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -174,7 +175,7 @@ class MemberCacheControlTest {
         Cube cube = connection.getSchema().lookupCube(cubeName, true);
         SchemaReader scr = cube.getSchemaReader(null).withLocus();
         return (RolapMember)
-            scr.getMemberByUniqueName(IdImpl.Segment.toList(names), true);
+            scr.getMemberByUniqueName(Segment.toList(names), true);
     }
 
     /**

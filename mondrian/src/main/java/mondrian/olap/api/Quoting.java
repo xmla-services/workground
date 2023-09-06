@@ -13,14 +13,20 @@
  */
 package mondrian.olap.api;
 
-import java.util.List;
+public enum Quoting {
+    /**
+     * Unquoted identifier, for example "Measures".
+     */
+    UNQUOTED,
 
-public non-sealed interface Id extends QueryPart {
+    /**
+     * Quoted identifier, for example "[Measures]".
+     */
+    QUOTED,
 
-    String[] toStringArray();
-
-    List<Segment> getSegments();
-
-    Segment getElement(int i);
-
+    /**
+     * Identifier quoted with an ampersand to indicate a key value, for
+     * example the second segment in "[Employees].&amp;[89]".
+     */
+    KEY
 }

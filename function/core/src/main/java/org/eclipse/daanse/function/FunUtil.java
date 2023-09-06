@@ -34,6 +34,7 @@ import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpr;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.ResolvedFunCall;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.fun.ParenthesesFunDef;
@@ -2123,7 +2124,7 @@ public class FunUtil extends Util {
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader, Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 
