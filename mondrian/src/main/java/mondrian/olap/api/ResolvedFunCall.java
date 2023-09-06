@@ -13,6 +13,19 @@
  */
 package mondrian.olap.api;
 
-public non-sealed interface ResolvedFunCall extends QueryPart{
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.type.Type;
 
+public non-sealed interface ResolvedFunCall extends QueryPart {
+
+    int getArgCount();
+
+    FunDef getFunDef();
+
+    Exp getArg(int i);
+
+    Exp[] getArgs();
+
+    Type getType();
 }

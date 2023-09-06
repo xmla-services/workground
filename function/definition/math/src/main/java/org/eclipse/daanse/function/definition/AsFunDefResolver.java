@@ -14,11 +14,11 @@
 package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.mdx.NamedSetExpr;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
+import mondrian.olap.api.NamedSetExpr;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.ResolverBase;
@@ -53,8 +53,8 @@ public class AsFunDefResolver extends ResolverBase {
         // was not visible in the scope that defines it. But we can work
         // with this.
 
-        final Query.ScopedNamedSet scopedNamedSet =
-            (Query.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
+        final QueryImpl.ScopedNamedSet scopedNamedSet =
+            (QueryImpl.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
         return (FunDef) new AsFunDef(scopedNamedSet);
     }
 

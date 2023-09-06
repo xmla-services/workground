@@ -12,9 +12,9 @@ package org.eclipse.daanse.function.definition;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.api.ResolvedFunCall;
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
@@ -29,14 +29,14 @@ import org.eclipse.daanse.olap.calc.api.Calc;
  * @since Oct 7, 2009
  */
 class AsFunDef extends FunDefBase {
-    private final Query.ScopedNamedSet scopedNamedSet;
+    private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
     /**
      * Creates an AsFunDef.
      *
      * @param scopedNamedSet Named set definition
      */
-     AsFunDef(Query.ScopedNamedSet scopedNamedSet) {
+     AsFunDef(QueryImpl.ScopedNamedSet scopedNamedSet) {
         super(
             "AS",
             "<Expression> AS <Name>",
