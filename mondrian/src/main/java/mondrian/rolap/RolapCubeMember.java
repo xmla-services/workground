@@ -10,13 +10,13 @@
 */
 package mondrian.rolap;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -253,7 +253,7 @@ public class RolapCubeMember
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        IdImpl.Segment childName,
+        Segment childName,
         MatchType matchType)
     {
         return

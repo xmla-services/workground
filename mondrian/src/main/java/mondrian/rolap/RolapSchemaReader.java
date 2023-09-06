@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
@@ -422,20 +424,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public OlapElement getElementChild(OlapElement parent, IdImpl.Segment name) {
+	public OlapElement getElementChild(OlapElement parent, Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement getElementChild(
-        OlapElement parent, IdImpl.Segment name, MatchType matchType)
+            OlapElement parent, Segment name, MatchType matchType)
     {
         return parent.lookupChild(this, name, matchType);
     }
 
     @Override
 	public final Member getMemberByUniqueName(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return getMemberByUniqueName(
@@ -444,7 +446,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member getMemberByUniqueName(
-        List<IdImpl.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
     {
@@ -456,7 +458,7 @@ public class RolapSchemaReader
     @Override
 	public OlapElement lookupCompound(
         OlapElement parent,
-        List<IdImpl.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category)
     {
@@ -467,7 +469,7 @@ public class RolapSchemaReader
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent,
-        List<IdImpl.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -491,7 +493,7 @@ public class RolapSchemaReader
 
     public final OlapElement lookupCompoundInternal(
         OlapElement parent,
-        List<IdImpl.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -537,7 +539,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member lookupMemberChildByName(
-        Member parent, IdImpl.Segment childName, MatchType matchType)
+            Member parent, Segment childName, MatchType matchType)
     {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
@@ -546,11 +548,11 @@ public class RolapSchemaReader
         assert !(parent instanceof RolapHierarchy.LimitedRollupMember);
         try {
             MemberChildrenConstraint constraint;
-            if (childName instanceof IdImpl.NameSegment
+            if (childName instanceof NameSegment
                 && matchType.isExact())
             {
                 constraint = sqlConstraintFactory.getChildByNameConstraint(
-                    (RolapMember) parent, (IdImpl.NameSegment) childName);
+                    (RolapMember) parent, (NameSegment) childName);
             } else {
                 constraint =
                     sqlConstraintFactory.getMemberChildrenConstraint(null);
@@ -585,7 +587,7 @@ public class RolapSchemaReader
 
     @Override
 	public List<Member> lookupMemberChildrenByNames(
-        Member parent, List<IdImpl.NameSegment> childNames, MatchType matchType)
+        Member parent, List<NameSegment> childNames, MatchType matchType)
     {
         MemberChildrenConstraint constraint = sqlConstraintFactory
             .getChildrenByNamesConstraint(
@@ -598,20 +600,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public Member getCalculatedMember(List<IdImpl.Segment> nameParts) {
+	public Member getCalculatedMember(List<Segment> nameParts) {
         // There are no calculated members defined against a schema.
         return null;
     }
 
     @Override
-	public NamedSet getNamedSet(List<IdImpl.Segment> nameParts) {
+	public NamedSet getNamedSet(List<Segment> nameParts) {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof IdImpl.NameSegment)) {
+        if (!(nameParts.get(0) instanceof NameSegment)) {
             return null;
         }
-        final String name = ((IdImpl.NameSegment) nameParts.get(0)).name;
+        final String name = ((NameSegment) nameParts.get(0)).getName();
         return schema.getNamedSet(name);
     }
 

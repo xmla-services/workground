@@ -26,6 +26,7 @@ import mondrian.olap.api.LevelExpr;
 import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpr;
 import mondrian.olap.api.Query;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -2107,7 +2108,7 @@ public class FunUtil extends Util {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader, Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

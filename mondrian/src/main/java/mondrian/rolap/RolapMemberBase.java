@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.NameSegment;
 import org.apache.commons.collections.map.Flat3Map;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -967,8 +968,8 @@ public class RolapMemberBase
         String name;
         if (key == null || RolapUtil.sqlNullValue.equals(key)) {
             name = RolapUtil.mdxNullLiteral();
-        } else if (key instanceof IdImpl.NameSegment) {
-            name = ((IdImpl.NameSegment) key).name;
+        } else if (key instanceof NameSegment) {
+            name = ((NameSegment) key).getName();
         } else {
             name = key.toString();
         }

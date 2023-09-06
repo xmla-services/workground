@@ -11,14 +11,14 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.mdx.ParameterExpr;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
+import mondrian.olap.api.Formula;
 import mondrian.olap.FunTable;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.api.MemberProperty;
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryAxis;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.Type;

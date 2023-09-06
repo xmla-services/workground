@@ -12,7 +12,7 @@
 package org.eclipse.daanse.function;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.Exp;
 import mondrian.olap.Syntax;
 import org.eclipse.daanse.olap.calc.api.Calc;

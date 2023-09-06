@@ -1868,7 +1868,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new IdImpl.NameSegment(member.getName()));
+                        new IdImpl.NameSegmentImpl(member.getName()));
 
                 // Remove the member from its parent's lists. First try the
                 // unconstrained cache.
@@ -1942,7 +1942,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new IdImpl.NameSegment(member.getName()));
+                        new IdImpl.NameSegmentImpl(member.getName()));
 
                 // Check if there is already a list in cache
                 // constrained by a wildcard.

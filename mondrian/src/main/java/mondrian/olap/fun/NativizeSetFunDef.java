@@ -36,6 +36,7 @@ import mondrian.olap.api.MemberExpr;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NamedSetExpr;
 import mondrian.olap.api.Query;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -1612,8 +1613,8 @@ public class NativizeSetFunDef extends FunDefBase {
         return id;
     }
 
-    private static IdImpl.Segment q(String s) {
-        return new IdImpl.NameSegment(s);
+    private static Segment q(String s) {
+        return new IdImpl.NameSegmentImpl(s);
     }
 
     private static String createMangledName(Level level, String prefix) {

@@ -13,6 +13,8 @@ package mondrian.olap;
 
 import java.util.List;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -118,7 +120,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
     }
 
     @Override
-	public Hierarchy lookupHierarchy(IdImpl.NameSegment s, boolean unique) {
+	public Hierarchy lookupHierarchy(NameSegment s, boolean unique) {
         for (Dimension dimension : dimensions) {
             Hierarchy[] hierarchies = dimension.getHierarchies();
             for (Hierarchy hierarchy : hierarchies) {
@@ -135,7 +137,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        IdImpl.Segment s,
+        Segment s,
         MatchType matchType)
     {
         Dimension mdxDimension = lookupDimension(s);
@@ -146,7 +148,7 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
         final List<Dimension> dimensionsInner = schemaReader.getCubeDimensions(this);
 
         // Look for hierarchies named '[dimension.hierarchy]'.
-        if (s instanceof IdImpl.NameSegment nameSegment) {
+        if (s instanceof NameSegment nameSegment) {
             Hierarchy hierarchy = lookupHierarchy(nameSegment, false);
             if (hierarchy != null) {
                 return hierarchy;
@@ -179,12 +181,12 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
      * @param s Name segment
      * @return Dimension, or null if not found
      */
-    public Dimension lookupDimension(IdImpl.Segment s) {
-        if (!(s instanceof IdImpl.NameSegment nameSegment)) {
+    public Dimension lookupDimension(Segment s) {
+        if (!(s instanceof NameSegment nameSegment)) {
             return null;
         }
         for (Dimension dimension : dimensions) {
-            if (Util.equalName(dimension.getName(), nameSegment.name)) {
+            if (Util.equalName(dimension.getName(), nameSegment.getName())) {
                 return dimension;
             }
         }

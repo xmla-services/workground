@@ -21,6 +21,7 @@
 package mondrian.olap;
 
 import mondrian.olap.api.Update;
+import mondrian.olap.api.UpdateClause;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -63,23 +64,25 @@ public class UpdateImpl extends AbstractQueryPart implements Update {
         USE_WEIGHTED_INCREMENT
     }
 
-    public static class UpdateClause extends AbstractQueryPart {
+    public static class UpdateClauseImpl extends AbstractQueryPart implements UpdateClause {
         private final Exp tuple;
         private Exp value;
         private Allocation allocation;
         private Exp weight;
 
-        public UpdateClause(Exp tuple, Exp value, Allocation allocation, Exp weight) {
+        public UpdateClauseImpl(Exp tuple, Exp value, Allocation allocation, Exp weight) {
             this.tuple = tuple;
             this.value = value;
             this.allocation = allocation;
             this.weight = weight;
         }
 
+        @Override
         public Exp getTupleExp() {
             return this.tuple;
         }
 
+        @Override
         public Exp getValueExp() {
             return this.value;
         }

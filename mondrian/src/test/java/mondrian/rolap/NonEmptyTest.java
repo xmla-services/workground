@@ -28,6 +28,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.Collection;
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -5318,7 +5319,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapHierarchy hierarchy =
       (RolapHierarchy) cube.lookupHierarchy(
-        new IdImpl.NameSegment( hierName, IdImpl.Quoting.UNQUOTED ),
+        new IdImpl.NameSegmentImpl( hierName, Quoting.UNQUOTED ),
         false );
     assertNotNull( hierarchy );
     return (SmartMemberReader)
@@ -5332,7 +5333,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapCubeHierarchy hierarchy =
       (RolapCubeHierarchy) cube.lookupHierarchy(
-        new IdImpl.NameSegment( hierName, IdImpl.Quoting.UNQUOTED ), false );
+        new IdImpl.NameSegmentImpl( hierName, Quoting.UNQUOTED ), false );
     assertNotNull( hierarchy );
     return (SmartMemberReader) hierarchy.getRolapHierarchy()
       .createMemberReader( schemaReader.getRole() );

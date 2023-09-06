@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.api.model.Schema;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -210,7 +210,7 @@ public String getDescription() {
 
   @Override
 public OlapElement lookupChild(
-    SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
+          SchemaReader schemaReader, Segment s, MatchType matchType ) {
     throw new UnsupportedOperationException();
   }
 
@@ -294,8 +294,8 @@ public Dimension getDimension() {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader,
-      IdImpl.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader,
+        Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

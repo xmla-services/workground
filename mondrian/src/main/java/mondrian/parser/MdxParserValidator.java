@@ -14,13 +14,13 @@ package mondrian.parser;
 import java.util.List;
 
 import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.Command;
 import mondrian.olap.api.DmvQuery;
 import mondrian.olap.api.DrillThrough;
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.FunTable;
 import mondrian.olap.api.QueryAxis;
-import mondrian.olap.TransactionCommandImpl;
 import mondrian.olap.UpdateImpl;
 import mondrian.olap.api.Explain;
 import mondrian.olap.api.Formula;
@@ -30,6 +30,7 @@ import mondrian.olap.api.Refresh;
 import mondrian.olap.api.Subcube;
 import mondrian.olap.api.TransactionCommand;
 import mondrian.olap.api.Update;
+import mondrian.olap.api.UpdateClause;
 import mondrian.server.Statement;
 
 /**
@@ -98,7 +99,7 @@ public interface MdxParserValidator {
 
         Update makeUpdate(
                 String cubeName,
-                List<UpdateImpl.UpdateClause> list);
+                List<UpdateClause> list);
 
         DmvQuery makeDmvQuery(
                 String tableName,
@@ -106,6 +107,6 @@ public interface MdxParserValidator {
                 Exp whereExpression);
 
         TransactionCommand makeTransactionCommand(
-                TransactionCommandImpl.Command c);
+                Command c);
     }
 }

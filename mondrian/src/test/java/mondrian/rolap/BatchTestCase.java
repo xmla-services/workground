@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -586,7 +587,7 @@ public class BatchTestCase{
         if (salesCube != null) {
             RolapHierarchy hierarchy =
                     (RolapHierarchy) salesCube.lookupHierarchy(
-                            new IdImpl.NameSegment("Store", IdImpl.Quoting.UNQUOTED),
+                            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED),
                             false);
             if (hierarchy != null) {
                 SmartMemberReader memberReader =

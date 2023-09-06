@@ -15,6 +15,7 @@ package mondrian.olap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.NamedSet;
@@ -138,7 +139,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
         return null;
     }

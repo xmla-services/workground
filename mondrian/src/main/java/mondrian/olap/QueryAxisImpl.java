@@ -17,6 +17,7 @@ import mondrian.olap.api.DimensionExpr;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.LevelExpr;
 import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
@@ -326,14 +327,5 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
         return dimensionProperties;
     }
 
-    /**
-     * <code>SubtotalVisibility</code> enumerates the allowed values of
-     * whether subtotals are visible.
-     */
-    public enum SubtotalVisibility {
-        Undefined,
-        Hide,
-        Show;
-    }
 
 }

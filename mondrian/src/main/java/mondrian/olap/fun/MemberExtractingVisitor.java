@@ -14,15 +14,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.mdx.MemberExprImpl;
 import mondrian.olap.api.DimensionExpr;
 import mondrian.olap.api.LevelExpr;
 import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.HierarchyExprImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
@@ -50,7 +51,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     private final Set<Member> memberSet;
     private final ResolvedFunCallFinder finder;
     private final Set<Member> activeMembers = new HashSet<>();
-    private final ResolvedFunCallImpl call;
+    private final ResolvedFunCall call;
     private final boolean mapToAllMember;
 
     /**
@@ -69,7 +70,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         Arrays.asList(MemberExtractingVisitor.unsafeFuncNames));
 
     public MemberExtractingVisitor(
-        Set<Member> memberSet, ResolvedFunCallImpl call, boolean mapToAllMember)
+        Set<Member> memberSet, ResolvedFunCall call, boolean mapToAllMember)
     {
         this.memberSet = memberSet;
         this.finder = new ResolvedFunCallFinder(call);

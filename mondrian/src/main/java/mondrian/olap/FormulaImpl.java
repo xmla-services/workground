@@ -23,7 +23,9 @@ import mondrian.olap.api.Id;
 import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpr;
 import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -192,7 +194,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     @Override
     public void createElement(Query q) {
         // first resolve the name, bit by bit
-        final List<IdImpl.Segment> segments = id.getSegments();
+        final List<Segment> segments = id.getSegments();
         if (isMember) {
             if (mdxMember != null) {
                 return;
@@ -200,8 +202,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             OlapElement mdxElement = q.getCube();
             final SchemaReader schemaReader = q.getSchemaReader(false);
             for (int i = 0; i < segments.size(); i++) {
-                final IdImpl.Segment segment0 = segments.get(i);
-                if (!(segment0 instanceof IdImpl.NameSegment segment)) {
+                final Segment segment0 = segments.get(i);
+                if (!(segment0 instanceof NameSegment segment)) {
                     throw Util.newError(
                         "Calculated member name must not contain member keys");
                 }
@@ -278,8 +280,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             Util.assertTrue(
                 segments.size() == 1,
                 "set names must not be compound");
-            final IdImpl.Segment segment0 = segments.get(0);
-            if (!(segment0 instanceof IdImpl.NameSegment)) {
+            final Segment segment0 = segments.get(0);
+            if (!(segment0 instanceof NameSegment)) {
                 throw Util.newError(
                     "Calculated member name must not contain member keys");
             }
@@ -288,7 +290,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             // give these their true values later.
             mdxSet =
                 new SetBase(
-                    ((IdImpl.NameSegment) segment0).getName(),
+                    ((NameSegment) segment0).getName(),
                     null,
                     null,
                     exp,
@@ -379,13 +381,13 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     public void rename(String newName)
     {
         String oldName = getElement().getName();
-        final List<IdImpl.Segment> segments = this.id.getSegments();
-        assert Util.last(segments) instanceof IdImpl.NameSegment;
-        assert ((IdImpl.NameSegment) Util.last(segments)).name
+        final List<Segment> segments = this.id.getSegments();
+        assert Util.last(segments) instanceof NameSegment;
+        assert ((NameSegment) Util.last(segments)).getName()
             .equalsIgnoreCase(oldName);
         segments.set(
             segments.size() - 1,
-            new IdImpl.NameSegment(newName));
+            new IdImpl.NameSegmentImpl(newName));
         if (isMember) {
             mdxMember.setName(newName);
         } else {

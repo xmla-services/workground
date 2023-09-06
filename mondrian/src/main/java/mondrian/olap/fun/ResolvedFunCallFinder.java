@@ -11,6 +11,7 @@ package mondrian.olap.fun;
 import java.util.HashSet;
 import java.util.Set;
 
+import mondrian.olap.api.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
@@ -25,11 +26,11 @@ import mondrian.olap.Exp;
 public class ResolvedFunCallFinder
     extends MdxVisitorImpl
 {
-    private final ResolvedFunCallImpl call;
+    private final ResolvedFunCall call;
     public boolean found;
     private final Set<Member> activeMembers = new HashSet<>();
 
-    public ResolvedFunCallFinder(ResolvedFunCallImpl call)
+    public ResolvedFunCallFinder(ResolvedFunCall call)
     {
         this.call = call;
         found = false;

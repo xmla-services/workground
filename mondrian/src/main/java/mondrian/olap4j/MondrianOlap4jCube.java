@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.OlapException;
@@ -222,7 +223,7 @@ class MondrianOlap4jCube
         SchemaReader schemaReader,
         List<IdentifierSegment> nameParts)
     {
-        final List<mondrian.olap.IdImpl.Segment> segmentList =
+        final List<Segment> segmentList =
             new ArrayList<>();
         for (IdentifierSegment namePart : nameParts) {
             segmentList.add(Util.convert(namePart));

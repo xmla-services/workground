@@ -13,14 +13,7 @@
  */
 package mondrian.olap.api;
 
-import java.util.List;
+public interface NameSegment extends Segment{
 
-public non-sealed interface Id extends QueryPart {
-
-    String[] toStringArray();
-
-    List<Segment> getSegments();
-
-    Segment getElement(int i);
-
+    String getName();
 }
