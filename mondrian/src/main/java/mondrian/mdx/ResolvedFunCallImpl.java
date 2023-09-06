@@ -138,6 +138,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements FunCall, Resol
      *
      * @return function definition
      */
+    @Override
     public FunDef getFunDef() {
         return funDef;
     }

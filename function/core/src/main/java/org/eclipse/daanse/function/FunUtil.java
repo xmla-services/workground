@@ -16,24 +16,24 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
+import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.HierarchyExpr;
+import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.Literal;
+import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.Query;
+import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.fun.ParenthesesFunDef;
@@ -2123,7 +2123,7 @@ public class FunUtil extends Util {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader, IdImpl.Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 
