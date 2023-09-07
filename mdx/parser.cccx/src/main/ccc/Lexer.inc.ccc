@@ -170,6 +170,7 @@ TOKEN #Keyword:
 | < PLAN : "PLAN" >
 | < PROPERTIES : "PROPERTIES" >
 | < REFRESH : "REFRESH" >
+| < UPDATE : "UPDATE" >
 | < RETURN : "RETURN" >
 | < ROWS : "ROWS" >
 | < SECTIONS : "SECTIONS" >

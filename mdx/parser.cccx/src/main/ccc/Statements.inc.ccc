@@ -149,6 +149,20 @@ RefreshStatement :
   NameObjectIdentifier
 ;
 
+INJECT UpdateStatement :
+   implements org.eclipse.daanse.mdx.model.api.UpdateStatement;
+{
+   public NameObjectIdentifier cubeName() {
+      return (NameObjectIdentifier) getChild(2);
+   }
+}
+
+UpdateStatement :
+  < UPDATE >
+  < CUBE >
+  NameObjectIdentifier
+;
+
 INJECT DMVStatement :
    implements org.eclipse.daanse.mdx.model.api.DMVStatement;
 {
