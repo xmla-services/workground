@@ -13,23 +13,15 @@
  */
 package org.eclipse.daanse.olap.query.base;
 
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getColumns;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getFormulaList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getName;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getParameterList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxis;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxisList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getSubcube;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import mondrian.olap.DmvQueryImpl;
+import mondrian.olap.DrillThroughImpl;
+import mondrian.olap.Exp;
+import mondrian.olap.ExplainImpl;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.RefreshImpl;
+import mondrian.olap.UpdateImpl;
+import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
@@ -40,15 +32,26 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
-
-import mondrian.olap.DmvQueryImpl;
-import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.Exp;
-import mondrian.olap.ExplainImpl;
-import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.RefreshImpl;
 import mondrian.server.Statement;
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.olap.api.query.component.Update;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getColumns;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getFormulaList;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getName;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getParameterList;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxis;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxisList;
+import static org.eclipse.daanse.olap.query.base.QueryUtil.getSubcube;
 
 public class QueryProviderImpl implements QueryProvider {
 
@@ -75,8 +78,12 @@ public class QueryProviderImpl implements QueryProvider {
 
     @Override
     public Refresh createRefresh(RefreshStatement refreshStatement) {
-        getName(refreshStatement.cubeName());
         return new RefreshImpl(getName(refreshStatement.cubeName()));
+    }
+
+    @Override
+    public Update createUpdate(UpdateStatement updateStatement) {
+        return new UpdateImpl(getName(updateStatement.cubeName()), List.of());
     }
 
     @Override
