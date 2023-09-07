@@ -16,6 +16,8 @@ import java.util.List;
 
 import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpression;
+import mondrian.olap.api.NumericLiteral;
+
 import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.Exp;
@@ -211,13 +213,14 @@ public class RolapNativeTopCount extends RolapNativeSet {
             return null;
         }
 
-        // extract count
-        if (!(args[1] instanceof Literal)) {
-            alertNonNativeTopCount(
-                "TopCount value cannot be determined.");
-            return null;
-        }
-        int count = ((Literal) args[1]).getIntValue();
+		int count = 0;
+		// extract count
+		if ((args[1] instanceof NumericLiteral numericLiteral)) {
+			count = numericLiteral.getIntValue();
+		} else {
+			alertNonNativeTopCount("TopCount value cannot be determined.");
+			return null;
+		}
 
         // extract "order by" expression
         SchemaReader schemaReader = evaluator.getSchemaReader();

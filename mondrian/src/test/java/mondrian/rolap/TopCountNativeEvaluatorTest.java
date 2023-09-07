@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
-import mondrian.olap.DoubleLiteralImpl;
+import mondrian.olap.NumericLiteralImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,7 +89,7 @@ class TopCountNativeEvaluatorTest {
 
         Exp[] arguments = new Exp[] {
             new TypeWrapperExp(new EmptyType()),
-            DoubleLiteralImpl.create(BigDecimal.ONE)
+            NumericLiteralImpl.create(BigDecimal.ONE)
         };
 
         assertNull(

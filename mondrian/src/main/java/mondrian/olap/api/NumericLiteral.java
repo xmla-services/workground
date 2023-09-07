@@ -13,6 +13,10 @@
  */
 package mondrian.olap.api;
 
-public interface DoubleLiteral extends Literal{
+import java.math.BigDecimal;
+
+public interface NumericLiteral extends Literal<BigDecimal> {
+
+	int getIntValue();
 
 }

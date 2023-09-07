@@ -13,9 +13,8 @@
  */
 package mondrian.olap.api;
 
-public non-sealed interface Literal extends QueryPart {
+public non-sealed interface Literal<R> extends QueryPart {
 
-    Object getValue();
+	R getValue();
 
-    int getIntValue();
 }

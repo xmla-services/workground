@@ -13,24 +13,52 @@
  */
 package mondrian.olap;
 
+import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
+
+import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.api.SymbolLiteral;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.SymbolType;
+import mondrian.olap.type.Type;
 
 public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements SymbolLiteral {
 
-    private SymbolLiteralImpl(int type, String o) {
-        super(type, o);
-    }
+	private SymbolLiteralImpl(String o) {
+		super(o);
+	}
 
-    /**
-     * Creates a symbol.
-     */
-    public static AbstractLiteralImpl<String> create(String s) {
-        return new SymbolLiteralImpl(Category.SYMBOL, s);
-    }
+	public static AbstractLiteralImpl<String> create(String s) {
+		return new SymbolLiteralImpl(s);
+	}
 
-    @Override
-    public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Object accept(MdxVisitor visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public int getCategory() {
+		return Category.SYMBOL;
+	}
+
+	@Override
+	public Type getType() {
+		return new SymbolType();
+	}
+
+	@Override
+	public void unparse(PrintWriter pw) {
+		pw.print(getValue());
+	}
+
+	@Override
+	public Calc<String> accept(ExpCompiler compiler) {
+
+		// why is this not a symbolType?
+		return new ConstantStringCalc(new StringType(), getValue());
+	}
 }

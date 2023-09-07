@@ -778,13 +778,13 @@ AbstractLiteralImpl numericLiteral() :
 }
 {
     <DECIMAL_NUMERIC_LITERAL> {
-        return DoubleLiteralImpl.create(new BigDecimal(token.image));
+        return NumericLiteralImpl.create(new BigDecimal(token.image));
     }
 |   <UNSIGNED_INTEGER_LITERAL> {
-        return DoubleLiteralImpl.create(new BigDecimal(token.image));
+        return NumericLiteralImpl.create(new BigDecimal(token.image));
     }
 |   <APPROX_NUMERIC_LITERAL> {
-        return DoubleLiteralImpl.create(new BigDecimal(token.image));
+        return NumericLiteralImpl.create(new BigDecimal(token.image));
     }
 }
 

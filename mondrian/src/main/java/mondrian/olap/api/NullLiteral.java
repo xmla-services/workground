@@ -13,6 +13,6 @@
  */
 package mondrian.olap.api;
 
-public interface NullLiteral extends Literal{
+public interface NullLiteral extends Literal<Object> {
 
 }

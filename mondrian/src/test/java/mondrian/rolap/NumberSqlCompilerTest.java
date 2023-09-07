@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
-import mondrian.olap.DoubleLiteralImpl;
+import mondrian.olap.NumericLiteralImpl;
 import mondrian.olap.StringLiteralImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterAll;
@@ -75,7 +75,7 @@ class NumberSqlCompilerTest {
 
     @Test
     void testAcceptsNumeric() {
-        Exp exp = DoubleLiteralImpl.create(BigDecimal.ONE);
+        Exp exp = NumericLiteralImpl.create(BigDecimal.ONE);
         assertNotNull(compiler.compile(exp));
     }
 

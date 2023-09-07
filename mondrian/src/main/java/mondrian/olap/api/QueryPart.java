@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 public sealed interface QueryPart permits
     CalculatedFormula,
     CellProperty,
-        DimensionExpression,
+    DimensionExpression,
     DmvQuery,
     DrillThrough,
     Explain,
@@ -26,7 +26,7 @@ public sealed interface QueryPart permits
     HierarchyExpression,
     Id,
     LevelExpression,
-    Literal,
+    Literal<?>,
     MemberProperty,
     NamedSetExpression,
     ParameterExpression,
