@@ -16,15 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mondrian.olap.api.DimensionExpr;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.DimensionExpression;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -184,10 +184,10 @@ public class RolapNativeSql {
         @Override
 		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
-            if (!(exp instanceof MemberExpr)) {
+            if (!(exp instanceof MemberExpression)) {
                 return null;
             }
-            final Member member = ((MemberExpr) exp).getMember();
+            final Member member = ((MemberExpression) exp).getMember();
             if (!(member instanceof RolapStoredMeasure measure)) {
                 return null;
             }
@@ -295,16 +295,16 @@ public class RolapNativeSql {
             // Must be a dimension, a hierarchy or a level.
             final RolapCubeDimension dimension;
             final Exp dimExpr = ((ResolvedFunCallImpl)currMemberExpr).getArg(0);
-            if (dimExpr instanceof DimensionExpr) {
+            if (dimExpr instanceof DimensionExpression) {
                 dimension =
                     (RolapCubeDimension) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
-            } else if (dimExpr instanceof HierarchyExprImpl) {
+            } else if (dimExpr instanceof HierarchyExpressionImpl) {
                 final RolapCubeHierarchy hierarchy =
                     (RolapCubeHierarchy) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
                 dimension = (RolapCubeDimension) hierarchy.getDimension();
-            } else if (dimExpr instanceof LevelExpr) {
+            } else if (dimExpr instanceof LevelExpression) {
                 final RolapCubeLevel level =
                     (RolapCubeLevel) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
@@ -397,10 +397,10 @@ public class RolapNativeSql {
         @Override
 		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
-            if (!(exp instanceof MemberExpr)) {
+            if (!(exp instanceof MemberExpression)) {
                 return null;
             }
-            final Member member = ((MemberExpr) exp).getMember();
+            final Member member = ((MemberExpression) exp).getMember();
             if (!(member instanceof RolapCalculatedMember)) {
                 return null;
             }

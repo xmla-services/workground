@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -26,7 +26,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -151,9 +151,9 @@ class ExtractFunDef extends FunDefBase {
         for (int i = 1; i < args.length; i++) {
             Exp arg = args[i];
             Hierarchy extractedHierarchy = null;
-            if (arg instanceof HierarchyExprImpl hierarchyExpr) {
+            if (arg instanceof HierarchyExpressionImpl hierarchyExpr) {
                 extractedHierarchy = hierarchyExpr.getHierarchy();
-            } else if (arg instanceof DimensionExpr dimensionExpr) {
+            } else if (arg instanceof DimensionExpression dimensionExpr) {
                 extractedHierarchy =
                     dimensionExpr.getDimension().getHierarchy();
             }

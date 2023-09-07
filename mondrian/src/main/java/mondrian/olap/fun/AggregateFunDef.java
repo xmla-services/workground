@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -80,7 +80,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
     }
 
     private Member getMember(Exp exp) {
-        if (exp instanceof MemberExpr memberExpr) {
+        if (exp instanceof MemberExpression memberExpr) {
             Member m = memberExpr.getMember();
             if (m.isMeasure() && !m.isCalculated()) {
                 return m;

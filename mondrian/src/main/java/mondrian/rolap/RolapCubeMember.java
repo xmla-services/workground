@@ -14,7 +14,7 @@ import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.MatchType;
@@ -240,10 +240,10 @@ public class RolapCubeMember
         Exp exp = member.getExpression();
         if (exp instanceof ResolvedFunCallImpl fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
-                if (fcall.getArg(i) instanceof HierarchyExprImpl expr && expr.getHierarchy().equals(
+                if (fcall.getArg(i) instanceof HierarchyExpressionImpl expr && expr.getHierarchy().equals(
                     member.getHierarchy())) {
                     fcall.getArgs()[i] =
-                        new HierarchyExprImpl(this.getHierarchy());
+                        new HierarchyExpressionImpl(this.getHierarchy());
                 }
             }
         }

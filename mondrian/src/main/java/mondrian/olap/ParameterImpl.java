@@ -14,7 +14,7 @@ package mondrian.olap;
 import java.util.List;
 
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -95,7 +95,7 @@ public class ParameterImpl
 
             // make sure caller called convert first
             assert !(value instanceof List && !(value instanceof TupleList));
-            assert !(value instanceof MemberExpr);
+            assert !(value instanceof MemberExpression);
             assert !(value instanceof Literal);
         }
     };
@@ -245,8 +245,8 @@ public class ParameterImpl
         if (value instanceof List list && !(value instanceof TupleList)) {
             return TupleCollections.asTupleList(list);
         }
-        if (value instanceof MemberExpr) {
-            return ((MemberExpr) value).getMember();
+        if (value instanceof MemberExpression) {
+            return ((MemberExpression) value).getMember();
         }
         if (value instanceof Literal) {
             return ((Literal) value).getValue();

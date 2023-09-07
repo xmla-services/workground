@@ -25,7 +25,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
@@ -74,7 +74,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
     }
 
     private Member getMember(Exp exp) {
-        if (exp instanceof MemberExpr memberExpr) {
+        if (exp instanceof MemberExpression memberExpr) {
             Member m = memberExpr.getMember();
             if (m.isMeasure() && !m.isCalculated()) {
                 return m;

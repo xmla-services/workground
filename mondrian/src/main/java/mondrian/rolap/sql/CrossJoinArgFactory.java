@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.MemberExpression;
+import mondrian.olap.api.NamedSetExpression;
 import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -153,7 +153,7 @@ public class CrossJoinArgFactory {
         Exp exp,
         final boolean returnAny)
     {
-        if (exp instanceof NamedSetExpr namedSetExpr) {
+        if (exp instanceof NamedSetExpression namedSetExpr) {
             NamedSet namedSet = namedSetExpr.getNamedSet();
             exp = namedSet.getExp();
         }
@@ -235,7 +235,7 @@ public class CrossJoinArgFactory {
     }
 
     private boolean isConstrainedMeasure(Exp arg) {
-        if (!(arg instanceof MemberExpr memberExpr
+        if (!(arg instanceof MemberExpression memberExpr
             && memberExpr.getMember().isMeasure()))
         {
             if (arg instanceof ResolvedFunCallImpl call && (call.getFunDef() instanceof SetFunDef
@@ -245,7 +245,7 @@ public class CrossJoinArgFactory {
             }
             return false;
         }
-        Member member = ((MemberExpr) arg).getMember();
+        Member member = ((MemberExpression) arg).getMember();
         if (member instanceof RolapCalculatedMember rolapCalculatedMember) {
             Exp calcExp =
                 rolapCalculatedMember.getFormula().getExpression();
@@ -278,7 +278,7 @@ public class CrossJoinArgFactory {
                 } else {
                     members = new ArrayList<>();
                 }
-                members.add((RolapMember) ((MemberExpr) tupleArg).getMember());
+                members.add((RolapMember) ((MemberExpression) tupleArg).getMember());
                 memberLists.put(dimension, members);
             } else if (isConstrainedMeasure(tupleArg)) {
                 addConstrainingMembersToMap(tupleArg, memberLists);
@@ -287,7 +287,7 @@ public class CrossJoinArgFactory {
     }
 
     private Exp[] getCalculatedTupleArgs(Exp arg) {
-        if (arg instanceof MemberExpr memberExpr) {
+        if (arg instanceof MemberExpression memberExpr) {
             Member member = memberExpr.getMember();
             if (member instanceof RolapCalculatedMember rolapCalculatedMember) {
                 Exp formulaExp =
@@ -343,7 +343,7 @@ public class CrossJoinArgFactory {
     private int countNonLiteralMeasures(Exp[] length) {
         int count = 0;
         for (Exp exp : length) {
-            if (exp instanceof MemberExpr memberExpr) {
+            if (exp instanceof MemberExpression memberExpr) {
                 Exp calcExp = memberExpr.getMember().getExpression();
                 if (!(calcExp instanceof Literal)) {
                     count++;
@@ -476,10 +476,10 @@ public class CrossJoinArgFactory {
 
         List<RolapMember> memberList = new ArrayList<>();
         for (Exp arg : args) {
-            if (!(arg instanceof MemberExpr)) {
+            if (!(arg instanceof MemberExpression)) {
                 return null;
             }
-            final Member member = ((MemberExpr) arg).getMember();
+            final Member member = ((MemberExpression) arg).getMember();
             if (member.isCalculated()
                 && !member.isParentChildLeaf())
             {
@@ -521,10 +521,10 @@ public class CrossJoinArgFactory {
         }
 
         // Note: <Dimension>.Children is not recognized as a native expression.
-        if (!(args[0] instanceof MemberExpr)) {
+        if (!(args[0] instanceof MemberExpression)) {
             return null;
         }
-        RolapMember member = (RolapMember) ((MemberExpr) args[0]).getMember();
+        RolapMember member = (RolapMember) ((MemberExpression) args[0]).getMember();
         if (member.isCalculated()) {
             return null;
         }
@@ -574,10 +574,10 @@ public class CrossJoinArgFactory {
         if (args.length != 1) {
             return null;
         }
-        if (!(args[0] instanceof LevelExpr)) {
+        if (!(args[0] instanceof LevelExpression)) {
             return null;
         }
-        RolapLevel level = (RolapLevel) ((LevelExpr) args[0]).getLevel();
+        RolapLevel level = (RolapLevel) ((LevelExpression) args[0]).getLevel();
         if (!level.isSimple()) {
             return null;
         }
@@ -641,16 +641,16 @@ public class CrossJoinArgFactory {
         if (args.length != 2) {
             return null;
         }
-        if (!(args[0] instanceof MemberExpr)) {
+        if (!(args[0] instanceof MemberExpression)) {
             return null;
         }
-        RolapMember member = (RolapMember) ((MemberExpr) args[0]).getMember();
+        RolapMember member = (RolapMember) ((MemberExpression) args[0]).getMember();
         if (member.isCalculated()) {
             return null;
         }
         RolapLevel level = null;
-        if ((args[1] instanceof LevelExpr)) {
-            level = (RolapLevel) ((LevelExpr) args[1]).getLevel();
+        if ((args[1] instanceof LevelExpression)) {
+            level = (RolapLevel) ((LevelExpression) args[1]).getLevel();
         } else if (args[1] instanceof Literal descendantsDepth) {
             RolapLevel[] levels = (RolapLevel[])
                 member.getHierarchy().getLevels();
@@ -917,7 +917,7 @@ public class CrossJoinArgFactory {
 
         if (useIs) {
             // IS operator
-            if (!(predSecondArg instanceof MemberExpr)) {
+            if (!(predSecondArg instanceof MemberExpression)) {
                 return null;
             }
 
@@ -927,7 +927,7 @@ public class CrossJoinArgFactory {
             predSecondArgList = new Exp[]{predSecondArg};
         } else {
             // IN operator
-            if (predSecondArg instanceof NamedSetExpr namedSetExpr) {
+            if (predSecondArg instanceof NamedSetExpression namedSetExpr) {
                 NamedSet namedSet =
                     namedSetExpr.getNamedSet();
                 predSecondArg = namedSet.getExp();
@@ -991,7 +991,7 @@ public class CrossJoinArgFactory {
         Arrays.asList("LastChild", "FirstChild", "Lag");
 
     private boolean allArgsCheapToExpand(Exp exp) {
-        while (exp instanceof NamedSetExpr namedSetExpr) {
+        while (exp instanceof NamedSetExpression namedSetExpr) {
             exp = namedSetExpr.getNamedSet().getExp();
         }
         for (Exp arg : ((ResolvedFunCallImpl) exp).getArgs()) {
@@ -999,7 +999,7 @@ public class CrossJoinArgFactory {
                 if (!cheapFuns.contains(resolvedFunCall.getFunName())) {
                     return false;
                 }
-            } else if (!(arg instanceof MemberExpr)) {
+            } else if (!(arg instanceof MemberExpression)) {
                 return false;
             }
         }
@@ -1009,6 +1009,6 @@ public class CrossJoinArgFactory {
     private boolean isSet(Exp exp) {
         return ((exp instanceof ResolvedFunCallImpl resolvedFunCall)
             && resolvedFunCall.getFunName().equals("{}"))
-            || (exp instanceof NamedSetExpr);
+            || (exp instanceof NamedSetExpression);
     }
 }

@@ -14,13 +14,13 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.LiteralImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.NamedSetExpr;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.NamedSetExpression;
+import mondrian.olap.api.ParameterExpression;
 
 /**
  * Interface for a visitor to an MDX parse tree.
@@ -79,44 +79,44 @@ public interface MdxVisitor {
     /**
      * Visits a Parameter.
      *
-     * @see ParameterExpr)
+     * @see ParameterExpression )
      */
-    Object visit(ParameterExpr parameterExpr);
+    Object visit(ParameterExpression parameterExpr);
 
     /**
      * Visits a DimensionExpr.
      *
-     * @see DimensionExpr(MdxVisitor)
+     * @see DimensionExpression (MdxVisitor)
      */
-    Object visit(DimensionExpr dimensionExpr);
+    Object visit(DimensionExpression dimensionExpr);
 
     /**
      * Visits a HierarchyExpr.
      *
-     * @see HierarchyExprImpl#accept(MdxVisitor)
+     * @see HierarchyExpressionImpl#accept(MdxVisitor)
      */
-    Object visit(HierarchyExprImpl hierarchyExpr);
+    Object visit(HierarchyExpressionImpl hierarchyExpr);
 
     /**
      * Visits a LevelExpr.
      *
-     * @see LevelExpr(MdxVisitor)
+     * @see LevelExpression (MdxVisitor)
      */
-    Object visit(LevelExpr levelExpr);
+    Object visit(LevelExpression levelExpr);
 
     /**
      * Visits a MemberExpr.
      *
-     * @see MemberExprImpl#accept(MdxVisitor)
+     * @see MemberExpressionImpl#accept(MdxVisitor)
      */
-    Object visit(MemberExprImpl memberExpr);
+    Object visit(MemberExpressionImpl memberExpr);
 
     /**
      * Visits a NamedSetExpr.
      *
-     * @see NamedSetExpr)
+     * @see NamedSetExpression )
      */
-    Object visit(NamedSetExpr namedSetExpr);
+    Object visit(NamedSetExpression namedSetExpr);
 
     /**
      * Visits a Literal.

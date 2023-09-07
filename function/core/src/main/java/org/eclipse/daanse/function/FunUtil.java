@@ -20,18 +20,17 @@ import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.api.DimensionExpr;
-import mondrian.olap.api.HierarchyExpr;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.DimensionExpression;
+import mondrian.olap.api.HierarchyExpression;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.api.Segment;
@@ -1529,14 +1528,14 @@ public class FunUtil extends Util {
         final Exp arg0 = args[ 0 ];
         switch ( cat0 ) {
           case Category.DIMENSION, Category.HIERARCHY:
-            if ( arg0 instanceof DimensionExpr dimensionExpr
+            if ( arg0 instanceof DimensionExpression dimensionExpr
               && dimensionExpr.getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
           case Category.MEMBER:
-            if ( arg0 instanceof MemberExpr memberExpr
+            if ( arg0 instanceof MemberExpression memberExpr
               && memberExpr.getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
@@ -1825,10 +1824,10 @@ public class FunUtil extends Util {
     }
     // Member, hierarchy, level, or dimension expression is not worth
     // caching.
-    if ( exp instanceof MemberExpr
-      || exp instanceof LevelExpr
-      || exp instanceof HierarchyExpr
-      || exp instanceof DimensionExpr ) {
+    if ( exp instanceof MemberExpression
+      || exp instanceof LevelExpression
+      || exp instanceof HierarchyExpression
+      || exp instanceof DimensionExpression) {
       return false;
     }
     if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {

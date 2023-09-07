@@ -13,9 +13,9 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -23,8 +23,8 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.LevelExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.DimensionType;
@@ -144,9 +144,9 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
 
     private static Exp normalizeSlicerExpression(Exp exp) {
         Exp slicer = exp;
-        if (slicer instanceof LevelExpr
-            || slicer instanceof HierarchyExprImpl
-            || slicer instanceof DimensionExpr)
+        if (slicer instanceof LevelExpression
+            || slicer instanceof HierarchyExpressionImpl
+            || slicer instanceof DimensionExpression)
         {
             slicer = new UnresolvedFunCallImpl(
                 "DefaultMember", Syntax.Property, new Exp[] {
@@ -298,7 +298,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                 exp,
                 new UnresolvedFunCallImpl(
                     "Members", Syntax.Property, new Exp[] {
-                        new LevelExprImpl(level)})});
+                        new LevelExpressionImpl(level)})});
     }
 
     void setSubtotalVisibility(boolean bShowSubtotals) {

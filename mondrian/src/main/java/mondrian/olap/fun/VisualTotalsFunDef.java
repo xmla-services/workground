@@ -21,7 +21,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -193,7 +193,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             Exp[] memberExprs = new Exp[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
-                memberExprs[i] = new MemberExprImpl(childMember);
+                memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
                 "Aggregate",
@@ -306,7 +306,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             Exp[] memberExprs = new Exp[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
-                memberExprs[i] = new MemberExprImpl(childMember);
+                memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
                 "Aggregate",

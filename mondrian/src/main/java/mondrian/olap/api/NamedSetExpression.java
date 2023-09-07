@@ -13,9 +13,12 @@
  */
 package mondrian.olap.api;
 
-import mondrian.olap.Parameter;
+import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
-public non-sealed interface ParameterExpr extends QueryPart {
+public non-sealed interface NamedSetExpression extends QueryPart {
 
-    Parameter getParameter();
+    NamedSet getNamedSet();
+
+    Evaluator.NamedSetEvaluator getEval(Evaluator evaluator);
 }

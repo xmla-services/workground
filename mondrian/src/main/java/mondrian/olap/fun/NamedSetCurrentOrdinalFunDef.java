@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
@@ -42,7 +42,7 @@ public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
 	public Exp createCall(Validator validator, Exp[] args) {
         assert args.length == 1;
         final Exp arg0 = args[0];
-        if (!(arg0 instanceof NamedSetExpr)) {
+        if (!(arg0 instanceof NamedSetExpression)) {
             throw MondrianResource.instance().NotANamedSet.ex();
         }
         return super.createCall(validator, args);
@@ -51,8 +51,8 @@ public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
     @Override
 	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
         final Exp arg0 = call.getArg(0);
-        assert arg0 instanceof NamedSetExpr : "checked this in createCall";
-        final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;
+        assert arg0 instanceof NamedSetExpression : "checked this in createCall";
+        final NamedSetExpression namedSetExpr = (NamedSetExpression) arg0;
         return new AbstractProfilingNestedIntegerCalc(call.getType(), new Calc[0]) {
             @Override
 			public Integer evaluate(Evaluator evaluator) {

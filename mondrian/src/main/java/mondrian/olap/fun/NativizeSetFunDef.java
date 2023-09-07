@@ -31,10 +31,10 @@ import java.util.Set;
 
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.LevelExpression;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.MemberProperty;
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -58,9 +58,9 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.LevelExprImpl;
+import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -427,11 +427,11 @@ public class NativizeSetFunDef extends FunDefBase {
         private Exp getOriginalExp(final Query query) {
             originalExp.accept(
                 new TransformFromFormulasVisitor(query, compiler));
-            if (originalExp instanceof NamedSetExpr) {
+            if (originalExp instanceof NamedSetExpression) {
                 //named sets get their evaluator cached in RolapResult.
                 //We do not want to use the cached evaluator, so pass along the
                 //expression instead.
-                return ((NamedSetExpr) originalExp).getNamedSet().getExp();
+                return ((NamedSetExpression) originalExp).getNamedSet().getExp();
             }
             return originalExp;
         }
@@ -519,8 +519,8 @@ public class NativizeSetFunDef extends FunDefBase {
         @Override
         public Object visit(ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
-                if (call.getArg(0) instanceof LevelExprImpl) {
-                    Level level = ((LevelExpr) call.getArg(0)).getLevel();
+                if (call.getArg(0) instanceof LevelExpressionImpl) {
+                    Level level = ((LevelExpression) call.getArg(0)).getLevel();
                     substitutionMap.put(NativizeSetFunDef.createMemberId(level), level);
                     dimensions.add(level.getDimension());
                 }
@@ -537,7 +537,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExprImpl member) {
+        public Object visit(MemberExpressionImpl member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
@@ -653,7 +653,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private Object replaceLevelMembersReferences(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("replaceLevelMembersReferences " + call);
-            Level level = ((LevelExpr) call.getArg(0)).getLevel();
+            Level level = ((LevelExpression) call.getArg(0)).getLevel();
             Id setId = NativizeSetFunDef.createSetId(level);
             Formula formula = query.findFormula(setId.toString());
             Exp exp = Util.createExpr(formula.getNamedSet());
@@ -710,10 +710,10 @@ public class NativizeSetFunDef extends FunDefBase {
                 Exp curr = args.get(i);
                 if (prev.toString().equals(curr.toString())) {
                     OlapElement element = null;
-                    if (curr instanceof NamedSetExpr) {
-                        element = ((NamedSetExpr) curr).getNamedSet();
-                    } else if (curr instanceof MemberExpr) {
-                        element = ((MemberExpr) curr).getMember();
+                    if (curr instanceof NamedSetExpression) {
+                        element = ((NamedSetExpression) curr).getNamedSet();
+                    } else if (curr instanceof MemberExpression) {
+                        element = ((MemberExpression) curr).getMember();
                     }
                     if (element != null) {
                         Level level = element.getHierarchy().getLevels()[0];
@@ -748,7 +748,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(NamedSetExpr namedSetExpr) {
+        public Object visit(NamedSetExpression namedSetExpr) {
             String exprName = namedSetExpr.getNamedSet().getName();
             Exp membersExpr;
 

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -671,7 +671,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         // Extract the list of members
         expandSetFromCalculatedMember( evaluator, member, expandedSet );
       }
-    } else if ( expression instanceof MemberExpr memberExpr) {
+    } else if ( expression instanceof MemberExpression memberExpr) {
       expandedSet.addMember( memberExpr.getMember() );
     } else {
       expandedSet.addMember( member );
@@ -716,7 +716,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       }
     }
 
-    return  expression instanceof MemberExpr;
+    return  expression instanceof MemberExpression;
   }
 
   public static void expandSetFromCalculatedMember( Evaluator evaluator, Member member,

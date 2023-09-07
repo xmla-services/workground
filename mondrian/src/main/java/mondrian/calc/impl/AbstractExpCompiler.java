@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
@@ -732,7 +732,7 @@ public class AbstractExpCompiler implements ExpCompiler {
 
             // make sure caller called convert first
             assert (!(value instanceof List) || (value instanceof TupleList));
-            if (value instanceof Literal || value instanceof MemberExpr) {
+            if (value instanceof Literal || value instanceof MemberExpression) {
                 throw new IllegalArgumentException("value should not be Literal or MemberExpr");
             }
         }
