@@ -117,7 +117,7 @@ public class IdImpl
             if (s.getQuoting() == Quoting.UNQUOTED) {
                 NameSegmentImpl nameSegment = (NameSegmentImpl) s;
                 if (validator.getFunTable().isReserved(nameSegment.getName())) {
-                    return LiteralImpl.createSymbol(
+                    return SymbolLiteralImpl.create(
                         nameSegment.getName().toUpperCase());
                 }
             }

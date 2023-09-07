@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import mondrian.olap.SymbolLiteralImpl;
 import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -62,7 +63,6 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.LiteralImpl;
 import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -600,7 +600,7 @@ public class AbstractExpCompiler implements ExpCompiler {
                                 Syntax.Cast,
                                 new Exp[] {
                                         defaultExp,
-                                        LiteralImpl.createSymbol(
+                                    SymbolLiteralImpl.create(
                                                 Category.instance.getName(
                                                         TypeUtil.typeToCategory(type)))});
                 defaultExp = getValidator().validate(defaultExp, true);
