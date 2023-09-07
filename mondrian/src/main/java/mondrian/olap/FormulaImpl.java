@@ -524,7 +524,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                     formatString = new StringBuilder(formatString).append("0").toString();
                 }
             }
-            return LiteralImpl.createString(formatString);
+            return StringLiteralImpl.create(formatString);
         }
 
         if (!mdxMember.isMeasure()) {

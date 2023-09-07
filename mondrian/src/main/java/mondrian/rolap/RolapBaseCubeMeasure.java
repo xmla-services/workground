@@ -11,11 +11,11 @@ package mondrian.rolap;
 
 import java.util.Map;
 
+import mondrian.olap.StringLiteralImpl;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
-import mondrian.olap.LiteralImpl;
 import mondrian.olap.Property;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
@@ -109,7 +109,7 @@ public class RolapBaseCubeMeasure
         }
         setProperty(
             Property.FORMAT_EXP_PARSED.name,
-            LiteralImpl.createString(formatString));
+            StringLiteralImpl.create(formatString));
         setProperty(
             Property.FORMAT_EXP.name,
             formatString);

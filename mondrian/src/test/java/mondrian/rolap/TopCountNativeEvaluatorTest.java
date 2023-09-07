@@ -18,13 +18,13 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
+import mondrian.olap.DoubleLiteralImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.LiteralImpl;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.test.PropertySaver5;
@@ -89,7 +89,7 @@ class TopCountNativeEvaluatorTest {
 
         Exp[] arguments = new Exp[] {
             new TypeWrapperExp(new EmptyType()),
-            LiteralImpl.create(BigDecimal.ONE)
+            DoubleLiteralImpl.create(BigDecimal.ONE)
         };
 
         assertNull(

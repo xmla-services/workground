@@ -16,11 +16,15 @@ package org.eclipse.daanse.query.base;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellPropertyImpl;
+import mondrian.olap.DoubleLiteralImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
+import mondrian.olap.NullLiteralImpl;
 import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.StringLiteralImpl;
 import mondrian.olap.SubcubeImpl;
+import mondrian.olap.SymbolLiteralImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
@@ -274,16 +278,16 @@ public class QueryUtil {
 
     static Exp getExpByLiteral(Literal literal) {
         if (literal instanceof NumericLiteral numericLiteral) {
-            return mondrian.olap.LiteralImpl.create(numericLiteral.value());
+            return DoubleLiteralImpl.create(numericLiteral.value());
         }
         if (literal instanceof StringLiteral stringLiteral) {
-            return mondrian.olap.LiteralImpl.createString(stringLiteral.value());
+            return StringLiteralImpl.create(stringLiteral.value());
         }
         if (literal instanceof NullLiteral) {
-            return mondrian.olap.LiteralImpl.nullValue;
+            return NullLiteralImpl.nullValue;
         }
         if (literal instanceof SymbolLiteral symbolLiteral) {
-            return mondrian.olap.LiteralImpl.createSymbol(symbolLiteral.value());
+            return SymbolLiteralImpl.create(symbolLiteral.value());
         }
         return null;
     }

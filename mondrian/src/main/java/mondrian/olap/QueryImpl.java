@@ -1987,8 +1987,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // TODO: Don't assume it's a string.
                 // TODO: Create expression which will get the value from the
                 //  statement at the time the query is executed.
-                LiteralImpl defaultValue =
-                    LiteralImpl.createString(String.valueOf(value));
+                AbstractLiteralImpl defaultValue =
+                    StringLiteralImpl.create(String.valueOf(value));
                 return new ConnectionParameterImpl(name, defaultValue);
             }
 
@@ -2059,7 +2059,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     private static class ConnectionParameterImpl
         extends ParameterImpl
     {
-        public ConnectionParameterImpl(String name, LiteralImpl defaultValue) {
+        public ConnectionParameterImpl(String name, AbstractLiteralImpl defaultValue) {
             super(name, defaultValue, "Connection property", new StringType());
         }
 
@@ -2379,7 +2379,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 // Create a temporary parameter. We don't know its
                 // type yet. The default of NULL is temporary.
                 Parameter parameter = new ParameterImpl(
-                    parameterName, LiteralImpl.nullValue, null, type);
+                    parameterName, NullLiteralImpl.nullValue, null, type);
                 parameters.add(parameter);
                 parametersByName.put(parameterName, parameter);
             }
