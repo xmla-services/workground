@@ -13,27 +13,11 @@
  */
 package org.eclipse.daanse.query.base;
 
-import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.AxisOrdinal;
-import mondrian.olap.CellPropertyImpl;
-import mondrian.olap.DoubleLiteralImpl;
-import mondrian.olap.Exp;
-import mondrian.olap.FormulaImpl;
-import mondrian.olap.IdImpl;
-import mondrian.olap.NullLiteralImpl;
-import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.StringLiteralImpl;
-import mondrian.olap.SubcubeImpl;
-import mondrian.olap.SymbolLiteralImpl;
-import mondrian.olap.Syntax;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
-import mondrian.olap.api.Subcube;
-import mondrian.olap.api.SubtotalVisibility;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
@@ -61,9 +45,27 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import mondrian.mdx.UnresolvedFunCallImpl;
+import mondrian.olap.AxisOrdinal;
+import mondrian.olap.CellPropertyImpl;
+import mondrian.olap.DoubleLiteralImpl;
+import mondrian.olap.Exp;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.IdImpl;
+import mondrian.olap.NullLiteralImpl;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.StringLiteralImpl;
+import mondrian.olap.SubcubeImpl;
+import mondrian.olap.SymbolLiteralImpl;
+import mondrian.olap.Syntax;
+import mondrian.olap.api.CellProperty;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
+import mondrian.olap.api.Subcube;
+import mondrian.olap.api.SubtotalVisibility;
 
 public class QueryUtil {
 
@@ -89,7 +91,7 @@ public class QueryUtil {
         return columns;
     }
 
-    static List<QueryPart> getParameterList(Optional<SelectCellPropertyListClause> selectCellPropertyListClauseOptional) {
+    static List<CellProperty> getParameterList(Optional<SelectCellPropertyListClause> selectCellPropertyListClauseOptional) {
         if (selectCellPropertyListClauseOptional.isPresent()) {
             SelectCellPropertyListClause selectCellPropertyListClause = selectCellPropertyListClauseOptional.get();
             if (selectCellPropertyListClause.properties() != null) {

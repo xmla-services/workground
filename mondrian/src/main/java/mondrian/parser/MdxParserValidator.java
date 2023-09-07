@@ -13,18 +13,18 @@ package mondrian.parser;
 
 import java.util.List;
 
-import mondrian.olap.api.CalculatedFormula;
-import mondrian.olap.api.Command;
-import mondrian.olap.api.DmvQuery;
-import mondrian.olap.api.DrillThrough;
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.FunTable;
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.UpdateImpl;
+import mondrian.olap.api.CalculatedFormula;
+import mondrian.olap.api.CellProperty;
+import mondrian.olap.api.Command;
+import mondrian.olap.api.DmvQuery;
+import mondrian.olap.api.DrillThrough;
 import mondrian.olap.api.Explain;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Query;
+import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
 import mondrian.olap.api.Refresh;
 import mondrian.olap.api.Subcube;
@@ -72,7 +72,7 @@ public interface MdxParserValidator {
             QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
-            QueryPart[] cellProps,
+            CellProperty[] cellProps,
             boolean strictValidation);
 
         /**

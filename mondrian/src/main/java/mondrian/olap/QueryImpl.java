@@ -141,7 +141,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     /**
      * Cell properties. Not currently used.
      */
-    private final QueryPart[] cellProps;
+    private final CellProperty[] cellProperties;
 
     /**
      * Cube this query belongs to.
@@ -209,7 +209,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
    * Creates a Query.
    */
   public QueryImpl(Statement statement, Formula[] formulas, QueryAxis[] axes, String cubeName, QueryAxis slicerAxis,
-               QueryPart[] cellProps, boolean strictValidation ) {
+               CellProperty[] cellProps, boolean strictValidation ) {
       this(
               statement,
               Util.lookupCube( statement.getSchemaReader(), cubeName, true ),
@@ -223,7 +223,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
   }
 
   public QueryImpl(Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
-                   QueryPart[] cellProps, boolean strictValidation ) {
+                   CellProperty[] cellProps, boolean strictValidation ) {
     this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, subcube, axes, slicerAxis, cellProps,
         new Parameter[0], strictValidation );
   }
@@ -236,8 +236,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             Cube mdxCube,
             Formula[] formulas,
             QueryAxis[] axes,
-            QueryAxisImpl slicerAxis,
-            QueryPart[] cellProps,
+            QueryAxis slicerAxis,
+            CellProperty[] cellProps,
             Parameter[] parameters,
             boolean strictValidation)
     {
@@ -261,7 +261,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         Subcube subcube,
         QueryAxis[] axes,
         QueryAxis slicerAxis,
-        QueryPart[] cellProps,
+        CellProperty[] cellProps,
         Parameter[] parameters,
         boolean strictValidation)
     {
@@ -272,7 +272,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         this.axes = axes;
         normalizeAxes();
         this.slicerAxis = slicerAxis;
-        this.cellProps = cellProps;
+        this.cellProperties = cellProps;
         this.parameters.addAll(Arrays.asList(parameters));
         this.measuresMembers = new HashSet<>();
         // assume, for now, that cross joins on virtual cubes can be
@@ -308,7 +308,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             query.subcube,
             QueryAxisImpl.cloneArray(query.axes),
             (query.slicerAxis == null) ? null : new QueryAxisImpl(query.slicerAxis),
-            query.cellProps,
+            query.cellProperties,
             query.parameters.toArray(new Parameter[query.parameters.size()]),
             query.strictValidation);
     }
@@ -328,14 +328,14 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
   public QueryPart[] getCellProperties() {
-        return this.cellProps;
+        return this.cellProperties;
     }
 
     /**
      * Checks whether the property name is present in the query.
      */
     public boolean hasCellProperty(String propertyName) {
-        for (QueryPart cellProp : cellProps) {
+        for (QueryPart cellProp : cellProperties) {
             if (((CellProperty)cellProp).isNameEquals(propertyName)) {
                 return true;
             }
@@ -347,7 +347,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * Checks whether any cell property present in the query
      */
     public boolean isCellPropertyEmpty() {
-        return cellProps.length == 0;
+        return cellProperties.length == 0;
     }
 
     /**

@@ -2393,15 +2393,19 @@ public class CmdRunner {
         out.println(buf.toString());
     }
 
+    private static final String[][] commentDelimDefault = {
+            new String[] {"//", null},
+            new String[] {"--", null},
+            new String[] {"/*", "*/"}
+        };
     /**
      * Set the default comment delimiters for CmdRunner.  These defaults are
      * # to end of line
      * plus all the comment delimiters in Scanner.
      */
     private static void setDefaultCommentState() {
-        allowNestedComments = mondrian.olap.Scanner.getNestedCommentsState();
-        String[][] scannerCommentsDelimiters =
-            mondrian.olap.Scanner.getCommentDelimiters();
+        allowNestedComments =true;
+        String[][] scannerCommentsDelimiters = commentDelimDefault;
         commentDelim = new String[scannerCommentsDelimiters.length + 1][2];
         commentStartChars = new char[scannerCommentsDelimiters.length + 1];
 
