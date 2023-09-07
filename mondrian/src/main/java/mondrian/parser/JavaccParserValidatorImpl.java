@@ -10,9 +10,9 @@
 package mondrian.parser;
 
 import mondrian.olap.Exp;
+import mondrian.olap.FactoryImpl;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Parser;
 import mondrian.olap.Util;
 import mondrian.olap.api.QueryPart;
 import mondrian.server.Statement;
@@ -30,7 +30,7 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
      * Creates a JavaccParserValidatorImpl.
      */
     public JavaccParserValidatorImpl() {
-        this(new Parser.FactoryImpl());
+        this(new FactoryImpl());
     }
 
     /**

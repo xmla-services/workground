@@ -13,6 +13,25 @@
  */
 package org.eclipse.daanse.query.base;
 
+import static org.eclipse.daanse.query.base.QueryUtil.getColumns;
+import static org.eclipse.daanse.query.base.QueryUtil.getFormulaList;
+import static org.eclipse.daanse.query.base.QueryUtil.getName;
+import static org.eclipse.daanse.query.base.QueryUtil.getParameterList;
+import static org.eclipse.daanse.query.base.QueryUtil.getQueryAxis;
+import static org.eclipse.daanse.query.base.QueryUtil.getQueryAxisList;
+import static org.eclipse.daanse.query.base.QueryUtil.getSubcube;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.query.api.QueryProvider;
+
 import mondrian.olap.DmvQueryImpl;
 import mondrian.olap.DrillThroughImpl;
 import mondrian.olap.Exp;
@@ -20,6 +39,7 @@ import mondrian.olap.ExplainImpl;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.RefreshImpl;
+import mondrian.olap.api.CellProperty;
 import mondrian.olap.api.DmvQuery;
 import mondrian.olap.api.DrillThrough;
 import mondrian.olap.api.Explain;
@@ -29,24 +49,6 @@ import mondrian.olap.api.QueryPart;
 import mondrian.olap.api.Refresh;
 import mondrian.olap.api.Subcube;
 import mondrian.server.Statement;
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
-import org.eclipse.daanse.query.api.QueryProvider;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.eclipse.daanse.query.base.QueryUtil.getColumns;
-import static org.eclipse.daanse.query.base.QueryUtil.getFormulaList;
-import static org.eclipse.daanse.query.base.QueryUtil.getName;
-import static org.eclipse.daanse.query.base.QueryUtil.getParameterList;
-import static org.eclipse.daanse.query.base.QueryUtil.getQueryAxis;
-import static org.eclipse.daanse.query.base.QueryUtil.getQueryAxisList;
-import static org.eclipse.daanse.query.base.QueryUtil.getSubcube;
 
 public class QueryProviderImpl implements QueryProvider {
 
@@ -114,7 +116,7 @@ public class QueryProviderImpl implements QueryProvider {
         List<Formula> formulaList = getFormulaList(selectStatement.selectWithClauses());
         List<QueryAxisImpl> axesList = getQueryAxisList(selectStatement.selectQueryClause());
         QueryAxisImpl slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
-        List<QueryPart> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
+        List<CellProperty> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
 
         return new QueryImpl(
             statement,
@@ -122,7 +124,7 @@ public class QueryProviderImpl implements QueryProvider {
             axesList.toArray(QueryAxisImpl[]::new),
             subcube,
             slicerAxis,
-            cellProps.toArray(QueryPart[]::new),
+            cellProps.toArray(CellProperty[]::new),
             strictValidation);
     }
 

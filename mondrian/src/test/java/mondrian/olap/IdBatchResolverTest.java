@@ -28,13 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Subcube;
-import mondrian.olap.api.SubtotalVisibility;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -51,6 +44,14 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
+import mondrian.olap.api.CellProperty;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.Id;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.QueryAxis;
+import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Subcube;
+import mondrian.olap.api.SubtotalVisibility;
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
 import mondrian.rolap.RolapConnection;
@@ -462,7 +463,7 @@ class IdBatchResolverTest  {
 
     public IdBatchResolver makeTestBatchResolver(TestingContext context,String mdx) {
     	TestUtil.flushSchemaCache(context.createConnection());
-        Parser.FactoryImpl factoryImpl = new FactoryImplTestWrapper();
+        FactoryImpl factoryImpl = new FactoryImplTestWrapper();
         MdxParserValidator parser = new JavaccParserValidatorImpl(factoryImpl);
 
         RolapConnection conn = (RolapConnection) spy(
@@ -486,7 +487,7 @@ class IdBatchResolverTest  {
             QueryAxis[] axes,
             String cube,
             QueryAxisImpl slicerAxis,
-            QueryPart[] cellProps,
+            CellProperty[] cellProps,
             boolean strictValidation)
         {
             super(
@@ -523,7 +524,7 @@ class IdBatchResolverTest  {
         }
     }
 
-    class FactoryImplTestWrapper extends Parser.FactoryImpl {
+    class FactoryImplTestWrapper extends FactoryImpl {
 
         @Override
         public QueryImpl makeQuery(
@@ -532,7 +533,7 @@ class IdBatchResolverTest  {
             QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
-            QueryPart[] cellProps,
+            CellProperty[] cellProps,
             boolean strictValidation)
         {
             final QueryAxisImpl slicerAxis =
