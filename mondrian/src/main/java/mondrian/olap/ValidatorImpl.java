@@ -52,7 +52,7 @@ abstract class ValidatorImpl implements Validator {
     private final FunTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
         new HashMap<>();
-    private static final QueryPart placeHolder = ZeroLiteralImpl.zero;
+    private static final QueryPart placeHolder = NumericLiteralImpl.zero;
 
     /**
      * Creates a ValidatorImpl.

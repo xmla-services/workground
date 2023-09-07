@@ -13,26 +13,53 @@
  */
 package mondrian.olap;
 
+import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
+
+import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.api.StringLiteral;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 
 public class StringLiteralImpl extends AbstractLiteralImpl<String> implements StringLiteral {
 
-    private StringLiteralImpl(int type, String o) {
-        super(type, o);
-    }
+	protected StringLiteralImpl(String text) {
+		super(text);
+	}
 
-    /**
-     * Creates a string literal.
-     */
-    public static AbstractLiteralImpl create(String s) {
-        return (s.equals(""))
-            ? EmptyStringLiteralImpl.emptyString
-            : new StringLiteralImpl(Category.STRING, s);
-    }
+	/**
+	 * Creates a string literal.
+	 */
+	public static StringLiteralImpl create(String text) {
+		return ("".equals(text)) ? EmptyStringLiteralImpl.emptyString : new StringLiteralImpl(text);
+	}
 
-    @Override
-    public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Object accept(MdxVisitor visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public int getCategory() {
+		return Category.STRING;
+	}
+
+	@Override
+	public Type getType() {
+		return new StringType();
+	}
+
+	@Override
+	public void unparse(PrintWriter pw) {
+		pw.print(Util.quoteForMdx(getValue()));
+	}
+
+	@Override
+	public Calc<String> accept(ExpCompiler compiler) {
+		return new ConstantStringCalc(new StringType(), getValue());
+	}
+
 }

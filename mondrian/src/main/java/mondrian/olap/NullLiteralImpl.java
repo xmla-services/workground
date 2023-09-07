@@ -13,19 +13,50 @@
  */
 package mondrian.olap;
 
+import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
+
+import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.api.NullLiteral;
+import mondrian.olap.type.NullType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 
-public class NullLiteralImpl extends AbstractLiteralImpl implements NullLiteral {
+public class NullLiteralImpl extends AbstractLiteralImpl<Object> implements NullLiteral {
 
-    public static final NullLiteralImpl nullValue = new NullLiteralImpl(Category.NULL, null);
+	public static final NullLiteralImpl nullValue = new NullLiteralImpl();
 
-    private NullLiteralImpl(int type, String o) {
-        super(type, o);
-    }
+	private NullLiteralImpl() {
+		super(null);
+	}
 
-    @Override
-    public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
-    }
+	@Override
+	public Object accept(MdxVisitor visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public int getCategory() {
+		return Category.NULL;
+	}
+
+	@Override
+	public Type getType() {
+		return new NullType();
+	}
+
+	@Override
+	public Calc<?> accept(ExpCompiler compiler) {
+
+		return new ConstantStringCalc(new StringType(), null);
+	}
+
+	@Override
+	public void unparse(PrintWriter pw) {
+		pw.print("NULL");
+	}
+
 }

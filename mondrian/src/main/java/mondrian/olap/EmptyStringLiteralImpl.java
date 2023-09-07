@@ -16,12 +16,12 @@ package mondrian.olap;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.api.EmptyStringLiteral;
 
-public class EmptyStringLiteralImpl extends AbstractLiteralImpl<String> implements EmptyStringLiteral {
+public class EmptyStringLiteralImpl extends StringLiteralImpl implements EmptyStringLiteral {
 
-    public static final EmptyStringLiteralImpl emptyString = new EmptyStringLiteralImpl(Category.STRING, "");
+    public static final EmptyStringLiteralImpl emptyString = new EmptyStringLiteralImpl();
 
-    private EmptyStringLiteralImpl(int type, String o) {
-        super(type, o);
+    private EmptyStringLiteralImpl() {
+        super("");
     }
 
     @Override

@@ -13,6 +13,6 @@
  */
 package mondrian.olap.api;
 
-public interface EmptyStringLiteral extends Literal{
+public interface EmptyStringLiteral extends StringLiteral{
 
 }

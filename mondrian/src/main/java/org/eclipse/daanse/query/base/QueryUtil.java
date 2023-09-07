@@ -48,7 +48,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellPropertyImpl;
-import mondrian.olap.DoubleLiteralImpl;
+import mondrian.olap.NumericLiteralImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
@@ -280,7 +280,7 @@ public class QueryUtil {
 
     static Exp getExpByLiteral(Literal literal) {
         if (literal instanceof NumericLiteral numericLiteral) {
-            return DoubleLiteralImpl.create(numericLiteral.value());
+            return NumericLiteralImpl.create(numericLiteral.value());
         }
         if (literal instanceof StringLiteral stringLiteral) {
             return StringLiteralImpl.create(stringLiteral.value());

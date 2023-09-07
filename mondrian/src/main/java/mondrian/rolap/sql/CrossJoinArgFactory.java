@@ -25,6 +25,7 @@ import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
 import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.NamedSetExpression;
+import mondrian.olap.api.NumericLiteral;
 import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -651,7 +652,7 @@ public class CrossJoinArgFactory {
         RolapLevel level = null;
         if ((args[1] instanceof LevelExpression)) {
             level = (RolapLevel) ((LevelExpression) args[1]).getLevel();
-        } else if (args[1] instanceof Literal descendantsDepth) {
+        } else if (args[1] instanceof NumericLiteral descendantsDepth) {
             RolapLevel[] levels = (RolapLevel[])
                 member.getHierarchy().getLevels();
             int currentDepth = member.getDepth();

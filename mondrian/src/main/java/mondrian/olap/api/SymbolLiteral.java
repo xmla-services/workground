@@ -13,6 +13,6 @@
  */
 package mondrian.olap.api;
 
-public interface SymbolLiteral extends Literal{
+public interface SymbolLiteral extends Literal<String>{
 
 }
