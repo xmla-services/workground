@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -198,7 +198,7 @@ public class SqlContextConstraint
         Set<RolapCube> baseCubes,
         List<RolapCube> baseCubeList)
     {
-        if (exp instanceof MemberExpr memberExpr) {
+        if (exp instanceof MemberExpression memberExpr) {
             Member member = memberExpr.getMember();
             if (member instanceof RolapStoredMeasure rolapStoredMeasure) {
                 addMeasure(

@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.HierarchyExpr;
+import mondrian.olap.api.HierarchyExpression;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
@@ -29,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class HierarchyExprImpl extends ExpBase implements Exp, HierarchyExpr {
+public class HierarchyExpressionImpl extends ExpBase implements Exp, HierarchyExpression {
     private final Hierarchy hierarchy;
 
     /**
@@ -38,7 +38,7 @@ public class HierarchyExprImpl extends ExpBase implements Exp, HierarchyExpr {
      * @param hierarchy Hierarchy
      * @pre hierarchy != null
      */
-    public HierarchyExprImpl(Hierarchy hierarchy) {
+    public HierarchyExpressionImpl(Hierarchy hierarchy) {
         Util.assertPrecondition(hierarchy != null, "hierarchy != null");
         this.hierarchy = hierarchy;
     }
@@ -63,8 +63,8 @@ public class HierarchyExprImpl extends ExpBase implements Exp, HierarchyExpr {
     }
 
     @Override
-	public HierarchyExprImpl cloneExp() {
-        return new HierarchyExprImpl(hierarchy);
+	public HierarchyExpressionImpl cloneExp() {
+        return new HierarchyExpressionImpl(hierarchy);
     }
 
     @Override

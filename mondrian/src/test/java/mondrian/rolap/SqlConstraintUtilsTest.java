@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -48,7 +48,7 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractTupleCursor;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
@@ -170,7 +170,7 @@ class SqlConstraintUtilsTest {
     }
 
     private Exp makeSupportedExpressionForCalculatedMember() {
-        Exp memberExpr = new MemberExprImpl(Mockito.mock(Member.class));
+        Exp memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             true,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -203,7 +203,7 @@ class SqlConstraintUtilsTest {
     }
 
     private Member makeMemberExprMember(Member resultMember) {
-        Exp memberExp = new MemberExprImpl(resultMember);
+        Exp memberExp = new MemberExpressionImpl(resultMember);
         Member member = Mockito.mock(Member.class);
         Mockito.doReturn(true).when(member).isCalculated();
         Mockito.doReturn(memberExp).when(member).getExpression();
@@ -217,7 +217,7 @@ class SqlConstraintUtilsTest {
         Mockito.doReturn(true).when(member).isCalculated();
 
         Member aggregatedMember0 = Mockito.mock(Member.class);
-        Exp aggregateArg0 = new MemberExprImpl(aggregatedMember0);
+        Exp aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
 
         FunDef dummy = Mockito.mock(FunDef.class);
         Mockito.doReturn(Syntax.Function).when(dummy).getSyntax();
@@ -251,7 +251,7 @@ class SqlConstraintUtilsTest {
         Mockito.doReturn("mock[" + toString + "]").when(member).toString();
         Mockito.doReturn(true).when(member).isCalculated();
 
-        Exp parenthesesArg = new MemberExprImpl(parenthesesInnerMember);
+        Exp parenthesesArg = new MemberExpressionImpl(parenthesesInnerMember);
 
         FunDef funDef = new ParenthesesFunDef(Category.MEMBER);
         Exp[] args = new Exp[]{parenthesesArg};
@@ -275,7 +275,7 @@ class SqlConstraintUtilsTest {
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(null),
             "null expression");
 
-        Exp memberExpr = new MemberExprImpl(Mockito.mock(Member.class));
+        Exp memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             true,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -291,7 +291,7 @@ class SqlConstraintUtilsTest {
         // ResolvedFunCall arguments
         final Exp argUnsupported = new ResolvedFunCallImpl(
             new NullFunDef(), new Exp[]{}, new NullType());
-        final Exp argSupported = new MemberExprImpl(Mockito.mock(Member.class));
+        final Exp argSupported = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -404,7 +404,7 @@ class SqlConstraintUtilsTest {
         final QueryImpl query = connection.parseQuery(queryText);
         final QueryAxis querySlicerAxis = query.getSlicerAxis();
         final Member slicerMember =
-            ((MemberExpr)querySlicerAxis.getSet()).getMember();
+            ((MemberExpression)querySlicerAxis.getSet()).getMember();
         final RolapHierarchy slicerHierarchy =
             ((RolapCube)query.getCube()).getTimeHierarchy(null);
 
@@ -626,7 +626,7 @@ class SqlConstraintUtilsTest {
       final QueryImpl query = connection.parseQuery(queryText);
       final QueryAxis querySlicerAxis = query.getSlicerAxis();
       final Member slicerMember =
-          ((MemberExpr)querySlicerAxis.getSet()).getMember();
+          ((MemberExpression)querySlicerAxis.getSet()).getMember();
       final RolapHierarchy slicerHierarchy =
           ((RolapCube)query.getCube()).getTimeHierarchy(null);
 

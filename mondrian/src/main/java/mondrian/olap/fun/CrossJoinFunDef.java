@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.api.Formula;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.Query;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -665,7 +665,7 @@ public Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler ) 
     }
 
     @Override
-	public Object visit( ParameterExpr parameterExpr ) {
+	public Object visit( ParameterExpression parameterExpr ) {
       final Parameter parameter = parameterExpr.getParameter();
       final Type type = parameter.getType();
       if ( type instanceof mondrian.olap.type.MemberType ) {
@@ -679,7 +679,7 @@ public Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler ) 
     }
 
     @Override
-	public Object visit( MemberExprImpl memberExpr ) {
+	public Object visit( MemberExpressionImpl memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;

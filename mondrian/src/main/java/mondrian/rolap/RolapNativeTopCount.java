@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.Exp;
@@ -129,7 +129,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
         }
 
         private boolean deduceNullability(Exp expr) {
-            if (!(expr instanceof MemberExpr memberExpr)) {
+            if (!(expr instanceof MemberExpression memberExpr)) {
                 return true;
             }
             if (!(memberExpr.getMember() instanceof RolapStoredMeasure)) {

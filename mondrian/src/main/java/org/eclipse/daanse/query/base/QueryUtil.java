@@ -1,39 +1,35 @@
-package org.eclipse.daanse.query;
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+package org.eclipse.daanse.query.base;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellPropertyImpl;
-import mondrian.olap.DmvQueryImpl;
-import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.api.DmvQuery;
-import mondrian.olap.api.DrillThrough;
 import mondrian.olap.Exp;
-import mondrian.olap.ExplainImpl;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
-import mondrian.olap.api.Explain;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.SubcubeImpl;
+import mondrian.olap.Syntax;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Query;
-import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.api.QueryPart;
-import mondrian.olap.RefreshImpl;
-import mondrian.olap.SubcubeImpl;
-import mondrian.olap.Syntax;
 import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Refresh;
 import mondrian.olap.api.Segment;
 import mondrian.olap.api.Subcube;
 import mondrian.olap.api.SubtotalVisibility;
-import mondrian.server.Statement;
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
@@ -65,53 +61,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class QueryProviderImpl implements QueryProvider {
+public class QueryUtil {
 
-    public QueryPart createQuery(MdxStatement mdxStatement) {
-
-        if (mdxStatement instanceof SelectStatement selectStatement) {
-            return selectStatementToQuery(selectStatement);
-        }
-        if (mdxStatement instanceof DrillthroughStatement drillthroughStatement) {
-            return drillthroughStatementToQuery(drillthroughStatement);
-        }
-        if (mdxStatement instanceof ExplainStatement explainStatement) {
-            return explainStatementToQuery(explainStatement);
-        }
-        if (mdxStatement instanceof DMVStatement dmvStatement) {
-            return dmvStatementToQuery(dmvStatement);
-        }
-        if (mdxStatement instanceof RefreshStatement refreshStatement) {
-            return refreshStatementToQuery(refreshStatement);
-        }
-        return null;
+    private QueryUtil() {
+        // constructor
     }
 
-    private Refresh refreshStatementToQuery(RefreshStatement refreshStatement) {
-        getName(refreshStatement.cubeName());
-        return new RefreshImpl(getName(refreshStatement.cubeName()));
-    }
-
-    private DmvQuery dmvStatementToQuery(DMVStatement dmvStatement) {
-        String tableName = getName(dmvStatement.table());
-        List<String> columns = new ArrayList<>();
-        if (dmvStatement.columns() != null) {
-            dmvStatement.columns().forEach(c -> columns.addAll(getColumns(c.objectIdentifiers())));
-        }
-        Exp whereExpression = null;
-        return new DmvQueryImpl(tableName,
-            columns,
-            whereExpression);
-    }
-
-    private List<String> getColumns(List<? extends ObjectIdentifier> objectIdentifiers) {
+    static List<String> getColumns(List<? extends ObjectIdentifier> objectIdentifiers) {
         List<String> columns = new ArrayList<>();
         if (objectIdentifiers != null) {
             objectIdentifiers.forEach(oi -> {
                 if (oi instanceof KeyObjectIdentifier keyObjectIdentifier){
                     List<? extends NameObjectIdentifier> l = keyObjectIdentifier.nameObjectIdentifiers();
                     if (l != null) {
-                        l.forEach(this::getName);
+                        l.forEach(QueryUtil::getName);
                     }
                 }
                 if (oi instanceof NameObjectIdentifier nameObjectIdentifier){
@@ -122,40 +85,7 @@ public class QueryProviderImpl implements QueryProvider {
         return columns;
     }
 
-    private Explain explainStatementToQuery(ExplainStatement explainStatement) {
-        QueryPart queryPart = createQuery(explainStatement.mdxStatement());
-        return new ExplainImpl(queryPart);
-    }
-
-    private DrillThrough drillthroughStatementToQuery(DrillthroughStatement drillthroughStatement) {
-        Query query = selectStatementToQuery(drillthroughStatement.selectStatement());
-        List<Exp> returnList = List.of();
-        return new DrillThroughImpl(query,
-            drillthroughStatement.maxRows().orElse(0),
-            drillthroughStatement.firstRowSet().orElse(0),
-            returnList);
-    }
-
-    private Query selectStatementToQuery(SelectStatement selectStatement) {
-        Statement statement = null;
-        boolean strictValidation = false;
-        Subcube subcube = getSubcube(selectStatement.selectSubcubeClause());
-        List<Formula> formulaList = getFormulaList(selectStatement.selectWithClauses());
-        List<QueryAxisImpl> axesList = getQueryAxisList(selectStatement.selectQueryClause());
-        QueryAxisImpl slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
-        List<QueryPart> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
-
-        return new QueryImpl(
-            statement,
-            formulaList.toArray(Formula[]::new),
-            axesList.toArray(QueryAxisImpl[]::new),
-            subcube,
-            slicerAxis,
-            cellProps.toArray(QueryPart[]::new),
-            strictValidation);
-    }
-
-    private List<QueryPart> getParameterList(Optional<SelectCellPropertyListClause> selectCellPropertyListClauseOptional) {
+    static List<QueryPart> getParameterList(Optional<SelectCellPropertyListClause> selectCellPropertyListClauseOptional) {
         if (selectCellPropertyListClauseOptional.isPresent()) {
             SelectCellPropertyListClause selectCellPropertyListClause = selectCellPropertyListClauseOptional.get();
             if (selectCellPropertyListClause.properties() != null) {
@@ -167,7 +97,7 @@ public class QueryProviderImpl implements QueryProvider {
         return List.of();
     }
 
-    private QueryAxisImpl getQueryAxis(Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOptional) {
+    static QueryAxisImpl getQueryAxis(Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOptional) {
         if (selectSlicerAxisClauseOptional.isPresent()) {
             SelectSlicerAxisClause selectSlicerAxisClause = selectSlicerAxisClauseOptional.get();
             Expression expression = selectSlicerAxisClause.expression();
@@ -185,7 +115,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private List<QueryAxisImpl> getQueryAxisList(SelectQueryClause selectQueryClause) {
+    static List<QueryAxisImpl> getQueryAxisList(SelectQueryClause selectQueryClause) {
         if (selectQueryClause instanceof SelectQueryAsteriskClause) {
             return selectQueryAsteriskClauseToQueryAxisList();
         }
@@ -198,19 +128,19 @@ public class QueryProviderImpl implements QueryProvider {
         return List.of();
     }
 
-    private List<QueryAxisImpl> selectQueryEmptyClauseToQueryAxisList() {
+    static List<QueryAxisImpl> selectQueryEmptyClauseToQueryAxisList() {
         return List.of();
     }
 
-    private List<QueryAxisImpl> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
+    static List<QueryAxisImpl> selectQueryAxesClauseToQueryAxisList(SelectQueryAxesClause selectQueryAxesClause) {
         if (selectQueryAxesClause.selectQueryAxisClauses() != null) {
             return selectQueryAxesClause.selectQueryAxisClauses().stream()
-                .map(this::selectQueryAxisClauseToQueryAxisList).toList();
+                .map(QueryUtil::selectQueryAxisClauseToQueryAxisList).toList();
         }
         return List.of();
     }
 
-    private QueryAxisImpl selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
+    static QueryAxisImpl selectQueryAxisClauseToQueryAxisList(SelectQueryAxisClause selectQueryAxisClause) {
         Exp exp = getExp(selectQueryAxisClause.expression());
         AxisOrdinal axisOrdinal = getAxisOrdinal(selectQueryAxisClause.axis());
         List<IdImpl> dimensionProperties =
@@ -225,23 +155,23 @@ public class QueryProviderImpl implements QueryProvider {
         );
     }
 
-    private List<IdImpl> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
+    static List<IdImpl> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
         if (selectDimensionPropertyListClause.properties() != null) {
             return selectDimensionPropertyListClause.properties().stream()
-                .map(this::getExpByCompoundId).toList();
+                .map(QueryUtil::getExpByCompoundId).toList();
         }
         return List.of();
     }
 
-    private AxisOrdinal getAxisOrdinal(Axis axis) {
+    static AxisOrdinal getAxisOrdinal(Axis axis) {
         return AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(axis.ordinal());
     }
 
-    private List<QueryAxisImpl> selectQueryAsteriskClauseToQueryAxisList() {
+    static List<QueryAxisImpl> selectQueryAsteriskClauseToQueryAxisList() {
         return List.of();
     }
 
-    private Subcube getSubcube(SelectSubcubeClause selectSubcubeClause) {
+    static Subcube getSubcube(SelectSubcubeClause selectSubcubeClause) {
         if (selectSubcubeClause instanceof SelectSubcubeClauseName selectSubcubeClauseName) {
             return getSubcubeBySelectSubcubeClauseName(selectSubcubeClauseName);
         }
@@ -251,7 +181,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
+    static Subcube getSubcubeBySelectSubcubeClauseStatement(SelectSubcubeClauseStatement selectSubcubeClauseStatement) {
         Subcube subcube = getSubcube(selectSubcubeClauseStatement.selectSubcubeClause());
         List<QueryAxisImpl> axes = getQueryAxisList(selectSubcubeClauseStatement.selectQueryClause());
         String cubeName = null;
@@ -259,13 +189,13 @@ public class QueryProviderImpl implements QueryProvider {
         return new SubcubeImpl(cubeName, subcube, axes.stream().toArray(QueryAxisImpl[]::new), slicerAxis);
     }
 
-    private Subcube getSubcubeBySelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName) {
+    static Subcube getSubcubeBySelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName) {
         NameObjectIdentifier nameObjectIdentifier = selectSubcubeClauseName.cubeName();
         String cubeName = getName(nameObjectIdentifier);
         return new SubcubeImpl(cubeName, null, null, null);
     }
 
-    private List<Formula> getFormulaList(List<? extends SelectWithClause> selectWithClauses) {
+    static List<Formula> getFormulaList(List<? extends SelectWithClause> selectWithClauses) {
         List<Formula> formulaList = new ArrayList<>();
         if (selectWithClauses != null) {
             for (SelectWithClause swc : selectWithClauses) {
@@ -284,7 +214,7 @@ public class QueryProviderImpl implements QueryProvider {
         return formulaList;
     }
 
-    private Exp getExp(Expression expression) {
+    static Exp getExp(Expression expression) {
         if (expression instanceof CallExpression callExpression) {
             return getExpByCallExpression(callExpression);
         }
@@ -300,7 +230,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private Exp getExpByObjectIdentifier(ObjectIdentifier objectIdentifier) {
+    static Exp getExpByObjectIdentifier(ObjectIdentifier objectIdentifier) {
         if (objectIdentifier instanceof KeyObjectIdentifier keyObjectIdentifier) {
             return new IdImpl(getExpByKeyObjectIdentifier(keyObjectIdentifier));
         }
@@ -310,7 +240,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
+    static Segment getExpByNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
         switch (nameObjectIdentifier.quoting()) {
             case QUOTED:
                 return new IdImpl.NameSegmentImpl(nameObjectIdentifier.name(), Quoting.QUOTED);
@@ -322,12 +252,12 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private List<Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
+    static List<Segment> getExpByKeyObjectIdentifier(KeyObjectIdentifier keyObjectIdentifier) {
         return keyObjectIdentifier.nameObjectIdentifiers()
-            .stream().map(this::getExpByNameObjectIdentifier).toList();
+            .stream().map(QueryUtil::getExpByNameObjectIdentifier).toList();
     }
 
-    private IdImpl getExpByCompoundId(CompoundId compoundId) {
+    static IdImpl getExpByCompoundId(CompoundId compoundId) {
         List<Segment> list = new ArrayList<>();
         compoundId.objectIdentifiers().forEach(it ->
             {
@@ -342,7 +272,7 @@ public class QueryProviderImpl implements QueryProvider {
         return new IdImpl(list);
     }
 
-    private Exp getExpByLiteral(Literal literal) {
+    static Exp getExpByLiteral(Literal literal) {
         if (literal instanceof NumericLiteral numericLiteral) {
             return mondrian.olap.LiteralImpl.create(numericLiteral.value());
         }
@@ -358,7 +288,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private Exp getExpByCallExpression(CallExpression callExpression) {
+    static Exp getExpByCallExpression(CallExpression callExpression) {
         Exp x;
         Exp y;
         List<Exp> list;
@@ -409,19 +339,19 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private List<Exp> getExpList(List<? extends Expression> expressions) {
+    static List<Exp> getExpList(List<? extends Expression> expressions) {
         if (expressions != null) {
-            return expressions.stream().map(this::getExp).toList();
+            return expressions.stream().map(QueryUtil::getExp).toList();
         }
         return List.of();
     }
 
-    private IdImpl getId(CompoundId compoundId) {
+    static IdImpl getId(CompoundId compoundId) {
         List<Segment> segmentList = getIdSegmentList(compoundId.objectIdentifiers());
         return new IdImpl(segmentList);
     }
 
-    private List<Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
+    static List<Segment> getIdSegmentList(List<? extends ObjectIdentifier> objectIdentifiers) {
         List<Segment> segmentList = new ArrayList<>();
         if (objectIdentifiers != null) {
             for (ObjectIdentifier oi : objectIdentifiers) {
@@ -431,7 +361,7 @@ public class QueryProviderImpl implements QueryProvider {
         return segmentList;
     }
 
-    private Segment getIdSegment(ObjectIdentifier oi) {
+    static Segment getIdSegment(ObjectIdentifier oi) {
         if (oi instanceof KeyObjectIdentifier keyObjectIdentifier) {
             return new IdImpl.KeySegment(getNameSegmentList(keyObjectIdentifier.nameObjectIdentifiers()));
         }
@@ -441,7 +371,7 @@ public class QueryProviderImpl implements QueryProvider {
         return null;
     }
 
-    private List<NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
+    static List<NameSegment> getNameSegmentList(List<? extends NameObjectIdentifier> nameObjectIdentifiers) {
         List<NameSegment> res = new ArrayList<>();
         if (nameObjectIdentifiers != null) {
             for (NameObjectIdentifier noi : nameObjectIdentifiers) {
@@ -451,7 +381,7 @@ public class QueryProviderImpl implements QueryProvider {
         return res;
     }
 
-    private Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
+    static Quoting getQuoting(ObjectIdentifier.Quoting quoting) {
         switch (quoting) {
             case QUOTED:
                 return Quoting.QUOTED;
@@ -464,7 +394,7 @@ public class QueryProviderImpl implements QueryProvider {
         }
     }
 
-    private String getName(NameObjectIdentifier nameObjectIdentifier) {
+    static String getName(NameObjectIdentifier nameObjectIdentifier) {
         switch (nameObjectIdentifier.quoting()) {
             case QUOTED:
                 return quoted(nameObjectIdentifier.name());
@@ -477,14 +407,15 @@ public class QueryProviderImpl implements QueryProvider {
         }
     }
 
-    private String quoted(String name) {
+    static String quoted(String name) {
         StringBuilder sb = new StringBuilder();
         return sb.append("[").append(name).append("]").toString();
     }
 
-    private String key(String name) {
+    static String key(String name) {
         StringBuilder sb = new StringBuilder();
         return sb.append("&").append(name).append("]").toString();
     }
+
 
 }

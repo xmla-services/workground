@@ -18,7 +18,7 @@ import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpression;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.ResolverBase;
@@ -54,7 +54,7 @@ public class AsFunDefResolver extends ResolverBase {
         // with this.
 
         final QueryImpl.ScopedNamedSet scopedNamedSet =
-            (QueryImpl.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
+            (QueryImpl.ScopedNamedSet) ((NamedSetExpression) args[1]).getNamedSet();
         return (FunDef) new AsFunDef(scopedNamedSet);
     }
 

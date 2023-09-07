@@ -13,6 +13,10 @@
  */
 package mondrian.olap.api;
 
-public non-sealed interface WrapExp extends QueryPart {
+import org.eclipse.daanse.olap.api.model.Member;
+
+public non-sealed interface MemberExpression extends QueryPart {
+
+    Member getMember();
 
 }

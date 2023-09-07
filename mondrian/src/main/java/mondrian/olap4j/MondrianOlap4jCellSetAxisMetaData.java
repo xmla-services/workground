@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -83,7 +83,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
                     (UnresolvedFunCallImpl)
                         Util.lookup(
                             cellSetMetaData.query, id.getSegments(), true);
-                Level level = ((LevelExpr) call.getArg(0)).getLevel();
+                Level level = ((LevelExpression) call.getArg(0)).getLevel();
                 olap4jProperty =
                     new MondrianOlap4jProperty(
                         Util.lookupProperty(level, call.getFunName()), level);

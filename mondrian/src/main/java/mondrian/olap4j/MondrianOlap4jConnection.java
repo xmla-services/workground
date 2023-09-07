@@ -30,11 +30,11 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.LevelExpression;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.engine.api.Context;
@@ -92,7 +92,7 @@ import org.olap4j.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
@@ -1107,22 +1107,22 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             if (exp instanceof ResolvedFunCallImpl call) {
                 return toOlap4j(call);
             }
-            if (exp instanceof DimensionExpr dimensionExpr) {
+            if (exp instanceof DimensionExpression dimensionExpr) {
                 return new DimensionNode(
                     null,
                     olap4jConnection.toOlap4j(dimensionExpr.getDimension()));
             }
-            if (exp instanceof HierarchyExprImpl hierarchyExpr) {
+            if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
                 return new HierarchyNode(
                     null,
                     olap4jConnection.toOlap4j(hierarchyExpr.getHierarchy()));
             }
-            if (exp instanceof LevelExpr levelExpr) {
+            if (exp instanceof LevelExpression levelExpr) {
                 return new LevelNode(
                     null,
                     olap4jConnection.toOlap4j(levelExpr.getLevel()));
             }
-            if (exp instanceof MemberExpr memberExpr) {
+            if (exp instanceof MemberExpression memberExpr) {
                 return new MemberNode(
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));

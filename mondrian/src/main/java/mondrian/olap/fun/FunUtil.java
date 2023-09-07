@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.DimensionExpr;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.DimensionExpression;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -43,14 +43,13 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunDef;
-import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
@@ -1513,14 +1512,14 @@ public class FunUtil extends Util {
         final Exp arg0 = args[ 0 ];
         switch ( cat0 ) {
           case Category.DIMENSION, Category.HIERARCHY:
-            if ( arg0 instanceof DimensionExpr dimensionExpr
+            if ( arg0 instanceof DimensionExpression dimensionExpr
               && dimensionExpr.getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
           case Category.MEMBER:
-            if ( arg0 instanceof MemberExpr memberExpr
+            if ( arg0 instanceof MemberExpression memberExpr
               && memberExpr.getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
@@ -1809,10 +1808,10 @@ public class FunUtil extends Util {
     }
     // Member, hierarchy, level, or dimension expression is not worth
     // caching.
-    if ( exp instanceof MemberExpr
-      || exp instanceof LevelExpr
-      || exp instanceof HierarchyExprImpl
-      || exp instanceof DimensionExpr) {
+    if ( exp instanceof MemberExpression
+      || exp instanceof LevelExpression
+      || exp instanceof HierarchyExpressionImpl
+      || exp instanceof DimensionExpression) {
       return false;
     }
     if ( exp instanceof ResolvedFunCallImpl call && call.getFunDef() instanceof SetFunDef) {

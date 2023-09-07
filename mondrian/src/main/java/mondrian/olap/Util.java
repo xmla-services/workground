@@ -85,11 +85,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import mondrian.mdx.ParameterExprImpl;
-import mondrian.olap.api.DimensionExpr;
+import mondrian.mdx.ParameterExpressionImpl;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
-import mondrian.olap.api.LevelExpr;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.LevelExpression;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
@@ -125,11 +125,11 @@ import org.olap4j.mdx.Quoting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExprImpl;
-import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.LevelExprImpl;
-import mondrian.mdx.MemberExprImpl;
-import mondrian.mdx.NamedSetExprImpl;
+import mondrian.mdx.DimensionExpressionImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.LevelExpressionImpl;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.NamedSetExpressionImpl;
 import mondrian.mdx.QueryPrintWriter;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
@@ -835,13 +835,13 @@ public class Util extends XOMUtil {
 
     public static OlapElement lookup(Query q, List<Segment> nameParts) {
         final Exp exp = lookup(q, nameParts, false);
-        if (exp instanceof MemberExpr memberExpr) {
+        if (exp instanceof MemberExpression memberExpr) {
             return memberExpr.getMember();
-        } else if (exp instanceof LevelExpr levelExpr) {
+        } else if (exp instanceof LevelExpression levelExpr) {
             return levelExpr.getLevel();
-        } else if (exp instanceof HierarchyExprImpl hierarchyExpr) {
+        } else if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
             return hierarchyExpr.getHierarchy();
-        } else if (exp instanceof DimensionExpr dimensionExpr) {
+        } else if (exp instanceof DimensionExpression dimensionExpr) {
             return dimensionExpr.getDimension();
         } else {
             throw Util.newInternal("Not an olap element: " + exp);
@@ -1012,15 +1012,15 @@ public class Util extends XOMUtil {
     public static Exp createExpr(OlapElement element)
     {
         if (element instanceof Member member) {
-            return new MemberExprImpl(member);
+            return new MemberExpressionImpl(member);
         } else if (element instanceof Level level) {
-            return new LevelExprImpl(level);
+            return new LevelExpressionImpl(level);
         } else if (element instanceof Hierarchy hierarchy) {
-            return new HierarchyExprImpl(hierarchy);
+            return new HierarchyExpressionImpl(hierarchy);
         } else if (element instanceof Dimension dimension) {
-            return new DimensionExprImpl(dimension);
+            return new DimensionExpressionImpl(dimension);
         } else if (element instanceof NamedSet namedSet) {
-            return new NamedSetExprImpl(namedSet);
+            return new NamedSetExpressionImpl(namedSet);
         } else {
             throw Util.newInternal("Unexpected element type: " + element);
         }
@@ -3050,7 +3050,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public void validate(ParameterExprImpl parameterExpr) {
+			public void validate(ParameterExpressionImpl parameterExpr) {
                 //empty
             }
 

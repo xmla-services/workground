@@ -16,7 +16,7 @@ import mondrian.olap.api.Formula;
 import mondrian.olap.FunTable;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.Parameter;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.SchemaReader;
@@ -54,7 +54,7 @@ public interface Validator {
      *
      * <p>It must resolve to the same object (although sub-objects may change).
      */
-    void validate(ParameterExpr parameterExpr);
+    void validate(ParameterExpression parameterExpr);
 
     /**
      * Validates a child member property.

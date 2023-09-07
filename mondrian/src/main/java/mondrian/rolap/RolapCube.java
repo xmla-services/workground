@@ -95,7 +95,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
@@ -3441,7 +3441,7 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public Object visit(MemberExprImpl memberExpr)
+		public Object visit(MemberExpressionImpl memberExpr)
         {
             Member member = memberExpr.getMember();
             if (member instanceof RolapCalculatedMember calcMember) {

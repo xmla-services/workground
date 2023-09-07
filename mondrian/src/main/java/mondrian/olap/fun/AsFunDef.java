@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
@@ -98,7 +98,7 @@ class AsFunDef extends FunDefBase {
             // with this.
 
             final QueryImpl.ScopedNamedSet scopedNamedSet =
-                (QueryImpl.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
+                (QueryImpl.ScopedNamedSet) ((NamedSetExpression) args[1]).getNamedSet();
             return new AsFunDef(scopedNamedSet);
         }
     }

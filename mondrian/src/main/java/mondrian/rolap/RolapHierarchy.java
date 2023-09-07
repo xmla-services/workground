@@ -65,7 +65,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
@@ -1118,7 +1118,7 @@ public class RolapHierarchy extends HierarchyBase {
             UnresolvedFunCallImpl fc = new UnresolvedFunCallImpl(
                 "$AggregateChildren",
                 Syntax.Internal,
-                new Exp[] {new HierarchyExprImpl(this)});
+                new Exp[] {new HierarchyExpressionImpl(this)});
             Validator validator =
                     Util.createSimpleValidator(BuiltinFunTable.instance());
             aggregateChildrenExpression = fc.accept(validator);

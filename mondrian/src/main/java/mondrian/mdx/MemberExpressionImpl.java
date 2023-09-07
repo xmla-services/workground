@@ -9,10 +9,10 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.LevelExpr;
-import org.eclipse.daanse.olap.api.model.Level;
+import mondrian.olap.api.MemberExpression;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
-import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.Category;
@@ -20,57 +20,61 @@ import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
-import mondrian.olap.type.LevelType;
+import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.model.Level} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.model.Member} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class LevelExprImpl extends ExpBase implements Exp, LevelExpr {
-    private final Level level;
+public class MemberExpressionImpl extends ExpBase implements Exp, MemberExpression {
+    private final Member member;
+    private MemberType type;
 
     /**
-     * Creates a level expression.
+     * Creates a member expression.
      *
-     * @param level Level
-     * @pre level != null
+     * @param member Member
+     * @pre member != null
      */
-    public LevelExprImpl(Level level) {
-        Util.assertPrecondition(level != null, "level != null");
-        this.level = level;
+    public MemberExpressionImpl(Member member) {
+        Util.assertPrecondition(member != null, "member != null");
+        this.member = member;
     }
 
     /**
-     * Returns the level.
+     * Returns the member.
      *
      * @post return != null
      */
     @Override
-    public Level getLevel() {
-        return level;
+    public Member getMember() {
+        return member;
     }
 
     @Override
 	public String toString() {
-        return level.getUniqueName();
+        return member.getUniqueName();
     }
 
     @Override
 	public Type getType() {
-        return LevelType.forLevel(level);
+        if (type == null) {
+            type = MemberType.forMember(member);
+        }
+        return type;
     }
 
     @Override
-	public LevelExprImpl cloneExp() {
-        return new LevelExprImpl(level);
+	public MemberExpressionImpl cloneExp() {
+        return new MemberExpressionImpl(member);
     }
 
     @Override
 	public int getCategory() {
-        return Category.LEVEL;
+        return Category.MEMBER;
     }
 
     @Override
@@ -80,12 +84,11 @@ public class LevelExprImpl extends ExpBase implements Exp, LevelExpr {
 
     @Override
 	public Calc accept(ExpCompiler compiler) {
-        return ConstantLevelCalc.of(level);
+        return ConstantMemberCalc.of(member);
     }
 
     @Override
 	public Object accept(MdxVisitor visitor) {
         return visitor.visit(this);
     }
-
 }
