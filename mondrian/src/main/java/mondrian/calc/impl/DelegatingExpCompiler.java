@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.WrapExp;
+import mondrian.olap.api.WrapExpression;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
@@ -201,17 +201,17 @@ public class DelegatingExpCompiler implements ExpCompiler {
      * @return wrapper expression
      */
     private Exp wrap(Exp e) {
-        return new WrapExpImpl(e, this);
+        return new WrapExpressionImpl(e, this);
     }
 
     /**
      * See {@link mondrian.calc.impl.DelegatingExpCompiler#wrap}.
      */
-    private static class WrapExpImpl extends AbstractQueryPart implements Exp, WrapExp {
+    private static class WrapExpressionImpl extends AbstractQueryPart implements Exp, WrapExpression {
         private final Exp e;
         private final ExpCompiler wrappingCompiler;
 
-        WrapExpImpl(
+        WrapExpressionImpl(
                 Exp e,
                 ExpCompiler wrappingCompiler)
         {

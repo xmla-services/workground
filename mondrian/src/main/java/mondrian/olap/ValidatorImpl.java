@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.mdx.ParameterExprImpl;
+import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.Resolver;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.MemberProperty;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
 import mondrian.olap.type.Type;
@@ -113,16 +113,16 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public void validate(ParameterExprImpl parameterExpr) {
-        ParameterExpr resolved =
-            (ParameterExpr) resolvedNodes.get(parameterExpr);
+	public void validate(ParameterExpressionImpl parameterExpr) {
+        ParameterExpression resolved =
+            (ParameterExpression) resolvedNodes.get(parameterExpr);
         if (resolved != null) {
             return; // already resolved
         }
         try {
             stack.push(parameterExpr);
             resolvedNodes.put(parameterExpr, placeHolder);
-            resolved = (ParameterExpr) parameterExpr.accept(this);
+            resolved = (ParameterExpression) parameterExpr.accept(this);
             assert resolved != null;
             resolvedNodes.put(parameterExpr, resolved);
         } finally {

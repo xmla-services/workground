@@ -13,7 +13,7 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.mdx.ParameterExprImpl;
+import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.fun.Resolver;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.MemberProperty;
@@ -50,7 +50,7 @@ public interface Validator {
      *
      * <p>It must resolve to the same object (although sub-objects may change).
      */
-    void validate(ParameterExprImpl parameterExpr);
+    void validate(ParameterExpressionImpl parameterExpr);
 
     /**
      * Validates a child member property.

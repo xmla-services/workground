@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import java.util.List;
 
-import mondrian.olap.api.NamedSetExpr;
+import mondrian.olap.api.NamedSetExpression;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -34,7 +34,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class NamedSetExprImpl extends ExpBase implements Exp, NamedSetExpr {
+public class NamedSetExpressionImpl extends ExpBase implements Exp, NamedSetExpression {
     private final NamedSet namedSet;
 
     /**
@@ -43,7 +43,7 @@ public class NamedSetExprImpl extends ExpBase implements Exp, NamedSetExpr {
      * @param namedSet namedSet
      * @pre NamedSet != null
      */
-    public NamedSetExprImpl(NamedSet namedSet) {
+    public NamedSetExpressionImpl(NamedSet namedSet) {
         Util.assertPrecondition(namedSet != null, "namedSet != null");
         this.namedSet = namedSet;
     }
@@ -64,8 +64,8 @@ public class NamedSetExprImpl extends ExpBase implements Exp, NamedSetExpr {
     }
 
     @Override
-	public NamedSetExprImpl cloneExp() {
-        return new NamedSetExprImpl(namedSet);
+	public NamedSetExpressionImpl cloneExp() {
+        return new NamedSetExpressionImpl(namedSet);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class NamedSetExprImpl extends ExpBase implements Exp, NamedSetExpr {
         if (namedSet2 == namedSet) {
             return this;
         }
-        return new NamedSetExprImpl(namedSet2);
+        return new NamedSetExpressionImpl(namedSet2);
     }
 
     @Override

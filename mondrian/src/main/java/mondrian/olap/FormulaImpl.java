@@ -21,7 +21,7 @@ import java.util.Map;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
@@ -35,7 +35,7 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
@@ -612,7 +612,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         }
 
         @Override
-		public Object visit(MemberExprImpl memberExpr) {
+		public Object visit(MemberExpressionImpl memberExpr) {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()
@@ -634,12 +634,12 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
          * This check is required to avoid infinite recursion
          */
         private boolean hasCyclicReference(Exp expr) {
-            List<MemberExpr> expList = new ArrayList<>();
+            List<MemberExpression> expList = new ArrayList<>();
             return hasCyclicReference(expr, expList);
         }
 
-        private boolean hasCyclicReference(Exp expr, List<MemberExpr> expList) {
-            if (expr instanceof MemberExpr memberExpr) {
+        private boolean hasCyclicReference(Exp expr, List<MemberExpression> expList) {
+            if (expr instanceof MemberExpression memberExpr) {
                 if (expList.contains(expr)) {
                     return true;
                 }
@@ -664,7 +664,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             return false;
         }
 
-        private List<MemberExpr> cloneForEachBranch(List<MemberExpr> expList) {
+        private List<MemberExpression> cloneForEachBranch(List<MemberExpression> expList) {
             return new ArrayList<>(expList);
         }
 

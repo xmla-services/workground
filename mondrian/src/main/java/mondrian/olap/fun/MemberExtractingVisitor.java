@@ -14,15 +14,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.mdx.MemberExprImpl;
-import mondrian.olap.api.DimensionExpr;
-import mondrian.olap.api.LevelExpr;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.olap.api.DimensionExpression;
+import mondrian.olap.api.LevelExpression;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
@@ -79,7 +79,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(ParameterExpr parameterExpr) {
+	public Object visit(ParameterExpression parameterExpr) {
         final Parameter parameter = parameterExpr.getParameter();
         final Type type = parameter.getType();
         if (type instanceof mondrian.olap.type.MemberType) {
@@ -96,7 +96,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExprImpl memberExpr) {
+	public Object visit(MemberExpressionImpl memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);
@@ -115,20 +115,20 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(DimensionExpr dimensionExpr) {
+	public Object visit(DimensionExpression dimensionExpr) {
         // add the default hierarchy
         addToDimMemberSet(dimensionExpr.getDimension().getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExprImpl hierarchyExpr) {
+	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
         addToDimMemberSet(hierarchyExpr.getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(LevelExpr levelExpr) {
+	public Object visit(LevelExpression levelExpr) {
         addToDimMemberSet(levelExpr.getLevel().getHierarchy());
         return null;
     }

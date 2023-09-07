@@ -12,13 +12,13 @@ package mondrian.mdx;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.NamedSetExpr;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.NamedSetExpression;
+import mondrian.olap.api.ParameterExpression;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.
@@ -78,36 +78,36 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(ParameterExpr parameterExpr) {
+	public Object visit(ParameterExpression parameterExpr) {
         return null;
     }
 
     @Override
-	public Object visit(DimensionExpr dimensionExpr) {
+	public Object visit(DimensionExpression dimensionExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExprImpl hierarchyExpr) {
+	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(LevelExpr levelExpr) {
+	public Object visit(LevelExpression levelExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(MemberExprImpl memberExpr) {
+	public Object visit(MemberExpressionImpl memberExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(NamedSetExpr namedSetExpr) {
+	public Object visit(NamedSetExpression namedSetExpr) {
         // do nothing
         return null;
     }

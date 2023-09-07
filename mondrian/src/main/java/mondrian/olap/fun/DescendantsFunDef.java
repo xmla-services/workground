@@ -29,7 +29,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -104,7 +104,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
           "CurrentMember",
           Syntax.Property,
           new Exp[] {
-            new HierarchyExprImpl( hierarchy )
+            new HierarchyExpressionImpl( hierarchy )
           } );
       final ResolvedFunCallImpl generateCall =
         (ResolvedFunCallImpl) compiler.getValidator().validate(

@@ -14,15 +14,15 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.olap.api.model.Dimension;
 
-import mondrian.mdx.HierarchyExprImpl;
-import mondrian.mdx.ParameterExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FunCall;
@@ -80,7 +80,7 @@ public class ParameterFunDef extends FunDefBase {
         Parameter parameter = validator.createOrLookupParam(
             this.getName().equals("Parameter"),
             parameterName, type, exp, parameterDescription);
-        return new ParameterExprImpl(parameter);
+        return new ParameterExpressionImpl(parameter);
     }
 
     @Override
@@ -89,15 +89,15 @@ public class ParameterFunDef extends FunDefBase {
     }
 
     private static boolean isConstant(Exp typeArg) {
-        if (typeArg instanceof LevelExpr) {
+        if (typeArg instanceof LevelExpression) {
             // e.g. "[Time].[Quarter]"
             return true;
         }
-        if (typeArg instanceof HierarchyExprImpl) {
+        if (typeArg instanceof HierarchyExpressionImpl) {
             // e.g. "[Time].[By Week]"
             return true;
         }
-        if (typeArg instanceof DimensionExpr) {
+        if (typeArg instanceof DimensionExpression) {
             // e.g. "[Time]"
             return true;
         }
@@ -109,7 +109,7 @@ public class ParameterFunDef extends FunDefBase {
                 FunCall currentMemberCall = (FunCall) hierarchyCall.getArg(0);
                 if (currentMemberCall.getFunName().equals("CurrentMember")
                     && currentMemberCall.getArgCount() > 0
-                    && currentMemberCall.getArg(0) instanceof DimensionExpr)
+                    && currentMemberCall.getArg(0) instanceof DimensionExpression)
                 {
                     return true;
                 }
@@ -151,7 +151,7 @@ public class ParameterFunDef extends FunDefBase {
             } else if (literal.getValue().equals("STRING")) {
                 return new StringType();
             }
-        } else if (args[1] instanceof MemberExpr) {
+        } else if (args[1] instanceof MemberExpression) {
             return new MemberType(null, null, null, null);
         }
         return new StringType();

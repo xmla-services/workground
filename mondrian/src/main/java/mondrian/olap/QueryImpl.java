@@ -24,15 +24,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.mdx.LevelExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.LevelExpressionImpl;
 import mondrian.olap.api.CellProperty;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.NamedSetExpr;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.NamedSetExpression;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
@@ -62,7 +63,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.ParameterFunDef;
@@ -644,7 +645,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
                 org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
                 org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
-                LevelExprImpl levelExpr = new LevelExprImpl(lastLevel);
+                LevelExpressionImpl levelExpr = new LevelExpressionImpl(lastLevel);
                 Exp levelMembers = new UnresolvedFunCallImpl(
                   "AllMembers",
                   Syntax.Property,
@@ -687,7 +688,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
 
                 if(resultExp != null) {
-                    mondrian.mdx.HierarchyExprImpl hierarchyExpr = new mondrian.mdx.HierarchyExprImpl(hierarchy);
+                    HierarchyExpressionImpl hierarchyExpr = new HierarchyExpressionImpl(hierarchy);
                     Exp hierarchyAllMembersExp = new UnresolvedFunCallImpl(
                             "AllMembers",
                             Syntax.Property,
@@ -1384,12 +1385,12 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         Walker walker = new Walker(this);
         while (walker.hasMoreElements()) {
             Object queryElement = walker.nextElement();
-            if (queryElement instanceof MemberExpr memberExpr
+            if (queryElement instanceof MemberExpression memberExpr
                 && memberExpr.getMember().equals(mdxElement))
             {
                 return false;
             }
-            if (queryElement instanceof NamedSetExpr namedSetExpr
+            if (queryElement instanceof NamedSetExpression namedSetExpr
                 && namedSetExpr.getNamedSet().equals(
                     mdxElement))
             {
@@ -2352,7 +2353,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private class ParameterFinder extends MdxVisitorImpl {
         @Override
-		public Object visit(ParameterExpr parameterExpr) {
+		public Object visit(ParameterExpression parameterExpr) {
             Parameter parameter = parameterExpr.getParameter();
             if (!parameters.contains(parameter)) {
                 parameters.add(parameter);
@@ -2442,7 +2443,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                             .getName(),
                         parent,
                         call2.getArg(0));
-                } else if (call2.getArg(1) instanceof NamedSetExpr set) {
+                } else if (call2.getArg(1) instanceof NamedSetExpression set) {
                     createScopedNamedSet(
                         set.getNamedSet().getName(),
                         parent,
@@ -2537,9 +2538,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
     private Exp replaceSubcubeMember(Exp exp) {
-        if(exp instanceof MemberExpr memberExpr) {
+        if(exp instanceof MemberExpression memberExpr) {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
-            return new MemberExprImpl(subcubeMember);
+            return new MemberExpressionImpl(subcubeMember);
         }
         if(exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {

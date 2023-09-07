@@ -13,9 +13,9 @@
  */
 package mondrian.olap.api;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import mondrian.olap.Parameter;
 
-public non-sealed interface LevelExpr extends QueryPart {
+public non-sealed interface ParameterExpression extends QueryPart {
 
-    Level getLevel();
+    Parameter getParameter();
 }

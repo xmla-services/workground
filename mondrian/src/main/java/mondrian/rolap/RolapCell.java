@@ -20,14 +20,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpr;
+import mondrian.olap.api.LevelExpression;
 import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpr;
-import mondrian.olap.api.NamedSetExpr;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.MemberExpression;
+import mondrian.olap.api.NamedSetExpression;
+import mondrian.olap.api.ParameterExpression;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Connection;
@@ -44,9 +44,9 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
@@ -475,10 +475,10 @@ public class RolapCell implements Cell {
         // "with member cm as m" then
         // "cm" is equivalent to "m"
         final Exp expr = member.getExpression();
-        if (expr instanceof MemberExpr) {
+        if (expr instanceof MemberExpression) {
             members.set(
                 i,
-                ((MemberExpr) expr).getMember());
+                ((MemberExpression) expr).getMember());
             return;
         }
         // "Aggregate({m})" is equivalent to "m"
@@ -488,10 +488,10 @@ public class RolapCell implements Cell {
                 if (args[0] instanceof ResolvedFunCallImpl arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
-                            && arg0.getArg(0) instanceof MemberExpr)
+                            && arg0.getArg(0) instanceof MemberExpression)
                         {
-                            final MemberExpr memberExpr =
-                                (MemberExpr) arg0.getArg(0);
+                            final MemberExpression memberExpr =
+                                (MemberExpression) arg0.getArg(0);
                             members.set(i, memberExpr.getMember());
                         }
                     }
@@ -752,7 +752,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(MemberExprImpl memberExpr) {
+		public Object visit(MemberExpressionImpl memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }
@@ -801,7 +801,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(NamedSetExpr namedSetExpr) {
+		public Object visit(NamedSetExpression namedSetExpr) {
             throw Util.newInternal("not valid here: " + namedSetExpr);
         }
 
@@ -836,25 +836,25 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(ParameterExpr parameterExpr) {
+		public Object visit(ParameterExpression parameterExpr) {
             // Not valid in general; might contain complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(DimensionExpr dimensionExpr) {
+		public Object visit(DimensionExpression dimensionExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(HierarchyExprImpl hierarchyExpr) {
+		public Object visit(HierarchyExpressionImpl hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(LevelExpr levelExpr) {
+		public Object visit(LevelExpression levelExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

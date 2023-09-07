@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.DimensionExpr;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.DimensionExpression;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.QueryAxis;
@@ -56,9 +56,9 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
@@ -816,20 +816,20 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( DimensionExpr dimensionExpr ) {
+	public Object visit( DimensionExpression dimensionExpr ) {
       dimension = dimensionExpr.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( HierarchyExprImpl hierarchyExpr ) {
+	public Object visit( HierarchyExpressionImpl hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( MemberExprImpl memberExpr ) {
+	public Object visit( MemberExpressionImpl memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;
@@ -1449,7 +1449,7 @@ public Cell getCell( int[] pos ) {
     } else if ( o instanceof VisualTotalMember member ) {
       Exp exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
-    } else if ( o instanceof Exp exp && !( o instanceof MemberExpr ) ) {
+    } else if ( o instanceof Exp exp && !( o instanceof MemberExpression) ) {
       ResolvedFunCallImpl funCall = (ResolvedFunCallImpl) exp;
       Exp[] exps = funCall.getArgs();
       processMemberExpr( exps, exprMembers );
@@ -1457,7 +1457,7 @@ public Cell getCell( int[] pos ) {
       for ( Exp exp : exps ) {
         processMemberExpr( exp, exprMembers );
       }
-    } else if ( o instanceof MemberExpr memberExp ) {
+    } else if ( o instanceof MemberExpression memberExp ) {
       Member member = memberExp.getMember();
       processMemberExpr( member, exprMembers );
     }

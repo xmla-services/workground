@@ -24,10 +24,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import mondrian.olap.api.DimensionExpr;
+import mondrian.olap.api.DimensionExpression;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.Id;
-import mondrian.olap.api.MemberExpr;
+import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.QueryPart;
@@ -43,7 +43,7 @@ import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.HierarchyExprImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitor;
 
 /**
@@ -338,19 +338,19 @@ public final class IdBatchResolver {
      * For all other Exp returns null.
      */
     private Member getMemberFromExp(Exp exp) {
-        if (exp instanceof DimensionExpr dimensionExpr) {
+        if (exp instanceof DimensionExpression dimensionExpr) {
             Hierarchy hier = dimensionExpr
                 .getDimension().getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof HierarchyExprImpl hierarchyExpr) {
+        } else if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
             Hierarchy hier = hierarchyExpr
                 .getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof MemberExpr memberExpr) {
+        } else if (exp instanceof MemberExpression memberExpr) {
             return memberExpr.getMember();
         }
         return null;

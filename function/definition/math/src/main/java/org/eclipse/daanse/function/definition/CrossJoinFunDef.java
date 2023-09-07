@@ -25,7 +25,7 @@ import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExprImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
@@ -35,7 +35,7 @@ import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.api.Formula;
-import mondrian.olap.api.ParameterExpr;
+import mondrian.olap.api.ParameterExpression;
 import mondrian.olap.api.Query;
 import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.fun.MemberExtractingVisitor;
@@ -665,7 +665,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public Object visit( ParameterExpr parameterExpr ) {
+	public Object visit( ParameterExpression parameterExpr ) {
       final Parameter parameter = parameterExpr.getParameter();
       final Type type = parameter.getType();
       if ( type instanceof MemberType ) {
@@ -679,7 +679,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public Object visit( MemberExprImpl memberExpr ) {
+	public Object visit( MemberExpressionImpl memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;
