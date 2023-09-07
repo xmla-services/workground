@@ -34,12 +34,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.MemberProperty;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -111,11 +105,18 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
+import mondrian.olap.api.CellProperty;
+import mondrian.olap.api.Formula;
+import mondrian.olap.api.MemberProperty;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.QueryPart;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
@@ -3116,7 +3117,7 @@ public class RolapCube extends CubeBase {
                     new Formula[] {formula},
                     new QueryAxisImpl[0],
                     null,
-                    new QueryPart[0],
+                    new CellProperty[0],
                     new Parameter[0],
                     false);
             query.createValidator().validate(formula);
@@ -3140,7 +3141,7 @@ public class RolapCube extends CubeBase {
                             new Formula[] {formula},
                             new QueryAxisImpl[0],
                             null,
-                            new QueryPart[0],
+                            new CellProperty[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);
@@ -3163,7 +3164,7 @@ public class RolapCube extends CubeBase {
                             new Formula[] {formula},
                             new QueryAxisImpl[0],
                             null,
-                            new QueryPart[0],
+                            new CellProperty[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);

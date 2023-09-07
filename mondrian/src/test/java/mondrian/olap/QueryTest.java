@@ -16,6 +16,7 @@ package mondrian.olap;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import mondrian.olap.api.CellProperty;
 import mondrian.olap.api.Formula;
 import mondrian.olap.api.QueryPart;
 import mondrian.olap.api.Segment;
@@ -32,7 +33,7 @@ import mondrian.server.Statement;
  * Query test.
  */
 class QueryTest {
-    private QueryPart[] cellProps = {
+    private CellProperty[] cellProps = {
         new CellPropertyImpl(Segment.toList("Value")),
         new CellPropertyImpl(Segment.toList("Formatted_Value")),
         new CellPropertyImpl(Segment.toList("Format_String")),
@@ -59,7 +60,7 @@ class QueryTest {
             queryWithoutCellProps =
                     new QueryImpl(
                             statement, formulas, axes, "Sales",
-                            null, new QueryPart[0], false);
+                            null, new CellProperty[0], false);
         } finally {
             statement.close();
         }
