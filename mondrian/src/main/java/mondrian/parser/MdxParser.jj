@@ -773,18 +773,18 @@ Exp segmentOrFuncall(Exp left) :
     }
 }
 
-LiteralImpl numericLiteral() :
+AbstractLiteralImpl numericLiteral() :
 {
 }
 {
     <DECIMAL_NUMERIC_LITERAL> {
-        return LiteralImpl.create(new BigDecimal(token.image));
+        return DoubleLiteralImpl.create(new BigDecimal(token.image));
     }
 |   <UNSIGNED_INTEGER_LITERAL> {
-        return LiteralImpl.create(new BigDecimal(token.image));
+        return DoubleLiteralImpl.create(new BigDecimal(token.image));
     }
 |   <APPROX_NUMERIC_LITERAL> {
-        return LiteralImpl.create(new BigDecimal(token.image));
+        return DoubleLiteralImpl.create(new BigDecimal(token.image));
     }
 }
 
@@ -796,16 +796,16 @@ Exp atom() :
 }
 {
     <SINGLE_QUOTED_STRING> {
-        return LiteralImpl.createString(stripQuotes(token.image, "'", "'", "''"));
+        return StringLiteralImpl.create(stripQuotes(token.image, "'", "'", "''"));
     }
 |   <DOUBLE_QUOTED_STRING> {
-        return LiteralImpl.createString(stripQuotes(token.image, DQ, DQ, DQDQ));
+        return StringLiteralImpl.create(stripQuotes(token.image, DQ, DQ, DQDQ));
     }
 |   e = numericLiteral() {
         return e;
     }
 |   <NULL> {
-        return LiteralImpl.nullValue;
+        return NullLiteralImpl.nullValue;
     }
 |   <CAST> <LPAREN> e = unaliasedExpression()
     <AS> segment = nameSegment() <RPAREN>
@@ -813,7 +813,7 @@ Exp atom() :
         return  new UnresolvedFunCallImpl(
             "CAST", Syntax.Cast, new Exp[] {
                 e,
-                LiteralImpl.createSymbol(segment.getName())});
+                SymbolLiteralImpl.create(segment.getName())});
     }
 |   <LPAREN> lis = expList() <RPAREN> {
         // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)

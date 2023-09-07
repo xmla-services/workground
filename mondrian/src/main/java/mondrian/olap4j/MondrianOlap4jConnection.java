@@ -96,7 +96,7 @@ import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.LiteralImpl;
+import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryImpl;
@@ -1127,7 +1127,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));
             }
-            if (exp instanceof LiteralImpl literal) {
+            if (exp instanceof AbstractLiteralImpl literal) {
                 final Object value = literal.getValue();
                 if (literal.getCategory() == Category.SYMBOL) {
                     return LiteralNode.createSymbol(

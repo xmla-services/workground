@@ -939,10 +939,10 @@ factor ::=
 //                             |  <conditional_expression>
 value_expression_primary ::=
         STRING:s {:
-            RESULT = LiteralImpl.createString(s);
+            RESULT = StringLiteralImpl.create(s);
         :}
     |   NUMBER:d {:
-            RESULT = LiteralImpl.create(d);
+            RESULT = DoubleLiteralImpl.create(d);
         :}
     |   identifier:i {:
             RESULT =  new IdImpl(i);
@@ -990,7 +990,7 @@ value_expression_primary ::=
             RESULT =   new UnresolvedFunCallImpl(
                 "CAST", Syntax.Cast, new Exp[] {
                     e,
-                    LiteralImpl.createSymbol(t.getName())});
+                    SymbolLiteralImpl.create(t.getName())});
         :}
     |   LPAREN exp_list:lis RPAREN {:
             // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
@@ -1003,7 +1003,7 @@ value_expression_primary ::=
                 "{}", Syntax.Braces, Parser.toExpArray(lis));
         :}
     |  NULL {:
-            RESULT = LiteralImpl.nullValue;
+            RESULT = NullLiteralImpl.nullValue;
         :}
     |   case_expression
     ;

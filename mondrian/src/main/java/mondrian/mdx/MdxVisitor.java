@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
-import mondrian.olap.LiteralImpl;
+import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.api.DimensionExpression;
@@ -121,7 +121,7 @@ public interface MdxVisitor {
     /**
      * Visits a Literal.
      *
-     * @see LiteralImpl#accept(MdxVisitor)
+     * @see AbstractLiteralImpl#accept(MdxVisitor)
      */
     Object visit(Literal literal);
 }

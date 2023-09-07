@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.NullLiteralImpl;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.engine.api.Context;
@@ -45,8 +46,7 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.IdImpl;
-import mondrian.olap.LiteralImpl;
+import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
@@ -859,7 +859,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         public SystemPropertyParameter(String name, boolean system) {
             super(
                 name,
-                LiteralImpl.nullValue,
+                NullLiteralImpl.nullValue,
                 new StringBuilder("System property '").append(name).append("'").toString(),
                 new StringType());
             this.system = system;
