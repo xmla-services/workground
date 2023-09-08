@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.olap.calc.base.constant;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingConstantCalc;
 

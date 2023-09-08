@@ -15,26 +15,24 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.query.component.StringLiteral;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.api.StringLiteral;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 
 public class StringLiteralImpl extends AbstractLiteralImpl<String> implements StringLiteral {
+    public static final StringLiteralImpl EMPTY_STRING_LITERAL = new StringLiteralImpl("");
 
 	protected StringLiteralImpl(String text) {
 		super(text);
 	}
 
-	/**
-	 * Creates a string literal.
-	 */
 	public static StringLiteralImpl create(String text) {
-		return ("".equals(text)) ? EmptyStringLiteralImpl.emptyString : new StringLiteralImpl(text);
+		return ("".equals(text)) ? EMPTY_STRING_LITERAL : new StringLiteralImpl(text);
 	}
 
 	@Override

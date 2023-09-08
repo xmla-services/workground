@@ -11,11 +11,11 @@
 
 package mondrian.olap;
 
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * <code>Category</code> enumerates the possible expression types.

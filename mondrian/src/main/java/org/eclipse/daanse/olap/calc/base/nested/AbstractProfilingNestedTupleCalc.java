@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.base.nested;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;

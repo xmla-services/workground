@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.api.Id;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.query.component.Id;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import mondrian.mdx.MdxVisitor;

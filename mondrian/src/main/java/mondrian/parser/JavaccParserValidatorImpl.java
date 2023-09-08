@@ -9,12 +9,13 @@
 
 package mondrian.parser;
 
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+
 import mondrian.olap.Exp;
 import mondrian.olap.FactoryImpl;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
-import mondrian.olap.api.QueryPart;
 import mondrian.server.Statement;
 
 /**

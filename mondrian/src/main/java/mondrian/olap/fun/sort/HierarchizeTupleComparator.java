@@ -16,7 +16,7 @@ package mondrian.olap.fun.sort;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * Compares lists of {@link Member}s so as to convert them into hierarchical order. Applies lexicographic order to the

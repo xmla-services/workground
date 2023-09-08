@@ -26,30 +26,31 @@ import java.util.Set;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
-import mondrian.olap.api.CellProperty;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.MemberExpression;
-import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.NamedSetExpression;
-import mondrian.olap.api.ParameterExpression;
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.api.QueryPart;
 import mondrian.olap.api.Segment;
-import mondrian.olap.api.Subcube;
+
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -643,8 +644,8 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
             for(Hierarchy hierarchy : ((RolapCube) getCube()).getHierarchies()) {
 
-                org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
-                org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
+                org.eclipse.daanse.olap.api.element.Level[] levels = hierarchy.getLevels();
+                org.eclipse.daanse.olap.api.element.Level lastLevel = levels[levels.length - 1];
                 LevelExpressionImpl levelExpr = new LevelExpressionImpl(lastLevel);
                 Exp levelMembers = new UnresolvedFunCallImpl(
                   "AllMembers",

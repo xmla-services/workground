@@ -39,7 +39,7 @@ import java.util.Set;
 
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;

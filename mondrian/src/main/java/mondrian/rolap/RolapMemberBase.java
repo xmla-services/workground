@@ -18,12 +18,12 @@ import java.util.Map;
 
 import mondrian.olap.api.NameSegment;
 import org.apache.commons.collections.map.Flat3Map;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
@@ -993,7 +993,7 @@ public class RolapMemberBase
         /**
          * Creates a {@link java.util.Map} to be used for storing
          * property string/value pairs for the specified
-         * {@link org.eclipse.daanse.olap.api.model.Member}.
+         * {@link org.eclipse.daanse.olap.api.element.Member}.
          *
          * @param member Member
          * @return the Map instance to store property/value pairs
@@ -1020,7 +1020,7 @@ public class RolapMemberBase
          *
          * <p>Guessing the number of properties
          * can be tricky since some subclasses of
-         * {@link org.eclipse.daanse.olap.api.model.Member}</p> have additional properties
+         * {@link org.eclipse.daanse.olap.api.element.Member}</p> have additional properties
          * that aren't explicitly declared.  The most common offenders
          * are the (@link mondrian.olap.Measure} implementations, which
          * often have 4 or more undeclared properties, so if the member

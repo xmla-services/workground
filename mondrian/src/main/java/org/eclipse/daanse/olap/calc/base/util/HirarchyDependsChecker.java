@@ -17,7 +17,7 @@ package org.eclipse.daanse.olap.calc.base.util;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 public class HirarchyDependsChecker {

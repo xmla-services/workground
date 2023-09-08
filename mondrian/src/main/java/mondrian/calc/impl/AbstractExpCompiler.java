@@ -17,10 +17,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import mondrian.olap.SymbolLiteralImpl;
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;

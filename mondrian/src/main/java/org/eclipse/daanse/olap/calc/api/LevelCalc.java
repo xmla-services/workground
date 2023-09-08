@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Level;
 
 
 public interface LevelCalc extends Calc<Level> {

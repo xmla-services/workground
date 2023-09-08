@@ -12,7 +12,6 @@
 package org.eclipse.daanse.function;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.Syntax;
@@ -33,7 +32,9 @@ import mondrian.olap.type.StringType;
 import mondrian.olap.type.SymbolType;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
-import org.eclipse.daanse.olap.api.model.Cube;
+
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import java.io.PrintWriter;

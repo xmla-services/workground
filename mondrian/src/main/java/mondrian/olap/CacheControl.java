@@ -15,11 +15,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.Schema;
 
 /**
  * API for controlling the contents of the cell cache and the member cache.
@@ -433,7 +433,7 @@ public interface CacheControl {
     public interface CellRegion {
         /**
          * Returns the dimensionality of a region.
-         * @return a list of {@link org.eclipse.daanse.olap.api.model.Dimension} objects.
+         * @return a list of {@link org.eclipse.daanse.olap.api.element.Dimension} objects.
          */
         List<Dimension> getDimensionality();
     }

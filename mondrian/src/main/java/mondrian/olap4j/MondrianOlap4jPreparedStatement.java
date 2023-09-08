@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 
-import mondrian.olap.api.Query;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetMetaData;
 import org.olap4j.OlapException;

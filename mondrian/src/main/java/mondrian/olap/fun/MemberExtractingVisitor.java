@@ -15,12 +15,13 @@ import java.util.List;
 import java.util.Set;
 
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.ParameterExpression;
-import mondrian.olap.api.ResolvedFunCall;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;

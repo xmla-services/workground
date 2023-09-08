@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.daanse.olap.api.model.MetaElement;
+import org.eclipse.daanse.olap.api.element.MetaElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -565,8 +565,8 @@ class Olap4jTest {
             CacheControl cacheControl = context.createConnection().getCacheControl(null);
             Cube cube0 =
                 connection.getOlapSchema().getCubes().get("Sales");
-            org.eclipse.daanse.olap.api.model.Cube cube =
-                ((OlapWrapper) cube0).unwrap(org.eclipse.daanse.olap.api.model.Cube.class);
+            org.eclipse.daanse.olap.api.element.Cube cube =
+                ((OlapWrapper) cube0).unwrap(org.eclipse.daanse.olap.api.element.Cube.class);
             CacheControl.CellRegion cellRegion =
                 cacheControl.createMeasuresRegion(cube);
             final Random random = new Random();

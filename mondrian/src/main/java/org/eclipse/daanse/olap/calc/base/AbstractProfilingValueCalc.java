@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.olap.calc.base;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;

@@ -17,7 +17,7 @@ import static org.opencube.junit5.TestUtil.withSchemaProcessor;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;

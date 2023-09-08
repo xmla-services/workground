@@ -13,9 +13,9 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.api.NameSegment;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Level;
 
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;

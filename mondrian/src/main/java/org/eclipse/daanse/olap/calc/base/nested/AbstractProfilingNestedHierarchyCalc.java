@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.base.nested;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;

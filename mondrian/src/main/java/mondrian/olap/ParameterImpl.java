@@ -13,8 +13,8 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

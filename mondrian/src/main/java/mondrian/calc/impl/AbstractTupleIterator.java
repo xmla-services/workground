@@ -12,7 +12,7 @@ package mondrian.calc.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.calc.TupleIterator;
 

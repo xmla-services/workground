@@ -37,13 +37,17 @@ import java.util.TreeSet;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
@@ -110,11 +114,7 @@ import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
-import mondrian.olap.api.CellProperty;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.QueryPart;
 import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Segment;
 import mondrian.olap.fun.FunDefBase;
@@ -1154,7 +1154,7 @@ public class RolapCube extends CubeBase {
      *
      * @param xmlCalcMembers XML objects representing members
      * @param xmlNamedSets Array of XML definition of named set
-     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.model.Member} objects
+     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.element.Member} objects
      * @param formulaList Output list of {@link mondrian.olap.FormulaImpl} objects
      * @param cube the cube that the calculated members originate from
      * @param errOnDups throws an error if a duplicate member is found

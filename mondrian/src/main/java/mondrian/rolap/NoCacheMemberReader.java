@@ -22,7 +22,7 @@ import java.util.Objects;
 
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

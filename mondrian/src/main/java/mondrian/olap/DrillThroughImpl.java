@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.api.DrillThrough;
-import mondrian.olap.api.Query;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Query;
 
 /**
  * Drill through statement.

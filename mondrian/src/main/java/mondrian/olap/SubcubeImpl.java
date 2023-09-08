@@ -21,12 +21,12 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.api.Subcube;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
 
 public class SubcubeImpl extends AbstractQueryPart implements Subcube {
     private final String cubeName;

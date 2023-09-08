@@ -30,8 +30,8 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
@@ -1470,7 +1470,7 @@ RME is this right
 
         /**
          * @return the members's depth
-         * @see org.eclipse.daanse.olap.api.model.Member#getDepth()
+         * @see org.eclipse.daanse.olap.api.element.Member#getDepth()
          */
         @Override
 		public int getDepth() {

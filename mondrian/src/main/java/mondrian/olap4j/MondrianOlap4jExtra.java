@@ -20,8 +20,9 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import mondrian.olap.Syntax;
-import mondrian.olap.api.Query;
-import org.eclipse.daanse.olap.api.model.MetaElement;
+
+import org.eclipse.daanse.olap.api.element.MetaElement;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;

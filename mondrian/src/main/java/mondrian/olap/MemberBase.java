@@ -13,13 +13,13 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.api.Segment;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.FunUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
@@ -70,7 +70,7 @@ public abstract class MemberBase
   private static final int FLAG_MEASURE = 0x80;
 
   /**
-   * Cached values of {@link org.eclipse.daanse.olap.api.model.Member.MemberType} enumeration. Without caching, get excessive calls to
+   * Cached values of {@link org.eclipse.daanse.olap.api.element.Member.MemberType} enumeration. Without caching, get excessive calls to
    * {@link Object#clone}.
    */
   private static final MemberType[] MEMBER_TYPE_VALUES = MemberType.values();

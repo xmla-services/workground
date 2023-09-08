@@ -9,12 +9,12 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.DrillThrough;
-import mondrian.olap.api.Explain;
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryPart;
-
 import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Explain;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 
 /**
  * Explain statement.

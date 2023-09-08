@@ -12,7 +12,7 @@ package mondrian.calc.impl;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;

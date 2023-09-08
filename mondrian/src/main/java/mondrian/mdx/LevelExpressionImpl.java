@@ -9,8 +9,8 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.LevelExpression;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;
 
@@ -24,7 +24,7 @@ import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.model.Level} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.element.Level} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

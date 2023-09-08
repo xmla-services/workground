@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
