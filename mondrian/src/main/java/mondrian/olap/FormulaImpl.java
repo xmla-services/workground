@@ -18,20 +18,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
-import mondrian.olap.api.MemberProperty;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Query;
 import mondrian.olap.api.Segment;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;

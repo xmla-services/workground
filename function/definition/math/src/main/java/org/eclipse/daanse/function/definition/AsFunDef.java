@@ -14,8 +14,9 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.api.ResolvedFunCall;
+
 import org.eclipse.daanse.function.FunDefBase;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 /**

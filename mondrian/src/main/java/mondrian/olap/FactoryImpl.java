@@ -10,23 +10,24 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.olap.api.CalculatedFormula;
-import mondrian.olap.api.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.DmvQuery;
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Explain;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
+import org.eclipse.daanse.olap.api.query.component.Update;
+import org.eclipse.daanse.olap.api.query.component.UpdateClause;
+
 import mondrian.olap.api.Command;
-import mondrian.olap.api.DmvQuery;
-import mondrian.olap.api.DrillThrough;
-import mondrian.olap.api.Explain;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Refresh;
-import mondrian.olap.api.Subcube;
 import mondrian.olap.api.SubtotalVisibility;
-import mondrian.olap.api.TransactionCommand;
-import mondrian.olap.api.Update;
-import mondrian.olap.api.UpdateClause;
 import mondrian.parser.MdxParserValidator;
 import mondrian.server.Statement;
 

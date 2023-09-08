@@ -12,8 +12,8 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.WrapExpression;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.WrapExpression;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;

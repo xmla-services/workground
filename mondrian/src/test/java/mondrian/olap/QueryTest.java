@@ -16,9 +16,10 @@ package mondrian.olap;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import mondrian.olap.api.CellProperty;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+
 import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;

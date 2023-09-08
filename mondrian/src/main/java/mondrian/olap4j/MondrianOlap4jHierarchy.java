@@ -13,7 +13,7 @@ package mondrian.olap4j;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.AbstractNamedList;
 import org.olap4j.impl.Named;
@@ -37,11 +37,11 @@ public class MondrianOlap4jHierarchy
     implements Hierarchy, Named
 {
     final MondrianOlap4jSchema olap4jSchema;
-    final org.eclipse.daanse.olap.api.model.Hierarchy hierarchy;
+    final org.eclipse.daanse.olap.api.element.Hierarchy hierarchy;
 
     MondrianOlap4jHierarchy(
         MondrianOlap4jSchema olap4jSchema,
-        org.eclipse.daanse.olap.api.model.Hierarchy hierarchy)
+        org.eclipse.daanse.olap.api.element.Hierarchy hierarchy)
     {
         this.olap4jSchema = olap4jSchema;
         this.hierarchy = hierarchy;
@@ -73,7 +73,7 @@ public class MondrianOlap4jHierarchy
         final mondrian.olap.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
                 .withLocus();
-        for (org.eclipse.daanse.olap.api.model.Level level
+        for (org.eclipse.daanse.olap.api.element.Level level
             : schemaReader.getHierarchyLevels(hierarchy))
         {
             list.add(olap4jConnection.toOlap4j(level));
@@ -102,7 +102,7 @@ public class MondrianOlap4jHierarchy
 	public NamedList<Member> getRootMembers() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        final List<org.eclipse.daanse.olap.api.model.Member> levelMembers =
+        final List<org.eclipse.daanse.olap.api.element.Member> levelMembers =
             olap4jConnection.getMondrianConnection().getSchemaReader()
                 .withLocus()
                 .getLevelMembers(
@@ -164,7 +164,7 @@ public class MondrianOlap4jHierarchy
         return hierarchy;
     }
 
-    public org.eclipse.daanse.olap.api.model.Hierarchy getHierarchy() {
+    public org.eclipse.daanse.olap.api.element.Hierarchy getHierarchy() {
         return this.hierarchy;
     }
 }

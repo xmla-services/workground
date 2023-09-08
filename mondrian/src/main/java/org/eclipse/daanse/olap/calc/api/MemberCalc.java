@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 public interface MemberCalc extends Calc<Member> {
 

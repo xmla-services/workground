@@ -11,8 +11,8 @@ package mondrian.olap4j;
 
 import java.sql.SQLException;
 
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.CellSetMetaData;
 import org.olap4j.impl.ArrayNamedListImpl;

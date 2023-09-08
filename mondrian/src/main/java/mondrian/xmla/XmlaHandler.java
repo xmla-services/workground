@@ -74,19 +74,20 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import mondrian.olap.api.CalculatedFormula;
 import mondrian.olap.api.Command;
-import mondrian.olap.api.DmvQuery;
-import mondrian.olap.api.DrillThrough;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.Literal;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Refresh;
-import mondrian.olap.api.TransactionCommand;
-import mondrian.olap.api.Update;
-import mondrian.olap.api.UpdateClause;
+
+import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
+import org.eclipse.daanse.olap.api.query.component.DmvQuery;
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
+import org.eclipse.daanse.olap.api.query.component.Update;
+import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -2686,13 +2687,13 @@ public class XmlaHandler {
                 "name", axisName);
             writer.startSequence("Tuples", "Tuple");
 
-            HashMap<Level, ArrayList<org.eclipse.daanse.olap.api.model.Member>> levelMembers = new HashMap<>();
+            HashMap<Level, ArrayList<org.eclipse.daanse.olap.api.element.Member>> levelMembers = new HashMap<>();
 
             for (Position p : axis.getPositions()) {
                 for (Member member : p.getMembers()) {
                     Level level = member.getLevel();
                     if(!levelMembers.containsKey(level)){
-                        levelMembers.put(level, new ArrayList<org.eclipse.daanse.olap.api.model.Member>());
+                        levelMembers.put(level, new ArrayList<org.eclipse.daanse.olap.api.element.Member>());
                     }
                     levelMembers.get(level)
                             .add(((mondrian.olap4j.MondrianOlap4jMember)member).getOlapMember());
@@ -2704,9 +2705,9 @@ public class XmlaHandler {
             final mondrian.server.Statement statement =
                     (mondrian.server.Statement) cellSet.getStatement();
 
-            for(Map.Entry<Level, ArrayList<org.eclipse.daanse.olap.api.model.Member>> entry : levelMembers.entrySet()) {
+            for(Map.Entry<Level, ArrayList<org.eclipse.daanse.olap.api.element.Member>> entry : levelMembers.entrySet()) {
                 Level level = entry.getKey();
-                ArrayList<org.eclipse.daanse.olap.api.model.Member> members = entry.getValue();
+                ArrayList<org.eclipse.daanse.olap.api.element.Member> members = entry.getValue();
 
                 if (!members.isEmpty()
                         && members.get(0).getLevel().getChildLevel() != null
@@ -2714,9 +2715,9 @@ public class XmlaHandler {
                     Locus.execute(
                             rolapConnection,
                             "MondrianOlap4jMember.getChildMembers",
-                            new Locus.Action<List<org.eclipse.daanse.olap.api.model.Member>>() {
+                            new Locus.Action<List<org.eclipse.daanse.olap.api.element.Member>>() {
                                 @Override
-								public List<org.eclipse.daanse.olap.api.model.Member> execute() {
+								public List<org.eclipse.daanse.olap.api.element.Member> execute() {
                                     return
                                             statement.getQuery().getSchemaReader(true).getMemberChildren(members);
                                 }

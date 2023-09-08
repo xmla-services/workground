@@ -11,9 +11,9 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.MemberProperty;
-
 import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 
 /**
  * Member property or solve order specification.

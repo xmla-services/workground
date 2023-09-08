@@ -9,8 +9,8 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.MemberExpression;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 
@@ -24,7 +24,7 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.model.Member} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.element.Member} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

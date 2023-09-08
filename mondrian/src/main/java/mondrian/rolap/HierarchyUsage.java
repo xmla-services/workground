@@ -19,8 +19,8 @@ import static mondrian.rolap.util.RelationUtil.getAlias;
 
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;

@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.result;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * A <code>Position</code> is an item on an {@link Axis}.  It contains

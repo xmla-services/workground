@@ -14,11 +14,10 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
-import mondrian.olap.api.NumericLiteral;
-
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;

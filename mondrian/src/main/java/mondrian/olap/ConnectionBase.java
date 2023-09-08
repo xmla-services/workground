@@ -11,8 +11,8 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.QueryPart;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;

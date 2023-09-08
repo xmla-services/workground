@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

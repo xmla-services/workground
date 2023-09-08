@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 
 import mondrian.olap.*;
 import mondrian.olap.api.*;
+import org.eclipse.daanse.olap.api.query.*;
+import org.eclipse.daanse.olap.api.query.component.*;
 import mondrian.mdx.*;
 import mondrian.parser.*;
 import mondrian.resource.MondrianResource;
@@ -773,7 +775,7 @@ Exp segmentOrFuncall(Exp left) :
     }
 }
 
-AbstractLiteralImpl numericLiteral() :
+NumericLiteralImpl numericLiteral() :
 {
 }
 {

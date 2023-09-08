@@ -14,10 +14,11 @@ import mondrian.calc.TupleList;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.api.ResolvedFunCall;
+
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunUtil;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;

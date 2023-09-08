@@ -14,10 +14,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import mondrian.olap.api.Segment;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
+import mondrian.olap.api.Segment;
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MatchType;

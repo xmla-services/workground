@@ -21,18 +21,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
-import mondrian.olap.api.Query;
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eigenbase.xom.XOMUtil;
@@ -1703,7 +1703,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, of the form '(member, member, ...)'. There must be precisely one member for each hierarchy.
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param i           Position to start parsing in string
    * @param members     Output array of members
@@ -1733,7 +1733,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members

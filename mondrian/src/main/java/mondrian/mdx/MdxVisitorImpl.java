@@ -9,16 +9,17 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.NamedSetExpression;
-import mondrian.olap.api.ParameterExpression;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.

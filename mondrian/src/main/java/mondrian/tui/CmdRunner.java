@@ -36,11 +36,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
 import org.eigenbase.xom.XOMException;
@@ -443,7 +443,7 @@ public class CmdRunner {
 
         if (element instanceof Member member) {
             return new Expr(member, Expr.Type.MEMBER);
-        } else if (element instanceof org.eclipse.daanse.olap.api.model.Level level) {
+        } else if (element instanceof org.eclipse.daanse.olap.api.element.Level level) {
             return new Expr(level, Expr.Type.MEMBER);
         } else if (element instanceof Hierarchy hier) {
             return new Expr(hier, Expr.Type.MEMBER);

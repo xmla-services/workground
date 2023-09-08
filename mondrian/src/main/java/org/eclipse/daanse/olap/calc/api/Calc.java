@@ -27,7 +27,7 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;

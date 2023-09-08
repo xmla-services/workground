@@ -20,9 +20,9 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.Refresh;
-
 import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.api.query.component.Refresh;
 
 public class RefreshImpl extends AbstractQueryPart implements Refresh {
     private final String cubeName;

@@ -1,11 +1,11 @@
 package org.eclipse.daanse.query;
 
-import mondrian.olap.api.QueryPart;
-import mondrian.olap.api.Refresh;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
-import org.eclipse.daanse.query.base.QueryProviderImpl;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.olap.query.base.QueryProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
