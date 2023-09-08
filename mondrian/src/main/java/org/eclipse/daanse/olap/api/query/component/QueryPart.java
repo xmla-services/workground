@@ -26,7 +26,7 @@ public sealed interface QueryPart permits
     HierarchyExpression,
     Id,
     LevelExpression,
-    Literal<?>,
+    Literal,
     MemberProperty,
     NamedSetExpression,
     ParameterExpression,
