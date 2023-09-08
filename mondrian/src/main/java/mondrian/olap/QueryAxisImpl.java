@@ -13,12 +13,13 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.SubtotalVisibility;
-import org.eclipse.daanse.olap.api.model.Level;
+
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;

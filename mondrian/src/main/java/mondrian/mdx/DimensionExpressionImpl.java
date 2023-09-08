@@ -9,8 +9,8 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.DimensionExpression;
-import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
 
@@ -24,7 +24,7 @@ import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.model.Dimension} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.element.Dimension} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

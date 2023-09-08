@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.Literal;
-import mondrian.olap.api.MemberExpression;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
 import mondrian.mdx.HierarchyExpressionImpl;

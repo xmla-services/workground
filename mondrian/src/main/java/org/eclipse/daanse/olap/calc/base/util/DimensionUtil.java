@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.calc.base.util;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
 import mondrian.olap.MondrianProperties;
 

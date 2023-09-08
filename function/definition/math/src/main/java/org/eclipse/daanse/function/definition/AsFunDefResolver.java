@@ -18,11 +18,12 @@ import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
-import mondrian.olap.api.NamedSetExpression;
+
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.ResolverBase;
 import org.eclipse.daanse.function.Validator;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 

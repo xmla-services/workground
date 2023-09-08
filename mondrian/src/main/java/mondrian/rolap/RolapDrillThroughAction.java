@@ -13,7 +13,7 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
 public class RolapDrillThroughAction extends RolapAction {
     private final boolean isDefault;

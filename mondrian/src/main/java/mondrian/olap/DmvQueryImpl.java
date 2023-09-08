@@ -20,9 +20,9 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.DmvQuery;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 
 public class DmvQueryImpl extends AbstractQueryPart implements DmvQuery {
     private final String tableName;

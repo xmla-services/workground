@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;

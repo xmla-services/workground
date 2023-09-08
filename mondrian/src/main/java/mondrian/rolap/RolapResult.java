@@ -26,17 +26,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.MemberExpression;
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryAxis;
-import mondrian.olap.api.QueryPart;
+
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -271,8 +272,8 @@ public class RolapResult extends ResultBase {
 
       for(Map.Entry<Hierarchy, Calc> entry : query.getSubcubeHierarchyCalcs().entrySet()) {
         Hierarchy hierarchy = entry.getKey();
-        org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
-        org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
+        org.eclipse.daanse.olap.api.element.Level[] levels = hierarchy.getLevels();
+        org.eclipse.daanse.olap.api.element.Level lastLevel = levels[levels.length - 1];
 
         Calc calc = entry.getValue();
 
@@ -2338,7 +2339,7 @@ public Cell getCell( int[] pos ) {
     public boolean isOnSameHierarchyChainInternal( MemberBase member2 ) {
       // Stores the index of the corresponding member in each tuple
       int index = -1;
-      for ( List<org.eclipse.daanse.olap.api.model.Member> subList : tupleList ) {
+      for ( List<org.eclipse.daanse.olap.api.element.Member> subList : tupleList ) {
         if ( index == -1 ) {
           if (!subList.isEmpty() && member2.getHierarchy().equals( subList.get( 0 ).getHierarchy() ) ) {
                   index = 0;

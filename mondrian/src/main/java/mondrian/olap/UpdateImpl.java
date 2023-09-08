@@ -20,11 +20,11 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.Update;
-import mondrian.olap.api.UpdateClause;
-
 import java.io.PrintWriter;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.query.component.Update;
+import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
 public class UpdateImpl extends AbstractQueryPart implements Update {
     private final String cubeName;

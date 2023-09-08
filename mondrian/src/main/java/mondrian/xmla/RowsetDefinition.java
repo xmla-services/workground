@@ -5281,7 +5281,7 @@ TODO: see above
             // MD_ORIGIN_KEY_ATTRIBUTE 0x00000004
             // MD_ORIGIN_INTERNAL 0x00000008
             int hierarchyOrigin;
-            if(dimension.getUniqueName().equals(org.eclipse.daanse.olap.api.model.Dimension.MEASURES_UNIQUE_NAME)){
+            if(dimension.getUniqueName().equals(org.eclipse.daanse.olap.api.element.Dimension.MEASURES_UNIQUE_NAME)){
                 hierarchyOrigin = 6;
             }
             else {

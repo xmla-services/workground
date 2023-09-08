@@ -16,12 +16,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eclipse.daanse.olap.api.query.component.Query;
+
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;
-import mondrian.olap.api.Query;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.agg.SegmentCacheManager;

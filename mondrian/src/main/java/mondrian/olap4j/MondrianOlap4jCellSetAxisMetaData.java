@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.SubtotalVisibility;
-import org.eclipse.daanse.olap.api.model.Level;
+
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
@@ -114,7 +115,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
             return Collections.emptyList();
         }
         List<Hierarchy> hierarchyList = new ArrayList<>();
-        for (org.eclipse.daanse.olap.api.model.Hierarchy hierarchy
+        for (org.eclipse.daanse.olap.api.element.Hierarchy hierarchy
             : TypeUtil.getHierarchies(exp.getType()))
         {
             hierarchyList.add(

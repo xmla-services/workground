@@ -11,8 +11,8 @@ package mondrian.olap.fun;
 import java.util.HashSet;
 import java.util.Set;
 
-import mondrian.olap.api.ResolvedFunCall;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;

@@ -13,7 +13,7 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
-import mondrian.olap.api.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -136,7 +136,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
             return new AbstractList<>() {
                 @Override
 				public Member get(int slice) {
-                    final org.eclipse.daanse.olap.api.model.Member mondrianMember =
+                    final org.eclipse.daanse.olap.api.element.Member mondrianMember =
                         tupleList.get(slice, index);
                     return olap4jCellSet.olap4jStatement.olap4jConnection
                         .toOlap4j(mondrianMember);

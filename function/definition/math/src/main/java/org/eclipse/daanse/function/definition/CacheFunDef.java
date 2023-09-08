@@ -17,10 +17,10 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.Syntax;
-import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 import org.eclipse.daanse.function.FunDefBase;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.xom.XOMUtil;
 

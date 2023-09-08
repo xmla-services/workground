@@ -15,12 +15,12 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.query.component.NullLiteral;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.api.NullLiteral;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;

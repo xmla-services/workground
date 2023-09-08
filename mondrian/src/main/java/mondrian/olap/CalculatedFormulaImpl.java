@@ -20,10 +20,10 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.CalculatedFormula;
-import mondrian.olap.api.Formula;
-
 import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
+import org.eclipse.daanse.olap.api.query.component.Formula;
 
 public class CalculatedFormulaImpl extends AbstractQueryPart implements CalculatedFormula {
     private final String cubeName;

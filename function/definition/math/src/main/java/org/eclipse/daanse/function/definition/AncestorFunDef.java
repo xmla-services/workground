@@ -11,14 +11,14 @@ package org.eclipse.daanse.function.definition;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.Evaluator;
-import mondrian.olap.api.ResolvedFunCall;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.function.FunUtil;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;

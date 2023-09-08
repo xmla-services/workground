@@ -13,9 +13,7 @@
  */
 package mondrian.olap;
 
-import mondrian.olap.api.Literal;
-
-public abstract class AbstractLiteralImpl<R> extends ExpBase implements Literal<R> {
+public abstract class AbstractLiteralImpl<R> extends ExpBase {
 
 	private final R value;
 

@@ -14,11 +14,12 @@ package mondrian.rolap;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.query.component.Formula;
+
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
-import mondrian.olap.api.Formula;
 
 /**
  * A <code>RolapCalculatedMember</code> is a member based upon a

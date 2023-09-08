@@ -25,11 +25,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.Query;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ import mondrian.util.Format;
  *
  * <p>
  * The {@code savepoint} method is recommended for most purposes, because the initial checkpoint is extremely cheap.
- * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.model.Member)}) creates, at
+ * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.element.Member)}) creates, at
  * a modest cost, an entry on an internal command stack.
  *
  * <p>
@@ -818,7 +818,7 @@ public final RolapMember getContext( Hierarchy hierarchy ) {
   }
 
   /**
-   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.model.Hierarchy)}, for internal code.
+   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.element.Hierarchy)}, for internal code.
    *
    * @param hierarchy
    *          Hierarchy

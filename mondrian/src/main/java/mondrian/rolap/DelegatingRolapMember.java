@@ -13,11 +13,11 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.Segment;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.Segment;
 import mondrian.olap.Exp;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;

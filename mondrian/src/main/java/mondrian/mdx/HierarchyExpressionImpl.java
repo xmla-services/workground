@@ -9,8 +9,8 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.api.HierarchyExpression;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
 
@@ -24,7 +24,7 @@ import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.model.Hierarchy} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.element.Hierarchy} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

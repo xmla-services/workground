@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
@@ -24,7 +25,6 @@ import org.olap4j.impl.UnmodifiableArrayMap;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.api.NumericLiteral;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;

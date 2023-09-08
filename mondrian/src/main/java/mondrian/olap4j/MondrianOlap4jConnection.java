@@ -30,16 +30,16 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import mondrian.olap.api.DimensionExpression;
-import mondrian.olap.api.Formula;
-import mondrian.olap.api.Id;
-import mondrian.olap.api.LevelExpression;
-import mondrian.olap.api.MemberExpression;
-import mondrian.olap.api.MemberProperty;
-import mondrian.olap.api.QueryAxis;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.OlapConnection;
@@ -163,7 +163,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
      * catalog. It is possible for a schema to be mapped more than once, with
      * different names; the same RolapSchema object will be used.
      */
-    final Map<org.eclipse.daanse.olap.api.model.Schema, MondrianOlap4jSchema> schemaMap =
+    final Map<org.eclipse.daanse.olap.api.element.Schema, MondrianOlap4jSchema> schemaMap =
         new HashMap<>();
 
     private final MondrianOlap4jDatabaseMetaData olap4jDatabaseMetaData;
@@ -651,12 +651,12 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         };
     }
 
-    MondrianOlap4jCube toOlap4j(org.eclipse.daanse.olap.api.model.Cube cube) {
+    MondrianOlap4jCube toOlap4j(org.eclipse.daanse.olap.api.element.Cube cube) {
         MondrianOlap4jSchema schema = toOlap4j(cube.getSchema());
         return new MondrianOlap4jCube(cube, schema);
     }
 
-    MondrianOlap4jDimension toOlap4j(org.eclipse.daanse.olap.api.model.Dimension dimension) {
+    MondrianOlap4jDimension toOlap4j(org.eclipse.daanse.olap.api.element.Dimension dimension) {
         if (dimension == null) {
             return null;
         }
@@ -666,7 +666,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     }
 
     synchronized MondrianOlap4jSchema toOlap4j(
-            org.eclipse.daanse.olap.api.model.Schema schema)
+            org.eclipse.daanse.olap.api.element.Schema schema)
     {
         MondrianOlap4jSchema olap4jSchemaInner = schemaMap.get(schema);
         if (olap4jSchemaInner == null) {
@@ -679,7 +679,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         if (type instanceof mondrian.olap.type.BooleanType) {
             return new BooleanType();
         } else if (type instanceof mondrian.olap.type.CubeType cubeType) {
-            final org.eclipse.daanse.olap.api.model.Cube mondrianCube =
+            final org.eclipse.daanse.olap.api.element.Cube mondrianCube =
                 cubeType.getCube();
             return new CubeType(toOlap4j(mondrianCube));
         } else if (type instanceof mondrian.olap.type.DecimalType decimalType) {
@@ -717,7 +717,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
     }
 
-    MondrianOlap4jMember toOlap4j(org.eclipse.daanse.olap.api.model.Member member) {
+    MondrianOlap4jMember toOlap4j(org.eclipse.daanse.olap.api.element.Member member) {
         if (member == null) {
             return null;
         }
@@ -731,7 +731,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             member);
     }
 
-    MondrianOlap4jLevel toOlap4j(org.eclipse.daanse.olap.api.model.Level level) {
+    MondrianOlap4jLevel toOlap4j(org.eclipse.daanse.olap.api.element.Level level) {
         if (level == null) {
             return null;
         }
@@ -740,7 +740,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             level);
     }
 
-    MondrianOlap4jHierarchy toOlap4j(org.eclipse.daanse.olap.api.model.Hierarchy hierarchy) {
+    MondrianOlap4jHierarchy toOlap4j(org.eclipse.daanse.olap.api.element.Hierarchy hierarchy) {
         if (hierarchy == null) {
             return null;
         }
@@ -779,8 +779,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     }
 
     MondrianOlap4jNamedSet toOlap4j(
-        org.eclipse.daanse.olap.api.model.Cube cube,
-        org.eclipse.daanse.olap.api.model.NamedSet namedSet)
+        org.eclipse.daanse.olap.api.element.Cube cube,
+        org.eclipse.daanse.olap.api.element.NamedSet namedSet)
     {
         if (namedSet == null) {
             return null;

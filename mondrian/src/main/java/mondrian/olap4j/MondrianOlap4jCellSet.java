@@ -27,9 +27,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.Query;
-import mondrian.olap.api.QueryAxis;
 import mondrian.olap.api.SubtotalVisibility;
+
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.Cell;

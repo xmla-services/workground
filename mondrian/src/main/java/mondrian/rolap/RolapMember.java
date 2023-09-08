@@ -11,7 +11,7 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * A <code>RolapMember</code> is a member of a {@link RolapHierarchy}. There are
