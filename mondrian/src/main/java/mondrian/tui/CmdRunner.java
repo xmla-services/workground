@@ -109,6 +109,12 @@ public class CmdRunner {
     private Connection connection;
     private final PrintWriter out;
 
+    private static final String[][] commentDelimDefault = {
+            new String[] {"//", null},
+            new String[] {"--", null},
+            new String[] {"/*", "*/"}
+    };
+
     static {
         setDefaultCommentState();
     }
@@ -2393,11 +2399,6 @@ public class CmdRunner {
         out.println(buf.toString());
     }
 
-    private static final String[][] commentDelimDefault = {
-            new String[] {"//", null},
-            new String[] {"--", null},
-            new String[] {"/*", "*/"}
-        };
     /**
      * Set the default comment delimiters for CmdRunner.  These defaults are
      * # to end of line
