@@ -17,6 +17,7 @@ import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.Allocation;
 import org.eclipse.daanse.mdx.model.api.select.UpdateClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class UpdateStatementTest {
 
 	@Test
 	void test1() throws MdxParserException {
-        UpdateStatement clause = new MdxParserWrapper("UPDATE CUBE Cube_Name SET ([Measures].[Sales Count], [Time].[Time].[1997].[Q1]) = 55, ([Measures].[Sales Count], [Time].[Time].[1997].[Q2]) = 33").parseUpdateStatement();
+        UpdateStatement clause = new MdxParserWrapper("UPDATE CUBE Cube_Name SET ([Measures].[Sales Count], [Time].[Time].[1997].[Q1]) = 55, ([Measures].[Sales Count], [Time].[Time].[1997].[Q2]) = 33 USE_WEIGHTED_ALLOCATION BY 0.5").parseUpdateStatement();
         assertThat(clause).isNotNull();
         assertThat(clause.cubeName()).isNotNull();
         assertThat(clause.cubeName().name()).isEqualTo("Cube_Name");
@@ -38,7 +39,7 @@ class UpdateStatementTest {
         assertThat(clause.updateClauses().get(0)).isNotNull();
         assertThat(clause.updateClauses().get(1)).isNotNull();
         assertThat(clause.updateClauses().get(0)).isInstanceOf(UpdateClause.class);
-        assertThat(clause.updateClauses().get(1)).isInstanceOf(UpdateClause.class);        
+        assertThat(clause.updateClauses().get(1)).isInstanceOf(UpdateClause.class);
         UpdateClause updateClause1 = clause.updateClauses().get(0);
         UpdateClause updateClause2 = clause.updateClauses().get(1);
         assertThat(updateClause1.tupleExp()).isNotNull().isInstanceOf(CallExpression.class);
@@ -49,11 +50,15 @@ class UpdateStatementTest {
         assertThat(callExpression.name()).isEqualTo("()");
         assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PARENTHESES);
         assertThat(callExpression.expressions()).hasSize(2);
+        assertThat(updateClause2.allocation()).isEqualTo(Allocation.USE_WEIGHTED_ALLOCATION);
+        assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);
+        numericLiteral = (NumericLiteral)updateClause2.weight();
+        assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(0.5));
 	}
 
     @Test
     void test2() throws MdxParserException {
-        UpdateStatement clause = new MdxParserWrapper("UPDATE CUBE [Cube_Name] SET ([Measures].[Sales Count], [Time].[Time].[1997].[Q1]) = 55, ([Measures].[Sales Count], [Time].[Time].[1997].[Q2]) = 33").parseUpdateStatement();
+        UpdateStatement clause = new MdxParserWrapper("UPDATE CUBE [Cube_Name] SET ([Measures].[Sales Count], [Time].[Time].[1997].[Q1]) = 55, ([Measures].[Sales Count], [Time].[Time].[1997].[Q2]) = 33 USE_WEIGHTED_ALLOCATION BY 0.5").parseUpdateStatement();
         assertThat(clause).isNotNull();
         assertThat(clause.cubeName()).isNotNull();
         assertThat(clause.cubeName().name()).isEqualTo("Cube_Name");
@@ -62,7 +67,7 @@ class UpdateStatementTest {
         assertThat(clause.updateClauses().get(0)).isNotNull();
         assertThat(clause.updateClauses().get(1)).isNotNull();
         assertThat(clause.updateClauses().get(0)).isInstanceOf(UpdateClause.class);
-        assertThat(clause.updateClauses().get(1)).isInstanceOf(UpdateClause.class);        
+        assertThat(clause.updateClauses().get(1)).isInstanceOf(UpdateClause.class);
         UpdateClause updateClause1 = clause.updateClauses().get(0);
         UpdateClause updateClause2 = clause.updateClauses().get(1);
         assertThat(updateClause1.tupleExp()).isNotNull().isInstanceOf(CallExpression.class);
@@ -73,6 +78,10 @@ class UpdateStatementTest {
         assertThat(callExpression.name()).isEqualTo("()");
         assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PARENTHESES);
         assertThat(callExpression.expressions()).hasSize(2);
+        assertThat(updateClause2.allocation()).isEqualTo(Allocation.USE_WEIGHTED_ALLOCATION);
+        assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);
+        numericLiteral = (NumericLiteral)updateClause2.weight();
+        assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(0.5));
     }
 
 }

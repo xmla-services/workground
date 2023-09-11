@@ -171,7 +171,6 @@ UpdateStatement :
   (
        < COMMA > UpdateClause
   )*
-
 ;
 
 INJECT UpdateClause :
@@ -186,11 +185,21 @@ INJECT UpdateClause :
     }
 
     public org.eclipse.daanse.mdx.model.api.select.Allocation allocation() {
-          return org.eclipse.daanse.mdx.model.api.select.Allocation.NO_ALLOCATION;
+          if (getChild(3) == null) {
+            return org.eclipse.daanse.mdx.model.api.select.Allocation.NO_ALLOCATION;
+          }
+          NodeType type = getChild(3).getType();
+          if (type == USE_EQUAL_ALLOCATION) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_EQUAL_ALLOCATION;
+          else if (type == USE_EQUAL_INCREMENT) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_EQUAL_INCREMENT;
+          else if (type == USE_WEIGHTED_ALLOCATION) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_WEIGHTED_ALLOCATION;
+          else if (type == USE_WEIGHTED_INCREMENT) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_WEIGHTED_INCREMENT;
+          throw new IllegalStateException("Allocation parsing error");
     }
 
     public org.eclipse.daanse.mdx.model.api.expression.Expression weight() {
-          return null;
+          Node by = firstChildOfType(BY);
+                  return by == null ? null
+                                       : (org.eclipse.daanse.mdx.model.api.expression.Expression) by.nextSibling();
     }
 }
 
@@ -198,6 +207,19 @@ UpdateClause :
   PrimaryExpression
     < EQ >
   Expression
+  (
+    < USE_EQUAL_ALLOCATION >
+    |
+    < USE_EQUAL_INCREMENT >
+    |
+    < USE_WEIGHTED_ALLOCATION >
+    |
+    < USE_WEIGHTED_INCREMENT >
+  )?
+  (
+    < BY > Expression()
+  )?
+
 ;
 
 INJECT DMVStatement :
