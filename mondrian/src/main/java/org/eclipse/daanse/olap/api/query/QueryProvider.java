@@ -13,18 +13,20 @@
  */
 package org.eclipse.daanse.olap.api.query;
 
-import org.eclipse.daanse.mdx.model.api.DMVStatement;
-import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.MdxStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
-import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.olap.api.query.component.Update;
 
 public interface QueryProvider {
 
@@ -39,4 +41,6 @@ public interface QueryProvider {
     DmvQuery createDMV(DMVStatement dmvStatement);
 
     Refresh createRefresh(RefreshStatement refreshStatement);
+
+    Update createUpdate(UpdateStatement updateStatement);
 }

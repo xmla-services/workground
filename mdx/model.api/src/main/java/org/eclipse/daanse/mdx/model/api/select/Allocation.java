@@ -11,9 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.mdx.model.api;
+package org.eclipse.daanse.mdx.model.api.select;
 
-public sealed interface MdxStatement permits SelectStatement, DrillthroughStatement, ExplainStatement, DMVStatement,
-    RefreshStatement, UpdateStatement {
-
+public enum Allocation {
+    NO_ALLOCATION,
+    USE_EQUAL_ALLOCATION,
+    USE_EQUAL_INCREMENT,
+    USE_WEIGHTED_ALLOCATION,
+    USE_WEIGHTED_INCREMENT
 }
+

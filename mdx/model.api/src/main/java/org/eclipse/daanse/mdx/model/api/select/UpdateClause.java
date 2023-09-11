@@ -11,9 +11,18 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.mdx.model.api;
+package org.eclipse.daanse.mdx.model.api.select;
 
-public sealed interface MdxStatement permits SelectStatement, DrillthroughStatement, ExplainStatement, DMVStatement,
-    RefreshStatement, UpdateStatement {
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+
+public interface UpdateClause {
+
+    Expression tupleExp();
+
+    Expression valueExp();
+
+    Allocation allocation();
+
+    Expression weight();
 
 }

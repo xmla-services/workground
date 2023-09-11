@@ -13,7 +13,13 @@
  */
 package org.eclipse.daanse.mdx.model.api;
 
-public sealed interface MdxStatement permits SelectStatement, DrillthroughStatement, ExplainStatement, DMVStatement,
-    RefreshStatement, UpdateStatement {
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.UpdateClause;
 
+import java.util.List;
+
+public non-sealed interface UpdateStatement extends MdxStatement {
+
+    NameObjectIdentifier cubeName();
+    List<UpdateClause> updateClauses();
 }
