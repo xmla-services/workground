@@ -54,7 +54,6 @@ class UpdateStatementTest {
         assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);
         numericLiteral = (NumericLiteral)updateClause2.weight();
         assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(0.5));
-
 	}
 
     @Test
@@ -79,6 +78,10 @@ class UpdateStatementTest {
         assertThat(callExpression.name()).isEqualTo("()");
         assertThat(callExpression.type()).isEqualTo(CallExpression.Type.PARENTHESES);
         assertThat(callExpression.expressions()).hasSize(2);
+        assertThat(updateClause2.allocation()).isEqualTo(Allocation.USE_WEIGHTED_ALLOCATION);
+        assertThat(updateClause2.weight()).isInstanceOf(NumericLiteral.class);
+        numericLiteral = (NumericLiteral)updateClause2.weight();
+        assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(0.5));
     }
 
 }
