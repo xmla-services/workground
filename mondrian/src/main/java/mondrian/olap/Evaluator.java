@@ -68,25 +68,6 @@ public interface Evaluator extends ComputationContext{
     int savepoint();
 
     /**
-     * Creates a new Evaluator with each given member overriding the context of
-     * the current Evaluator for its hierarchy. Other hierarchies retain the
-     * same context as this Evaluator.
-     *
-     * <p>In mondrian-3.3 and later, a more efficient way to save the state of
-     * an evaluator is to call {@link #savepoint} followed by
-     * {@link #restore(int)}. We recommend using those methods.
-     *
-     * @param members Array of members to add to the context
-     * @return Evaluator with each given member overriding the state of the
-     *   current Evaluator for its hierarchy
-     *
-     * @deprecated Use {@link #savepoint()} followed by
-     *   {@link #setContext(Member[])}; will be removed in mondrian-4
-     */
-    @Deprecated
-	Evaluator push(Member[] members);
-
-    /**
      * Creates a new Evaluator with the same context as this evaluator.
      *
      * <p>This method is typically called before evaluating an expression which
@@ -105,54 +86,6 @@ public interface Evaluator extends ComputationContext{
      *   current Evaluator for its hierarchy
      */
     Evaluator push();
-
-    /**
-     * Creates a new Evaluator with the same context except for one member.
-     *
-     * <p>This method is typically called before evaluating an expression which
-     * may corrupt the evaluation context.
-     *
-     * <p>In mondrian-3.3 and later, a more efficient way to save the state of
-     * an evaluator is to call {@link #savepoint} followed by
-     * {@link #restore(int)}. We recommend using those methods.
-     *
-     * @param member Member to add to the context
-     * @return Evaluator with each given member overriding the state of the
-     *   current Evaluator for its hierarchy
-     *
-     * @deprecated Use {@link #savepoint()} followed by
-     *   {@link #setContext(Member)}; will be removed in mondrian-4
-     */
-    @Deprecated
-	Evaluator push(Member member);
-
-    /**
-     * Creates a new evaluator with the same state except nonEmpty property
-     *
-     * <p>In mondrian-3.3 and later, a more efficient way to save the state of
-     * an evaluator is to call {@link #savepoint} followed by
-     * {@link #restore(int)}. We recommend using those methods.
-     *
-     * @deprecated Use {@link #savepoint()} followed by
-     *     {@link #setNonEmpty(boolean)}; will be removed in mondrian-4
-     */
-    @Deprecated
-	Evaluator push(boolean nonEmpty);
-
-    /**
-     * Creates a new evaluator with the same state except nonEmpty
-     * and nativeEnabled properties.
-     *
-     * <p>In mondrian-3.3 and later, a more efficient way to save the state of
-     * an evaluator is to call {@link #savepoint} followed by
-     * {@link #restore(int)}. We recommend using those methods.
-     *
-     * @deprecated Use {@link #savepoint()} followed by
-     *     {@link #setNonEmpty(boolean)} and
-     *     {@link #setNativeEnabled(boolean)}; will be removed in mondrian-4.
-     */
-    @Deprecated
-	Evaluator push(boolean nonEmpty, boolean nativeEnabled);
 
     /**
      * Restores previous evaluator.
@@ -276,22 +209,6 @@ public interface Evaluator extends ComputationContext{
      * format, using a given format string.
      */
     String format(Object o, String formatString);
-
-    /**
-     * Obsolete method.
-     *
-     * @deprecated Will be removed in mondrian-4
-     */
-    @Deprecated
-	int getDepth();
-
-    /**
-     * Returns parent evaluator.
-     *
-     * @deprecated Will be removed in mondrian-4
-     */
-    @Deprecated
-	Evaluator getParent();
 
     /**
      * Returns the connection's locale.
