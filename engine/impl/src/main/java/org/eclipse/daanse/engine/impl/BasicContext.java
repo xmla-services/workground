@@ -20,6 +20,7 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
@@ -52,15 +53,17 @@ public class BasicContext implements Context {
     private DataSource dataSource = null;
 
     @Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+    private DialectFactory dialectFactory = null;
+
     private Dialect dialect = null;
 
     @Reference(name = REF_NAME_STATISTICS_PROVIDER)
     private StatisticsProvider statisticsProvider = null;
-    
+
 //    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 //    private QueryProvider queryProvider;
 //
-//    
+//
 //    @Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 //    private DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
 
@@ -73,9 +76,8 @@ public class BasicContext implements Context {
         this.config = CONVERTER.convert(coniguration)
                 .to(BasicContextConfig.class);
         try (Connection connection = dataSource.getConnection()) {
-            if (!dialect.initialize(connection)) {
-                throw new Exception(ERR_MSG_DIALECT_INIT);
-            }
+            Optional<Dialect> optionalDialect =  dialectFactory.tryCreateDialect(connection);
+            dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
         }
         statisticsProvider.initialize(dataSource, getDialect());
     }

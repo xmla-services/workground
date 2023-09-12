@@ -12,19 +12,16 @@
 */
 package org.eclipse.daanse.db.dialect.db.mssqlserver;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.db.dialect.db.common.Util;
+
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Microsoft SQL Server
@@ -33,9 +30,6 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MSSQL'",
-		"database.product:String='MSSQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
 
     private final DateFormat df =
@@ -43,9 +37,8 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "MSSQL";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public MicrosoftSqlServerDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

@@ -56,8 +56,7 @@ class CodeSetTest {
   void testSucces_CodeSetContainsOnlyCodeForPostgresDialect()
     throws Exception
     {
-    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
-    postgreSqlDialect.initialize(
+    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
             POSTGRESQL_PRODUCT_VERSION));
@@ -84,8 +83,7 @@ class CodeSetTest {
   void testSucces_CodeSetContainsCodeForBothPostgresAndGenericDialects()
     throws Exception
     {
-	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
-	    postgreSqlDialect.initialize(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
             POSTGRESQL_PRODUCT_VERSION));
@@ -114,8 +112,7 @@ class CodeSetTest {
     testSucces_CodeSetContainsCodeForBothPostgresAndPostgresqlDialects()
       throws Exception
       {
-	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
-	    postgreSqlDialect.initialize(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
             POSTGRESQL_PRODUCT_VERSION));
@@ -142,8 +139,7 @@ class CodeSetTest {
   void testSucces_CodeSetContainsOnlyCodeForGenericlDialect()
     throws Exception
     {
-	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
-	    postgreSqlDialect.initialize(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
             POSTGRESQL_PRODUCT_VERSION));
@@ -169,8 +165,7 @@ class CodeSetTest {
   void testMondrianExceptionThrown_WhenCodeSetContainsNOCodeForDialect()
     throws Exception
     {
-	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
-	    postgreSqlDialect.initialize(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
             POSTGRESQL_PRODUCT_VERSION));

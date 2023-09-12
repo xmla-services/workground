@@ -9,15 +9,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.sybase;
 
+import java.sql.Connection;
 import java.sql.Date;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Sybase database.
@@ -25,16 +22,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SYBASE'",
-		"database.product:String='SYBASE'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class SybaseDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "SQLSTREAM";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public SybaseDialect(Connection connection) {
+        super(connection);
     }
 
     @Override
