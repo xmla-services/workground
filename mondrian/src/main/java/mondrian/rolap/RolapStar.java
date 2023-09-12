@@ -261,7 +261,6 @@ public class RolapStar {
      * it is accessed via a thread-local, the data structures can be accessed
      * without acquiring locks.
      *
-     * @see Util#deprecated(Object)
      */
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
@@ -626,7 +625,6 @@ public class RolapStar {
      *
      * <p>Must be called from synchronized context.
      *
-     * @see Util#deprecated(Object)  currently always returns null -- remove
      */
     public Aggregation lookupSegment(AggregationKey aggregationKey) {
         return localBars.get().aggregations.get(aggregationKey);

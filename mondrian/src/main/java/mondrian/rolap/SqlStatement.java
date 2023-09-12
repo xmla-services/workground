@@ -228,7 +228,6 @@ public class SqlStatement {
       long timeNanos = System.nanoTime();
       final long executeNanos = timeNanos - startTimeNanos;
       final long executeMillis = executeNanos / 1000000;
-      Util.addDatabaseTime( executeMillis );
       status = new StringBuilder(", exec ").append(executeMillis).append(" ms").toString();
 
       locus.getServer().getMonitor().sendEvent(
