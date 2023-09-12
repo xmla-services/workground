@@ -1258,32 +1258,6 @@ public class Util extends XOMUtil {
         return null;
     }
 
-    /**
-     * Insert a call to this method if you want to flag a piece of
-     * undesirable code.
-     *
-     * @deprecated
-     */
-    @Deprecated
-	public static <T> T deprecated(T reason) {
-        throw new UnsupportedOperationException(reason.toString());
-    }
-
-    /**
-     * Insert a call to this method if you want to flag a piece of
-     * undesirable code.
-     *
-     * @deprecated
-     */
-    @Deprecated
-	public static <T> T deprecated(T reason, boolean fail) {
-        if (fail) {
-            throw new UnsupportedOperationException(reason.toString());
-        } else {
-            return reason;
-        }
-    }
-
     public static List<Member> addLevelCalculatedMembers(
         SchemaReader reader,
         Level level,
@@ -2971,41 +2945,6 @@ public class Util extends XOMUtil {
         return copy;
     }
 
-    /**
-     * Returns the cumulative amount of time spent accessing the database.
-     *
-     * @deprecated Use {@link mondrian.server.monitor.Monitor#getServer()} and
-     *  {@link mondrian.server.monitor.ServerInfo#sqlStatementExecuteNanos};
-     *  will be removed in 4.0.
-     */
-    @Deprecated
-	public static long dbTimeMillis() {
-        return databaseMillis;
-    }
-
-    /**
-     * Adds to the cumulative amount of time spent accessing the database.
-     *
-     * @deprecated Will be removed in 4.0.
-     */
-    @Deprecated
-	public static void addDatabaseTime(long millis) {
-        databaseMillis += millis;
-    }
-
-    /**
-     * Returns the system time less the time spent accessing the database.
-     * Use this method to figure out how long an operation took: call this
-     * method before an operation and after an operation, and the difference
-     * is the amount of non-database time spent.
-     *
-     * @deprecated Will be removed in 4.0.
-     */
-    @Deprecated
-	public static long nonDbTimeMillis() {
-        final long systemMillis = System.currentTimeMillis();
-        return systemMillis - databaseMillis;
-    }
 
     /**
      * Creates a very simple implementation of {@link Validator}. (Only

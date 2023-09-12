@@ -449,23 +449,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
     /**
-     * Issues a cancel request on this Query object.  Once the thread
-     * running the query detects the cancel request, the query execution will
-     * throw an exception. See <code>BasicQueryTest.testCancel</code> for an
-     * example of usage of this method.
-     *
-     * @deprecated This method is deprecated and will be removed in mondrian-4.0
-     */
-    @Deprecated
-	public void cancel() {
-        try {
-            statement.cancel();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Determines whether an alert for non-native evaluation needs
      * to be posted.
      *

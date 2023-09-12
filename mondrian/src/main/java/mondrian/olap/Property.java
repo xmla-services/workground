@@ -151,22 +151,7 @@ public class Property extends EnumeratedValues.BasicValue {
 
     public static final int CONTRIBUTING_CHILDREN_ORDINAL = 4;
 
-    /**
-     * Definition of the internal property which
-     * holds, for a member of a  parent-child hierarchy, a
-     * {@link java.util.List} containing the member's data
-     * member and all of its children (including non-visible children).
-     *
-     * @deprecated Property is not used and will be removed in mondrian-4.0;
-     * use {@link mondrian.olap.SchemaReader#getParentChildContributingChildren}
-     */
-    @Deprecated(since = "Property is not used and will be removed in mondrian-4.0")
-	public static final Property CONTRIBUTING_CHILDREN =
-        new Property(
-            "$contributingChildren", Datatype.TYPE_OTHER,
-            CONTRIBUTING_CHILDREN_ORDINAL, true, false, false, null);
-
-    public static final int FORMULA_ORDINAL = 5;
+     public static final int FORMULA_ORDINAL = 5;
     /**
      * Definition of the internal property which
      * returns a calculated member's {@link FormulaImpl} object.
@@ -825,7 +810,6 @@ public class Property extends EnumeratedValues.BasicValue {
                 AGGREGATION_TYPE,
                 NAME_PROPERTY,
                 CAPTION,
-                CONTRIBUTING_CHILDREN,
                 FORMULA,
                 CATALOG_NAME,
                 SCHEMA_NAME,

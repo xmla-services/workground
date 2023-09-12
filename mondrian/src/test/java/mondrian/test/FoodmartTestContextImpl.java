@@ -1645,7 +1645,6 @@ public void assertSqlEquals(
       rs = stmt.executeQuery( actualSql );
       long time = System.currentTimeMillis();
       final long execMs = time - startTime;
-      Util.addDatabaseTime( execMs );
 
       RolapUtil.SQL_LOGGER.debug( ", exec " + execMs + " ms" );
 

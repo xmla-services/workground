@@ -1774,7 +1774,6 @@ public class BasicQueryTest {
     // If this call took longer than 10 seconds, the performance bug has
     // probably resurfaced again.
     final long afterParseMillis = System.currentTimeMillis();
-    final long afterParseNonDbMillis = afterParseMillis - Util.dbTimeMillis();
     final long parseMillis = afterParseMillis - start;
     assertTrue(parseMillis <= 10000, "performance problem: parse took " + parseMillis + " milliseconds");
 
@@ -1786,11 +1785,8 @@ public class BasicQueryTest {
     // the performance bug has
     // probably resurfaced again.
     final long afterExecMillis = System.currentTimeMillis();
-    final long afterExecNonDbMillis = afterExecMillis - Util.dbTimeMillis();
-    final long execNonDbMillis = afterExecNonDbMillis - afterParseNonDbMillis;
     final long execMillis = ( afterExecMillis - afterParseMillis );
-    assertTrue(execNonDbMillis <= 2000 && execMillis <= 30000, "performance problem: execute took " + execMillis + " milliseconds, " + execNonDbMillis
-        + " milliseconds excluding db");
+    assertTrue(execMillis <= 30000, "performance problem: execute took " + execMillis + " milliseconds, " );
   }
 
     @ParameterizedTest
@@ -5632,7 +5628,7 @@ public class BasicQueryTest {
         Thread.sleep( 500 );
 
         // Cancel the first
-        q1.cancel();
+        q1.getStatement().cancel();
 
         // Wait a bit for the cancelation of q1 to propagate.
         Thread.sleep( 3000 );
@@ -5668,7 +5664,7 @@ public class BasicQueryTest {
         Thread.sleep( 500 );
 
         // Cancel the first
-        q1.cancel();
+        q1.getStatement().cancel();
 
         // Run the second immediatly
         Future<?> f2 = exec.submit( r2 );
