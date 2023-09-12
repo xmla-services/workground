@@ -1139,15 +1139,6 @@ public class JdbcSchema {
     }
 
     /**
-     * @deprecated API updated to pass Mondrian connection properties
-     * See: {@link #load(PropertyList)}
-     */
-    @Deprecated
-    public void load() throws SQLException {
-        load(new Util.PropertyList());
-    }
-
-    /**
      * This forces the tables to be loaded.
      * @param connectInfo Mondrian connection properties
      * @throws SQLException

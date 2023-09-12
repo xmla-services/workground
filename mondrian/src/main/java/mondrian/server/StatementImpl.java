@@ -124,15 +124,6 @@ public abstract class StatementImpl implements Statement {
     }
 
     @Override
-	public void checkCancelOrTimeout() {
-        final Execution execution0 = execution;
-        if (execution0 == null) {
-            return;
-        }
-        execution0.checkCancelOrTimeout();
-    }
-
-    @Override
 	public SchemaReader getSchemaReader() {
         return getMondrianConnection().getSchemaReader().withLocus();
     }

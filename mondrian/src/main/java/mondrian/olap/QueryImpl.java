@@ -314,19 +314,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             query.strictValidation);
     }
 
-    /**
-     * Sets the timeout in milliseconds of this Query.
-     *
-     * <p>Zero means no timeout.
-     *
-     * @param queryTimeoutMillis Timeout in milliseconds
-     *
-     * @deprecated This method will be removed in mondrian-4.0
-     */
-    @Deprecated
-	public void setQueryTimeoutMillis(long queryTimeoutMillis) {
-        statement.setQueryTimeoutMillis(queryTimeoutMillis);
-    }
+
 
   public QueryPart[] getCellProperties() {
         return this.cellProperties;
@@ -456,15 +444,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             resolvedIdentifiers);
     }
 
-    /**
-     * @deprecated Please use {@link Query)}; this method will be removed in
-     * mondrian-4.0
-     */
-    @Deprecated
-	public QueryImpl safeClone() {
-        return new QueryImpl(this);
-    }
-
     public Connection getConnection() {
         return statement.getMondrianConnection();
     }
@@ -484,40 +463,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Checks if either a cancel request has been issued on the query or
-     * the execution time has exceeded the timeout value (if one has been
-     * set).  Exceptions are raised if either of these two conditions are
-     * met.  This method should be called periodically during query execution
-     * to ensure timely detection of these events, particularly before/after
-     * any potentially long running operations.
-     *
-     * @deprecated This method will be removed in mondrian-4.0
-     */
-    @Deprecated
-	public void checkCancelOrTimeout() {
-        final Execution execution0 = statement.getCurrentExecution();
-        if (execution0 == null) {
-            return;
-        }
-        execution0.checkCancelOrTimeout();
-    }
-
-    /**
-     * Gets the query start time
-     * @return start time
-     *
-     * @deprecated Use {@link Execution#getStartTime}. This method is deprecated
-     *   and will be removed in mondrian-4.0
-     */
-    @Deprecated
-	public long getQueryStartTime() {
-        final Execution currentExecution = statement.getCurrentExecution();
-        return currentExecution == null
-            ? 0
-            : currentExecution.getStartTime();
     }
 
     /**
@@ -1647,23 +1592,6 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void clearEvalCache() {
         evalCache.clear();
-    }
-
-    /**
-     * Closes this query.
-     *
-     * <p>Releases any resources held. Writes statistics to log if profiling
-     * is enabled.
-     *
-     * <p>This method is idempotent.
-     *
-     * @deprecated This method will be removed in mondrian-4.0.
-     */
-    @Deprecated(since = "mondrian-4.0")
-	public void close() {
-        if (ownStatement) {
-            statement.close();
-        }
     }
 
     public Statement getStatement() {

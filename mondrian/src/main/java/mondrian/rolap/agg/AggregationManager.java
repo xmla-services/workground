@@ -81,21 +81,6 @@ public class AggregationManager extends RolapAggregationManager {
     }
 
     /**
-     * Returns or creates the singleton.
-     *
-     * @deprecated No longer a singleton, and will be removed in mondrian-4.
-     *   Use {@link mondrian.olap.MondrianServer#getAggregationManager()}.
-     *   To get a server, call
-     *   {@link mondrian.olap.MondrianServer#forConnection(mondrian.olap.Connection)},
-     *   passing in a null connection if you absolutely must.
-     */
-    @Deprecated
-	public static synchronized AggregationManager instance() {
-        return
-            MondrianServer.forId(null).getAggregationManager();
-    }
-
-    /**
      * Called by FastBatchingCellReader.load where the
      * RolapStar creates an Aggregation if needed.
      *
