@@ -1073,35 +1073,6 @@ public Context getContext() {
     return jdbc + database + integratedSecurity;
   }
 
-  /**
-   * Data source that gets connections from an underlying data source but
-   * with different user name and password.
-   */
-  private static class UserPasswordDataSource extends DelegatingDataSource {
-    private final String jdbcUser;
-    private final String jdbcPassword;
-
-    /**
-     * Creates a UserPasswordDataSource
-     *
-     * @param dataSource   Underlying data source
-     * @param jdbcUser     User name
-     * @param jdbcPassword Password
-     */
-    public UserPasswordDataSource(
-      DataSource dataSource,
-      String jdbcUser,
-      String jdbcPassword ) {
-      super( dataSource );
-      this.jdbcUser = jdbcUser;
-      this.jdbcPassword = jdbcPassword;
-    }
-
-    @Override
-	public Connection getConnection() throws SQLException {
-      return dataSource.getConnection( jdbcUser, jdbcPassword );
-    }
-  }
 
   /**
    * <p>Implementation of {@link Statement} for use when you don't have an
