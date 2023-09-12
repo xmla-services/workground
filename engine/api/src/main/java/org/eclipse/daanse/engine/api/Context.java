@@ -47,13 +47,26 @@ public interface Context {
     Dialect getDialect();
 
     /**
-     * Gives access to a {@link StatisticsProvider} that is initialised with the
+     * Gives access to a {@link StatisticsProvider} that is initialized with the
      * {@link DataSource} of this {@link Context}.
      *
      * @return StatisticsProvider
      */
     StatisticsProvider getStatisticsProvider();
 
+    /**
+     * Gives access to a {@link DataBaseMappingSchemaProvider}.
+     *
+     * @return {@link DataBaseMappingSchemaProvider}.
+     */
+//    DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider();
+    
+    /**
+     * Gives access to a {@link QueryProvider}.
+     *
+     * @return {@link QueryProvider}.
+     */
+//    QueryProvider getQueryProvider(); 
     /*
      * The human readable name of the Context
      */
