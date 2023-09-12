@@ -11,6 +11,7 @@
 
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 
-import mondrian.olap.LevelType;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.agg.MemberColumnPredicate;

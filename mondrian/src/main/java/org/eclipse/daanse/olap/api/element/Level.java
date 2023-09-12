@@ -14,7 +14,6 @@
 
 package org.eclipse.daanse.olap.api.element;
 
-import mondrian.olap.LevelType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
 import mondrian.spi.MemberFormatter;
