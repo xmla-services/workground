@@ -17,16 +17,16 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -46,7 +46,7 @@ import mondrian.rolap.RolapHierarchy;
 class OpeningClosingPeriodFunDef extends FunDefBase {
     private final boolean opening;
 
-    static final Resolver OpeningPeriodResolver =
+    static final FunctionResolver OpeningPeriodResolver =
         new MultiResolver(
             "OpeningPeriod",
             "OpeningPeriod([<Level>[, <Member>]])",
@@ -54,12 +54,12 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm"})
     {
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             return new OpeningClosingPeriodFunDef(dummyFunDef, true);
         }
     };
 
-    static final Resolver ClosingPeriodResolver =
+    static final FunctionResolver ClosingPeriodResolver =
         new MultiResolver(
             "ClosingPeriod",
             "ClosingPeriod([<Level>[, <Member>]])",
@@ -67,13 +67,13 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm", "fmm"})
     {
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             return new OpeningClosingPeriodFunDef(dummyFunDef, false);
         }
     };
 
     public OpeningClosingPeriodFunDef(
-        FunDef dummyFunDef,
+        FunctionDefinition dummyFunDef,
         boolean opening)
     {
         super(dummyFunDef);
@@ -95,7 +95,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final LevelCalc levelCalc;
         final MemberCalc memberCalc;

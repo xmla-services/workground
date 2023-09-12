@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.mdx.MemberExpressionImpl;
-
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -25,6 +23,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;

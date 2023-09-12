@@ -13,15 +13,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -51,12 +51,12 @@ import mondrian.resource.MondrianResource;
 public class CastFunDef extends FunDefBase {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    private CastFunDef(FunDef dummyFunDef) {
+    private CastFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Type targetType = call.getType();
         final Exp arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
@@ -137,7 +137,7 @@ public class CastFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args, Validator validator, List<Conversion> conversions)
         {
             if (args.length != 2) {
@@ -159,7 +159,7 @@ public class CastFunDef extends FunDefBase {
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
-            final FunDef dummyFunDef =
+            final FunctionDefinition dummyFunDef =
                 FunUtil.createDummyFunDef(this, returnCategory, args);
             return new CastFunDef(dummyFunDef);
         }

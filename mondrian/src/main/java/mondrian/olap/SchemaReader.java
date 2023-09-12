@@ -497,7 +497,7 @@ public interface SchemaReader {
      * @param calc the calc to be natively evaluated
      */
     NativeEvaluator getNativeSetEvaluator(
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args,
         Evaluator evaluator,
         Calc calc);

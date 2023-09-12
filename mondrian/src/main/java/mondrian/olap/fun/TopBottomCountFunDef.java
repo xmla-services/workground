@@ -16,22 +16,22 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
@@ -52,7 +52,7 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the top of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, true );
       }
     };
@@ -64,19 +64,19 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the bottom of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, false );
       }
     };
 
-  public TopBottomCountFunDef( FunDef dummyFunDef, final boolean top ) {
+  public TopBottomCountFunDef( FunctionDefinition dummyFunDef, final boolean top ) {
     super( dummyFunDef );
     this.top = top;
 
   }
 
   @Override
-public Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to sort it later.
     final TupleListCalc tupleListCalc =

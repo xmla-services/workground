@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import mondrian.olap.api.Segment;
-
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -43,6 +41,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
@@ -51,12 +50,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.mdx.LevelExpressionImpl;
@@ -67,13 +66,14 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.api.Segment;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -92,8 +92,8 @@ public class NativizeSetFunDef extends FunDefBase {
     private static final String SENTINEL_PREFIX = "_Nativized_Sentinel_";
     private static final String MEMBER_NAME_PREFIX = "_Nativized_Member_";
     private static final String SET_NAME_PREFIX = "_Nativized_Set_";
-    private static final List<Class<? extends FunDef>> functionWhitelist =
-        Arrays.<Class<? extends FunDef>>asList(
+    private static final List<Class<? extends FunctionDefinition>> functionWhitelist =
+        Arrays.<Class<? extends FunctionDefinition>>asList(
             CacheFunDef.class,
             SetFunDef.class,
             CrossJoinFunDef.class,
@@ -124,7 +124,7 @@ public class NativizeSetFunDef extends FunDefBase {
     private static final String PARTIAL_ESTIMATE_MESSAGE =
         "isHighCardinality=%b: partial estimate=%,d threshold=%,d";
 
-    public NativizeSetFunDef(FunDef dummyFunDef) {
+    public NativizeSetFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
         NativizeSetFunDef.LOGGER.debug("---- NativizeSetFunDef constructor");
     }
@@ -139,7 +139,7 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
@@ -331,7 +331,7 @@ public class NativizeSetFunDef extends FunDefBase {
         private final Exp originalExp;
 
         protected NativeListCalc(
-            ResolvedFunCallImpl call,
+        	ResolvedFunCall call,
             Calc[] calcs,
             ExpCompiler compiler,
             SubstitutionMap substitutionMap,

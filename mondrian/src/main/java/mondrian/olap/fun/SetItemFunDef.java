@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
@@ -20,13 +21,12 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -49,7 +49,7 @@ import mondrian.olap.type.Type;
  * @since Mar 23, 2006
  */
 class SetItemFunDef extends FunDefBase {
-    static final Resolver intResolver =
+    static final FunctionResolver intResolver =
         new ReflectiveMultiResolver(
             "Item",
             "<Set>.Item(<Index>)",
@@ -57,7 +57,7 @@ class SetItemFunDef extends FunDefBase {
             new String[] {"mmxn"},
             SetItemFunDef.class);
 
-    static final Resolver stringResolver =
+    static final FunctionResolver stringResolver =
         new ResolverBase(
             "Item",
             "<Set>.Item(<String> [, ...])",
@@ -65,7 +65,7 @@ class SetItemFunDef extends FunDefBase {
             Syntax.Method)
     {
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -92,12 +92,12 @@ class SetItemFunDef extends FunDefBase {
                     "Argument count does not match set's cardinality " + arity);
             }
             final int category = arity == 1 ? Category.MEMBER : Category.TUPLE;
-            FunDef dummy = FunUtil.createDummyFunDef(this, category, args);
+            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }
     };
 
-    public SetItemFunDef(FunDef dummyFunDef) {
+    public SetItemFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -108,7 +108,7 @@ class SetItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Type elementType =

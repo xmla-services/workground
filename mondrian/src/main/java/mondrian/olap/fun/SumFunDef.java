@@ -10,20 +10,20 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.ResultStyleException;
 
 /**
@@ -39,12 +39,12 @@ class SumFunDef extends AbstractAggregateFunDef {
           SumFunDef.class );
   private static final String TIMING_NAME = SumFunDef.class.getSimpleName();
 
-  public SumFunDef( FunDef dummyFunDef ) {
+  public SumFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
   @Override
-public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     // What is the desired type to use to get the underlying values
     for ( ResultStyle r : compiler.getAcceptableResultStyles() ) {
       Calc calc;
@@ -79,7 +79,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
         .getAcceptableResultStyles() );
   }
 
-  protected Calc compileCall( final ResolvedFunCallImpl call, ExpCompiler compiler, ResultStyle resultStyle ) {
+  protected Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler, ResultStyle resultStyle ) {
     final Calc ncalc = compiler.compileIter( call.getArg( 0 ) );
     if ( ncalc == null ) {
       return null;
@@ -94,7 +94,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     }
   }
 
-  protected Calc genIterCalc( final ResolvedFunCallImpl call, final TupleIteratorCalc tupleIteratorCalc, final Calc calc ) {
+  protected Calc genIterCalc( final ResolvedFunCall call, final TupleIteratorCalc tupleIteratorCalc, final Calc calc ) {
     return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { tupleIteratorCalc, calc } ) {
       @Override
 	public Double evaluate( Evaluator evaluator ) {
@@ -116,7 +116,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     };
   }
 
-  protected Calc genListCalc( final ResolvedFunCallImpl call, final TupleListCalc tupleListCalc, final Calc calc ) {
+  protected Calc genListCalc( final ResolvedFunCall call, final TupleListCalc tupleListCalc, final Calc calc ) {
     return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { tupleListCalc, calc } ) {
       @Override
 	public Double evaluate( Evaluator evaluator ) {

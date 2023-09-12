@@ -21,30 +21,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.FunDef;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.Syntax;
 import mondrian.util.Pair;
 
 /**
- * Abstract implementation of {@link FunTable}.
+ * Abstract implementation of {@link FunctionTable}.
  *
  * <p>The derived class must implement
- * {@link #defineFunctions(mondrian.olap.FunTable.Builder)} to define
+ * {@link #defineFunctions(mondrian.olap.FunctionTable.FunctionTableCollector)} to define
  * each function which will be recognized by this table. This method is called
  * from the constructor, after which point, no further functions can be added.
  */
-public abstract class FunTableImpl implements FunTable {
+public abstract class FunTableImpl implements FunctionTable {
     /**
      * Maps the upper-case name of a function plus its
      * {@link mondrian.olap.Syntax} to an array of
-     * {@link Resolver} objects for that name.
+     * {@link FunctionResolver} objects for that name.
      */
-    private Map<Pair<String, Syntax>, List<Resolver>> mapNameToResolvers;
+    private Map<Pair<String, Syntax>, List<FunctionResolver>> mapNameToResolvers;
     private Set<String> reservedWordSet;
     private List<String> reservedWordList;
     private Set<String> propertyWords;
-    private List<FunInfo> funInfoList;
+    private List<FunctionInfo> functionInfos;
 
     /**
      * Creates a FunTableImpl.
@@ -52,16 +52,21 @@ public abstract class FunTableImpl implements FunTable {
     protected FunTableImpl() {
     }
 
-    /**
-     * Initializes the function table.
-     */
-    public final void init() {
-        final BuilderImpl builder = new BuilderImpl();
+	/**
+	 * Initializes the function table.
+	 */
+	public final void init() {
+		final BuilderImpl builder = new BuilderImpl();
+		init(builder);
+
+	}
+    	
+    public final void init(BuilderImpl builder) {
         defineFunctions(builder);
         builder.organizeFunctions();
 
         // Copy information out of builder into this.
-        this.funInfoList = Collections.unmodifiableList(builder.funInfoList);
+        this.functionInfos = Collections.unmodifiableList(builder.funInfoList);
         this.mapNameToResolvers =
             Collections.unmodifiableMap(builder.mapNameToResolvers);
         this.reservedWordSet = builder.reservedWords;
@@ -100,9 +105,9 @@ public abstract class FunTableImpl implements FunTable {
     }
 
     @Override
-	public List<Resolver> getResolvers() {
-        final List<Resolver> list = new ArrayList<>();
-        for (List<Resolver> resolvers : mapNameToResolvers.values()) {
+	public List<FunctionResolver> getResolvers() {
+        final List<FunctionResolver> list = new ArrayList<>();
+        for (List<FunctionResolver> resolvers : mapNameToResolvers.values()) {
             list.addAll(resolvers);
         }
         return list;
@@ -114,14 +119,14 @@ public abstract class FunTableImpl implements FunTable {
     }
 
     @Override
-	public List<FunInfo> getFunInfoList() {
-        return funInfoList;
+	public List<FunctionInfo> getFunctionInfos() {
+        return functionInfos;
     }
 
     @Override
-	public List<Resolver> getResolvers(String name, Syntax syntax) {
+	public List<FunctionResolver> getResolvers(String name, Syntax syntax) {
         Pair<String, Syntax> key = FunTableImpl.makeResolverKey(name, syntax);
-        List<Resolver> resolvers = mapNameToResolvers.get(key);
+        List<FunctionResolver> resolvers = mapNameToResolvers.get(key);
         if (resolvers == null) {
             resolvers = Collections.emptyList();
         }
@@ -129,26 +134,26 @@ public abstract class FunTableImpl implements FunTable {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.FunTable.Builder}.
-     * Functions are added to lists each time {@link #define(Resolver)} is
+     * Implementation of {@link mondrian.olap.FunctionTable.FunctionTableCollector}.
+     * Functions are added to lists each time {@link #define(FunctionResolver)} is
      * called, then {@link #organizeFunctions()} sorts and indexes the map.
      */
-    private class BuilderImpl implements Builder {
-        private final List<Resolver> resolverList = new ArrayList<>();
-        private final List<FunInfo> funInfoList = new ArrayList<>();
-        private final Map<Pair<String, Syntax>, List<Resolver>>
+    private class BuilderImpl implements FunctionTableCollector {
+        private final List<FunctionResolver> resolverList = new ArrayList<>();
+        private final List<FunctionInfo> funInfoList = new ArrayList<>();
+        private final Map<Pair<String, Syntax>, List<FunctionResolver>>
             mapNameToResolvers =
             new HashMap<>();
         private final Set<String> reservedWords = new HashSet<>();
         private final Set<String> propertyWords = new HashSet<>();
 
         @Override
-		public void define(FunDef funDef) {
+		public void define(FunctionDefinition funDef) {
             define(new SimpleResolver(funDef));
         }
 
         @Override
-		public void define(Resolver resolver) {
+		public void define(FunctionResolver resolver) {
             funInfoList.add(FunInfo.make(resolver));
             if (resolver.getSyntax() == Syntax.Property) {
                 propertyWords.add(resolver.getName().toUpperCase());
@@ -161,7 +166,7 @@ public abstract class FunTableImpl implements FunTable {
         }
 
         @Override
-		public void define(FunInfo funInfo) {
+		public void define(FunctionInfo funInfo) {
             funInfoList.add(funInfo);
         }
 
@@ -177,14 +182,14 @@ public abstract class FunTableImpl implements FunTable {
             Collections.sort(funInfoList);
 
             // Map upper-case function names to resolvers.
-            final List<List<Resolver>> nonSingletonResolverLists =
+            final List<List<FunctionResolver>> nonSingletonResolverLists =
                 new ArrayList<>();
-            for (Resolver resolver : resolverList) {
+            for (FunctionResolver resolver : resolverList) {
                 Pair<String, Syntax> key =
                     FunTableImpl.makeResolverKey(
                         resolver.getName(),
                         resolver.getSyntax());
-                List<Resolver> list = mapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
+                List<FunctionResolver> list = mapNameToResolvers.computeIfAbsent(key, k -> new ArrayList<>());
                 list.add(resolver);
                 if (list.size() == 2) {
                     nonSingletonResolverLists.add(list);
@@ -192,14 +197,14 @@ public abstract class FunTableImpl implements FunTable {
             }
 
             // Sort lists by signature (skipping singleton lists)
-            final Comparator<Resolver> comparator =
+            final Comparator<FunctionResolver> comparator =
                 new Comparator<>() {
                     @Override
-					public int compare(Resolver o1, Resolver o2) {
+					public int compare(FunctionResolver o1, FunctionResolver o2) {
                         return o1.getSignature().compareTo(o2.getSignature());
                     }
                 };
-            for (List<Resolver> resolverListInner : nonSingletonResolverLists) {
+            for (List<FunctionResolver> resolverListInner : nonSingletonResolverLists) {
                 Collections.sort(resolverListInner, comparator);
             }
         }

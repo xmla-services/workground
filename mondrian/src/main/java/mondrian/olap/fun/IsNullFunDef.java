@@ -9,14 +9,14 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
 
@@ -38,12 +38,12 @@ class IsNullFunDef extends FunDefBase {
             new String[]{"Qbm", "Qbl", "Qbh", "Qbd"},
             IsNullFunDef.class);
 
-    public IsNullFunDef(FunDef dummyFunDef) {
+    public IsNullFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
 
         if (call.getArgCount() != 1) {
             throw new IllegalArgumentException("ArgCount should be 1 ");

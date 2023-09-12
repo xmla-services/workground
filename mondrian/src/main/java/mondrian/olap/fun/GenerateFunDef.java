@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
@@ -24,17 +25,17 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCal
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
@@ -70,7 +71,7 @@ class GenerateFunDef extends FunDefBase {
 
     private static final String[] ReservedWords = new String[] {"ALL"};
 
-    public GenerateFunDef(FunDef dummyFunDef) {
+    public GenerateFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -87,7 +88,7 @@ class GenerateFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleIteratorCalc tupleIteratorCalc = compiler.compileIter(call.getArg(0));
         if (call.getArg(1).getType() instanceof StringType
                 || call.getArg(1).getType() instanceof NumericType) {
@@ -129,7 +130,7 @@ class GenerateFunDef extends FunDefBase {
         private final boolean all;
 
         public GenerateListCalcImpl(
-            ResolvedFunCallImpl call,
+        		ResolvedFunCall call,
             TupleIteratorCalc tupleIteratorCalc,
             TupleListCalc listCalc2,
             int arityOut,
@@ -209,7 +210,7 @@ class GenerateFunDef extends FunDefBase {
         private final StringCalc sepCalc;
 
         public GenerateStringCalcImpl(
-            ResolvedFunCallImpl call,
+        	ResolvedFunCall call,
             TupleIteratorCalc tupleIteratorCalc,
             StringCalc stringCalc,
             StringCalc sepCalc)

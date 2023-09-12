@@ -14,6 +14,7 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
@@ -21,11 +22,10 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -66,7 +66,7 @@ class XtdFunDef extends FunDefBase {
 
   private static final String TIMING_NAME = XtdFunDef.class.getSimpleName();
 
-  public XtdFunDef( FunDef dummyFunDef, LevelType levelType ) {
+  public XtdFunDef( FunctionDefinition dummyFunDef, LevelType levelType ) {
     super( dummyFunDef );
     this.levelType = levelType;
   }
@@ -105,7 +105,7 @@ public Type getResultType( Validator validator, Exp[] args ) {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Level level = getLevel( compiler.getEvaluator() );
     switch ( call.getArgCount() ) {
       case 0:
@@ -151,7 +151,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     }
 
     @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
       return new XtdFunDef( dummyFunDef, levelType );
     }
   }

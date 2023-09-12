@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
@@ -34,7 +35,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -76,12 +77,12 @@ class DescendantsFunDef extends FunDefBase {
       DescendantsFunDef.class,
       Flag.getNames() );
 
-  public DescendantsFunDef( FunDef dummyFunDef ) {
+  public DescendantsFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
   @Override
-public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     if ( type0 instanceof SetType setType ) {
       if ( setType.getElementType() instanceof TupleType ) {

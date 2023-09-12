@@ -15,7 +15,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
@@ -25,7 +25,7 @@ import mondrian.olap.Util;
  *
  * @author Richard M. Emberson
  */
-public class FunInfo implements Comparable<FunInfo> {
+public class FunInfo implements FunctionInfo {
     private final Syntax syntax;
     private final String name;
     private final String description;
@@ -33,8 +33,8 @@ public class FunInfo implements Comparable<FunInfo> {
     private final int[][] parameterTypes;
     private String[] sigs;
 
-    static FunInfo make(Resolver resolver) {
-        FunDef funDef = resolver.getRepresentativeFunDef();
+    static FunInfo make(FunctionResolver resolver) {
+        FunctionDefinition funDef = resolver.getRepresentativeFunDef();
         if (funDef != null) {
             return new FunInfo(funDef);
         } else if (resolver instanceof MultiResolver multiResolver) {
@@ -44,7 +44,7 @@ public class FunInfo implements Comparable<FunInfo> {
         }
     }
 
-    FunInfo(FunDef funDef) {
+    FunInfo(FunctionDefinition funDef) {
         this.syntax = funDef.getSyntax();
         this.name = funDef.getName();
         assert name != null;
@@ -78,7 +78,7 @@ public class FunInfo implements Comparable<FunInfo> {
         this.sigs = FunInfo.makeSigs(syntax, name, returnTypes, parameterTypes);
     }
 
-    FunInfo(Resolver resolver) {
+    FunInfo(FunctionResolver resolver) {
         this.syntax = resolver.getSyntax();
         this.name = resolver.getName();
         assert name != null;
@@ -106,7 +106,8 @@ public class FunInfo implements Comparable<FunInfo> {
             new int[][] {FunUtil.decodeParameterCategories(flags)};
     }
 
-    public String[] getSignatures() {
+    @Override
+	public String[] getSignatures() {
         return sigs;
     }
 
@@ -131,21 +132,24 @@ public class FunInfo implements Comparable<FunInfo> {
     /**
      * Returns the syntactic type of the function.
      */
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return this.syntax;
     }
 
     /**
      * Returns the name of this function.
      */
-    public String getName() {
+    @Override
+	public String getName() {
         return this.name;
     }
 
     /**
      * Returns the description of this function.
      */
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return this.description;
     }
 
@@ -153,7 +157,8 @@ public class FunInfo implements Comparable<FunInfo> {
      * Returns the type of value returned by this function. Values are the same
      * as those returned by {@link mondrian.olap.Exp#getCategory()}.
      */
-    public int[] getReturnCategories() {
+    @Override
+	public int[] getReturnCategories() {
         return this.returnTypes;
     }
 
@@ -164,13 +169,14 @@ public class FunInfo implements Comparable<FunInfo> {
      * are applied to. Infix operators have two arguments, and prefix operators
      * have one argument.
      */
-    public int[][] getParameterCategories() {
+    @Override
+	public int[][] getParameterCategories() {
         return this.parameterTypes;
     }
 
     @Override
-	public int compareTo(FunInfo fi) {
-        int c = this.name.compareTo(fi.name);
+	public int compareTo(FunctionInfo fi) {
+        int c = this.name.compareTo(fi.getName());
         if (c != 0) {
             return c;
         }
@@ -218,4 +224,6 @@ public class FunInfo implements Comparable<FunInfo> {
         }
         return list;
     }
+
+
 }

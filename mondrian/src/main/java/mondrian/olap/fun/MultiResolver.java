@@ -15,7 +15,7 @@ import java.util.List;
 
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -28,7 +28,7 @@ import mondrian.olap.Validator;
  * @author jhyde
  * @since Feb 12, 2003
  */
-public abstract class MultiResolver implements Resolver {
+public abstract class MultiResolver implements FunctionResolver {
     private final String name;
     private final String signature;
     private final String description;
@@ -98,12 +98,12 @@ public abstract class MultiResolver implements Resolver {
     }
 
     @Override
-	public FunDef getRepresentativeFunDef() {
+	public FunctionDefinition getRepresentativeFunDef() {
         return null;
     }
 
     @Override
-	public FunDef resolve(
+	public FunctionDefinition resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)
@@ -123,7 +123,7 @@ outer:
                 }
             }
             int returnType = FunUtil.decodeReturnCategory(signature);
-            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
+            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return createFunDef(args, dummy);
         }
         return null;
@@ -142,5 +142,5 @@ outer:
         return true;
     }
 
-    protected abstract FunDef createFunDef(Exp[] args, FunDef dummyFunDef);
+    protected abstract FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef);
 }

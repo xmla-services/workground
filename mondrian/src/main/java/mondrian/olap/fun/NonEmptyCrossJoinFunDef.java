@@ -14,16 +14,16 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.RolapEvaluator;
@@ -45,12 +45,12 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
             new String[]{"fxxx"},
             NonEmptyCrossJoinFunDef.class);
 
-    public NonEmptyCrossJoinFunDef(FunDef dummyFunDef) {
+    public NonEmptyCrossJoinFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(final ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final TupleListCalc listCalc2 = compiler.compileList(call.getArg(1));
         return new AbstractListCalc(

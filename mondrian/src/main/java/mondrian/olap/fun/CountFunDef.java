@@ -11,18 +11,18 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Count</code> MDX function.
@@ -39,12 +39,12 @@ class CountFunDef extends AbstractAggregateFunDef {
           new String[] { "fnx", "fnxy" }, CountFunDef.class, CountFunDef.ReservedWords );
   private static final String TIMING_NAME = CountFunDef.class.getSimpleName();
 
-  public CountFunDef( FunDef dummyFunDef ) {
+  public CountFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
   @Override
-public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc calc = compiler.compileAs( call.getArg( 0 ), null, ResultStyle.ITERABLE_ANY );
     final boolean includeEmpty =
         call.getArgCount() < 2 || ( (Literal) call.getArg( 1 ) ).getValue().equals( "INCLUDEEMPTY" );

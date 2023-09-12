@@ -49,7 +49,7 @@ public class MdxParserImpl
 {
     private MdxParserValidator.QueryPartFactory factory;
     private Statement statement;
-    private FunTable funTable;
+    private FunctionTable funTable;
     private boolean strictValidation;
 
     public MdxParserImpl(
@@ -57,7 +57,7 @@ public class MdxParserImpl
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation)
     {
         this(new StringReader(term(queryString)));

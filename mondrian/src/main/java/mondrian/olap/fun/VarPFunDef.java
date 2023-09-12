@@ -10,17 +10,17 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>VarP</code> MDX builtin function
@@ -30,7 +30,7 @@ import mondrian.olap.FunDef;
  * @since Mar 23, 2006
  */
 class VarPFunDef extends AbstractAggregateFunDef {
-    static final Resolver VariancePResolver =
+    static final FunctionResolver VariancePResolver =
         new ReflectiveMultiResolver(
             "VarianceP",
             "VarianceP(<Set>[, <Numeric Expression>])",
@@ -38,7 +38,7 @@ class VarPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             VarPFunDef.class);
 
-    static final Resolver VarPResolver =
+    static final FunctionResolver VarPResolver =
         new ReflectiveMultiResolver(
             "VarP",
             "VarP(<Set>[, <Numeric Expression>])",
@@ -46,12 +46,12 @@ class VarPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             VarPFunDef.class);
 
-    public VarPFunDef(FunDef dummyFunDef) {
+    public VarPFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc =

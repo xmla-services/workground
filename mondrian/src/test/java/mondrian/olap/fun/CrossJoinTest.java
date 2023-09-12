@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -43,7 +44,7 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -405,7 +406,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
   }
 
   protected ResolvedFunCallImpl getResolvedFunCall() {
-    FunDef funDef = new TestFunDef();
+    FunctionDefinition funDef = new TestFunDef();
     Exp[] args = new Exp[ 0 ];
     Type returnType =
       new SetType(
@@ -419,7 +420,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
   ////////////////////////////////////////////////////////////////////////
   // Helper classes
   ////////////////////////////////////////////////////////////////////////
-  public static class TestFunDef implements FunDef {
+  public static class TestFunDef implements FunctionDefinition {
     TestFunDef() {
     }
 
@@ -464,12 +465,12 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       throw new UnsupportedOperationException();
     }
   }
 
-  public static class NullFunDef implements FunDef {
+  public static class NullFunDef implements FunctionDefinition {
     public NullFunDef() {
     }
 
@@ -514,7 +515,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return null;
     }
   }

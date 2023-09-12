@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.Type;
@@ -39,14 +39,14 @@ public class GlobalFunTable extends FunTableImpl {
     }
 
     @Override
-	public void defineFunctions(Builder builder) {
-        final FunTable builtinFunTable = BuiltinFunTable.instance();
+	public void defineFunctions(FunctionTableCollector builder) {
+        final FunctionTable builtinFunTable = BuiltinFunTable.instance();
         final List<String> reservedWords = builtinFunTable.getReservedWords();
         for (String reservedWord : reservedWords) {
             builder.defineReserved(reservedWord);
         }
-        final List<Resolver> resolvers = builtinFunTable.getResolvers();
-        for (Resolver resolver : resolvers) {
+        final List<FunctionResolver> resolvers = builtinFunTable.getResolvers();
+        for (FunctionResolver resolver : resolvers) {
             builder.define(resolver);
         }
 
@@ -72,7 +72,7 @@ public class GlobalFunTable extends FunTableImpl {
      * @param udfFactory Factory for UDF
      */
     private void defineUdf(
-        Builder builder,
+        FunctionTableCollector builder,
         UdfResolver.UdfFactory udfFactory)
     {
         // Instantiate class with default constructor.

@@ -10,17 +10,17 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>StdevP</code> builtin MDX function, and its alias
@@ -31,7 +31,7 @@ import mondrian.olap.FunDef;
  */
 class StdevPFunDef extends AbstractAggregateFunDef {
 
-    static final Resolver StdevpResolver =
+    static final FunctionResolver StdevpResolver =
         new ReflectiveMultiResolver(
             "StdevP",
             "StdevP(<Set>[, <Numeric Expression>])",
@@ -39,7 +39,7 @@ class StdevPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             StdevPFunDef.class);
 
-    static final Resolver StddevpResolver =
+    static final FunctionResolver StddevpResolver =
         new ReflectiveMultiResolver(
             "StddevP",
             "StddevP(<Set>[, <Numeric Expression>])",
@@ -47,12 +47,12 @@ class StdevPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             StdevPFunDef.class);
 
-    public StdevPFunDef(FunDef dummyFunDef) {
+    public StdevPFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc =

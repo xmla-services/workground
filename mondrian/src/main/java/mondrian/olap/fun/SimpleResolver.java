@@ -15,7 +15,7 @@ import java.util.List;
 
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 
@@ -25,15 +25,15 @@ import mondrian.olap.Validator;
  * @author jhyde
  * @since 3 March, 2002
  */
-class SimpleResolver implements Resolver {
-    private  final FunDef funDef;
+class SimpleResolver implements FunctionResolver {
+    private  final FunctionDefinition funDef;
 
-    SimpleResolver(FunDef funDef) {
+    SimpleResolver(FunctionDefinition funDef) {
         this.funDef = funDef;
     }
 
     @Override
-	public FunDef getRepresentativeFunDef() {
+	public FunctionDefinition getRepresentativeFunDef() {
         return funDef;
     }
 
@@ -63,7 +63,7 @@ class SimpleResolver implements Resolver {
     }
 
     @Override
-	public FunDef resolve(
+	public FunctionDefinition resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)

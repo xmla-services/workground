@@ -28,9 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -42,6 +39,7 @@ import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
@@ -61,8 +59,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
@@ -82,6 +80,9 @@ import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.olap.fun.FunDefBase;
@@ -989,7 +990,7 @@ public class RolapHierarchy extends HierarchyBase {
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCallImpl call,
+								ResolvedFunCall call,
                                 ExpCompiler compiler)
                             {
                                 return partialCalc;
@@ -1011,7 +1012,7 @@ public class RolapHierarchy extends HierarchyBase {
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCallImpl call, ExpCompiler compiler)
+									ResolvedFunCall call, ExpCompiler compiler)
                             {
                                 return ConstantCalcs.nullCalcOf(returnType);
                             }

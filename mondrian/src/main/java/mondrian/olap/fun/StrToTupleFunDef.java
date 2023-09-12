@@ -16,6 +16,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
@@ -23,11 +24,10 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.HierarchyExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -56,7 +56,7 @@ class StrToTupleFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
@@ -157,7 +157,7 @@ class StrToTupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -188,7 +188,7 @@ class StrToTupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef getRepresentativeFunDef() {
+		public FunctionDefinition getRepresentativeFunDef() {
             return new StrToTupleFunDef(new int[] {Category.STRING});
         }
     }

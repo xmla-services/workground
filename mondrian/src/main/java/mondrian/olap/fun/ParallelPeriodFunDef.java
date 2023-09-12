@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
@@ -20,10 +21,9 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.MemberType;
@@ -47,7 +47,7 @@ class ParallelPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmln", "fmlnm"},
             ParallelPeriodFunDef.class);
 
-    public ParallelPeriodFunDef(FunDef dummyFunDef) {
+    public ParallelPeriodFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -66,7 +66,7 @@ class ParallelPeriodFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         // Member defaults to [Time].currentmember
         Exp[] args = call.getArgs();
 

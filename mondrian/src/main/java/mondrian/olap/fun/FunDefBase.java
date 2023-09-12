@@ -15,13 +15,14 @@ import java.io.PrintWriter;
 
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -43,7 +44,7 @@ import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 
 /**
- * <code>FunDefBase</code> is the default implementation of {@link FunDef}.
+ * <code>FunDefBase</code> is the default implementation of {@link FunctionDefinition}.
  *
  * <h3>Signatures</h3>
  *
@@ -97,7 +98,7 @@ import mondrian.olap.type.TypeUtil;
  * @author jhyde
  * @since 26 February, 2002
  */
-public abstract class FunDefBase implements FunDef {
+public abstract class FunDefBase implements FunctionDefinition {
     protected final int flags;
     private final String name;
     final String signature;
@@ -209,13 +210,13 @@ public abstract class FunDefBase implements FunDef {
     }
 
     /**
-     * Convenience constructor when we are created by a {@link Resolver}.
+     * Convenience constructor when we are created by a {@link FunctionResolver}.
      *
      * @param resolver Resolver
      * @param returnType Return type
      * @param parameterTypes Parameter types
      */
-    FunDefBase(Resolver resolver, int returnType, int[] parameterTypes) {
+    FunDefBase(FunctionResolver resolver, int returnType, int[] parameterTypes) {
         this(
             resolver.getName(),
             null,
@@ -230,7 +231,7 @@ public abstract class FunDefBase implements FunDef {
      *
      * @param funDef Function definition to copy
      */
-    FunDefBase(FunDef funDef) {
+    FunDefBase(FunctionDefinition funDef) {
         this(
             funDef.getName(), funDef.getSignature(),
             funDef.getDescription(), funDef.getSyntax(),
@@ -420,7 +421,7 @@ public abstract class FunDefBase implements FunDef {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         throw Util.newInternal(
             new StringBuilder("function '").append( getSignature())
                 .append("' has not been implemented").toString());

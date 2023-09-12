@@ -20,7 +20,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunCall;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -30,12 +30,12 @@ import mondrian.olap.type.Type;
 /**
  * A <code>ResolvedFunCall</code> is a function applied to a list of operands,
  * which has been validated and resolved to a
- * {@link FunDef function definition}.
+ * {@link FunctionDefinition function definition}.
  *
  * @author jhyde
  * @since Jan 6, 2006
  */
-public final class ResolvedFunCallImpl extends ExpBase implements FunCall, ResolvedFunCall {
+public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCall {
 
     /**
      * The arguments to the function call.  Note that for methods, 0-th arg is
@@ -51,7 +51,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements FunCall, Resol
     /**
      * Function definition.
      */
-    private final FunDef funDef;
+    private final FunctionDefinition funDef;
 
     /**
      * Creates a function call.
@@ -60,7 +60,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements FunCall, Resol
      * @param args Arguments
      * @param returnType Return type
      */
-    public ResolvedFunCallImpl(FunDef funDef, Exp[] args, Type returnType) {
+    public ResolvedFunCallImpl(FunctionDefinition funDef, Exp[] args, Type returnType) {
         if (funDef == null || args == null || returnType == null) {
             throw new IllegalArgumentException("ResolvedFunCall params be not null");
         }
@@ -139,7 +139,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements FunCall, Resol
      * @return function definition
      */
     @Override
-    public FunDef getFunDef() {
+    public FunctionDefinition getFunDef() {
         return funDef;
     }
 

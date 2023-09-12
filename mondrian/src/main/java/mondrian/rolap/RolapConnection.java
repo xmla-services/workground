@@ -49,7 +49,7 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryImpl;
@@ -672,7 +672,7 @@ public Exp parseExpression( String expr ) {
     final Statement statement = getInternalStatement();
     try {
       MdxParserValidator parser = createParser();
-      final FunTable funTable = getSchema().getFunTable();
+      final FunctionTable funTable = getSchema().getFunTable();
       return parser.parseExpression( statement, expr, debug, funTable );
     } catch ( Throwable exception ) {
       throw MondrianResource.instance().FailedToParseQuery.ex(

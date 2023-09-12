@@ -18,7 +18,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunCall;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -33,7 +33,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 28, 2005
  */
-public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall, FunCall {
+public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall {
     private final String name;
     private final Syntax syntax;
     private final Exp[] args;
@@ -113,7 +113,7 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall,
     @Override
 	public Exp accept(Validator validator) {
         Exp[] newArgs = new Exp[args.length];
-        FunDef funDef =
+        FunctionDefinition funDef =
             FunUtil.resolveFunArgs(
                 validator, null, args, newArgs, name, syntax);
         return funDef.createCall(validator, newArgs);

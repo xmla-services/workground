@@ -22,7 +22,7 @@ import mondrian.spi.SegmentBody;
 /**
  * Describes an aggregation operator, such as "sum" or "count".
  *
- * @see FunDef
+ * @see FunctionDefinition
  * @see Evaluator
  *
  * @author jhyde$

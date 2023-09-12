@@ -52,12 +52,13 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 
 import mondrian.olap.Category;
 import mondrian.olap.DriverManager;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunInfo;
+import mondrian.olap.fun.FunctionInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
@@ -1834,14 +1835,14 @@ public class CmdRunner {
 
         String[] tokens = mdxCmd.split("\\s+");
 
-        final FunTable funTable = getConnection().getSchema().getFunTable();
+        final FunctionTable funTable = getConnection().getSchema().getFunTable();
         if (tokens.length == 1) {
             // prints names only once
-            List<FunInfo> funInfoList = funTable.getFunInfoList();
-            Iterator<FunInfo> it = funInfoList.iterator();
+            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
+            Iterator<FunctionInfo> it = funInfoList.iterator();
             String prevName = null;
             while (it.hasNext()) {
-                FunInfo fi = it.next();
+                FunctionInfo fi = it.next();
                 String name = fi.getName();
                 if (prevName == null || ! prevName.equals(name)) {
                     buf.append(name);
@@ -1852,10 +1853,10 @@ public class CmdRunner {
 
         } else if (tokens.length == 2) {
             String funcname = tokens[1];
-            List<FunInfo> funInfoList = funTable.getFunInfoList();
-            List<FunInfo> matches = new ArrayList<>();
+            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
+            List<FunctionInfo> matches = new ArrayList<>();
 
-            for (FunInfo fi : funInfoList) {
+            for (FunctionInfo fi : funInfoList) {
                 if (fi.getName().equalsIgnoreCase(funcname)) {
                     matches.add(fi);
                 }
@@ -1868,10 +1869,10 @@ public class CmdRunner {
                 buf.append(NL);
                 appendList(buf);
             } else {
-                Iterator<FunInfo> it = matches.iterator();
+                Iterator<FunctionInfo> it = matches.iterator();
                 boolean doname = true;
                 while (it.hasNext()) {
-                    FunInfo fi = it.next();
+                    FunctionInfo fi = it.next();
                     if (doname) {
                         buf.append(fi.getName());
                         buf.append(NL);

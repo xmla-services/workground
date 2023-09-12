@@ -18,7 +18,7 @@ package mondrian.olap;
  * {@link mondrian.mdx.UnresolvedFunCallImpl unresolved  function call}.
  * The validator converts it to a
  * {@link  mondrian.mdx.ResolvedFunCallImpl resolved function call},
- * which has a {@link FunDef function definition} and extra type information.
+ * which has a {@link FunctionDefinition function definition} and extra type information.
  *
  * @author jhyde
  * @since Jan 6, 2006

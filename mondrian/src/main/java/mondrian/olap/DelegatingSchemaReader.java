@@ -334,7 +334,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     @Override
 	public NativeEvaluator getNativeSetEvaluator(
-        FunDef fun, Exp[] args, Evaluator evaluator, Calc calc)
+        FunctionDefinition fun, Exp[] args, Evaluator evaluator, Calc calc)
     {
         return schemaReader.getNativeSetEvaluator(fun, args, evaluator, calc);
     }

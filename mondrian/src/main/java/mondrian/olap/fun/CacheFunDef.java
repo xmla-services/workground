@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.xom.XOMUtil;
 
@@ -19,11 +20,10 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.SetType;
@@ -64,7 +64,7 @@ public class CacheFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp exp = call.getArg(0);
         final ExpCacheDescriptor cacheDescriptor =
                 new ExpCacheDescriptor(exp, compiler);
@@ -112,7 +112,7 @@ public class CacheFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
