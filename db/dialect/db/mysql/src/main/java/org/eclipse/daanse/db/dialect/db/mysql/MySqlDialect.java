@@ -12,6 +12,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.mysql;
 
+import org.eclipse.daanse.db.dialect.db.common.DialectException;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -23,17 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectException;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * Implementation of {@link org.eclipse.daanse.db.dialect.api.Dialect} for the
  * MySQL database.
@@ -41,9 +36,6 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
-        "database.product:String='MYSQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MySqlDialect extends JdbcDialectImpl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MySqlDialect.class);
@@ -52,23 +44,17 @@ public class MySqlDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "MYSQL";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
-
-    @Override
-    public boolean initialize(Connection connection) {
-
+    public MySqlDialect(Connection connection) {
+        super(connection);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            return super.initialize(connection) && !isInfobright(dbMetaData);
+            if (isInfobright(dbMetaData)) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             LOGGER.warn("Could not get DatabaseMetadata", e);
         }
-
-        return false;
-    }
+}
 
     /**
      * Detects whether this database is Infobright.

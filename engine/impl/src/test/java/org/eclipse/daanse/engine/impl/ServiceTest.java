@@ -14,6 +14,7 @@
 package org.eclipse.daanse.engine.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
@@ -21,10 +22,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +56,9 @@ class ServiceTest {
     Dialect dialect;
 
     @Mock
+    DialectFactory dialectFactory;
+
+    @Mock
     DataSource dataSource;
 
     @Mock
@@ -60,14 +66,14 @@ class ServiceTest {
 
     @Mock
     StatisticsProvider statisticsProvider;
-    
+
 //    @Mock
 //    QueryProvider queryProvider;
-//    
+//
 //    @Mock
 //    DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
-    
-    
+
+
 
     @BeforeEach
     public void setup() throws SQLException {
@@ -80,7 +86,7 @@ class ServiceTest {
             @InjectService(cardinality = 0) ServiceAware<Context> saContext) throws Exception {
 
         when(dataSource.getConnection()).thenReturn(connection);
-        when(dialect.initialize(connection)).thenReturn(true);
+        when(dialectFactory.tryCreateDialect(any())).thenReturn(Optional.of(dialect));
 
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
@@ -90,7 +96,7 @@ class ServiceTest {
                 .isNull();
 
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
-        bc.registerService(Dialect.class, dialect, dictionaryOf("d", "2"));
+        bc.registerService(DialectFactory.class, dialectFactory, dictionaryOf("d", "2"));
         bc.registerService(StatisticsProvider.class, statisticsProvider, dictionaryOf("sp", "3"));
 //        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
 //        bc.registerService(DataBaseMappingSchemaProvider.class, dataBaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));

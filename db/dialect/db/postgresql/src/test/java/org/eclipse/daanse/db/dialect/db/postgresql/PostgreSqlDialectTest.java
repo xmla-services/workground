@@ -32,8 +32,8 @@ class PostgreSqlDialectTest {
     protected void setUp() throws Exception {
         when(metaData.getDatabaseProductName()).thenReturn("POSTGRESQL");
         when(connection.getMetaData()).thenReturn(metaData);
-        dialect = new PostgreSqlDialect();
-        dialect.initialize(connection);
+        when(connection.createStatement()).thenReturn(statmentMock);
+        dialect = new PostgreSqlDialect(connection);
     }
 
     @Test

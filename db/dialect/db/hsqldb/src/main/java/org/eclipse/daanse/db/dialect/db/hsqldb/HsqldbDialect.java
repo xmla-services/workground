@@ -9,6 +9,7 @@
 
 package org.eclipse.daanse.db.dialect.db.hsqldb;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
 
@@ -26,16 +27,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author wgorman
  * @since Aug 20, 2009
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='HSQLDB'",
-		"database.product:String='HSQLDB'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class HsqldbDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "HSQLDB";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public HsqldbDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

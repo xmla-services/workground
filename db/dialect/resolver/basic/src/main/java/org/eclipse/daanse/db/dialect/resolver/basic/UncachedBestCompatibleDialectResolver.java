@@ -19,6 +19,7 @@
 package org.eclipse.daanse.db.dialect.resolver.basic;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ import java.util.function.Predicate;
  *
  * - does not cache <br>
  * - returns Dialect with best ranking - calculated using
- * {@link org.eclipse.daanse.db.dialect.api.Dialect#tryInitalisation(DataSource)}.
+ * {@link org.eclipse.daanse.db.dialect.api.Dialect(DataSource)}.
  *
  * @author stbischof
  *
@@ -50,43 +52,73 @@ import java.util.function.Predicate;
 @Component(service = DialectResolver.class)
 public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     private static final Logger LOGGER = LoggerFactory.getLogger(UncachedBestCompatibleDialectResolver.class);
-    private List<Dialect> dialects = new ArrayList<>();
+    private List<DialectFactory> dialectFactories = new ArrayList<>();
 
-    @Reference(service = Dialect.class, cardinality = ReferenceCardinality.MULTIPLE )
-    public void bindDialect(Dialect dialect) {
-        dialects.add(dialect);
+    @Reference(service = DialectFactory.class, cardinality = ReferenceCardinality.MULTIPLE )
+    public void bindDialect(DialectFactory dialectFactory) {
+        dialectFactories.add(dialectFactory);
     }
 
-    public void unbindDialect(Dialect dialect) {
-        dialects.remove(dialect);
+    public void unbindDialect(DialectFactory dialectFactory) {
+        dialectFactories.remove(dialectFactory);
     }
 
-    public void updatedDialect(Dialect dialect) {
-        unbindDialect(dialect);
-        bindDialect(dialect);
+    public void updatedDialect(DialectFactory dialectFactory) {
+        unbindDialect(dialectFactory);
+        bindDialect(dialectFactory);
     }
 
     @Override
     public Optional<Dialect> resolve(DataSource dataSource) {
 
         try (Connection c = dataSource.getConnection()) {
-            return dialects.parallelStream()
-                    .map(calcCompatibility(c))
-                    .filter(compatibleDialect())
-                    .findFirst()
-                    .map(Entry::getKey);
+            return resolve(c);
         } catch (SQLException e) {
             LOGGER.error("connection error", e);
         }
         return Optional.empty();
     }
 
-    private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(Connection c) {
-        return dialect -> new AbstractMap.SimpleEntry<Dialect, Boolean>(dialect, dialect.initialize(c));
+    @Override
+    public Optional<Dialect> resolve(Connection connection) {
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            String productName = deduceProductName(metaData);
+            String productVersion = deduceProductVersion(metaData);
+
+            Optional<DialectFactory> dfOptional = dialectFactories.parallelStream()
+                .map(calcCompatibility(productName, productVersion, connection))
+                .filter(compatibleDialect())
+                .findFirst().map(Entry::getKey);
+            if (dfOptional.isPresent()) {
+                return dfOptional.get().tryCreateDialect(connection);
+            }
+        } catch (SQLException e) {
+            LOGGER.info("resolve failed", e);
+        }
+        return Optional.empty();
     }
 
-    private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {
+    private Function<? super DialectFactory, ? extends Entry<DialectFactory, Boolean>> calcCompatibility(
+        String productName, String productVersion, Connection connection) {
+        return dialectFactory ->
+            new AbstractMap.SimpleEntry<>(
+                dialectFactory,
+                dialectFactory.isSupportedProduct(productName, productVersion, connection)
+            );
+    }
+
+    private Predicate<Entry<DialectFactory, Boolean>> compatibleDialect() {
         return Entry::getValue;
+    }
+
+    private String deduceProductName(DatabaseMetaData databaseMetaData) throws SQLException {
+        return databaseMetaData.getDatabaseProductName();
+
+    }
+
+    protected String deduceProductVersion(DatabaseMetaData databaseMetaData) throws SQLException {
+        return databaseMetaData.getDatabaseProductVersion();
     }
 
 }

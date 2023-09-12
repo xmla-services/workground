@@ -9,12 +9,10 @@
 
 package org.eclipse.daanse.db.dialect.db.ingres;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -23,16 +21,12 @@ import java.util.List;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='INGRES'",
-        "database.product:String='INGRES'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class IngresDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "INGRES";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public IngresDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

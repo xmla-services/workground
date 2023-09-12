@@ -898,9 +898,8 @@ class SqlQueryTest  extends BatchTestCase {
 
     public class JdbcDialectImplForTest extends JdbcDialectImpl{
 
-        @Override
-        protected boolean isSupportedProduct(String productName, String productVersion) {
-            return true;
+        public JdbcDialectImplForTest() {
+
         }
 
         @Override

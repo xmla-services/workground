@@ -14,6 +14,7 @@
 */
 package org.eclipse.daanse.db.dialect.api;
 
+import java.sql.Connection;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -21,7 +22,7 @@ import javax.sql.DataSource;
 /**
  * A {@link DialectResolver} gives access to Dialect that is compatible with a
  * {@link DataSource}
- * 
+ *
  * @author stbischof
  *
  */
@@ -30,10 +31,12 @@ public interface DialectResolver {
     /**
      * Returns a dialect that could operate on the given DataSource. The given
      * dialect MUST be FULLY compatible.
-     * 
+     *
      * @param dataSource
      * @returns a Optional of Dialect
      */
     Optional<Dialect> resolve(DataSource dataSource);
+
+    Optional<Dialect> resolve(Connection connection);
 
 }

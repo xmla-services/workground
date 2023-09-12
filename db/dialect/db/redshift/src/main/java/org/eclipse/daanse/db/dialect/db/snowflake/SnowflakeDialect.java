@@ -8,6 +8,12 @@
  */
 package org.eclipse.daanse.db.dialect.db.snowflake;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.db.dialect.db.common.Util;
+
+import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -15,26 +21,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SNOWFLAKE'",
-        "database.product:String='SNOWFLAKE'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class SnowflakeDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "SNOWFLAKE";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public SnowflakeDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

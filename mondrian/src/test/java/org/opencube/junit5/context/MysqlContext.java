@@ -32,9 +32,8 @@ public class MysqlContext implements Context {
 
     public MysqlContext(DataSource dataSource) {
         this.dataSource = dataSource;
-        dialect = new MySqlDialect();
         try (Connection connection = dataSource.getConnection()) {
-            dialect.initialize(connection);
+            dialect = new MySqlDialect(connection);
         } catch (SQLException e) {
             new RuntimeException(e);
         }

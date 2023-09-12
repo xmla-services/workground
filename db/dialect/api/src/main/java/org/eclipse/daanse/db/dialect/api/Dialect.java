@@ -23,20 +23,6 @@ import java.util.Map;
  */
 public interface Dialect {
 
-    /**
-     * Checks the compatibility of the Dialect.
-     * if it not fully compatible it must return false
-     *
-     * <p>To prevent connection leaks, this constructor does not hold a
-     * reference to the connection after the call returns. It makes a copy of
-     * everything useful during the call.  Derived classes must do the
-     * same.</p>
-     *
-     * @param connection
-     * @return compatibility
-     *
-     */
-    boolean initialize(Connection connection);
 
     /**
      * Converts an expression to upper case.

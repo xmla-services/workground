@@ -43,8 +43,7 @@ class MicrosoftSqlServerDialectTest {
         when(statmentMock.execute(any())).thenReturn(false);
         when(connection.getMetaData()).thenReturn(metaData);
         when(connection.createStatement()).thenReturn(statmentMock);
-        dialect = new MicrosoftSqlServerDialect();
-        dialect.initialize(connection);
+        dialect = new MicrosoftSqlServerDialect(connection);
         buf = new StringBuilder();
     }
 
