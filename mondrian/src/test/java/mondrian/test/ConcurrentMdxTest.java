@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.junit.jupiter.api.AfterEach;
@@ -35,7 +36,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.MondrianProperties;
 
 /**

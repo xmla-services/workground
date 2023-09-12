@@ -26,7 +26,6 @@ import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.result.Result;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryImpl;

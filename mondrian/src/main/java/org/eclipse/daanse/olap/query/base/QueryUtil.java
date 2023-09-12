@@ -44,13 +44,13 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.AxisOrdinal;
 import mondrian.olap.CellPropertyImpl;
 import mondrian.olap.NumericLiteralImpl;
 import mondrian.olap.Exp;

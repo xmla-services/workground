@@ -29,6 +29,7 @@ import java.util.concurrent.Callable;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -36,7 +37,6 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eigenbase.util.property.BooleanProperty;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -1211,7 +1211,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Visitor that visits various sub-types of
-     * {@link mondrian.olap.CacheControl.CellRegion}.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.CellRegion}.
      */
     interface CellRegionVisitor {
         void visit(MemberCellRegion region);
@@ -1264,7 +1264,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Implementation-specific extensions to the
-     * {@link mondrian.olap.CacheControl.MemberEditCommand} interface.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand} interface.
      */
     interface MemberEditCommandPlus extends MemberEditCommand {
         /**
@@ -1282,7 +1282,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Implementation-specific extensions to the
-     * {@link mondrian.olap.CacheControl.MemberSet} interface.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.MemberSet} interface.
      */
     interface MemberSetPlus extends MemberSet {
         /**

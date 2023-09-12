@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Random;
 
 import mondrian.olap.api.Quoting;
+
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -39,7 +41,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;

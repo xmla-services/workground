@@ -10,6 +10,7 @@ package mondrian.olap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;

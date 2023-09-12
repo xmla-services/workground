@@ -28,6 +28,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -45,7 +46,6 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.CacheControl;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;

@@ -16,7 +16,6 @@ package org.eclipse.daanse.olap.api.query.component;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.AxisOrdinal;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Validator;

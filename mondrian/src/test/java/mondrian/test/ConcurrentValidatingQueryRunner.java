@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.opencube.junit5.TestUtil;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
 

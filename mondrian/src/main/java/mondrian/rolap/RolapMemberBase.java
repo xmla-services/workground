@@ -70,7 +70,7 @@ public class RolapMemberBase
      * Sets a member's parent.
      *
      * <p>Can screw up the caching structure. Only to be called by
-     * {@link mondrian.olap.CacheControl#createMoveCommand}.
+     * {@link org.eclipse.daanse.olap.api.CacheControl#createMoveCommand}.
      *
      * <p>New parent must be in same level as old parent.
      *
