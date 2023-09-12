@@ -162,7 +162,7 @@ public class QueryUtil {
     }
 
     static List<IdImpl> getDimensionProperties(SelectDimensionPropertyListClause selectDimensionPropertyListClause) {
-        if (selectDimensionPropertyListClause.properties() != null) {
+        if (selectDimensionPropertyListClause != null && selectDimensionPropertyListClause.properties() != null) {
             return selectDimensionPropertyListClause.properties().stream()
                 .map(QueryUtil::getExpByCompoundId).toList();
         }
