@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
 
 import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -39,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.CacheControl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;

@@ -29,6 +29,7 @@ import java.util.Map;
 
 import mondrian.olap.api.SubtotalVisibility;
 
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -41,7 +42,6 @@ import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
 
-import mondrian.olap.AxisOrdinal;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.rolap.RolapAxis;

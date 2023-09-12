@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;

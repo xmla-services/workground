@@ -24,7 +24,7 @@ import java.util.Map;
  * <p>The region is represented in terms of the columns of a given
  * {@link mondrian.rolap.RolapStar}, and constraints on those columns.
  *
- * <p>Compare with {@link mondrian.olap.CacheControl.CellRegion}: a
+ * <p>Compare with {@link org.eclipse.daanse.olap.api.CacheControl.CellRegion}: a
  * <code>CellRegion</code> is in terms of {@link org.eclipse.daanse.olap.api.element.Member} objects
  * (logical); whereas a <code>RolapCacheRegion</code> is in terms of columns
  * (physical).

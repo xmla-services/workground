@@ -20,6 +20,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,7 +30,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.MondrianServer;
 import mondrian.server.monitor.Monitor;
 import mondrian.server.monitor.ServerInfo;

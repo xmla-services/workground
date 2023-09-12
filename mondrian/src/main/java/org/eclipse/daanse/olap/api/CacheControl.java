@@ -1,13 +1,28 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -33,10 +48,10 @@ import org.eclipse.daanse.olap.api.element.Schema;
  * <p>Methods concerning cell cache:<ul>
  * <li>{@link #createMemberRegion(Member, boolean)}</li>
  * <li>{@link #createMemberRegion(boolean, Member, boolean, Member, boolean)}</li>
- * <li>{@link #createUnionRegion(mondrian.olap.CacheControl.CellRegion[])}</li>
- * <li>{@link #createCrossjoinRegion(mondrian.olap.CacheControl.CellRegion[])}</li>
+ * <li>{@link #createUnionRegion(org.eclipse.daanse.olap.api.CacheControl.CellRegion[])}</li>
+ * <li>{@link #createCrossjoinRegion(org.eclipse.daanse.olap.api.CacheControl.CellRegion[])}</li>
  * <li>{@link #createMeasuresRegion(Cube)}</li>
- * <li>{@link #flush(mondrian.olap.CacheControl.CellRegion)}</li>
+ * <li>{@link #flush(org.eclipse.daanse.olap.api.CacheControl.CellRegion)}</li>
  * </ul></p>
  *
  * <p>Methods concerning member cache:<ul>
@@ -44,13 +59,13 @@ import org.eclipse.daanse.olap.api.element.Schema;
  * <li>{@link #createMemberSet(boolean, Member, boolean, Member, boolean)}</li>
  * <li>{@link #createAddCommand(Member)}</li>
  * <li>{@link #createDeleteCommand(Member)}</li>
- * <li>{@link #createDeleteCommand(mondrian.olap.CacheControl.MemberSet)}</li>
+ * <li>{@link #createDeleteCommand(org.eclipse.daanse.olap.api.CacheControl.MemberSet)}</li>
  * <li>{@link #createCompoundCommand(java.util.List)}</li>
- * <li>{@link #createCompoundCommand(mondrian.olap.CacheControl.MemberEditCommand[])}</li>
+ * <li>{@link #createCompoundCommand(org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand[])}</li>
  * <li>{@link #createSetPropertyCommand(Member, String, Object)}</li>
- * <li>{@link #createSetPropertyCommand(mondrian.olap.CacheControl.MemberSet,java.util.Map)}</li>
- * <li>{@link #flush(mondrian.olap.CacheControl.MemberSet)}</li>
- * <li>{@link #execute(mondrian.olap.CacheControl.MemberEditCommand)}</li>
+ * <li>{@link #createSetPropertyCommand(org.eclipse.daanse.olap.api.CacheControl.MemberSet,java.util.Map)}</li>
+ * <li>{@link #flush(org.eclipse.daanse.olap.api.CacheControl.MemberSet)}</li>
+ * <li>{@link #execute(org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand)}</li>
  * </ul></p>
  *
  * @author jhyde
@@ -444,7 +459,7 @@ public interface CacheControl {
      * <p>Member sets can be created using methods
      * {@link CacheControl#createMemberSet(Member, boolean)},
      * {@link CacheControl#createMemberSet(boolean, Member, boolean, Member, boolean)},
-     * {@link CacheControl#createUnionSet(mondrian.olap.CacheControl.MemberSet[])}.
+     * {@link CacheControl#createUnionSet(org.eclipse.daanse.olap.api.CacheControl.MemberSet[])}.
      */
     public interface MemberSet {
     }

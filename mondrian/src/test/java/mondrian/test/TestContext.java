@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -33,7 +34,6 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.Util;
 
 /**

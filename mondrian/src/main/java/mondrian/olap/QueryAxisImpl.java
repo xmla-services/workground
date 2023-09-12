@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import mondrian.olap.api.SubtotalVisibility;
 
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
@@ -179,7 +180,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
 
     /**
      * Returns the ordinal of this axis, for example
-     * {@link mondrian.olap.AxisOrdinal.StandardAxisOrdinal#ROWS}.
+     * {@link org.eclipse.daanse.olap.api.query.component.AxisOrdinal.StandardAxisOrdinal#ROWS}.
      */
     @Override
     public AxisOrdinal getAxisOrdinal() {
