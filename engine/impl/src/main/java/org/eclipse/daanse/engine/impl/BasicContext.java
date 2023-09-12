@@ -41,11 +41,14 @@ public class BasicContext implements Context {
     public static final String REF_NAME_DIALECT = "dialect";
     public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
     public static final String REF_NAME_DATA_SOURCE = "dataSource";
-    private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
-    private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
-    private static final Converter CONVERTER = Converters.standardConverter();
+    public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
+    public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "dataBaseMappingSchemaProvider";
+	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
+	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 
-    @Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	private static final Converter CONVERTER = Converters.standardConverter();
+
+	@Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
     private DataSource dataSource = null;
 
     @Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -53,6 +56,14 @@ public class BasicContext implements Context {
 
     @Reference(name = REF_NAME_STATISTICS_PROVIDER)
     private StatisticsProvider statisticsProvider = null;
+    
+//    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+//    private QueryProvider queryProvider;
+//
+//    
+//    @Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+//    private DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
+
 
     private BasicContextConfig config;
 
@@ -93,5 +104,15 @@ public class BasicContext implements Context {
     public Optional<String> getDescription() {
         return Optional.ofNullable(config.description());
     }
+
+//	@Override
+//	public DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider() {
+//		return dataBaseMappingSchemaProvider;
+//	}
+//
+//	@Override
+//	public QueryProvider getQueryProvider() {
+//		return queryProvider;
+//	}
 
 }
