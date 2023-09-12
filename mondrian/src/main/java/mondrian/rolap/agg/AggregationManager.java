@@ -68,10 +68,6 @@ public class AggregationManager extends RolapAggregationManager {
      */
     public AggregationManager(MondrianServer server) {
         this.server = server;
-        if (properties.EnableCacheHitCounters.get()) {
-            LOGGER.error(
-                "Property {} is obsolete; ignored.", properties.EnableCacheHitCounters.getPath());
-        }
         this.cacheMgr = new SegmentCacheManager(server);
     }
 
