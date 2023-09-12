@@ -369,27 +369,6 @@ public class Util extends XOMUtil {
     }
 
     /**
-     * Encodes string for MDX (escapes ] as ]] inside a name).
-     *
-     * @deprecated Will be removed in 4.0
-     */
-    @Deprecated(since = "Will be removed in 4.0")
-	public static String mdxEncodeString(String st) {
-        StringBuilder retString = new StringBuilder(st.length() + 20);
-        for (int i = 0; i < st.length(); i++) {
-            char c = st.charAt(i);
-            if ((c == ']')
-                && ((i + 1) < st.length())
-                && (st.charAt(i + 1) != '.'))
-            {
-                retString.append(']'); // escaping character
-            }
-            retString.append(c);
-        }
-        return retString.toString();
-    }
-
-    /**
      * Converts a string into a double-quoted string.
      */
     public static String quoteForMdx(String val) {

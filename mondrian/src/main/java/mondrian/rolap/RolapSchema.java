@@ -360,16 +360,6 @@ public class RolapSchema implements Schema {
         return LOGGER;
     }
 
-  /**
-   * @deprecated API changed to also pass Mondrian connection properties
-   * @param catalogUrl URL of catalog
-   * @param catalogStr Text of catalog, or null
-   */
-  @Deprecated
-    protected void load(String catalogUrl, String catalogStr) {
-      load(catalogUrl, catalogStr, new PropertyList());
-    }
-
     /**
      * Method called by all constructors to load the catalog into DOM and build
      * application mdx and sql objects.

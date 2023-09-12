@@ -101,20 +101,6 @@ public interface Statement {
     long getQueryTimeoutMillis();
 
     /**
-     * Checks if either a cancel request has been issued on the query or
-     * the execution time has exceeded the timeout value (if one has been
-     * set).  Exceptions are raised if either of these two conditions are
-     * met.  This method should be called periodically during query execution
-     * to ensure timely detection of these events, particularly before/after
-     * any potentially long running operations.
-     *
-     * @deprecated This method will be removed in mondrian-4.0; use
-     *   {@link mondrian.server.Execution#checkCancelOrTimeout()}
-     */
-    @Deprecated
-	void checkCancelOrTimeout();
-
-    /**
      * Issues a cancel request on this statement.
      *
      * <p>Once the thread running the statement detects the cancel request,
