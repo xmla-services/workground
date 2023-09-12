@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 
 /**
@@ -48,7 +48,7 @@ public class RolapNativeRegistry extends RolapNative {
      */
     @Override
 	public NativeEvaluator createEvaluator(
-        RolapEvaluator evaluator, FunDef fun, Exp[] args)
+        RolapEvaluator evaluator, FunctionDefinition fun, Exp[] args)
     {
         if (!isEnabled()) {
             return null;

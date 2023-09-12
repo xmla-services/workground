@@ -130,7 +130,7 @@ public class FunUtil extends Util {
      * @return Exception that can be used as a cell result
      */
     public static RuntimeException newEvalException(
-        mondrian.olap.FunDef funDef,
+        mondrian.olap.FunctionDefinition funDef,
         String message ) {
         XOMUtil.discard( funDef ); // TODO: use this
         return new MondrianEvaluationException( message );

@@ -70,7 +70,7 @@ import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FormulaImpl;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
@@ -82,7 +82,7 @@ import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap.fun.FunTableImpl;
 import mondrian.olap.fun.GlobalFunTable;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.fun.UdfResolver;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
@@ -189,7 +189,7 @@ public class RolapSchema implements Schema {
      * Table containing all standard MDX functions, plus user-defined functions
      * for this schema.
      */
-    private FunTable funTable;
+    private FunctionTable funTable;
 
     private org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema;
 
@@ -1118,7 +1118,7 @@ public class RolapSchema implements Schema {
     }
 
     @Override
-	public FunTable getFunTable() {
+	public FunctionTable getFunTable() {
         return funTable;
     }
 
@@ -1476,12 +1476,12 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         }
 
         @Override
-		public void defineFunctions(Builder builder) {
-            final FunTable globalFunTable = GlobalFunTable.instance();
+		public void defineFunctions(FunctionTableCollector builder) {
+            final FunctionTable globalFunTable = GlobalFunTable.instance();
             for (String reservedWord : globalFunTable.getReservedWords()) {
                 builder.defineReserved(reservedWord);
             }
-            for (Resolver resolver : globalFunTable.getResolvers()) {
+            for (FunctionResolver resolver : globalFunTable.getResolvers()) {
                 builder.define(resolver);
             }
             for (UdfResolver.UdfFactory udfFactory : udfFactoryList) {

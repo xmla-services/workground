@@ -17,17 +17,17 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -51,7 +51,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();
 
-    public static final Resolver resolver = new ResolverImpl();
+    public static final FunctionResolver resolver = new ResolverImpl();
     private static final String FLAG = "fxx";
 
     private AddCalculatedMembersFunDef() {
@@ -62,7 +62,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc}) {
             @Override
@@ -128,7 +128,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             if (args.length == 1) {
                 Exp arg = args[0];
                 final Type type1 = arg.getType();

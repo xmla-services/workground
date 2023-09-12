@@ -134,7 +134,7 @@ import mondrian.mdx.QueryPrintWriter;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
@@ -2950,7 +2950,7 @@ public class Util extends XOMUtil {
      * Creates a very simple implementation of {@link Validator}. (Only
      * useful for resolving trivial expressions.)
      */
-    public static Validator createSimpleValidator(final FunTable funTable) {
+    public static Validator createSimpleValidator(final FunctionTable funTable) {
         return new Validator() {
             @Override
 			public Query getQuery() {
@@ -2988,15 +2988,15 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public FunDef getDef(Exp[] args, String name, Syntax syntax) {
+			public FunctionDefinition getDef(Exp[] args, String name, Syntax syntax) {
                 // Very simple resolution. Assumes that there is precisely
                 // one resolver (i.e. no overloading) and no argument
                 // conversions are necessary.
-                List<Resolver> resolvers = funTable.getResolvers(name, syntax);
-                final Resolver resolver = resolvers.get(0);
-                final List<Resolver.Conversion> conversionList =
+                List<FunctionResolver> resolvers = funTable.getResolvers(name, syntax);
+                final FunctionResolver resolver = resolvers.get(0);
+                final List<FunctionResolver.Conversion> conversionList =
                     new ArrayList<>();
-                final FunDef def =
+                final FunctionDefinition def =
                     resolver.resolve(args, this, conversionList);
                 assert conversionList.isEmpty();
                 return def;
@@ -3011,7 +3011,7 @@ public class Util extends XOMUtil {
 			public boolean canConvert(
                 int ordinal, Exp fromExp,
                 int to,
-                List<Resolver.Conversion> conversions)
+                List<FunctionResolver.Conversion> conversions)
             {
                 return true;
             }
@@ -3022,7 +3022,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public FunTable getFunTable() {
+			public FunctionTable getFunTable() {
                 return funTable;
             }
 

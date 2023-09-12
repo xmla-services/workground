@@ -16,6 +16,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
@@ -28,9 +29,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.CrossJoinFunDef;
@@ -136,7 +136,7 @@ class CancellationTest {
         }
 
     class CrossJoinFunDefTester extends CrossJoinFunDef {
-        public CrossJoinFunDefTester(FunDef dummyFunDef) {
+        public CrossJoinFunDefTester(FunctionDefinition dummyFunDef) {
             super(dummyFunDef);
         }
 
@@ -144,7 +144,7 @@ class CancellationTest {
 		public TupleList nonEmptyList(
             Evaluator evaluator,
             TupleList list,
-            ResolvedFunCallImpl call)
+            ResolvedFunCall call)
         {
             return super.nonEmptyList(evaluator, list, call);
         }

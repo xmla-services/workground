@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -33,6 +32,7 @@ import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eigenbase.xom.XOMUtil;
@@ -44,12 +44,11 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
@@ -57,6 +56,7 @@ import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.sort.OrderKey;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.MemberType;
@@ -114,7 +114,7 @@ public class FunUtil extends Util {
    * @return Exception that can be used as a cell result
    */
   public static RuntimeException newEvalException(
-    FunDef funDef,
+    FunctionDefinition funDef,
     String message ) {
     XOMUtil.discard( funDef ); // TODO: use this
     return new MondrianEvaluationException( message );
@@ -172,7 +172,7 @@ public class FunUtil extends Util {
    * Returns an argument whose value is a literal.
    */
   static String getLiteralArg(
-    ResolvedFunCallImpl call,
+    ResolvedFunCall call,
     int i,
     String defaultValue,
     String[] allowedValues ) {
@@ -214,7 +214,7 @@ public class FunUtil extends Util {
    * -1.
    */
   static <E extends Enum<E>> E getLiteralArg(
-    ResolvedFunCallImpl call,
+    ResolvedFunCall call,
     int i,
     E defaultValue,
     Class<E> allowedValues ) {
@@ -258,7 +258,7 @@ public class FunUtil extends Util {
    *
    * @throws MondrianEvaluationException if expressions don't have the same hierarchy
    */
-  static void checkCompatible( Exp left, Exp right, FunDef funDef ) {
+  static void checkCompatible( Exp left, Exp right, FunctionDefinition funDef ) {
     final Type leftType = TypeUtil.stripSetType( left.getType() );
     final Type rightType = TypeUtil.stripSetType( right.getType() );
     if ( !TypeUtil.isUnionCompatible( leftType, rightType ) ) {
@@ -1456,9 +1456,9 @@ public class FunUtil extends Util {
    * @param syntax    Syntax style used to invoke function
    * @return resolved function definition
    */
-  public static FunDef resolveFunArgs(
+  public static FunctionDefinition resolveFunArgs(
     Validator validator,
-    FunDef funDef,
+    FunctionDefinition funDef,
     Exp[] args,
     Exp[] newArgs,
     String name,
@@ -1483,7 +1483,7 @@ public class FunUtil extends Util {
    */
   private static void checkNativeCompatible(
     Validator validator,
-    FunDef funDef,
+    FunctionDefinition funDef,
     Exp[] args ) {
     // If the first argument to a function is either:
     // 1) the measures dimension or
@@ -1581,8 +1581,8 @@ public class FunUtil extends Util {
     return true;
   }
 
-  static FunDef createDummyFunDef(
-    Resolver resolver,
+  static FunctionDefinition createDummyFunDef(
+    FunctionResolver resolver,
     int returnCategory,
     Exp[] args ) {
     final int[] argCategories = ExpBase.getTypes( args );
@@ -1814,7 +1814,7 @@ public class FunUtil extends Util {
       || exp instanceof DimensionExpression) {
       return false;
     }
-    if ( exp instanceof ResolvedFunCallImpl call && call.getFunDef() instanceof SetFunDef) {
+    if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
       // A set of literals is not worth caching.
       for ( Exp setArg : call.getArgs() ) {
           if ( FunUtil.worthCaching( setArg ) ) {

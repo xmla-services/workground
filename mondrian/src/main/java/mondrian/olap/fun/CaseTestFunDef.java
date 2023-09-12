@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
@@ -19,11 +20,10 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -47,12 +47,12 @@ import mondrian.olap.type.BooleanType;
 class CaseTestFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    public CaseTestFunDef(FunDef dummyFunDef) {
+    public CaseTestFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final BooleanCalc[] conditionCalcs =
                 new BooleanCalc[args.length / 2];
@@ -116,7 +116,7 @@ class CaseTestFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -149,7 +149,7 @@ class CaseTestFunDef extends FunDefBase {
             if (mismatchingArgs != 0) {
                 return null;
             }
-            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
+            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return new CaseTestFunDef(dummy);
         }
 

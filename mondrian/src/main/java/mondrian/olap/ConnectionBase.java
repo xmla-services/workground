@@ -80,7 +80,7 @@ public abstract class ConnectionBase implements Connection {
     public QueryPart parseStatement(
         Statement statement,
         String query,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation)
     {
         MdxParserValidator parser = createParser();

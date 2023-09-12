@@ -54,7 +54,7 @@ import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Evaluator.SetEvaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.AggregateFunDef;
@@ -219,11 +219,11 @@ class SqlConstraintUtilsTest {
         Member aggregatedMember0 = Mockito.mock(Member.class);
         Exp aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
 
-        FunDef dummy = Mockito.mock(FunDef.class);
+        FunctionDefinition dummy = Mockito.mock(FunctionDefinition.class);
         Mockito.doReturn(Syntax.Function).when(dummy).getSyntax();
         Mockito.doReturn("dummy").when(dummy).getName();
 
-        FunDef funDef = new AggregateFunDef(dummy);
+        FunctionDefinition funDef = new AggregateFunDef(dummy);
         Exp[] args = new Exp[]{aggregateArg0};
         Type returnType = new DecimalType(1, 1);
         Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
@@ -253,7 +253,7 @@ class SqlConstraintUtilsTest {
 
         Exp parenthesesArg = new MemberExpressionImpl(parenthesesInnerMember);
 
-        FunDef funDef = new ParenthesesFunDef(Category.MEMBER);
+        FunctionDefinition funDef = new ParenthesesFunDef(Category.MEMBER);
         Exp[] args = new Exp[]{parenthesesArg};
         Type returnType = new DecimalType(1, 1);
         Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
@@ -335,10 +335,10 @@ class SqlConstraintUtilsTest {
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 parenthesesExpr), "ResolvedFunCall-Parentheses(N,Y)");
 
-        FunDef dummy = Mockito.mock(FunDef.class);
+        FunctionDefinition dummy = Mockito.mock(FunctionDefinition.class);
         Mockito.doReturn(Syntax.Function).when(dummy).getSyntax();
         Mockito.doReturn("dummy").when(dummy).getName();
-        FunDef aggregateFunDef = new AggregateFunDef(dummy);
+        FunctionDefinition aggregateFunDef = new AggregateFunDef(dummy);
         Type aggregateReturnType = new DecimalType(1, 1);
 
         Exp aggregateExpr = new ResolvedFunCallImpl(
@@ -721,12 +721,12 @@ class SqlConstraintUtilsTest {
 
         Exp[] funCallArgExps = new Exp[0];
         ResolvedFunCallImpl funCallArgMock = new ResolvedFunCallImpl(
-            mock(FunDef.class),
+            mock(FunctionDefinition.class),
             funCallArgExps, mock(TupleType.class));
 
         Exp[] funCallExps = {funCallArgMock};
         ResolvedFunCallImpl funCallMock = new ResolvedFunCallImpl(
-            mock(FunDef.class), funCallExps, mock(TupleType.class));
+            mock(FunctionDefinition.class), funCallExps, mock(TupleType.class));
 
         when(memberMock.getExpression()).thenReturn(funCallMock);
 

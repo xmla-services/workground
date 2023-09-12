@@ -30,7 +30,7 @@ import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
 import mondrian.olap.Exp;
 import mondrian.olap.ExplainImpl;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.api.Command;
 import mondrian.server.Statement;
 
@@ -52,14 +52,14 @@ public interface MdxParserValidator {
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation);
 
     Exp parseExpression(
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable);
+        FunctionTable funTable);
 
     interface QueryPartFactory {
 

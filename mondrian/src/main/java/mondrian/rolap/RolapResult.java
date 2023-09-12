@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import mondrian.olap.api.NameSegment;
-
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -38,6 +36,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -45,12 +44,12 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleIterator;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.calc.impl.DelegatingTupleList;
@@ -73,6 +72,7 @@ import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
@@ -323,7 +323,7 @@ public class RolapResult extends ResultBase {
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
                           @Override
 						public Calc compileCall(
-                                  ResolvedFunCallImpl call, mondrian.calc.ExpCompiler compiler)
+                                  ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
                           {
                             return partialCalc;
                           }

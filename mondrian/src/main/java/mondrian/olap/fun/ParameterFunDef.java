@@ -26,7 +26,7 @@ import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FunCall;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Parameter;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -52,7 +52,7 @@ public class ParameterFunDef extends FunDefBase {
     public final String parameterDescription;
 
     ParameterFunDef(
-        FunDef funDef,
+        FunctionDefinition funDef,
         String parameterName,
         Type type,
         int returnCategory,
@@ -188,7 +188,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             Exp typeArg = args[1];
             int category;
@@ -317,7 +317,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
                 dummyFunDef, parameterName, null, Category.UNKNOWN, null,

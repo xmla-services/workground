@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ArrayTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Except</code> MDX function.
@@ -40,12 +40,12 @@ class ExceptFunDef extends FunDefBase {
             new String[]{"fxxx", "fxxxy"},
             ExceptFunDef.class);
 
-    public ExceptFunDef(FunDef dummyFunDef) {
+    public ExceptFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         // todo: implement ALL
         final TupleListCalc listCalc0 = compiler.compileList(call.getArg(0));
         final TupleListCalc listCalc1 = compiler.compileList(call.getArg(1));

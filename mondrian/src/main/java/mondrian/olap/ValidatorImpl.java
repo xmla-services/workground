@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
@@ -50,7 +50,7 @@ import mondrian.util.ArrayStack;
  */
 abstract class ValidatorImpl implements Validator {
     protected final ArrayStack<QueryPart> stack = new ArrayStack<>();
-    private final FunTable funTable;
+    private final FunctionTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
         new HashMap<>();
     private static final QueryPart placeHolder = NumericLiteralImpl.zero;
@@ -64,7 +64,7 @@ abstract class ValidatorImpl implements Validator {
      * @pre funTable != null
      */
     protected ValidatorImpl(
-        FunTable funTable, Map<QueryPart, QueryPart> resolvedIdentifiers)
+        FunctionTable funTable, Map<QueryPart, QueryPart> resolvedIdentifiers)
     {
         Util.assertPrecondition(funTable != null, "funTable != null");
         this.funTable = funTable;
@@ -181,7 +181,7 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public FunDef getDef(
+	public FunctionDefinition getDef(
         Exp[] args,
         String funName,
         Syntax syntax)
@@ -195,17 +195,17 @@ abstract class ValidatorImpl implements Validator {
         // function with that name, stop immediately.  If there is more than
         // function, use some custom method, which generally involves looking
         // at the type of one of its arguments.
-        List<Resolver> resolvers = funTable.getResolvers(funName, syntax);
+        List<FunctionResolver> resolvers = funTable.getResolvers(funName, syntax);
         assert resolvers != null;
 
-        final List<Resolver.Conversion> conversionList =
+        final List<FunctionResolver.Conversion> conversionList =
             new ArrayList<>();
         int minConversionCost = Integer.MAX_VALUE;
-        List<FunDef> matchDefs = new ArrayList<>();
-        List<Resolver.Conversion> matchConversionList = null;
-        for (Resolver resolver : resolvers) {
+        List<FunctionDefinition> matchDefs = new ArrayList<>();
+        List<FunctionResolver.Conversion> matchConversionList = null;
+        for (FunctionResolver resolver : resolvers) {
             conversionList.clear();
-            FunDef def = resolver.resolve(args, this, conversionList);
+            FunctionDefinition def = resolver.resolve(args, this, conversionList);
             if (def != null) {
                 int conversionCost = sumConversionCost(conversionList);
                 if (conversionCost < minConversionCost) {
@@ -230,7 +230,7 @@ abstract class ValidatorImpl implements Validator {
             break;
         default:
             final StringBuilder buf = new StringBuilder();
-            for (FunDef matchDef : matchDefs) {
+            for (FunctionDefinition matchDef : matchDefs) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
@@ -242,8 +242,8 @@ abstract class ValidatorImpl implements Validator {
                     buf.toString());
         }
 
-        final FunDef matchDef = matchDefs.get(0);
-        for (Resolver.Conversion conversion : matchConversionList) {
+        final FunctionDefinition matchDef = matchDefs.get(0);
+        for (FunctionResolver.Conversion conversion : matchConversionList) {
             conversion.checkValid();
             conversion.apply(this, Arrays.asList(args));
         }
@@ -257,10 +257,10 @@ abstract class ValidatorImpl implements Validator {
     }
 
     private int sumConversionCost(
-        List<Resolver.Conversion> conversionList)
+        List<FunctionResolver.Conversion> conversionList)
     {
         int cost = 0;
-        for (Resolver.Conversion conversion : conversionList) {
+        for (FunctionResolver.Conversion conversion : conversionList) {
             cost += conversion.getCost();
         }
         return cost;
@@ -268,7 +268,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public boolean canConvert(
-        int ordinal, Exp fromExp, int to, List<Resolver.Conversion> conversions)
+        int ordinal, Exp fromExp, int to, List<FunctionResolver.Conversion> conversions)
     {
         return TypeUtil.canConvert(
             ordinal,
@@ -301,7 +301,7 @@ abstract class ValidatorImpl implements Validator {
                     // irrelevant.
                     return false;
                 }
-                final FunDef funDef = funCall.getFunDef();
+                final FunctionDefinition funDef = funCall.getFunDef();
                 final int[] parameterTypes = funDef.getParameterCategories();
                 return parameterTypes[k] != Category.SET;
             }
@@ -342,11 +342,11 @@ abstract class ValidatorImpl implements Validator {
         // operator (which returns a scalar) or the crossjoin operator
         // (which returns a set) we have to know what kind of expression is
         // expected.
-        List<Resolver> resolvers =
+        List<FunctionResolver> resolvers =
             funTable.getResolvers(
                 funCall.getFunName(),
                 funCall.getSyntax());
-        for (Resolver resolver2 : resolvers) {
+        for (FunctionResolver resolver2 : resolvers) {
             if (!resolver2.requiresExpression(k)) {
                 // This resolver accepts a set in this argument position,
                 // therefore we don't REQUIRE a scalar expression.
@@ -357,7 +357,7 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public FunTable getFunTable() {
+	public FunctionTable getFunTable() {
         return funTable;
     }
 

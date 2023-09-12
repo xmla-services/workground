@@ -10,15 +10,15 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>IS</code> MDX function.
@@ -36,12 +36,12 @@ class IsFunDef extends FunDefBase {
             new String[] {"ibmm", "ibll", "ibhh", "ibdd", "ibtt"},
             IsFunDef.class);
 
-    public IsFunDef(FunDef dummyFunDef) {
+    public IsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final int category = call.getArg(0).getCategory();
         switch (category) {
         case Category.TUPLE:

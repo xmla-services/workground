@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
@@ -23,10 +24,9 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
@@ -46,7 +46,7 @@ class AncestorsFunDef extends FunDefBase {
             new String[] {"fxml", "fxmn"},
             AncestorsFunDef.class);
 
-    public AncestorsFunDef(FunDef dummyFunDef) {
+    public AncestorsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -56,7 +56,7 @@ class AncestorsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));
         final Type type1 = call.getArg(1).getType();

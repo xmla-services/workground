@@ -11,17 +11,17 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 
 /**
  * <code>ResolverBase</code> provides a skeleton implementation of
- * <code>interface {@link Resolver}</code>
+ * <code>interface {@link FunctionResolver}</code>
  *
  * @author jhyde
  * @since 3 March, 2002
  */
-abstract class ResolverBase implements Resolver {
+abstract class ResolverBase implements FunctionResolver {
     private final String name;
     private final String signature;
     private final String description;
@@ -50,7 +50,7 @@ abstract class ResolverBase implements Resolver {
     }
 
     @Override
-	public FunDef getRepresentativeFunDef() {
+	public FunctionDefinition getRepresentativeFunDef() {
         return null;
     }
 

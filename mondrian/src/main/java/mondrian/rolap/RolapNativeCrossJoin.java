@@ -19,7 +19,7 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -105,7 +105,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
     @Override
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!isEnabled()) {
@@ -281,7 +281,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
 
     private TupleConstraint buildConstraint(
         final RolapEvaluator evaluator,
-        final FunDef fun,
+        final FunctionDefinition fun,
         final CrossJoinArg[] cargs)
     {
         CrossJoinArg[] myArgs;
@@ -302,13 +302,13 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
         return joinArgs.toArray(new CrossJoinArg[joinArgs.size()]);
     }
 
-    private boolean safeToConstrainByOtherAxes(final FunDef fun) {
+    private boolean safeToConstrainByOtherAxes(final FunctionDefinition fun) {
         return !(fun instanceof NonEmptyCrossJoinFunDef);
     }
 
     private void alertCrossJoinNonNative(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         String reason)
     {
         if (!(fun instanceof NonEmptyCrossJoinFunDef)) {

@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
@@ -26,7 +27,7 @@ import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -93,7 +94,7 @@ public class TupleFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final MemberCalc[] memberCalcs = new MemberCalc[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -105,7 +106,7 @@ public class TupleFunDef extends FunDefBase {
     public static class CurrentMemberCalc extends AbstractProfilingNestedTupleCalc {
         private final MemberCalc[] memberCalcs;
 
-        public CurrentMemberCalc(ResolvedFunCallImpl call, MemberCalc[] memberCalcs) {
+        public CurrentMemberCalc(ResolvedFunCall call, MemberCalc[] memberCalcs) {
             super(call.getType(), memberCalcs);
             this.memberCalcs = memberCalcs;
         }
@@ -135,7 +136,7 @@ public class TupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -170,7 +171,7 @@ public class TupleFunDef extends FunDefBase {
                     }
                 }
                 if(hasSet){
-                    FunDef dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
+                    FunctionDefinition dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
                     return new CrossJoinFunDef(dummy);
                 }
                 else {

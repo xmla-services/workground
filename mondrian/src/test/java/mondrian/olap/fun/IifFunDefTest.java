@@ -23,7 +23,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.fun.SetFunDef.SetListCalc;
 import mondrian.olap.type.SetType;
 
@@ -32,7 +32,7 @@ class IifFunDefTest {
   private Exp logicalParamMock = mock( Exp.class );
   private Exp trueCaseParamMock = mock( Exp.class );
   private Exp falseCaseParamMock = mock( Exp.class );
-  private FunDef funDefMock = mock( FunDef.class );
+  private FunctionDefinition funDefMock = mock( FunctionDefinition.class );
   private ExpCompiler compilerMock = mock( ExpCompiler.class );
   private Exp[] args = new Exp[] { logicalParamMock, trueCaseParamMock, falseCaseParamMock };
   private SetType setTypeMock = mock( SetType.class );

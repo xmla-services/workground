@@ -14,14 +14,15 @@
 package org.eclipse.daanse.olap.api.query.component;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunCall;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.Type;
 
-public non-sealed interface ResolvedFunCall extends QueryPart {
+public non-sealed interface ResolvedFunCall extends QueryPart, FunCall {
 
     int getArgCount();
 
-    FunDef getFunDef();
+    FunctionDefinition getFunDef();
 
     Exp getArg(int i);
 

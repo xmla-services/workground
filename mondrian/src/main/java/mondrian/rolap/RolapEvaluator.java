@@ -40,7 +40,7 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryTiming;
@@ -1145,7 +1145,7 @@ public final void setNonEmpty( boolean nonEmpty ) {
 
   @Override
 public final RuntimeException newEvalException( Object context, String s ) {
-    return FunUtil.newEvalException( (FunDef) context, s );
+    return FunUtil.newEvalException( (FunctionDefinition) context, s );
   }
 
   @Override

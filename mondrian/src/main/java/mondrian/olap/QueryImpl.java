@@ -160,7 +160,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * Set of FunDefs for which alerts about non-native evaluation
      * have already been posted.
      */
-    Set<FunDef> alertedNonNativeFunDefs;
+    Set<FunctionDefinition> alertedNonNativeFunDefs;
 
     /**
      * Unique list of members referenced from the measures dimension.
@@ -422,7 +422,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @return Validator
      */
     public Validator createValidator(
-        FunTable functionTable,
+        FunctionTable functionTable,
         boolean alwaysResolveFunDef)
     {
         return new QueryValidator(
@@ -434,7 +434,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
 
     public Validator createValidator(
-        FunTable functionTable,
+        FunctionTable functionTable,
         boolean alwaysResolveFunDef,
         Map<QueryPart, QueryPart> resolvedIdentifiers)
     {
@@ -457,7 +457,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      *
      * @return true if alert should be raised
      */
-    public boolean shouldAlertForNonNative(FunDef funDef) {
+    public boolean shouldAlertForNonNative(FunctionDefinition funDef) {
         return alertedNonNativeFunDefs.add(funDef);
     }
 
@@ -2011,7 +2011,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param query Query
          */
         public QueryValidator(
-            FunTable functionTable, boolean alwaysResolveFunDef, QueryImpl query,
+            FunctionTable functionTable, boolean alwaysResolveFunDef, QueryImpl query,
             Map<QueryPart, QueryPart> resolvedIdentifiers)
         {
             super(functionTable, resolvedIdentifiers);

@@ -51,7 +51,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
@@ -759,7 +759,7 @@ public class RolapCell implements Cell {
 
         @Override
 		public Object visit(ResolvedFunCallImpl call) {
-            final FunDef def = call.getFunDef();
+            final FunctionDefinition def = call.getFunDef();
             final Exp[] args = call.getArgs();
             final String name = def.getName();
             if (name.equals("+")

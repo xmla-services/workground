@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.access.Role;
 
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
 
@@ -90,7 +90,7 @@ public interface Schema extends MetaElement {
     /**
      * Returns this schema's function table.
      */
-    FunTable getFunTable();
+    FunctionTable getFunTable();
 
     /**
      * Returns this schema's parameters.

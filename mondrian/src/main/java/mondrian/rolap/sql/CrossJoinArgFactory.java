@@ -42,7 +42,7 @@ import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.ParenthesesFunDef;
@@ -161,7 +161,7 @@ public class CrossJoinArgFactory {
         if (!(exp instanceof ResolvedFunCallImpl funCall)) {
             return null;
         }
-        FunDef fun = funCall.getFunDef();
+        FunctionDefinition fun = funCall.getFunDef();
         Exp[] args = funCall.getArgs();
 
         final Role role = evaluator.getSchemaReader().getRole();
@@ -209,7 +209,7 @@ public class CrossJoinArgFactory {
     }
 
     private CrossJoinArg[] checkConstrainedMeasures(
-        RolapEvaluator evaluator, FunDef fun, Exp[] args)
+        RolapEvaluator evaluator, FunctionDefinition fun, Exp[] args)
     {
             if (isSetOfConstrainedMeasures(fun, args)) {
             HashMap<Dimension, List<RolapMember>> memberLists =
@@ -222,7 +222,7 @@ public class CrossJoinArgFactory {
         return null;
     }
 
-    private boolean isSetOfConstrainedMeasures(FunDef fun, Exp[] args) {
+    private boolean isSetOfConstrainedMeasures(FunctionDefinition fun, Exp[] args) {
         return fun.getName().equals("{}") && allArgsConstrainedMeasure(args);
     }
 
@@ -371,7 +371,7 @@ public class CrossJoinArgFactory {
      */
     public List<CrossJoinArg[]> checkCrossJoin(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args,
         final boolean returnAny)
     {
@@ -458,7 +458,7 @@ public class CrossJoinArgFactory {
      */
     private CrossJoinArg[] checkEnumeration(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args,
         boolean exclude)
     {
@@ -511,7 +511,7 @@ public class CrossJoinArgFactory {
      */
     private CrossJoinArg[] checkMemberChildren(
         Role role,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!"Children".equalsIgnoreCase(fun.getName())) {
@@ -566,7 +566,7 @@ public class CrossJoinArgFactory {
      */
     private CrossJoinArg[] checkLevelMembers(
         Role role,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!"Members".equalsIgnoreCase(fun.getName())) {
@@ -633,7 +633,7 @@ public class CrossJoinArgFactory {
      */
     private CrossJoinArg[] checkDescendants(
         Role role,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!"Descendants".equalsIgnoreCase(fun.getName())) {
@@ -703,7 +703,7 @@ public class CrossJoinArgFactory {
      */
     private List<CrossJoinArg[]> checkDimensionFilter(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] filterArgs)
     {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
@@ -890,7 +890,7 @@ public class CrossJoinArgFactory {
 
         // Now check that predFirstArgCall is a CurrentMember function that
         // refers to the dimension being filtered
-        FunDef predFirstArgFun = predFirstArgCall.getFunDef();
+        FunctionDefinition predFirstArgFun = predFirstArgCall.getFunDef();
         if (!predFirstArgFun.getName().equals("CurrentMember")) {
             return null;
         }
@@ -913,7 +913,7 @@ public class CrossJoinArgFactory {
         // Check that predArgs[1] can be expressed as an MemberListCrossJoinArg.
         Exp predSecondArg = predArgs[1];
         Exp[] predSecondArgList;
-        FunDef predSecondArgFun;
+        FunctionDefinition predSecondArgFun;
         CrossJoinArg[] predCJArgs;
 
         if (useIs) {

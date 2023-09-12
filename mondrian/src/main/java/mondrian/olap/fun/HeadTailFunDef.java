@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.DecimalType;
 
 /**
@@ -31,7 +31,7 @@ import mondrian.olap.type.DecimalType;
  * @since Mar 23, 2006
  */
 class HeadTailFunDef extends FunDefBase {
-    static final Resolver TailResolver =
+    static final FunctionResolver TailResolver =
         new ReflectiveMultiResolver(
             "Tail",
             "Tail(<Set>[, <Count>])",
@@ -39,7 +39,7 @@ class HeadTailFunDef extends FunDefBase {
             new String[] {"fxx", "fxxn"},
             HeadTailFunDef.class);
 
-    static final Resolver HeadResolver =
+    static final FunctionResolver HeadResolver =
         new ReflectiveMultiResolver(
             "Head",
             "Head(<Set>[, < Numeric Expression >])",
@@ -49,13 +49,13 @@ class HeadTailFunDef extends FunDefBase {
 
     private final boolean head;
 
-    public HeadTailFunDef(FunDef dummyFunDef) {
+    public HeadTailFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
         head = dummyFunDef.getName().equals("Head");
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc integerCalc =

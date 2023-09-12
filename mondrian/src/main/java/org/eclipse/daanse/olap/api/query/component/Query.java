@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.query.component;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Validator;
@@ -91,7 +91,7 @@ public non-sealed interface Query extends QueryPart {
 
     boolean nativeCrossJoinVirtualCube();
 
-    boolean shouldAlertForNonNative(FunDef fun);
+    boolean shouldAlertForNonNative(FunctionDefinition fun);
 
     ExpCompiler createCompiler();
 

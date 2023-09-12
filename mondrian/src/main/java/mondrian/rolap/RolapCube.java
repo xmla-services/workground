@@ -48,7 +48,7 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
@@ -3523,7 +3523,7 @@ public class RolapCube extends CubeBase {
             new FunDefBase("dummy", null, "fn") {
                 @Override
 				public Calc compileCall(
-                    ResolvedFunCallImpl call, ExpCompiler compiler)
+                    ResolvedFunCall call, ExpCompiler compiler)
                 {
                     return calc;
                 }

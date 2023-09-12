@@ -19,19 +19,19 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.HierarchyExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -58,7 +58,7 @@ class ExtractFunDef extends FunDefBase {
         Syntax.Function)
     {
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -101,7 +101,7 @@ class ExtractFunDef extends FunDefBase {
     };
 
     private ExtractFunDef(
-        Resolver resolver, int returnType, int[] parameterTypes)
+        FunctionResolver resolver, int returnType, int[] parameterTypes)
     {
         super(resolver, returnType, parameterTypes);
     }
@@ -187,7 +187,7 @@ class ExtractFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         List<Hierarchy> extractedHierarchyList = new ArrayList<>();
         List<Integer> extractedOrdinalList = new ArrayList<>();
         ExtractFunDef.findExtractedHierarchies(

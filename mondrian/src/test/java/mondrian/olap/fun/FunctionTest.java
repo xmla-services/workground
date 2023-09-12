@@ -12618,13 +12618,13 @@ Intel platforms):
   }
 
   /**
-   * Tests {@link mondrian.olap.FunTable#getFunInfoList()}, but more importantly, generates an HTML table of all
+   * Tests {@link mondrian.olap.FunctionTable#getFunctionInfos()}, but more importantly, generates an HTML table of all
    * implemented functions into a file called "functions.html". You can manually include that table in the <a
    * href="{@docRoot}/../mdx.html">MDX specification</a>.
    */
   @Test
   void testDumpFunctions() throws IOException {
-    final List<FunInfo> funInfoList = new ArrayList<>(BuiltinFunTable.instance().getFunInfoList());
+    final List<FunctionInfo> funInfoList = new ArrayList<>(BuiltinFunTable.instance().getFunctionInfos());
     assertEquals( NUM_EXPECTED_FUNCTIONS, funInfoList.size() );
 
     // Add some UDFs.
@@ -12656,7 +12656,7 @@ Intel platforms):
     pw.println( "<td><b>Name</b></td>" );
     pw.println( "<td><b>Description</b></td>" );
     pw.println( "</tr>" );
-    for ( FunInfo funInfo : funInfoList ) {
+    for ( FunctionInfo funInfo : funInfoList ) {
       pw.println( "<tr>" );
       pw.print( "  <td valign=top><code>" );
       printHtml( pw, funInfo.getName() );
