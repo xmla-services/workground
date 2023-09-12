@@ -410,16 +410,6 @@ public final Query getQuery() {
   }
 
   @Override
-public final int getDepth() {
-    return 0;
-  }
-
-  @Override
-public final RolapEvaluator getParent() {
-    return parent;
-  }
-
-  @Override
 public final SchemaReader getSchemaReader() {
     return root.schemaReader;
   }
@@ -427,36 +417,6 @@ public final SchemaReader getSchemaReader() {
   @Override
 public Date getQueryStartTime() {
     return root.getQueryStartTime();
-  }
-
-
-  @Override
-public final RolapEvaluator push( Member[] members ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setContext( members );
-    return evaluator;
-  }
-
-  @Override
-public final RolapEvaluator push( Member member ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setContext( member );
-    return evaluator;
-  }
-
-  @Override
-public final Evaluator push( boolean nonEmpty ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setNonEmpty( nonEmpty );
-    return evaluator;
-  }
-
-  @Override
-public final Evaluator push( boolean nonEmpty, boolean nativeEnabled ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setNonEmpty( nonEmpty );
-    evaluator.setNativeEnabled( nativeEnabled );
-    return evaluator;
   }
 
   @Override

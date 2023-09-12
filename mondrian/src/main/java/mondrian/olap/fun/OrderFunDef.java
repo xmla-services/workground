@@ -319,7 +319,8 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
       for ( int i = 0; i < memberCalcs.length; i++ ) {
         members[i] = memberCalcs[i].evaluate( evaluator );
       }
-      final Evaluator subEval = evaluator.push( members );
+      Evaluator subEval=evaluator.push();
+      subEval.setContext(members); 
       // Evaluate the expression in the new context.
       return calc.evaluateDual( evaluator, subEval );
     }
