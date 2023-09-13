@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -170,7 +170,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
     @Override
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!isEnabled() || !isValidContext(evaluator)) {

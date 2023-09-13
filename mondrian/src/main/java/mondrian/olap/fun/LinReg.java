@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil.SetWrapper;
 
@@ -121,7 +121,7 @@ public abstract class LinReg extends FunDefBase {
     public static final int SLOPE = 3;
     public static final int VARIANCE = 4;
 
-    static final Resolver InterceptResolver =
+    static final FunctionResolver InterceptResolver =
         new ReflectiveMultiResolver(
             "LinRegIntercept",
             "LinRegIntercept(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -129,7 +129,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             InterceptFunDef.class);
 
-    static final Resolver PointResolver =
+    static final FunctionResolver PointResolver =
         new ReflectiveMultiResolver(
             "LinRegPoint",
             "LinRegPoint(<Numeric Expression>, <Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -137,7 +137,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnnxn", "fnnxnn"},
             PointFunDef.class);
 
-    static final Resolver SlopeResolver =
+    static final FunctionResolver SlopeResolver =
         new ReflectiveMultiResolver(
             "LinRegSlope",
             "LinRegSlope(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -145,7 +145,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             SlopeFunDef.class);
 
-    static final Resolver R2Resolver =
+    static final FunctionResolver R2Resolver =
         new ReflectiveMultiResolver(
             "LinRegR2",
             "LinRegR2(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -153,7 +153,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             R2FunDef.class);
 
-    static final Resolver VarianceResolver =
+    static final FunctionResolver VarianceResolver =
         new ReflectiveMultiResolver(
             "LinRegVariance",
             "LinRegVariance(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -163,7 +163,7 @@ public abstract class LinReg extends FunDefBase {
 
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final DoubleCalc yCalc = compiler.compileDouble(call.getArg(1));
         final DoubleCalc xCalc =
@@ -258,7 +258,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class InterceptFunDef extends LinReg {
-        public InterceptFunDef(FunDef funDef) {
+        public InterceptFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.INTERCEPT);
         }
     }
@@ -273,12 +273,12 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class PointFunDef extends LinReg {
-        public PointFunDef(FunDef funDef) {
+        public PointFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.POINT);
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final DoubleCalc xPointCalc =
                 compiler.compileDouble(call.getArg(0));
             final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(1));
@@ -299,7 +299,7 @@ public abstract class LinReg extends FunDefBase {
         private final DoubleCalc xCalc;
 
         public PointCalc(
-            ResolvedFunCallImpl call,
+            ResolvedFunCall call,
             DoubleCalc xPointCalc,
             TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
@@ -334,7 +334,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class SlopeFunDef extends LinReg {
-        public SlopeFunDef(FunDef funDef) {
+        public SlopeFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.SLOPE);
         }
     }
@@ -349,7 +349,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class R2FunDef extends LinReg {
-        public R2FunDef(FunDef funDef) {
+        public R2FunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.R2);
         }
     }
@@ -364,7 +364,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class VarianceFunDef extends LinReg {
-        public VarianceFunDef(FunDef funDef) {
+        public VarianceFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.VARIANCE);
         }
     }
@@ -375,7 +375,7 @@ public abstract class LinReg extends FunDefBase {
     }
 
 
-    protected LinReg(FunDef funDef, int regType) {
+    protected LinReg(FunctionDefinition funDef, int regType) {
         super(funDef);
         this.regType = regType;
     }
@@ -590,7 +590,7 @@ public abstract class LinReg extends FunDefBase {
         private final int regType;
 
         public LinRegCalc(
-            ResolvedFunCallImpl call,
+            ResolvedFunCall call,
             TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc,

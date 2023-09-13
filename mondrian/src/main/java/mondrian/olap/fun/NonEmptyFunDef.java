@@ -13,20 +13,20 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
@@ -41,7 +41,7 @@ class NonEmptyFunDef extends FunDefBase {
                     new String[] {"fxx", "fxxx"},
                     NonEmptyFunDef.class);
 
-    public NonEmptyFunDef(FunDef dummyFunDef) {
+    public NonEmptyFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -51,7 +51,7 @@ class NonEmptyFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
         TupleListCalc listCalc2 = null;
         if(call.getArgCount() == 2) {
@@ -66,7 +66,7 @@ class NonEmptyFunDef extends FunDefBase {
         private final TupleListCalc listCalc2;
 
         public NonEmptyListCalcImpl(
-                ResolvedFunCallImpl call,
+                ResolvedFunCall call,
                 TupleListCalc listCalc1,
                 TupleListCalc listCalc2)
         {

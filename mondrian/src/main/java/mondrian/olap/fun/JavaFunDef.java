@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
@@ -32,11 +33,10 @@ import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
@@ -94,7 +94,7 @@ public class JavaFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(
-        ResolvedFunCallImpl call,
+        ResolvedFunCall call,
         ExpCompiler compiler)
     {
         final Calc[] calcs = new Calc[parameterCategories.length];
@@ -123,7 +123,7 @@ public class JavaFunDef extends FunDefBase {
         return arr;
     }
 
-    private static FunDef generateFunDef(final Method method) {
+    private static FunctionDefinition generateFunDef(final Method method) {
         String name =
             Util.getAnnotation(
                 method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$FunctionName").toString(), method.getName());
@@ -149,8 +149,8 @@ public class JavaFunDef extends FunDefBase {
      * @param clazz Class
      * @return List of function definitions
      */
-    public static List<FunDef> scan(Class clazz) {
-        List<FunDef> list = new ArrayList<>();
+    public static List<FunctionDefinition> scan(Class clazz) {
+        List<FunctionDefinition> list = new ArrayList<>();
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             if (Modifier.isStatic(method.getModifiers())
@@ -374,7 +374,7 @@ public class JavaFunDef extends FunDefBase {
          * @param method Method to call
          */
         public JavaMethodCalc(
-            ResolvedFunCallImpl call, Calc[] calcs, Method method)
+            ResolvedFunCall call, Calc[] calcs, Method method)
         {
             super(call.getType(), calcs);
             this.method = method;

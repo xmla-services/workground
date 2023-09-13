@@ -34,7 +34,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 
 /**
  * Unit test for mondrian type facility.
@@ -149,7 +149,7 @@ class TypeTest {
                 }
 
                 final int toCategory = TypeUtil.typeToCategory(toType);
-                final List<Resolver.Conversion> conversions =
+                final List<FunctionResolver.Conversion> conversions =
                     new ArrayList<>();
                 final boolean canConvert =
                     TypeUtil.canConvert(

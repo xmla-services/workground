@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
@@ -22,10 +23,9 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -49,7 +49,7 @@ class LastPeriodsFunDef extends FunDefBase {
             new String[] {"fxn", "fxnm"},
             LastPeriodsFunDef.class);
 
-    public LastPeriodsFunDef(FunDef dummyFunDef) {
+    public LastPeriodsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -71,7 +71,7 @@ class LastPeriodsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         // Member defaults to [Time].currentmember
         Exp[] args = call.getArgs();
         final MemberCalc memberCalc;

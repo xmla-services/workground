@@ -16,24 +16,24 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -50,7 +50,7 @@ import mondrian.spi.UserDefinedFunction;
  * @author jhyde
  * @since 2.0
  */
-public class UdfResolver implements Resolver {
+public class UdfResolver implements FunctionResolver {
     private final UdfFactory factory;
     private final UserDefinedFunction udf;
 
@@ -92,7 +92,7 @@ public class UdfResolver implements Resolver {
     }
 
     @Override
-	public FunDef getRepresentativeFunDef() {
+	public FunctionDefinition getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
         int[] parameterCategories = new int[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
@@ -103,7 +103,7 @@ public class UdfResolver implements Resolver {
     }
 
     @Override
-	public FunDef resolve(
+	public FunctionDefinition resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)
@@ -148,7 +148,7 @@ public class UdfResolver implements Resolver {
 
     /**
      * Adapter which converts a {@link UserDefinedFunction} into a
-     * {@link FunDef}.
+     * {@link FunctionDefinition}.
      */
     private class UdfFunDef extends FunDefBase {
         private Type returnType;
@@ -167,7 +167,7 @@ public class UdfResolver implements Resolver {
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final Exp[] args = call.getArgs();
             Calc[] calcs = new Calc[args.length];
             UserDefinedFunction.Argument[] expCalcs =
@@ -216,7 +216,7 @@ public class UdfResolver implements Resolver {
         private final UserDefinedFunction.Argument[] args;
 
         public ScalarCalcImpl(
-            ResolvedFunCallImpl call,
+            ResolvedFunCall call,
             Calc[] calcs,
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
@@ -261,7 +261,7 @@ public class UdfResolver implements Resolver {
         private final UserDefinedFunction.Argument[] args;
 
         public ListCalcImpl(
-            ResolvedFunCallImpl call,
+            ResolvedFunCall call,
             Calc[] calcs,
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)

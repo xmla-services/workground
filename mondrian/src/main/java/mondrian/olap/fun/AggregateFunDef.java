@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.util.property.IntegerProperty;
@@ -32,18 +33,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Aggregator;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -75,7 +75,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
      *
      * @param dummyFunDef Dummy function
      */
-    public AggregateFunDef(FunDef dummyFunDef) {
+    public AggregateFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -96,7 +96,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall	call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final Calc calc =
             call.getArgCount() > 1

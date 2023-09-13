@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
@@ -30,14 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.CacheCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
@@ -59,12 +59,12 @@ public class RankFunDef extends FunDefBase {
           RankFunDef.class );
   private static final String TIMING_NAME = RankFunDef.class.getSimpleName();
 
-  public RankFunDef( FunDef dummyFunDef ) {
+  public RankFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
   @Override
-public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     switch ( call.getArgCount() ) {
       case 2:
         return compileCall2( call, compiler );
@@ -75,7 +75,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     }
   }
 
-  public Calc compileCall3( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+  public Calc compileCall3( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     final TupleListCalc tupleListCalc = compiler.compileList( call.getArg( 1 ) );
     final Calc keyCalc = compiler.compileScalar( call.getArg( 2 ), true );
@@ -90,7 +90,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     }
   }
 
-  public Calc compileCall2( ResolvedFunCallImpl call, ExpCompiler compiler ) {
+  public Calc compileCall2( ResolvedFunCall call, ExpCompiler compiler ) {
     final boolean tuple = call.getArg( 0 ).getType() instanceof TupleType;
     final Exp listExp = call.getArg( 1 );
     final TupleListCalc listCalc0 = compiler.compileList( listExp );
@@ -115,7 +115,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     private final TupleCalc tupleCalc;
     private final Calc listCalc;
 
-    public Rank2TupleCalc( ResolvedFunCallImpl call, TupleCalc tupleCalc, Calc listCalc ) {
+    public Rank2TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc listCalc ) {
       super( call.getType(), new Calc[] { tupleCalc, listCalc } );
       this.tupleCalc = tupleCalc;
       this.listCalc = listCalc;
@@ -159,7 +159,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     private final MemberCalc memberCalc;
     private final Calc listCalc;
 
-    public Rank2MemberCalc( ResolvedFunCallImpl call, MemberCalc memberCalc, Calc listCalc ) {
+    public Rank2MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc listCalc ) {
       super( call.getType(), new Calc[] { memberCalc, listCalc } );
       this.memberCalc = memberCalc;
       this.listCalc = listCalc;
@@ -202,7 +202,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
 
-    public Rank3TupleCalc( ResolvedFunCallImpl call, TupleCalc tupleCalc, Calc sortCalc,
+    public Rank3TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
       super( call.getType(), new Calc[] { tupleCalc, sortCalc } );
       this.tupleCalc = tupleCalc;
@@ -286,7 +286,7 @@ public Calc compileCall( ResolvedFunCallImpl call, ExpCompiler compiler ) {
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
 
-    public Rank3MemberCalc( ResolvedFunCallImpl call, MemberCalc memberCalc, Calc sortCalc,
+    public Rank3MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
       super( call.getType(), new Calc[] { memberCalc, sortCalc } );
       this.memberCalc = memberCalc;

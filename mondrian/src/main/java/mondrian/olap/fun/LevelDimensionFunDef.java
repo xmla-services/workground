@@ -11,12 +11,12 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 
 /**
@@ -36,7 +36,7 @@ class LevelDimensionFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler)
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
     {
         final LevelCalc levelCalc =
             compiler.compileLevel(call.getArg(0));

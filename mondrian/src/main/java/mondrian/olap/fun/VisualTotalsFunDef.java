@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
@@ -26,7 +27,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Property;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -46,7 +47,7 @@ import mondrian.rolap.RolapUtil;
  * @since Jan 16, 2006
  */
 public class VisualTotalsFunDef extends FunDefBase {
-    static final Resolver Resolver =
+    static final FunctionResolver Resolver =
         new ReflectiveMultiResolver(
             "VisualTotals",
             "VisualTotals(<Set>[, <Pattern>])",
@@ -54,7 +55,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             new String[] {"fxx", "fxxS"},
             VisualTotalsFunDef.class);
 
-    public VisualTotalsFunDef(FunDef dummyFunDef) {
+    public VisualTotalsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -78,7 +79,7 @@ public class VisualTotalsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final StringCalc stringCalc =
             call.getArgCount() > 1
@@ -95,7 +96,7 @@ public class VisualTotalsFunDef extends FunDefBase {
         private final StringCalc stringCalc;
 
         public CalcImpl(
-            ResolvedFunCallImpl call, TupleListCalc tupleListCalc, StringCalc stringCalc)
+        		ResolvedFunCall call, TupleListCalc tupleListCalc, StringCalc stringCalc)
         {
             super(call.getType(), new Calc[] {tupleListCalc, stringCalc});
             this.tupleListCalc = tupleListCalc;

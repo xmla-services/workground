@@ -10,15 +10,15 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Lead</code> and <code>Lag</code> MDX functions.
@@ -43,17 +43,17 @@ class LeadLagFunDef extends FunDefBase {
             new String[]{"mmmn"},
             LeadLagFunDef.class);
 
-    public LeadLagFunDef(FunDef dummyFunDef) {
+    public LeadLagFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
         final IntegerCalc integerCalc =
                 compiler.compileInteger(call.getArg(1));
-        final boolean lag = call.getFunName().equals("Lag");
+        final boolean lag = call.getFunDef().getName().equals("Lag");
         return new AbstractProfilingNestedMemberCalc(
         		call.getType(),
             new Calc[] {memberCalc, integerCalc})

@@ -12,7 +12,7 @@
 package org.eclipse.daanse.function;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -103,7 +103,7 @@ public interface Validator {
     /**
      * Returns the table of function and operator definitions.
      */
-    FunTable getFunTable();
+    FunctionTable getFunTable();
 
     /**
      * Creates or retrieves the parameter corresponding to a "Parameter" or

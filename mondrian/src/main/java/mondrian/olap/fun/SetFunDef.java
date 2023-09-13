@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
@@ -27,13 +28,13 @@ import org.eclipse.daanse.olap.calc.api.VoidCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
 
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
@@ -45,7 +46,7 @@ import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -65,7 +66,7 @@ import mondrian.resource.MondrianResource;
 public class SetFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    SetFunDef(Resolver resolver, int[] argTypes) {
+    SetFunDef(FunctionResolver resolver, int[] argTypes) {
         super(resolver, Category.SET, argTypes);
     }
 
@@ -102,7 +103,7 @@ public class SetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         if (args.length == 0) {
             // Special treatment for empty set, because we don't know whether it
@@ -322,7 +323,7 @@ public class SetFunDef extends FunDefBase {
                 calc.getResultStyle());
         } else if (TypeUtil.couldBeMember(type)) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
-            final ResolvedFunCallImpl call = SetFunDef.wrapAsSet(arg);
+            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(type, new Calc[] {memberCalc}) {
             	// name "Sublist..."// name "Sublist..."
                 @Override
@@ -340,7 +341,7 @@ public class SetFunDef extends FunDefBase {
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
-            final ResolvedFunCallImpl call = SetFunDef.wrapAsSet(arg);
+            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(call.getType(), new Calc[] {tupleCalc}) {
                 @Override
 				public TupleIterable evaluateIterable(
@@ -366,7 +367,7 @@ public class SetFunDef extends FunDefBase {
      * @param args Expressions
      * @return Call to set operator
      */
-    public static ResolvedFunCallImpl wrapAsSet(Exp... args) {
+    public static ResolvedFunCall wrapAsSet(Exp... args) {
         assert args.length > 0;
         final int[] categories = new int[args.length];
         Type type = null;
@@ -478,7 +479,7 @@ public class SetFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -520,7 +521,7 @@ public class SetFunDef extends FunDefBase {
          *
          * @param call Expression which was compiled
          */
-        EmptyListCalc(ResolvedFunCallImpl call) {
+        EmptyListCalc(ResolvedFunCall call) {
             super(call.getType(), new Calc[0]);
 
             list = TupleCollections.emptyList(call.getType().getArity());

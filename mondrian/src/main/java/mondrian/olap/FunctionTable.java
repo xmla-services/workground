@@ -13,19 +13,19 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.olap.fun.FunInfo;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionInfo;
+import mondrian.olap.fun.FunctionResolver;
 
 /**
  * List of all MDX functions.
  *
  * <p>A function table can resolve a function call, using a particular
  * {@link Syntax} and set of arguments, to a
- * function definition ({@link FunDef}).</p>
+ * function definition ({@link FunctionDefinition}).</p>
  *
  * @author jhyde, 3 March, 2002
  */
-public interface FunTable {
+public interface FunctionTable {
     /**
      * Returns whether a string is a reserved word.
      */
@@ -45,9 +45,9 @@ public interface FunTable {
     List<String> getReservedWords();
 
     /**
-     * Returns a list of {@link mondrian.olap.fun.Resolver} objects.
+     * Returns a list of {@link mondrian.olap.fun.FunctionResolver} objects.
      */
-    List<Resolver> getResolvers();
+    List<FunctionResolver> getResolvers();
 
     /**
      * Returns a list of resolvers for an operator with a given name and syntax.
@@ -57,45 +57,45 @@ public interface FunTable {
      * @param syntax Operator syntax
      * @return List of resolvers for the operator
      */
-    List<Resolver> getResolvers(
+    List<FunctionResolver> getResolvers(
         String name,
         Syntax syntax);
 
     /**
      * Returns a list of {@link mondrian.olap.fun.FunInfo} objects.
      */
-    List<FunInfo> getFunInfoList();
+    List<FunctionInfo> getFunctionInfos();
 
     /**
      * This method is called from the constructor, to define the set of
      * functions and reserved words recognized.
      *
-     * <p>The implementing class calls {@link Builder} methods to declare
+     * <p>The implementing class calls {@link FunctionTableCollector} methods to declare
      * functions and reserved words.
      *
      * <p>Derived class can override this method to add more functions. It must
      * call the base method.
      *
-     * @param builder Builder
+     * @param collector FunctionTableCollector
      */
-    void defineFunctions(Builder builder);
+    void defineFunctions(FunctionTableCollector collector);
 
     /**
      * Builder that assists with the construction of a function table by
      * providing callbacks to define functions.
      *
-     * <p>An implementation of {@link mondrian.olap.FunTable} must register all
+     * <p>An implementation of {@link mondrian.olap.FunctionTable} must register all
      * of its functions and operators by making callbacks during its
-     * {@link mondrian.olap.FunTable#defineFunctions(mondrian.olap.FunTable.Builder)}
+     * {@link mondrian.olap.FunctionTable#defineFunctions(mondrian.olap.FunctionTable.FunctionTableCollector)}
      * method.
      */
-    public interface Builder {
+    public interface FunctionTableCollector {
         /**
          * Defines a function.
          *
          * @param funDef Function definition
          */
-        void define(FunDef funDef);
+        void define(FunctionDefinition funDef);
 
         /**
          * Defines a resolver that will resolve overloaded function calls to
@@ -103,7 +103,7 @@ public interface FunTable {
          *
          * @param resolver Function call resolver
          */
-        void define(Resolver resolver);
+        void define(FunctionResolver resolver);
 
         /**
          * Defines a function info that is not matchd by an actual function.
@@ -112,14 +112,14 @@ public interface FunTable {
          *
          * @param funInfo Function info
          */
-        void define(FunInfo funInfo);
+        void define(FunctionInfo funInfo);
 
         /**
          * Defines a reserved word.
          *
          * @param keyword Reserved word
          *
-         * @see mondrian.olap.FunTable#isReserved
+         * @see mondrian.olap.FunctionTable#isReserved
          */
         void defineReserved(String keyword);
     }

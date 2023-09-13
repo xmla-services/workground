@@ -24,7 +24,7 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -160,7 +160,7 @@ protected boolean restrictMemberTypes() {
   }
 
   @Override
-NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunDef fun, Exp[] args ) {
+NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Exp[] args ) {
     if ( !isEnabled() ) {
       return null;
     }

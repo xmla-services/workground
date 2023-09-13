@@ -12,16 +12,16 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -38,7 +38,7 @@ import mondrian.olap.Validator;
  * @since Oct 7, 2009
  */
 class AsFunDef extends FunDefBase {
-    public static final Resolver RESOLVER = new ResolverImpl();
+    public static final FunctionResolver RESOLVER = new ResolverImpl();
     private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
     /**
@@ -56,7 +56,7 @@ class AsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCallImpl call, ExpCompiler compiler) {
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         // Argument 0, the definition of the set, has been resolved since the
         // scoped named set was created. Implicit conversions, like converting
         // a member to a set, have been performed. Use the new expression.
@@ -80,7 +80,7 @@ class AsFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)

@@ -17,16 +17,16 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -43,7 +43,7 @@ import mondrian.rolap.RolapStoredMeasure;
  * @since 2005/8/14
  */
 public class AbstractAggregateFunDef extends FunDefBase {
-    public AbstractAggregateFunDef(FunDef dummyFunDef) {
+    public AbstractAggregateFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 

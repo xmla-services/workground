@@ -37,13 +37,13 @@ import org.olap4j.metadata.MetadataElement;
 import org.olap4j.metadata.Schema;
 
 import mondrian.olap.Category;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
-import mondrian.olap.fun.FunInfo;
+import mondrian.olap.fun.FunctionInfo;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
@@ -108,10 +108,10 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         Schema schema,
         Predicate<String> functionFilter)
     {
-        final FunTable funTable =
+        final FunctionTable funTable =
             ((MondrianOlap4jSchema) schema).schema.getFunTable();
         StringBuilder buf = new StringBuilder(50);
-        for (FunInfo fi : funTable.getFunInfoList()) {
+        for (FunctionInfo fi : funTable.getFunctionInfos()) {
             if (Syntax.Empty.equals(fi.getSyntax())
                 || Syntax.Internal.equals(fi.getSyntax())
                 || Syntax.Parentheses.equals(fi.getSyntax())) {

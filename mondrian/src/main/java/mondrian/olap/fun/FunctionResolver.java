@@ -14,18 +14,18 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 
 /**
  * A <code>Resolver</code> converts a function name, invocation type, and set
- * of arguments into a {@link FunDef}.
+ * of arguments into a {@link FunctionDefinition}.
  *
  * @author jhyde
  * @since 3 March, 2002
  */
-public interface Resolver {
+public interface FunctionResolver {
     /**
      * Returns the name of the function or operator.
      */
@@ -57,7 +57,7 @@ public interface Resolver {
      * @return The function definition which matches these arguments, or null
      *   if no function definition that this resolver knows about matches.
      */
-    FunDef resolve(
+    FunctionDefinition resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions);
@@ -93,7 +93,7 @@ public interface Resolver {
      * null if there is no representative function, or if the Resolver has
      * a way to describe itself in more detail.
      */
-    FunDef getRepresentativeFunDef();
+    FunctionDefinition getRepresentativeFunDef();
 
     /**
      * Description of an implicit conversion that occurred while resolving an
