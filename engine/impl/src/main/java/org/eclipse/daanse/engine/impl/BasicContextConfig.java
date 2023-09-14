@@ -29,4 +29,11 @@ public interface BasicContextConfig {
         return null;
     }
 
+    @AttributeDefinition(name = "%aggregateRuleTag.name", description = "%aggregateRuleTag.description")
+    default String aggregateRuleTag() {
+        return "default";
+    }
+
+    @AttributeDefinition(name = "%generateAggregateSql.name", description = "%generateAggregateSql.description")
+    default Boolean generateAggregateSql() { return false; }
 }
