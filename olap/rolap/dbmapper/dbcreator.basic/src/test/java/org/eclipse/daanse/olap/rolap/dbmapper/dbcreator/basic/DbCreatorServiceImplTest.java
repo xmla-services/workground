@@ -99,7 +99,7 @@ class DbCreatorServiceImplTest {
     @BeforeEach
     void beforeEach() throws SQLException {
         bc.registerService(DialectResolver.class, dialectResolver, dictionaryOf("ds", "1"));
-        when(dialectResolver.resolve(any())).thenReturn(Optional.of(dialect));
+        when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
         when(dialect.getDialectName()).thenReturn("MYSQL");
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.createStatement()).thenReturn(statement);

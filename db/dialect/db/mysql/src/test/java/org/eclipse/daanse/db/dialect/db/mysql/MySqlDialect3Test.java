@@ -45,7 +45,7 @@ class MySqlDialect3Test {
         when(statmentMock.execute(any())).thenReturn(false);
         when(connection.getMetaData()).thenReturn(metaData);
         when(connection.createStatement()).thenReturn(statmentMock);
-        dialect = new MySqlDialect();
+        dialect = new MySqlDialect(connection);
         buf = new StringBuilder();
     }
 

@@ -92,7 +92,7 @@ class OdsDataLoadServiceImplTest {
             .thenReturn(Optional.of(93));
 
 
-        when(dialectResolver.resolve(any())).thenReturn(Optional.of(dialect));
+        when(dialectResolver.resolve(any(DataSource.class))).thenReturn(Optional.of(dialect));
 
         when(dialect.getDialectName()).thenReturn("MYSQL");
         when(dataSource.getConnection()).thenReturn(connection);

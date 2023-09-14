@@ -8,17 +8,14 @@
 */
 package org.eclipse.daanse.db.dialect.db.nuodb;
 
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
-import java.util.List;
-
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Date;
+import java.util.List;
 
 /**
  * Implementation of {@link Dialect} for the NuoDB database. In order to use
@@ -28,15 +25,11 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author rbuck
  * @since Mar 20, 2014
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NUODB'",
-        "database.product:String='NUODB'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class NuoDbDialect extends JdbcDialectImpl {
     private static final String SUPPORTED_PRODUCT_NAME = "NUODB";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public NuoDbDialect(Connection connection) {
+        super(connection);
     }
 
     /**

@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -34,9 +36,12 @@ class AdditionalTest {
     @Test
     void testMonetBooleanColumn() throws SQLException {
       ResultSetMetaData resultSet = mock(ResultSetMetaData.class);
+      DatabaseMetaData databaseMetaData = mock(DatabaseMetaData.class);      
+      Connection connection = mock(Connection.class);
+      when(connection.getMetaData()).thenReturn( databaseMetaData );
       when(resultSet.getColumnType(1)).thenReturn(Types.BOOLEAN );
 
-      MonetDbDialect monetDbDialect = new MonetDbDialect();
+      MonetDbDialect monetDbDialect = new MonetDbDialect(connection);
       BestFitColumnType type = monetDbDialect.getType( resultSet, 0 );
       assertEquals( BestFitColumnType.OBJECT, type );
     }

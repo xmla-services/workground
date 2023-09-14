@@ -34,10 +34,6 @@ class JdbcDialectImplTest{
           return null;
       }
 
-      @Override
-      protected boolean isSupportedProduct(String productName, String productVersion) {
-          return true;
-      }
   };
   private static StringBuilder buf;
 

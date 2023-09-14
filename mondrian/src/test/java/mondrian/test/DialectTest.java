@@ -698,10 +698,6 @@ class DialectTest {
             return null;
         }
 
-        @Override
-        protected boolean isSupportedProduct(String productName, String productVersion) {
-            return true;
-        }
     };
     StringBuilder buf = new StringBuilder();
     jdbcDialect.quoteDateLiteral( buf, "2003-12-12" );
@@ -1632,10 +1628,6 @@ class DialectTest {
             return null;
         }
 
-        @Override
-        protected boolean isSupportedProduct(String productName, String productVersion) {
-            return true;
-        }
     };
     assertTrue(
             postgresDialect.getType(
@@ -1753,11 +1745,6 @@ class DialectTest {
     // "1" is supposed to be a column number
     String expr = "1";
     Dialect dialect = new JdbcDialectImpl() {
-
-        @Override
-        protected boolean isSupportedProduct(String productName, String productVersion) {
-            return false;
-        }
 
         @Override
         public boolean requiresUnionOrderByOrdinal() {
