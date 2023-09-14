@@ -14,6 +14,7 @@
 package org.eclipse.daanse.engine.impl;
 
 import java.sql.Connection;
+import java.util.Dictionary;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,7 +24,9 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
+import org.osgi.service.cm.ConfigurationPlugin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -60,6 +63,10 @@ public class BasicContext implements Context {
     @Reference(name = REF_NAME_STATISTICS_PROVIDER)
     private StatisticsProvider statisticsProvider = null;
 
+    @Reference
+    private ConfigurationPlugin plugin;
+
+
 //    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 //    private QueryProvider queryProvider;
 //
@@ -72,8 +79,9 @@ public class BasicContext implements Context {
 
     @Activate
     public void activate(Map<String, Object> coniguration) throws Exception {
-
-        this.config = CONVERTER.convert(coniguration)
+        Dictionary  dictionary = FrameworkUtil.asDictionary(coniguration);
+        plugin.modifyConfiguration(null, dictionary);
+        this.config = CONVERTER.convert(dictionary)
                 .to(BasicContextConfig.class);
         try (Connection connection = dataSource.getConnection()) {
             Optional<Dialect> optionalDialect =  dialectFactory.tryCreateDialect(connection);
@@ -106,6 +114,12 @@ public class BasicContext implements Context {
     public Optional<String> getDescription() {
         return Optional.ofNullable(config.description());
     }
+
+    @Override
+    public String aggregateRuleTag() {
+        return config.aggregateRuleTag();
+    }
+
 
 //	@Override
 //	public DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider() {
