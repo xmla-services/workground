@@ -8,8 +8,11 @@
 * SPDX-License-Identifier: EPL-2.0
 *
 * Contributors:
+*   Copyright (C) 2011-2019 Hitachi Vantara
+*   Copyright (C) 2020-2021 Sergei Semenkov
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
+*
 */
 package org.eclipse.daanse.engine.impl;
 
