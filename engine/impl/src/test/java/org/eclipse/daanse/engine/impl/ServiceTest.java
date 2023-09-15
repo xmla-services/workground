@@ -110,16 +110,17 @@ class ServiceTest {
 //        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
 
         String theName = "theName";
+        System.setProperty("test.name", theName);
         String theDescription = "theDescription";
-        props.put("name", theName);
+        props.put("name", "$[env:test.name]");
         props.put("description", theDescription);
         c.update(props);
-        Context ctx = saContext.waitForService(1000);
+        Context ctx = saContext.waitForService(1000000);
 
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
                 .isEqualTo(1);
-
+        System.getProperty("test.name");
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
             assertThat(x.getDescription()

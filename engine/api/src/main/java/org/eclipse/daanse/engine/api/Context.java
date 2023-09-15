@@ -60,13 +60,13 @@ public interface Context {
      * @return {@link DataBaseMappingSchemaProvider}.
      */
 //    DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider();
-    
+
     /**
      * Gives access to a {@link QueryProvider}.
      *
      * @return {@link QueryProvider}.
      */
-//    QueryProvider getQueryProvider(); 
+//    QueryProvider getQueryProvider();
     /*
      * The human readable name of the Context
      */

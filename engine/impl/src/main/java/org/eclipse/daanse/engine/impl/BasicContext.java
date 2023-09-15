@@ -14,6 +14,7 @@
 package org.eclipse.daanse.engine.impl;
 
 import java.sql.Connection;
+import java.util.Dictionary;
 import java.util.Map;
 import java.util.Optional;
 
