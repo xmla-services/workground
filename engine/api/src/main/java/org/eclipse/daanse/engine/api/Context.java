@@ -77,6 +77,4 @@ public interface Context {
      */
     Optional<String> getDescription();
 
-    String aggregateRuleTag();
-
 }
