@@ -24,9 +24,12 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
-import org.osgi.service.cm.ConfigurationPlugin;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -64,7 +67,11 @@ public class BasicContext implements Context {
     private StatisticsProvider statisticsProvider = null;
 
     @Reference
-    private ConfigurationPlugin plugin;
+    private ConfigurationAdmin configAdmin;
+
+
+    @Reference
+    ManagedService  managedService;
 
 
 //    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -78,10 +85,18 @@ public class BasicContext implements Context {
     private BasicContextConfig config;
 
     @Activate
-    public void activate(Map<String, Object> coniguration) throws Exception {
+    public void activate(Map<String, Object> coniguration, BundleContext context) throws Exception {
         Dictionary  dictionary = FrameworkUtil.asDictionary(coniguration);
-        plugin.modifyConfiguration(null, dictionary);
-        this.config = CONVERTER.convert(dictionary)
+        Configuration configuration = configAdmin.getConfiguration("coniguration");
+        configuration.update(dictionary);
+        configuration.update();
+        String p = System.getProperty("test.name"); //"theName"
+        Dictionary  dictionary1 = configuration.getProperties();
+        managedService.updated(dictionary1);
+        Dictionary  dictionary2 = configuration.getProcessedProperties(context.getServiceReference(ManagedService.class));
+        System.out.println(dictionary1.get("name")); //"$[env:test.name]"
+        System.out.println(dictionary2.get("name")); //"$[env:test.name]" but should "theName"
+        this.config = CONVERTER.convert(coniguration)
                 .to(BasicContextConfig.class);
         try (Connection connection = dataSource.getConnection()) {
             Optional<Dialect> optionalDialect =  dialectFactory.tryCreateDialect(connection);
@@ -113,11 +128,6 @@ public class BasicContext implements Context {
     @Override
     public Optional<String> getDescription() {
         return Optional.ofNullable(config.description());
-    }
-
-    @Override
-    public String aggregateRuleTag() {
-        return config.aggregateRuleTag();
     }
 
 
