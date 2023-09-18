@@ -1,389 +1,400 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
-    <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <artifactId>org.eclipse.daanse.emondrian</artifactId>
-  <description>eMondrian OLAP Engine</description>
-  <properties>
-    <project.version.minor>000</project.version.minor>
-    <driver.version>${project.version}</driver.version>
-    <project.version.major>8</project.version.major>
-    <schema.version>3</schema.version>
-    <driver.name>Mondrian olap4j driver</driver.name>
-    <driver.version.minor>${project.version.minor}</driver.version.minor>
-    <vendor>opencube.org</vendor>
-    <driver.version.major>${project.version.major}</driver.version.major>
-    <maven-failsafe-plugin.argLine>-Duser.language=en -Duser.country=US</maven-failsafe-plugin.argLine>
-  </properties>
-  <dependencies>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.daanse</groupId>
+		<artifactId>org.eclipse.daanse.pom.parent</artifactId>
+		<version>${revision}</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>org.eclipse.daanse.emondrian</artifactId>
+	<description>eMondrian OLAP Engine</description>
+	<properties>
+		<project.version.minor>000</project.version.minor>
+		<driver.version>${project.version}</driver.version>
+		<project.version.major>8</project.version.major>
+		<schema.version>3</schema.version>
+		<driver.name>Mondrian olap4j driver</driver.name>
+		<driver.version.minor>${project.version.minor}</driver.version.minor>
+		<vendor>opencube.org</vendor>
+		<driver.version.major>${project.version.major}</driver.version.major>
+		<maven-failsafe-plugin.argLine>-Duser.language=en -Duser.country=US</maven-failsafe-plugin.argLine>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.core</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bndlib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.apache.commons.dbcp</artifactId>
+			<version>${commons-dbcp.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-vfs2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.olap4j</groupId>
+			<artifactId>olap4j-tck</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xerces</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.javacc</groupId>
+			<artifactId>javacc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.statistics.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.common</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
+			<version>${javacup.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.univocity</groupId>
+			<artifactId>univocity-parsers</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.dockerjava</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.36.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>4.2.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.xmlunit</groupId>
+			<artifactId>xmlunit-assertj3</artifactId>
+			<version>2.9.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite-engine</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-engine</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.mssqlserver</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.infobright</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.mariadb</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.postgresql</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.googlebigquery</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.olap.rolap.core</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.monetdb</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.vectorwise</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>biz.aQute.bnd</groupId>
-      <artifactId>biz.aQute.bndlib</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.apache.commons.dbcp</artifactId>
-      <version>${commons-dbcp.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-        </exclusion>
-        <exclusion>
-        	<groupId>xml-apis</groupId>
-        	<artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.github.ben-manes.caffeine</groupId>
-      <artifactId>caffeine</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-pool</groupId>
-      <artifactId>commons-pool</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-vfs2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.neoview</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
 
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.olap4j</groupId>
-      <artifactId>olap4j-tck</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xerces</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jsp-api</artifactId>
-    </dependency>
-
-    <!--
-    <dependency>
-      <groupId>javacup</groupId>
-      <artifactId>javacup</artifactId>
-    </dependency>
--->
-
-    <dependency>
-      <groupId>net.java.dev.javacc</groupId>
-      <artifactId>javacc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.olap.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.statistics.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.common</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.db.dialect.db.nuodb</artifactId>
+			<version>${revision}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 
-    <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.rhino.engine</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
-      <version>${javacup.version}</version>
-      <scope>compile</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.record</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.mdx.model.api</artifactId>
+			<version>${revision}</version>
+			<scope>compile</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>com.univocity</groupId>
-      <artifactId>univocity-parsers</artifactId>
-      <version>2.9.1</version>
-    </dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.util.converter</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.dockerjava</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.xerial</groupId>
-      <artifactId>sqlite-jdbc</artifactId>
-      <version>3.36.0.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <version>4.2.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.xmlunit</groupId>
-      <artifactId>xmlunit-assertj3</artifactId>
-      <version>2.9.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-suite-engine</artifactId>
-      <version>1.8.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-engine</artifactId>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.mssqlserver</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.infobright</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.mariadb</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.postgresql</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.googlebigquery</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.monetdb</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.vectorwise</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.neoview</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.nuodb</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.rhino.engine</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-        <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.engine.api</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-      <dependency>
-          <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>
-          <version>${revision}</version>
-          <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.record</artifactId>
-          <version>${revision}</version>
-          <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
-          <version>${revision}</version>
-          <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.mdx.model.api</artifactId>
-          <version>${revision}</version>
-          <scope>compile</scope>
-      </dependency>
-  </dependencies>
-  <build>
-  <!--
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.metatype.annotations</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.namespace.unresolvable</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.resource</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.configadmin.plugin.interpolation</artifactId>
+			<version>1.2.8</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<!--
 
     <resources>
       <resource>
@@ -395,171 +406,183 @@
       </resource>
     </resources>
     -->
-    <plugins>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.2.0</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/generated</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>generate-res-ant</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <property name="classpath" refid="maven.compile.classpath" />
-                <property name="java.dir" value="${project.build.sourceDirectory}" />
-                <property name="relative.java.dir" value="src/main/java" />
-                <property name="relative.resources.dir" value="src/main/resources" />
-                <property name="generated.java.dir" value="${project.basedir}/src/generated/java" />
-                <property name="generated.resources.dir" value="${project.basedir}/src/generated/resources" />
-                <property name="relative.generated.java.dir" value="src/generated/java" />
-                <property name="classes.dir" value="${project.build.outputDirectory}" />
-                <property name="build.compiler" value="extJavac"/>
-                <mkdir dir="${project.build.outputDirectory}" />
-                <mkdir dir="${generated.java.dir}/mondrian/olap" />
-                <mkdir dir="${generated.java.dir}/mondrian/rolap/aggmatcher" />
-                <mkdir dir="${generated.java.dir}/mondrian/xmla" />
-                <mkdir dir="${generated.java.dir}/mondrian/parser" />
-                <ant target="def" />
-                <ant target="generate.properties" />
-                <ant target="generate.resources" />
-                <ant target="parser" />
-                <ant target="version" />
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/generated/java</source>
-              </sources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>add-resource</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>add-resource</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/src/generated/resources</directory>
-                </resource>
-                <resource>
-                  <directory>${project.basedir}</directory>
-                  <includes>
-                    <include>README.txt</include>
-                  </includes>
-                </resource>
-                <resource>
-                  <directory>${project.basedir}/..</directory>
-                  <includes>
-                    <include>LICENSE.html</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xml-maven-plugin</artifactId>
-        <version>1.0.1</version>
-        <executions>
-          <execution>
-            <phase>site</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <transformationSets>
-            <transformationSet>
-              <dir>${project.build.sourceDirectory}/mondrian/olap</dir>
-              <includes>Mondrian.xml</includes>
-              <stylesheet>src/site/xsl/Meta.xsl</stylesheet>
-              <outputDir>${project.build.directory}/site/doc</outputDir>
-              <fileMappers>
-                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-                  <pattern>Mondrian.xml</pattern>
-                  <replacement>xml_schema.html</replacement>
-                </fileMapper>
-              </fileMappers>
-            </transformationSet>
-          </transformationSets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.0.0-M6</version>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-          </execution>
-        </executions>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/generated</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>generate-res-ant</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<property name="classpath"
+									refid="maven.compile.classpath" />
+								<property name="java.dir"
+									value="${project.build.sourceDirectory}" />
+								<property name="relative.java.dir"
+									value="src/main/java" />
+								<property name="relative.resources.dir"
+									value="src/main/resources" />
+								<property name="generated.java.dir"
+									value="${project.basedir}/src/generated/java" />
+								<property name="generated.resources.dir"
+									value="${project.basedir}/src/generated/resources" />
+								<property name="relative.generated.java.dir"
+									value="src/generated/java" />
+								<property name="classes.dir"
+									value="${project.build.outputDirectory}" />
+								<property name="build.compiler" value="extJavac" />
+								<mkdir dir="${project.build.outputDirectory}" />
+								<mkdir dir="${generated.java.dir}/mondrian/olap" />
+								<mkdir
+									dir="${generated.java.dir}/mondrian/rolap/aggmatcher" />
+								<mkdir dir="${generated.java.dir}/mondrian/xmla" />
+								<mkdir
+									dir="${generated.java.dir}/mondrian/parser" />
+								<ant target="def" />
+								<ant target="generate.properties" />
+								<ant target="generate.resources" />
+								<ant target="parser" />
+								<ant target="version" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/generated/java</source>
+							</sources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add-resource</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>
+										${project.basedir}/src/generated/resources</directory>
+								</resource>
+								<resource>
+									<directory>${project.basedir}</directory>
+									<includes>
+										<include>README.txt</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${project.basedir}/..</directory>
+									<includes>
+										<include>LICENSE.html</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>${project.build.sourceDirectory}/mondrian/olap</dir>
+							<includes>Mondrian.xml</includes>
+							<stylesheet>src/site/xsl/Meta.xsl</stylesheet>
+							<outputDir>${project.build.directory}/site/doc</outputDir>
+							<fileMappers>
+								<fileMapper
+									implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
+									<pattern>Mondrian.xml</pattern>
+									<replacement>xml_schema.html</replacement>
+								</fileMapper>
+							</fileMappers>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+				</executions>
 
-        <configuration>
-          <includes>
-            <include>Main.java</include>
-          </includes>
-          <systemPropertyVariables>
-            <mondrian.foodmart.jdbcURL>${mondrian.foodmart.jdbcURL}</mondrian.foodmart.jdbcURL>
-            <mondrian.foodmart.jdbcUser>${mondrian.foodmart.jdbcUser}</mondrian.foodmart.jdbcUser>
-            <mondrian.foodmart.jdbcPassword>${mondrian.foodmart.jdbcPassword}</mondrian.foodmart.jdbcPassword>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
+				<configuration>
+					<includes>
+						<include>Main.java</include>
+					</includes>
+					<systemPropertyVariables>
+						<mondrian.foodmart.jdbcURL>${mondrian.foodmart.jdbcURL}</mondrian.foodmart.jdbcURL>
+						<mondrian.foodmart.jdbcUser>
+							${mondrian.foodmart.jdbcUser}</mondrian.foodmart.jdbcUser>
+						<mondrian.foodmart.jdbcPassword>
+							${mondrian.foodmart.jdbcPassword}</mondrian.foodmart.jdbcPassword>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 
-      <plugin>
-        <groupId>biz.aQute.bnd</groupId>
-        <artifactId>bnd-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-
-
-			<resources>
-				<resource>
-					<directory>${project.basedir}/testfiles</directory>
-					<targetPath>${project.build.directory}/testfiles</targetPath>
-				</resource>
-				<resource>
-					<directory>src/test/resources</directory>
-				</resource>
-        <resource>
-          <directory>src/main/resources</directory>
-        </resource>
-			</resources>
-		</build>
+			<plugin>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/testfiles</directory>
+				<targetPath>${project.build.directory}/testfiles</targetPath>
+			</resource>
+			<resource>
+				<directory>src/test/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
 
 </project>

@@ -13,7 +13,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 

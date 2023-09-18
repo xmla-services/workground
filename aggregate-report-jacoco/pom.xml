@@ -26,10 +26,6 @@
 
    <dependencies>
 
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.compute.olap.basic</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.clickhouse</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.common</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.datasource.jtdssqlserver</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
@@ -82,8 +78,6 @@
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.nop</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.db.statistics.query</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.emondrian</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.engine.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
-    <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.engine.impl</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.api</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.core</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>
     <dependency>       <groupId>org.eclipse.daanse</groupId>       <artifactId>org.eclipse.daanse.function.definition.math</artifactId>       <version>${revision}</version>       <scope>compile</scope>     </dependency>

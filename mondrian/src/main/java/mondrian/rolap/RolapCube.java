@@ -34,8 +34,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
