@@ -23,5 +23,6 @@
     <module>api</module>
     <module>rolap</module>
     <module>calc</module>
+    <module>xmla</module>
   </modules>
 </project>

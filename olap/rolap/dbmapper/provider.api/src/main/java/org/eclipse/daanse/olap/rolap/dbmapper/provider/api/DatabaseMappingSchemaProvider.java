@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 /*
  * Provides a Schema
  */
-public interface DbMappingSchemaProvider extends Supplier<Schema> {
+public interface DatabaseMappingSchemaProvider extends Supplier<Schema> {
 
     /*
      * Provides a Schema.

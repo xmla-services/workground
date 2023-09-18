@@ -23,6 +23,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 public class MysqlContext implements Context {
 
@@ -84,5 +85,11 @@ public class MysqlContext implements Context {
     public Optional<String> getDescription() {
         return Optional.empty();
     }
+
+	@Override
+	public DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

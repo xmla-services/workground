@@ -61,13 +61,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilde
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeMeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.VirtualCubeRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=FoodMart",
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=FoodMart",
     "sample.type=record"})
-public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
+public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 
 	private static final String CONCAT_CONCAT_CUSTOMER_FNAME_CUSTOMER_LNAME =
         "CONCAT(CONCAT(\"customer\".\"fname\", ' '), \"customer\".\"lname\")";
