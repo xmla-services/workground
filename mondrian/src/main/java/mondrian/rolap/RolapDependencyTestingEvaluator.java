@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
@@ -315,14 +315,14 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
             Hierarchy[] independentHierarchies,
             String mdxString)
         {
-            super("DteScalarCalcImpl",calc.getType());
+            super(calc.getType());
             this.calc = calc;
             this.independentHierarchies = independentHierarchies;
             this.mdxString = mdxString;
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 
@@ -355,7 +355,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
             boolean mutableList,
             String mdxString)
         {
-            super("DteIterCalcImpl",calc.getType());
+            super(calc.getType());
             this.calc = calc;
             this.independentHierarchies = independentHierarchies;
             this.mutableList = mutableList;
@@ -363,7 +363,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 

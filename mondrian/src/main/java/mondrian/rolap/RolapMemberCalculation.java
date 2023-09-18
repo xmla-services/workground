@@ -9,8 +9,9 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
-import mondrian.mdx.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.fun.AggregateFunDef;
 
@@ -99,7 +100,7 @@ class RolapMemberCalculation implements RolapCalculation {
      * @return Whether expression contains a call to an aggregate function.
      */
     private static boolean foundAggregateFunction(Exp exp) {
-        if (exp instanceof ResolvedFunCall resolvedFunCall) {
+        if (exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             if (resolvedFunCall.getFunDef() instanceof AggregateFunDef) {
                 return true;
             } else {

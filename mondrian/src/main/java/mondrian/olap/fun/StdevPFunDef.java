@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>StdevP</code> builtin MDX function, and its alias
@@ -31,7 +31,7 @@ import mondrian.olap.FunDef;
  */
 class StdevPFunDef extends AbstractAggregateFunDef {
 
-    static final Resolver StdevpResolver =
+    static final FunctionResolver StdevpResolver =
         new ReflectiveMultiResolver(
             "StdevP",
             "StdevP(<Set>[, <Numeric Expression>])",
@@ -39,7 +39,7 @@ class StdevPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             StdevPFunDef.class);
 
-    static final Resolver StddevpResolver =
+    static final FunctionResolver StddevpResolver =
         new ReflectiveMultiResolver(
             "StddevP",
             "StddevP(<Set>[, <Numeric Expression>])",
@@ -47,26 +47,26 @@ class StdevPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             StdevPFunDef.class);
 
-    public StdevPFunDef(FunDef dummyFunDef) {
+    public StdevPFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc =
             call.getArgCount() > 1
             ? compiler.compileScalar(call.getArg(1), true)
             : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, calc}) {
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, calc}) {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
-                    final double stdev =
+                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
+                    final Double stdev =
                         (Double) FunUtil.stdev(
                             evaluator, list, calc, true);
                     return stdev;
@@ -77,7 +77,7 @@ class StdevPFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

@@ -11,17 +11,18 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.Query;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 
@@ -37,15 +38,15 @@ import mondrian.olap.Validator;
  * @since Oct 7, 2009
  */
 class AsFunDef extends FunDefBase {
-    public static final Resolver RESOLVER = new ResolverImpl();
-    private final Query.ScopedNamedSet scopedNamedSet;
+    public static final FunctionResolver RESOLVER = new ResolverImpl();
+    private final QueryImpl.ScopedNamedSet scopedNamedSet;
 
     /**
      * Creates an AsFunDef.
      *
      * @param scopedNamedSet Named set definition
      */
-    private AsFunDef(Query.ScopedNamedSet scopedNamedSet) {
+    private AsFunDef(QueryImpl.ScopedNamedSet scopedNamedSet) {
         super(
             "AS",
             "<Expression> AS <Name>",
@@ -61,7 +62,7 @@ class AsFunDef extends FunDefBase {
         // a member to a set, have been performed. Use the new expression.
         scopedNamedSet.setExp(call.getArg(0));
 
-        return new AbstractIterCalc(call.getFunName(),call.getType(), new Calc[0]) {
+        return new AbstractIterCalc(call.getType(), new Calc[0]) {
             @Override
 			public TupleIterable evaluateIterable(
                 Evaluator evaluator)
@@ -79,7 +80,7 @@ class AsFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -96,8 +97,8 @@ class AsFunDef extends FunDefBase {
             // was not visible in the scope that defines it. But we can work
             // with this.
 
-            final Query.ScopedNamedSet scopedNamedSet =
-                (Query.ScopedNamedSet) ((NamedSetExpr) args[1]).getNamedSet();
+            final QueryImpl.ScopedNamedSet scopedNamedSet =
+                (QueryImpl.ScopedNamedSet) ((NamedSetExpression) args[1]).getNamedSet();
             return new AsFunDef(scopedNamedSet);
         }
     }

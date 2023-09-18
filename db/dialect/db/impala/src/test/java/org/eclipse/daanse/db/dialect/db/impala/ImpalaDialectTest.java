@@ -34,8 +34,7 @@ class ImpalaDialectTest{
   protected void setUp() throws Exception {
     when( metaData.getDatabaseProductName() ).thenReturn( "IMPALA" );
     when( connection.getMetaData() ).thenReturn( metaData );
-    impalaDialect = new ImpalaDialect(  );
-    impalaDialect.initialize(connection);
+    impalaDialect = new ImpalaDialect(connection);
   }
 
   @Test

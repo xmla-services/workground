@@ -15,10 +15,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Level;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 
 /**
  * todo:
@@ -111,12 +111,12 @@ class Test {
 
         RolapHierarchy genderHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new Id.NameSegment("Gender"), false);
+                new IdImpl.NameSegmentImpl("Gender"), false);
         testMemberReader(genderHierarchy.getMemberReader());
 
         RolapHierarchy customerHierarchy = (RolapHierarchy)
             salesCube.lookupHierarchy(
-                new Id.NameSegment("Customers"), false);
+                new IdImpl.NameSegmentImpl("Customers"), false);
         testMemberReader(customerHierarchy.getMemberReader());
     }
     void testMemberReader(MemberReader reader)

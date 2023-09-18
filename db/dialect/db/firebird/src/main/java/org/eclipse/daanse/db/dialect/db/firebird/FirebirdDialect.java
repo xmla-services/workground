@@ -11,10 +11,8 @@ package org.eclipse.daanse.db.dialect.db.firebird;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the Firebird database.
@@ -22,16 +20,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='FIREBIRD'",
-        "database.product:String='FIREBIRD'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class FirebirdDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "FIREBIRD";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public FirebirdDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

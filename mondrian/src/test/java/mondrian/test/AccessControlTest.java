@@ -18,17 +18,19 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -45,7 +47,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Category;
 import mondrian.olap.DelegatingRole;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
@@ -117,7 +119,7 @@ class AccessControlTest {
         final SchemaReader schemaReader = salesCube.getSchemaReader(role);
         Dimension genderDimension =
             (Dimension) schemaReader.lookupCompound(
-                salesCube, Id.Segment.toList("Gender"), true,
+                salesCube, Segment.toList("Gender"), true,
                 Category.DIMENSION);
         role.grant(genderDimension, Access.NONE);
         role.makeImmutable();
@@ -1138,9 +1140,9 @@ class AccessControlTest {
         Cube salesCube = schema.lookupCube("Sales", mustGet);
         Cube warehouseCube = schema.lookupCube("Warehouse", mustGet);
         Hierarchy measuresInSales = salesCube.lookupHierarchy(
-            new Id.NameSegment("Measures", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegmentImpl("Measures", Quoting.UNQUOTED), false);
         Hierarchy storeInWarehouse = warehouseCube.lookupHierarchy(
-            new Id.NameSegment("Store", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED), false);
 
         RoleImpl role = new RoleImpl();
         role.grant(schema, Access.NONE);
@@ -1191,7 +1193,7 @@ class AccessControlTest {
         final SchemaReader schemaReader =
             salesCube.getSchemaReader(null).withLocus();
         Hierarchy storeHierarchy = salesCube.lookupHierarchy(
-            new Id.NameSegment("Store", Id.Quoting.UNQUOTED), false);
+            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED), false);
         role.grant(schema, Access.ALL_DIMENSIONS);
         role.grant(salesCube, Access.ALL);
         Level nationLevel =
@@ -1235,7 +1237,7 @@ class AccessControlTest {
         if (restrictCustomers) {
             Hierarchy customersHierarchy =
                 salesCube.lookupHierarchy(
-                    new Id.NameSegment("Customers", Id.Quoting.UNQUOTED),
+                    new IdImpl.NameSegmentImpl("Customers", Quoting.UNQUOTED),
                     false);
             Level stateProvinceLevel =
                 Util.lookupHierarchyLevel(customersHierarchy, "State Province");
@@ -1892,7 +1894,7 @@ class AccessControlTest {
         final HierarchyAccess accessDetails =
             connection.getRole().getAccessDetails(
                 cube.lookupHierarchy(
-                    new Id.NameSegment("Customers", Id.Quoting.UNQUOTED),
+                    new IdImpl.NameSegmentImpl("Customers", Quoting.UNQUOTED),
                     false));
         final SchemaReader scr =
             cube.getSchemaReader(null).withLocus();
@@ -2383,7 +2385,7 @@ class AccessControlTest {
      * <a href="http://jira.pentaho.com/browse/BISERVER-1574">BISERVER-1574,
      * "Cube role rollupPolicy='partial' failure"</a>. The problem was a
      * NullPointerException in
-     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.model.Member)} when called
+     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.element.Member)} when called
      * on a members returned in a result set. JPivot calls that method but
      * Mondrian normally does not.
      */
@@ -3240,7 +3242,7 @@ class AccessControlTest {
             role.grant(cube, Access.ALL);
 
             Hierarchy hierarchy = cube.lookupHierarchy(
-                new Id.NameSegment("Employees"), false);
+                new IdImpl.NameSegmentImpl("Employees"), false);
 
             Level[] levels = hierarchy.getLevels();
             Level topLevel = levels[1];

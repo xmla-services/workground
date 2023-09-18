@@ -13,14 +13,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 
 /**
@@ -43,25 +44,25 @@ class DistinctFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
-        return new CalcImpl(call, listCalc);
+        return new CalcImpl(call, tupleListCalc);
     }
 
     static class CalcImpl extends AbstractListCalc {
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
 
-        public CalcImpl(ResolvedFunCall call, ListCalc listCalc) {
-            super(call.getFunName(),call.getType(), new Calc[]{listCalc});
-            this.listCalc = listCalc;
+        public CalcImpl(ResolvedFunCall call, TupleListCalc tupleListCalc) {
+            super(call.getType(), new Calc[]{tupleListCalc});
+            this.tupleListCalc = tupleListCalc;
         }
 
         @Override
 		public TupleList evaluateList(Evaluator evaluator) {
-            TupleList list = listCalc.evaluateList(evaluator);
+            TupleList list = tupleListCalc.evaluateList(evaluator);
             Set<List<Member>> set = new HashSet<>(list.size());
-            TupleList result = list.cloneList(list.size());
+            TupleList result = list.copyList(list.size());
             for (List<Member> element : list) {
                 if (set.add(element)) {
                     result.add(element);

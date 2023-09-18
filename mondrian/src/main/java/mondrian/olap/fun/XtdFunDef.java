@@ -11,21 +11,21 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.LevelType;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -66,7 +66,7 @@ class XtdFunDef extends FunDefBase {
 
   private static final String TIMING_NAME = XtdFunDef.class.getSimpleName();
 
-  public XtdFunDef( FunDef dummyFunDef, LevelType levelType ) {
+  public XtdFunDef( FunctionDefinition dummyFunDef, LevelType levelType ) {
     super( dummyFunDef );
     this.levelType = levelType;
   }
@@ -109,7 +109,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Level level = getLevel( compiler.getEvaluator() );
     switch ( call.getArgCount() ) {
       case 0:
-        return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[0] ) {
+        return new AbstractListCalc( call.getType(), new Calc[0] ) {
           @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
@@ -127,12 +127,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         };
       default:
         final MemberCalc memberCalc = compiler.compileMember( call.getArg( 0 ) );
-        return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { memberCalc } ) {
+        return new AbstractListCalc( call.getType(), new Calc[] { memberCalc } ) {
           @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
-              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluateMember( evaluator ) ) );
+              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluate( evaluator ) ) );
             } finally {
               evaluator.getTiming().markEnd( XtdFunDef.TIMING_NAME );
             }
@@ -151,7 +151,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
       return new XtdFunDef( dummyFunDef, levelType );
     }
   }

@@ -15,11 +15,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 
 /**
- * Resolver which uses reflection to instantiate a {@link FunDef}.
+ * Resolver which uses reflection to instantiate a {@link FunctionDefinition}.
  * This reduces the amount of anonymous classes.
  *
  * @author jhyde
@@ -49,7 +49,7 @@ public class ReflectiveMultiResolver extends MultiResolver {
     {
         super(name, signature, description, signatures);
         try {
-            this.constructor = clazz.getConstructor(new Class[] {FunDef.class});
+            this.constructor = clazz.getConstructor(new Class[] {FunctionDefinition.class});
         } catch (NoSuchMethodException e) {
             throw Util.newInternal(
                 e, new StringBuilder("Error while registering resolver class ").append(clazz).toString());
@@ -58,9 +58,9 @@ public class ReflectiveMultiResolver extends MultiResolver {
     }
 
     @Override
-	protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+	protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
         try {
-            return (FunDef) constructor.newInstance(new Object[] {dummyFunDef});
+            return (FunctionDefinition) constructor.newInstance(new Object[] {dummyFunDef});
         } catch (InstantiationException e) {
             throw Util.newInternal(
                 e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());

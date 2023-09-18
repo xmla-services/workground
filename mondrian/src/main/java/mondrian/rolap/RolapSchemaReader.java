@@ -20,31 +20,34 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.engine.api.Context;
+import mondrian.olap.NullLiteralImpl;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eigenbase.util.property.Property;
 import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
@@ -422,20 +425,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
+	public OlapElement getElementChild(OlapElement parent, Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement getElementChild(
-        OlapElement parent, Id.Segment name, MatchType matchType)
+            OlapElement parent, Segment name, MatchType matchType)
     {
         return parent.lookupChild(this, name, matchType);
     }
 
     @Override
 	public final Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return getMemberByUniqueName(
@@ -444,7 +447,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
     {
@@ -456,7 +459,7 @@ public class RolapSchemaReader
     @Override
 	public OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category)
     {
@@ -467,7 +470,7 @@ public class RolapSchemaReader
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -491,7 +494,7 @@ public class RolapSchemaReader
 
     public final OlapElement lookupCompoundInternal(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -537,7 +540,7 @@ public class RolapSchemaReader
 
     @Override
 	public Member lookupMemberChildByName(
-        Member parent, Id.Segment childName, MatchType matchType)
+            Member parent, Segment childName, MatchType matchType)
     {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
@@ -546,11 +549,11 @@ public class RolapSchemaReader
         assert !(parent instanceof RolapHierarchy.LimitedRollupMember);
         try {
             MemberChildrenConstraint constraint;
-            if (childName instanceof Id.NameSegment
+            if (childName instanceof NameSegment
                 && matchType.isExact())
             {
                 constraint = sqlConstraintFactory.getChildByNameConstraint(
-                    (RolapMember) parent, (Id.NameSegment) childName);
+                    (RolapMember) parent, (NameSegment) childName);
             } else {
                 constraint =
                     sqlConstraintFactory.getMemberChildrenConstraint(null);
@@ -585,7 +588,7 @@ public class RolapSchemaReader
 
     @Override
 	public List<Member> lookupMemberChildrenByNames(
-        Member parent, List<Id.NameSegment> childNames, MatchType matchType)
+        Member parent, List<NameSegment> childNames, MatchType matchType)
     {
         MemberChildrenConstraint constraint = sqlConstraintFactory
             .getChildrenByNamesConstraint(
@@ -598,20 +601,20 @@ public class RolapSchemaReader
     }
 
     @Override
-	public Member getCalculatedMember(List<Id.Segment> nameParts) {
+	public Member getCalculatedMember(List<Segment> nameParts) {
         // There are no calculated members defined against a schema.
         return null;
     }
 
     @Override
-	public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+	public NamedSet getNamedSet(List<Segment> nameParts) {
         if (nameParts.size() != 1) {
             return null;
         }
-        if (!(nameParts.get(0) instanceof Id.NameSegment)) {
+        if (!(nameParts.get(0) instanceof NameSegment)) {
             return null;
         }
-        final String name = ((Id.NameSegment) nameParts.get(0)).name;
+        final String name = ((NameSegment) nameParts.get(0)).getName();
         return schema.getNamedSet(name);
     }
 
@@ -767,10 +770,10 @@ public class RolapSchemaReader
 
     @Override
 	public NativeEvaluator getNativeSetEvaluator(
-        FunDef fun, Exp[] args, Evaluator evaluator, Calc calc)
+        FunctionDefinition fun, Exp[] args, Evaluator evaluator, Calc calc)
     {
         RolapEvaluator revaluator = (RolapEvaluator)
-            AbstractCalc.simplifyEvaluator(calc, evaluator);
+ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
         if (evaluator.nativeEnabled()) {
             return schema.getNativeRegistry().createEvaluator(
                 revaluator, fun, args);
@@ -857,7 +860,7 @@ public class RolapSchemaReader
         public SystemPropertyParameter(String name, boolean system) {
             super(
                 name,
-                Literal.nullValue,
+                NullLiteralImpl.nullValue,
                 new StringBuilder("System property '").append(name).append("'").toString(),
                 new StringType());
             this.system = system;
@@ -879,9 +882,10 @@ public class RolapSchemaReader
 
         @Override
 		public Calc compile(ExpCompiler compiler) {
-            return new GenericCalc("SystemPropertyCalc",getType()) {
+            return new GenericCalc(getType()) {
+            	//"SystemPropertyCalc"
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[0];
                 }
 

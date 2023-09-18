@@ -31,8 +31,7 @@ class RedshiftDialectTest {
     protected void setUp() throws Exception {
         when(metaData.getDatabaseProductName()).thenReturn("REDSHIFT");
         when(connection.getMetaData()).thenReturn(metaData);
-        dialect = new RedshiftDialect();
-        dialect.initialize(connection);
+        dialect = new RedshiftDialect(connection);
     }
 
     @Test

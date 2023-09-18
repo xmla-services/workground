@@ -11,18 +11,18 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>EXISTS</code> MDX function.
@@ -32,7 +32,7 @@ import mondrian.olap.FunDef;
  */
 class ExistsFunDef extends FunDefBase
 {
-    static final Resolver resolver =
+    static final FunctionResolver resolver =
         new ReflectiveMultiResolver(
             "Exists",
             "Exists(<Set1>, <Set2>])",
@@ -40,17 +40,17 @@ class ExistsFunDef extends FunDefBase
             new String[] {"fxxx"},
             ExistsFunDef.class);
 
-    public ExistsFunDef(FunDef dummyFunDef)
+    public ExistsFunDef(FunctionDefinition dummyFunDef)
     {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
-        final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc listCalc1 = compiler.compileList(call.getArg(0));
+        final TupleListCalc listCalc2 = compiler.compileList(call.getArg(1));
 
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc1, listCalc2}) {
+        return new AbstractListCalc(call.getType(), new Calc[] {listCalc1, listCalc2}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList leftTuples = listCalc1.evaluateList(evaluator);

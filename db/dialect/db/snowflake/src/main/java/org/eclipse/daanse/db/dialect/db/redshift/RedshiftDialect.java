@@ -9,38 +9,23 @@
 
 package org.eclipse.daanse.db.dialect.db.redshift;
 
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.Util;
+import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
+
 import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * User: cboyden Date: 2/8/13
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
-        "database.product:String='REDSHIFT'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
-
 public class RedshiftDialect extends PostgreSqlDialect {
     private static final String SUPPORTED_PRODUCT_NAME = "REDSHIFT";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
-
-    @Override
-    public boolean initialize(Connection connection) {
-        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
+    public RedshiftDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

@@ -12,16 +12,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.Schema;
 
+import mondrian.olap.api.Segment;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -210,7 +210,7 @@ public String getDescription() {
 
   @Override
 public OlapElement lookupChild(
-    SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
+          SchemaReader schemaReader, Segment s, MatchType matchType ) {
     throw new UnsupportedOperationException();
   }
 
@@ -294,8 +294,8 @@ public Dimension getDimension() {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader,
-      Id.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader,
+        Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

@@ -14,24 +14,24 @@ package mondrian.olap.fun;
 import java.util.AbstractList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
@@ -52,7 +52,7 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the top of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, true );
       }
     };
@@ -64,12 +64,12 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the bottom of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, false );
       }
     };
 
-  public TopBottomCountFunDef( FunDef dummyFunDef, final boolean top ) {
+  public TopBottomCountFunDef( FunctionDefinition dummyFunDef, final boolean top ) {
     super( dummyFunDef );
     this.top = top;
 
@@ -79,7 +79,7 @@ class TopBottomCountFunDef extends FunDefBase {
 public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to sort it later.
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final IntegerCalc integerCalc =
       compiler.compileInteger( call.getArg( 1 ) );
@@ -89,8 +89,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         : null;
     final int arity = call.getType().getArity();
     return new AbstractListCalc(
-    		call.getFunName(),call.getType(),
-      new Calc[] { listCalc, integerCalc, orderCalc } ) {
+    		call.getType(),
+      new Calc[] { tupleListCalc, integerCalc, orderCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         // Use a native evaluator, if more efficient.
@@ -104,12 +104,12 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
             (TupleList) nativeEvaluator.execute( ResultStyle.LIST );
         }
 
-        int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == 0 || n == mondrian.olap.fun.FunUtil.INTEGER_NULL) {
+        Integer n = integerCalc.evaluate( evaluator );
+        if ( n == 0 || n ==null) {
           return TupleCollections.emptyList( arity );
         }
 
-        TupleList list = listCalc.evaluateList( evaluator );
+        TupleList list = tupleListCalc.evaluateList( evaluator );
         assert list.getArity() == arity;
         if ( list.isEmpty() ) {
           return list;
@@ -184,7 +184,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
 
       private boolean hasHighCardDimension( TupleList l ) {

@@ -8,15 +8,15 @@
 */
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractBooleanCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.RolapUtil;
 
@@ -38,21 +38,21 @@ class IsNullFunDef extends FunDefBase {
             new String[]{"Qbm", "Qbl", "Qbh", "Qbd"},
             IsNullFunDef.class);
 
-    public IsNullFunDef(FunDef dummyFunDef) {
+    public IsNullFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
 
         if (call.getArgCount() != 1) {
             throw new IllegalArgumentException("ArgCount should be 1 ");
         }
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
-        return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[]{memberCalc}) {
+        return new AbstractProfilingNestedBooleanCalc(call.getType(), new Calc[]{memberCalc}) {
             @Override
-			public boolean evaluateBoolean(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+			public Boolean evaluate(Evaluator evaluator) {
+                Member member = memberCalc.evaluate(evaluator);
                 return member.isNull()
                    || nonAllWithNullKey((RolapMember) member);
       }

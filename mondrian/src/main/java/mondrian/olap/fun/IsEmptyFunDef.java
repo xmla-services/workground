@@ -9,12 +9,13 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractBooleanCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>IsEmpty</code> MDX function.
@@ -39,16 +40,16 @@ class IsEmptyFunDef extends FunDefBase {
             new String[] {"Qbm", "Qbt"},
             IsEmptyFunDef.class);
 
-    public IsEmptyFunDef(FunDef dummyFunDef) {
+    public IsEmptyFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Calc calc = compiler.compileScalar(call.getArg(0), true);
-        return new AbstractBooleanCalc(call.getFunName(),call.getType(), new Calc[] {calc}) {
+        return new AbstractProfilingNestedBooleanCalc(call.getType(), new Calc[] {calc}) {
             @Override
-			public boolean evaluateBoolean(Evaluator evaluator) {
+			public Boolean evaluate(Evaluator evaluator) {
                 Object o = calc.evaluate(evaluator);
                 return o == null;
             }

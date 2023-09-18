@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.RandomAccess;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.rolap.sql.TupleConstraint;
 

@@ -9,9 +9,9 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
@@ -31,7 +31,7 @@ public class ValueCalc extends GenericCalc {
      * @param exp Source expression
      */
     public ValueCalc( Type type) {
-        super("ValueCalc",type, new Calc[0]);
+        super(type, new Calc[0]);
     }
 
     @Override

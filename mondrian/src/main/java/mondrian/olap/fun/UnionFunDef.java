@@ -13,17 +13,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Union</code> MDX function.
@@ -43,21 +43,21 @@ public class UnionFunDef extends FunDefBase {
             UnionFunDef.class,
             UnionFunDef.ReservedWords);
 
-    public UnionFunDef(FunDef dummyFunDef) {
+    public UnionFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         String allString = FunUtil.getLiteralArg(call, 2, "DISTINCT", UnionFunDef.ReservedWords);
         final boolean all = allString.equalsIgnoreCase("ALL");
         // todo: do at validate time
         FunUtil.checkCompatible(call.getArg(0), call.getArg(1), null);
-        final ListCalc listCalc0 =
+        final TupleListCalc listCalc0 =
             compiler.compileList(call.getArg(0));
-        final ListCalc listCalc1 =
+        final TupleListCalc listCalc1 =
             compiler.compileList(call.getArg(1));
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc0, listCalc1}) {
+        return new AbstractListCalc(call.getType(), new Calc[] {listCalc0, listCalc1}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList list0 = listCalc0.evaluateList(evaluator);

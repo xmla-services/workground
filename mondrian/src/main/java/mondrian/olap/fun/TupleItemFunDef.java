@@ -9,15 +9,15 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -57,22 +57,22 @@ class TupleItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Type type = call.getArg(0).getType();
         if (type instanceof MemberType) {
             final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, indexCalc})
+            return new AbstractProfilingNestedMemberCalc(
+            		call.getType(), new Calc[] {memberCalc, indexCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     final Member member =
-                            memberCalc.evaluateMember(evaluator);
-                    final int index =
-                            indexCalc.evaluateInteger(evaluator);
+                            memberCalc.evaluate(evaluator);
+                    final Integer index =
+                            indexCalc.evaluate(evaluator);
                     if (index != 0) {
                         return null;
                     }
@@ -84,18 +84,18 @@ class TupleItemFunDef extends FunDefBase {
                 compiler.compileTuple(call.getArg(0));
             final IntegerCalc indexCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {tupleCalc, indexCalc})
+            return new AbstractProfilingNestedMemberCalc(
+            		call.getType(), new Calc[] {tupleCalc, indexCalc})
             {
                 final Member[] nullTupleMembers =
                         FunUtil.makeNullTuple((TupleType) tupleCalc.getType());
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     final Member[] members =
-                            tupleCalc.evaluateTuple(evaluator);
+                            tupleCalc.evaluate(evaluator);
                     assert members == null
                         || members.length == nullTupleMembers.length;
-                    final int index = indexCalc.evaluateInteger(evaluator);
+                    final Integer index = indexCalc.evaluate(evaluator);
                     if (members == null) {
                         return nullTupleMembers[index];
                     }

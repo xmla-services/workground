@@ -12,22 +12,22 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -57,16 +57,16 @@ class StrToSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         SetType type = (SetType) call.getType();
         Type elementType = type.getElementType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractListCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
@@ -78,10 +78,10 @@ class StrToSetFunDef extends FunDefBase {
         } else {
             TupleType tupleType = (TupleType) elementType;
             final List<Hierarchy> hierarchyList = tupleType.getHierarchies();
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractListCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
@@ -100,10 +100,10 @@ class StrToSetFunDef extends FunDefBase {
         }
         for (int i = 1; i < argCount; i++) {
             final Exp arg = args[i];
-            if (arg instanceof DimensionExpr dimensionExpr) {
+            if (arg instanceof DimensionExpression dimensionExpr) {
                 Dimension dimension = dimensionExpr.getDimension();
-                args[i] = new HierarchyExpr(dimension.getHierarchy());
-            } else if (arg instanceof HierarchyExpr) {
+                args[i] = new HierarchyExpressionImpl(dimension.getHierarchy());
+            } else if (arg instanceof HierarchyExpressionImpl) {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
@@ -164,7 +164,7 @@ class StrToSetFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -180,8 +180,8 @@ class StrToSetFunDef extends FunDefBase {
             }
             for (int i = 1; i < args.length; i++) {
                 Exp exp = args[i];
-                if (!(exp instanceof DimensionExpr
-                      || exp instanceof HierarchyExpr))
+                if (!(exp instanceof DimensionExpression
+                      || exp instanceof HierarchyExpressionImpl))
                 {
                     return null;
                 }
@@ -195,7 +195,7 @@ class StrToSetFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef getRepresentativeFunDef() {
+		public FunctionDefinition getRepresentativeFunDef() {
             return new StrToSetFunDef(new int[] {Category.STRING});
         }
     }

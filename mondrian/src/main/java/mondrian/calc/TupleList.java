@@ -11,7 +11,8 @@ package mondrian.calc;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
 /**
  * List of tuples.
@@ -76,7 +77,7 @@ extends List<List<Member>>, TupleIterable
      * @param capacity Capacity
      * @return Copy of list, empty if capacity is non-negative
      */
-    TupleList cloneList(int capacity);
+    TupleList copyList(int capacity);
 
     void addTuple(Member... members);
 

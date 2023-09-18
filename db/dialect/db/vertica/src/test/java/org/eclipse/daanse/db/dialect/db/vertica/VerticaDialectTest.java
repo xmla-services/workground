@@ -29,8 +29,7 @@ class VerticaDialectTest{
   protected void setUp() throws Exception {
     when( metaData.getDatabaseProductName() ).thenReturn( "VERTICA" );
     when( connection.getMetaData() ).thenReturn( metaData );
-    dialect = new VerticaDialect(  );
-    dialect.initialize(connection);
+    dialect = new VerticaDialect( connection );
   }
 
   @Test

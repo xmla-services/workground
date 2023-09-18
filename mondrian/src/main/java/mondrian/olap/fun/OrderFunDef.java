@@ -16,30 +16,31 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ConstantCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.MemberArrayValueCalc;
 import mondrian.calc.impl.MemberValueCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.fun.sort.SortKeySpec;
@@ -57,7 +58,7 @@ class OrderFunDef extends FunDefBase {
 
     static final ResolverImpl Resolver = new ResolverImpl();
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
-    public static final String CALC_IMPL = "CalcImpl";
+    public static final String CALC_IMPL = "CurrentMemberCalc";
 
     public OrderFunDef( ResolverBase resolverBase, int type, int[] types ) {
     super( resolverBase, type, types );
@@ -65,7 +66,7 @@ class OrderFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final IterCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
+    final TupleIteratorCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
     List<SortKeySpec> keySpecList = new ArrayList<>();
     buildKeySpecList( keySpecList, call, compiler );
     final int keySpecCount = keySpecList.size();
@@ -79,7 +80,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     if (keySpecCount == 1 && ( expCalc.isWrapperFor( MemberValueCalc.class ) || expCalc.isWrapperFor( MemberArrayValueCalc.class ) )) {
         List<MemberCalc> constantList = new ArrayList<>();
         List<MemberCalc> variableList = new ArrayList<>();
-        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractCalc) expCalc ).getCalcs();
+        final MemberCalc[] calcs = (MemberCalc[]) ( (AbstractProfilingNestedCalc) expCalc ).getChildCalcs();
         for ( MemberCalc memberCalc : calcs ) {
           if ( memberCalc.isWrapperFor( ConstantCalc.class ) && !listCalc.dependsOn( memberCalc.getType()
               .getHierarchy() ) ) {
@@ -94,7 +95,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           // All members are constant. Optimize by setting entire
           // context first.
           calcList[1] = new ValueCalc( expCalc.getType()  );
-          return new ContextCalc( calcs, new CalcImpl(CALC_IMPL,call.getType(), calcList, keySpecList ) );
+          return new ContextCalc( calcs, new CurrentMemberCalc(call.getType(), calcList, keySpecList ) );
         } else {
           // Some members are constant. Evaluate these before
           // evaluating the list expression.
@@ -102,7 +103,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
               MemberValueCalc.create(  expCalc.getType() , variableList.toArray(
                   new MemberCalc[variableList.size()] ), compiler.getEvaluator()
                       .mightReturnNullForUnrelatedDimension() );
-          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( CALC_IMPL,call.getType(),
+          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CurrentMemberCalc( call.getType(),
               calcList, keySpecList ) );
         }
     }
@@ -110,7 +111,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       final Calc expCalcs = keySpecList.get( i ).getKey();
       calcList[i + 1] = expCalcs;
     }
-    return new CalcImpl( CALC_IMPL,call.getType(), calcList, keySpecList );
+    return new CurrentMemberCalc( call.getType(), calcList, keySpecList );
   }
 
   private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
@@ -133,20 +134,20 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private interface CalcWithDual extends Calc {
+  private interface CalcWithDual extends Calc<Object> {
     public TupleList evaluateDual( Evaluator rootEvaluator, Evaluator subEvaluator );
   }
 
-  private static class CalcImpl extends AbstractListCalc implements CalcWithDual {
-    private final IterCalc iterCalc;
+  private static class CurrentMemberCalc extends AbstractListCalc implements CalcWithDual {
+    private final TupleIteratorCalc tupleIteratorCalc;
     private final Calc sortKeyCalc;
     private final List<SortKeySpec> keySpecList;
     private final int originalKeySpecCount;
     private final int arity;
 
-    public CalcImpl( String name,Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
-      super( name,type, calcList );
-      this.iterCalc = (IterCalc) calcList[0];
+    public CurrentMemberCalc( Type type, Calc[] calcList, List<SortKeySpec> keySpecList ) {
+      super( type, calcList );
+      this.tupleIteratorCalc = (TupleIteratorCalc) calcList[0];
       this.sortKeyCalc = calcList[1];
       this.keySpecList = keySpecList;
       this.originalKeySpecCount = keySpecList.size();
@@ -156,12 +157,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     @Override
 	public TupleList evaluateDual( Evaluator rootEvaluator, Evaluator subEvaluator ) {
       assert originalKeySpecCount == 1;
-      final TupleIterable iterable = iterCalc.evaluateIterable( rootEvaluator );
+      final TupleIterable iterable = tupleIteratorCalc.evaluateIterable( rootEvaluator );
       // REVIEW: If iterable happens to be a list, we'd like to pass it,
       // but we cannot yet guarantee that it is mutable.
       // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code
       final TupleList list = null;
-      XOMUtil.discard( iterCalc.getResultStyle() );
+      XOMUtil.discard( tupleIteratorCalc.getResultStyle() );
       return handleSortWithOneKeySpec( subEvaluator, iterable, list );
     }
 
@@ -169,7 +170,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 	public TupleList evaluateList( Evaluator evaluator ) {
       evaluator.getTiming().markStart( OrderFunDef.TIMING_NAME );
       try {
-        final TupleIterable iterable = iterCalc.evaluateIterable( evaluator );
+        final TupleIterable iterable = tupleIteratorCalc.evaluateIterable( evaluator );
         // REVIEW: If iterable happens to be a list, we'd like to pass it,
         // but we cannot yet guarantee that it is mutable.
         // final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null; old code list all time null
@@ -226,25 +227,28 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       }
     }
 
-    @Override
-    public void collectArguments( Map<String, Object> arguments ) {
-      super.collectArguments( arguments );
+	@Override
+	protected Map<String, Object> profilingProperties(Map<String, Object> properties) {
 
-      StringBuilder result = new StringBuilder();
-      for ( SortKeySpec spec : keySpecList ) {
-        if ( result.length() > 0 ) {
-          result.append( "," );
-        }
+		
+		StringBuilder result = new StringBuilder();
+		for (SortKeySpec spec : keySpecList) {
+			if (result.length() > 0) {
+				result.append(",");
+			}
 
-        Flag sortKeyDir = spec.getDirection();
-        result.append( sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk) );
-      }
-      arguments.put( "direction", result.toString() );
-    }
+			Flag sortKeyDir = spec.getDirection();
+			result.append(sortKeyDir.descending ? getDesc(sortKeyDir.brk) : getAsc(sortKeyDir.brk));
+		}
+		properties.put("direction", result.toString());
+
+		return super.profilingProperties(properties);
+	}
+
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
     private Flag getDesc(boolean brk) {
@@ -278,9 +282,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         SortKeySpec key = iter.next();
         Calc expCalc = key.getKey();
         if ( expCalc instanceof MemberOrderKeyFunDef.CalcImpl calc) {
-          Calc[] calcs = calc.getCalcs();
+          Calc[] calcs = calc.getChildCalcs();
           MemberCalc memberCalc = (MemberCalc) calcs[0];
-          if ( memberCalc instanceof ConstantCalc || !listHierarchies.contains( memberCalc.getType()
+          if ( memberCalc instanceof org.eclipse.daanse.olap.calc.api.ConstantCalc || !listHierarchies.contains( memberCalc.getType()
               .getHierarchy() ) ) {
             iter.remove();
           }
@@ -295,7 +299,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     private final Member[] members; // workspace
 
     protected ContextCalc( MemberCalc[] memberCalcs, CalcWithDual calc ) {
-      super( "ContextCalc",calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
+      super( calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
       this.memberCalcs = memberCalcs;
       this.calc = calc;
       this.members = new Member[memberCalcs.length];
@@ -313,16 +317,17 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       // Evaluate each of the members, and set as context in the
       // sub-evaluator.
       for ( int i = 0; i < memberCalcs.length; i++ ) {
-        members[i] = memberCalcs[i].evaluateMember( evaluator );
+        members[i] = memberCalcs[i].evaluate( evaluator );
       }
-      final Evaluator subEval = evaluator.push( members );
+      Evaluator subEval=evaluator.push();
+      subEval.setContext(members); 
       // Evaluate the expression in the new context.
       return calc.evaluateDual( evaluator, subEval );
     }
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      if ( AbstractCalc.anyDepends( memberCalcs, hierarchy ) ) {
+      if ( HirarchyDependsChecker.checkAnyDependsOnChilds(  memberCalcs,hierarchy ) ) {
         return true;
       }
       // Member calculations generate members, which mask the actual
@@ -352,7 +357,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public FunDef resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
+	public FunctionDefinition resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
       ResolverImpl.argTypes = new int[args.length];
 
       if ( args.length < 2 ) {

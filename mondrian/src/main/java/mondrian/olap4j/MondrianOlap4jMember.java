@@ -12,7 +12,7 @@ package mondrian.olap4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.AbstractNamedList;
 import org.olap4j.impl.Named;
@@ -32,7 +32,7 @@ import mondrian.server.Locus;
  * Implementation of {@link Member}
  * for the Mondrian OLAP engine,
  * as a wrapper around a mondrian
- * {@link org.eclipse.daanse.olap.api.model.Member}.
+ * {@link org.eclipse.daanse.olap.api.element.Member}.
  *
  * @author jhyde
  * @since May 25, 2007
@@ -42,13 +42,13 @@ public class MondrianOlap4jMember
     implements Member, Named
 {
 
-    final org.eclipse.daanse.olap.api.model.Member member;
+    final org.eclipse.daanse.olap.api.element.Member member;
 
     final MondrianOlap4jSchema olap4jSchema;
 
     MondrianOlap4jMember(
         MondrianOlap4jSchema olap4jSchema,
-        org.eclipse.daanse.olap.api.model.Member mondrianMember)
+        org.eclipse.daanse.olap.api.element.Member mondrianMember)
     {
         assert mondrianMember != null;
         assert mondrianMember instanceof RolapMeasure
@@ -80,13 +80,13 @@ public class MondrianOlap4jMember
         final RolapConnection conn =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                 .olap4jConnection.getMondrianConnection();
-        final List<org.eclipse.daanse.olap.api.model.Member> children =
+        final List<org.eclipse.daanse.olap.api.element.Member> children =
             Locus.execute(
                 conn,
                 "MondrianOlap4jMember.getChildMembers",
-                new Locus.Action<List<org.eclipse.daanse.olap.api.model.Member>>() {
+                new Locus.Action<List<org.eclipse.daanse.olap.api.element.Member>>() {
                     @Override
-					public List<org.eclipse.daanse.olap.api.model.Member> execute() {
+					public List<org.eclipse.daanse.olap.api.element.Member> execute() {
                         return
                             conn.getSchemaReader()
                                 .getMemberChildren(member);
@@ -132,7 +132,7 @@ public class MondrianOlap4jMember
 
     @Override
 	public MondrianOlap4jMember getParentMember() {
-        final org.eclipse.daanse.olap.api.model.Member parentMember = member.getParentMember();
+        final org.eclipse.daanse.olap.api.element.Member parentMember = member.getParentMember();
         if (parentMember == null) {
             return null;
         }
@@ -262,7 +262,7 @@ public class MondrianOlap4jMember
 
     @Override
 	public Member getDataMember() {
-        final org.eclipse.daanse.olap.api.model.Member dataMember = member.getDataMember();
+        final org.eclipse.daanse.olap.api.element.Member dataMember = member.getDataMember();
         if (dataMember == null) {
             return null;
         }
@@ -300,7 +300,7 @@ public class MondrianOlap4jMember
         return member;
     }
 
-    public org.eclipse.daanse.olap.api.model.Member getOlapMember() { return member; }
+    public org.eclipse.daanse.olap.api.element.Member getOlapMember() { return member; }
 
 
 }

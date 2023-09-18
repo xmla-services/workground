@@ -15,18 +15,19 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractTupleCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -93,30 +94,30 @@ public class TupleFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final MemberCalc[] memberCalcs = new MemberCalc[args.length];
         for (int i = 0; i < args.length; i++) {
             memberCalcs[i] = compiler.compileMember(args[i]);
         }
-        return new CalcImpl(call, memberCalcs);
+        return new CurrentMemberCalc(call, memberCalcs);
     }
 
-    public static class CalcImpl extends AbstractTupleCalc {
+    public static class CurrentMemberCalc extends AbstractProfilingNestedTupleCalc {
         private final MemberCalc[] memberCalcs;
 
-        public CalcImpl(ResolvedFunCall call, MemberCalc[] memberCalcs) {
-            super("CalcImpl",call.getType(), memberCalcs);
+        public CurrentMemberCalc(ResolvedFunCall call, MemberCalc[] memberCalcs) {
+            super(call.getType(), memberCalcs);
             this.memberCalcs = memberCalcs;
         }
 
         @Override
-		public Member[] evaluateTuple(Evaluator evaluator) {
+		public Member[] evaluate(Evaluator evaluator) {
             final Member[] members = new Member[memberCalcs.length];
             for (int i = 0; i < members.length; i++) {
                 final Member member =
                     members[i] =
-                    memberCalcs[i].evaluateMember(evaluator);
+                    memberCalcs[i].evaluate(evaluator);
                 if (member == null || member.isNull()) {
                     return null;
                 }
@@ -135,7 +136,7 @@ public class TupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -170,7 +171,7 @@ public class TupleFunDef extends FunDefBase {
                     }
                 }
                 if(hasSet){
-                    FunDef dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
+                    FunctionDefinition dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
                     return new CrossJoinFunDef(dummy);
                 }
                 else {

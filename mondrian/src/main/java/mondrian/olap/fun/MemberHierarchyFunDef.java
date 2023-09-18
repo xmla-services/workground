@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractHierarchyCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
@@ -34,23 +34,23 @@ public class MemberHierarchyFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
-        return new CalcImpl(call.getType(), memberCalc);
+        return new MemberHirarchyCalcImpl(call.getType(), memberCalc);
     }
 
-    public static class CalcImpl extends AbstractHierarchyCalc {
+    public static class MemberHirarchyCalcImpl extends AbstractProfilingNestedHierarchyCalc {
         private final MemberCalc memberCalc;
 
-        public CalcImpl(Type type, MemberCalc memberCalc) {
-            super("MemberHirarchy",type, new Calc[] {memberCalc});
+        public MemberHirarchyCalcImpl(Type type, MemberCalc memberCalc) {
+            super(type, new Calc[] {memberCalc});
             this.memberCalc = memberCalc;
         }
 
         @Override
-		public Hierarchy evaluateHierarchy(Evaluator evaluator) {
-            Member member = memberCalc.evaluateMember(evaluator);
+		public Hierarchy evaluate(Evaluator evaluator) {
+            Member member = memberCalc.evaluate(evaluator);
             return member.getHierarchy();
         }
     }

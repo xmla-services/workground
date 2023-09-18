@@ -11,10 +11,21 @@ package mondrian.calc;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eigenbase.util.property.StringProperty;
 
 import mondrian.calc.impl.BetterExpCompiler;
@@ -55,7 +66,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @return Compiled expression
      */
-    Calc compile(Exp exp);
+    Calc<?> compile(Exp exp);
 
     /**
      * Compiles an expression to a given result type.
@@ -126,7 +137,7 @@ public interface ExpCompiler {
      *
      * <p>Always equivalent to <code>{@link #compileList}(exp, false)</code>.
      */
-    ListCalc compileList(Exp exp);
+    TupleListCalc compileList(Exp exp);
 
     /**
      * Compiles an expression which yields {@link TupleList} result.
@@ -139,7 +150,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @param mutable Whether resulting list is mutable
      */
-    ListCalc compileList(Exp exp, boolean mutable);
+    TupleListCalc compileList(Exp exp, boolean mutable);
 
     /**
      * Compiles an expression which yields an immutable {@link Iterable} result.
@@ -147,7 +158,7 @@ public interface ExpCompiler {
      * @param exp Expression
      * @return Calculator which yields an Iterable
      */
-    IterCalc compileIter(Exp exp);
+    TupleIteratorCalc compileIter(Exp exp);
 
     /**
      * Compiles an expression which yields a <code>boolean</code> result.
@@ -187,7 +198,7 @@ public interface ExpCompiler {
      *   {@link #compileString(mondrian.olap.Exp)}
      * @return Calculation which returns the scalar value of the expression
      */
-    Calc compileScalar(Exp exp, boolean specific);
+    Calc<?> compileScalar(Exp exp, boolean specific);
 
     /**
      * Implements a parameter, returning a unique slot which will hold the
@@ -214,7 +225,7 @@ public interface ExpCompiler {
      */
     public static final class Factory extends ObjectFactory<ExpCompiler> {
         private static final Factory factory;
-        private static final Class[] CLASS_ARRAY;
+        private static final Class<?>[] CLASS_ARRAY;
         static {
             factory = new Factory();
             CLASS_ARRAY = new Class[] {
@@ -347,7 +358,7 @@ public interface ExpCompiler {
          */
         @Override
         protected ExpCompiler getDefault(
-                final Class[] parameterTypes,
+                final Class<?>[] parameterTypes,
                 final Object[] parameterValues)
                         throws CreationException
         {

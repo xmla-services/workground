@@ -356,18 +356,6 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         }
 
         /**
-         * Returns whether this value is equal to a given string.
-         *
-         * @deprecated I bet you meant to write
-         *   <code>value.name_.equals(s)</code> rather than
-         *   <code>value.equals(s)</code>, didn't you?
-         */
-        @Deprecated
-		public boolean isEqualsBasicValue(String s) {
-            return super.equals(s);
-        }
-
-        /**
          * Returns an error indicating that we did not expect to find this
          * value in this context. Typical use is in a <code>switch</code>
          * statement:

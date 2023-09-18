@@ -8,6 +8,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.oracle;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+
+import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -16,33 +22,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * Implementation of {@link Dialect} for the Oracle database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='ORACLE'",
-        "database.product:String='ORACLE'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class OracleDialect extends JdbcDialectImpl {
 
     private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private static final Pattern escapePattern = Pattern.compile(ESCAPE_REGEXP);
     private static final String SUPPORTED_PRODUCT_NAME = "ORACLE";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public OracleDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

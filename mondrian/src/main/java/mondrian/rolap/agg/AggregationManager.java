@@ -22,11 +22,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.CacheControl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
@@ -68,10 +68,6 @@ public class AggregationManager extends RolapAggregationManager {
      */
     public AggregationManager(MondrianServer server) {
         this.server = server;
-        if (properties.EnableCacheHitCounters.get()) {
-            LOGGER.error(
-                "Property {} is obsolete; ignored.", properties.EnableCacheHitCounters.getPath());
-        }
         this.cacheMgr = new SegmentCacheManager(server);
     }
 
@@ -82,21 +78,6 @@ public class AggregationManager extends RolapAggregationManager {
      */
     public final Logger getLogger() {
         return LOGGER;
-    }
-
-    /**
-     * Returns or creates the singleton.
-     *
-     * @deprecated No longer a singleton, and will be removed in mondrian-4.
-     *   Use {@link mondrian.olap.MondrianServer#getAggregationManager()}.
-     *   To get a server, call
-     *   {@link mondrian.olap.MondrianServer#forConnection(mondrian.olap.Connection)},
-     *   passing in a null connection if you absolutely must.
-     */
-    @Deprecated
-	public static synchronized AggregationManager instance() {
-        return
-            MondrianServer.forId(null).getAggregationManager();
     }
 
     /**

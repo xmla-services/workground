@@ -38,11 +38,12 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
@@ -58,7 +59,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapCube;
@@ -396,7 +397,7 @@ class DrillThroughTest {
 
         Hierarchy h =
             cube.lookupHierarchy(
-                new Id.NameSegment(hierName, Id.Quoting.UNQUOTED), false);
+                new IdImpl.NameSegmentImpl(hierName, Quoting.UNQUOTED), false);
         if (h == null) {
             return null;
         }

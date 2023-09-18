@@ -9,7 +9,7 @@
 
 package mondrian.server.monitor;
 
-import mondrian.olap.CacheControl;
+import org.eclipse.daanse.olap.api.CacheControl;
 
 /**
  * Event concerning the cell cache.

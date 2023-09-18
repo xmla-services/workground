@@ -21,5 +21,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>dbmapper</module>
+    <module>api</module>
+    <module>core</module>
   </modules>
 </project>

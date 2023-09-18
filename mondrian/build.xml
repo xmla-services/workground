@@ -78,15 +78,6 @@
   </target>
 
   <target name="parser" depends="define-tasks">
-    <!-- Old parser. -->
-    <javacup
-        srcdir="${java.dir}"
-        input="${java.dir}/mondrian/olap/Parser.cup"
-
-        expect="63"
-        interface="true"/>
-    <move file="${java.dir}/mondrian/olap/Parser.java" todir="${generated.java.dir}/mondrian/olap"/>
-    <move file="${java.dir}/mondrian/olap/ParserSym.java" todir="${generated.java.dir}/mondrian/olap"/>
     <!-- New parser. -->
     <copy file="${net.java.dev.javacc:javacc:jar}" tofile="${project.build.directory}/javacc.jar" />
     <javacc

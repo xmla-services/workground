@@ -9,6 +9,9 @@
 */
 package org.eclipse.daanse.db.dialect.db.impala;
 
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.List;
@@ -16,23 +19,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * Dialect for Cloudera's Impala DB.
  *
  * @author cboyden
  * @since 2/11/13
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='IMPALA'",
-        "database.product:String='IMPALA'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class ImpalaDialect extends HiveDialect {
 
     private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
@@ -42,14 +34,8 @@ public class ImpalaDialect extends HiveDialect {
     public static final String CAST = "cast(";
     public static final String AS_STRING = " as string)";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
-
-    @Override
-    public boolean initialize(Connection connection) {
-        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
+    public ImpalaDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

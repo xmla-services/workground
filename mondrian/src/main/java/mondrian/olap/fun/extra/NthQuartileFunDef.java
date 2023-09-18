@@ -9,18 +9,19 @@
 
 package mondrian.olap.fun.extra;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
-import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.MultiResolver;
@@ -54,27 +55,27 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             NthQuartileFunDef.class);
 
-    public NthQuartileFunDef(FunDef dummyFunDef) {
+    public NthQuartileFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
         this.range = dummyFunDef.getName().equals("FirstQ") ? 1 : 3;
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final DoubleCalc doubleCalc =
             call.getArgCount() > 1
             ? compiler.compileDouble(call.getArg(1))
-            : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, doubleCalc}) {
+            : new CurrentValueDoubleCalc(call.getType());
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, doubleCalc}) {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
                     TupleList members =
-                        evaluateCurrentList(listCalc, evaluator);
+                        evaluateCurrentList(tupleListCalc, evaluator);
                     return
                         FunUtil.quartile(
                             evaluator, members, doubleCalc, range);
@@ -85,7 +86,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

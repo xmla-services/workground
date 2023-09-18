@@ -149,6 +149,79 @@ RefreshStatement :
   NameObjectIdentifier
 ;
 
+INJECT UpdateStatement :
+   import java.util.List;
+   implements org.eclipse.daanse.mdx.model.api.UpdateStatement;
+{
+   public NameObjectIdentifier cubeName() {
+      return (NameObjectIdentifier) getChild(2);
+   }
+
+   public List<org.eclipse.daanse.mdx.model.api.select.UpdateClause> updateClauses() {
+       return childrenOfType(org.eclipse.daanse.mdx.model.api.select.UpdateClause.class);
+   }
+}
+
+UpdateStatement :
+  < UPDATE >
+  < CUBE >
+  NameObjectIdentifier
+  <SET>
+  UpdateClause
+  (
+       < COMMA > UpdateClause
+  )*
+;
+
+INJECT UpdateClause :
+   implements org.eclipse.daanse.mdx.model.api.select.UpdateClause
+{
+    public org.eclipse.daanse.mdx.model.api.expression.Expression tupleExp() {
+      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(0);
+    }
+
+    public org.eclipse.daanse.mdx.model.api.expression.Expression valueExp() {
+          return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
+    }
+
+    public org.eclipse.daanse.mdx.model.api.select.Allocation allocation() {
+          if (getChild(3) == null) {
+            return org.eclipse.daanse.mdx.model.api.select.Allocation.NO_ALLOCATION;
+          }
+          NodeType type = getChild(3).getType();
+          if (type == USE_EQUAL_ALLOCATION) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_EQUAL_ALLOCATION;
+          else if (type == USE_EQUAL_INCREMENT) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_EQUAL_INCREMENT;
+          else if (type == USE_WEIGHTED_ALLOCATION) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_WEIGHTED_ALLOCATION;
+          else if (type == USE_WEIGHTED_INCREMENT) return org.eclipse.daanse.mdx.model.api.select.Allocation.USE_WEIGHTED_INCREMENT;
+          throw new IllegalStateException("Allocation parsing error");
+    }
+
+    public org.eclipse.daanse.mdx.model.api.expression.Expression weight() {
+          Node by = firstChildOfType(BY);
+                  return by == null ? null
+                                       : (org.eclipse.daanse.mdx.model.api.expression.Expression) by.nextSibling();
+    }
+}
+
+UpdateClause :
+  PrimaryExpression
+    < EQ >
+  Expression
+  (
+    < USE_EQUAL_ALLOCATION >
+    |
+    < USE_EQUAL_INCREMENT >
+    |
+    < USE_WEIGHTED_ALLOCATION >
+    |
+    < USE_WEIGHTED_INCREMENT >
+  )?
+  (
+    < BY > Expression()
+  )?
+
+;
+
 INJECT DMVStatement :
    implements org.eclipse.daanse.mdx.model.api.DMVStatement;
 {

@@ -9,22 +9,23 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.calc.impl.ConstantCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
+import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
@@ -46,7 +47,7 @@ class ParallelPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmln", "fmlnm"},
             ParallelPeriodFunDef.class);
 
-    public ParallelPeriodFunDef(FunDef dummyFunDef) {
+    public ParallelPeriodFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -65,7 +66,7 @@ class ParallelPeriodFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         // Member defaults to [Time].currentmember
         Exp[] args = call.getArgs();
 
@@ -73,7 +74,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         final IntegerCalc lagValueCalc =
             (args.length >= 2)
             ? compiler.compileInteger(args[1])
-            : ConstantCalc.constantInteger(1);
+            : new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
 
         // If level is not specified, we compute it from
         // member at runtime.
@@ -93,7 +94,7 @@ class ParallelPeriodFunDef extends FunDefBase {
                 // For some functions, such as Levels(<string expression>),
                 // the dimension cannot be determined at compile time.
                 memberCalc =
-                    new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                    new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                         call.getType(), hierarchy);
             } else {
                 memberCalc = null;
@@ -104,30 +105,30 @@ class ParallelPeriodFunDef extends FunDefBase {
                 ((RolapCube) compiler.getEvaluator().getCube())
                     .getTimeHierarchy(getName());
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);
             break;
         }
 
-        return new AbstractMemberCalc(
-        		call.getFunName(),call.getType(),
+        return new AbstractProfilingNestedMemberCalc(
+        		call.getType(),
             new Calc[] {memberCalc, lagValueCalc, ancestorLevelCalc})
         {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
+			public Member evaluate(Evaluator evaluator) {
                 Member member;
-                int lagValue = lagValueCalc.evaluateInteger(evaluator);
+                Integer lagValue = lagValueCalc.evaluate(evaluator);
                 Level ancestorLevel;
                 if (ancestorLevelCalc != null) {
-                    ancestorLevel = ancestorLevelCalc.evaluateLevel(evaluator);
+                    ancestorLevel = ancestorLevelCalc.evaluate(evaluator);
                     if (memberCalc == null) {
                         member =
                             evaluator.getContext(ancestorLevel.getHierarchy());
                     } else {
-                        member = memberCalc.evaluateMember(evaluator);
+                        member = memberCalc.evaluate(evaluator);
                     }
                 } else {
-                    member = memberCalc.evaluateMember(evaluator);
+                    member = memberCalc.evaluate(evaluator);
                     Member parent = member.getParentMember();
                     if (parent == null) {
                         // This is a root member,
@@ -146,7 +147,7 @@ class ParallelPeriodFunDef extends FunDefBase {
         Member member,
         Level ancestorLevel,
         Evaluator evaluator,
-        int lagValue)
+        Integer lagValue)
     {
         // Now do some error checking.
         // The ancestorLevel and the member must be from the

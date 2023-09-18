@@ -12,22 +12,22 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.calc.impl.AbstractTupleCalc;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -56,15 +56,15 @@ class StrToTupleFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
-            return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+				public Member evaluate(Evaluator evaluator) {
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
@@ -75,10 +75,10 @@ class StrToTupleFunDef extends FunDefBase {
         } else {
             TupleType tupleType = (TupleType) elementType;
             final List<Hierarchy> hierarchies = tupleType.getHierarchies();
-            return new AbstractTupleCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
+            return new AbstractProfilingNestedTupleCalc(call.getType(), new Calc[] {stringCalc}) {
                 @Override
-				public Member[] evaluateTuple(Evaluator evaluator) {
-                    String string = stringCalc.evaluateString(evaluator);
+				public Member[] evaluate(Evaluator evaluator) {
+                    String string = stringCalc.evaluate(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
@@ -97,10 +97,10 @@ class StrToTupleFunDef extends FunDefBase {
         }
         for (int i = 1; i < argCount; i++) {
             final Exp arg = args[i];
-            if (arg instanceof DimensionExpr dimensionExpr) {
+            if (arg instanceof DimensionExpression dimensionExpr) {
                 Dimension dimension = dimensionExpr.getDimension();
-                args[i] = new HierarchyExpr(dimension.getHierarchy());
-            } else if (arg instanceof HierarchyExpr) {
+                args[i] = new HierarchyExpressionImpl(dimension.getHierarchy());
+            } else if (arg instanceof HierarchyExpressionImpl) {
                 // nothing
             } else {
                 throw MondrianResource.instance().MdxFuncNotHier.ex(
@@ -157,7 +157,7 @@ class StrToTupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -173,8 +173,8 @@ class StrToTupleFunDef extends FunDefBase {
             }
             for (int i = 1; i < args.length; i++) {
                 Exp exp = args[i];
-                if (!(exp instanceof DimensionExpr
-                    || exp instanceof HierarchyExpr))
+                if (!(exp instanceof DimensionExpression
+                    || exp instanceof HierarchyExpressionImpl))
                 {
                     return null;
                 }
@@ -188,7 +188,7 @@ class StrToTupleFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef getRepresentativeFunDef() {
+		public FunctionDefinition getRepresentativeFunDef() {
             return new StrToTupleFunDef(new int[] {Category.STRING});
         }
     }

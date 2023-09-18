@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 
 import java.io.Serializable;
@@ -37,7 +37,7 @@ import java.io.Serializable;
 public class ResultCache implements HttpSessionBindingListener, Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResultCache.class);
     private static final String ATTR_NAME = "mondrian.web.taglib.ResultCache.";
-    private Query query = null;
+    private QueryImpl query = null;
     private Result result = null;
     private Document document = null;
     private ServletContext servletContext;
@@ -100,17 +100,17 @@ public class ResultCache implements HttpSessionBindingListener, Serializable {
     }
 
     /**
-     * Returns the {@link Query}. If you modify the query, call
+     * Returns the {@link QueryImpl}. If you modify the query, call
      * <code>{@link #setDirty}(true)</code>.
      */
-    public Query getQuery() {
+    public QueryImpl getQuery() {
         return query;
     }
 
     /**
      * Sets the query. Automatically calls <code>{@link #setDirty}(true)</code>.
      */
-    public void setQuery(Query query) {
+    public void setQuery(QueryImpl query) {
         this.query = query;
         setDirty();
     }

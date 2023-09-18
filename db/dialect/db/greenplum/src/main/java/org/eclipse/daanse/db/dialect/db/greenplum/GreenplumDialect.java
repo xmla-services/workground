@@ -11,14 +11,10 @@
 
 package org.eclipse.daanse.db.dialect.db.greenplum;
 
-import java.sql.Connection;
-
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the GreenplumSQL database.
@@ -26,22 +22,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author Millersoft
  * @since Dec 23, 2009
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
-        "database.product:String='GREENPLUM'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class GreenplumDialect extends PostgreSqlDialect {
 
     private static final String SUPPORTED_PRODUCT_NAME = "GREENPLUM";
 
-    @Override
-    public boolean initialize(Connection connection) {
-
-        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
-    }
-
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public GreenplumDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

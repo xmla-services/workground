@@ -14,6 +14,7 @@ package mondrian.olap;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,12 +25,12 @@ import org.junit.jupiter.api.Test;
  * @since 08 May, 2007
  */
 class CellPropertyTest{
-    private CellProperty cellProperty;
+    private CellPropertyImpl cellProperty;
 
     @BeforeEach
     protected void setUp() throws Exception {
 
-        cellProperty = new CellProperty(Id.Segment.toList("Format_String"));
+        cellProperty = new CellPropertyImpl(Segment.toList("Format_String"));
     }
 
     @Test

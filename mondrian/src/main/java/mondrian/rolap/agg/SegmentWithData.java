@@ -152,7 +152,6 @@ public class SegmentWithData extends Segment {
      *
      * </ul></p>
      *
-     * @see mondrian.olap.Util#deprecated(Object) make package-private?
      */
     public Object getCellValue(Object[] keys) {
         assert keys.length == axes.length;

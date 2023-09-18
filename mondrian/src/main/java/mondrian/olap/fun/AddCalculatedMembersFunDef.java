@@ -14,20 +14,20 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -51,7 +51,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();
 
-    public static final Resolver resolver = new ResolverImpl();
+    public static final FunctionResolver resolver = new ResolverImpl();
     private static final String FLAG = "fxx";
 
     private AddCalculatedMembersFunDef() {
@@ -63,12 +63,12 @@ class AddCalculatedMembersFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
-        return new AbstractListCalc(call.getFunDef().getName(),call.getType(), new Calc[] {listCalc}) {
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
+        return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 final TupleList list =
-                    listCalc.evaluateList(evaluator);
+                    tupleListCalc.evaluateList(evaluator);
                 return new UnaryTupleList(
                     addCalculatedMembers(list.slice(0), evaluator));
             }
@@ -128,7 +128,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             if (args.length == 1) {
                 Exp arg = args[0];
                 final Type type1 = arg.getType();

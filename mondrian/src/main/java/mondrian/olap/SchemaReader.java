@@ -16,19 +16,22 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.engine.api.Context;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
+
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchema;
 
@@ -228,7 +231,7 @@ public interface SchemaReader {
      * @return The member, or null if not found
      */
     Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType);
 
@@ -245,7 +248,7 @@ public interface SchemaReader {
      * @return The member, or null if not found
      */
     Member getMemberByUniqueName(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound);
 
     /**
@@ -270,7 +273,7 @@ public interface SchemaReader {
      */
     OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType);
@@ -295,7 +298,7 @@ public interface SchemaReader {
      */
     OlapElement lookupCompound(
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category);
 
@@ -325,13 +328,13 @@ public interface SchemaReader {
      * Looks up a calculated member by name. If the name is not found in the
      * current scope, returns null.
      */
-    Member getCalculatedMember(List<Id.Segment> nameParts);
+    Member getCalculatedMember(List<Segment> nameParts);
 
     /**
      * Looks up a set by name. If the name is not found in the current scope,
      * returns null.
      */
-    NamedSet getNamedSet(List<Id.Segment> nameParts);
+    NamedSet getNamedSet(List<Segment> nameParts);
 
     /**
      * Appends to <code>list</code> all members between <code>startMember</code>
@@ -376,7 +379,7 @@ public interface SchemaReader {
      */
     OlapElement getElementChild(
         OlapElement parent,
-        Id.Segment name,
+        Segment name,
         MatchType matchType);
 
     /**
@@ -393,7 +396,7 @@ public interface SchemaReader {
      */
     OlapElement getElementChild(
         OlapElement parent,
-        Id.Segment name);
+        Segment name);
 
     /**
      * Returns the members of a level, optionally including calculated members.
@@ -474,7 +477,7 @@ public interface SchemaReader {
      */
     Member lookupMemberChildByName(
         Member parent,
-        Id.Segment childName,
+        Segment childName,
         MatchType matchType);
 
     /**
@@ -482,7 +485,7 @@ public interface SchemaReader {
      */
     List<Member> lookupMemberChildrenByNames(
         Member parent,
-        List<Id.NameSegment> childNames,
+        List<NameSegment> childNames,
         MatchType matchType);
 
     /**
@@ -495,7 +498,7 @@ public interface SchemaReader {
      * @param calc the calc to be natively evaluated
      */
     NativeEvaluator getNativeSetEvaluator(
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args,
         Evaluator evaluator,
         Calc calc);

@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractDimensionCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 
 /**
@@ -36,15 +36,15 @@ class MemberDimensionFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
     {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));
-        return new AbstractDimensionCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc})
+        return new AbstractProfilingNestedDimensionCalc(call.getType(), new Calc[] {memberCalc})
         {
             @Override
-			public Dimension evaluateDimension(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
+			public Dimension evaluate(Evaluator evaluator) {
+                Member member = memberCalc.evaluate(evaluator);
                 return member.getDimension();
             }
         };

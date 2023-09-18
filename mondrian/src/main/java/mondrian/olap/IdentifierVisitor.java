@@ -11,6 +11,8 @@ package mondrian.olap;
 
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.query.component.Id;
+
 import mondrian.mdx.MdxVisitorImpl;
 
 public class IdentifierVisitor extends MdxVisitorImpl {

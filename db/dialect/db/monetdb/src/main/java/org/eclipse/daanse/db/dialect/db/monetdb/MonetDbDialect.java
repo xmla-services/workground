@@ -12,17 +12,14 @@
 */
 package org.eclipse.daanse.db.dialect.db.monetdb;
 
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Implementation of {@link Dialect} for the MonetDB database.
@@ -30,17 +27,13 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author pstoellberger
  * @since Nov 10, 2012
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MONETDB'",
-        "database.product:String='MONETDB'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MonetDbDialect extends JdbcDialectImpl {
     private static final String DOT = "\\.";
 
     private static final String SUPPORTED_PRODUCT_NAME = "MONETDB";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public MonetDbDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

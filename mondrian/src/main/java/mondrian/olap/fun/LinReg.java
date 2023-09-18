@@ -15,16 +15,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractDoubleCalc;
-import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil.SetWrapper;
 
@@ -120,7 +121,7 @@ public abstract class LinReg extends FunDefBase {
     public static final int SLOPE = 3;
     public static final int VARIANCE = 4;
 
-    static final Resolver InterceptResolver =
+    static final FunctionResolver InterceptResolver =
         new ReflectiveMultiResolver(
             "LinRegIntercept",
             "LinRegIntercept(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -128,7 +129,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             InterceptFunDef.class);
 
-    static final Resolver PointResolver =
+    static final FunctionResolver PointResolver =
         new ReflectiveMultiResolver(
             "LinRegPoint",
             "LinRegPoint(<Numeric Expression>, <Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -136,7 +137,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnnxn", "fnnxnn"},
             PointFunDef.class);
 
-    static final Resolver SlopeResolver =
+    static final FunctionResolver SlopeResolver =
         new ReflectiveMultiResolver(
             "LinRegSlope",
             "LinRegSlope(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -144,7 +145,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             SlopeFunDef.class);
 
-    static final Resolver R2Resolver =
+    static final FunctionResolver R2Resolver =
         new ReflectiveMultiResolver(
             "LinRegR2",
             "LinRegR2(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -152,7 +153,7 @@ public abstract class LinReg extends FunDefBase {
             new String[]{"fnxn", "fnxnn"},
             R2FunDef.class);
 
-    static final Resolver VarianceResolver =
+    static final FunctionResolver VarianceResolver =
         new ReflectiveMultiResolver(
             "LinRegVariance",
             "LinRegVariance(<Set>, <Numeric Expression>[, <Numeric Expression>])",
@@ -162,14 +163,14 @@ public abstract class LinReg extends FunDefBase {
 
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final DoubleCalc yCalc = compiler.compileDouble(call.getArg(1));
         final DoubleCalc xCalc =
             call.getArgCount() > 2
             ? compiler.compileDouble(call.getArg(2))
-            : new ValueCalc(call.getType());
-        return new LinRegCalc(call, listCalc, yCalc, xCalc, regType);
+            : new CurrentValueDoubleCalc(call.getType());
+        return new LinRegCalc(call, tupleListCalc, yCalc, xCalc, regType);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -257,7 +258,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class InterceptFunDef extends LinReg {
-        public InterceptFunDef(FunDef funDef) {
+        public InterceptFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.INTERCEPT);
         }
     }
@@ -272,49 +273,49 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class PointFunDef extends LinReg {
-        public PointFunDef(FunDef funDef) {
+        public PointFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.POINT);
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final DoubleCalc xPointCalc =
                 compiler.compileDouble(call.getArg(0));
-            final ListCalc listCalc = compiler.compileList(call.getArg(1));
+            final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(1));
             final DoubleCalc yCalc = compiler.compileDouble(call.getArg(2));
             final DoubleCalc xCalc =
                 call.getArgCount() > 3
                 ? compiler.compileDouble(call.getArg(3))
-                : new ValueCalc(call.getType());
+                : new CurrentValueDoubleCalc(call.getType());
             return new PointCalc(
-                call, xPointCalc, listCalc, yCalc, xCalc);
+                call, xPointCalc, tupleListCalc, yCalc, xCalc);
         }
     }
 
-    private static class PointCalc extends AbstractDoubleCalc {
+    private static class PointCalc extends AbstractProfilingNestedDoubleCalc {
         private final DoubleCalc xPointCalc;
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final DoubleCalc yCalc;
         private final DoubleCalc xCalc;
 
         public PointCalc(
             ResolvedFunCall call,
             DoubleCalc xPointCalc,
-            ListCalc listCalc,
+            TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc)
         {
-            super(call.getFunName(),call.getType(), new Calc[]{xPointCalc, listCalc, yCalc, xCalc});
+            super(call.getType(), new Calc[]{xPointCalc, tupleListCalc, yCalc, xCalc});
             this.xPointCalc = xPointCalc;
-            this.listCalc = listCalc;
+            this.tupleListCalc = tupleListCalc;
             this.yCalc = yCalc;
             this.xCalc = xCalc;
         }
 
         @Override
-		public double evaluateDouble(Evaluator evaluator) {
-            double xPoint = xPointCalc.evaluateDouble(evaluator);
-            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
+		public Double evaluate(Evaluator evaluator) {
+            Double xPoint = xPointCalc.evaluate(evaluator);
+            Value value = LinReg.process(evaluator, tupleListCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DOUBLE_NULL;
             }
@@ -333,7 +334,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class SlopeFunDef extends LinReg {
-        public SlopeFunDef(FunDef funDef) {
+        public SlopeFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.SLOPE);
         }
     }
@@ -348,7 +349,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class R2FunDef extends LinReg {
-        public R2FunDef(FunDef funDef) {
+        public R2FunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.R2);
         }
     }
@@ -363,7 +364,7 @@ public abstract class LinReg extends FunDefBase {
      * Expression&gt;])</code></blockquote>
      */
     public static class VarianceFunDef extends LinReg {
-        public VarianceFunDef(FunDef funDef) {
+        public VarianceFunDef(FunctionDefinition funDef) {
             super(funDef, LinReg.VARIANCE);
         }
     }
@@ -374,14 +375,14 @@ public abstract class LinReg extends FunDefBase {
     }
 
 
-    protected LinReg(FunDef funDef, int regType) {
+    protected LinReg(FunctionDefinition funDef, int regType) {
         super(funDef);
         this.regType = regType;
     }
 
     protected static LinReg.Value process(
         Evaluator evaluator,
-        ListCalc listCalc,
+        TupleListCalc tupleListCalc,
         DoubleCalc yCalc,
         DoubleCalc xCalc)
     {
@@ -389,7 +390,7 @@ public abstract class LinReg extends FunDefBase {
         TupleList members;
         try {
             evaluator.setNonEmpty(false);
-            members = listCalc.evaluateList(evaluator);
+            members = tupleListCalc.evaluateList(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }
@@ -582,29 +583,29 @@ public abstract class LinReg extends FunDefBase {
         return yfs;
     }
 
-    private static class LinRegCalc extends AbstractDoubleCalc {
-        private final ListCalc listCalc;
+    private static class LinRegCalc extends AbstractProfilingNestedDoubleCalc {
+        private final TupleListCalc tupleListCalc;
         private final DoubleCalc yCalc;
         private final DoubleCalc xCalc;
         private final int regType;
 
         public LinRegCalc(
             ResolvedFunCall call,
-            ListCalc listCalc,
+            TupleListCalc tupleListCalc,
             DoubleCalc yCalc,
             DoubleCalc xCalc,
             int regType)
         {
-            super(call.getFunName(),call.getType(), new Calc[]{listCalc, yCalc, xCalc});
-            this.listCalc = listCalc;
+            super(call.getType(), new Calc[]{tupleListCalc, yCalc, xCalc});
+            this.tupleListCalc = tupleListCalc;
             this.yCalc = yCalc;
             this.xCalc = xCalc;
             this.regType = regType;
         }
 
         @Override
-		public double evaluateDouble(Evaluator evaluator) {
-            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
+		public Double evaluate(Evaluator evaluator) {
+            Value value = LinReg.process(evaluator, tupleListCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DOUBLE_NULL;
             }

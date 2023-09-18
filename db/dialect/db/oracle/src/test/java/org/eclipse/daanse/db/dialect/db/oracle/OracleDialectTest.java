@@ -32,8 +32,7 @@ class OracleDialectTest {
     public void setUp() throws Exception {
         when(metaData.getDatabaseProductName()).thenReturn("ORACLE");
         when(connection.getMetaData()).thenReturn(metaData);
-        dialect = new OracleDialect();
-        dialect.initialize(connection);
+        dialect = new OracleDialect(connection);
     }
 
     @Test

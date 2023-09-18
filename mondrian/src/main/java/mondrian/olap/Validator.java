@@ -13,8 +13,13 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.mdx.ParameterExpr;
-import mondrian.olap.fun.Resolver;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+
+import mondrian.mdx.ParameterExpressionImpl;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.type.Type;
 
 /**
@@ -46,7 +51,7 @@ public interface Validator {
      *
      * <p>It must resolve to the same object (although sub-objects may change).
      */
-    void validate(ParameterExpr parameterExpr);
+    void validate(ParameterExpressionImpl parameterExpr);
 
     /**
      * Validates a child member property.
@@ -89,12 +94,12 @@ public interface Validator {
         int ordinal,
         Exp fromExp,
         int to,
-        List<Resolver.Conversion> conversions);
+        List<FunctionResolver.Conversion> conversions);
 
     /**
      * Returns the table of function and operator definitions.
      */
-    FunTable getFunTable();
+    FunctionTable getFunTable();
 
     /**
      * Creates or retrieves the parameter corresponding to a "Parameter" or
@@ -112,7 +117,7 @@ public interface Validator {
      * overloaded, returns as precise a match to the argument types as
      * possible.
      */
-    FunDef getDef(
+    FunctionDefinition getDef(
         Exp[] args,
         String name,
         Syntax syntax);

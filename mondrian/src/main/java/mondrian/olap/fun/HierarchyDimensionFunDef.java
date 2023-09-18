@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
-import mondrian.calc.impl.AbstractDimensionCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
@@ -39,24 +39,24 @@ public class HierarchyDimensionFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final HierarchyCalc hierarchyCalc =
                 compiler.compileHierarchy(call.getArg(0));
-        return new CalcImpl(call.getType(), hierarchyCalc);
+        return new DimensionCalcImpl(call.getType(), hierarchyCalc);
     }
 
-    public static class CalcImpl extends AbstractDimensionCalc {
+    public static class DimensionCalcImpl extends AbstractProfilingNestedDimensionCalc {
         private final HierarchyCalc hierarchyCalc;
 
-        public CalcImpl(Type type, HierarchyCalc hierarchyCalc) {
-            super("Dimension",type, new Calc[] {hierarchyCalc});
+        public DimensionCalcImpl(Type type, HierarchyCalc hierarchyCalc) {
+            super(type, new Calc[] {hierarchyCalc});
             this.hierarchyCalc = hierarchyCalc;
         }
 
         @Override
-		public Dimension evaluateDimension(Evaluator evaluator) {
+		public Dimension evaluate(Evaluator evaluator) {
             Hierarchy hierarchy =
-                    hierarchyCalc.evaluateHierarchy(evaluator);
+                    hierarchyCalc.evaluate(evaluator);
             return hierarchy.getDimension();
         }
     }

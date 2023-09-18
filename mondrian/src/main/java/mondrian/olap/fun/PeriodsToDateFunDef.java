@@ -9,21 +9,21 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -46,7 +46,7 @@ class PeriodsToDateFunDef extends FunDefBase {
 
   private static final String TIMING_NAME = PeriodsToDateFunDef.class.getSimpleName();
 
-  public PeriodsToDateFunDef( FunDef dummyFunDef ) {
+  public PeriodsToDateFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -82,7 +82,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final RolapHierarchy timeHierarchy =
         levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getName() ) : null;
 
-    return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { levelCalc, memberCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { levelCalc, memberCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         evaluator.getTiming().markStart( PeriodsToDateFunDef.TIMING_NAME );
@@ -93,11 +93,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
             member = evaluator.getContext( timeHierarchy );
             level = member.getLevel().getParentLevel();
           } else {
-            level = levelCalc.evaluateLevel( evaluator );
+            level = levelCalc.evaluate( evaluator );
             if ( memberCalc == null ) {
               member = evaluator.getContext( level.getHierarchy() );
             } else {
-              member = memberCalc.evaluateMember( evaluator );
+              member = memberCalc.evaluate( evaluator );
             }
           }
           return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, member ) );

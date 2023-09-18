@@ -459,22 +459,6 @@ Property that contains the URL of the catalog to be used by
         <Type>String</Type>
     </PropertyDefinition>
     <PropertyDefinition>
-        <Name>EnableCacheHitCounters</Name>
-        <Path>mondrian.rolap.agg.enableCacheHitCounters</Path>
-        <Description>
-<p>Property that controls whether aggregation cache hit / miss
-counters will be enabled.</p>
-
-<p>Note that this will affect performance due to existence of sync
-blocks.</p>
-
-@deprecated This property is no longer used, and will be removed in
-mondrian-4.0.
-        </Description>
-        <Type>boolean</Type>
-        <Default>false</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
         <Name>WarnIfNoPatternForDialect</Name>
         <Path>mondrian.test.WarnIfNoPatternForDialect</Path>
         <Category>Testing</Category>

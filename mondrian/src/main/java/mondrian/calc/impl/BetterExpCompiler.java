@@ -13,13 +13,15 @@ package mondrian.calc.impl;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
+import org.eclipse.daanse.olap.calc.base.type.tuple.MemberCalcToTupleCalc;
+import org.eclipse.daanse.olap.calc.base.type.tuple.UnknownToTupleCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -30,87 +32,79 @@ import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
 
 /**
- * Enhanced expression compiler. It can generate code to convert between
- * scalar types.
+ * Enhanced expression compiler. It can generate code to convert between scalar
+ * types.
  *
  * @author jhyde
  * @since Sep 29, 2005
  */
 public class BetterExpCompiler extends AbstractExpCompiler {
-    public BetterExpCompiler(Evaluator evaluator, Validator validator) {
-        super(evaluator, validator);
-    }
+	public BetterExpCompiler(Evaluator evaluator, Validator validator) {
+		super(evaluator, validator);
+	}
 
-    public BetterExpCompiler(
-            Evaluator evaluator,
-            Validator validator,
-            List<ResultStyle> resultStyles)
-    {
-        super(evaluator, validator, resultStyles);
-    }
+	public BetterExpCompiler(Evaluator evaluator, Validator validator, List<ResultStyle> resultStyles) {
+		super(evaluator, validator, resultStyles);
+	}
 
-    @Override
-    public TupleCalc compileTuple(Exp exp) {
-        final Calc calc = compile(exp);
-        final Type type = exp.getType();
-        if (
-                type instanceof mondrian.olap.type.DimensionType
-                || type instanceof mondrian.olap.type.HierarchyType
-                ) {
-            final mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
-                    "DefaultMember",
-                    mondrian.olap.Syntax.Property,
-                    new Exp[] {exp});
-            final Exp defaultMember = unresolvedFunCall.accept(getValidator());
-            return compileTuple(defaultMember);
-        }
-        if (type instanceof TupleType) {
-            assert calc instanceof TupleCalc;
-            return (TupleCalc) calc;
-        } else if (type instanceof MemberType) {
-            assert calc instanceof MemberCalc;
-            final MemberCalc memberCalc = (MemberCalc) calc;
-            return new AbstractTupleCalc("AbstractTupleCalc1",type, new Calc[] {memberCalc}) {
-                @Override
-                public Member[] evaluateTuple(Evaluator evaluator) {
-                    final Member member = memberCalc.evaluateMember(evaluator);
-                    if(member == null) {
-                        //<Tuple>.Item(-1)
-                        return null;
-                    }
-                    else {
-                        return new Member[]{memberCalc.evaluateMember(evaluator)};
-                    }
-                }
-            };
-        } else {
-            throw Util.newInternal("cannot cast " + exp);
-        }
-    }
+	@Override
+	public TupleCalc compileTuple(Exp exp) {
+		final Calc<?> calc = compile(exp);
+		final Type type = exp.getType();
+		if (type instanceof mondrian.olap.type.DimensionType || type instanceof mondrian.olap.type.HierarchyType) {
+			final mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl("DefaultMember",
+					mondrian.olap.Syntax.Property, new Exp[] { exp });
+			final Exp defaultMember = unresolvedFunCall.accept(getValidator());
+			return compileTuple(defaultMember);
+		}
+		if (type instanceof TupleType) {
 
-    @Override
-    public ListCalc compileList(Exp exp, boolean mutable) {
-        final ListCalc listCalc = super.compileList(exp, mutable);
-        if (mutable && listCalc.getResultStyle() == ResultStyle.LIST) {
-            // Wrap the expression in an expression which creates a mutable
-            // copy.
-            return new CopyListCalc(listCalc);
-        }
-        return listCalc;
-    }
+			if (calc instanceof TupleCalc tc) {
+				return tc;
+			}
 
-    private static class CopyListCalc extends AbstractListCalc {
-        private final ListCalc listCalc;
+			TupleCalc tc = new UnknownToTupleCalc( type, calc);
+			return tc;
+		} else if (type instanceof MemberType) {
+			MemberCalc tmpCalc = null;
+			if (calc instanceof MemberCalc mc) {
+				tmpCalc = mc;
+			} else {
+				tmpCalc = new UnknownToMemberCalc( type, calc);
+			}
+			final MemberCalc memberCalc = tmpCalc;
+			return new MemberCalcToTupleCalc( type,  memberCalc);
 
-        public CopyListCalc(ListCalc listCalc) {
-			super("CopyListCalc", listCalc.getType(), new Calc[] { listCalc });
-            this.listCalc = listCalc;
-        }
+		} else {
+			throw Util.newInternal("cannot cast " + exp);
+		}
+	}
 
-        @Override
-        public TupleList evaluateList(Evaluator evaluator) {
-            final TupleList list = listCalc.evaluateList(evaluator);
-            return list.cloneList(-1);
-        }
-    }
+	@Override
+	public TupleListCalc compileList(Exp exp, boolean mutable) {
+		final TupleListCalc tupleListCalc = super.compileList(exp, mutable);
+		if (mutable && tupleListCalc.getResultStyle() == ResultStyle.LIST) {
+			// Wrap the expression in an expression which creates a mutable
+			// copy.
+			return new CopyListCalc(tupleListCalc);
+		}
+		return tupleListCalc;
+	}
+
+	
+
+	private static class CopyListCalc extends AbstractListCalc {
+		private final TupleListCalc tupleListCalc;
+
+		public CopyListCalc(TupleListCalc tupleListCalc) {
+			super( tupleListCalc.getType(), new Calc[] { tupleListCalc });
+			this.tupleListCalc = tupleListCalc;
+		}
+
+		@Override
+		public TupleList evaluateList(Evaluator evaluator) {
+			final TupleList list = tupleListCalc.evaluateList(evaluator);
+			return list.copyList(-1);
+		}
+	}
 }

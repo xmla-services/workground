@@ -18,30 +18,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractIntegerCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.CacheCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
 import mondrian.rolap.RolapUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Definition of the <code>RANK</code> MDX function.
@@ -58,7 +59,7 @@ public class RankFunDef extends FunDefBase {
           RankFunDef.class );
   private static final String TIMING_NAME = RankFunDef.class.getSimpleName();
 
-  public RankFunDef( FunDef dummyFunDef ) {
+  public RankFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -76,9 +77,9 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
   public Calc compileCall3( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
-    final ListCalc listCalc = compiler.compileList( call.getArg( 1 ) );
+    final TupleListCalc tupleListCalc = compiler.compileList( call.getArg( 1 ) );
     final Calc keyCalc = compiler.compileScalar( call.getArg( 2 ), true );
-    Calc sortedListCalc = new SortedListCalc( call.getFunName(),call.getType(), listCalc, keyCalc );
+    Calc sortedListCalc = new SortedListCalc( call.getType(), tupleListCalc, keyCalc );
     final ExpCacheDescriptor cacheDescriptor = new ExpCacheDescriptor( call, sortedListCalc, compiler.getEvaluator() );
     if ( type0 instanceof TupleType ) {
       final TupleCalc tupleCalc = compiler.compileTuple( call.getArg( 0 ) );
@@ -92,12 +93,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   public Calc compileCall2( ResolvedFunCall call, ExpCompiler compiler ) {
     final boolean tuple = call.getArg( 0 ).getType() instanceof TupleType;
     final Exp listExp = call.getArg( 1 );
-    final ListCalc listCalc0 = compiler.compileList( listExp );
+    final TupleListCalc listCalc0 = compiler.compileList( listExp );
     Calc listCalc1 = new RankedListCalc( listCalc0, tuple );
     final Calc listCalc;
     if ( MondrianProperties.instance().EnableExpCache.get() ) {
       final ExpCacheDescriptor key = new ExpCacheDescriptor( listExp, listCalc1, compiler.getEvaluator() );
-      listCalc = new CacheCalc( "CacheCalc",listExp.getType(), key );
+      listCalc = new CacheCalc( listExp.getType(), key );
     } else {
       listCalc = listCalc1;
     }
@@ -110,26 +111,26 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank2TupleCalc extends AbstractIntegerCalc {
+  private static class Rank2TupleCalc extends AbstractProfilingNestedIntegerCalc {
     private final TupleCalc tupleCalc;
     private final Calc listCalc;
 
     public Rank2TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc listCalc ) {
-      super( call.getFunName(),call.getType(), new Calc[] { tupleCalc, listCalc } );
+      super( call.getType(), new Calc[] { tupleCalc, listCalc } );
       this.tupleCalc = tupleCalc;
       this.listCalc = listCalc;
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         // Get member or tuple.
         // If the member is null (or the tuple contains a null member)
         // the result is null (even if the list is null).
-        final Member[] members = tupleCalc.evaluateTuple( evaluator );
+        final Member[] members = tupleCalc.evaluate( evaluator );
         if ( members == null ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -154,27 +155,27 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank2MemberCalc extends AbstractIntegerCalc {
+  private static class Rank2MemberCalc extends AbstractProfilingNestedIntegerCalc {
     private final MemberCalc memberCalc;
     private final Calc listCalc;
 
     public Rank2MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc listCalc ) {
-      super( call.getFunName(),call.getType(), new Calc[] { memberCalc, listCalc } );
+      super( call.getType(), new Calc[] { memberCalc, listCalc } );
       this.memberCalc = memberCalc;
       this.listCalc = listCalc;
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
 
         // Get member or tuple.
         // If the member is null (or the tuple contains a null member)
         // the result is null (even if the list is null).
-        final Member member = memberCalc.evaluateMember( evaluator );
+        final Member member = memberCalc.evaluate( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         // Get the set of members/tuples.
         // If the list is empty, MSAS cannot figure out the type of the
@@ -196,26 +197,26 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank3TupleCalc extends AbstractIntegerCalc {
+  private static class Rank3TupleCalc extends AbstractProfilingNestedIntegerCalc {
     private final TupleCalc tupleCalc;
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
 
     public Rank3TupleCalc( ResolvedFunCall call, TupleCalc tupleCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
-      super( call.getFunName(),call.getType(), new Calc[] { tupleCalc, sortCalc } );
+      super( call.getType(), new Calc[] { tupleCalc, sortCalc } );
       this.tupleCalc = tupleCalc;
       this.sortCalc = sortCalc;
       this.cacheDescriptor = cacheDescriptor;
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
-        Member[] members = tupleCalc.evaluateTuple( evaluator );
+        Member[] members = tupleCalc.evaluate( evaluator );
         if ( members == null ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
         assert !FunUtil.tupleContainsNullMember( members );
 
@@ -229,7 +230,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // First try to find the member in the cached SortResult
@@ -280,26 +281,26 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  private static class Rank3MemberCalc extends AbstractIntegerCalc {
+  private static class Rank3MemberCalc extends AbstractProfilingNestedIntegerCalc {
     private final MemberCalc memberCalc;
     private final Calc sortCalc;
     private final ExpCacheDescriptor cacheDescriptor;
 
     public Rank3MemberCalc( ResolvedFunCall call, MemberCalc memberCalc, Calc sortCalc,
         ExpCacheDescriptor cacheDescriptor ) {
-      super( call.getFunName(),call.getType(), new Calc[] { memberCalc, sortCalc } );
+      super( call.getType(), new Calc[] { memberCalc, sortCalc } );
       this.memberCalc = memberCalc;
       this.sortCalc = sortCalc;
       this.cacheDescriptor = cacheDescriptor;
     }
 
     @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
-        Member member = memberCalc.evaluateMember( evaluator );
+        Member member = memberCalc.evaluate( evaluator );
         if ( member == null || member.isNull() ) {
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // Evaluate the list (or retrieve from cache).
@@ -311,7 +312,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return FunUtil.INTEGER_NULL;
+          return null;
         }
 
         // First try to find the member in the cached SortResult
@@ -375,8 +376,8 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * sorts the list of values. The result is a value of type {@link SortResult}, and can be used to implement the
    * <code>Rank</code> function efficiently.
    */
-  private static class SortedListCalc extends AbstractCalc {
-    private final ListCalc listCalc;
+  private static class SortedListCalc extends AbstractProfilingNestedCalc {
+    private final TupleListCalc tupleListCalc;
     private final Calc keyCalc;
 
     private static final Integer ONE = 1;
@@ -386,20 +387,20 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
      *
      * @param exp
      *          Source expression
-     * @param listCalc
+     * @param tupleListCalc
      *          Compiled expression to compute the list
      * @param keyCalc
      *          Compiled expression to compute the sort key
      */
-    public SortedListCalc( String name,Type type, ListCalc listCalc, Calc keyCalc ) {
-      super( name,type, new Calc[] { listCalc, keyCalc } );
-      this.listCalc = listCalc;
+    public SortedListCalc( Type type, TupleListCalc tupleListCalc, Calc keyCalc ) {
+      super( type, new Calc[] { tupleListCalc, keyCalc } );
+      this.tupleListCalc = tupleListCalc;
       this.keyCalc = keyCalc;
     }
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
 
     @Override
@@ -420,7 +421,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         // Construct an array containing the value of the expression
         // for each member.
 
-        list = listCalc.evaluateList( evaluator );
+        list = tupleListCalc.evaluateList( evaluator );
         assert list != null;
         if ( list.isEmpty() ) {
           return list.getArity() == 1 ? new MemberSortResult( new Object[0], Collections.<Member, Integer>emptyMap() )
@@ -608,21 +609,21 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * The result is a value of type {@link mondrian.olap.fun.RankFunDef.RankedMemberList} or
    * {@link mondrian.olap.fun.RankFunDef.RankedTupleList}, or null if the list is empty.
    */
-  private static class RankedListCalc extends AbstractCalc {
-    private final ListCalc listCalc;
+  private static class RankedListCalc extends AbstractProfilingNestedCalc {
+    private final TupleListCalc tupleListCalc;
     private final boolean tuple;
 
     /**
      * Creates a RankedListCalc.
      *
-     * @param listCalc
+     * @param tupleListCalc
      *          Compiled expression to compute the list
      * @param tuple
      *          Whether elements of the list are tuples (as opposed to members)
      */
-    public RankedListCalc( ListCalc listCalc, boolean tuple ) {
-      super( "RankedListCalc", listCalc.getType() , new Calc[] { listCalc } );
-      this.listCalc = listCalc;
+    public RankedListCalc( TupleListCalc tupleListCalc, boolean tuple ) {
+      super(  tupleListCalc.getType() , new Calc[] { tupleListCalc } );
+      this.tupleListCalc = tupleListCalc;
       this.tuple = tuple;
     }
 
@@ -630,7 +631,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 	public Object evaluate( Evaluator evaluator ) {
       // Construct an array containing the value of the expression
       // for each member.
-      TupleList tupleList = listCalc.evaluateList( evaluator );
+      TupleList tupleList = tupleListCalc.evaluateList( evaluator );
       assert tupleList != null;
       if ( tuple ) {
         return new RankedTupleList( tupleList );

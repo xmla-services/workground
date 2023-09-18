@@ -9,16 +9,17 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Subset</code> MDX function.
@@ -35,13 +36,13 @@ class SubsetFunDef extends FunDefBase {
             new String[] {"fxxn", "fxxnn"},
             SubsetFunDef.class);
 
-    public SubsetFunDef(FunDef dummyFunDef) {
+    public SubsetFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc startCalc =
             compiler.compileInteger(call.getArg(1));
@@ -50,18 +51,18 @@ class SubsetFunDef extends FunDefBase {
             ? compiler.compileInteger(call.getArg(2))
             : null;
         return new AbstractListCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, startCalc, countCalc})
+        		call.getType(), new Calc[] {tupleListCalc, startCalc, countCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final TupleList list = listCalc.evaluateList(evaluator);
-                    final int start = startCalc.evaluateInteger(evaluator);
+                    final TupleList list = tupleListCalc.evaluateList(evaluator);
+                    final Integer start = startCalc.evaluate(evaluator);
                     int end;
                     if (countCalc != null) {
-                        final int count = countCalc.evaluateInteger(evaluator);
+                        final Integer count = countCalc.evaluate(evaluator);
                         end = start + count;
                     } else {
                         end = list.size();

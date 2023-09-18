@@ -17,13 +17,14 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
+import mondrian.olap.NumericLiteralImpl;
+import mondrian.olap.StringLiteralImpl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Exp;
-import mondrian.olap.Literal;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.TypeWrapperExp;
@@ -74,7 +75,7 @@ class NumberSqlCompilerTest {
 
     @Test
     void testAcceptsNumeric() {
-        Exp exp = Literal.create(BigDecimal.ONE);
+        Exp exp = NumericLiteralImpl.create(BigDecimal.ONE);
         assertNotNull(compiler.compile(exp));
     }
 
@@ -99,7 +100,7 @@ class NumberSqlCompilerTest {
     }
 
     private void checkAcceptsString(String value) {
-        Exp exp = Literal.createString(value);
+        Exp exp = StringLiteralImpl.create(value);
         assertNotNull(value, compiler.compile(exp).toString());
     }
 
@@ -135,7 +136,7 @@ class NumberSqlCompilerTest {
     }
 
     private void checkRejectsString(String value) {
-        Exp exp = Literal.createString(value);
+        Exp exp = StringLiteralImpl.create(value);
         try {
             compiler.compile(exp);
         } catch (MondrianEvaluationException e) {

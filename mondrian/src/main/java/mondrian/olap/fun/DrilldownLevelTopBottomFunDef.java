@@ -15,26 +15,26 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
@@ -64,7 +64,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the topmost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, true );
       }
     };
@@ -76,13 +76,13 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the bottommost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, false );
       }
     };
 
   public DrilldownLevelTopBottomFunDef(
-    FunDef dummyFunDef,
+    FunctionDefinition dummyFunDef,
     final boolean top ) {
     super( dummyFunDef );
     this.top = top;
@@ -92,7 +92,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
 public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to insert members into it later.
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final IntegerCalc integerCalc =
       compiler.compileInteger( call.getArg( 1 ) );
@@ -107,8 +107,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         : new ValueCalc(
                new ScalarType()  );
     return new AbstractListCalc(
-    		call.getFunName(),call.getType(),
-      new Calc[] { listCalc, integerCalc, orderCalc } ) {
+    		call.getType(),
+      new Calc[] { tupleListCalc, integerCalc, orderCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         // Use a native evaluator, if more efficient.
@@ -122,16 +122,16 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
             (TupleList) nativeEvaluator.execute( ResultStyle.LIST );
         }
 
-        TupleList list = listCalc.evaluateList( evaluator );
-        int n = integerCalc.evaluateInteger( evaluator );
-        if ( n == FunUtil.INTEGER_NULL || n <= 0 ) {
+        TupleList list = tupleListCalc.evaluateList( evaluator );
+        Integer n = integerCalc.evaluate( evaluator );
+        if ( n == null || n <= 0 ) {
           return list;
         }
         Level level;
         if ( levelCalc == null ) {
           level = null;
         } else {
-          level = levelCalc.evaluateLevel( evaluator );
+          level = levelCalc.evaluate( evaluator );
         }
         List<Member> result = new ArrayList<>();
         assert list.getArity() == 1;
@@ -176,7 +176,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }

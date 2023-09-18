@@ -9,7 +9,8 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.olap.Evaluator;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.type.Type;
@@ -24,8 +25,8 @@ import mondrian.olap.type.Type;
 public class CacheCalc extends GenericCalc {
     private final ExpCacheDescriptor key;
 
-    public CacheCalc(String name, Type type, ExpCacheDescriptor key) {
-        super( name,  type);
+    public CacheCalc( Type type, ExpCacheDescriptor key) {
+        super(   type);
         this.key = key;
     }
 
@@ -35,7 +36,7 @@ public class CacheCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new Calc[] {key.getCalc()};
     }
 }

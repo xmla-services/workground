@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Connection;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 
 /**
  * Thread which runs an MDX query and checks it against an expected result.
@@ -244,7 +244,7 @@ public class QueryRunner extends Thread {
 
                     mRunCount++;
 
-                    Query query = cxn.parseQuery(Queries[queryIndex]);
+                    QueryImpl query = cxn.parseQuery(Queries[queryIndex]);
                     cxn.execute(query);
                     mSuccessCount++;
                 } catch (Exception e) {

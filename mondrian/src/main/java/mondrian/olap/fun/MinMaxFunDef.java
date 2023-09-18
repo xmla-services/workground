@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Min</code> and <code>Max</code> MDX functions.
@@ -42,23 +42,23 @@ class MinMaxFunDef extends AbstractAggregateFunDef {
 
   private final boolean max;
 
-  public MinMaxFunDef( FunDef dummyFunDef ) {
+  public MinMaxFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
     this.max = dummyFunDef.getName().equals( "Max" );
   }
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final ListCalc listCalc = compiler.compileList( call.getArg( 0 ) );
+    final TupleListCalc tupleListCalc = compiler.compileList( call.getArg( 0 ) );
     final Calc calc =
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call.getType() );
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { tupleListCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( MinMaxFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
-          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
+          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( tupleListCalc, evaluator );
           evaluator.setNonEmpty( false );
           return (Double) ( max ? FunUtil.max( evaluator, memberList, calc ) : FunUtil.min( evaluator, memberList, calc ) );
         } finally {
@@ -69,7 +69,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }

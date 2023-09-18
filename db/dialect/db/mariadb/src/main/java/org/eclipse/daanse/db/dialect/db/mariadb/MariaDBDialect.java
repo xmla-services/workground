@@ -10,25 +10,17 @@
 
 package org.eclipse.daanse.db.dialect.db.mariadb;
 
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MARIADB'",
-        "database.product:String='MARIADB'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MariaDBDialect extends MySqlDialect {
 
     private static final String SUPPORTED_PRODUCT_NAME = "MARIADB";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public MariaDBDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

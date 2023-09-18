@@ -58,11 +58,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -88,11 +89,11 @@ import org.slf4j.Logger;
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -1769,11 +1770,10 @@ public class BasicQueryTest {
             + " Crossjoin ({([Gender].[All Gender].[F],\n" + " [Marital Status].[All Marital Status],\n"
             + " [Customers].[All Customers].[USA])},\n"
             + " [Product].[All Products].Children))) ON rows  from [Sales]  where [Time].[1997]";
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     // If this call took longer than 10 seconds, the performance bug has
     // probably resurfaced again.
     final long afterParseMillis = System.currentTimeMillis();
-    final long afterParseNonDbMillis = afterParseMillis - Util.dbTimeMillis();
     final long parseMillis = afterParseMillis - start;
     assertTrue(parseMillis <= 10000, "performance problem: parse took " + parseMillis + " milliseconds");
 
@@ -1785,11 +1785,8 @@ public class BasicQueryTest {
     // the performance bug has
     // probably resurfaced again.
     final long afterExecMillis = System.currentTimeMillis();
-    final long afterExecNonDbMillis = afterExecMillis - Util.dbTimeMillis();
-    final long execNonDbMillis = afterExecNonDbMillis - afterParseNonDbMillis;
     final long execMillis = ( afterExecMillis - afterParseMillis );
-    assertTrue(execNonDbMillis <= 2000 && execMillis <= 30000, "performance problem: execute took " + execMillis + " milliseconds, " + execNonDbMillis
-        + " milliseconds excluding db");
+    assertTrue(execMillis <= 30000, "performance problem: execute took " + execMillis + " milliseconds, " );
   }
 
     @ParameterizedTest
@@ -2371,7 +2368,7 @@ public class BasicQueryTest {
 
     String queryString =
         "select {[Measures].[Unit Sales]} on columns,\n" + "{[Customers].members} on rows\n" + "from Sales";
-    Query query = connection.parseQuery( queryString );
+    QueryImpl query = connection.parseQuery( queryString );
     Result result = connection.execute( query );
     assertEquals( 10407, result.getAxes()[1].getPositions().size() );
   }
@@ -2380,7 +2377,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testUnparse(TestingContext context) {
     Connection connection = context.createConnection();
-    Query query =
+    QueryImpl query =
         connection.parseQuery( "with member [Measures].[Rendite] as \n"
             + " '(([Measures].[Store Sales] - [Measures].[Store Cost])) / [Measures].[Store Cost]',\n"
             + " format_string = iif(([Measures].[Store Sales] - [Measures].[Store Cost]) / [Measures].[Store Cost] * 100 "
@@ -2409,7 +2406,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   void testUnparse2(TestingContext context) {
       Connection connection = context.createConnection();
-    Query query =
+    QueryImpl query =
         connection.parseQuery( "with member [Measures].[Foo] as '1', " + "format_string='##0.00', "
             + "funny=IIf(1=1,\"x\"\"y\",\"foo\") " + "select {[Measures].[Foo]} on columns from Sales" );
     final String s = query.toString();
@@ -3843,15 +3840,15 @@ public class BasicQueryTest {
             + "  </CalculatedMember>\n" + "</Cube>", null, null, null, null );
     withSchema(context, schema);
     SchemaReader scr = context.createConnection().getSchema().lookupCube( cubeName, true ).getSchemaReader( null );
-    Member member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Unit Sales" ), true );
+    Member member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Unit Sales" ), true );
     Object visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
 
-    member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Store Cost" ), true );
+    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Store Cost" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.TRUE, visible );
 
-    member = scr.getMemberByUniqueName( Id.Segment.toList( "Measures", "Profit" ), true );
+    member = scr.getMemberByUniqueName( Segment.toList( "Measures", "Profit" ), true );
     visible = member.getPropertyValue( Property.VISIBLE.name );
     assertEquals( Boolean.FALSE, visible );
   }
@@ -4359,7 +4356,7 @@ public class BasicQueryTest {
     withSchema(context, schema);
     Connection connection = context.createConnection();
 
-    final Query query = connection.parseQuery( queryString );
+    final QueryImpl query = connection.parseQuery( queryString );
     final Throwable[] throwables = { null };
     if ( waitMillis == 0 ) {
       // cancel immediately
@@ -4700,7 +4697,7 @@ public class BasicQueryTest {
     Throwable throwable = null;
     Connection connection = context.createConnection();
     try {
-      Query query = connection.parseQuery( queryString );
+      QueryImpl query = connection.parseQuery( queryString );
       query.setResultStyle( ResultStyle.LIST );
       connection.execute( query );
     } catch ( Throwable ex ) {
@@ -5614,7 +5611,7 @@ public class BasicQueryTest {
     // should succeed.
     runMondrian1506(context, new Mondrian1506Lambda() {
       @Override
-	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+	public void run( ExecutorService exec, QueryImpl q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5631,7 +5628,7 @@ public class BasicQueryTest {
         Thread.sleep( 500 );
 
         // Cancel the first
-        q1.cancel();
+        q1.getStatement().cancel();
 
         // Wait a bit for the cancelation of q1 to propagate.
         Thread.sleep( 3000 );
@@ -5656,7 +5653,7 @@ public class BasicQueryTest {
     // after the call to cancel() returns. Same result as test 1.
     runMondrian1506(context, new Mondrian1506Lambda() {
       @Override
-	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+	public void run( ExecutorService exec, QueryImpl q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5667,7 +5664,7 @@ public class BasicQueryTest {
         Thread.sleep( 500 );
 
         // Cancel the first
-        q1.cancel();
+        q1.getStatement().cancel();
 
         // Run the second immediatly
         Future<?> f2 = exec.submit( r2 );
@@ -5690,7 +5687,7 @@ public class BasicQueryTest {
   }
 
   private interface Mondrian1506Lambda {
-    void run( final ExecutorService exec, final Query q1, final AtomicBoolean fail, final AtomicBoolean success,
+    void run( final ExecutorService exec, final QueryImpl q1, final AtomicBoolean fail, final AtomicBoolean success,
         final Runnable r1, final Runnable r2 ) throws Exception;
   }
 
@@ -5719,8 +5716,8 @@ public class BasicQueryTest {
 
     // We are testing the old Query API.
     final Connection connection = context.createConnection();
-    final Query q1 = connection.parseQuery( mdx );
-    final Query q2 = connection.parseQuery( mdx );
+    final QueryImpl q1 = connection.parseQuery( mdx );
+    final QueryImpl q2 = connection.parseQuery( mdx );
 
     // Some flags to test.
     final AtomicBoolean fail = new AtomicBoolean( false );

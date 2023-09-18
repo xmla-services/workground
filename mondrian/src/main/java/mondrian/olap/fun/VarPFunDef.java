@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>VarP</code> MDX builtin function
@@ -30,7 +30,7 @@ import mondrian.olap.FunDef;
  * @since Mar 23, 2006
  */
 class VarPFunDef extends AbstractAggregateFunDef {
-    static final Resolver VariancePResolver =
+    static final FunctionResolver VariancePResolver =
         new ReflectiveMultiResolver(
             "VarianceP",
             "VarianceP(<Set>[, <Numeric Expression>])",
@@ -38,7 +38,7 @@ class VarPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             VarPFunDef.class);
 
-    static final Resolver VarPResolver =
+    static final FunctionResolver VarPResolver =
         new ReflectiveMultiResolver(
             "VarP",
             "VarP(<Set>[, <Numeric Expression>])",
@@ -46,22 +46,22 @@ class VarPFunDef extends AbstractAggregateFunDef {
             new String[]{"fnx", "fnxn"},
             VarPFunDef.class);
 
-    public VarPFunDef(FunDef dummyFunDef) {
+    public VarPFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc =
             call.getArgCount() > 1
             ? compiler.compileScalar(call.getArg(1), true)
             : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, calc}) {
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, calc}) {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
-                TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
+			public Double evaluate(Evaluator evaluator) {
+                TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
@@ -74,7 +74,7 @@ class VarPFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

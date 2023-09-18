@@ -19,21 +19,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
@@ -41,17 +45,14 @@ import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -86,7 +87,7 @@ public class CrossJoinFunDef extends FunDefBase {
   // used to tell the difference between crossjoin expressions.
   private final int ctag = CrossJoinFunDef.counterTag++;
 
-  public CrossJoinFunDef( FunDef dummyFunDef ) {
+  public CrossJoinFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -164,7 +165,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   ///////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
-  protected IterCalc compileCallIterable( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleIteratorCalc compileCallIterable( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -173,15 +174,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallIterableArray(call, compiler, calcs);
   }
 
-  protected IterCalc compileCallIterableArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs) {
-    IterCalc iterCalc = compileCallIterableLeaf(call, calcs[0], calcs[1]);
+  protected TupleIteratorCalc compileCallIterableArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs) {
+    TupleIteratorCalc tupleIteratorCalc = compileCallIterableLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return iterCalc;
+      return tupleIteratorCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = iterCalc;
+      nextClasls[0] = tupleIteratorCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -189,7 +190,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected IterCalc compileCallIterableLeaf( final ResolvedFunCall call,
+  protected TupleIteratorCalc compileCallIterableLeaf( final ResolvedFunCall call,
                                                 final Calc  calc1, final Calc calc2) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -210,10 +211,10 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // a mutable list.
     final Type type = exp.getType();
     if ( type instanceof SetType ) {
-      // this can return an IterCalc or ListCalc
+      // this can return an TupleIteratorCalc or TupleListCalc
       return compiler.compileAs( exp, null, ResultStyle.ITERABLE_LIST_MUTABLELIST );
     } else {
-      // this always returns an IterCalc
+      // this always returns an TupleIteratorCalc
       return new SetFunDef.ExprIterCalc(  new SetType( type ) , new Exp[] { exp }, compiler,
           ResultStyle.ITERABLE_LIST_MUTABLELIST );
     }
@@ -222,7 +223,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   class CrossJoinIterCalc extends AbstractIterCalc {
 	private  ResolvedFunCall call;
     CrossJoinIterCalc( ResolvedFunCall call, Calc[] calcs ) {
-      super( "CrossJoinIterCalc",call.getType(), calcs );
+      super( call.getType(), calcs );
       this.call=call;
     }
 
@@ -238,9 +239,9 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         return (TupleIterable) nativeEvaluator.execute( ResultStyle.ITERABLE );
       }
 
-      Calc[] calcs = getCalcs();
-      IterCalc calc1 = (IterCalc) calcs[0];
-      IterCalc calc2 = (IterCalc) calcs[1];
+      Calc[] calcs = getChildCalcs();
+      TupleIteratorCalc calc1 = (TupleIteratorCalc) calcs[0];
+      TupleIteratorCalc calc2 = (TupleIteratorCalc) calcs[1];
 
       TupleIterable o1 = calc1.evaluateIterable( evaluator );
       if ( o1 instanceof TupleList l1 ) {
@@ -333,7 +334,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   // Immutable List
   ///////////////////////////////////////////////////////////////////////////
 
-  protected ListCalc compileCallImmutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleListCalc compileCallImmutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -342,15 +343,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallImmutableListArray(call, compiler, calcs);
   }
 
-  protected ListCalc compileCallImmutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallImmutableListLeaf(call, calcs[0], calcs[1]);
+  protected TupleListCalc compileCallImmutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
+    TupleListCalc tupleListCalc = compileCallImmutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return listCalc;
+      return tupleListCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = listCalc;
+      nextClasls[0] = tupleListCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -358,7 +359,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallImmutableListLeaf( final ResolvedFunCall call,
+  protected TupleListCalc compileCallImmutableListLeaf( final ResolvedFunCall call,
                                                    final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -384,7 +385,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
    *          Expression
    * @return Compiled expression that yields a list or mutable list
    */
-  private ListCalc toList( ExpCompiler compiler, final Exp exp ) {
+  private TupleListCalc toList( ExpCompiler compiler, final Exp exp ) {
     // Want immutable list or mutable list in that order
     // It is assumed that an immutable list is easier to get than
     // a mutable list.
@@ -394,7 +395,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       if ( calc == null ) {
         return compiler.compileList( exp, false );
       }
-      return (ListCalc) calc;
+      return (TupleListCalc) calc;
     } else {
       return new SetFunDef.SetListCalc(  new SetType( type ), new Exp[] { exp }, compiler,
           ResultStyle.LIST_MUTABLELIST );
@@ -404,7 +405,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
   abstract class BaseListCalc extends AbstractListCalc {
 	  ResolvedFunCall call;
     protected BaseListCalc( ResolvedFunCall call, Calc[] calcs, boolean mutable ) {
-      super( call.getFunName(),call.getType(), calcs, mutable );
+      super( call.getType(), calcs, mutable );
       this.call=call;
     }
 
@@ -419,9 +420,9 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         return (TupleList) nativeEvaluator.execute( ResultStyle.LIST );
       }
 
-      Calc[] calcs = getCalcs();
-      ListCalc listCalc1 = (ListCalc) calcs[0];
-      ListCalc listCalc2 = (ListCalc) calcs[1];
+      Calc[] calcs = getChildCalcs();
+      TupleListCalc listCalc1 = (TupleListCalc) calcs[0];
+      TupleListCalc listCalc2 = (TupleListCalc) calcs[1];
 
       TupleList l1 = listCalc1.evaluateList( evaluator );
       // check if size of first list already exceeds limit
@@ -475,7 +476,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallMutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
+  protected TupleListCalc compileCallMutableList( final ResolvedFunCall call, ExpCompiler compiler ) {
     final Exp[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -484,15 +485,15 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     return compileCallMutableListArray(call, compiler, calcs);
   }
 
-  protected ListCalc compileCallMutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
-    ListCalc listCalc = compileCallMutableListLeaf(call, calcs[0], calcs[1]);
+  protected TupleListCalc compileCallMutableListArray( final ResolvedFunCall call, ExpCompiler compiler, Calc[] calcs ) {
+    TupleListCalc tupleListCalc = compileCallMutableListLeaf(call, calcs[0], calcs[1]);
 
     if(calcs.length == 2){
-      return listCalc;
+      return tupleListCalc;
     }
     else {
       Calc[] nextClasls = new Calc[calcs.length - 1];
-      nextClasls[0] = listCalc;
+      nextClasls[0] = tupleListCalc;
       for (int i = 1; i < calcs.length - 1; i++) {
         nextClasls[i] = calcs[i + 1];
       }
@@ -500,7 +501,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
   }
 
-  protected ListCalc compileCallMutableListLeaf( final ResolvedFunCall call,
+  protected TupleListCalc compileCallMutableListLeaf( final ResolvedFunCall call,
                                                  final Calc  calc1, final Calc calc2 ) {
     Calc[] calcs = new Calc[] { calc1, calc2 };
     // The Calcs, 1 and 2, can be of type: Member or Member[] and
@@ -665,7 +666,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public Object visit( ParameterExpr parameterExpr ) {
+	public Object visit( ParameterExpression parameterExpr ) {
       final Parameter parameter = parameterExpr.getParameter();
       final Type type = parameter.getType();
       if ( type instanceof mondrian.olap.type.MemberType ) {
@@ -679,7 +680,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public Object visit( MemberExpr memberExpr ) {
+	public Object visit( MemberExpressionImpl memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;
@@ -1035,7 +1036,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public FunDef resolve(
+	public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -1050,12 +1051,12 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
           }
         }
 
-        FunDef dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.SET, args);
+        FunctionDefinition dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.SET, args);
         return new CrossJoinFunDef(dummy);
       }
     }
 
-    protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+    protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
       return new CrossJoinFunDef(dummyFunDef);
     }
   }
@@ -1068,7 +1069,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	public FunDef resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
+	public FunctionDefinition resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
       // This function only applies in contexts which require a set.
       // Elsewhere, "*" is the multiplication operator.
       // This means that [Measures].[Unit Sales] * [Gender].[M] is
@@ -1080,7 +1081,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
       return new CrossJoinFunDef( dummyFunDef );
     }
   }

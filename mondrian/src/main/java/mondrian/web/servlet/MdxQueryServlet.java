@@ -13,12 +13,13 @@ package mondrian.web.servlet;
 
 import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 import mondrian.web.taglib.ResultCache;
-import org.eclipse.daanse.olap.api.model.Member;
+
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -102,7 +103,7 @@ public class MdxQueryServlet extends HttpServlet {
         // execute the query
         try {
             mdxConnection = DriverManager.getConnection(connectString, locator);
-            Query q = mdxConnection.parseQuery(queryString);
+            QueryImpl q = mdxConnection.parseQuery(queryString);
             Result result = mdxConnection.execute(q);
             List<Position> slicers = result.getSlicerAxis().getPositions();
             html.append("<table class='resulttable' cellspacing=1 border=0>");
@@ -215,8 +216,8 @@ public class MdxQueryServlet extends HttpServlet {
         ResultCache rc =
             ResultCache.getInstance(
                 request.getSession(), getServletContext(), queryName);
-        Query query = rc.getQuery();
-        query = new Query(query);
+        QueryImpl query = rc.getQuery();
+        query = new QueryImpl(query);
         rc.setDirty();
         String operation = request.getParameter("operation");
         if (operation.equals("expand")) {

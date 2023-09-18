@@ -12,11 +12,13 @@
 
 package mondrian.olap;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -177,11 +179,11 @@ public abstract class HierarchyBase
     @Override
 	public OlapElement lookupChild(
         SchemaReader schemaReader,
-        Id.Segment s,
+        Segment s,
         MatchType matchType)
     {
         OlapElement oe;
-        if (s instanceof Id.NameSegment nameSegment) {
+        if (s instanceof NameSegment nameSegment) {
             oe = Util.lookupHierarchyLevel(this, nameSegment.getName());
             if (oe == null) {
                 oe = Util.lookupHierarchyRootMember(
@@ -190,7 +192,7 @@ public abstract class HierarchyBase
         } else {
             // Key segment searches bottom level by default. For example,
             // [Products].&[1] is shorthand for [Products].[Product Name].&[1].
-            final Id.KeySegment keySegment = (Id.KeySegment) s;
+            final IdImpl.KeySegment keySegment = (IdImpl.KeySegment) s;
             oe = levels[levels.length - 1]
                 .lookupChild(schemaReader, keySegment, matchType);
         }

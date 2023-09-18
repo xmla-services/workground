@@ -16,22 +16,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -58,7 +58,7 @@ class ExtractFunDef extends FunDefBase {
         Syntax.Function)
     {
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -101,7 +101,7 @@ class ExtractFunDef extends FunDefBase {
     };
 
     private ExtractFunDef(
-        Resolver resolver, int returnType, int[] parameterTypes)
+        FunctionResolver resolver, int returnType, int[] parameterTypes)
     {
         super(resolver, returnType, parameterTypes);
     }
@@ -151,9 +151,9 @@ class ExtractFunDef extends FunDefBase {
         for (int i = 1; i < args.length; i++) {
             Exp arg = args[i];
             Hierarchy extractedHierarchy = null;
-            if (arg instanceof HierarchyExpr hierarchyExpr) {
+            if (arg instanceof HierarchyExpressionImpl hierarchyExpr) {
                 extractedHierarchy = hierarchyExpr.getHierarchy();
-            } else if (arg instanceof DimensionExpr dimensionExpr) {
+            } else if (arg instanceof DimensionExpression dimensionExpr) {
                 extractedHierarchy =
                     dimensionExpr.getDimension().getHierarchy();
             }
@@ -187,7 +187,7 @@ class ExtractFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         List<Hierarchy> extractedHierarchyList = new ArrayList<>();
         List<Integer> extractedOrdinalList = new ArrayList<>();
         ExtractFunDef.findExtractedHierarchies(
@@ -197,21 +197,21 @@ class ExtractFunDef extends FunDefBase {
         Util.assertTrue(
             extractedOrdinalList.size() == extractedHierarchyList.size());
         Exp arg = call.getArg(0);
-        final ListCalc listCalc = compiler.compileList(arg, false);
+        final TupleListCalc tupleListCalc = compiler.compileList(arg, false);
         int inArity = arg.getType().getArity();
         final int outArity = extractedOrdinalList.size();
         if (inArity == 1) {
             // LHS is a set of members, RHS is the same hierarchy. Extract boils
             // down to eliminating duplicate members.
             Util.assertTrue(outArity == 1);
-            return new DistinctFunDef.CalcImpl(call, listCalc);
+            return new DistinctFunDef.CalcImpl(call, tupleListCalc);
         }
         final int[] extractedOrdinals = ExtractFunDef.toIntArray(extractedOrdinalList);
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[]{listCalc}) {
+        return new AbstractListCalc(call.getType(), new Calc[]{tupleListCalc}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList result = TupleCollections.createList(outArity);
-                TupleList list = listCalc.evaluateList(evaluator);
+                TupleList list = tupleListCalc.evaluateList(evaluator);
                 Set<List<Member>> emittedTuples = new HashSet<>();
                 for (List<Member> members : list.project(extractedOrdinals)) {
                     if (emittedTuples.add(members)) {

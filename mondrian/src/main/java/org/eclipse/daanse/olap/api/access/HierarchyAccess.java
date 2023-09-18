@@ -15,7 +15,7 @@
  */
 package org.eclipse.daanse.olap.api.access;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 /**
  * Represents the access that a role has to a particular hierarchy.

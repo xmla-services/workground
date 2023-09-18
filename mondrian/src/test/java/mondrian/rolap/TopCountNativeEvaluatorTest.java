@@ -18,13 +18,13 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
+import mondrian.olap.NumericLiteralImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.test.PropertySaver5;
@@ -34,7 +34,7 @@ import mondrian.test.PropertySaver5;
  * native evaluator for {@code TOPCOUNT} function.
  *
  * @author Andrey Khayrutdinov
- * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunDef, Exp[])
+ * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunctionDefinition, Exp[])
  */
 class TopCountNativeEvaluatorTest {
 
@@ -89,7 +89,7 @@ class TopCountNativeEvaluatorTest {
 
         Exp[] arguments = new Exp[] {
             new TypeWrapperExp(new EmptyType()),
-            Literal.create(BigDecimal.ONE)
+            NumericLiteralImpl.create(BigDecimal.ONE)
         };
 
         assertNull(
@@ -104,8 +104,8 @@ class TopCountNativeEvaluatorTest {
         return nativeTopCount;
     }
 
-    private FunDef mockFunctionDef() {
-        FunDef topCountFunMock = mock(FunDef.class);
+    private FunctionDefinition mockFunctionDef() {
+        FunctionDefinition topCountFunMock = mock(FunctionDefinition.class);
         when(topCountFunMock.getName()).thenReturn("TOPCOUNT");
         return topCountFunMock;
     }

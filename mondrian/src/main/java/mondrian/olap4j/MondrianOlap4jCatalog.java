@@ -12,7 +12,7 @@ package mondrian.olap4j;
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;
@@ -55,7 +55,7 @@ class MondrianOlap4jCatalog
         // Make sure to register the schemas.
         for (Map.Entry<String, RolapSchema> entry : schemaMap.entrySet()) {
             String schemaName = entry.getKey();
-            final  org.eclipse.daanse.olap.api.model.Schema schema = entry.getValue();
+            final  org.eclipse.daanse.olap.api.element.Schema schema = entry.getValue();
             if (schemaName == null) {
                 schemaName = schema.getName();
             }
@@ -73,7 +73,7 @@ class MondrianOlap4jCatalog
             new NamedListImpl<>();
         for (Map.Entry<String, RolapSchema> entry : schemaMap.entrySet()) {
             String schemaName = entry.getKey();
-            final org.eclipse.daanse.olap.api.model.Schema schema = entry.getValue();
+            final org.eclipse.daanse.olap.api.element.Schema schema = entry.getValue();
             final MondrianOlap4jConnection oConn =
                 ((MondrianOlap4jConnection)olap4jDatabase
                     .getOlapConnection());

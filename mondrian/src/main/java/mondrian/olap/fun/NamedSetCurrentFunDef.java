@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.calc.impl.AbstractTupleCalc;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -44,28 +44,28 @@ public class NamedSetCurrentFunDef extends FunDefBase {
 	public Exp createCall(Validator validator, Exp[] args) {
         assert args.length == 1;
         final Exp arg0 = args[0];
-        if (!(arg0 instanceof NamedSetExpr)) {
+        if (!(arg0 instanceof NamedSetExpression)) {
             throw MondrianResource.instance().NotANamedSet.ex();
         }
         return super.createCall(validator, args);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Exp arg0 = call.getArg(0);
-        assert arg0 instanceof NamedSetExpr : "checked this in createCall";
-        final NamedSetExpr namedSetExpr = (NamedSetExpr) arg0;
+        assert arg0 instanceof NamedSetExpression : "checked this in createCall";
+        final NamedSetExpression namedSetExpr = (NamedSetExpression) arg0;
         if (arg0.getType().getArity() == 1) {
-            return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[0]) {
+            return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[0]) {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
+				public Member evaluate(Evaluator evaluator) {
                     return namedSetExpr.getEval(evaluator).currentMember();
                 }
             };
         } else {
-            return new AbstractTupleCalc(call.getFunName(),call.getType(), new Calc[0]) {
+            return new AbstractProfilingNestedTupleCalc(call.getType(), new Calc[0]) {
                 @Override
-				public Member[] evaluateTuple(Evaluator evaluator) {
+				public Member[] evaluate(Evaluator evaluator) {
                     return namedSetExpr.getEval(evaluator).currentTuple();
                 }
             };

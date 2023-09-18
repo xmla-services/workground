@@ -14,28 +14,30 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
@@ -48,7 +50,7 @@ import mondrian.spi.UserDefinedFunction;
  * @author jhyde
  * @since 2.0
  */
-public class UdfResolver implements Resolver {
+public class UdfResolver implements FunctionResolver {
     private final UdfFactory factory;
     private final UserDefinedFunction udf;
 
@@ -90,7 +92,7 @@ public class UdfResolver implements Resolver {
     }
 
     @Override
-	public FunDef getRepresentativeFunDef() {
+	public FunctionDefinition getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
         int[] parameterCategories = new int[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
@@ -101,7 +103,7 @@ public class UdfResolver implements Resolver {
     }
 
     @Override
-	public FunDef resolve(
+	public FunctionDefinition resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)
@@ -146,7 +148,7 @@ public class UdfResolver implements Resolver {
 
     /**
      * Adapter which converts a {@link UserDefinedFunction} into a
-     * {@link FunDef}.
+     * {@link FunctionDefinition}.
      */
     private class UdfFunDef extends FunDefBase {
         private Type returnType;
@@ -165,7 +167,7 @@ public class UdfResolver implements Resolver {
         }
 
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final Exp[] args = call.getArgs();
             Calc[] calcs = new Calc[args.length];
             UserDefinedFunction.Argument[] expCalcs =
@@ -178,16 +180,16 @@ public class UdfResolver implements Resolver {
                     ResultStyle.ANY_LIST);
                 calcs[i] = calc;
                 final Calc scalarCalc = compiler.compileScalar(arg, true);
-                final ListCalc listCalc;
-                final IterCalc iterCalc;
+                final TupleListCalc tupleListCalc;
+                final TupleIteratorCalc tupleIteratorCalc;
                 if (arg.getType() instanceof SetType) {
-                    listCalc = compiler.compileList(arg, true);
-                    iterCalc = compiler.compileIter(arg);
+                    tupleListCalc = compiler.compileList(arg, true);
+                    tupleIteratorCalc = compiler.compileIter(arg);
                 } else {
-                    listCalc = null;
-                    iterCalc = null;
+                    tupleListCalc = null;
+                    tupleIteratorCalc = null;
                 }
-                expCalcs[i] = new CalcExp(calc, scalarCalc, listCalc, iterCalc);
+                expCalcs[i] = new CalcExp(calc, scalarCalc, tupleListCalc, tupleIteratorCalc);
             }
 
             // Create a new instance of the UDF, because some UDFs use member
@@ -195,12 +197,16 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf2 = factory.create();
             if (call.getType() instanceof SetType) {
                 return new ListCalcImpl(call, calcs, udf2, expCalcs);
-            } else {
+            } else if(call.getType() instanceof BooleanType) {
+                return new BooleanScalarUserDefinedFunctionCalcImpl(call, calcs, udf2, expCalcs);
+            }else {
                 return new ScalarCalcImpl(call, calcs, udf2, expCalcs);
             }
         }
     }
 
+
+    
     /**
      * Expression that evaluates a scalar user-defined function.
      */
@@ -215,14 +221,14 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
         {
-            super(call.getFunName(),call.getType());
+            super(call.getType());
             this.calcs = calcs;
             this.udf = udf;
             this.args = args;
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return calcs;
         }
 
@@ -260,7 +266,7 @@ public class UdfResolver implements Resolver {
             UserDefinedFunction udf,
             UserDefinedFunction.Argument[] args)
         {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             this.udf = udf;
             this.args = args;
         }
@@ -314,28 +320,28 @@ public class UdfResolver implements Resolver {
     private static class CalcExp implements UserDefinedFunction.Argument {
         private final Calc calc;
         private final Calc scalarCalc;
-        private final IterCalc iterCalc;
-        private final ListCalc listCalc;
+        private final TupleIteratorCalc tupleIteratorCalc;
+        private final TupleListCalc tupleListCalc;
 
         /**
          * Creates a CalcExp.
          *
          * @param calc Compiled expression
          * @param scalarCalc Compiled expression that evaluates to a scalar
-         * @param listCalc Compiled expression that evaluates an MDX set to
+         * @param tupleListCalc Compiled expression that evaluates an MDX set to
          *     a java list
-         * @param iterCalc Compiled expression that evaluates an MDX set to
+         * @param tupleIteratorCalc Compiled expression that evaluates an MDX set to
          */
         public CalcExp(
             Calc calc,
             Calc scalarCalc,
-            ListCalc listCalc,
-            IterCalc iterCalc)
+            TupleListCalc tupleListCalc,
+            TupleIteratorCalc tupleIteratorCalc)
         {
             this.calc = calc;
             this.scalarCalc = scalarCalc;
-            this.listCalc = listCalc;
-            this.iterCalc = iterCalc;
+            this.tupleListCalc = tupleListCalc;
+            this.tupleIteratorCalc = tupleIteratorCalc;
         }
 
         @Override
@@ -355,18 +361,18 @@ public class UdfResolver implements Resolver {
 
         @Override
 		public List evaluateList(Evaluator eval) {
-            if (listCalc == null) {
+            if (tupleListCalc == null) {
                 throw new RuntimeException("Expression is not a set");
             }
-            return adaptList(listCalc.evaluateList(eval));
+            return adaptList(tupleListCalc.evaluateList(eval));
         }
 
         @Override
 		public Iterable evaluateIterable(Evaluator eval) {
-            if (iterCalc == null) {
+            if (tupleIteratorCalc == null) {
                 throw new RuntimeException("Expression is not a set");
             }
-            return adaptIterable(iterCalc.evaluateIterable(eval));
+            return adaptIterable(tupleIteratorCalc.evaluateIterable(eval));
         }
 
         /**

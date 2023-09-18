@@ -15,16 +15,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -44,21 +44,21 @@ class ToggleDrillStateFunDef extends FunDefBase {
             ToggleDrillStateFunDef.class,
             ToggleDrillStateFunDef.ReservedWords);
 
-    public ToggleDrillStateFunDef(FunDef dummyFunDef) {
+    public ToggleDrillStateFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         if (call.getArgCount() > 2) {
             throw MondrianResource.instance()
                 .ToggleDrillStateRecursiveNotSupported.ex();
         }
-        final ListCalc listCalc0 =
+        final TupleListCalc listCalc0 =
             compiler.compileList(call.getArg(0));
-        final ListCalc listCalc1 =
+        final TupleListCalc listCalc1 =
             compiler.compileList(call.getArg(1));
-        return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[]{listCalc0, listCalc1}) {
+        return new AbstractListCalc(call.getType(), new Calc[]{listCalc0, listCalc1}) {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
                 final TupleList list0 = listCalc0.evaluateList(evaluator);
@@ -80,7 +80,7 @@ class ToggleDrillStateFunDef extends FunDefBase {
         }
         final Member[] members = new Member[v0.getArity()]; // tuple workspace
         final Set<Member> set = new HashSet<>(list1.slice(0));
-        TupleList result = v0.cloneList((v0.size() * 3) / 2 + 1); // allow 50%
+        TupleList result = v0.copyList((v0.size() * 3) / 2 + 1); // allow 50%
         int i = 0, n = v0.size();
         while (i < n) {
             List<Member> o = v0.get(i++);

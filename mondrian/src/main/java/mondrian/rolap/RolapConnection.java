@@ -27,9 +27,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -42,17 +46,14 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.CacheControl;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
-import mondrian.olap.QueryPart;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.ResultBase;
@@ -474,7 +475,7 @@ public CacheControl getCacheControl( PrintWriter pw ) {
    */
   @Deprecated(since = "this method will be removed in mondrian-4.0")
 @Override
-public Result execute( Query query ) {
+public Result execute( QueryImpl query ) {
     final Statement statement = query.getStatement();
     Execution execution =
       new Execution( statement, statement.getQueryTimeoutMillis() );
@@ -637,7 +638,7 @@ public Role getRole() {
   }
 
   @Override
-public QueryPart parseStatement( String query ) {
+public QueryPart parseStatement(String query ) {
     Statement statement = createInternalStatement( false );
     final Locus locus =
       new Locus(
@@ -648,7 +649,7 @@ public QueryPart parseStatement( String query ) {
     try {
       QueryPart queryPart =
         parseStatement( statement, query, null, false );
-      if ( queryPart instanceof Query q) {
+      if ( queryPart instanceof QueryImpl q) {
           q.setOwnStatement( true );
         statement = null;
       }
@@ -671,7 +672,7 @@ public Exp parseExpression( String expr ) {
     final Statement statement = getInternalStatement();
     try {
       MdxParserValidator parser = createParser();
-      final FunTable funTable = getSchema().getFunTable();
+      final FunctionTable funTable = getSchema().getFunTable();
       return parser.parseExpression( statement, expr, debug, funTable );
     } catch ( Throwable exception ) {
       throw MondrianResource.instance().FailedToParseQuery.ex(
@@ -1072,35 +1073,6 @@ public Context getContext() {
     return jdbc + database + integratedSecurity;
   }
 
-  /**
-   * Data source that gets connections from an underlying data source but
-   * with different user name and password.
-   */
-  private static class UserPasswordDataSource extends DelegatingDataSource {
-    private final String jdbcUser;
-    private final String jdbcPassword;
-
-    /**
-     * Creates a UserPasswordDataSource
-     *
-     * @param dataSource   Underlying data source
-     * @param jdbcUser     User name
-     * @param jdbcPassword Password
-     */
-    public UserPasswordDataSource(
-      DataSource dataSource,
-      String jdbcUser,
-      String jdbcPassword ) {
-      super( dataSource );
-      this.jdbcUser = jdbcUser;
-      this.jdbcPassword = jdbcPassword;
-    }
-
-    @Override
-	public Connection getConnection() throws SQLException {
-      return dataSource.getConnection( jdbcUser, jdbcPassword );
-    }
-  }
 
   /**
    * <p>Implementation of {@link Statement} for use when you don't have an

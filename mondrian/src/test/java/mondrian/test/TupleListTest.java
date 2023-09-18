@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -260,10 +260,10 @@ class TupleListTest {
             fm.project(new int[] {1}).toString());
 
         // Also check cloneList.
-        assertEquals(0, fm.cloneList(100).size());
-        assertEquals(fm.size(), fm.cloneList(-1).size());
-        assertEquals(fm, fm.cloneList(-1));
-        assertNotSame(fm, fm.cloneList(-1));
+        assertEquals(0, fm.copyList(100).size());
+        assertEquals(fm.size(), fm.copyList(-1).size());
+        assertEquals(fm, fm.copyList(-1));
+        assertNotSame(fm, fm.copyList(-1));
     }
 
     /**

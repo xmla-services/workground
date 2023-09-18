@@ -18,18 +18,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -83,7 +84,7 @@ public class FoodMartTestCase {
      * Executes a query in a given connection.
      */
     public static Result execute(Connection connection, String queryString) {
-        Query query = connection.parseQuery(queryString);
+        QueryImpl query = connection.parseQuery(queryString);
         return connection.execute(query);
     }
 
@@ -204,7 +205,7 @@ public class FoodMartTestCase {
     }
 
     protected static Member member(
-        List<Id.Segment> segmentList,
+        List<Segment> segmentList,
         SchemaReader salesCubeSchemaReader)
     {
         return salesCubeSchemaReader.getMemberByUniqueName(segmentList, true);
@@ -215,40 +216,40 @@ public class FoodMartTestCase {
     {
         return new UnaryTupleList(Arrays.asList(
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "CA", "Alameda"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "CA", "Beverly Hills",
                     "Store 6"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "CA", "Los Angeles"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "OR", "Portland"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "OR", "Salem"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                 salesCubeSchemaReader)));
     }
@@ -258,42 +259,42 @@ public class FoodMartTestCase {
     {
         return new UnaryTupleList(Arrays.asList(
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pot Scrubbers", "Cormorant"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pot Scrubbers", "Denny"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pot Scrubbers", "Red Wing"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pots and Pans", "Cormorant"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pots and Pans", "Denny"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pots and Pans", "High Quality"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pots and Pans", "Red Wing"),
                 salesCubeSchemaReader),
             member(
-                Id.Segment.toList(
+                Segment.toList(
                     "Product", "All Products", "Non-Consumable", "Household",
                     "Kitchen Products", "Pots and Pans", "Sunset"),
                 salesCubeSchemaReader)));
@@ -306,11 +307,11 @@ public class FoodMartTestCase {
     {
         Member maleMember =
             member(
-                Id.Segment.toList("Gender", "All Gender", "M"),
+                Segment.toList("Gender", "All Gender", "M"),
                 salesCubeSchemaReader);
         Member femaleMember =
             member(
-                Id.Segment.toList("Gender", "All Gender", "F"),
+                Segment.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
@@ -350,11 +351,11 @@ public class FoodMartTestCase {
     protected static List<Member> warehouseMembersCanadaMexicoUsa(SchemaReader reader)
     {
         return Arrays.asList(
-            member(Id.Segment.toList(
+            member(Segment.toList(
                 "Warehouse", "All Warehouses", "Canada"), reader),
-            member(Id.Segment.toList(
+            member(Segment.toList(
                 "Warehouse", "All Warehouses", "Mexico"), reader),
-            member(Id.Segment.toList(
+            member(Segment.toList(
                 "Warehouse", "All Warehouses", "USA"), reader));
     }
 
@@ -383,11 +384,11 @@ public class FoodMartTestCase {
     {
         Member usaMember =
             member(
-                Id.Segment.toList("Store", "All Stores", "USA"),
+                Segment.toList("Store", "All Stores", "USA"),
                 salesCubeSchemaReader);
         Member canadaMember =
             member(
-                Id.Segment.toList("Store", "All Stores", "CANADA"),
+                Segment.toList("Store", "All Stores", "CANADA"),
                 salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {

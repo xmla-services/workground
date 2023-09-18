@@ -17,20 +17,20 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunCall;
-import mondrian.olap.Literal;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
@@ -184,10 +184,10 @@ public class RolapNativeSql {
         @Override
 		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
-            if (!(exp instanceof MemberExpr)) {
+            if (!(exp instanceof MemberExpression)) {
                 return null;
             }
-            final Member member = ((MemberExpr) exp).getMember();
+            final Member member = ((MemberExpression) exp).getMember();
             if (!(member instanceof RolapStoredMeasure measure)) {
                 return null;
             }
@@ -254,39 +254,39 @@ public class RolapNativeSql {
                 return null;
             }
             if (!dialect.allowsRegularExpressionInWhereClause()
-                || !(exp instanceof ResolvedFunCall)
+                || !(exp instanceof ResolvedFunCallImpl)
                 || evaluator == null)
             {
                 return null;
             }
 
-            final Exp arg0 = ((ResolvedFunCall)exp).getArg(0);
-            final Exp arg1 = ((ResolvedFunCall)exp).getArg(1);
+            final Exp arg0 = ((ResolvedFunCallImpl)exp).getArg(0);
+            final Exp arg1 = ((ResolvedFunCallImpl)exp).getArg(1);
 
             // Must finish by ".Caption" or ".Name"
-            if (!(arg0 instanceof ResolvedFunCall)
-                || ((ResolvedFunCall)arg0).getArgCount() != 1
+            if (!(arg0 instanceof ResolvedFunCallImpl)
+                || ((ResolvedFunCallImpl)arg0).getArgCount() != 1
                 || !(arg0.getType() instanceof StringType)
-                || (!((ResolvedFunCall)arg0).getFunName().equals("Name")
-                    && !((ResolvedFunCall)arg0)
+                || (!((ResolvedFunCallImpl)arg0).getFunName().equals("Name")
+                    && !((ResolvedFunCallImpl)arg0)
                             .getFunName().equals("Caption")))
             {
                 return null;
             }
 
             final boolean useCaption;
-            if (((ResolvedFunCall)arg0).getFunName().equals("Name")) {
+            if (((ResolvedFunCallImpl)arg0).getFunName().equals("Name")) {
                 useCaption = false;
             } else {
                 useCaption = true;
             }
 
             // Must be ".CurrentMember"
-            final Exp currMemberExpr = ((ResolvedFunCall)arg0).getArg(0);
-            if (!(currMemberExpr instanceof ResolvedFunCall)
-                || ((ResolvedFunCall)currMemberExpr).getArgCount() != 1
+            final Exp currMemberExpr = ((ResolvedFunCallImpl)arg0).getArg(0);
+            if (!(currMemberExpr instanceof ResolvedFunCallImpl)
+                || ((ResolvedFunCallImpl)currMemberExpr).getArgCount() != 1
                 || !(currMemberExpr.getType() instanceof MemberType)
-                || !((ResolvedFunCall)currMemberExpr)
+                || !((ResolvedFunCallImpl)currMemberExpr)
                         .getFunName().equals("CurrentMember"))
             {
                 return null;
@@ -294,17 +294,17 @@ public class RolapNativeSql {
 
             // Must be a dimension, a hierarchy or a level.
             final RolapCubeDimension dimension;
-            final Exp dimExpr = ((ResolvedFunCall)currMemberExpr).getArg(0);
-            if (dimExpr instanceof DimensionExpr) {
+            final Exp dimExpr = ((ResolvedFunCallImpl)currMemberExpr).getArg(0);
+            if (dimExpr instanceof DimensionExpression) {
                 dimension =
                     (RolapCubeDimension) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
-            } else if (dimExpr instanceof HierarchyExpr) {
+            } else if (dimExpr instanceof HierarchyExpressionImpl) {
                 final RolapCubeHierarchy hierarchy =
                     (RolapCubeHierarchy) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
                 dimension = (RolapCubeDimension) hierarchy.getDimension();
-            } else if (dimExpr instanceof LevelExpr) {
+            } else if (dimExpr instanceof LevelExpression) {
                 final RolapCubeLevel level =
                     (RolapCubeLevel) evaluator.getCachedResult(
                         new ExpCacheDescriptor(dimExpr, evaluator));
@@ -397,10 +397,10 @@ public class RolapNativeSql {
         @Override
 		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
-            if (!(exp instanceof MemberExpr)) {
+            if (!(exp instanceof MemberExpression)) {
                 return null;
             }
-            final Member member = ((MemberExpr) exp).getMember();
+            final Member member = ((MemberExpression) exp).getMember();
             if (!(member instanceof RolapCalculatedMember)) {
                 return null;
             }

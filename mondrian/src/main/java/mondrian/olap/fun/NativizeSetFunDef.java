@@ -29,45 +29,51 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
+import mondrian.olap.api.Segment;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -86,8 +92,8 @@ public class NativizeSetFunDef extends FunDefBase {
     private static final String SENTINEL_PREFIX = "_Nativized_Sentinel_";
     private static final String MEMBER_NAME_PREFIX = "_Nativized_Member_";
     private static final String SET_NAME_PREFIX = "_Nativized_Set_";
-    private static final List<Class<? extends FunDef>> functionWhitelist =
-        Arrays.<Class<? extends FunDef>>asList(
+    private static final List<Class<? extends FunctionDefinition>> functionWhitelist =
+        Arrays.<Class<? extends FunctionDefinition>>asList(
             CacheFunDef.class,
             SetFunDef.class,
             CrossJoinFunDef.class,
@@ -118,7 +124,7 @@ public class NativizeSetFunDef extends FunDefBase {
     private static final String PARTIAL_ESTIMATE_MESSAGE =
         "isHighCardinality=%b: partial estimate=%,d threshold=%,d";
 
-    public NativizeSetFunDef(FunDef dummyFunDef) {
+    public NativizeSetFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
         NativizeSetFunDef.LOGGER.debug("---- NativizeSetFunDef constructor");
     }
@@ -126,14 +132,14 @@ public class NativizeSetFunDef extends FunDefBase {
     @Override
 	public Exp createCall(Validator validator, Exp[] args) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef createCall");
-        ResolvedFunCall call =
-            (ResolvedFunCall) super.createCall(validator, args);
+        ResolvedFunCallImpl call =
+            (ResolvedFunCallImpl) super.createCall(validator, args);
         call.accept(new FindLevelsVisitor(substitutionMap, dimensions));
         return call;
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
@@ -148,7 +154,7 @@ public class NativizeSetFunDef extends FunDefBase {
         final int arity = calcs[0].getType().getArity();
         assert arity >= 0;
         if (arity == 1 || substitutionMap.isEmpty()) {
-            IterCalc calc = (IterCalc) funArg.accept(compiler);
+            TupleIteratorCalc calc = (TupleIteratorCalc) funArg.accept(compiler);
             final boolean highCardinality =
                 arity == 1
                 && isHighCardinality(funArg, compiler.getEvaluator());
@@ -156,8 +162,8 @@ public class NativizeSetFunDef extends FunDefBase {
                 // This can happen under JDK1.4: caller wants iterator
                 // implementation, but compiler can only provide list.
                 // Fall through and use native.
-            } else if (calc instanceof ListCalc) {
-                return new NonNativeListCalc((ListCalc) calc, highCardinality);
+            } else if (calc instanceof TupleListCalc) {
+                return new NonNativeListCalc((TupleListCalc) calc, highCardinality);
             } else {
                 return new NonNativeIterCalc(calc, highCardinality);
             }
@@ -214,12 +220,14 @@ public class NativizeSetFunDef extends FunDefBase {
                 nativizeMinThreshold));
     }
 
-    static class NonNativeCalc implements Calc {
-        final Calc parent;
+    static class NonNativeCalc extends AbstractProfilingCalc<Object> implements ProfilingCalc<Object> {
+        final Calc<?> parent;
         final boolean nativeEnabled;
 
         protected NonNativeCalc(Calc parent, final boolean nativeEnabled) {
-            assert parent != null;
+            super(parent.getType());
+        	assert parent != null;
+
             this.parent = parent;
             this.nativeEnabled = nativeEnabled;
         }
@@ -234,16 +242,13 @@ public class NativizeSetFunDef extends FunDefBase {
 		public boolean dependsOn(final Hierarchy hierarchy) {
             return parent.dependsOn(hierarchy);
         }
+//
+//        @Override
+//		public Type getType() {
+//            return parent.getType();
+//        }
 
-        @Override
-		public Type getType() {
-            return parent.getType();
-        }
 
-        @Override
-		public void accept(final CalcWriter calcWriter) {
-            parent.accept(calcWriter);
-        }
 
         @Override
 		public ResultStyle getResultStyle() {
@@ -271,18 +276,20 @@ public class NativizeSetFunDef extends FunDefBase {
 		public <T> T unwrap(Class<T> iface) {
             return iface.cast(this);
         }
+
+
     }
 
     static class NonNativeIterCalc
         extends NonNativeCalc
-        implements IterCalc
+        implements TupleIteratorCalc
     {
-        protected NonNativeIterCalc(IterCalc parent, boolean highCardinality) {
+        protected NonNativeIterCalc(TupleIteratorCalc parent, boolean highCardinality) {
             super(parent, highCardinality);
         }
 
-        IterCalc parent() {
-            return (IterCalc) parent;
+        TupleIteratorCalc parent() {
+            return (TupleIteratorCalc) parent;
         }
 
         @Override
@@ -294,14 +301,14 @@ public class NativizeSetFunDef extends FunDefBase {
 
     static class NonNativeListCalc
         extends NonNativeCalc
-        implements ListCalc
+        implements TupleListCalc
     {
-        protected NonNativeListCalc(ListCalc parent, boolean highCardinality) {
+        protected NonNativeListCalc(TupleListCalc parent, boolean highCardinality) {
             super(parent, highCardinality);
         }
 
-        ListCalc parent() {
-            return (ListCalc) parent;
+        TupleListCalc parent() {
+            return (TupleListCalc) parent;
         }
 
         @Override
@@ -318,22 +325,22 @@ public class NativizeSetFunDef extends FunDefBase {
 
     public static class NativeListCalc extends AbstractListCalc {
         private final SubstitutionMap substitutionMap;
-        private final ListCalc simpleCalc;
+        private final TupleListCalc simpleCalc;
         private final ExpCompiler compiler;
 
         private final Exp originalExp;
 
         protected NativeListCalc(
-            ResolvedFunCall call,
+        	ResolvedFunCall call,
             Calc[] calcs,
             ExpCompiler compiler,
             SubstitutionMap substitutionMap,
             Exp originalExp)
         {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             NativizeSetFunDef.LOGGER.debug("---- NativeListCalc constructor");
             this.substitutionMap = substitutionMap;
-            this.simpleCalc = (ListCalc) calcs[0];
+            this.simpleCalc = (TupleListCalc) calcs[0];
             this.compiler = compiler;
             this.originalExp = originalExp;
         }
@@ -372,7 +379,7 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "Disabling native evaluation. originalExp="
                     + originalExp);
-            ListCalc calc =
+            TupleListCalc calc =
                 compiler.compileList(getOriginalExp(evaluator.getQuery()));
             final int savepoint = evaluator.savepoint();
             try {
@@ -421,11 +428,11 @@ public class NativizeSetFunDef extends FunDefBase {
         private Exp getOriginalExp(final Query query) {
             originalExp.accept(
                 new TransformFromFormulasVisitor(query, compiler));
-            if (originalExp instanceof NamedSetExpr) {
+            if (originalExp instanceof NamedSetExpression) {
                 //named sets get their evaluator cached in RolapResult.
                 //We do not want to use the cached evaluator, so pass along the
                 //expression instead.
-                return ((NamedSetExpr) originalExp).getNamedSet().getExp();
+                return ((NamedSetExpression) originalExp).getNamedSet().getExp();
             }
             return originalExp;
         }
@@ -494,7 +501,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 evaluator.getQuery().getConnection()
                     .parseExpression(crossJoinExpression);
             Exp resolved = compiler.getValidator().validate(unresolved, false);
-            ListCalc calc = compiler.compileList(resolved);
+            TupleListCalc calc = compiler.compileList(resolved);
             return calc.evaluateList(evaluator);
         }
     }
@@ -511,10 +518,10 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
-                if (call.getArg(0) instanceof LevelExpr) {
-                    Level level = ((LevelExpr) call.getArg(0)).getLevel();
+                if (call.getArg(0) instanceof LevelExpressionImpl) {
+                    Level level = ((LevelExpression) call.getArg(0)).getLevel();
                     substitutionMap.put(NativizeSetFunDef.createMemberId(level), level);
                     dimensions.add(level.getDimension());
                 }
@@ -531,7 +538,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExpr member) {
+        public Object visit(MemberExpressionImpl member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
@@ -554,7 +561,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof NativizeSetFunDef) {
                 addFormulasToQuery();
             }
@@ -564,10 +571,10 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void addFormulasToQuery() {
             NativizeSetFunDef.LOGGER.debug("FormulaResolvingVisitor addFormulas");
-            List<Formula> formulas = new ArrayList<>();
+            List<FormulaImpl> formulas = new ArrayList<>();
 
             for (Level level : levels) {
-                Formula memberFormula = createDefaultMemberFormula(level);
+                FormulaImpl memberFormula = createDefaultMemberFormula(level);
                 formulas.add(memberFormula);
                 formulas.add(createNamedSetFormula(level, memberFormula));
             }
@@ -577,10 +584,10 @@ public class NativizeSetFunDef extends FunDefBase {
                 formulas.add(createSentinelFormula(level));
             }
 
-            query.addFormulas(formulas.toArray(new Formula[formulas.size()]));
+            query.addFormulas(formulas.toArray(new FormulaImpl[formulas.size()]));
         }
 
-        private Formula createSentinelFormula(Level level) {
+        private FormulaImpl createSentinelFormula(Level level) {
             Id memberId = NativizeSetFunDef.createSentinelId(level);
             Exp memberExpr = query.getConnection()
                 .parseExpression("101010");
@@ -588,13 +595,13 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createSentinelFormula memberId={} memberExpr={}"
                 , memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createDefaultMemberFormula(Level level) {
+        private FormulaImpl createDefaultMemberFormula(Level level) {
             Id memberId = NativizeSetFunDef.createMemberId(level);
             Exp memberExpr =
-                new UnresolvedFunCall(
+                new UnresolvedFunCallImpl(
                     "DEFAULTMEMBER",
                     Syntax.Property,
                     new Exp[] {NativizeSetFunDef.hierarchyId(level)});
@@ -602,11 +609,11 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createLevelMembersFormulas memberId={} memberExpr={}",
                 memberId, memberExpr);
-            return new Formula(memberId, memberExpr, new MemberProperty[0]);
+            return new FormulaImpl(memberId, memberExpr, new MemberProperty[0]);
         }
 
-        private Formula createNamedSetFormula(
-            Level level, Formula memberFormula)
+        private FormulaImpl createNamedSetFormula(
+            Level level, FormulaImpl memberFormula)
         {
             Id setId = NativizeSetFunDef.createSetId(level);
             Exp setExpr = query.getConnection()
@@ -618,7 +625,7 @@ public class NativizeSetFunDef extends FunDefBase {
             NativizeSetFunDef.LOGGER.debug(
                 "createNamedSetFormula setId={} setExpr={}",
                 setId, setExpr);
-            return new Formula(setId, setExpr);
+            return new FormulaImpl(setId, setExpr);
         }
     }
 
@@ -631,7 +638,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result = null;
             if (call.getFunDef() instanceof LevelMembersFunDef) {
@@ -645,16 +652,16 @@ public class NativizeSetFunDef extends FunDefBase {
             return result;
         }
 
-        private Object replaceLevelMembersReferences(ResolvedFunCall call) {
+        private Object replaceLevelMembersReferences(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("replaceLevelMembersReferences " + call);
-            Level level = ((LevelExpr) call.getArg(0)).getLevel();
+            Level level = ((LevelExpression) call.getArg(0)).getLevel();
             Id setId = NativizeSetFunDef.createSetId(level);
             Formula formula = query.findFormula(setId.toString());
             Exp exp = Util.createExpr(formula.getNamedSet());
             return query.createValidator().validate(exp, false);
         }
 
-        private Object visitCallArguments(ResolvedFunCall call) {
+        private Object visitCallArguments(ResolvedFunCallImpl call) {
             Exp[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
@@ -673,12 +680,12 @@ public class NativizeSetFunDef extends FunDefBase {
             return null;
         }
 
-        private Object flattenSetFunDef(ResolvedFunCall call) {
+        private Object flattenSetFunDef(ResolvedFunCallImpl call) {
             List<Exp> newArgs = new ArrayList<>();
             flattenSetMembers(newArgs, call.getArgs());
             addSentinelMembers(newArgs);
             if (newArgs.size() != call.getArgCount()) {
-                return new ResolvedFunCall(
+                return new ResolvedFunCallImpl(
                     call.getFunDef(),
                     newArgs.toArray(new Exp[newArgs.size()]),
                     call.getType());
@@ -688,10 +695,10 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void flattenSetMembers(List<Exp> result, Exp[] args) {
             for (Exp arg : args) {
-                if (arg instanceof ResolvedFunCall
-                    && ((ResolvedFunCall)arg).getFunDef() instanceof SetFunDef)
+                if (arg instanceof ResolvedFunCallImpl
+                    && ((ResolvedFunCallImpl)arg).getFunDef() instanceof SetFunDef)
                 {
-                    flattenSetMembers(result, ((ResolvedFunCall)arg).getArgs());
+                    flattenSetMembers(result, ((ResolvedFunCallImpl)arg).getArgs());
                 } else {
                     result.add(arg);
                 }
@@ -704,10 +711,10 @@ public class NativizeSetFunDef extends FunDefBase {
                 Exp curr = args.get(i);
                 if (prev.toString().equals(curr.toString())) {
                     OlapElement element = null;
-                    if (curr instanceof NamedSetExpr) {
-                        element = ((NamedSetExpr) curr).getNamedSet();
-                    } else if (curr instanceof MemberExpr) {
-                        element = ((MemberExpr) curr).getMember();
+                    if (curr instanceof NamedSetExpression) {
+                        element = ((NamedSetExpression) curr).getNamedSet();
+                    } else if (curr instanceof MemberExpression) {
+                        element = ((MemberExpression) curr).getMember();
                     }
                     if (element != null) {
                         Level level = element.getHierarchy().getLevels()[0];
@@ -733,7 +740,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visit(ResolvedFunCallImpl call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result;
             result = visitCallArguments(call);
@@ -742,7 +749,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(NamedSetExpr namedSetExpr) {
+        public Object visit(NamedSetExpression namedSetExpr) {
             String exprName = namedSetExpr.getNamedSet().getName();
             Exp membersExpr;
 
@@ -763,7 +770,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
 
-        private Object visitCallArguments(ResolvedFunCall call) {
+        private Object visitCallArguments(ResolvedFunCallImpl call) {
             Exp[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
@@ -890,7 +897,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 new ArrayList<>(arity);
 
             for (int i = 0; i < arity; i++) {
-                nativeMembers.add(new LinkedHashSet<String>());
+                nativeMembers.add(new LinkedHashSet<>());
             }
 
             findNativeMembers(reassemblyGuide, nativeMembers);
@@ -1595,20 +1602,20 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     private static Id createSetId(Level level) {
-        return new Id(
+        return new IdImpl(
             NativizeSetFunDef.q(NativizeSetFunDef.createMangledName(level, NativizeSetFunDef.SET_NAME_PREFIX)));
     }
 
-    private static Id hierarchyId(Level level) {
-        Id id = new Id(NativizeSetFunDef.q(level.getDimension().getName()));
+    private static IdImpl hierarchyId(Level level) {
+        IdImpl id = new IdImpl(NativizeSetFunDef.q(level.getDimension().getName()));
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             id = id.append(NativizeSetFunDef.q(level.getHierarchy().getName()));
         }
         return id;
     }
 
-    private static Id.Segment q(String s) {
-        return new Id.NameSegment(s);
+    private static Segment q(String s) {
+        return new IdImpl.NameSegmentImpl(s);
     }
 
     private static String createMangledName(Level level, String prefix) {

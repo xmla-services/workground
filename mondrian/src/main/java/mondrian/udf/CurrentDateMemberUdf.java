@@ -14,12 +14,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
+import mondrian.olap.api.Segment;
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
 import mondrian.olap.MatchType;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -84,7 +84,7 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
             matchType = MatchType.EXACT;
         }
 
-        List<Id.Segment> uniqueNames = Util.parseIdentifier(currDateStr);
+        List<Segment> uniqueNames = Util.parseIdentifier(currDateStr);
         resultDateMember =
             evaluator.getSchemaReader().getMemberByUniqueName(
                 uniqueNames, false, matchType);

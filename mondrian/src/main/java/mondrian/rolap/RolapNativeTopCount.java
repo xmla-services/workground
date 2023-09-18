@@ -14,12 +14,13 @@ package mondrian.rolap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 
-import mondrian.mdx.MemberExpr;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -129,7 +130,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
         }
 
         private boolean deduceNullability(Exp expr) {
-            if (!(expr instanceof MemberExpr memberExpr)) {
+            if (!(expr instanceof MemberExpression memberExpr)) {
                 return true;
             }
             if (!(memberExpr.getMember() instanceof RolapStoredMeasure)) {
@@ -169,7 +170,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
     @Override
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
-        FunDef fun,
+        FunctionDefinition fun,
         Exp[] args)
     {
         if (!isEnabled() || !isValidContext(evaluator)) {
@@ -211,13 +212,14 @@ public class RolapNativeTopCount extends RolapNativeSet {
             return null;
         }
 
-        // extract count
-        if (!(args[1] instanceof Literal)) {
-            alertNonNativeTopCount(
-                "TopCount value cannot be determined.");
-            return null;
-        }
-        int count = ((Literal) args[1]).getIntValue();
+		int count = 0;
+		// extract count
+		if ((args[1] instanceof NumericLiteral numericLiteral)) {
+			count = numericLiteral.getIntValue();
+		} else {
+			alertNonNativeTopCount("TopCount value cannot be determined.");
+			return null;
+		}
 
         // extract "order by" expression
         SchemaReader schemaReader = evaluator.getSchemaReader();

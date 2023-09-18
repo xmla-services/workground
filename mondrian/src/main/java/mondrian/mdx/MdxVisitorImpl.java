@@ -9,12 +9,17 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryAxisImpl;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.
@@ -44,12 +49,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(Query query) {
+	public Object visit(QueryImpl query) {
         return null;
     }
 
     @Override
-	public Object visit(QueryAxis queryAxis) {
+	public Object visit(QueryAxisImpl queryAxis) {
         return null;
     }
 
@@ -59,12 +64,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(UnresolvedFunCall call) {
+	public Object visit(UnresolvedFunCallImpl call) {
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCall call) {
+	public Object visit(ResolvedFunCallImpl call) {
         return null;
     }
 
@@ -74,36 +79,36 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(ParameterExpr parameterExpr) {
+	public Object visit(ParameterExpression parameterExpr) {
         return null;
     }
 
     @Override
-	public Object visit(DimensionExpr dimensionExpr) {
+	public Object visit(DimensionExpression dimensionExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExpr hierarchyExpr) {
+	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(LevelExpr levelExpr) {
+	public Object visit(LevelExpression levelExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExpressionImpl memberExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(NamedSetExpr namedSetExpr) {
+	public Object visit(NamedSetExpression namedSetExpr) {
         // do nothing
         return null;
     }

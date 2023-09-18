@@ -24,11 +24,25 @@ import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 
 public interface ExecuteService {
 
-    StatementResponse statement(StatementRequest statementRequest);
+	/*
+	 * The method is used to alter an object that already exists on a server.
+	 */
+	AlterResponse alter(AlterRequest statementRequest);
 
-    AlterResponse alter(AlterRequest statementRequest);
+	/*
+	 * The method cancels the currently running command on the specified
+	 * connection.
+	 */
+	CancelResponse cancel(CancelRequest capture);
 
-    ClearCacheResponse clearCache(ClearCacheRequest clearCacheRequest);
+	/*
+	 * The method clears the in-memory cache of the specified object.
+	 */
+	ClearCacheResponse clearCache(ClearCacheRequest clearCacheRequest);
 
-    CancelResponse cancel(CancelRequest capture);
+	/*
+	 * The method consists of a string. This MUST be a valid string in a
+	 * language that is understood by the server, such as MDX, DMX, or SQL.
+	 */
+	StatementResponse statement(StatementRequest statementRequest);
 }

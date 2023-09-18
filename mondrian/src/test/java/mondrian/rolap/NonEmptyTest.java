@@ -28,9 +28,10 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.Collection;
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -50,7 +51,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
 import mondrian.rolap.RolapConnection.NonEmptyResult;
@@ -5318,7 +5319,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapHierarchy hierarchy =
       (RolapHierarchy) cube.lookupHierarchy(
-        new Id.NameSegment( hierName, Id.Quoting.UNQUOTED ),
+        new IdImpl.NameSegmentImpl( hierName, Quoting.UNQUOTED ),
         false );
     assertNotNull( hierarchy );
     return (SmartMemberReader)
@@ -5332,7 +5333,7 @@ class NonEmptyTest extends BatchTestCase {
       (RolapSchemaReader) cube.getSchemaReader();
     RolapCubeHierarchy hierarchy =
       (RolapCubeHierarchy) cube.lookupHierarchy(
-        new Id.NameSegment( hierName, Id.Quoting.UNQUOTED ), false );
+        new IdImpl.NameSegmentImpl( hierName, Quoting.UNQUOTED ), false );
     assertNotNull( hierarchy );
     return (SmartMemberReader) hierarchy.getRolapHierarchy()
       .createMemberReader( schemaReader.getRole() );

@@ -10,18 +10,18 @@
 */
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Percentile</code> MDX function.
@@ -48,29 +48,29 @@ class PercentileFunDef extends AbstractAggregateFunDef {
             new String[] {"fnxnn"},
             PercentileFunDef.class);
 
-    public PercentileFunDef(FunDef dummyFunDef) {
+    public PercentileFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc =
             compiler.compileScalar(call.getArg(1), true);
         final DoubleCalc percentCalc =
             compiler.compileDouble(call.getArg(2));
-        return new AbstractDoubleCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, calc, percentCalc})
+        return new AbstractProfilingNestedDoubleCalc(
+        		call.getType(), new Calc[] {tupleListCalc, calc, percentCalc})
         {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
-                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
-                double percent = percentCalc.evaluateDouble(evaluator) * 0.01;
+			public Double evaluate(Evaluator evaluator) {
+                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
+                Double percent = percentCalc.evaluate(evaluator) * 0.01;
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    final double percentile =
+                    final Double percentile =
                         FunUtil.percentile(evaluator, list, calc, percent);
                     return percentile;
                 } finally {
@@ -80,7 +80,7 @@ class PercentileFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

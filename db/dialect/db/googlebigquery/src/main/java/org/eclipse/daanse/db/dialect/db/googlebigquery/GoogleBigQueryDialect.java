@@ -8,17 +8,13 @@
 */
 package org.eclipse.daanse.db.dialect.db.googlebigquery;
 
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+
+import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * This is the Mondrian dialect for Google BigQuery. It was tested against
@@ -26,15 +22,11 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  *
  * @author lucboudreau
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
-        "database.product:String='GOOGLEBIGQUERY'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class GoogleBigQueryDialect extends JdbcDialectImpl {
     private static final String SUPPORTED_PRODUCT_NAME = "GOOGLEBIGQUERY";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public GoogleBigQueryDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

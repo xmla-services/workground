@@ -17,24 +17,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -76,7 +77,7 @@ class DescendantsFunDef extends FunDefBase {
       DescendantsFunDef.class,
       Flag.getNames() );
 
-  public DescendantsFunDef( FunDef dummyFunDef ) {
+  public DescendantsFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -100,19 +101,19 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       //   Generate(<set>, Descendants(<dimension>.CurrentMember, <args>))
       Exp[] descendantsArgs = call.getArgs().clone();
       descendantsArgs[ 0 ] =
-        new UnresolvedFunCall(
+        new UnresolvedFunCallImpl(
           "CurrentMember",
           Syntax.Property,
           new Exp[] {
-            new HierarchyExpr( hierarchy )
+            new HierarchyExpressionImpl( hierarchy )
           } );
-      final ResolvedFunCall generateCall =
-        (ResolvedFunCall) compiler.getValidator().validate(
-          new UnresolvedFunCall(
+      final ResolvedFunCallImpl generateCall =
+        (ResolvedFunCallImpl) compiler.getValidator().validate(
+          new UnresolvedFunCallImpl(
             "Generate",
             new Exp[] {
               call.getArg( 0 ),
-              new UnresolvedFunCall(
+              new UnresolvedFunCallImpl(
                 DESCENDANTS,
                 descendantsArgs )
             } ),
@@ -144,15 +145,14 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         depthSpecified
           ? compiler.compileInteger( call.getArg( 1 ) )
           : null;
-      return new AbstractListCalc(
-        call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
+      return new AbstractListCalc(call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
-          int depth = -1;
+          Integer depth = -1;
           if ( depthCalc != null ) {
-            depth = depthCalc.evaluateInteger( evaluator );
+            depth = depthCalc.evaluate( evaluator );
             if ( depth < 0 ) {
               depth = -1; // no limit
             }
@@ -170,12 +170,12 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         compiler.compileInteger( call.getArg( 1 ) );
       final Flag flag1 = flag;
       return new AbstractListCalc(
-    		  call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
+    		  call.getType(), new Calc[] { memberCalc, depthCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
-          final int depth = depthCalc.evaluateInteger( evaluator );
+          final Integer depth = depthCalc.evaluate( evaluator );
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           DescendantsFunDef.descendantsByDepth(
@@ -193,18 +193,18 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           : null;
       final Flag flag2 = flag;
       return new AbstractListCalc(
-    		  call.getFunName(),call.getType(), new Calc[] { memberCalc, levelCalc } ) {
+    		  call.getType(), new Calc[] { memberCalc, levelCalc } ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Evaluator context =
             evaluator.isNonEmpty() ? evaluator : null;
-          final Member member = memberCalc.evaluateMember( evaluator );
+          final Member member = memberCalc.evaluate( evaluator );
           List<Member> result = new ArrayList<>();
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           final Level level =
             levelCalc != null
-              ? levelCalc.evaluateLevel( evaluator )
+              ? levelCalc.evaluate( evaluator )
               : member.getLevel();
           DescendantsFunDef.descendantsByLevel(
             schemaReader, member, level, result,

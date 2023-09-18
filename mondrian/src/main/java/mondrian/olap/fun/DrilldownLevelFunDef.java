@@ -16,23 +16,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -60,13 +60,13 @@ class DrilldownLevelFunDef extends FunDefBase {
                     DrilldownLevelFunDef.class,
                     new String[]{DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS});
 
-    public DrilldownLevelFunDef(FunDef dummyFunDef) {
+    public DrilldownLevelFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final LevelCalc levelCalc =
             call.getArgCount() > 1
@@ -80,24 +80,24 @@ class DrilldownLevelFunDef extends FunDefBase {
                 && !(call.getArg(2).getType() instanceof mondrian.olap.type.EmptyType)
                 ? compiler.compileInteger(call.getArg(2))
                 : null;
-        final int arity = listCalc.getType().getArity();
+        final int arity = tupleListCalc.getType().getArity();
         final boolean includeCalcMembers =
             call.getArgCount() == 4
                 && call.getArg(3) != null
                 && call.getArg(3) instanceof Literal literal
                 && DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS.equals(literal.getValue());
         if (indexCalc == null) {
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, levelCalc})
+            return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc, levelCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    TupleList list = listCalc.evaluateList(evaluator);
+                    TupleList list = tupleListCalc.evaluateList(evaluator);
                     if (list.isEmpty()) {
                         return list;
                     }
                     int searchDepth = -1;
                     if (levelCalc != null) {
-                        Level level = levelCalc.evaluateLevel(evaluator);
+                        Level level = levelCalc.evaluate(evaluator);
                         searchDepth = level.getDepth();
                     }
                     return new UnaryTupleList(
@@ -105,15 +105,15 @@ class DrilldownLevelFunDef extends FunDefBase {
                 }
             };
         } else {
-            return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, indexCalc})
+            return new AbstractListCalc(call.getType(), new Calc[] {tupleListCalc, indexCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    TupleList list = listCalc.evaluateList(evaluator);
+                    TupleList list = tupleListCalc.evaluateList(evaluator);
                     if (list.isEmpty()) {
                         return list;
                     }
-                    final int index = indexCalc.evaluateInteger(evaluator);
+                    final Integer index = indexCalc.evaluate(evaluator);
                     if (index < 0 || index >= arity) {
                         return list;
                     }

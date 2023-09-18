@@ -13,20 +13,20 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
 
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -43,7 +43,7 @@ import mondrian.rolap.RolapStoredMeasure;
  * @since 2005/8/14
  */
 public class AbstractAggregateFunDef extends FunDefBase {
-    public AbstractAggregateFunDef(FunDef dummyFunDef) {
+    public AbstractAggregateFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -57,7 +57,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
             Exp arg = args[0];
             if (FunUtil.worthCaching(arg)) {
                 final Exp cacheCall =
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         CacheFunDef.NAME,
                         Syntax.Function,
                         new Exp[] {arg});
@@ -79,19 +79,19 @@ public class AbstractAggregateFunDef extends FunDefBase {
      * across all parent evaluation contexts will exceed the limit set in the
      * properties file.
      *
-     * @param listCalc  calculator used to evaluate the member list
+     * @param tupleListCalc  calculator used to evaluate the member list
      * @param evaluator current evaluation context
      * @return list of evaluated members or tuples
      */
     protected static TupleList evaluateCurrentList(
-        ListCalc listCalc,
+        TupleListCalc tupleListCalc,
         Evaluator evaluator)
     {
         final int savepoint = evaluator.savepoint();
         TupleList tuples;
         try {
             evaluator.setNonEmpty(false);
-            tuples = listCalc.evaluateList(evaluator);
+            tuples = tupleListCalc.evaluateList(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }
@@ -107,7 +107,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
     }
 
     protected TupleIterable evaluateCurrentIterable(
-        IterCalc iterCalc,
+        TupleIteratorCalc tupleIteratorCalc,
         Evaluator evaluator)
     {
         final int savepoint = evaluator.savepoint();
@@ -115,7 +115,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         TupleIterable iterable;
         try {
             evaluator.setNonEmpty(false);
-            iterable = iterCalc.evaluateIterable(evaluator);
+            iterable = tupleIteratorCalc.evaluateIterable(evaluator);
         } finally {
             evaluator.restore(savepoint);
         }

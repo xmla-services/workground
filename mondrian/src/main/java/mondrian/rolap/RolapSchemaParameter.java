@@ -9,7 +9,8 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ParameterCompilable;
 import mondrian.calc.impl.GenericCalc;
@@ -133,9 +134,9 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
 
         // Generate a program which looks at the assigned value first,
         // and if it is not set, returns the default expression.
-        return new GenericCalc("GenericCalc",defaultExp.getType()) {
+        return new GenericCalc(defaultExp.getType()) {
             @Override
-			public Calc[] getCalcs() {
+			public Calc[] getChildCalcs() {
                 return new Calc[] {defaultCalc};
             }
 

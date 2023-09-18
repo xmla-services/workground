@@ -9,11 +9,11 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.TupleCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.TupleFunDef;
 import mondrian.olap.type.TupleType;
@@ -46,14 +46,14 @@ public class TupleValueCalc extends GenericCalc {
      *     dimensions in a virtual cube
      */
     public TupleValueCalc( Type type, TupleCalc tupleCalc, boolean nullCheck) {
-        super("TupleValueCalc",type);
+        super(type);
         this.tupleCalc = tupleCalc;
         this.nullCheck = nullCheck;
     }
 
     @Override
     public Object evaluate(Evaluator evaluator) {
-        final Member[] members = tupleCalc.evaluateTuple(evaluator);
+        final Member[] members = tupleCalc.evaluate(evaluator);
         if ((members == null) || (nullCheck
                 && evaluator.needToReturnNullForUnrelatedDimension(members)))
         {
@@ -70,7 +70,7 @@ public class TupleValueCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new Calc[] {tupleCalc};
     }
 
@@ -113,9 +113,9 @@ public class TupleValueCalc extends GenericCalc {
      * @return optimized expression
      */
     public Calc optimize() {
-        if (tupleCalc instanceof TupleFunDef.CalcImpl calc) {
+        if (tupleCalc instanceof TupleFunDef.CurrentMemberCalc calc) {
             return MemberValueCalc.create(
-                    type,
+                    getType(),
                     calc.getMemberCalcs(),
                     nullCheck);
         }

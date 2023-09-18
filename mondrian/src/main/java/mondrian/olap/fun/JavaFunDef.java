@@ -21,20 +21,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
@@ -121,7 +123,7 @@ public class JavaFunDef extends FunDefBase {
         return arr;
     }
 
-    private static FunDef generateFunDef(final Method method) {
+    private static FunctionDefinition generateFunDef(final Method method) {
         String name =
             Util.getAnnotation(
                 method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$FunctionName").toString(), method.getName());
@@ -147,8 +149,8 @@ public class JavaFunDef extends FunDefBase {
      * @param clazz Class
      * @return List of function definitions
      */
-    public static List<FunDef> scan(Class clazz) {
-        List<FunDef> list = new ArrayList<>();
+    public static List<FunctionDefinition> scan(Class clazz) {
+        List<FunctionDefinition> list = new ArrayList<>();
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             if (Modifier.isStatic(method.getModifiers())
@@ -192,8 +194,13 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (byte) integerCalc.evaluateInteger(evaluator);
-                    }
+
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.byteValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -210,7 +217,7 @@ public class JavaFunDef extends FunDefBase {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final String string =
-                        stringCalc.evaluateString(evaluator);
+                        stringCalc.evaluate(evaluator);
                     return
                         Character.valueOf(
                             string == null
@@ -225,8 +232,12 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (short) integerCalc.evaluateInteger(evaluator);
-                    }
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.shortValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -245,8 +256,12 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, integerCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (long) integerCalc.evaluateInteger(evaluator);
-                    }
+						Integer i = integerCalc.evaluate(evaluator);
+						if (i == null) {
+							return null;
+						}
+						return i.longValue();
+					}
                 };
             } else {
                 return new AbstractCalc2(exp, integerCalc) {
@@ -271,7 +286,7 @@ public class JavaFunDef extends FunDefBase {
                 return new AbstractCalc2(exp, doubleCalc) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
-                        return (float) doubleCalc.evaluateDouble(evaluator);
+                        return  doubleCalc.evaluate(evaluator).floatValue();
                     }
                 };
             }
@@ -332,7 +347,7 @@ public class JavaFunDef extends FunDefBase {
      * Base class for adapter calcs that convert arguments into the precise
      * type needed.
      */
-    private abstract static class AbstractCalc2 extends AbstractCalc {
+    private abstract static class AbstractCalc2 extends AbstractProfilingNestedCalc {
         /**
          * Creates an AbstractCalc2.
          *
@@ -340,7 +355,7 @@ public class JavaFunDef extends FunDefBase {
          * @param calc Child compiled expression
          */
         protected AbstractCalc2(Exp exp, Calc calc) {
-            super("AbstractCalc2",exp.getType(), new Calc[] {calc});
+            super(exp.getType(), new Calc[] {calc});
         }
     }
 
@@ -361,17 +376,17 @@ public class JavaFunDef extends FunDefBase {
         public JavaMethodCalc(
             ResolvedFunCall call, Calc[] calcs, Method method)
         {
-            super(call.getFunName(),call.getType(), calcs);
+            super(call.getType(), calcs);
             this.method = method;
             this.args = new Object[calcs.length];
         }
 
         @Override
 		public Object evaluate(Evaluator evaluator) {
-            final Calc[] calcs = getCalcs();
+            final Calc[] calcs = getChildCalcs();
             for (int i = 0; i < args.length; i++) {
                 args[i] = calcs[i].evaluate(evaluator);
-                if (args[i] == null) {
+                if (args[i] == null || Objects.equals(args[i], FunUtil.DOUBLE_NULL)) {
                     return Util.nullValue;
                 }
             }

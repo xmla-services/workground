@@ -24,20 +24,21 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.engine.api.Context;
+import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
-import mondrian.olap.Id.NameSegment;
-import mondrian.olap.Id.Segment;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.NameResolver.Namespace;
 import mondrian.rolap.RolapSchema;
 
@@ -141,7 +142,7 @@ public class SpySchemaReader implements SchemaReader {
 
 	@Override
 	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, int category,
-			MatchType matchType) {
+                                      MatchType matchType) {
 		return delegate.lookupCompound(parent, names, failIfNotFound, category, matchType);
 	}
 
@@ -251,7 +252,7 @@ public class SpySchemaReader implements SchemaReader {
 	}
 
 	@Override
-	public NativeEvaluator getNativeSetEvaluator(FunDef fun, Exp[] args, Evaluator evaluator, Calc calc) {
+	public NativeEvaluator getNativeSetEvaluator(FunctionDefinition fun, Exp[] args, Evaluator evaluator, Calc calc) {
 		return delegate.getNativeSetEvaluator(fun, args, evaluator, calc);
 	}
 

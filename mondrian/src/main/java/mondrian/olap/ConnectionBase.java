@@ -12,6 +12,7 @@
 package mondrian.olap;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;
@@ -55,8 +56,8 @@ public abstract class ConnectionBase implements Connection {
     public abstract Statement getInternalStatement();
 
     @Override
-	public Query parseQuery(String query) {
-        return (Query) parseStatement(query);
+	public QueryImpl parseQuery(String query) {
+        return (QueryImpl) parseStatement(query);
     }
 
     /**
@@ -79,7 +80,7 @@ public abstract class ConnectionBase implements Connection {
     public QueryPart parseStatement(
         Statement statement,
         String query,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation)
     {
         MdxParserValidator parser = createParser();

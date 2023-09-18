@@ -14,19 +14,19 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.FunCall;
-import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Parameter;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -52,7 +52,7 @@ public class ParameterFunDef extends FunDefBase {
     public final String parameterDescription;
 
     ParameterFunDef(
-        FunDef funDef,
+        FunctionDefinition funDef,
         String parameterName,
         Type type,
         int returnCategory,
@@ -80,7 +80,7 @@ public class ParameterFunDef extends FunDefBase {
         Parameter parameter = validator.createOrLookupParam(
             this.getName().equals("Parameter"),
             parameterName, type, exp, parameterDescription);
-        return new ParameterExpr(parameter);
+        return new ParameterExpressionImpl(parameter);
     }
 
     @Override
@@ -89,15 +89,15 @@ public class ParameterFunDef extends FunDefBase {
     }
 
     private static boolean isConstant(Exp typeArg) {
-        if (typeArg instanceof LevelExpr) {
+        if (typeArg instanceof LevelExpression) {
             // e.g. "[Time].[Quarter]"
             return true;
         }
-        if (typeArg instanceof HierarchyExpr) {
+        if (typeArg instanceof HierarchyExpressionImpl) {
             // e.g. "[Time].[By Week]"
             return true;
         }
-        if (typeArg instanceof DimensionExpr) {
+        if (typeArg instanceof DimensionExpression) {
             // e.g. "[Time]"
             return true;
         }
@@ -109,7 +109,7 @@ public class ParameterFunDef extends FunDefBase {
                 FunCall currentMemberCall = (FunCall) hierarchyCall.getArg(0);
                 if (currentMemberCall.getFunName().equals("CurrentMember")
                     && currentMemberCall.getArgCount() > 0
-                    && currentMemberCall.getArg(0) instanceof DimensionExpr)
+                    && currentMemberCall.getArg(0) instanceof DimensionExpression)
                 {
                     return true;
                 }
@@ -151,7 +151,7 @@ public class ParameterFunDef extends FunDefBase {
             } else if (literal.getValue().equals("STRING")) {
                 return new StringType();
             }
-        } else if (args[1] instanceof MemberExpr) {
+        } else if (args[1] instanceof MemberExpression) {
             return new MemberType(null, null, null, null);
         }
         return new StringType();
@@ -188,7 +188,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             Exp typeArg = args[1];
             int category;
@@ -317,7 +317,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
                 dummyFunDef, parameterName, null, Category.UNKNOWN, null,

@@ -31,20 +31,24 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
@@ -63,12 +67,11 @@ import org.slf4j.LoggerFactory;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.FunTable;
-import mondrian.olap.Id;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.FunctionTable;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Parameter;
@@ -79,7 +82,7 @@ import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap.fun.FunTableImpl;
 import mondrian.olap.fun.GlobalFunTable;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.fun.UdfResolver;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
@@ -186,7 +189,7 @@ public class RolapSchema implements Schema {
      * Table containing all standard MDX functions, plus user-defined functions
      * for this schema.
      */
-    private FunTable funTable;
+    private FunctionTable funTable;
 
     private org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema;
 
@@ -355,16 +358,6 @@ public class RolapSchema implements Schema {
 
     protected Logger getLogger() {
         return LOGGER;
-    }
-
-  /**
-   * @deprecated API changed to also pass Mondrian connection properties
-   * @param catalogUrl URL of catalog
-   * @param catalogStr Text of catalog, or null
-   */
-  @Deprecated
-    protected void load(String catalogUrl, String catalogStr) {
-      load(catalogUrl, catalogStr, new PropertyList());
     }
 
     /**
@@ -727,11 +720,11 @@ public class RolapSchema implements Schema {
                 xmlNamedSet.name(), e);
         }
         final Formula formula =
-            new Formula(
-                new Id(
-                    new Id.NameSegment(
+            new FormulaImpl(
+                new IdImpl(
+                    new IdImpl.NameSegmentImpl(
                         xmlNamedSet.name(),
-                        Id.Quoting.UNQUOTED)),
+                        Quoting.UNQUOTED)),
                 exp);
         return formula.getNamedSet();
     }
@@ -890,7 +883,7 @@ public class RolapSchema implements Schema {
         int category,
         String id)
     {
-        List<Id.Segment> segments = Util.parseIdentifier(id);
+        List<Segment> segments = Util.parseIdentifier(id);
         //noinspection unchecked
         return (T) reader.lookupCompound(cube, segments, true, category);
     }
@@ -1125,7 +1118,7 @@ public class RolapSchema implements Schema {
     }
 
     @Override
-	public FunTable getFunTable() {
+	public FunctionTable getFunTable() {
         return funTable;
     }
 
@@ -1483,12 +1476,12 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         }
 
         @Override
-		public void defineFunctions(Builder builder) {
-            final FunTable globalFunTable = GlobalFunTable.instance();
+		public void defineFunctions(FunctionTableCollector builder) {
+            final FunctionTable globalFunTable = GlobalFunTable.instance();
             for (String reservedWord : globalFunTable.getReservedWords()) {
                 builder.defineReserved(reservedWord);
             }
-            for (Resolver resolver : globalFunTable.getResolvers()) {
+            for (FunctionResolver resolver : globalFunTable.getResolvers()) {
                 builder.define(resolver);
             }
             for (UdfResolver.UdfFactory udfFactory : udfFactoryList) {

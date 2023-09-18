@@ -9,21 +9,21 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.ResultStyleException;
 
 /**
@@ -39,7 +39,7 @@ class SumFunDef extends AbstractAggregateFunDef {
           SumFunDef.class );
   private static final String TIMING_NAME = SumFunDef.class.getSimpleName();
 
-  public SumFunDef( FunDef dummyFunDef ) {
+  public SumFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -87,21 +87,21 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc calc =
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call.getType() );
     // we may have asked for one sort of Calc, but here's what we got.
-    if ( ncalc instanceof ListCalc ) {
-      return genListCalc( call, (ListCalc) ncalc, calc );
+    if ( ncalc instanceof TupleListCalc ) {
+      return genListCalc( call, (TupleListCalc) ncalc, calc );
     } else {
-      return genIterCalc( call, (IterCalc) ncalc, calc );
+      return genIterCalc( call, (TupleIteratorCalc) ncalc, calc );
     }
   }
 
-  protected Calc genIterCalc( final ResolvedFunCall call, final IterCalc iterCalc, final Calc calc ) {
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { iterCalc, calc } ) {
+  protected Calc genIterCalc( final ResolvedFunCall call, final TupleIteratorCalc tupleIteratorCalc, final Calc calc ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { tupleIteratorCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
-          TupleIterable iterable = evaluateCurrentIterable( iterCalc, evaluator );
+          TupleIterable iterable = evaluateCurrentIterable( tupleIteratorCalc, evaluator );
           return FunUtil.sumDouble( evaluator, iterable, calc );
         } finally {
           evaluator.restore( savepoint );
@@ -111,19 +111,19 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }
 
-  protected Calc genListCalc( final ResolvedFunCall call, final ListCalc listCalc, final Calc calc ) {
-    return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
+  protected Calc genListCalc( final ResolvedFunCall call, final TupleListCalc tupleListCalc, final Calc calc ) {
+    return new AbstractProfilingNestedDoubleCalc( call.getType(), new Calc[] { tupleListCalc, calc } ) {
       @Override
-	public double evaluateDouble( Evaluator evaluator ) {
+	public Double evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
-          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
+          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( tupleListCalc, evaluator );
           evaluator.setNonEmpty( false );
           return FunUtil.sumDouble( evaluator, memberList, calc );
         } finally {
@@ -134,7 +134,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
       @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+        return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
       }
     };
   }

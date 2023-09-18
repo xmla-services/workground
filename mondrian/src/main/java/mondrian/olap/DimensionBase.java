@@ -13,10 +13,12 @@ package mondrian.olap;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -108,10 +110,10 @@ public abstract class DimensionBase
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
         OlapElement oe = null;
-        if (s instanceof Id.NameSegment nameSegment) {
+        if (s instanceof NameSegment nameSegment) {
             oe = lookupHierarchy(nameSegment);
         }
 
@@ -153,7 +155,7 @@ public abstract class DimensionBase
         return this.highCardinality;
     }
 
-    private Hierarchy lookupHierarchy(Id.NameSegment s) {
+    private Hierarchy lookupHierarchy(NameSegment s) {
         for (Hierarchy hierarchy : hierarchies) {
             if (Util.equalName(hierarchy.getName(), s.getName())) {
                 return hierarchy;

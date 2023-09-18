@@ -14,18 +14,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Level;
+import mondrian.olap.api.SubtotalVisibility;
+
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.AxisOrdinal;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
 
@@ -52,9 +55,9 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         QueryAxis queryAxis)
     {
         if (queryAxis == null) {
-            queryAxis = new QueryAxis(
+            queryAxis = new QueryAxisImpl(
                 false, null, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                QueryAxis.SubtotalVisibility.Undefined);
+                SubtotalVisibility.Undefined);
         }
         this.queryAxis = queryAxis;
         this.cellSetMetaData = cellSetMetaData;
@@ -77,11 +80,11 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
                 }
             }
             if (olap4jProperty == null) {
-                final UnresolvedFunCall call =
-                    (UnresolvedFunCall)
+                final UnresolvedFunCallImpl call =
+                    (UnresolvedFunCallImpl)
                         Util.lookup(
                             cellSetMetaData.query, id.getSegments(), true);
-                Level level = ((LevelExpr) call.getArg(0)).getLevel();
+                Level level = ((LevelExpression) call.getArg(0)).getLevel();
                 olap4jProperty =
                     new MondrianOlap4jProperty(
                         Util.lookupProperty(level, call.getFunName()), level);
@@ -112,7 +115,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
             return Collections.emptyList();
         }
         List<Hierarchy> hierarchyList = new ArrayList<>();
-        for (org.eclipse.daanse.olap.api.model.Hierarchy hierarchy
+        for (org.eclipse.daanse.olap.api.element.Hierarchy hierarchy
             : TypeUtil.getHierarchies(exp.getType()))
         {
             hierarchyList.add(

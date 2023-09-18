@@ -12,14 +12,15 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -41,7 +42,7 @@ import mondrian.olap.Validator;
 class CaseMatchFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private CaseMatchFunDef(FunDef dummyFunDef) {
+    private CaseMatchFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -64,11 +65,11 @@ class CaseMatchFunDef extends FunDefBase {
         final Calc defaultCalc =
             args.length % 2 == 0
             ? compiler.compile(args[args.length - 1])
-            : ConstantCalc.constantNull(call.getType());
+            : ConstantCalcs.nullCalcOf(call.getType());
         calcList.add(defaultCalc);
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 
-        return new GenericCalc(call.getFunName(),call.getType()) {
+        return new GenericCalc(call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 Object value = valueCalc.evaluate(evaluator);
@@ -82,7 +83,7 @@ class CaseMatchFunDef extends FunDefBase {
             }
 
             @Override
-			public Calc[] getCalcs() {
+			public Calc[] getChildCalcs() {
                 return calcs;
             }
         };
@@ -98,7 +99,7 @@ class CaseMatchFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -136,7 +137,7 @@ class CaseMatchFunDef extends FunDefBase {
                 return null;
             }
 
-            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
+            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return new CaseMatchFunDef(dummy);
         }
 

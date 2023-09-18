@@ -13,14 +13,15 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 
@@ -47,7 +48,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
         for (int i = 0; i < args.length; i++) {
             calcs[i] = compiler.compileScalar(args[i], true);
         }
-        return new GenericCalc(call.getFunName(),call.getType()) {
+        return new GenericCalc(call.getType()) {
             @Override
 			public Object evaluate(Evaluator evaluator) {
                 for (Calc calc : calcs) {
@@ -60,7 +61,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             }
 
             @Override
-			public Calc[] getCalcs() {
+			public Calc[] getChildCalcs() {
                 return calcs;
             }
         };
@@ -76,7 +77,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)

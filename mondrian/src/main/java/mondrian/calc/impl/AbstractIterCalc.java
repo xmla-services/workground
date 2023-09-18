@@ -9,8 +9,10 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.olap.Evaluator;
@@ -18,7 +20,7 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 
 /**
- * Abstract implementation of the {@link mondrian.calc.IterCalc} interface.
+ * Abstract implementation of the {@link mondrian.calc.TupleIteratorCalc} interface.
  *
  * <p>The derived class must
  * implement the {@link #evaluateIterable(mondrian.olap.Evaluator)} method,
@@ -30,8 +32,8 @@ import mondrian.olap.type.Type;
  * @since Oct 24, 2008
  */
 public abstract class AbstractIterCalc
-extends AbstractCalc
-implements IterCalc
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
+implements TupleIteratorCalc
 {
     /**
      * Creates an abstract implementation of a compiled expression which returns
@@ -41,8 +43,8 @@ implements IterCalc
      * @param calcs List of child compiled expressions (for dependency
      *   analysis)
      */
-    protected AbstractIterCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected AbstractIterCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
     @Override

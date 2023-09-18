@@ -13,7 +13,6 @@ package mondrian.olap.fun.sort;
 
 import static mondrian.olap.Util.newInternal;
 import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
-import static mondrian.olap.fun.FunUtil.INTEGER_NULL;
 import static org.eigenbase.xom.XOMUtil.discard;
 
 import java.util.AbstractList;
@@ -30,12 +29,12 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -646,14 +645,6 @@ public class Sorter {
       : d;
   }
 
-  /**
-   * Converts an int (primitive) value to an Integer. IntegerNull becomes null.
-   */
-  public static Integer box( int n ) {
-    return n == INTEGER_NULL
-      ? null
-      : n;
-  }
 
 
   /**

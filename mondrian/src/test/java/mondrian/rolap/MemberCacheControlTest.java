@@ -28,10 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -48,14 +53,11 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 
-import mondrian.olap.AxisOrdinal;
-import mondrian.olap.CacheControl;
-import mondrian.olap.CacheControl.MemberEditCommand;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Execution;
@@ -174,7 +176,7 @@ class MemberCacheControlTest {
         Cube cube = connection.getSchema().lookupCube(cubeName, true);
         SchemaReader scr = cube.getSchemaReader(null).withLocus();
         return (RolapMember)
-            scr.getMemberByUniqueName(Id.Segment.toList(names), true);
+            scr.getMemberByUniqueName(Segment.toList(names), true);
     }
 
     /**
@@ -360,7 +362,7 @@ class MemberCacheControlTest {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Store].[USA].[CA].[San Francisco].[Store 14]}"
             + " ON ROWS FROM [Sales]";
-        Query q = conn.parseQuery(mdx);
+        QueryImpl q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",
@@ -413,7 +415,7 @@ class MemberCacheControlTest {
         String mdx = "SELECT {[Measures].[Unit Sales]} ON COLUMNS,"
             + " {[Retail].Members} ON ROWS "
             + "FROM [Sales]";
-        Query q = conn.parseQuery(mdx);
+        QueryImpl q = conn.parseQuery(mdx);
         Result r = conn.execute(q);
         dr.assertEquals(
             "props before",

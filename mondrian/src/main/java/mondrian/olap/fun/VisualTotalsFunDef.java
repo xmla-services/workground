@@ -12,21 +12,22 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Property;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -46,7 +47,7 @@ import mondrian.rolap.RolapUtil;
  * @since Jan 16, 2006
  */
 public class VisualTotalsFunDef extends FunDefBase {
-    static final Resolver Resolver =
+    static final FunctionResolver Resolver =
         new ReflectiveMultiResolver(
             "VisualTotals",
             "VisualTotals(<Set>[, <Pattern>])",
@@ -54,7 +55,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             new String[] {"fxx", "fxxS"},
             VisualTotalsFunDef.class);
 
-    public VisualTotalsFunDef(FunDef dummyFunDef) {
+    public VisualTotalsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -78,34 +79,34 @@ public class VisualTotalsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc = compiler.compileList(call.getArg(0));
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc = compiler.compileList(call.getArg(0));
         final StringCalc stringCalc =
             call.getArgCount() > 1
             ? compiler.compileString(call.getArg(1))
             : null;
-        return new CalcImpl(call, listCalc, stringCalc);
+        return new CalcImpl(call, tupleListCalc, stringCalc);
     }
 
     /**
      * Calc implementation of the <code>VisualTotals</code> function.
      */
     private static class CalcImpl extends AbstractListCalc {
-        private final ListCalc listCalc;
+        private final TupleListCalc tupleListCalc;
         private final StringCalc stringCalc;
 
         public CalcImpl(
-            ResolvedFunCall call, ListCalc listCalc, StringCalc stringCalc)
+        		ResolvedFunCall call, TupleListCalc tupleListCalc, StringCalc stringCalc)
         {
-            super(call.getFunName(),call.getType(), new Calc[] {listCalc, stringCalc});
-            this.listCalc = listCalc;
+            super(call.getType(), new Calc[] {tupleListCalc, stringCalc});
+            this.tupleListCalc = tupleListCalc;
             this.stringCalc = stringCalc;
         }
 
         @Override
 		public TupleList evaluateList(Evaluator evaluator) {
             final List<Member> list =
-                listCalc.evaluateList(evaluator).slice(0);
+                tupleListCalc.evaluateList(evaluator).slice(0);
             final List<Member> resultList = new ArrayList<>(list);
             final int memberCount = list.size();
             for (int i = memberCount - 1; i >= 0; --i) {
@@ -133,7 +134,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             final String name = member.getName();;
             final String caption;
             if (stringCalc != null) {
-                final String namePattern = stringCalc.evaluateString(evaluator);
+                final String namePattern = stringCalc.evaluate(evaluator);
                 caption = VisualTotalsFunDef.substitute(namePattern, member.getCaption());
             } else {
                 caption = member.getCaption();
@@ -193,12 +194,12 @@ public class VisualTotalsFunDef extends FunDefBase {
             Exp[] memberExprs = new Exp[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
-                memberExprs[i] = new MemberExpr(childMember);
+                memberExprs[i] = new MemberExpressionImpl(childMember);
             }
-            return new UnresolvedFunCall(
+            return new UnresolvedFunCallImpl(
                 "Aggregate",
                 new Exp[] {
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
                         memberExprs)
@@ -306,12 +307,12 @@ public class VisualTotalsFunDef extends FunDefBase {
             Exp[] memberExprs = new Exp[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
-                memberExprs[i] = new MemberExpr(childMember);
+                memberExprs[i] = new MemberExpressionImpl(childMember);
             }
-            return new UnresolvedFunCall(
+            return new UnresolvedFunCallImpl(
                 "Aggregate",
                 new Exp[] {
-                    new UnresolvedFunCall(
+                    new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
                         memberExprs)

@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
-import mondrian.olap.Id;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -27,7 +27,7 @@ import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * <code>CacheMemberReader</code> implements {@link MemberReader} by reading
- * from a pre-populated array of {@link org.eclipse.daanse.olap.api.model.Member}s.
+ * from a pre-populated array of {@link org.eclipse.daanse.olap.api.element.Member}s.
  * <p>Note: CacheMemberReader can not handle ragged hierarchies. (HR
  * Tests fail if {@link SmartMemberReader} is replaced with
  * CacheMemberReader).
@@ -177,7 +177,7 @@ class CacheMemberReader implements MemberReader, MemberCache {
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);

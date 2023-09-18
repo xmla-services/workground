@@ -9,11 +9,10 @@
 
 package org.eclipse.daanse.db.dialect.db.informix;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
+
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the Informix database.
@@ -21,16 +20,12 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='INFORMIX'",
-		"database.product:String='INFORMIX'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class InformixDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "INFORMIX";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public InformixDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

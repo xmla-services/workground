@@ -9,11 +9,11 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
-import mondrian.calc.MemberCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.Type;
@@ -41,7 +41,7 @@ public class MemberValueCalc extends GenericCalc {
      *
      * <p>Clients outside this package should use the
      * {@link MemberValueCalc#create(mondrian.olap.Exp,
-     * mondrian.calc.MemberCalc[], boolean)}
+     * org.eclipse.daanse.olap.calc.api.MemberCalc[], boolean)}
      * factory method.
      *
      * @param exp Expression
@@ -50,7 +50,7 @@ public class MemberValueCalc extends GenericCalc {
      *     dimensions in a virtual cube
      */
     public MemberValueCalc(Type type, MemberCalc memberCalc, boolean nullCheck) {
-        super( "MemberValueCalc",  type);
+        super(type);
         this.nullCheck = nullCheck;
         if (!(type instanceof ScalarType)) {
             throw new IllegalArgumentException("Invalid type in MemberValueCalc");
@@ -86,7 +86,7 @@ public class MemberValueCalc extends GenericCalc {
     public Object evaluate(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
-            final Member member = memberCalc.evaluateMember(evaluator);
+            final Member member = memberCalc.evaluate(evaluator);
             if (member == null
                     || member.isNull())
             {
@@ -106,7 +106,7 @@ public class MemberValueCalc extends GenericCalc {
     }
 
     @Override
-    public Calc[] getCalcs() {
+    public Calc[] getChildCalcs() {
         return new MemberCalc[] {memberCalc};
     }
 

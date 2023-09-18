@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractStringCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.TypeUtil;
 
@@ -39,15 +39,15 @@ class TupleToStrFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         if (TypeUtil.couldBeMember(call.getArg(0).getType())) {
             final MemberCalc memberCalc =
                     compiler.compileMember(call.getArg(0));
-            return new AbstractStringCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {memberCalc}) {
                 @Override
-				public String evaluateString(Evaluator evaluator) {
+				public String evaluate(Evaluator evaluator) {
                     final Member member =
-                            memberCalc.evaluateMember(evaluator);
+                            memberCalc.evaluate(evaluator);
                     if (member.isNull()) {
                         return "";
                     }
@@ -59,11 +59,11 @@ class TupleToStrFunDef extends FunDefBase {
         } else {
             final TupleCalc tupleCalc =
                     compiler.compileTuple(call.getArg(0));
-            return new AbstractStringCalc(call.getFunName(),call.getType(), new Calc[] {tupleCalc}) {
+            return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[] {tupleCalc}) {
                 @Override
-				public String evaluateString(Evaluator evaluator) {
+				public String evaluate(Evaluator evaluator) {
                     final Member[] members =
-                            tupleCalc.evaluateTuple(evaluator);
+                            tupleCalc.evaluate(evaluator);
                     if (members == null) {
                         return "";
                     }

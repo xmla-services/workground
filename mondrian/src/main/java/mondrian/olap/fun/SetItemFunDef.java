@@ -12,21 +12,21 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.calc.impl.AbstractTupleCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -49,7 +49,7 @@ import mondrian.olap.type.Type;
  * @since Mar 23, 2006
  */
 class SetItemFunDef extends FunDefBase {
-    static final Resolver intResolver =
+    static final FunctionResolver intResolver =
         new ReflectiveMultiResolver(
             "Item",
             "<Set>.Item(<Index>)",
@@ -57,7 +57,7 @@ class SetItemFunDef extends FunDefBase {
             new String[] {"mmxn"},
             SetItemFunDef.class);
 
-    static final Resolver stringResolver =
+    static final FunctionResolver stringResolver =
         new ResolverBase(
             "Item",
             "<Set>.Item(<String> [, ...])",
@@ -65,7 +65,7 @@ class SetItemFunDef extends FunDefBase {
             Syntax.Method)
     {
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -92,12 +92,12 @@ class SetItemFunDef extends FunDefBase {
                     "Argument count does not match set's cardinality " + arity);
             }
             final int category = arity == 1 ? Category.MEMBER : Category.TUPLE;
-            FunDef dummy = FunUtil.createDummyFunDef(this, category, args);
+            FunctionDefinition dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }
     };
 
-    public SetItemFunDef(FunDef dummyFunDef) {
+    public SetItemFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -108,18 +108,18 @@ class SetItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Type elementType =
-            ((SetType) listCalc.getType()).getElementType();
+            ((SetType) tupleListCalc.getType()).getElementType();
         final boolean isString =
             call.getArgCount() < 2
             || call.getArg(1).getType() instanceof StringType;
         final IntegerCalc indexCalc;
         final StringCalc[] stringCalcs;
         List<Calc> calcList = new ArrayList<>();
-        calcList.add(listCalc);
+        calcList.add(tupleListCalc);
         if (isString) {
             indexCalc = null;
             stringCalcs = new StringCalc[call.getArgCount() - 1];
@@ -136,14 +136,14 @@ class SetItemFunDef extends FunDefBase {
         if (elementType instanceof TupleType tupleType) {
             final Member[] nullTuple = FunUtil.makeNullTuple(tupleType);
             if (isString) {
-                return new AbstractTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getType(), calcs) {
                     @Override
-					public Member[] evaluateTuple(Evaluator evaluator) {
+					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final TupleList list;
                         try {
                             evaluator.setNonEmpty(false);
-                            list = listCalc.evaluateList(evaluator);
+                            list = tupleListCalc.evaluateList(evaluator);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);
@@ -152,7 +152,7 @@ class SetItemFunDef extends FunDefBase {
                             String[] results = new String[stringCalcs.length];
                             for (int i = 0; i < stringCalcs.length; i++) {
                                 results[i] =
-                                    stringCalcs[i].evaluateString(evaluator);
+                                    stringCalcs[i].evaluate(evaluator);
                             }
                             listLoop:
                             for (List<Member> members : list) {
@@ -176,22 +176,22 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractTupleCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedTupleCalc(call.getType(), calcs) {
                     @Override
-					public Member[] evaluateTuple(Evaluator evaluator) {
+					public Member[] evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final TupleList list;
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator);
+                                tupleListCalc.evaluateList(evaluator);
                         } finally {
                             evaluator.restore(savepoint);
                         }
                         assert list != null;
                         try {
-                            final int index =
-                                indexCalc.evaluateInteger(evaluator);
+                            final Integer index =
+                                indexCalc.evaluate(evaluator);
                             int listSize = list.size();
                             if (index >= listSize || index < 0) {
                                 return nullTuple;
@@ -211,22 +211,22 @@ class SetItemFunDef extends FunDefBase {
             final MemberType memberType = (MemberType) elementType;
             final Member nullMember = FunUtil.makeNullMember(memberType);
             if (isString) {
-                return new AbstractMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getType(), calcs) {
                     @Override
-					public Member evaluateMember(Evaluator evaluator) {
+					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final List<Member> list;
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator).slice(0);
+                                tupleListCalc.evaluateList(evaluator).slice(0);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);
                         }
                         try {
                             final String result =
-                                stringCalcs[0].evaluateString(evaluator);
+                                stringCalcs[0].evaluate(evaluator);
                             for (Member member : list) {
                                 if (SetItemFunDef.matchMember(member, result)) {
                                     return member;
@@ -239,22 +239,22 @@ class SetItemFunDef extends FunDefBase {
                     }
                 };
             } else {
-                return new AbstractMemberCalc(call.getFunName(),call.getType(), calcs) {
+                return new AbstractProfilingNestedMemberCalc(call.getType(), calcs) {
                     @Override
-					public Member evaluateMember(Evaluator evaluator) {
+					public Member evaluate(Evaluator evaluator) {
                         final int savepoint = evaluator.savepoint();
                         final List<Member> list;
                         try {
                             evaluator.setNonEmpty(false);
                             list =
-                                listCalc.evaluateList(evaluator).slice(0);
+                                tupleListCalc.evaluateList(evaluator).slice(0);
                             assert list != null;
                         } finally {
                             evaluator.restore(savepoint);
                         }
                         try {
-                            final int index =
-                                indexCalc.evaluateInteger(evaluator);
+                            final Integer index =
+                                indexCalc.evaluate(evaluator);
                             int listSize = list.size();
                             if (index >= listSize || index < 0) {
                                 return nullMember;

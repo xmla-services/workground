@@ -20,25 +20,20 @@ package org.eclipse.daanse.db.dialect.db.clickhouse;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for ClickHouse
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='CLICKHOUSE'",
-    "database.product:String='CLICKHOUSE'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class ClickHouseDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "CLICKHOUSE";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public ClickHouseDialect(Connection connection) {
+        super(connection);
     }
+
     @Override
 	public boolean requiresDrillthroughMaxRowsInLimit() {
         return true;

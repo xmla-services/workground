@@ -13,7 +13,10 @@ package mondrian.olap;
 
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ParameterCompilable;
 import mondrian.calc.ParameterSlot;
@@ -21,7 +24,6 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.MemberExpr;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
@@ -93,7 +95,7 @@ public class ParameterImpl
 
             // make sure caller called convert first
             assert !(value instanceof List && !(value instanceof TupleList));
-            assert !(value instanceof MemberExpr);
+            assert !(value instanceof MemberExpression);
             assert !(value instanceof Literal);
         }
     };
@@ -243,8 +245,8 @@ public class ParameterImpl
         if (value instanceof List list && !(value instanceof TupleList)) {
             return TupleCollections.asTupleList(list);
         }
-        if (value instanceof MemberExpr) {
-            return ((MemberExpr) value).getMember();
+        if (value instanceof MemberExpression) {
+            return ((MemberExpression) value).getMember();
         }
         if (value instanceof Literal) {
             return ((Literal) value).getValue();
@@ -282,7 +284,7 @@ public class ParameterImpl
          * @param slot Slot
          */
         public ParameterCalc(ParameterSlot slot) {
-            super("ParameterCalc",slot.getParameter().getType(), new Calc[0]);
+            super(slot.getParameter().getType(), new Calc[0]);
             this.slot = slot;
         }
 
@@ -316,7 +318,7 @@ public class ParameterImpl
          * @param slot Slot
          */
         public MemberListParameterCalc(ParameterSlot slot) {
-			super("MemberListParameterCalc", slot.getParameter().getType(), new Calc[0]);
+			super( slot.getParameter().getType(), new Calc[0]);
             this.slot = slot;
         }
 

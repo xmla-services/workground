@@ -14,6 +14,9 @@
  */
 package mondrian.olap;
 
+import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
+import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -82,6 +85,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import mondrian.mdx.ParameterExpressionImpl;
+import mondrian.olap.api.Segment;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -91,14 +96,25 @@ import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
+import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
+import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -109,19 +125,16 @@ import org.olap4j.mdx.Quoting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
-import mondrian.calc.CalcWriter;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.DimensionExpressionImpl;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.LevelExpressionImpl;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.NamedSetExpressionImpl;
 import mondrian.mdx.QueryPrintWriter;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
@@ -137,9 +150,6 @@ import mondrian.util.ConcatenableList;
 import mondrian.util.Pair;
 import mondrian.util.UtilCompatible;
 import mondrian.util.UtilCompatibleJdk16;
-
-import static mondrian.olap.fun.FunUtil.DOUBLE_EMPTY;
-import static mondrian.olap.fun.FunUtil.DOUBLE_NULL;
 
 /**
  * Utility functions used throughout mondrian. All methods are static.
@@ -359,27 +369,6 @@ public class Util extends XOMUtil {
     }
 
     /**
-     * Encodes string for MDX (escapes ] as ]] inside a name).
-     *
-     * @deprecated Will be removed in 4.0
-     */
-    @Deprecated(since = "Will be removed in 4.0")
-	public static String mdxEncodeString(String st) {
-        StringBuilder retString = new StringBuilder(st.length() + 20);
-        for (int i = 0; i < st.length(); i++) {
-            char c = st.charAt(i);
-            if ((c == ']')
-                && ((i + 1) < st.length())
-                && (st.charAt(i + 1) != '.'))
-            {
-                retString.append(']'); // escaping character
-            }
-            retString.append(c);
-        }
-        return retString.toString();
-    }
-
-    /**
      * Converts a string into a double-quoted string.
      */
     public static String quoteForMdx(String val) {
@@ -420,14 +409,14 @@ public class Util extends XOMUtil {
      * Return identifiers quoted in [...].[...].  For example, {"Store", "USA",
      * "California"} becomes "[Store].[USA].[California]".
      */
-    public static String quoteMdxIdentifier(List<Id.Segment> ids) {
+    public static String quoteMdxIdentifier(List<Segment> ids) {
         StringBuilder sb = new StringBuilder(64);
         quoteMdxIdentifier(ids, sb);
         return sb.toString();
     }
 
     public static void quoteMdxIdentifier(
-        List<Id.Segment> ids,
+        List<Segment> ids,
         StringBuilder sb)
     {
         for (int i = 0; i < ids.size(); i++) {
@@ -563,7 +552,7 @@ public class Util extends XOMUtil {
      * @param s MDX identifier
      * @return List of segments
      */
-    public static List<Id.Segment> parseIdentifier(String s)  {
+    public static List<Segment> parseIdentifier(String s)  {
         return convert(
             org.olap4j.impl.IdentifierParser.parseIdentifier(s));
     }
@@ -572,7 +561,7 @@ public class Util extends XOMUtil {
      * Converts an array of name parts {"part1", "part2"} into a single string
      * "[part1].[part2]". If the names contain "]" they are escaped as "]]".
      */
-    public static String implode(List<Id.Segment> names) {
+    public static String implode(List<Segment> names) {
         StringBuilder sb = new StringBuilder(64);
         for (int i = 0; i < names.size(); i++) {
             if (i > 0) {
@@ -581,9 +570,9 @@ public class Util extends XOMUtil {
             // FIXME: should be:
             //   names.get(i).toString(sb);
             // but that causes some tests to fail
-            Id.Segment segment = names.get(i);
-            if (Id.Quoting.UNQUOTED.equals(segment.getQuoting())) {
-                segment = new Id.NameSegment(((Id.NameSegment) segment).name);
+            Segment segment = names.get(i);
+            if (mondrian.olap.api.Quoting.UNQUOTED.equals(segment.getQuoting())) {
+                segment = new IdImpl.NameSegmentImpl(((mondrian.olap.api.NameSegment) segment).getName());
             }
             segment.toString(sb);
         }
@@ -621,7 +610,7 @@ public class Util extends XOMUtil {
     public static OlapElement lookupCompound(
         SchemaReader schemaReader,
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category)
     {
@@ -652,7 +641,7 @@ public class Util extends XOMUtil {
     public static OlapElement lookupCompound(
         SchemaReader schemaReader,
         OlapElement parent,
-        List<Id.Segment> names,
+        List<Segment> names,
         boolean failIfNotFound,
         int category,
         MatchType matchType)
@@ -690,19 +679,19 @@ public class Util extends XOMUtil {
         // Now resolve the name one part at a time.
         for (int i = 0; i < names.size(); i++) {
             OlapElement child;
-            Id.NameSegment name;
-            if (names.get(i) instanceof Id.NameSegment nameSegment) {
+            mondrian.olap.api.NameSegment name;
+            if (names.get(i) instanceof mondrian.olap.api.NameSegment nameSegment) {
                 name = nameSegment;
                 child = schemaReader.getElementChild(parent, name, matchType);
             } else if (parent instanceof RolapLevel
-                       && names.get(i) instanceof Id.KeySegment
+                       && names.get(i) instanceof IdImpl.KeySegment
                        && names.get(i).getKeyParts().size() == 1)
             {
                 // The following code is for SsasCompatibleNaming=false.
                 // Continues the very limited support for key segments in
                 // mondrian-3.x. To be removed in mondrian-4, when
                 // SsasCompatibleNaming=true is the only option.
-                final Id.KeySegment keySegment = (Id.KeySegment) names.get(i);
+                final IdImpl.KeySegment keySegment = (IdImpl.KeySegment) names.get(i);
                 name = keySegment.getKeyParts().get(0);
                 final List<Member> levelMembers =
                     schemaReader.getLevelMembers(
@@ -823,15 +812,15 @@ public class Util extends XOMUtil {
         }
     }
 
-    public static OlapElement lookup(Query q, List<Id.Segment> nameParts) {
+    public static OlapElement lookup(Query q, List<Segment> nameParts) {
         final Exp exp = lookup(q, nameParts, false);
-        if (exp instanceof MemberExpr memberExpr) {
+        if (exp instanceof MemberExpression memberExpr) {
             return memberExpr.getMember();
-        } else if (exp instanceof LevelExpr levelExpr) {
+        } else if (exp instanceof LevelExpression levelExpr) {
             return levelExpr.getLevel();
-        } else if (exp instanceof HierarchyExpr hierarchyExpr) {
+        } else if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
             return hierarchyExpr.getHierarchy();
-        } else if (exp instanceof DimensionExpr dimensionExpr) {
+        } else if (exp instanceof DimensionExpression dimensionExpr) {
             return dimensionExpr.getDimension();
         } else {
             throw Util.newInternal("Not an olap element: " + exp);
@@ -846,7 +835,7 @@ public class Util extends XOMUtil {
      * <p>If <code>allowProp</code> is true, also allows property references
      * from valid members, for example
      * <code>[Measures].[Unit Sales].FORMATTED_VALUE</code>.
-     * In this case, the result will be a {@link mondrian.mdx.ResolvedFunCall}.
+     * In this case, the result will be a {@link mondrian.mdx.ResolvedFunCallImpl}.
      *
      * @param q Query expression belongs to
      * @param nameParts Parts of the identifier
@@ -855,7 +844,7 @@ public class Util extends XOMUtil {
      */
     public static Exp lookup(
         Query q,
-        List<Id.Segment> nameParts,
+        List<Segment> nameParts,
         boolean allowProp)
     {
         return lookup(q, q.getSchemaReader(true), nameParts, allowProp);
@@ -869,7 +858,7 @@ public class Util extends XOMUtil {
      * <p>If <code>allowProp</code> is true, also allows property references
      * from valid members, for example
      * <code>[Measures].[Unit Sales].FORMATTED_VALUE</code>.
-     * In this case, the result will be a {@link ResolvedFunCall}.
+     * In this case, the result will be a {@link ResolvedFunCallImpl}.
      *
      * @param q Query expression belongs to
      * @param schemaReader Schema reader
@@ -880,7 +869,7 @@ public class Util extends XOMUtil {
     public static Exp lookup(
         Query q,
         SchemaReader schemaReader,
-        List<Id.Segment> segments,
+        List<Segment> segments,
         boolean allowProp)
     {
         // First, look for a calculated member defined in the query.
@@ -891,11 +880,11 @@ public class Util extends XOMUtil {
         // Check level properties before Member.
         // Otherwise it will query all level members to find member with property name.
         if (allowProp && segments.size() > 1) {
-            List<Id.Segment> segmentsButOne =
+            List<Segment> segmentsButOne =
                     segments.subList(0, segments.size() - 1);
-            final Id.Segment lastSegment = last(segments);
+            final Segment lastSegment = last(segments);
             final String propertyName =
-                    lastSegment instanceof Id.NameSegment nameSegment
+                    lastSegment instanceof mondrian.olap.api.NameSegment nameSegment
                             ? nameSegment.getName()
                             : null;
             final Member member =
@@ -905,7 +894,7 @@ public class Util extends XOMUtil {
                     && propertyName != null
                     && isValidProperty(propertyName, member.getLevel()))
             {
-                return new UnresolvedFunCall(
+                return new UnresolvedFunCallImpl(
                         propertyName, Syntax.Property, new Exp[] {
                         createExpr(member)});
             }
@@ -916,7 +905,7 @@ public class Util extends XOMUtil {
                     && propertyName != null
                     && isValidProperty(propertyName, level))
             {
-                return new UnresolvedFunCall(
+                return new UnresolvedFunCallImpl(
                         propertyName, Syntax.Property, new Exp[] {
                         createExpr(level)});
             }
@@ -937,7 +926,7 @@ public class Util extends XOMUtil {
                 int nameLen = segments.size() - 1;
                 olapElement = null;
                 while (nameLen > 0 && olapElement == null) {
-                    List<Id.Segment> partialName =
+                    List<Segment> partialName =
                             segments.subList(0, nameLen);
                     olapElement = schemaReaderSansAc.lookupCompound(
                             cube, partialName, false, Category.UNKNOWN);
@@ -1002,22 +991,22 @@ public class Util extends XOMUtil {
     public static Exp createExpr(OlapElement element)
     {
         if (element instanceof Member member) {
-            return new MemberExpr(member);
+            return new MemberExpressionImpl(member);
         } else if (element instanceof Level level) {
-            return new LevelExpr(level);
+            return new LevelExpressionImpl(level);
         } else if (element instanceof Hierarchy hierarchy) {
-            return new HierarchyExpr(hierarchy);
+            return new HierarchyExpressionImpl(hierarchy);
         } else if (element instanceof Dimension dimension) {
-            return new DimensionExpr(dimension);
+            return new DimensionExpressionImpl(dimension);
         } else if (element instanceof NamedSet namedSet) {
-            return new NamedSetExpr(namedSet);
+            return new NamedSetExpressionImpl(namedSet);
         } else {
             throw Util.newInternal("Unexpected element type: " + element);
         }
     }
 
     public static Member lookupHierarchyRootMember(
-        SchemaReader reader, Hierarchy hierarchy, Id.NameSegment memberName)
+        SchemaReader reader, Hierarchy hierarchy, mondrian.olap.api.NameSegment memberName)
     {
         return lookupHierarchyRootMember(
             reader, hierarchy, memberName, MatchType.EXACT);
@@ -1033,7 +1022,7 @@ public class Util extends XOMUtil {
     public static Member lookupHierarchyRootMember(
         SchemaReader reader,
         Hierarchy hierarchy,
-        Id.NameSegment memberName,
+        mondrian.olap.api.NameSegment memberName,
         MatchType matchType)
     {
         // Lookup member at first level.
@@ -1054,7 +1043,7 @@ public class Util extends XOMUtil {
                 hierarchy.createMember(
                     null,
                     rootMembers.get(0).getLevel(),
-                    memberName.name,
+                    memberName.getName(),
                     null);
         }
 
@@ -1065,7 +1054,7 @@ public class Util extends XOMUtil {
             int rc;
             // when searching on the ALL hierarchy, match must be exact
             if (matchType.isExact() || hierarchy.hasAll()) {
-                rc = rootMember.getName().compareToIgnoreCase(memberName.name);
+                rc = rootMember.getName().compareToIgnoreCase(memberName.getName());
             } else {
                 rc = FunUtil.compareSiblingMembers(
                     rootMember,
@@ -1267,32 +1256,6 @@ public class Util extends XOMUtil {
             return property;
         }
         return null;
-    }
-
-    /**
-     * Insert a call to this method if you want to flag a piece of
-     * undesirable code.
-     *
-     * @deprecated
-     */
-    @Deprecated
-	public static <T> T deprecated(T reason) {
-        throw new UnsupportedOperationException(reason.toString());
-    }
-
-    /**
-     * Insert a call to this method if you want to flag a piece of
-     * undesirable code.
-     *
-     * @deprecated
-     */
-    @Deprecated
-	public static <T> T deprecated(T reason, boolean fail) {
-        if (fail) {
-            throw new UnsupportedOperationException(reason.toString());
-        } else {
-            return reason;
-        }
     }
 
     public static List<Member> addLevelCalculatedMembers(
@@ -1769,7 +1732,7 @@ public class Util extends XOMUtil {
      * @param olap4jSegmentList List of olap4j segments
      * @return List of mondrian segments
      */
-    public static List<Id.Segment> convert(
+    public static List<Segment> convert(
         List<IdentifierSegment> olap4jSegmentList)
     {
         return olap4jSegmentList.stream().map(Util::convert).toList();
@@ -1781,7 +1744,7 @@ public class Util extends XOMUtil {
      * @param olap4jSegment olap4j segment
      * @return mondrian segment
      */
-    public static Id.Segment convert(IdentifierSegment olap4jSegment) {
+    public static Segment convert(IdentifierSegment olap4jSegment) {
         if (olap4jSegment instanceof NameSegment nameSegment) {
             return convert(nameSegment);
         } else {
@@ -1789,11 +1752,11 @@ public class Util extends XOMUtil {
         }
     }
 
-    private static Id.KeySegment convert(final KeySegment keySegment) {
-        return new Id.KeySegment(
-            new AbstractList<Id.NameSegment>() {
+    private static IdImpl.KeySegment convert(final KeySegment keySegment) {
+        return new IdImpl.KeySegment(
+            new AbstractList<mondrian.olap.api.NameSegment>() {
                 @Override
-				public Id.NameSegment get(int index) {
+				public mondrian.olap.api.NameSegment get(int index) {
                     return convert(keySegment.getKeyParts().get(index));
                 }
 
@@ -1804,20 +1767,20 @@ public class Util extends XOMUtil {
             });
     }
 
-    private static Id.NameSegment convert(NameSegment nameSegment) {
-        return new Id.NameSegment(
+    private static mondrian.olap.api.NameSegment convert(NameSegment nameSegment) {
+        return new IdImpl.NameSegmentImpl(
             nameSegment.getName(),
             convert(nameSegment.getQuoting()));
     }
 
-    private static Id.Quoting convert(Quoting quoting) {
+    private static mondrian.olap.api.Quoting convert(Quoting quoting) {
         switch (quoting) {
         case QUOTED:
-            return Id.Quoting.QUOTED;
+            return mondrian.olap.api.Quoting.QUOTED;
         case UNQUOTED:
-            return Id.Quoting.UNQUOTED;
+            return mondrian.olap.api.Quoting.UNQUOTED;
         case KEY:
-            return Id.Quoting.KEY;
+            return mondrian.olap.api.Quoting.KEY;
         default:
             throw Util.unexpected(quoting);
         }
@@ -1907,7 +1870,7 @@ public class Util extends XOMUtil {
     }
 
     public static List<IdentifierSegment> toOlap4j(
-        final List<Id.Segment> segments)
+        final List<Segment> segments)
     {
         return new AbstractList<>() {
             @Override
@@ -1922,15 +1885,15 @@ public class Util extends XOMUtil {
         };
     }
 
-    public static IdentifierSegment toOlap4j(Id.Segment segment) {
-        if (mondrian.olap.Id.Quoting.KEY.equals(segment.quoting)) {
-            return toOlap4j((Id.KeySegment) segment);
+    public static IdentifierSegment toOlap4j(Segment segment) {
+        if (mondrian.olap.api.Quoting.KEY.equals(segment.getQuoting())) {
+            return toOlap4j((IdImpl.KeySegment) segment);
         } else {
-            return toOlap4j((Id.NameSegment) segment);
+            return toOlap4j((mondrian.olap.api.NameSegment) segment);
         }
     }
 
-    private static KeySegment toOlap4j(final Id.KeySegment keySegment) {
+    private static KeySegment toOlap4j(final IdImpl.KeySegment keySegment) {
         return new KeySegment(
             new AbstractList<NameSegment>() {
                 @Override
@@ -1945,14 +1908,14 @@ public class Util extends XOMUtil {
             });
     }
 
-    private static NameSegment toOlap4j(Id.NameSegment nameSegment) {
+    private static NameSegment toOlap4j(mondrian.olap.api.NameSegment nameSegment) {
         return new NameSegment(
             null,
-            nameSegment.name,
-            toOlap4j(nameSegment.quoting));
+            nameSegment.getName(),
+            toOlap4j(nameSegment.getQuoting()));
     }
 
-    public static Quoting toOlap4j(Id.Quoting quoting) {
+    public static Quoting toOlap4j(mondrian.olap.api.Quoting quoting) {
         return Quoting.valueOf(quoting.name());
     }
 
@@ -1971,7 +1934,7 @@ public class Util extends XOMUtil {
     }
 
     public static boolean matches(
-        Member member, List<Id.Segment> nameParts)
+        Member member, List<Segment> nameParts)
     {
         if (Util.equalName(Util.implode(nameParts),
             member.getUniqueName()))
@@ -1979,7 +1942,7 @@ public class Util extends XOMUtil {
             // exact match
             return true;
         }
-        Id.Segment segment = nameParts.get(nameParts.size() - 1);
+        Segment segment = nameParts.get(nameParts.size() - 1);
         while (member.getParentMember() != null) {
             if (!segment.matches(member.getName())) {
                 return false;
@@ -2982,47 +2945,12 @@ public class Util extends XOMUtil {
         return copy;
     }
 
-    /**
-     * Returns the cumulative amount of time spent accessing the database.
-     *
-     * @deprecated Use {@link mondrian.server.monitor.Monitor#getServer()} and
-     *  {@link mondrian.server.monitor.ServerInfo#sqlStatementExecuteNanos};
-     *  will be removed in 4.0.
-     */
-    @Deprecated
-	public static long dbTimeMillis() {
-        return databaseMillis;
-    }
-
-    /**
-     * Adds to the cumulative amount of time spent accessing the database.
-     *
-     * @deprecated Will be removed in 4.0.
-     */
-    @Deprecated
-	public static void addDatabaseTime(long millis) {
-        databaseMillis += millis;
-    }
-
-    /**
-     * Returns the system time less the time spent accessing the database.
-     * Use this method to figure out how long an operation took: call this
-     * method before an operation and after an operation, and the difference
-     * is the amount of non-database time spent.
-     *
-     * @deprecated Will be removed in 4.0.
-     */
-    @Deprecated
-	public static long nonDbTimeMillis() {
-        final long systemMillis = System.currentTimeMillis();
-        return systemMillis - databaseMillis;
-    }
 
     /**
      * Creates a very simple implementation of {@link Validator}. (Only
      * useful for resolving trivial expressions.)
      */
-    public static Validator createSimpleValidator(final FunTable funTable) {
+    public static Validator createSimpleValidator(final FunctionTable funTable) {
         return new Validator() {
             @Override
 			public Query getQuery() {
@@ -3040,7 +2968,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public void validate(ParameterExpr parameterExpr) {
+			public void validate(ParameterExpressionImpl parameterExpr) {
                 //empty
             }
 
@@ -3060,15 +2988,15 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public FunDef getDef(Exp[] args, String name, Syntax syntax) {
+			public FunctionDefinition getDef(Exp[] args, String name, Syntax syntax) {
                 // Very simple resolution. Assumes that there is precisely
                 // one resolver (i.e. no overloading) and no argument
                 // conversions are necessary.
-                List<Resolver> resolvers = funTable.getResolvers(name, syntax);
-                final Resolver resolver = resolvers.get(0);
-                final List<Resolver.Conversion> conversionList =
+                List<FunctionResolver> resolvers = funTable.getResolvers(name, syntax);
+                final FunctionResolver resolver = resolvers.get(0);
+                final List<FunctionResolver.Conversion> conversionList =
                     new ArrayList<>();
-                final FunDef def =
+                final FunctionDefinition def =
                     resolver.resolve(args, this, conversionList);
                 assert conversionList.isEmpty();
                 return def;
@@ -3083,7 +3011,7 @@ public class Util extends XOMUtil {
 			public boolean canConvert(
                 int ordinal, Exp fromExp,
                 int to,
-                List<Resolver.Conversion> conversions)
+                List<FunctionResolver.Conversion> conversions)
             {
                 return true;
             }
@@ -3094,7 +3022,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public FunTable getFunTable() {
+			public FunctionTable getFunTable() {
                 return funTable;
             }
 
@@ -4460,10 +4388,21 @@ public class Util extends XOMUtil {
     }
     final StringWriter stringWriter = new StringWriter();
     final PrintWriter printWriter = new PrintWriter( stringWriter );
-    final CalcWriter calcWriter = new CalcWriter( printWriter, true );
+
+	SimpleCalculationProfileWriter spw = new SimpleCalculationProfileWriter(printWriter);
+
     printWriter.println( title );
     if ( calc != null ) {
-      calc.accept( calcWriter );
+
+    	if (calc instanceof ProfilingCalc pc) {
+
+			CalculationProfile calcProfile = pc.getCalculationProfile();
+			spw.write(calcProfile);
+
+		} else {
+			printWriter.println("UNPROFILED: " + calc.getClass().getName());
+
+		}
     }
     printWriter.close();
     handler.explain( stringWriter.toString(), timing );

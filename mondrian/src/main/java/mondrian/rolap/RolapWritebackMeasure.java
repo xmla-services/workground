@@ -10,7 +10,7 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 public class RolapWritebackMeasure  extends RolapWritebackColumn{
     private final Member measure;

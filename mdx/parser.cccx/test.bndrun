@@ -39,7 +39,6 @@
 	net.bytebuddy.byte-buddy;version='[1.12.16,1.12.17)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
 	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.mdx.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.cccx;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.cccx-tests;version='[0.0.1,0.0.2)',\

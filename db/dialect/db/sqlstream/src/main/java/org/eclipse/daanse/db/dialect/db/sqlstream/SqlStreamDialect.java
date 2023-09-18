@@ -11,10 +11,8 @@ package org.eclipse.daanse.db.dialect.db.sqlstream;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.luciddb.LucidDbDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the SQLstream streaming SQL system.
@@ -22,16 +20,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Mar 23, 2009
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SQLSTREAM'",
-        "database.product:String='SQLSTREAM'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class SqlStreamDialect extends LucidDbDialect {
 
     private static final String SUPPORTED_PRODUCT_NAME = "SQLSTREAM";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public SqlStreamDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

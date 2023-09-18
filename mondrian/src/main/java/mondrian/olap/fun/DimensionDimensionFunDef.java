@@ -9,14 +9,13 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.impl.ConstantCalc;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.type.DimensionType;
 
 /**
  * Definition of the <code>&lt;Dimension&gt;.Dimension</code>
@@ -36,12 +35,10 @@ class DimensionDimensionFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
     {
         Dimension dimension =
-            ((DimensionExpr) call.getArg(0)).getDimension();
-        return new ConstantCalc(
-            DimensionType.forDimension(dimension),
-            dimension);
+            ((DimensionExpression) call.getArg(0)).getDimension();
+        return ConstantDimensionCalc.of(dimension);
     }
 }

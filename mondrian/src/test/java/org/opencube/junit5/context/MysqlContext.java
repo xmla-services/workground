@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
 
 public class MysqlContext implements Context {
 
@@ -32,9 +32,8 @@ public class MysqlContext implements Context {
 
     public MysqlContext(DataSource dataSource) {
         this.dataSource = dataSource;
-        dialect = new MySqlDialect();
         try (Connection connection = dataSource.getConnection()) {
-            dialect.initialize(connection);
+            dialect = new MySqlDialect(connection);
         } catch (SQLException e) {
             new RuntimeException(e);
         }
@@ -85,4 +84,5 @@ public class MysqlContext implements Context {
     public Optional<String> getDescription() {
         return Optional.empty();
     }
+
 }

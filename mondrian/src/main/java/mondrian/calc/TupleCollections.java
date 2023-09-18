@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.calc.impl.AbstractTupleIterator;
 import mondrian.calc.impl.ArrayTupleList;
@@ -56,7 +56,7 @@ public final class TupleCollections {
      * if arity == 0, creates a {@link DelegatingTupleList};
      * otherwise creates a {@link ArrayTupleList}.
      *
-     * @see TupleList#cloneList(int)
+     * @see TupleList#copyList(int)
      * @see #createList(int, int)
      *
      * @param arity Arity
@@ -77,7 +77,7 @@ public final class TupleCollections {
      * if arity == 0, creates a {@link DelegatingTupleList};
      * otherwise creates a {@link ArrayTupleList}.
      *
-     * @see TupleList#cloneList(int)
+     * @see TupleList#copyList(int)
      *
      * @param arity Arity
      * @param initialCapacity Initial capacity
@@ -466,8 +466,8 @@ public final class TupleCollections {
         }
 
         @Override
-        public TupleList cloneList(int capacity) {
-            return materialize().cloneList(capacity);
+        public TupleList copyList(int capacity) {
+            return materialize().copyList(capacity);
         }
 
         @Override

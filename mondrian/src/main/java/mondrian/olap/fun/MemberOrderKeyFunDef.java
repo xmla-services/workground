@@ -9,11 +9,12 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.sort.OrderKey;
 import mondrian.olap.type.Type;
@@ -43,10 +44,10 @@ public final class MemberOrderKeyFunDef extends FunDefBase {
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final MemberCalc memberCalc =
       compiler.compileMember( call.getArg( 0 ) );
-    return new CalcImpl( call.getFunName(),call.getType(), memberCalc );
+    return new CalcImpl( call.getType(), memberCalc );
   }
 
-  public static class CalcImpl extends AbstractCalc {
+  public static class CalcImpl extends AbstractProfilingNestedCalc {
     private final MemberCalc memberCalc;
 
     /**
@@ -55,19 +56,16 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
      * @param exp        Source expression
      * @param memberCalc Compiled expression to calculate member
      */
-    public CalcImpl( String name, Type type, MemberCalc memberCalc ) {
-      super( name,type, new Calc[] { memberCalc } );
+    public CalcImpl(Type type, MemberCalc memberCalc ) {
+      super( type, new Calc[] { memberCalc } );
       this.memberCalc = memberCalc;
     }
 
     @Override
 	public OrderKey evaluate( Evaluator evaluator ) {
-      return new OrderKey( memberCalc.evaluateMember( evaluator ) );
+      return new OrderKey( memberCalc.evaluate( evaluator ) );
     }
 
-    @Override
-	protected String getName() {
-      return "OrderKey";
-    }
+
   }
 }

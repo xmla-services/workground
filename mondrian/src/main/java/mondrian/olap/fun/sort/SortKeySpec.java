@@ -14,7 +14,7 @@
 
 package mondrian.olap.fun.sort;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
 public class SortKeySpec {
   private final Calc key;

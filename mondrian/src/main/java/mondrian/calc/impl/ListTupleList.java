@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
@@ -145,7 +145,7 @@ public class ListTupleList extends AbstractEndToEndTupleList
     }
 
     @Override
-    public TupleList cloneList(int capacity) {
+    public TupleList copyList(int capacity) {
         return new ListTupleList(
                 arity,
                 capacity < 0

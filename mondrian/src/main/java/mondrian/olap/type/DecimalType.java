@@ -11,9 +11,9 @@
 
 package mondrian.olap.type;
 
-import mondrian.olap.Util;
-
 import java.util.Objects;
+
+import mondrian.olap.Util;
 
 /**
  * Subclass of {@link NumericType} which guarantees fixed number of decimal

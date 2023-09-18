@@ -9,11 +9,12 @@
 
 package mondrian.parser;
 
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+
 import mondrian.olap.Exp;
-import mondrian.olap.FunTable;
+import mondrian.olap.FactoryImpl;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Parser;
-import mondrian.olap.QueryPart;
 import mondrian.olap.Util;
 import mondrian.server.Statement;
 
@@ -30,7 +31,7 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
      * Creates a JavaccParserValidatorImpl.
      */
     public JavaccParserValidatorImpl() {
-        this(new Parser.FactoryImpl());
+        this(new FactoryImpl());
     }
 
     /**
@@ -48,7 +49,7 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation)
     {
         final MdxParserImpl mdxParser =
@@ -71,7 +72,7 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable)
+        FunctionTable funTable)
     {
         final MdxParserImpl mdxParser =
             new MdxParserImpl(

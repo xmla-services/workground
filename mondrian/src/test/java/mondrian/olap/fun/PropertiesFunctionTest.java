@@ -24,7 +24,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianException;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 
@@ -34,7 +34,7 @@ class PropertiesFunctionTest {
   private static final String TIME_WEEKLY_MEMBER_CAPTION = "All Time.Weeklys";
   private static final String STORE_MEMBER_CAPTION = "All Stores";
   private static final int[] ZERO_POS = new int[] { 0 };
-  private Query query;
+  private QueryImpl query;
   private Result result;
   private Connection connection;
   private Exp resolvedFun;

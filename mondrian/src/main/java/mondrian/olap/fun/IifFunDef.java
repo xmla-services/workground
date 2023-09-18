@@ -9,16 +9,17 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.BooleanCalc;
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractBooleanCalc;
-import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -80,7 +81,7 @@ public class IifFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final BooleanCalc booleanCalc =
             compiler.compileBoolean(call.getArg(0));
         final Calc calc1 =
@@ -90,17 +91,17 @@ public class IifFunDef extends FunDefBase {
             compiler.compileAs(
                 call.getArg(2), call.getType(), ResultStyle.ANY_LIST);
         if (call.getType() instanceof SetType) {
-            return new GenericIterCalc(call.getFunName(),call.getType()) {
+            return new GenericIterCalc(call.getType()) {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
 
@@ -110,17 +111,17 @@ public class IifFunDef extends FunDefBase {
               }
             };
         } else {
-            return new GenericCalc(call.getFunName(),call.getType()) {
+            return new GenericCalc(call.getType()) {
                 @Override
 				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
 
                 @Override
-				public Calc[] getCalcs() {
+				public Calc[] getChildCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
             };
@@ -134,19 +135,19 @@ public class IifFunDef extends FunDefBase {
         "fSbSS")
     {
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final StringCalc calc1 = compiler.compileString(call.getArg(1));
             final StringCalc calc2 = compiler.compileString(call.getArg(2));
-            return new AbstractStringCalc(
-            		call.getFunName(),call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
+            return new AbstractProfilingNestedStringCalc(
+            		call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
                 @Override
-				public String evaluateString(Evaluator evaluator) {
+				public String evaluate(Evaluator evaluator) {
                     final boolean b =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     StringCalc calc = b ? calc1 : calc2;
-                    return calc.evaluateString(evaluator);
+                    return calc.evaluate(evaluator);
                 }
             };
         }
@@ -160,23 +161,23 @@ public class IifFunDef extends FunDefBase {
             "fnbnn")
         {
             @Override
-			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+			public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileScalar(call.getArg(1), true);
                 final Calc calc2 = compiler.compileScalar(call.getArg(2), true);
-                return new GenericCalc(call.getFunName(),call.getType()) {
+                return new GenericCalc(call.getType()) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
-                            booleanCalc.evaluateBoolean(evaluator);
+                            booleanCalc.evaluate(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
 
                     @Override
-					public Calc[] getCalcs() {
+					public Calc[] getChildCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -191,23 +192,23 @@ public class IifFunDef extends FunDefBase {
             "ftbtt")
         {
             @Override
-			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+			public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileTuple(call.getArg(1));
                 final Calc calc2 = compiler.compileTuple(call.getArg(2));
-                return new GenericCalc(call.getFunName(),call.getType()) {
+                return new GenericCalc(call.getType()) {
                     @Override
 					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
-                            booleanCalc.evaluateBoolean(evaluator);
+                            booleanCalc.evaluate(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
 
                     @Override
-					public Calc[] getCalcs() {
+					public Calc[] getChildCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -221,7 +222,7 @@ public class IifFunDef extends FunDefBase {
         "fbbbb")
     {
         @Override
-		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+		public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final BooleanCalc booleanCalc1 =
@@ -229,15 +230,15 @@ public class IifFunDef extends FunDefBase {
             final BooleanCalc booleanCalc2 =
                 compiler.compileBoolean(call.getArg(2));
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
-            return new AbstractBooleanCalc(call.getFunName(),call.getType(), calcs) {
+            return new AbstractProfilingNestedBooleanCalc(call.getType(), calcs) {
                 @Override
-				public boolean evaluateBoolean(Evaluator evaluator) {
+				public Boolean evaluate(Evaluator evaluator) {
                     final boolean condition =
-                        booleanCalc.evaluateBoolean(evaluator);
+                        booleanCalc.evaluate(evaluator);
                     if (condition) {
-                        return booleanCalc1.evaluateBoolean(evaluator);
+                        return booleanCalc1.evaluate(evaluator);
                     } else {
-                        return booleanCalc2.evaluateBoolean(evaluator);
+                        return booleanCalc2.evaluate(evaluator);
                     }
                 }
             };

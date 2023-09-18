@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
 
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 
 /**
  * Utility methods relating to types.
@@ -274,7 +274,7 @@ public class TypeUtil {
         int ordinal,
         Type fromType,
         int to,
-        List<Resolver.Conversion> conversions)
+        List<FunctionResolver.Conversion> conversions)
     {
         final int from = typeToCategory(fromType);
         if (from == to) {
@@ -482,9 +482,9 @@ public class TypeUtil {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.fun.Resolver.Conversion}.
+     * Implementation of {@link mondrian.olap.fun.FunctionResolver.Conversion}.
      */
-    private static class ConversionImpl implements Resolver.Conversion {
+    private static class ConversionImpl implements FunctionResolver.Conversion {
         final int from;
         final int to;
         /**
@@ -543,7 +543,7 @@ public class TypeUtil {
             if ((from == Category.MEMBER || from == Category.TUPLE) && to == Category.SET) {
                 final Exp newArg =
                     validator.validate(
-                        new UnresolvedFunCall(
+                        new UnresolvedFunCallImpl(
                             "{}", Syntax.Braces, new Exp[]{arg}), false);
                 args.set(ordinal, newArg);
             }

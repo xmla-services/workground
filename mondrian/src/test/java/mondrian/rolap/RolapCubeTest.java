@@ -26,10 +26,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -425,16 +426,16 @@ class RolapCubeTest {
     private List<Member> warehouseMembersCanadaMexicoUsa(SchemaReader reader)
     {
         return Arrays.asList(
-                member(Id.Segment.toList(
+                member(Segment.toList(
                         "Warehouse", "All Warehouses", "Canada"), reader),
-                member(Id.Segment.toList(
+                member(Segment.toList(
                         "Warehouse", "All Warehouses", "Mexico"), reader),
-                member(Id.Segment.toList(
+                member(Segment.toList(
                         "Warehouse", "All Warehouses", "USA"), reader));
     }
 
     private Member member(
-            List<Id.Segment> segmentList,
+            List<Segment> segmentList,
             SchemaReader salesCubeSchemaReader)
     {
         return salesCubeSchemaReader.getMemberByUniqueName(segmentList, true);
@@ -445,40 +446,40 @@ class RolapCubeTest {
     {
         return new UnaryTupleList(Arrays.asList(
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills",
                                 "Store 6"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Los Angeles"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem"),
                         salesCubeSchemaReader),
                 member(
-                        Id.Segment.toList(
+                        Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                         salesCubeSchemaReader)));
     }

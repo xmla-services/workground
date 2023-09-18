@@ -36,16 +36,14 @@ class MonetDbDialectTest {
         when(metaData.getDatabaseProductName()).thenReturn("MONETDB");
         when(metaData.getDatabaseProductVersion()).thenReturn(CURRENT_DB_VERSION);
         when(connection.getMetaData()).thenReturn(metaData);
-        dialect = new MonetDbDialect();
-        dialect.initialize(connection);
+        dialect = new MonetDbDialect(connection);
     }
 
     @Test
     void testAllowsCountDistinctFalse_BeforeAug2011SP2() throws Exception {
         // set up the version before Aug2011 SP2
         when(metaData.getDatabaseProductVersion()).thenReturn(AUG_2011_SP1_DB_VERSION);
-        dialect = new MonetDbDialect();
-        dialect.initialize(connection);
+        dialect = new MonetDbDialect(connection);
         assertFalse(dialect.allowsCountDistinct());
     }
 
@@ -53,8 +51,7 @@ class MonetDbDialectTest {
     void testAllowsCountDistinctTrue_StartingFromAug2011SP2() throws Exception {
         // set up the version starting from Aug2011 SP2
         when(metaData.getDatabaseProductVersion()).thenReturn(AUG_2011_SP2_DB_VERSION);
-        dialect = new MonetDbDialect();
-        dialect.initialize(connection);
+        dialect = new MonetDbDialect(connection);
         assertTrue(dialect.allowsCountDistinct());
     }
 

@@ -15,15 +15,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.fun.SetFunDef.SetListCalc;
 import mondrian.olap.type.SetType;
 
@@ -32,19 +32,19 @@ class IifFunDefTest {
   private Exp logicalParamMock = mock( Exp.class );
   private Exp trueCaseParamMock = mock( Exp.class );
   private Exp falseCaseParamMock = mock( Exp.class );
-  private FunDef funDefMock = mock( FunDef.class );
+  private FunctionDefinition funDefMock = mock( FunctionDefinition.class );
   private ExpCompiler compilerMock = mock( ExpCompiler.class );
   private Exp[] args = new Exp[] { logicalParamMock, trueCaseParamMock, falseCaseParamMock };
   private SetType setTypeMock = mock( SetType.class );
   private SetListCalc setListCalc;
-  ResolvedFunCall call;
+  ResolvedFunCallImpl call;
 
   @BeforeEach
   protected void setUp() throws Exception {
     when( trueCaseParamMock.getType() ).thenReturn( setTypeMock );
     setListCalc = new SetListCalc( setTypeMock, new Exp[] { args[1] }, compilerMock, ResultStyle.LIST_MUTABLELIST );
-    call = new ResolvedFunCall( funDefMock, args, setTypeMock );
-    when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn( setListCalc );
+    call = new ResolvedFunCallImpl( funDefMock, args, setTypeMock );
+    when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn(  setListCalc );
   }
 
   @Test

@@ -21,9 +21,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,16 +36,15 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -404,8 +405,8 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     return list;
   }
 
-  protected ResolvedFunCall getResolvedFunCall() {
-    FunDef funDef = new TestFunDef();
+  protected ResolvedFunCallImpl getResolvedFunCall() {
+    FunctionDefinition funDef = new TestFunDef();
     Exp[] args = new Exp[ 0 ];
     Type returnType =
       new SetType(
@@ -413,13 +414,13 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
           new Type[] {
             new MemberType( null, null, null, null ),
             new MemberType( null, null, null, null ) } ) );
-    return new ResolvedFunCall( funDef, args, returnType );
+    return new ResolvedFunCallImpl( funDef, args, returnType );
   }
 
   ////////////////////////////////////////////////////////////////////////
   // Helper classes
   ////////////////////////////////////////////////////////////////////////
-  public static class TestFunDef implements FunDef {
+  public static class TestFunDef implements FunctionDefinition {
     TestFunDef() {
     }
 
@@ -469,7 +470,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
   }
 
-  public static class NullFunDef implements FunDef {
+  public static class NullFunDef implements FunctionDefinition {
     public NullFunDef() {
     }
 

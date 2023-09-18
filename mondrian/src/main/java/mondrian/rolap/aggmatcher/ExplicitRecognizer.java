@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.Id;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
+import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.HierarchyUsage;
@@ -129,14 +131,14 @@ class ExplicitRecognizer extends Recognizer {
                     if (measure.getColumnName().equalsIgnoreCase(aggColumnName))
                     {
                         String name = measure.getName();
-                        List<Id.Segment> parts = Util.parseIdentifier(name);
-                        Id.Segment nameLast = Util.last(parts);
+                        List<Segment> parts = Util.parseIdentifier(name);
+                        Segment nameLast = Util.last(parts);
 
                         RolapStar.Measure m = null;
-                        if (nameLast instanceof Id.NameSegment nameSegment) {
+                        if (nameLast instanceof NameSegment nameSegment) {
                             m = star.getFactTable().lookupMeasureByName(
                                 cube.getName(),
-                                nameSegment.name);
+                                nameSegment.getName());
                         }
                         RolapAggregator agg = null;
                         if (m != null) {

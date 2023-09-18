@@ -8,6 +8,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.vertica;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+
+import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -18,31 +24,18 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * Implementation of {@link Dialect} for the Vertica database.
  *
  * @author Pedro Alves
  * @since Sept 11, 2009
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VERTICA'",
-        "database.product:String='VERTICA'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class VerticaDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "VERTICA";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public VerticaDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

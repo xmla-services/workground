@@ -13,18 +13,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
-import mondrian.calc.StringCalc;
-import mondrian.calc.TupleCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.olap.type.MemberType;
@@ -56,18 +56,18 @@ public class CachedExistsFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final ListCalc listCalc1 = compiler.compileList( call.getArg( 0 ) );
+    final TupleListCalc listCalc1 = compiler.compileList( call.getArg( 0 ) );
     final TupleCalc tupleCalc1 = compiler.compileTuple( call.getArg( 1 ) );
     final StringCalc stringCalc = compiler.compileString( call.getArg( 2 ) );
 
-    return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { listCalc1, tupleCalc1, stringCalc } ) {
+    return new AbstractListCalc( call.getType(), new Calc[] { listCalc1, tupleCalc1, stringCalc } ) {
       @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
         evaluator.getTiming().markStart( TIMING_NAME );
         try {
 
-          Member[] subtotal = tupleCalc1.evaluateTuple( evaluator );
-          String namedSetName = stringCalc.evaluateString( evaluator );
+          Member[] subtotal = tupleCalc1.evaluate( evaluator );
+          String namedSetName = stringCalc.evaluate( evaluator );
 
           Object cacheObj = evaluator.getQuery().getEvalCache( makeSetCacheKey( namedSetName, subtotal ) );
           if ( cacheObj != null ) {

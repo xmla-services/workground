@@ -13,20 +13,25 @@ package mondrian.parser;
 
 import java.util.List;
 
-import mondrian.olap.CalculatedFormula;
-import mondrian.olap.DmvQuery;
-import mondrian.olap.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.DmvQuery;
+import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Explain;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Refresh;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
+import org.eclipse.daanse.olap.api.query.component.Update;
+import org.eclipse.daanse.olap.api.query.component.UpdateClause;
+
 import mondrian.olap.Exp;
-import mondrian.olap.Explain;
-import mondrian.olap.Formula;
-import mondrian.olap.FunTable;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
-import mondrian.olap.QueryPart;
-import mondrian.olap.Refresh;
-import mondrian.olap.Subcube;
-import mondrian.olap.TransactionCommand;
-import mondrian.olap.Update;
+import mondrian.olap.ExplainImpl;
+import mondrian.olap.FunctionTable;
+import mondrian.olap.api.Command;
 import mondrian.server.Statement;
 
 /**
@@ -40,26 +45,26 @@ import mondrian.server.Statement;
 public interface MdxParserValidator {
 
     /**
-      * Parses a string to create a {@link mondrian.olap.Query}.
+      * Parses a string to create a {@link mondrian.olap.QueryImpl}.
       * Called only by {@link mondrian.olap.ConnectionBase#parseQuery}.
       */
     QueryPart parseInternal(
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable,
+        FunctionTable funTable,
         boolean strictValidation);
 
     Exp parseExpression(
         Statement statement,
         String queryString,
         boolean debug,
-        FunTable funTable);
+        FunctionTable funTable);
 
     interface QueryPartFactory {
 
         /**
-         * Creates a {@link mondrian.olap.Query} object.
+         * Creates a {@link mondrian.olap.QueryImpl} object.
          * Override this function to make your kind of query.
          */
         Query makeQuery(
@@ -68,11 +73,11 @@ public interface MdxParserValidator {
             QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
-            QueryPart[] cellProps,
+            CellProperty[] cellProps,
             boolean strictValidation);
 
         /**
-         * Creates a {@link mondrian.olap.DrillThrough} object.
+         * Creates a {@link DrillThrough} object.
          */
         DrillThrough makeDrillThrough(
             Query query,
@@ -85,7 +90,7 @@ public interface MdxParserValidator {
                 Formula e);
 
         /**
-         * Creates an {@link mondrian.olap.Explain} object.
+         * Creates an {@link ExplainImpl} object.
          */
         Explain makeExplain(
             QueryPart query);
@@ -95,7 +100,7 @@ public interface MdxParserValidator {
 
         Update makeUpdate(
                 String cubeName,
-                List<Update.UpdateClause> list);
+                List<UpdateClause> list);
 
         DmvQuery makeDmvQuery(
                 String tableName,
@@ -103,6 +108,6 @@ public interface MdxParserValidator {
                 Exp whereExpression);
 
         TransactionCommand makeTransactionCommand(
-                TransactionCommand.Command c);
+                Command c);
     }
 }

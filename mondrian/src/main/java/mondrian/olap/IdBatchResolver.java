@@ -24,21 +24,27 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitor;
-import mondrian.mdx.MemberExpr;
 
 /**
  * Used to collect and resolve identifiers in groups of children
@@ -62,7 +68,7 @@ import mondrian.mdx.MemberExpr;
 public final class IdBatchResolver {
     static final Logger LOGGER = LoggerFactory.getLogger(IdBatchResolver.class);
 
-    private final Query query;
+    private final QueryImpl query;
     private final Formula[] formulas;
     private final QueryAxis[] axes;
     private final Cube cube;
@@ -82,7 +88,7 @@ public final class IdBatchResolver {
     // first on segment length (shortest to longest), then alphabetically.
     private  SortedSet<Id> identifiers = new TreeSet<>(new IdComparator());
 
-    public IdBatchResolver(Query query) {
+    public IdBatchResolver(QueryImpl query) {
         this.query = query;
         formulas = query.getFormulas();
         axes = query.getAxes();
@@ -197,7 +203,7 @@ public final class IdBatchResolver {
         Map<QueryPart, QueryPart> resolvedIdentifiers)
     {
         final List<Id> children = findChildIds(parent, identifiers);
-        final List<Id.NameSegment> childNameSegments =
+        final List<NameSegment> childNameSegments =
             collectChildrenNameSegments(parentMember, children);
 
         if (!childNameSegments.isEmpty()) {
@@ -247,7 +253,7 @@ public final class IdBatchResolver {
      */
     private List<Member> lookupChildrenByNames(
         Member parentMember,
-        List<Id.NameSegment> childNameSegments)
+        List<NameSegment> childNameSegments)
     {
         try {
             return query.getSchemaReader(true)
@@ -271,7 +277,7 @@ public final class IdBatchResolver {
      * we think we can batch resolve, then transforms the Id list
      * to the corresponding NameSegment.
      */
-    private List<Id.NameSegment> collectChildrenNameSegments(
+    private List<NameSegment> collectChildrenNameSegments(
         final Member parentMember, List<Id> children)
     {
         filter(
@@ -298,7 +304,7 @@ public final class IdBatchResolver {
         }));
     }
 
-    private Id.Segment getLastSegment(Id id) {
+    private Segment getLastSegment(Id id) {
         int segSize = id.getSegments().size();
         return id.getSegments().get(segSize - 1);
     }
@@ -308,8 +314,8 @@ public final class IdBatchResolver {
      * the given identifier is likely to be resolvable at this point.
      */
     private boolean supportedIdentifier(Id id) {
-        Id.Segment seg = getLastSegment(id);
-        if (!(seg instanceof Id.NameSegment)) {
+        Segment seg = getLastSegment(id);
+        if (!(seg instanceof NameSegment)) {
             // we can't batch resolve members identified by key
             return false;
         }
@@ -332,19 +338,19 @@ public final class IdBatchResolver {
      * For all other Exp returns null.
      */
     private Member getMemberFromExp(Exp exp) {
-        if (exp instanceof DimensionExpr dimensionExpr) {
+        if (exp instanceof DimensionExpression dimensionExpr) {
             Hierarchy hier = dimensionExpr
                 .getDimension().getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof HierarchyExpr hierarchyExpr) {
+        } else if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
             Hierarchy hier = hierarchyExpr
                 .getHierarchy();
             if (hier.hasAll()) {
                 return hier.getAllMember();
             }
-        } else if (exp instanceof MemberExpr memberExpr) {
+        } else if (exp instanceof MemberExpression memberExpr) {
             return memberExpr.getMember();
         }
         return null;
@@ -400,7 +406,7 @@ public final class IdBatchResolver {
     }
 
     private boolean segListMatchInUniqueNames(
-        List<Id.Segment> segments, Collection<String> names)
+        List<Segment> segments, Collection<String> names)
     {
         String segUniqueName = Util.implode(segments);
         for (String name : names) {
@@ -412,7 +418,7 @@ public final class IdBatchResolver {
     }
 
     private boolean segMatchInNames(
-        Id.Segment seg, Collection<String> names)
+        Segment seg, Collection<String> names)
     {
         for (String name : names) {
             if (seg.matches(name)) {
@@ -422,7 +428,7 @@ public final class IdBatchResolver {
         return false;
     }
 
-    private boolean segmentIsCalcMember(final List<Id.Segment> checkSegments) {
+    private boolean segmentIsCalcMember(final List<Segment> checkSegments) {
         return query.getSchemaReader(true)
             .getCalculatedMember(checkSegments) != null;
     }
@@ -430,8 +436,8 @@ public final class IdBatchResolver {
     private List<Id> findChildIds(Id parent, SortedSet<Id> identifiers) {
         List<Id> childIds = new ArrayList<>();
         for (Id id : identifiers) {
-            final List<Id.Segment> idSeg = id.getSegments();
-            final List<Id.Segment> parentSegments = parent.getSegments();
+            final List<Segment> idSeg = id.getSegments();
+            final List<Segment> parentSegments = parent.getSegments();
             final int parentSegSize = parentSegments.size();
             if (idSeg.size() == parentSegSize + 1
                 && parent.getSegments().equals(
@@ -450,7 +456,7 @@ public final class IdBatchResolver {
         Set<Id> expandedIdentifiers = new HashSet<>();
         for (Id id : identifiers) {
             for (int i = 1; i < id.getSegments().size(); i++) {
-                expandedIdentifiers.add(new Id(id.getSegments().subList(0, i)));
+                expandedIdentifiers.add(new IdImpl(id.getSegments().subList(0, i)));
             }
         }
         identifiers.addAll(expandedIdentifiers);
@@ -464,8 +470,8 @@ public final class IdBatchResolver {
     private static class IdComparator implements Comparator<Id> {
         @Override
 		public int compare(Id o1, Id o2) {
-            List<Id.Segment> o1Seg = o1.getSegments();
-            List<Id.Segment> o2Seg = o2.getSegments();
+            List<Segment> o1Seg = o1.getSegments();
+            List<Segment> o2Seg = o2.getSegments();
 
             if (o1Seg.size() > o2Seg.size()) {
                 return 1;

@@ -135,9 +135,11 @@ public abstract class JdbcDialectImpl implements Dialect {
     private static final String FLAGS_REGEXP = "^(\\(\\?([a-zA-Z]+)\\)).*$";
     private static final Pattern flagsPattern = Pattern.compile(FLAGS_REGEXP);
 
+    public JdbcDialectImpl() {
 
-    @Override
-    public boolean initialize(Connection connection) {
+    }
+
+    public JdbcDialectImpl(Connection connection) {
 
         DatabaseMetaData metaData;
         try {
@@ -152,17 +154,10 @@ public abstract class JdbcDialectImpl implements Dialect {
             this.maxColumnNameLength = deduceMaxColumnNameLength(metaData);
             this.permitsSelectNotInGroupBy = deduceSupportsSelectNotInGroupBy(connection);
 
-            //check
-            return isSupportedProduct(productName, productVersion);
-
-
-
         } catch (SQLException e) {
             LOGGER.info("initialize failed", e);
-            return false;
         }
     }
-    protected abstract boolean isSupportedProduct(String productName, String productVersion);
 
     @Override
     public void appendHintsAfterFromClause(
@@ -1074,65 +1069,6 @@ public abstract class JdbcDialectImpl implements Dialect {
             javaRegex = javaRegex.substring( 0, flagsMatcher.start( 1 ) ) + javaRegex.substring( flagsMatcher.end( 1 ) );
         }
         return javaRegex;
-    }
-
-    /**
-     * Helper method to determine if a connection would work with
-     * a given database product. This can be used to differenciate
-     * between databases which use the same driver as others.
-     *
-     * <p>It will first try to use
-     * {@link DatabaseMetaData#getDatabaseProductName()} and match the
-     * name of DatabaseProduct passed as an argument.
-     *
-     * <p>If that fails, it will try to execute <code>select version();</code>
-     * and obtains some information directly from the server.
-     *
-     * @param databaseProduct Database product instance
-     * @param connection SQL connection
-     * @return true if a match was found. false otherwise.
-     */
-    protected static boolean isDatabase(
-        String databaseProduct,
-        Connection connection)
-    {
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        String dbProduct = databaseProduct.toLowerCase();
-
-        try {
-            // Quick and dirty check first.
-            if (connection.getMetaData().getDatabaseProductName()
-                .toLowerCase().contains(dbProduct))
-            {
-                LOGGER.debug("Using {} dialect", databaseProduct);
-                return true;
-            }
-
-            // Let's try using version().
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("select version()");
-            if (resultSet.next()) {
-                String version = resultSet.getString(1);
-                LOGGER.debug("Version={}", version);
-                if (version != null && version.toLowerCase().contains(dbProduct)) {
-                    LOGGER.info("Using {} dialect", databaseProduct);
-                    return true;
-                }
-            }
-            LOGGER.debug("NOT Using {} dialect",  databaseProduct);
-            return false;
-        } catch (SQLException e) {
-            // this exception can be hit by any db types that don't support
-            // 'select version()'
-            // no need to log exception, this is an "expected" error as we
-            // loop through all dialects looking for one that matches.
-            LOGGER.debug("NOT Using {} dialect.", databaseProduct);
-            return false;
-        } finally {
-            Util.close(resultSet, statement, null);
-        }
     }
 
     @Override

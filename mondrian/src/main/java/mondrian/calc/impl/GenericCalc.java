@@ -11,24 +11,13 @@ package mondrian.calc.impl;
 
 import java.util.Date;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.BooleanCalc;
-import mondrian.calc.Calc;
-import mondrian.calc.DateTimeCalc;
-import mondrian.calc.DimensionCalc;
-import mondrian.calc.DoubleCalc;
-import mondrian.calc.HierarchyCalc;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.StringCalc;
-import mondrian.calc.TupleCalc;
-import mondrian.calc.VoidCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
 
@@ -36,26 +25,22 @@ import mondrian.olap.type.Type;
  * Adapter which computes a scalar or tuple expression and converts it to any
  * required type.
  *
- * @see mondrian.calc.impl.GenericIterCalc
  *
  * @author jhyde
  * @since Sep 26, 2005
  */
 public abstract class GenericCalc
-extends AbstractCalc
-implements TupleCalc,
-StringCalc, IntegerCalc, DoubleCalc, BooleanCalc, DateTimeCalc,
-VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
 {
     /**
      * Creates a GenericCalc without specifying child calculated expressions.
      *
-     * <p>Subclass should override {@link #getCalcs()}.
+     * <p>Subclass should override {@link #getChildCalcs()}.
      *
      * @param exp Source expression
      */
-    protected GenericCalc(String name, Type type) {
-        super(name,type, null);
+    protected GenericCalc(Type type) {
+        super(type, null);
     }
 
     /**
@@ -64,16 +49,11 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
      * @param exp Source expression
      * @param calcs Child compiled expressions
      */
-    protected GenericCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected GenericCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
 
-
-	@Override
-    public Member[] evaluateTuple(Evaluator evaluator) {
-        return (Member[]) evaluate(evaluator);
-    }
 
     private String msg(TypeEnum expectedType, Object o) {
         final TypeEnum actualType = GenericCalc.actualType(o);
@@ -106,39 +86,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
-    public String evaluateString(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (String) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.STRING, o));
-        }
-    }
 
-    @Override
-    public int evaluateInteger(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            final Number number = (Number) o;
-            return number == null
-                    ? FunUtil.INTEGER_NULL
-                            : number.intValue();
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
-        }
-    }
-
-    @Override
-    public double evaluateDouble(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            final Number number = (Number) o;
-            return GenericCalc.numberToDouble(number);
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.NUMERIC, o));
-        }
-    }
 
     public static double numberToDouble(Number number) {
         return number == null
@@ -146,71 +94,9 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
                         : number.doubleValue();
     }
 
-    @Override
-    public boolean evaluateBoolean(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Boolean) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.BOOLEAN, o));
-        }
-    }
 
-    @Override
-    public Date evaluateDateTime(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Date) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.DATETIME, o));
-        }
-    }
 
-    @Override
-    public void evaluateVoid(Evaluator evaluator) {
-        final Object result = evaluate(evaluator);
-        assert result == null;
-    }
 
-    @Override
-    public Member evaluateMember(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Member) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.MEMBER, o));
-        }
-    }
-
-    @Override
-    public Level evaluateLevel(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Level) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.LEVEL, o));
-        }
-    }
-
-    @Override
-    public Hierarchy evaluateHierarchy(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Hierarchy) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.HIERARCHY, o));
-        }
-    }
-
-    @Override
-    public Dimension evaluateDimension(Evaluator evaluator) {
-        final Object o = evaluate(evaluator);
-        try {
-            return (Dimension) o;
-        } catch (final ClassCastException e) {
-            throw evaluator.newEvalException(null, msg(TypeEnum.DIMENSION, o));
-        }
-    }
 
     private enum TypeEnum {
         NULL,

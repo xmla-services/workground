@@ -11,11 +11,14 @@
 
 package mondrian.olap;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
 
@@ -133,10 +136,10 @@ public abstract class LevelBase
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
         if (areMembersUnique()
-            && s instanceof Id.NameSegment nameSegment)
+            && s instanceof NameSegment nameSegment)
         {
             return Util.lookupHierarchyRootMember(
                 schemaReader, hierarchy, nameSegment, matchType);

@@ -84,14 +84,6 @@ public class AggTableManager {
         return LOGGER;
     }
 
-    /**
-     * @deprecated API updated to pass the Mondrian connection properties.
-     * See {@link #initialize(PropertyList)}
-     */
-    @Deprecated
-    public void initialize() {
-        initialize(new Util.PropertyList());
-    }
 
     /**
      * Initializes this object, loading all aggregate tables and associating

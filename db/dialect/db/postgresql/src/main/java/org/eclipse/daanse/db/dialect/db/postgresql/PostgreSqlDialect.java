@@ -9,6 +9,11 @@
 
 package org.eclipse.daanse.db.dialect.db.postgresql;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -16,38 +21,16 @@ import java.sql.Types;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
 /**
  * Implementation of {@link Dialect} for the PostgreSQL database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
-        "database.product:String='POSTGRESQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class PostgreSqlDialect extends JdbcDialectImpl {
 
-    private static final String SUPPORTED_PRODUCT_NAME = "POSTGRESQL";
-
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
-
-    @Override
-    public boolean initialize(Connection connection) {
-        return super.initialize(connection) && !isDatabase("GREENPLUM", connection)
-                && !isDatabase("NETEZZA", connection)
-                && !isDatabase("REDSHIFT", connection);
+    public PostgreSqlDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

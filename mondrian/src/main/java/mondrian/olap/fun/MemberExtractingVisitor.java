@@ -14,16 +14,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
@@ -78,7 +79,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(ParameterExpr parameterExpr) {
+	public Object visit(ParameterExpression parameterExpr) {
         final Parameter parameter = parameterExpr.getParameter();
         final Type type = parameter.getType();
         if (type instanceof mondrian.olap.type.MemberType) {
@@ -95,7 +96,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExpr memberExpr) {
+	public Object visit(MemberExpressionImpl memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);
@@ -114,26 +115,26 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(DimensionExpr dimensionExpr) {
+	public Object visit(DimensionExpression dimensionExpr) {
         // add the default hierarchy
         addToDimMemberSet(dimensionExpr.getDimension().getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExpr hierarchyExpr) {
+	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
         addToDimMemberSet(hierarchyExpr.getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(LevelExpr levelExpr) {
+	public Object visit(LevelExpression levelExpr) {
         addToDimMemberSet(levelExpr.getLevel().getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCall funCall) {
+	public Object visit(ResolvedFunCallImpl funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
         } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {

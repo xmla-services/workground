@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import mondrian.rolap.TupleReader.MemberBuilder;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
@@ -40,11 +40,12 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
+import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.aggmatcher.AggStar;
@@ -164,7 +165,7 @@ class SqlMemberSource
 
     @Override
 	public RolapMember lookupMember(
-        List<Id.Segment> uniqueNameParts,
+        List<Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         throw new UnsupportedOperationException();
@@ -1469,7 +1470,7 @@ RME is this right
 
         /**
          * @return the members's depth
-         * @see org.eclipse.daanse.olap.api.model.Member#getDepth()
+         * @see org.eclipse.daanse.olap.api.element.Member#getDepth()
          */
         @Override
 		public int getDepth() {

@@ -13,6 +13,8 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -21,7 +23,6 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
 import mondrian.calc.TupleList;
-import mondrian.olap.AxisOrdinal;
 import mondrian.rolap.RolapAxis;
 import mondrian.server.Locus;
 
@@ -34,7 +35,7 @@ import mondrian.server.Locus;
  */
 class MondrianOlap4jCellSetAxis implements CellSetAxis {
     private final MondrianOlap4jCellSet olap4jCellSet;
-    private final mondrian.olap.QueryAxis queryAxis;
+    private final QueryAxis queryAxis;
     private final RolapAxis axis;
 
     /**
@@ -46,7 +47,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
      */
     MondrianOlap4jCellSetAxis(
         MondrianOlap4jCellSet olap4jCellSet,
-        mondrian.olap.QueryAxis queryAxis,
+        QueryAxis queryAxis,
         RolapAxis axis)
     {
         assert olap4jCellSet != null;
@@ -135,7 +136,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
             return new AbstractList<>() {
                 @Override
 				public Member get(int slice) {
-                    final org.eclipse.daanse.olap.api.model.Member mondrianMember =
+                    final org.eclipse.daanse.olap.api.element.Member mondrianMember =
                         tupleList.get(slice, index);
                     return olap4jCellSet.olap4jStatement.olap4jConnection
                         .toOlap4j(mondrianMember);

@@ -16,15 +16,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
+import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -72,7 +72,7 @@ public class RolapNativeFilter extends RolapNativeSet {
       final AtomicBoolean mustJoin = new AtomicBoolean( false );
       filterExpr.accept( new MdxVisitorImpl() {
         @Override
-		public Object visit( MemberExpr memberExpr ) {
+		public Object visit( MemberExpressionImpl memberExpr ) {
           if ( memberExpr.getMember().isMeasure() ) {
             mustJoin.set( true );
             return null;
@@ -160,7 +160,7 @@ protected boolean restrictMemberTypes() {
   }
 
   @Override
-NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunDef fun, Exp[] args ) {
+NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Exp[] args ) {
     if ( !isEnabled() ) {
       return null;
     }

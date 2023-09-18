@@ -20,7 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
@@ -29,13 +30,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.calc.Calc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.SetType;
 import mondrian.rolap.RolapMemberBase;
 
@@ -88,8 +88,8 @@ class UnionFunDefTest {
         new CrossJoinFunDef(new CrossJoinTest.NullFunDef());
     Exp[] expMock = new Exp[1];
     expMock[0] = mock(Exp.class);
-    ResolvedFunCall resolvedFunCall =
-        new ResolvedFunCall(mock(FunDef.class), expMock, mock(SetType.class));
+    ResolvedFunCallImpl resolvedFunCall =
+        new ResolvedFunCallImpl(mock(FunctionDefinition.class), expMock, mock(SetType.class));
     Calc[] calcs = new Calc[1];
     calcs[0] = Mockito.mock(Calc.class);
     CrossJoinFunDef.ImmutableListCalc immutableListCalc =

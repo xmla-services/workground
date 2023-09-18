@@ -25,24 +25,24 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -70,7 +70,7 @@ import mondrian.util.Format;
  *
  * <p>
  * The {@code savepoint} method is recommended for most purposes, because the initial checkpoint is extremely cheap.
- * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.model.Member)}) creates, at
+ * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.element.Member)}) creates, at
  * a modest cost, an entry on an internal command stack.
  *
  * <p>
@@ -410,16 +410,6 @@ public final Query getQuery() {
   }
 
   @Override
-public final int getDepth() {
-    return 0;
-  }
-
-  @Override
-public final RolapEvaluator getParent() {
-    return parent;
-  }
-
-  @Override
 public final SchemaReader getSchemaReader() {
     return root.schemaReader;
   }
@@ -427,36 +417,6 @@ public final SchemaReader getSchemaReader() {
   @Override
 public Date getQueryStartTime() {
     return root.getQueryStartTime();
-  }
-
-
-  @Override
-public final RolapEvaluator push( Member[] members ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setContext( members );
-    return evaluator;
-  }
-
-  @Override
-public final RolapEvaluator push( Member member ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setContext( member );
-    return evaluator;
-  }
-
-  @Override
-public final Evaluator push( boolean nonEmpty ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setNonEmpty( nonEmpty );
-    return evaluator;
-  }
-
-  @Override
-public final Evaluator push( boolean nonEmpty, boolean nativeEnabled ) {
-    final RolapEvaluator evaluator = pushClone( null );
-    evaluator.setNonEmpty( nonEmpty );
-    evaluator.setNativeEnabled( nativeEnabled );
-    return evaluator;
   }
 
   @Override
@@ -818,7 +778,7 @@ public final RolapMember getContext( Hierarchy hierarchy ) {
   }
 
   /**
-   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.model.Hierarchy)}, for internal code.
+   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.element.Hierarchy)}, for internal code.
    *
    * @param hierarchy
    *          Hierarchy
@@ -1185,7 +1145,7 @@ public final void setNonEmpty( boolean nonEmpty ) {
 
   @Override
 public final RuntimeException newEvalException( Object context, String s ) {
-    return FunUtil.newEvalException( (FunDef) context, s );
+    return FunUtil.newEvalException( (FunctionDefinition) context, s );
   }
 
   @Override
@@ -1502,4 +1462,5 @@ public boolean shouldIgnoreUnrelatedDimensions() {
 
     abstract void execute( RolapEvaluator evaluator );
   }
+
 }

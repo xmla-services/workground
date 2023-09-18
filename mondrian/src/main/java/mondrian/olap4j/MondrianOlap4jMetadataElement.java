@@ -11,7 +11,7 @@ package mondrian.olap4j;
 
 import java.sql.SQLException;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapWrapper;
 
 /**

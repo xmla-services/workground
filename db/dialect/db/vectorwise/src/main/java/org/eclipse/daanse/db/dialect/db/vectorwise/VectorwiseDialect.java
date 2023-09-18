@@ -10,10 +10,8 @@ package org.eclipse.daanse.db.dialect.db.vectorwise;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.ingres.IngresDialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the Vertica database.
@@ -21,16 +19,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author LBoudreau
  * @since Sept 11, 2009
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VECTORWISE'",
-		"database.product:String='VECTORWISE'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class VectorwiseDialect extends IngresDialect {
 
     private static final String SUPPORTED_PRODUCT_NAME = "VECTORWISE";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public VectorwiseDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

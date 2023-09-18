@@ -13,19 +13,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
@@ -49,7 +49,7 @@ class LastPeriodsFunDef extends FunDefBase {
             new String[] {"fxn", "fxnm"},
             LastPeriodsFunDef.class);
 
-    public LastPeriodsFunDef(FunDef dummyFunDef) {
+    public LastPeriodsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -71,7 +71,7 @@ class LastPeriodsFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         // Member defaults to [Time].currentmember
         Exp[] args = call.getArgs();
         final MemberCalc memberCalc;
@@ -80,7 +80,7 @@ class LastPeriodsFunDef extends FunDefBase {
                 ((RolapCube) compiler.getEvaluator().getCube())
                     .getTimeHierarchy(getName());
             memberCalc =
-                new HierarchyCurrentMemberFunDef.FixedCalcImpl(
+                new HierarchyCurrentMemberFunDef.CurrentMemberFixedCalc(
                 		call.getType(), timeHierarchy);
         } else {
             memberCalc = compiler.compileMember(args[1]);
@@ -91,12 +91,12 @@ class LastPeriodsFunDef extends FunDefBase {
                 compiler.compileInteger(args[0]);
 
         return new AbstractListCalc(
-call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
+call.getType(), new Calc[] {memberCalc, indexValueCalc})
         {
             @Override
 			public TupleList evaluateList(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
-                int indexValue = indexValueCalc.evaluateInteger(evaluator);
+                Member member = memberCalc.evaluate(evaluator);
+                Integer indexValue = indexValueCalc.evaluate(evaluator);
 
                 return new UnaryTupleList(
                     lastPeriods(member, evaluator, indexValue));
@@ -118,7 +118,7 @@ call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
     List<Member> lastPeriods(
         Member member,
         Evaluator evaluator,
-        int indexValue)
+        Integer indexValue)
     {
         // empty set
         if ((indexValue == 0) || member.isNull()) {

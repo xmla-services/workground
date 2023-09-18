@@ -16,6 +16,11 @@ package mondrian.olap;
 import static mondrian.olap.Util.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+
+import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -29,15 +34,15 @@ import mondrian.server.Statement;
  * Query test.
  */
 class QueryTest {
-    private QueryPart[] cellProps = {
-        new CellProperty(Id.Segment.toList("Value")),
-        new CellProperty(Id.Segment.toList("Formatted_Value")),
-        new CellProperty(Id.Segment.toList("Format_String")),
+    private CellProperty[] cellProps = {
+        new CellPropertyImpl(Segment.toList("Value")),
+        new CellPropertyImpl(Segment.toList("Formatted_Value")),
+        new CellPropertyImpl(Segment.toList("Format_String")),
     };
-    private QueryAxis[] axes = new QueryAxis[0];
+    private QueryAxisImpl[] axes = new QueryAxisImpl[0];
     private Formula[] formulas = new Formula[0];
-    private Query queryWithCellProps;
-    private Query queryWithoutCellProps;
+    private QueryImpl queryWithCellProps;
+    private QueryImpl queryWithoutCellProps;
 
 
     private void beforeTest(TestingContext context)
@@ -50,13 +55,13 @@ class QueryTest {
 
         try {
             queryWithCellProps =
-                    new Query(
+                    new QueryImpl(
                             statement, formulas, axes, "Sales",
                             null, cellProps, false);
             queryWithoutCellProps =
-                    new Query(
+                    new QueryImpl(
                             statement, formulas, axes, "Sales",
-                            null, new QueryPart[0], false);
+                            null, new CellProperty[0], false);
         } finally {
             statement.close();
         }

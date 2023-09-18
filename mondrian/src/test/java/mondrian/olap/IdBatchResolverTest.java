@@ -30,7 +30,14 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,6 +51,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.SubtotalVisibility;
 import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
 import mondrian.rolap.RolapConnection;
@@ -55,10 +64,10 @@ import mondrian.test.PropertySaver5;
 class IdBatchResolverTest  {
 
 	@Mock
-     Query query;
+     QueryImpl query;
 
     @Captor
-     ArgumentCaptor<List<Id.NameSegment>> childNames;
+     ArgumentCaptor<List<NameSegment>> childNames;
 
     @Captor
      ArgumentCaptor<Member> parentMember;
@@ -421,12 +430,12 @@ class IdBatchResolverTest  {
         return resolvedNames;
     }
 
-    private String sortedNames(List<Id.NameSegment> items) {
+    private String sortedNames(List<NameSegment> items) {
         Collections.sort(
-            items, new Comparator<Id.NameSegment>()
+            items, new Comparator<NameSegment>()
         {
             @Override
-			public int compare(Id.NameSegment o1, Id.NameSegment o2) {
+			public int compare(NameSegment o1, NameSegment o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
@@ -455,7 +464,7 @@ class IdBatchResolverTest  {
 
     public IdBatchResolver makeTestBatchResolver(TestingContext context,String mdx) {
     	TestUtil.flushSchemaCache(context.createConnection());
-        Parser.FactoryImpl factoryImpl = new FactoryImplTestWrapper();
+        FactoryImpl factoryImpl = new FactoryImplTestWrapper();
         MdxParserValidator parser = new JavaccParserValidatorImpl(factoryImpl);
 
         RolapConnection conn = (RolapConnection) spy(
@@ -470,7 +479,7 @@ class IdBatchResolverTest  {
         return new IdBatchResolver(query);
     }
 
-    private class QueryTestWrapper extends Query {
+    private class QueryTestWrapper extends QueryImpl {
         private SchemaReader spyReader;
 
         public QueryTestWrapper(
@@ -478,8 +487,8 @@ class IdBatchResolverTest  {
             Formula[] formulas,
             QueryAxis[] axes,
             String cube,
-            QueryAxis slicerAxis,
-            QueryPart[] cellProps,
+            QueryAxisImpl slicerAxis,
+            CellProperty[] cellProps,
             boolean strictValidation)
         {
             super(
@@ -516,24 +525,24 @@ class IdBatchResolverTest  {
         }
     }
 
-    class FactoryImplTestWrapper extends Parser.FactoryImpl {
+    class FactoryImplTestWrapper extends FactoryImpl {
 
         @Override
-        public Query makeQuery(
+        public QueryImpl makeQuery(
             Statement statement,
             Formula[] formulae,
             QueryAxis[] axes,
             Subcube subcube,
             Exp slicer,
-            QueryPart[] cellProps,
+            CellProperty[] cellProps,
             boolean strictValidation)
         {
-            final QueryAxis slicerAxis =
+            final QueryAxisImpl slicerAxis =
                 slicer == null
                     ? null
-                    : new QueryAxis(
+                    : new QueryAxisImpl(
                         false, slicer, AxisOrdinal.StandardAxisOrdinal.SLICER,
-                        QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
+                        SubtotalVisibility.Undefined, new Id[0]);
             return new QueryTestWrapper(
                 statement, formulae, axes, subcube.getCubeName(), slicerAxis, cellProps,
                 strictValidation);

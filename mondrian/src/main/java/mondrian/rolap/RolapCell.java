@@ -18,16 +18,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -35,25 +44,18 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.NamedSetExpr;
-import mondrian.mdx.ParameterExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.SetFunDef;
@@ -130,7 +132,7 @@ public class RolapCell implements Cell {
 
     @Override
 	public boolean isNull() {
-        return (ci.value == Util.nullValue);
+        return (Objects.equals(ci.value ,Util.nullValue));
     }
 
     @Override
@@ -473,23 +475,23 @@ public class RolapCell implements Cell {
         // "with member cm as m" then
         // "cm" is equivalent to "m"
         final Exp expr = member.getExpression();
-        if (expr instanceof MemberExpr) {
+        if (expr instanceof MemberExpression) {
             members.set(
                 i,
-                ((MemberExpr) expr).getMember());
+                ((MemberExpression) expr).getMember());
             return;
         }
         // "Aggregate({m})" is equivalent to "m"
-        if (expr instanceof ResolvedFunCall call) {
+        if (expr instanceof ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof AggregateFunDef) {
                 final Exp[] args = call.getArgs();
-                if (args[0] instanceof ResolvedFunCall arg0) {
+                if (args[0] instanceof ResolvedFunCallImpl arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
-                            && arg0.getArg(0) instanceof MemberExpr)
+                            && arg0.getArg(0) instanceof MemberExpression)
                         {
-                            final MemberExpr memberExpr =
-                                (MemberExpr) arg0.getArg(0);
+                            final MemberExpression memberExpr =
+                                (MemberExpression) arg0.getArg(0);
                             members.set(i, memberExpr.getMember());
                         }
                     }
@@ -750,14 +752,14 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(MemberExpr memberExpr) {
+		public Object visit(MemberExpressionImpl memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
-            final FunDef def = call.getFunDef();
+		public Object visit(ResolvedFunCallImpl call) {
+            final FunctionDefinition def = call.getFunDef();
             final Exp[] args = call.getArgs();
             final String name = def.getName();
             if (name.equals("+")
@@ -799,7 +801,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(NamedSetExpr namedSetExpr) {
+		public Object visit(NamedSetExpression namedSetExpr) {
             throw Util.newInternal("not valid here: " + namedSetExpr);
         }
 
@@ -809,12 +811,12 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(Query query) {
+		public Object visit(QueryImpl query) {
             throw Util.newInternal("not valid here: " + query);
         }
 
         @Override
-		public Object visit(QueryAxis queryAxis) {
+		public Object visit(QueryAxisImpl queryAxis) {
             throw Util.newInternal("not valid here: " + queryAxis);
         }
 
@@ -824,7 +826,7 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visit(UnresolvedFunCallImpl call) {
             throw Util.newInternal("expected resolved expression");
         }
 
@@ -834,25 +836,25 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(ParameterExpr parameterExpr) {
+		public Object visit(ParameterExpression parameterExpr) {
             // Not valid in general; might contain complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(DimensionExpr dimensionExpr) {
+		public Object visit(DimensionExpression dimensionExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(HierarchyExpr hierarchyExpr) {
+		public Object visit(HierarchyExpressionImpl hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(LevelExpr levelExpr) {
+		public Object visit(LevelExpression levelExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

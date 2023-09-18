@@ -8,28 +8,20 @@
 */
 package org.eclipse.daanse.db.dialect.db.pdidataservice;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+
+import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
-
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='PDI'",
-        "database.product:String='PDI'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class PdiDataServiceDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "PDI";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public PdiDataServiceDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

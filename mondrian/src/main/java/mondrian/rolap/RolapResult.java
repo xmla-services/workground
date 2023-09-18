@@ -11,6 +11,8 @@
 */
 package mondrian.rolap;
 
+import static org.eigenbase.xom.XOMUtil.discard;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,37 +23,43 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleIterator;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -60,12 +68,11 @@ import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
+import mondrian.olap.api.NameSegment;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
@@ -83,8 +90,6 @@ import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
-
-import static org.eigenbase.xom.XOMUtil.discard;
 
 /**
  * A <code>RolapResult</code> is the result of running a query.
@@ -142,7 +147,7 @@ public class RolapResult extends ResultBase {
 
     this.batchingReader = new FastBatchingCellReader( execution, cube, aggMgr );
 
-    this.cellInfos = ( query.axes.length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.axes.length );
+    this.cellInfos = ( query.getAxes().length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.getAxes().length );
 
     if ( !execute ) {
       return;
@@ -265,10 +270,10 @@ public class RolapResult extends ResultBase {
       //
       HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
 
-      for(Map.Entry<Hierarchy, Calc> entry : query.subcubeHierarchyCalcs.entrySet()) {
+      for(Map.Entry<Hierarchy, Calc> entry : query.getSubcubeHierarchyCalcs().entrySet()) {
         Hierarchy hierarchy = entry.getKey();
-        org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
-        org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
+        org.eclipse.daanse.olap.api.element.Level[] levels = hierarchy.getLevels();
+        org.eclipse.daanse.olap.api.element.Level lastLevel = levels[levels.length - 1];
 
         Calc calc = entry.getValue();
 
@@ -281,9 +286,9 @@ public class RolapResult extends ResultBase {
                         null,
                         null);
         SetType setType = new SetType(memberType1);
-        mondrian.calc.ListCalc listCalc =
+        mondrian.calc.TupleListCalc tupleListCalc =
                 new mondrian.calc.impl.AbstractListCalc(
-                        "AbstractListCalc",setType, new Calc[0])
+                        setType, new Calc[0])
                 {
                   @Override
 				public TupleList evaluateList(
@@ -312,9 +317,9 @@ public class RolapResult extends ResultBase {
                 };
         final mondrian.olap.type.NumericType returnType = new mondrian.olap.type.NumericType();
         final Calc partialCalc =
-                new RolapHierarchy.LimitedRollupAggregateCalc(returnType, listCalc);
+                new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
         Exp partialExp =
-                new ResolvedFunCall(
+                new ResolvedFunCallImpl(
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
                           @Override
 						public Calc compileCall(
@@ -331,7 +336,7 @@ public class RolapResult extends ResultBase {
                         new Exp[0],
                         returnType);
 
-        final TupleIterable iterable = ( (IterCalc) calc ).evaluateIterable( evaluator );
+        final TupleIterable iterable = ( (TupleIteratorCalc) calc ).evaluateIterable( evaluator );
         TupleCursor cursor;
         if ( iterable instanceof TupleList list ) {
           cursor = list.tupleCursor();
@@ -361,7 +366,7 @@ public class RolapResult extends ResultBase {
         subcubeHierarchies.put(hierarchy, subcubeHierarchyMembers);
 
       }
-      query.subcubeHierarchies = subcubeHierarchies;
+      query.setSubcubeHierarchies(subcubeHierarchies);
 
       query.replaceSubcubeMembers();
       query.resolve();
@@ -399,7 +404,7 @@ public class RolapResult extends ResultBase {
       // Determine Slicer
       //
       axisMembers.setSlicer( true );
-      loadMembers( emptyNonAllMembers, evaluator, query.getSlicerAxis(), query.slicerCalc, axisMembers );
+      loadMembers( emptyNonAllMembers, evaluator, query.getSlicerAxis(), query.getSlicerCalc(), axisMembers );
       axisMembers.setSlicer( false );
 
       // Save unadulterated context for the next time we need to evaluate
@@ -432,7 +437,7 @@ public class RolapResult extends ResultBase {
       do {
         TupleIterable tupleIterable =
             evalExecute( nonAllMembers, nonAllMembers.size() - 1, savedEvaluator, query.getSlicerAxis(),
-                query.slicerCalc );
+                query.getSlicerCalc() );
         // Materialize the iterable as a list. Although it may take
         // memory, we need the first member below, and besides, slicer
         // axes are generally small.
@@ -459,7 +464,7 @@ public class RolapResult extends ResultBase {
 
           final List<Member> prevSlicerMembers = new ArrayList<>();
 
-          final Calc calcCached = new GenericCalc("DummyExp", query.slicerCalc.getType() ) {
+          final Calc calcCached = new GenericCalc( query.getSlicerCalc().getType() ) {
             @Override
 			public Object evaluate( Evaluator evaluator ) {
               try {
@@ -491,7 +496,7 @@ public class RolapResult extends ResultBase {
           // Generate a cached calculation for slicer aggregation
           // This is so critical for performance that we should consider creating an
           // optimized query level slicer cache.
-          final Calc calc = new CacheCalc("CacheCalc", query.getSlicerAxis().getSet().getType(), cacheDescriptor );
+          final Calc calc = new CacheCalc( query.getSlicerAxis().getSet().getType(), cacheDescriptor );
 
           // replace the slicer set with a placeholder to avoid
           // interaction between the aggregate calc we just created
@@ -510,7 +515,7 @@ public class RolapResult extends ResultBase {
           Member placeholder =
               setPlaceholderSlicerAxis( (RolapMember) tupleList.get( 0 ).get( 0 ), calc, true, tupleList );
 
-          Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (FILTER):", query.slicerCalc, evaluator
+          Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (FILTER):", query.getSlicerCalc(), evaluator
               .getTiming() );
 
           evaluator.setContext( placeholder );
@@ -529,8 +534,8 @@ public class RolapResult extends ResultBase {
       axisMembers.clearTotalCellCount();
 
       for ( int i = 0; i < axes.length; i++ ) {
-        final QueryAxis axis = query.axes[i];
-        final Calc calc = query.axisCalcs[i];
+        final QueryAxis axis = query.getAxes()[i];
+        final Calc calc = query.getAxisCalcs()[i];
         loadMembers( emptyNonAllMembers, evaluator, axis, calc, axisMembers );
       }
 
@@ -556,8 +561,8 @@ public class RolapResult extends ResultBase {
         final int savepoint = evaluator.savepoint();
         try {
           for ( int i = 0; i < axes.length; i++ ) {
-            final QueryAxis axis = query.axes[i];
-            final Calc calc = query.axisCalcs[i];
+            final QueryAxis axis = query.getAxes()[i];
+            final Calc calc = query.getAxisCalcs()[i];
             loadMembers( nonAllMembers, evaluator, axis, calc, axisMembers );
             evaluator.restore( savepoint );
           }
@@ -580,8 +585,8 @@ public class RolapResult extends ResultBase {
             evaluator.restore( savepoint );
             redo = false;
             for ( int i = 0; i < axes.length; i++ ) {
-              QueryAxis axis = query.axes[i];
-              final Calc calc = query.axisCalcs[i];
+              QueryAxis axis = query.getAxes()[i];
+              final Calc calc = query.getAxisCalcs()[i];
               TupleIterable tupleIterable =
                   evalExecute( nonAllMembers, nonAllMembers.size() - 1, evaluator, axis, calc );
 
@@ -624,10 +629,10 @@ public class RolapResult extends ResultBase {
 
       // Get value for each Cell
       // Cells will not be calculated if only CELL_ORDINAL requested.
-      mondrian.olap.QueryPart[] cellProperties = query.getCellProperties();
+      QueryPart[] cellProperties = query.getCellProperties();
       if(!(cellProperties.length == 1
-              && ((mondrian.olap.Id.NameSegment)
-              mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).name.equalsIgnoreCase(
+              && ((NameSegment)
+              mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).getName().equalsIgnoreCase(
               mondrian.olap.Property.CELL_ORDINAL.getName()    ))) {
         final Locus locus = new Locus( execution, null, "Loading cells" );
         Locus.push( locus );
@@ -812,20 +817,20 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( DimensionExpr dimensionExpr ) {
+	public Object visit( DimensionExpression dimensionExpr ) {
       dimension = dimensionExpr.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( HierarchyExpr hierarchyExpr ) {
+	public Object visit( HierarchyExpressionImpl hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( MemberExpr memberExpr ) {
+	public Object visit( MemberExpressionImpl memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;
@@ -852,8 +857,8 @@ public final Execution getExecution() {
     return changed;
   }
 
-  protected void loadMembers( List<List<Member>> nonAllMembers, RolapEvaluator evaluator, QueryAxis axis, Calc calc,
-      AxisMemberList axisMembers ) {
+  protected void loadMembers(List<List<Member>> nonAllMembers, RolapEvaluator evaluator, QueryAxis axis, Calc calc,
+                             AxisMemberList axisMembers ) {
     int attempt = 0;
     evaluator.setCellReader( batchingReader );
     while ( true ) {
@@ -1045,7 +1050,7 @@ public Cell getCell( int[] pos ) {
     try {
       evaluator.setNonEmpty( queryAxis.isNonEmpty() );
       evaluator.setEvalAxes( true );
-      final TupleIterable iterable = ( (IterCalc) axisCalc ).evaluateIterable( evaluator );
+      final TupleIterable iterable = ( (TupleIteratorCalc) axisCalc ).evaluateIterable( evaluator );
       if ( axisCalc.getClass().getName().indexOf( "OrderFunDef" ) != -1 ) {
         queryAxis.setOrdered( true );
       }
@@ -1066,7 +1071,7 @@ public Cell getCell( int[] pos ) {
     }
   }
 
-  private void executeBody( RolapEvaluator evaluator, Query query, final int[] pos ) {
+  private void executeBody(RolapEvaluator evaluator, Query query, final int[] pos ) {
     // Compute the cells several times. The first time, use a dummy
     // evaluator which collects requests.
     int count = 0;
@@ -1074,7 +1079,7 @@ public Cell getCell( int[] pos ) {
     while ( true ) {
       evaluator.setCellReader( batchingReader );
       try {
-        executeStripe( query.axes.length - 1, evaluator, pos );
+        executeStripe( query.getAxes().length - 1, evaluator, pos );
       } catch ( CellRequestQuantumExceededException e ) {
         // Safe to ignore. Need to call 'phase' and loop again.
         // Decrement count because it wasn't a recursive formula that
@@ -1445,15 +1450,15 @@ public Cell getCell( int[] pos ) {
     } else if ( o instanceof VisualTotalMember member ) {
       Exp exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
-    } else if ( o instanceof Exp exp && !( o instanceof MemberExpr ) ) {
-      ResolvedFunCall funCall = (ResolvedFunCall) exp;
+    } else if ( o instanceof Exp exp && !( o instanceof MemberExpression) ) {
+      ResolvedFunCallImpl funCall = (ResolvedFunCallImpl) exp;
       Exp[] exps = funCall.getArgs();
       processMemberExpr( exps, exprMembers );
     } else if ( o instanceof Exp[] exps ) {
       for ( Exp exp : exps ) {
         processMemberExpr( exp, exprMembers );
       }
-    } else if ( o instanceof MemberExpr memberExp ) {
+    } else if ( o instanceof MemberExpression memberExp ) {
       Member member = memberExp.getMember();
       processMemberExpr( member, exprMembers );
     }
@@ -1886,7 +1891,7 @@ public Cell getCell( int[] pos ) {
 
     @Override
 	public String format( Object value, String formatString ) {
-      if ( value == Util.nullValue ) {
+      if ( Objects.equals( value ,Util.nullValue )) {
         value = null;
       }
       if ( value instanceof Throwable ) {
@@ -2334,7 +2339,7 @@ public Cell getCell( int[] pos ) {
     public boolean isOnSameHierarchyChainInternal( MemberBase member2 ) {
       // Stores the index of the corresponding member in each tuple
       int index = -1;
-      for ( List<org.eclipse.daanse.olap.api.model.Member> subList : tupleList ) {
+      for ( List<org.eclipse.daanse.olap.api.element.Member> subList : tupleList ) {
         if ( index == -1 ) {
           if (!subList.isEmpty() && member2.getHierarchy().equals( subList.get( 0 ).getHierarchy() ) ) {
                   index = 0;

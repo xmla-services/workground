@@ -25,10 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.IntegerProperty;
@@ -38,10 +40,9 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
 import mondrian.rolap.RolapNative.NativeEvent;
@@ -498,7 +499,7 @@ public class BatchTestCase{
                     //connection =
                     //    testContext.withSchemaPool(false).getConnection();
                 }
-                final Query query = connection.parseQuery(mdxQuery);
+                final QueryImpl query = connection.parseQuery(mdxQuery);
                 if (clearCache) {
                     clearCache(connection, (RolapCube)query.getCube());
                 }
@@ -586,7 +587,7 @@ public class BatchTestCase{
         if (salesCube != null) {
             RolapHierarchy hierarchy =
                     (RolapHierarchy) salesCube.lookupHierarchy(
-                            new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
+                            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED),
                             false);
             if (hierarchy != null) {
                 SmartMemberReader memberReader =
@@ -998,7 +999,7 @@ public class BatchTestCase{
     }
 
     public Result executeQuery(String mdx, Connection connection) {
-        Query query = connection.parseQuery(mdx);
+        QueryImpl query = connection.parseQuery(mdx);
         query.setResultStyle(ResultStyle.LIST);
         return connection.execute(query);
     }

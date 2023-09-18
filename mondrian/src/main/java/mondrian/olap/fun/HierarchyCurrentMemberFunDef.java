@@ -11,17 +11,17 @@ package mondrian.olap.fun;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -50,31 +50,28 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final HierarchyCalc hierarchyCalc = compiler.compileHierarchy( call.getArg( 0 ) );
     final Hierarchy hierarchy = hierarchyCalc.getType().getHierarchy();
     if ( hierarchy != null ) {
-      return new FixedCalcImpl( call.getType(), hierarchy );
+      return new CurrentMemberFixedCalc( call.getType(), hierarchy );
     } else {
-      return new CalcImpl( call.getType(), hierarchyCalc );
+      return new CurrentMemberCalc( call.getType(), hierarchyCalc );
     }
   }
 
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that evaluates the hierarchy expression first.
    */
-  public static class CalcImpl extends AbstractMemberCalc {
+  public static class CurrentMemberCalc extends AbstractProfilingNestedMemberCalc {
     private final HierarchyCalc hierarchyCalc;
 
-    public CalcImpl( Type type, HierarchyCalc hierarchyCalc ) {
-      super("CorrentMember", type, new Calc[] { hierarchyCalc } );
+    public CurrentMemberCalc( Type type, HierarchyCalc hierarchyCalc ) {
+      super( type, new Calc[] { hierarchyCalc } );
       this.hierarchyCalc = hierarchyCalc;
     }
 
-    @Override
-	protected String getName() {
-      return "CurrentMember";
-    }
+ 
 
     @Override
-	public Member evaluateMember( Evaluator evaluator ) {
-      Hierarchy hierarchy = hierarchyCalc.evaluateHierarchy( evaluator );
+	public Member evaluate( Evaluator evaluator ) {
+      Hierarchy hierarchy = hierarchyCalc.evaluate( evaluator );
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
@@ -88,24 +85,21 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
   /**
    * Compiled implementation of the Hierarchy.CurrentMember function that uses a fixed hierarchy.
    */
-  public static class FixedCalcImpl extends AbstractMemberCalc {
+  public static class CurrentMemberFixedCalc extends AbstractProfilingNestedMemberCalc {
     // getContext works faster if we give RolapHierarchy rather than
     // Hierarchy
     private final RolapHierarchy hierarchy;
 
-    public FixedCalcImpl( Type type, Hierarchy hierarchy ) {
-      super( "CurrentMemberFixed",type, new Calc[] {} );
+    public CurrentMemberFixedCalc( Type type, Hierarchy hierarchy ) {
+      super( type, new Calc[] {} );
       assert hierarchy != null;
       this.hierarchy = (RolapHierarchy) hierarchy;
     }
 
-    @Override
-	protected String getName() {
-      return "CurrentMemberFixed";
-    }
+
 
     @Override
-	public Member evaluateMember( Evaluator evaluator ) {
+	public Member evaluate( Evaluator evaluator ) {
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
@@ -115,11 +109,6 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return this.hierarchy == hierarchy;
     }
 
-    @Override
-	public void collectArguments( Map<String, Object> arguments ) {
-      arguments.put( "hierarchy", hierarchy );
-      super.collectArguments( arguments );
-    }
   }
 
   private static void validateSlicerMembers( Hierarchy hierarchy, Evaluator evaluator ) {

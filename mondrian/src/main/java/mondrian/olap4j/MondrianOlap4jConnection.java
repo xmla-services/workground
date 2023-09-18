@@ -30,9 +30,16 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.OlapConnection;
@@ -85,21 +92,14 @@ import org.olap4j.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.MemberProperty;
+import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
@@ -163,7 +163,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
      * catalog. It is possible for a schema to be mapped more than once, with
      * different names; the same RolapSchema object will be used.
      */
-    final Map<org.eclipse.daanse.olap.api.model.Schema, MondrianOlap4jSchema> schemaMap =
+    final Map<org.eclipse.daanse.olap.api.element.Schema, MondrianOlap4jSchema> schemaMap =
         new HashMap<>();
 
     private final MondrianOlap4jDatabaseMetaData olap4jDatabaseMetaData;
@@ -651,12 +651,12 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         };
     }
 
-    MondrianOlap4jCube toOlap4j(org.eclipse.daanse.olap.api.model.Cube cube) {
+    MondrianOlap4jCube toOlap4j(org.eclipse.daanse.olap.api.element.Cube cube) {
         MondrianOlap4jSchema schema = toOlap4j(cube.getSchema());
         return new MondrianOlap4jCube(cube, schema);
     }
 
-    MondrianOlap4jDimension toOlap4j(org.eclipse.daanse.olap.api.model.Dimension dimension) {
+    MondrianOlap4jDimension toOlap4j(org.eclipse.daanse.olap.api.element.Dimension dimension) {
         if (dimension == null) {
             return null;
         }
@@ -666,7 +666,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     }
 
     synchronized MondrianOlap4jSchema toOlap4j(
-            org.eclipse.daanse.olap.api.model.Schema schema)
+            org.eclipse.daanse.olap.api.element.Schema schema)
     {
         MondrianOlap4jSchema olap4jSchemaInner = schemaMap.get(schema);
         if (olap4jSchemaInner == null) {
@@ -679,7 +679,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         if (type instanceof mondrian.olap.type.BooleanType) {
             return new BooleanType();
         } else if (type instanceof mondrian.olap.type.CubeType cubeType) {
-            final org.eclipse.daanse.olap.api.model.Cube mondrianCube =
+            final org.eclipse.daanse.olap.api.element.Cube mondrianCube =
                 cubeType.getCube();
             return new CubeType(toOlap4j(mondrianCube));
         } else if (type instanceof mondrian.olap.type.DecimalType decimalType) {
@@ -717,7 +717,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
     }
 
-    MondrianOlap4jMember toOlap4j(org.eclipse.daanse.olap.api.model.Member member) {
+    MondrianOlap4jMember toOlap4j(org.eclipse.daanse.olap.api.element.Member member) {
         if (member == null) {
             return null;
         }
@@ -731,7 +731,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             member);
     }
 
-    MondrianOlap4jLevel toOlap4j(org.eclipse.daanse.olap.api.model.Level level) {
+    MondrianOlap4jLevel toOlap4j(org.eclipse.daanse.olap.api.element.Level level) {
         if (level == null) {
             return null;
         }
@@ -740,7 +740,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             level);
     }
 
-    MondrianOlap4jHierarchy toOlap4j(org.eclipse.daanse.olap.api.model.Hierarchy hierarchy) {
+    MondrianOlap4jHierarchy toOlap4j(org.eclipse.daanse.olap.api.element.Hierarchy hierarchy) {
         if (hierarchy == null) {
             return null;
         }
@@ -779,8 +779,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     }
 
     MondrianOlap4jNamedSet toOlap4j(
-        org.eclipse.daanse.olap.api.model.Cube cube,
-        org.eclipse.daanse.olap.api.model.NamedSet namedSet)
+        org.eclipse.daanse.olap.api.element.Cube cube,
+        org.eclipse.daanse.olap.api.element.NamedSet namedSet)
     {
         if (namedSet == null) {
             return null;
@@ -794,7 +794,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(exp);
     }
 
-    SelectNode toOlap4j(Query query) {
+    SelectNode toOlap4j(QueryImpl query) {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(query);
     }
 
@@ -1047,7 +1047,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                 StringWriter sw = new StringWriter();
                 selectNode.unparse(new ParseTreeWriter(new PrintWriter(sw)));
                 String mdx = sw.toString();
-                Query query =
+                QueryImpl query =
                     connection.mondrianConnection
                         .parseQuery(mdx);
                 query.resolve();
@@ -1067,7 +1067,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             this.olap4jConnection = olap4jConnection;
         }
 
-        public SelectNode toOlap4j(Query query) {
+        public SelectNode toOlap4j(QueryImpl query) {
             List<IdentifierNode> list = Collections.emptyList();
             return new SelectNode(
                 null,
@@ -1104,30 +1104,30 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             if (exp instanceof Id id) {
                 return toOlap4j(id);
             }
-            if (exp instanceof ResolvedFunCall call) {
+            if (exp instanceof ResolvedFunCallImpl call) {
                 return toOlap4j(call);
             }
-            if (exp instanceof DimensionExpr dimensionExpr) {
+            if (exp instanceof DimensionExpression dimensionExpr) {
                 return new DimensionNode(
                     null,
                     olap4jConnection.toOlap4j(dimensionExpr.getDimension()));
             }
-            if (exp instanceof HierarchyExpr hierarchyExpr) {
+            if (exp instanceof HierarchyExpressionImpl hierarchyExpr) {
                 return new HierarchyNode(
                     null,
                     olap4jConnection.toOlap4j(hierarchyExpr.getHierarchy()));
             }
-            if (exp instanceof LevelExpr levelExpr) {
+            if (exp instanceof LevelExpression levelExpr) {
                 return new LevelNode(
                     null,
                     olap4jConnection.toOlap4j(levelExpr.getLevel()));
             }
-            if (exp instanceof MemberExpr memberExpr) {
+            if (exp instanceof MemberExpression memberExpr) {
                 return new MemberNode(
                     null,
                     olap4jConnection.toOlap4j(memberExpr.getMember()));
             }
-            if (exp instanceof Literal literal) {
+            if (exp instanceof AbstractLiteralImpl literal) {
                 final Object value = literal.getValue();
                 if (literal.getCategory() == Category.SYMBOL) {
                     return LiteralNode.createSymbol(
@@ -1174,7 +1174,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
         }
 
-        private ParseTreeNode toOlap4j(ResolvedFunCall call) {
+        private ParseTreeNode toOlap4j(ResolvedFunCallImpl call) {
             final CallNode callNode = new CallNode(
                 null,
                 call.getFunName(),

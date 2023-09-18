@@ -12,7 +12,7 @@ package mondrian.olap4j;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;

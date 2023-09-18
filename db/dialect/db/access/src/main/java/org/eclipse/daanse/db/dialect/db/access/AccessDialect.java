@@ -12,16 +12,13 @@
 */
 package org.eclipse.daanse.db.dialect.db.access;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Microsoft Access
@@ -30,15 +27,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class)
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class AccessDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "ACCESS";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public AccessDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

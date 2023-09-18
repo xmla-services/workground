@@ -9,11 +9,13 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ListCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
@@ -29,8 +31,8 @@ import mondrian.olap.type.Type;
  * @since Sep 27, 2005
  */
 public abstract class AbstractListCalc
-extends AbstractCalc
-implements ListCalc {
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
+implements TupleListCalc {
     private final boolean mutable;
 
     /**
@@ -39,8 +41,8 @@ implements ListCalc {
      * @param exp   Expression which was compiled
      * @param calcs List of child compiled expressions (for dependency analysis)
      */
-    protected AbstractListCalc( String name, Type type, Calc[] calcs ) {
-        this( name,type, calcs, true );
+    protected AbstractListCalc(  Type type, Calc[] calcs ) {
+        this( type, calcs, true );
     }
 
     /**
@@ -50,8 +52,8 @@ implements ListCalc {
      * @param calcs   List of child compiled expressions (for dependency analysis)
      * @param mutable Whether the list is mutable
      */
-    protected AbstractListCalc( String name, Type type, Calc[] calcs, boolean mutable ) {
-        super( name,type, calcs );
+    protected AbstractListCalc(  Type type, Calc[] calcs, boolean mutable ) {
+        super( type, calcs );
         this.mutable = mutable;
         assert type instanceof SetType : "expecting a set: " + getType();
     }

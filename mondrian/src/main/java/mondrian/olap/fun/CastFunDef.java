@@ -9,17 +9,19 @@
 
 package mondrian.olap.fun;
 
+import java.util.Date;
 import java.util.List;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -49,7 +51,7 @@ import mondrian.resource.MondrianResource;
 public class CastFunDef extends FunDefBase {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    private CastFunDef(FunDef dummyFunDef) {
+    private CastFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -58,7 +60,7 @@ public class CastFunDef extends FunDefBase {
         final Type targetType = call.getType();
         final Exp arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
-        return new CalcImpl(arg, calc, targetType);
+        return new CastCalcImpl(arg, calc, targetType);
     }
 
     private static RuntimeException cannotConvert(
@@ -71,12 +73,12 @@ public class CastFunDef extends FunDefBase {
             .append("'").toString());
     }
 
-    public static int toInt(
+    public static Integer toInt(
         Object o,
         final Type targetType)
     {
         if (o == null) {
-            return FunUtil.INTEGER_NULL;
+            return null;
         }
         if (o instanceof String str) {
             return Integer.parseInt(str);
@@ -91,6 +93,13 @@ public class CastFunDef extends FunDefBase {
         if (o == null) {
             return FunUtil.DOUBLE_NULL;
         }
+		if (o instanceof Boolean bool) {
+			if (Boolean.TRUE.equals(bool)) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
         if (o instanceof String str) {
             return Double.valueOf(str);
         }
@@ -128,7 +137,7 @@ public class CastFunDef extends FunDefBase {
         }
 
         @Override
-		public FunDef resolve(
+		public FunctionDefinition resolve(
             Exp[] args, Validator validator, List<Conversion> conversions)
         {
             if (args.length != 2) {
@@ -150,26 +159,26 @@ public class CastFunDef extends FunDefBase {
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
-            final FunDef dummyFunDef =
+            final FunctionDefinition dummyFunDef =
                 FunUtil.createDummyFunDef(this, returnCategory, args);
             return new CastFunDef(dummyFunDef);
         }
     }
 
-    private static class CalcImpl extends GenericCalc {
+    private static class CastCalcImpl extends GenericCalc {
         private final Calc calc;
         private final Type targetType;
         private final int targetCategory;
 
-        public CalcImpl(Exp arg, Calc calc, Type targetType) {
-            super("Cast",arg.getType());
+        public CastCalcImpl(Exp arg, Calc calc, Type targetType) {
+            super(arg.getType());
             this.calc = calc;
             this.targetType = targetType;
             this.targetCategory = TypeUtil.typeToCategory(targetType);
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[] {calc};
         }
 
@@ -179,9 +188,9 @@ public class CastFunDef extends FunDefBase {
             case Category.STRING:
                 return evaluateString(evaluator);
             case Category.INTEGER:
-                return FunUtil.box(evaluateInteger(evaluator));
+                return evaluateInteger(evaluator);
             case Category.NUMERIC:
-                return FunUtil.box(evaluateDouble(evaluator));
+                return evaluateDouble(evaluator);
             case Category.DATE_TIME:
                 return evaluateDateTime(evaluator);
             case Category.LOGICAL:
@@ -191,7 +200,7 @@ public class CastFunDef extends FunDefBase {
             }
         }
 
-        @Override
+
 		public String evaluateString(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             if (o == null) {
@@ -200,22 +209,29 @@ public class CastFunDef extends FunDefBase {
             return String.valueOf(o);
         }
 
-        @Override
-		public int evaluateInteger(Evaluator evaluator) {
+
+		public Integer evaluateInteger(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toInt(o, targetType);
         }
 
-        @Override
-		public double evaluateDouble(Evaluator evaluator) {
+
+		public Double evaluateDouble(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toDouble(o, targetType);
         }
 
-        @Override
 		public boolean evaluateBoolean(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toBoolean(o, targetType);
         }
+		public Date evaluateDateTime(Evaluator evaluator) {
+            final Object o = calc.evaluate(evaluator);
+            if(o instanceof Date d) {
+            	return d;
+            }
+			throw evaluator.newEvalException(null, "must be Date but was: " + o);
+		}
     }
+
 }

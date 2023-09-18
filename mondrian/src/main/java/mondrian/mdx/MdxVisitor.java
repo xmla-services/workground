@@ -9,11 +9,20 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.IdImpl;
+
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+
+import mondrian.olap.AbstractLiteralImpl;
+import mondrian.olap.QueryImpl;
+import mondrian.olap.QueryAxisImpl;
 
 /**
  * Interface for a visitor to an MDX parse tree.
@@ -30,91 +39,91 @@ public interface MdxVisitor {
     /**
      * Visits a Query.
      *
-     * @see Query#accept(MdxVisitor)
+     * @see QueryImpl#accept(MdxVisitor)
      */
-    Object visit(Query query);
+    Object visit(QueryImpl query);
 
     /**
      * Visits a QueryAxis.
      *
-     * @see QueryAxis#accept(MdxVisitor)
+     * @see QueryAxisImpl#accept(MdxVisitor)
      */
-    Object visit(QueryAxis queryAxis);
+    Object visit(QueryAxisImpl queryAxis);
 
     /**
      * Visits a Formula.
      *
-     * @see Formula#accept(MdxVisitor)
+     * @see FormulaImpl#accept(MdxVisitor)
      */
     Object visit(Formula formula);
 
     /**
      * Visits an UnresolvedFunCall.
      *
-     * @see UnresolvedFunCall#accept(MdxVisitor)
+     * @see UnresolvedFunCallImpl#accept(MdxVisitor)
      */
-    Object visit(UnresolvedFunCall call);
+    Object visit(UnresolvedFunCallImpl call);
 
     /**
      * Visits a ResolvedFunCall.
      *
-     * @see ResolvedFunCall#accept(MdxVisitor)
+     * @see ResolvedFunCallImpl#accept(MdxVisitor)
      */
-    Object visit(ResolvedFunCall call);
+    Object visit(ResolvedFunCallImpl call);
 
     /**
      * Visits an Id.
      *
-     * @see Id#accept(MdxVisitor)
+     * @see IdImpl#accept(MdxVisitor)
      */
     Object visit(Id id);
 
     /**
      * Visits a Parameter.
      *
-     * @see ParameterExpr#accept(MdxVisitor)
+     * @see ParameterExpression )
      */
-    Object visit(ParameterExpr parameterExpr);
+    Object visit(ParameterExpression parameterExpr);
 
     /**
      * Visits a DimensionExpr.
      *
-     * @see DimensionExpr#accept(MdxVisitor)
+     * @see DimensionExpression (MdxVisitor)
      */
-    Object visit(DimensionExpr dimensionExpr);
+    Object visit(DimensionExpression dimensionExpr);
 
     /**
      * Visits a HierarchyExpr.
      *
-     * @see HierarchyExpr#accept(MdxVisitor)
+     * @see HierarchyExpressionImpl#accept(MdxVisitor)
      */
-    Object visit(HierarchyExpr hierarchyExpr);
+    Object visit(HierarchyExpressionImpl hierarchyExpr);
 
     /**
      * Visits a LevelExpr.
      *
-     * @see LevelExpr#accept(MdxVisitor)
+     * @see LevelExpression (MdxVisitor)
      */
-    Object visit(LevelExpr levelExpr);
+    Object visit(LevelExpression levelExpr);
 
     /**
      * Visits a MemberExpr.
      *
-     * @see MemberExpr#accept(MdxVisitor)
+     * @see MemberExpressionImpl#accept(MdxVisitor)
      */
-    Object visit(MemberExpr memberExpr);
+    Object visit(MemberExpressionImpl memberExpr);
 
     /**
      * Visits a NamedSetExpr.
      *
-     * @see NamedSetExpr#accept(MdxVisitor)
+     * @see NamedSetExpression )
      */
-    Object visit(NamedSetExpr namedSetExpr);
+    Object visit(NamedSetExpression namedSetExpr);
 
     /**
      * Visits a Literal.
      *
-     * @see Literal#accept(MdxVisitor)
+     * @see AbstractLiteralImpl#accept(MdxVisitor)
      */
     Object visit(Literal literal);
 }

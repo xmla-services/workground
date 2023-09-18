@@ -12,8 +12,8 @@ package mondrian.olap.fun;
 import java.util.HashSet;
 import java.util.Set;
 
-import mondrian.olap.FunDef;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.FunctionTable;
 
 /**
  * Interface to build a customized function table, selecting functions from the
@@ -24,7 +24,7 @@ import mondrian.olap.FunTable;
 public class CustomizedFunctionTable extends FunTableImpl {
 
     Set<String> supportedBuiltinFunctions;
-    Set<FunDef> specialFunctions;
+    Set<FunctionDefinition> specialFunctions;
 
     public CustomizedFunctionTable(Set<String> builtinFunctions) {
         supportedBuiltinFunctions = builtinFunctions;
@@ -33,15 +33,15 @@ public class CustomizedFunctionTable extends FunTableImpl {
 
     public CustomizedFunctionTable(
         Set<String> builtinFunctions,
-        Set<FunDef> specialFunctions)
+        Set<FunctionDefinition> specialFunctions)
     {
         this.supportedBuiltinFunctions = builtinFunctions;
         this.specialFunctions = specialFunctions;
     }
 
     @Override
-	public void defineFunctions(Builder builder) {
-        final FunTable builtinFunTable = BuiltinFunTable.instance();
+	public void defineFunctions(FunctionTableCollector builder) {
+        final FunctionTable builtinFunTable = BuiltinFunTable.instance();
 
         // Includes all the keywords form builtin function table
         for (String reservedWord : builtinFunTable.getReservedWords()) {
@@ -49,14 +49,14 @@ public class CustomizedFunctionTable extends FunTableImpl {
         }
 
         // Add supported builtin functions
-        for (Resolver resolver : builtinFunTable.getResolvers()) {
+        for (FunctionResolver resolver : builtinFunTable.getResolvers()) {
             if (supportedBuiltinFunctions.contains(resolver.getName())) {
                 builder.define(resolver);
             }
         }
 
         // Add special function definitions
-        for (FunDef funDef : specialFunctions) {
+        for (FunctionDefinition funDef : specialFunctions) {
             builder.define(funDef);
         }
     }

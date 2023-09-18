@@ -26,8 +26,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
+
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
@@ -46,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Category;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -746,7 +749,7 @@ public class ExplicitRules {
                     checkAttributeString(msgRecorder, nameInner, "name");
                     checkAttributeString(msgRecorder, columnNameInner, "column");
 
-                    List<Id.Segment> names = Util.parseIdentifier(nameInner);
+                    List<Segment> names = Util.parseIdentifier(nameInner);
                     // must be [hierarchy usage name].[level name]
                     if (!(names.size() == 2
                         || MondrianProperties.instance().SsasCompatibleNaming
@@ -952,7 +955,7 @@ public class ExplicitRules {
                     checkAttributeString(msgRecorder, nameInner, "name");
                     checkAttributeString(msgRecorder, column, "column");
 
-                    List<Id.Segment> names = Util.parseIdentifier(nameInner);
+                    List<Segment> names = Util.parseIdentifier(nameInner);
                     if (names.size() != 2) {
                         msgRecorder.reportError(
                             mres.BadMeasureNameFormat.str(
@@ -967,8 +970,8 @@ public class ExplicitRules {
                             false,
                             Category.MEMBER);
                         if (member == null) {
-                            if (!(names.get(0) instanceof Id.NameSegment nameSegment
-                                    && nameSegment.name
+                            if (!(names.get(0) instanceof NameSegment nameSegment
+                                    && nameSegment.getName()
                                         .equals("Measures")))
                             {
                                 msgRecorder.reportError(
@@ -984,9 +987,9 @@ public class ExplicitRules {
                         }
                         RolapStar star = cube.getStar();
                         rolapMeasure =
-                            names.get(1) instanceof Id.NameSegment nameSegment
+                            names.get(1) instanceof NameSegment nameSegment
                                 ? star.getFactTable().lookupMeasureByName(
-                                    cube.getName(), nameSegment.name)
+                                    cube.getName(), nameSegment.getName())
                                 : null;
                         if (rolapMeasure == null) {
                             msgRecorder.reportError(

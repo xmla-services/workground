@@ -12,8 +12,9 @@ package mondrian.server;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eclipse.daanse.olap.api.query.component.Query;
+
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
@@ -120,15 +121,6 @@ public abstract class StatementImpl implements Statement {
     @Override
 	public long getQueryTimeoutMillis() {
         return queryTimeout;
-    }
-
-    @Override
-	public void checkCancelOrTimeout() {
-        final Execution execution0 = execution;
-        if (execution0 == null) {
-            return;
-        }
-        execution0.checkCancelOrTimeout();
     }
 
     @Override

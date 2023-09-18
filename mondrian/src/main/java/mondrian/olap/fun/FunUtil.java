@@ -22,41 +22,41 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eigenbase.xom.XOMUtil;
+import org.olap4j.impl.IdentifierParser.Builder;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
-import mondrian.olap.FunDef;
-import mondrian.olap.Id;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MatchType;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.sort.OrderKey;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.MemberType;
@@ -71,7 +71,6 @@ import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
-import org.olap4j.impl.IdentifierParser.Builder;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.
@@ -96,11 +95,11 @@ public class FunUtil extends Util {
    */
   public static final double DOUBLE_EMPTY = -0.000000012345;
 
-  /**
-   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
-   * mondrian.calc.IntegerCalc}.
-   */
-  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
+//  /**
+//   * Special value which indicates that an {@code int} computation has returned the MDX null value. See {@link
+//   * org.eclipse.daanse.olap.calc.api.IntegerCalc}.
+//   */
+//  public static final int INTEGER_NULL = Integer.MIN_VALUE + 1;
 
   /**
    * Null value in three-valued boolean logic. Actually, a placeholder until we actually implement 3VL.
@@ -115,7 +114,7 @@ public class FunUtil extends Util {
    * @return Exception that can be used as a cell result
    */
   public static RuntimeException newEvalException(
-    FunDef funDef,
+    FunctionDefinition funDef,
     String message ) {
     XOMUtil.discard( funDef ); // TODO: use this
     return new MondrianEvaluationException( message );
@@ -187,7 +186,7 @@ public class FunUtil extends Util {
       }
     }
     Exp arg = call.getArg( i );
-    if ( !( arg instanceof Literal )
+    if ( !( arg instanceof Literal)
       || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
@@ -259,7 +258,7 @@ public class FunUtil extends Util {
    *
    * @throws MondrianEvaluationException if expressions don't have the same hierarchy
    */
-  static void checkCompatible( Exp left, Exp right, FunDef funDef ) {
+  static void checkCompatible( Exp left, Exp right, FunctionDefinition funDef ) {
     final Type leftType = TypeUtil.stripSetType( left.getType() );
     final Type rightType = TypeUtil.stripSetType( right.getType() );
     if ( !TypeUtil.isUnionCompatible( leftType, rightType ) ) {
@@ -288,31 +287,9 @@ public class FunUtil extends Util {
     }
   }
 
-  /**
-   * Returns the default hierarchy of a dimension, or null if there is no default.
-   *
-   * @param dimension Dimension
-   * @return Default hierarchy, or null
-   * @see MondrianResource#CannotImplicitlyConvertDimensionToHierarchy
-   */
-  public static Hierarchy getDimensionDefaultHierarchy( Dimension dimension ) {
-    final Hierarchy[] hierarchies = dimension.getHierarchies();
-    if ( hierarchies.length == 1 ) {
-      return hierarchies[ 0 ];
-    }
-    if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
-      // In SSAS 2005, dimensions with more than one hierarchy do not have
-      // a default hierarchy.
-      return null;
-    }
-    for ( Hierarchy hierarchy : hierarchies ) {
-      if ( hierarchy.getName() == null
-        || hierarchy.getUniqueName().equals( dimension.getUniqueName() ) ) {
-        return hierarchy;
-      }
-    }
-    return null;
-  }
+
+
+
 
   static List<Member> addMembers(
     final SchemaReader schemaReader,
@@ -364,7 +341,7 @@ public class FunUtil extends Util {
         FunUtil.removeCalculatedMembers(
           memberList.slice( 0 ) ) );
     } else {
-      final TupleList clone = memberList.cloneList( memberList.size() );
+      final TupleList clone = memberList.copyList( memberList.size() );
       outer:
       for ( List<Member> members : memberList ) {
         for ( Member member : members ) {
@@ -688,14 +665,14 @@ public class FunUtil extends Util {
       : d;
   }
 
-  /**
-   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
-   */
-  public static Integer box( int n ) {
-    return n == FunUtil.INTEGER_NULL
-      ? null
-      : n;
-  }
+//  /**
+//   * Converts an int (primitive) value to an Integer. {@link #INTEGER_NULL} becomes null.
+//   */
+//  public static Integer box( int n ) {
+//    return n == FunUtil.INTEGER_NULL
+//      ? null
+//      : n;
+//  }
 
   static double percentile(
     Evaluator evaluator,
@@ -1120,7 +1097,10 @@ public class FunUtil extends Util {
       for ( int i = 0; i < calcs.length; i++ ) {
         DoubleCalc calc = calcs[ i ];
         SetWrapper retval = retvals[ i ];
-        double o = calc.evaluateDouble( evaluator );
+        Double o = calc.evaluate( evaluator );
+        if(o==null) {
+        	System.out.println(calc);
+        }
         if ( o == FunUtil.DOUBLE_NULL) {
           retval.nullCount++;
           retval.v.add( null );
@@ -1476,9 +1456,9 @@ public class FunUtil extends Util {
    * @param syntax    Syntax style used to invoke function
    * @return resolved function definition
    */
-  public static FunDef resolveFunArgs(
+  public static FunctionDefinition resolveFunArgs(
     Validator validator,
-    FunDef funDef,
+    FunctionDefinition funDef,
     Exp[] args,
     Exp[] newArgs,
     String name,
@@ -1503,7 +1483,7 @@ public class FunUtil extends Util {
    */
   private static void checkNativeCompatible(
     Validator validator,
-    FunDef funDef,
+    FunctionDefinition funDef,
     Exp[] args ) {
     // If the first argument to a function is either:
     // 1) the measures dimension or
@@ -1532,14 +1512,14 @@ public class FunUtil extends Util {
         final Exp arg0 = args[ 0 ];
         switch ( cat0 ) {
           case Category.DIMENSION, Category.HIERARCHY:
-            if ( arg0 instanceof DimensionExpr dimensionExpr
+            if ( arg0 instanceof DimensionExpression dimensionExpr
               && dimensionExpr.getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
           case Category.MEMBER:
-            if ( arg0 instanceof MemberExpr memberExpr
+            if ( arg0 instanceof MemberExpression memberExpr
               && memberExpr.getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
@@ -1601,8 +1581,8 @@ public class FunUtil extends Util {
     return true;
   }
 
-  static FunDef createDummyFunDef(
-    Resolver resolver,
+  static FunctionDefinition createDummyFunDef(
+    FunctionResolver resolver,
     int returnCategory,
     Exp[] args ) {
     final int[] argCategories = ExpBase.getTypes( args );
@@ -1723,7 +1703,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, of the form '(member, member, ...)'. There must be precisely one member for each hierarchy.
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param i           Position to start parsing in string
    * @param members     Output array of members
@@ -1753,7 +1733,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members
@@ -1828,10 +1808,10 @@ public class FunUtil extends Util {
     }
     // Member, hierarchy, level, or dimension expression is not worth
     // caching.
-    if ( exp instanceof MemberExpr
-      || exp instanceof LevelExpr
-      || exp instanceof HierarchyExpr
-      || exp instanceof DimensionExpr ) {
+    if ( exp instanceof MemberExpression
+      || exp instanceof LevelExpression
+      || exp instanceof HierarchyExpressionImpl
+      || exp instanceof DimensionExpression) {
       return false;
     }
     if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
@@ -2127,7 +2107,7 @@ public class FunUtil extends Util {
 
     @Override
 	public OlapElement lookupChild(
-      SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
+        SchemaReader schemaReader, Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 

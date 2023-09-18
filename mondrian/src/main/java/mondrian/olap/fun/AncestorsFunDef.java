@@ -12,21 +12,21 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
@@ -46,7 +46,7 @@ class AncestorsFunDef extends FunDefBase {
             new String[] {"fxml", "fxmn"},
             AncestorsFunDef.class);
 
-    public AncestorsFunDef(FunDef dummyFunDef) {
+    public AncestorsFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -64,12 +64,12 @@ class AncestorsFunDef extends FunDefBase {
             final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(1));
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
+            		call.getType(), new Calc[] {memberCalc, levelCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    Level level = levelCalc.evaluateLevel(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+                    Level level = levelCalc.evaluate(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     int distance =
                         member.getDepth() - level.getDepth();
                     List<Member> ancestors = new ArrayList<>();
@@ -84,12 +84,12 @@ class AncestorsFunDef extends FunDefBase {
             final IntegerCalc distanceCalc =
                 compiler.compileInteger(call.getArg(1));
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
+            		call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
-                    Member member = memberCalc.evaluateMember(evaluator);
-                    int distance = distanceCalc.evaluateInteger(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
+                    Integer distance = distanceCalc.evaluate(evaluator);
                     List<Member> ancestors = new ArrayList<>();
                     for (int curDist = 1; curDist <= distance; curDist++) {
                         ancestors.add(

@@ -25,7 +25,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.util.Format;
@@ -107,7 +107,7 @@ class I18nTest {
         context.setProperty(RolapConnectionProperties.Locale.name(), localeName);
         Connection connection = context.createConnection();
 
-        Query query = connection.parseQuery(
+        QueryImpl query = connection.parseQuery(
             "WITH MEMBER [Measures].[Foo] AS ' 12345.67 ',\n"
             + " FORMAT_STRING='#,###.00'\n"
             + "SELECT {[Measures].[Foo]} ON COLUMNS\n"

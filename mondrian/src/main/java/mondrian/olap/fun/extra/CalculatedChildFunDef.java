@@ -11,15 +11,15 @@ package mondrian.olap.fun.extra;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.FunDefBase;
@@ -46,18 +46,18 @@ public class CalculatedChildFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
 
-        return new AbstractMemberCalc(
-        		call.getFunName(),call.getType(),
+        return new AbstractProfilingNestedMemberCalc(
+        		call.getType(),
             new Calc[] {memberCalc, stringCalc})
         {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
-                Member member = memberCalc.evaluateMember(evaluator);
-                String name = stringCalc.evaluateString(evaluator);
+			public Member evaluate(Evaluator evaluator) {
+                Member member = memberCalc.evaluate(evaluator);
+                String name = stringCalc.evaluate(evaluator);
                 return getCalculatedChild(member, name, evaluator);
             }
         };

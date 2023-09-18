@@ -9,14 +9,11 @@
 
 package org.eclipse.daanse.db.dialect.db.teradata;
 
-import java.util.List;
-
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
+import java.util.List;
 
 /**
  * Implementation of {@link Dialect} for the Teradata database.
@@ -24,16 +21,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='TERADATA'",
-        "database.product:String='TERADATA'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class TeradataDialect extends JdbcDialectImpl {
 
     private static final String SUPPORTED_PRODUCT_NAME = "TERADATA";
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public TeradataDialect(Connection connection) {
+        super(connection);
     }
 
     @Override

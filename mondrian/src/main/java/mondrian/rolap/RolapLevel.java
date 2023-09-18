@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
@@ -36,9 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.olap.DimensionType;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.LevelBase;
-import mondrian.olap.LevelType;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -553,18 +555,18 @@ public class RolapLevel extends LevelBase {
         IfParentsName
     }
 
-    public OlapElement lookupChild(SchemaReader schemaReader, Id.Segment name) {
+    public OlapElement lookupChild(SchemaReader schemaReader, Segment name) {
         return lookupChild(schemaReader, name, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment name, MatchType matchType)
+            SchemaReader schemaReader, Segment name, MatchType matchType)
     {
-        if (name instanceof Id.KeySegment keySegment) {
+        if (name instanceof IdImpl.KeySegment keySegment) {
             List<Comparable> keyValues = new ArrayList<>();
-            for (Id.NameSegment nameSegment : keySegment.getKeyParts()) {
-                final String keyValue = nameSegment.name;
+            for (NameSegment nameSegment : keySegment.getKeyParts()) {
+                final String keyValue = nameSegment.getName();
                 if (RolapUtil.mdxNullLiteral().equalsIgnoreCase(keyValue)) {
                     keyValues.add(RolapUtil.sqlNullValue);
                 } else {

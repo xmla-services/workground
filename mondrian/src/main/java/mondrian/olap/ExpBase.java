@@ -13,7 +13,8 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+
 import mondrian.calc.ExpCompiler;
 
 /**
@@ -22,7 +23,7 @@ import mondrian.calc.ExpCompiler;
  * @author jhyde, 20 January, 1999
  */
 public abstract class ExpBase
-    extends QueryPart
+    extends AbstractQueryPart
     implements Exp
 {
 

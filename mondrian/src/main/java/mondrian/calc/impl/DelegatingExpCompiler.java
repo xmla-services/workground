@@ -12,27 +12,30 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
-import mondrian.calc.BooleanCalc;
-import mondrian.calc.Calc;
-import mondrian.calc.DateTimeCalc;
-import mondrian.calc.DimensionCalc;
-import mondrian.calc.DoubleCalc;
+import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.WrapExpression;
+import org.eclipse.daanse.olap.calc.api.BooleanCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
+import org.eclipse.daanse.olap.calc.api.DimensionCalc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.HierarchyCalc;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.IterCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.ListCalc;
-import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
-import mondrian.calc.StringCalc;
-import mondrian.calc.TupleCalc;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
-import mondrian.olap.QueryPart;
+import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
@@ -129,20 +132,20 @@ public class DelegatingExpCompiler implements ExpCompiler {
     }
 
     @Override
-    public final ListCalc compileList(Exp exp) {
+    public final TupleListCalc compileList(Exp exp) {
         return compileList(exp, false);
     }
 
     @Override
-    public ListCalc compileList(Exp exp, boolean mutable) {
-        final ListCalc calc = parent.compileList(wrap(exp), mutable);
-        return (ListCalc) afterCompile(exp, calc, mutable);
+    public TupleListCalc compileList(Exp exp, boolean mutable) {
+        final TupleListCalc calc = parent.compileList(wrap(exp), mutable);
+        return (TupleListCalc) afterCompile(exp, calc, mutable);
     }
 
     @Override
-    public IterCalc compileIter(Exp exp) {
-        final IterCalc calc = parent.compileIter(wrap(exp));
-        return (IterCalc) afterCompile(exp, calc, false);
+    public TupleIteratorCalc compileIter(Exp exp) {
+        final TupleIteratorCalc calc = parent.compileIter(wrap(exp));
+        return (TupleIteratorCalc) afterCompile(exp, calc, false);
     }
 
     @Override
@@ -198,17 +201,17 @@ public class DelegatingExpCompiler implements ExpCompiler {
      * @return wrapper expression
      */
     private Exp wrap(Exp e) {
-        return new WrapExp(e, this);
+        return new WrapExpressionImpl(e, this);
     }
 
     /**
      * See {@link mondrian.calc.impl.DelegatingExpCompiler#wrap}.
      */
-    private static class WrapExp extends QueryPart implements Exp{
+    private static class WrapExpressionImpl extends AbstractQueryPart implements Exp, WrapExpression {
         private final Exp e;
         private final ExpCompiler wrappingCompiler;
 
-        WrapExp(
+        WrapExpressionImpl(
                 Exp e,
                 ExpCompiler wrappingCompiler)
         {

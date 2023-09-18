@@ -19,10 +19,8 @@
 package org.eclipse.daanse.db.dialect.db.db2;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for old versions of the IBM DB2/AS400
@@ -33,16 +31,10 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2_OLD_AS400'",
-        "database.product:String='DB2_OLD_AS400'" })
-@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class Db2OldAs400Dialect extends Db2Dialect {
 
-    private static final String SUPPORTED_PRODUCT_NAME = "DB2_OLD_AS400";
-
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    public Db2OldAs400Dialect(Connection connection) {
+        super(connection);
     }
 
     @Override

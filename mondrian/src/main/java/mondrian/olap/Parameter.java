@@ -9,14 +9,14 @@
 
 package mondrian.olap;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.type.Type;
 
 /**
  * Parameter to a Query.
  *
- * <p>A parameter is not an expression; see {@link mondrian.mdx.ParameterExpr}.
+ * <p>A parameter is not an expression; see {@link ParameterExpr}.
  *
  * @author jhyde
  * @since Jul 22, 2006
@@ -82,7 +82,7 @@ public interface Parameter {
      * Sets the value of this parameter.
      *
      * @param value Value of the parameter; must be a {@link String},
-     *   a {@link Double}, or a {@link org.eclipse.daanse.olap.api.model.Member}
+     *   a {@link Double}, or a {@link org.eclipse.daanse.olap.api.element.Member}
      */
     void setValue(Object value);
 

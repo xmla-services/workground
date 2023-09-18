@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
@@ -39,7 +39,7 @@ class AncestorFunDef extends FunDefBase {
             new String[] {"fmml", "fmmn"},
             AncestorFunDef.class);
 
-    public AncestorFunDef(FunDef dummyFunDef) {
+    public AncestorFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
@@ -51,13 +51,13 @@ class AncestorFunDef extends FunDefBase {
         if (type1 instanceof LevelType) {
             final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(1));
-            return new AbstractMemberCalc(
-                call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
+            return new AbstractProfilingNestedMemberCalc(
+                call.getType(), new Calc[] {memberCalc, levelCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
-                    Level level = levelCalc.evaluateLevel(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+				public Member evaluate(Evaluator evaluator) {
+                    Level level = levelCalc.evaluate(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     int distance =
                         member.getLevel().getDepth() - level.getDepth();
                     return FunUtil.ancestor(evaluator, member, distance, level);
@@ -66,13 +66,13 @@ class AncestorFunDef extends FunDefBase {
         } else {
             final IntegerCalc distanceCalc =
                 compiler.compileInteger(call.getArg(1));
-            return new AbstractMemberCalc(
-            		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
+            return new AbstractProfilingNestedMemberCalc(
+            		call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
                 @Override
-				public Member evaluateMember(Evaluator evaluator) {
-                    int distance = distanceCalc.evaluateInteger(evaluator);
-                    Member member = memberCalc.evaluateMember(evaluator);
+				public Member evaluate(Evaluator evaluator) {
+                    Integer distance = distanceCalc.evaluate(evaluator);
+                    Member member = memberCalc.evaluate(evaluator);
                     return FunUtil.ancestor(evaluator, member, distance, null);
                 }
             };

@@ -9,20 +9,20 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractIntegerCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.calc.TupleListCalc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
-import mondrian.olap.Literal;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Count</code> MDX function.
@@ -39,7 +39,7 @@ class CountFunDef extends AbstractAggregateFunDef {
           new String[] { "fnx", "fnxy" }, CountFunDef.class, CountFunDef.ReservedWords );
   private static final String TIMING_NAME = CountFunDef.class.getSimpleName();
 
-  public CountFunDef( FunDef dummyFunDef ) {
+  public CountFunDef( FunctionDefinition dummyFunDef ) {
     super( dummyFunDef );
   }
 
@@ -48,21 +48,21 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Calc calc = compiler.compileAs( call.getArg( 0 ), null, ResultStyle.ITERABLE_ANY );
     final boolean includeEmpty =
         call.getArgCount() < 2 || ( (Literal) call.getArg( 1 ) ).getValue().equals( "INCLUDEEMPTY" );
-    return new AbstractIntegerCalc( call.getFunName(),call.getType(), new Calc[] { calc } ) {
+    return new AbstractProfilingNestedIntegerCalc( call.getType(), new Calc[] { calc } ) {
       @Override
-	public int evaluateInteger( Evaluator evaluator ) {
+	public Integer evaluate( Evaluator evaluator ) {
         evaluator.getTiming().markStart( CountFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
           evaluator.setNonEmpty( false );
           final int count;
-          if ( calc instanceof IterCalc iterCalc ) {
-            TupleIterable iterable = evaluateCurrentIterable( iterCalc, evaluator );
+          if ( calc instanceof TupleIteratorCalc tupleIteratorCalc ) {
+            TupleIterable iterable = evaluateCurrentIterable( tupleIteratorCalc, evaluator );
             count = FunUtil.count( evaluator, iterable, includeEmpty );
           } else {
-            // must be ListCalc
-            ListCalc listCalc = (ListCalc) calc;
-            TupleList list = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
+            // must be TupleListCalc
+            TupleListCalc tupleListCalc = (TupleListCalc) calc;
+            TupleList list = AbstractAggregateFunDef.evaluateCurrentList( tupleListCalc, evaluator );
             count = FunUtil.count( evaluator, list, includeEmpty );
           }
           return count;

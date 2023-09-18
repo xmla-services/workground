@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -30,9 +32,9 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.SchemaReader;
-import mondrian.olap.fun.Resolver;
+import mondrian.olap.fun.FunctionResolver;
 
 /**
  * Unit test for mondrian type facility.
@@ -147,7 +149,7 @@ class TypeTest {
                 }
 
                 final int toCategory = TypeUtil.typeToCategory(toType);
-                final List<Resolver.Conversion> conversions =
+                final List<FunctionResolver.Conversion> conversions =
                     new ArrayList<>();
                 final boolean canConvert =
                     TypeUtil.canConvert(
@@ -275,11 +277,11 @@ class TypeTest {
     }
 
     private Member getStoreChild(Connection connection) {
-        List<Id.Segment> storeParts = Arrays.<Id.Segment>asList(
-            new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("All Stores", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("USA", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("CA", Id.Quoting.UNQUOTED));
+        List<Segment> storeParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Store", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("All Stores", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("USA", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("CA", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             storeParts, false);
     }
@@ -301,17 +303,17 @@ class TypeTest {
     }
 
     private Member getMaleChild(Connection connection) {
-        List<Id.Segment> genderParts = Arrays.<Id.Segment>asList(
-            new Id.NameSegment("Gender", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("M", Id.Quoting.UNQUOTED));
+        List<Segment> genderParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Gender", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("M", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             genderParts, false);
     }
 
     private static Member getUnitSalesMeasure(Connection connection) {
-        List<Id.Segment> measureParts = Arrays.<Id.Segment>asList(
-            new Id.NameSegment("Measures", Id.Quoting.UNQUOTED),
-            new Id.NameSegment("Unit Sales", Id.Quoting.UNQUOTED));
+        List<Segment> measureParts = Arrays.<Segment>asList(
+            new IdImpl.NameSegmentImpl("Measures", Quoting.UNQUOTED),
+            new IdImpl.NameSegmentImpl("Unit Sales", Quoting.UNQUOTED));
         return getSalesCubeSchemaReader(connection).getMemberByUniqueName(
             measureParts, false);
     }

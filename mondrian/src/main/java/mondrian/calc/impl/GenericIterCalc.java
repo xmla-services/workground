@@ -9,9 +9,11 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.Calc;
-import mondrian.calc.IterCalc;
-import mondrian.calc.ListCalc;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
+
+import mondrian.calc.TupleIteratorCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
@@ -28,19 +30,19 @@ import mondrian.olap.type.Type;
  * @since Nov 7, 2008
  */
 public abstract class GenericIterCalc
-extends AbstractCalc
-implements ListCalc, IterCalc
+extends AbstractProfilingNestedCalc<Object,Calc<?>>
+implements TupleListCalc, TupleIteratorCalc
 {
     /**
      * Creates a GenericIterCalc without specifying child calculated
      * expressions.
      *
-     * <p>Subclass should override {@link #getCalcs()}.
+     * <p>Subclass should override {@link #getChildCalcs()}.
      *
      * @param exp Source expression
      */
-    protected GenericIterCalc(String name, Type type) {
-        super( name,  type, null);
+    protected GenericIterCalc( Type type) {
+        super(   type, null);
     }
 
     /**
@@ -49,13 +51,13 @@ implements ListCalc, IterCalc
      * @param exp Source expression
      * @param calcs Child compiled expressions
      */
-    protected GenericIterCalc(String name, Type type, Calc[] calcs) {
-        super(name,type, calcs);
+    protected GenericIterCalc( Type type, Calc[] calcs) {
+        super(type, calcs);
     }
 
     @Override
     public SetType getType() {
-        return (SetType) type;
+        return (SetType) super.getType();
     }
 
     @Override
@@ -80,4 +82,5 @@ implements ListCalc, IterCalc
         final Object o = evaluate(evaluator);
         return (TupleIterable) o;
     }
+
 }

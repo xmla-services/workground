@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.LevelCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.LevelCalc;
-import mondrian.calc.impl.AbstractHierarchyCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
@@ -34,23 +34,23 @@ public class LevelHierarchyFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(0));
-        return new CalcImpl(call.getType(), levelCalc);
+        return new LevelHirarchyCalc(call.getType(), levelCalc);
     }
 
-    public static class CalcImpl extends AbstractHierarchyCalc {
+    public static class LevelHirarchyCalc extends AbstractProfilingNestedHierarchyCalc {
         private final LevelCalc levelCalc;
 
-        public CalcImpl(Type type, LevelCalc levelCalc) {
-            super("LevelHirarchy",type, new Calc[] {levelCalc});
+        public LevelHirarchyCalc(Type type, LevelCalc levelCalc) {
+            super(type, new Calc[] {levelCalc});
             this.levelCalc = levelCalc;
         }
 
         @Override
-		public Hierarchy evaluateHierarchy(Evaluator evaluator) {
-            Level level = levelCalc.evaluateLevel(evaluator);
+		public Hierarchy evaluate(Evaluator evaluator) {
+            Level level = levelCalc.evaluate(evaluator);
             return level.getHierarchy();
         }
     }

@@ -9,14 +9,14 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.impl.AbstractLevelCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -43,25 +43,25 @@ public class MemberLevelFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
-        return new CalcImpl(call.getType(), memberCalc);
+        return new MemberLevelCalcImpl(call.getType(), memberCalc);
     }
 
-    public static class CalcImpl extends AbstractLevelCalc {
+    public static class MemberLevelCalcImpl extends AbstractProfilingNestedLevelCalc {
         private final MemberCalc memberCalc;
 
-        public CalcImpl(Type type, MemberCalc memberCalc) {
-            super("MemberLevel",type, new Calc[] {memberCalc});
+        public MemberLevelCalcImpl(Type type, MemberCalc memberCalc) {
+            super(type, new Calc[] {memberCalc});
             this.memberCalc = memberCalc;
         }
 
 
 
 		@Override
-		public Level evaluateLevel(Evaluator evaluator) {
-            Member member = memberCalc.evaluateMember(evaluator);
+		public Level evaluate(Evaluator evaluator) {
+            Member member = memberCalc.evaluate(evaluator);
             return member.getLevel();
         }
     }

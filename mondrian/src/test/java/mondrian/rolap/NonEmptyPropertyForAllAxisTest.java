@@ -32,7 +32,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.test.PropertySaver5;
 
 /**
@@ -235,7 +235,7 @@ class NonEmptyPropertyForAllAxisTest {
         String mdxQuery = "select from [Sales]\n"
             + "where [Time].[1997]\n";
         Connection connection = context.createConnection();
-        Query query = connection.parseQuery(mdxQuery);
+        QueryImpl query = connection.parseQuery(mdxQuery);
         assertEqualsVerbose(mdxQuery, query.toString());
      }
 }

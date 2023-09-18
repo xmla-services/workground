@@ -32,11 +32,16 @@ import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.LevelType;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantCalcs;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
@@ -53,24 +58,21 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.mdx.UnresolvedFunCall;
+import mondrian.mdx.HierarchyExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
+import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.HierarchyBase;
-import mondrian.olap.Id;
-import mondrian.olap.LevelType;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -78,6 +80,9 @@ import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.olap.fun.FunDefBase;
@@ -462,15 +467,15 @@ public class RolapHierarchy extends HierarchyBase {
             ((RolapLevel) level).init(xmlDimension);
         }
         if (defaultMemberName != null) {
-            List<Id.Segment> uniqueNameParts;
+            List<Segment> uniqueNameParts;
             if (defaultMemberName.contains("[")) {
                 uniqueNameParts = Util.parseIdentifier(defaultMemberName);
             } else {
                 uniqueNameParts =
-                    Collections.<Id.Segment>singletonList(
-                        new Id.NameSegment(
+                    Collections.<Segment>singletonList(
+                        new IdImpl.NameSegmentImpl(
                             defaultMemberName,
-                            Id.Quoting.UNQUOTED));
+                            Quoting.UNQUOTED));
             }
 
             // First look up from within this hierarchy. Works for unqualified
@@ -653,7 +658,7 @@ public class RolapHierarchy extends HierarchyBase {
         Member parent,
         Level level,
         String name,
-        mondrian.olap.Formula formula)
+        Formula formula)
     {
         if (formula == null) {
             return new RolapMemberBase(
@@ -958,9 +963,9 @@ public class RolapHierarchy extends HierarchyBase {
                         null,
                         null);
                 SetType setType = new SetType(memberType1);
-                ListCalc listCalc =
+                TupleListCalc tupleListCalc =
                     new AbstractListCalc(
-                         "AbstractListCalc1",setType, new Calc[0])
+                         setType, new Calc[0])
                     {
                         @Override
 						public TupleList evaluateList(
@@ -978,14 +983,14 @@ public class RolapHierarchy extends HierarchyBase {
                         }
                     };
                 final Calc partialCalc =
-                    new LimitedRollupAggregateCalc(returnType, listCalc);
+                    new LimitedRollupAggregateCalc(returnType, tupleListCalc);
 
                 final Exp partialExp =
-                    new ResolvedFunCall(
+                    new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCall call,
+								ResolvedFunCall call,
                                 ExpCompiler compiler)
                             {
                                 return partialCalc;
@@ -1003,13 +1008,13 @@ public class RolapHierarchy extends HierarchyBase {
 
             case HIDDEN:
                 Exp hiddenExp =
-                    new ResolvedFunCall(
+                    new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
 							public Calc compileCall(
-                                ResolvedFunCall call, ExpCompiler compiler)
+									ResolvedFunCall call, ExpCompiler compiler)
                             {
-                                return new ConstantCalc(returnType, null);
+                                return ConstantCalcs.nullCalcOf(returnType);
                             }
 
                             @Override
@@ -1111,10 +1116,10 @@ public class RolapHierarchy extends HierarchyBase {
      */
     synchronized Exp getAggregateChildrenExpression() {
         if (aggregateChildrenExpression == null) {
-            UnresolvedFunCall fc = new UnresolvedFunCall(
+            UnresolvedFunCallImpl fc = new UnresolvedFunCallImpl(
                 "$AggregateChildren",
                 Syntax.Internal,
-                new Exp[] {new HierarchyExpr(this)});
+                new Exp[] {new HierarchyExpressionImpl(this)});
             Validator validator =
                     Util.createSimpleValidator(BuiltinFunTable.instance());
             aggregateChildrenExpression = fc.accept(validator);
@@ -1351,7 +1356,7 @@ public class RolapHierarchy extends HierarchyBase {
         private RolapResult.ValueFormatter cellFormatter;
 
         public RolapCalculatedMeasure(
-            RolapMember parent, RolapLevel level, String name, mondrian.olap.Formula formula)
+            RolapMember parent, RolapLevel level, String name, Formula formula)
         {
             super(parent, level, name, formula);
         }
@@ -1576,11 +1581,11 @@ public class RolapHierarchy extends HierarchyBase {
     {
         public LimitedRollupAggregateCalc(
             Type returnType,
-            ListCalc listCalc)
+            TupleListCalc tupleListCalc)
         {
             super(
-                "LimitedRollupAggregateCalc",returnType,
-                listCalc,
+                returnType,
+                tupleListCalc,
                 new ValueCalc(returnType));
         }
     }
@@ -1609,19 +1614,19 @@ public class RolapHierarchy extends HierarchyBase {
         @Override
 		public OlapElement lookupChild(
             SchemaReader schemaReader,
-            Id.Segment s,
+            Segment s,
             MatchType matchType)
         {
-            if (!(s instanceof Id.NameSegment nameSegment)) {
+            if (!(s instanceof NameSegment nameSegment)) {
                 return null;
             }
-            if (Util.equalName(nameSegment.name, dimension.getName())) {
+            if (Util.equalName(nameSegment.getName(), dimension.getName())) {
                 return dimension;
             }
             // Archaic form <dimension>.<hierarchy>, e.g. [Time.Weekly].[1997]
             if (!MondrianProperties.instance().SsasCompatibleNaming.get()
                 && Util.equalName(
-                    nameSegment.name,
+                    nameSegment.getName(),
                 new StringBuilder(dimension.getName()).append(".").append(subName).toString()))
             {
                 return RolapHierarchy.this;

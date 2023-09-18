@@ -16,17 +16,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.MemberCalc;
-import mondrian.calc.TupleCalc;
-import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.type.TypeUtil;
@@ -59,7 +59,7 @@ public class ValidMeasureFunDef extends FunDefBase
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final Calc calc;
         final Exp arg = call.getArg(0);
         if (TypeUtil.couldBeMember(arg.getType())) {
@@ -76,7 +76,7 @@ public class ValidMeasureFunDef extends FunDefBase
         private final Calc calc;
 
         public CalcImpl(ResolvedFunCall call, Calc calc) {
-            super(call.getFunName(),call.getType());
+            super(call.getType());
             this.calc = calc;
         }
 
@@ -152,22 +152,28 @@ public class ValidMeasureFunDef extends FunDefBase
             return evaluator.evaluateCurrent();
         }
 
-        private List<Member> getCalcsMembers(Evaluator evaluator) {
-            List<Member> memberList;
-            if (calc.isWrapperFor(MemberCalc.class)) {
-                memberList = Collections.singletonList(
-                    calc.unwrap(MemberCalc.class).evaluateMember(evaluator));
-            } else {
-                final Member[] tupleMembers =
-                    calc.unwrap((TupleCalc.class)).evaluateTuple(evaluator);
-                if (tupleMembers == null) {
-                  memberList = null;
-                } else {
-                  memberList = Arrays.asList(tupleMembers);
-                }
-            }
-            return memberList;
-        }
+		private List<Member> getCalcsMembers(Evaluator evaluator) {
+			List<Member> memberList;
+
+			MemberCalc mc = null;
+			if (calc instanceof MemberCalc tmpMembCalc) {
+				mc = tmpMembCalc;
+			} else if (calc.isWrapperFor(MemberCalc.class)) {
+				mc = (MemberCalc) calc.unwrap(MemberCalc.class);
+			}
+			if (mc != null) {
+				memberList = Collections.singletonList(mc.evaluate(evaluator));
+			} else {
+				TupleCalc tc = (TupleCalc) calc.unwrap((TupleCalc.class));
+				final Member[] tupleMembers = tc.evaluate(evaluator);
+				if (tupleMembers == null) {
+					memberList = null;
+				} else {
+					memberList = Arrays.asList(tupleMembers);
+				}
+			}
+			return memberList;
+		}
 
         private List<Member> getCalculatedMembersFromContext(
             Evaluator evaluator)
@@ -183,7 +189,7 @@ public class ValidMeasureFunDef extends FunDefBase
         }
 
         @Override
-		public Calc[] getCalcs() {
+		public Calc[] getChildCalcs() {
             return new Calc[]{calc};
         }
 
@@ -220,7 +226,7 @@ public class ValidMeasureFunDef extends FunDefBase
         @Override
 		public boolean dependsOn(Hierarchy hierarchy) {
             // depends on all hierarchies
-            return AbstractCalc.butDepends(getCalcs(), hierarchy);
+            return HirarchyDependsChecker.butDepends(getChildCalcs(), hierarchy);
         }
     }
 }

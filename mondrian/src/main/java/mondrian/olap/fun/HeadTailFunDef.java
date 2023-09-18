@@ -9,17 +9,19 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
+
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.ConstantCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
+import mondrian.olap.type.DecimalType;
 
 /**
  * Definition of the <code>Head</code> and <code>Tail</code>
@@ -29,7 +31,7 @@ import mondrian.olap.FunDef;
  * @since Mar 23, 2006
  */
 class HeadTailFunDef extends FunDefBase {
-    static final Resolver TailResolver =
+    static final FunctionResolver TailResolver =
         new ReflectiveMultiResolver(
             "Tail",
             "Tail(<Set>[, <Count>])",
@@ -37,7 +39,7 @@ class HeadTailFunDef extends FunDefBase {
             new String[] {"fxx", "fxxn"},
             HeadTailFunDef.class);
 
-    static final Resolver HeadResolver =
+    static final FunctionResolver HeadResolver =
         new ReflectiveMultiResolver(
             "Head",
             "Head(<Set>[, < Numeric Expression >])",
@@ -47,30 +49,30 @@ class HeadTailFunDef extends FunDefBase {
 
     private final boolean head;
 
-    public HeadTailFunDef(FunDef dummyFunDef) {
+    public HeadTailFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
         head = dummyFunDef.getName().equals("Head");
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc integerCalc =
             call.getArgCount() > 1
             ? compiler.compileInteger(call.getArg(1))
-            : ConstantCalc.constantInteger(1);
+            : new ConstantIntegerCalc(new DecimalType(Integer.MAX_VALUE, 0), 1);
         if (head) {
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {tupleListCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);
-                        TupleList list = listCalc.evaluateList(evaluator);
-                        int count = integerCalc.evaluateInteger(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
+                        Integer count = integerCalc.evaluate(evaluator);
                         return HeadTailFunDef.head(count, list);
                     } finally {
                         evaluator.restore(savepoint);
@@ -79,15 +81,15 @@ class HeadTailFunDef extends FunDefBase {
             };
         } else {
             return new AbstractListCalc(
-            		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
+            		call.getType(), new Calc[] {tupleListCalc, integerCalc})
             {
                 @Override
 				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);
-                        TupleList list = listCalc.evaluateList(evaluator);
-                        int count = integerCalc.evaluateInteger(evaluator);
+                        TupleList list = tupleListCalc.evaluateList(evaluator);
+                        Integer count = integerCalc.evaluate(evaluator);
                         return HeadTailFunDef.tail(count, list);
                     } finally {
                         evaluator.restore(savepoint);
@@ -97,7 +99,7 @@ class HeadTailFunDef extends FunDefBase {
         }
     }
 
-    static TupleList tail(final int count, final TupleList members) {
+    static TupleList tail(final Integer count, final TupleList members) {
         assert members != null;
         final int memberCount = members.size();
         if (count >= memberCount) {
@@ -109,7 +111,7 @@ class HeadTailFunDef extends FunDefBase {
         return members.subList(members.size() - count, members.size());
     }
 
-    static TupleList head(final int count, final TupleList members) {
+    static TupleList head(final Integer count, final TupleList members) {
         assert members != null;
         if (count <= 0) {
             return TupleCollections.emptyList(members.getArity());

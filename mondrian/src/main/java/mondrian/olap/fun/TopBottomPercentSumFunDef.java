@@ -13,20 +13,21 @@ package mondrian.olap.fun;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.DoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
 
@@ -76,7 +77,7 @@ class TopBottomPercentSumFunDef extends FunDefBase {
       new String[] { "fxxnn" }, false, false );
 
   public TopBottomPercentSumFunDef(
-    FunDef dummyFunDef, boolean top, boolean percent ) {
+    FunctionDefinition dummyFunDef, boolean top, boolean percent ) {
     super( dummyFunDef );
     this.top = top;
     this.percent = percent;
@@ -84,11 +85,11 @@ class TopBottomPercentSumFunDef extends FunDefBase {
 
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
-    final ListCalc listCalc =
+    final TupleListCalc tupleListCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final DoubleCalc doubleCalc = compiler.compileDouble( call.getArg( 1 ) );
     final Calc calc = compiler.compileScalar( call.getArg( 2 ), true );
-    return new CalcImpl( call, listCalc, doubleCalc, calc );
+    return new CalcImpl( call, tupleListCalc, doubleCalc, calc );
   }
 
   private static class ResolverImpl extends MultiResolver {
@@ -105,31 +106,31 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     @Override
-	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
       return new TopBottomPercentSumFunDef( dummyFunDef, top, percent );
     }
   }
 
   private class CalcImpl extends AbstractListCalc {
-    private final ListCalc listCalc;
+    private final TupleListCalc tupleListCalc;
     private final DoubleCalc doubleCalc;
     private final Calc calc;
 
     public CalcImpl(
       ResolvedFunCall call,
-      ListCalc listCalc,
+      TupleListCalc tupleListCalc,
       DoubleCalc doubleCalc,
       Calc calc ) {
-      super( call.getFunName(),call.getType(), new Calc[] { listCalc, doubleCalc, calc } );
-      this.listCalc = listCalc;
+      super( call.getType(), new Calc[] { tupleListCalc, doubleCalc, calc } );
+      this.tupleListCalc = tupleListCalc;
       this.doubleCalc = doubleCalc;
       this.calc = calc;
     }
 
     @Override
 	public TupleList evaluateList( Evaluator evaluator ) {
-      TupleList list = listCalc.evaluateList( evaluator );
-      double target = doubleCalc.evaluateDouble( evaluator );
+      TupleList list = tupleListCalc.evaluateList( evaluator );
+      Double target = doubleCalc.evaluate( evaluator );
       if ( list.isEmpty() ) {
         return list;
       }
@@ -187,7 +188,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
 
     @Override
 	public boolean dependsOn( Hierarchy hierarchy ) {
-      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
+      return HirarchyDependsChecker.checkAnyDependsButFirst( getChildCalcs(), hierarchy );
     }
   }
 }

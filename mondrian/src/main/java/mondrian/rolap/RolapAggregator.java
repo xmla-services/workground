@@ -13,8 +13,8 @@ package mondrian.rolap;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.TupleList;
 import mondrian.olap.Aggregator;
 import mondrian.olap.EnumeratedValues;

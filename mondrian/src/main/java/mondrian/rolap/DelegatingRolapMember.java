@@ -13,12 +13,12 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 
+import mondrian.olap.api.Segment;
 import mondrian.olap.Exp;
-import mondrian.olap.Id;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -211,7 +211,7 @@ public class DelegatingRolapMember extends RolapMemberBase {
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
         return member.lookupChild(schemaReader, s, matchType);
     }

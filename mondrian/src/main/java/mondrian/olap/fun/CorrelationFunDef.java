@@ -9,18 +9,18 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
+import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractCalc;
-import mondrian.calc.impl.AbstractDoubleCalc;
+import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Correlation</code> MDX function.
@@ -37,13 +37,13 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
             new String[]{"fnxn", "fnxnn"},
             CorrelationFunDef.class);
 
-    public CorrelationFunDef(FunDef dummyFunDef) {
+    public CorrelationFunDef(FunctionDefinition dummyFunDef) {
         super(dummyFunDef);
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final ListCalc listCalc =
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+        final TupleListCalc tupleListCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc1 =
             compiler.compileScalar(call.getArg(1), true);
@@ -51,15 +51,14 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
             call.getArgCount() > 2
             ? compiler.compileScalar(call.getArg(2), true)
             : new ValueCalc(call.getType());
-        return new AbstractDoubleCalc(
-        		call.getFunName(),call.getType(), new Calc[] {listCalc, calc1, calc2})
+        return new AbstractProfilingNestedDoubleCalc(call.getType(), new Calc[] {tupleListCalc, calc1, calc2})
         {
             @Override
-			public double evaluateDouble(Evaluator evaluator) {
+			public Double evaluate(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
+                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(tupleListCalc, evaluator);
 
                     return FunUtil.correlation(
                             evaluator, list, calc1, calc2);
@@ -70,7 +69,7 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
 
             @Override
 			public boolean dependsOn(Hierarchy hierarchy) {
-                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
+                return HirarchyDependsChecker.checkAnyDependsButFirst(getChildCalcs(), hierarchy);
             }
         };
     }

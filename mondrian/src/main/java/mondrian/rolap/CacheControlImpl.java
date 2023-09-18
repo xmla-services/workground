@@ -29,15 +29,15 @@ import java.util.concurrent.Callable;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.Schema;
 import org.eigenbase.util.property.BooleanProperty;
 
-import mondrian.olap.CacheControl;
-import mondrian.olap.Id;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
@@ -1211,7 +1211,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Visitor that visits various sub-types of
-     * {@link mondrian.olap.CacheControl.CellRegion}.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.CellRegion}.
      */
     interface CellRegionVisitor {
         void visit(MemberCellRegion region);
@@ -1264,7 +1264,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Implementation-specific extensions to the
-     * {@link mondrian.olap.CacheControl.MemberEditCommand} interface.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand} interface.
      */
     interface MemberEditCommandPlus extends MemberEditCommand {
         /**
@@ -1282,7 +1282,7 @@ public class CacheControlImpl implements CacheControl {
 
     /**
      * Implementation-specific extensions to the
-     * {@link mondrian.olap.CacheControl.MemberSet} interface.
+     * {@link org.eclipse.daanse.olap.api.CacheControl.MemberSet} interface.
      */
     interface MemberSetPlus extends MemberSet {
         /**
@@ -1868,7 +1868,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new Id.NameSegment(member.getName()));
+                        new IdImpl.NameSegmentImpl(member.getName()));
 
                 // Remove the member from its parent's lists. First try the
                 // unconstrained cache.
@@ -1942,7 +1942,7 @@ public class CacheControlImpl implements CacheControl {
                 final MemberCache memberCache = getMemberCache(member);
                 final MemberChildrenConstraint memberConstraint =
                     new ChildByNameConstraint(
-                        new Id.NameSegment(member.getName()));
+                        new IdImpl.NameSegmentImpl(member.getName()));
 
                 // Check if there is already a list in cache
                 // constrained by a wildcard.

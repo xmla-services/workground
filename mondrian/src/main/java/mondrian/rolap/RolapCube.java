@@ -34,16 +34,22 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
@@ -86,32 +92,31 @@ import org.slf4j.LoggerFactory;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.CacheControl;
+import mondrian.mdx.MemberExpressionImpl;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.CubeBase;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.Id;
+import mondrian.olap.FormulaImpl;
+import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
-import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.Query;
-import mondrian.olap.QueryAxis;
-import mondrian.olap.QueryPart;
+import mondrian.olap.QueryAxisImpl;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Quoting;
+import mondrian.olap.api.Segment;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
@@ -833,7 +838,7 @@ public class RolapCube extends CubeBase {
             RolapCube baseCube = entry.getKey();
             List<CalculatedMember> xmlCalculatedMemberList =
                 calculatedMembersMap.get(baseCube);
-            Query queryExp =
+            QueryImpl queryExp =
                 resolveCalcMembers(
                     xmlCalculatedMemberList,
                     Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
@@ -1001,9 +1006,9 @@ public class RolapCube extends CubeBase {
             if (xmlCalcMember.dimension() != null) {
                 Dimension dimension =
                     lookupDimension(
-                        new Id.NameSegment(
+                        new IdImpl.NameSegmentImpl(
                             xmlCalcMember.dimension(),
-                            Id.Quoting.UNQUOTED));
+                            Quoting.UNQUOTED));
                 if (dimension != null
                     && dimension.getHierarchy() != null)
                 {
@@ -1012,9 +1017,9 @@ public class RolapCube extends CubeBase {
             } else if (xmlCalcMember.hierarchy() != null) {
                 hierarchy =
                     lookupHierarchy(
-                        new Id.NameSegment(
+                        new IdImpl.NameSegmentImpl(
                             xmlCalcMember.hierarchy(),
-                            Id.Quoting.UNQUOTED),
+                            Quoting.UNQUOTED),
                         true);
             }
             if (formula.getName().equals(xmlCalcMember.name())
@@ -1149,8 +1154,8 @@ public class RolapCube extends CubeBase {
      *
      * @param xmlCalcMembers XML objects representing members
      * @param xmlNamedSets Array of XML definition of named set
-     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.model.Member} objects
-     * @param formulaList Output list of {@link mondrian.olap.Formula} objects
+     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.element.Member} objects
+     * @param formulaList Output list of {@link mondrian.olap.FormulaImpl} objects
      * @param cube the cube that the calculated members originate from
      * @param errOnDups throws an error if a duplicate member is found
      */
@@ -1162,7 +1167,7 @@ public class RolapCube extends CubeBase {
         RolapCube cube,
         boolean errOnDups)
     {
-        final Query queryExp =
+        final QueryImpl queryExp =
             resolveCalcMembers(
                 xmlCalcMembers,
                 xmlNamedSets,
@@ -1185,7 +1190,7 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    private Query resolveCalcMembers(
+    private QueryImpl resolveCalcMembers(
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember> xmlCalcMembers,
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         RolapCube cube,
@@ -1224,10 +1229,10 @@ public class RolapCube extends CubeBase {
             return Locus.execute(
                 conn,
                 "RolapCube.resolveCalcMembers",
-                new Locus.Action<Query>() {
+                new Locus.Action<QueryImpl>() {
                     @Override
-					public Query execute() {
-                        final Query queryExp =
+					public QueryImpl execute() {
+                        final QueryImpl queryExp =
                             conn.parseQuery(queryString);
                         queryExp.resolve();
                         return queryExp;
@@ -1243,7 +1248,7 @@ public class RolapCube extends CubeBase {
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         final int offset,
         int i,
-        final Query queryExp,
+        final QueryImpl queryExp,
         List<Formula> formulaList)
     {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet = xmlNamedSets.get(i);
@@ -1296,7 +1301,7 @@ public class RolapCube extends CubeBase {
     private void postCalcMember(
         List<? extends CalculatedMember> xmlCalcMembers,
         int i,
-        final Query queryExp,
+        final QueryImpl queryExp,
         List<RolapMember> memberList)
     {
         CalculatedMember xmlCalcMember = xmlCalcMembers.get(i);
@@ -1368,9 +1373,9 @@ public class RolapCube extends CubeBase {
             dimName = xmlCalcMember.dimension();
             final Dimension dimension =
                 lookupDimension(
-                    new Id.NameSegment(
+                    new IdImpl.NameSegmentImpl(
                         xmlCalcMember.dimension(),
-                        Id.Quoting.UNQUOTED));
+                        Quoting.UNQUOTED));
             if (dimension != null) {
                 hierarchy = dimension.getHierarchy();
             }
@@ -2902,15 +2907,15 @@ public class RolapCube extends CubeBase {
         return dimension;
     }
 
-    public OlapElement lookupChild(SchemaReader schemaReader, Id.Segment s) {
+    public OlapElement lookupChild(SchemaReader schemaReader, Segment s) {
         return lookupChild(schemaReader, s, MatchType.EXACT);
     }
 
     @Override
 	public OlapElement lookupChild(
-        SchemaReader schemaReader, Id.Segment s, MatchType matchType)
+        SchemaReader schemaReader, Segment s, MatchType matchType)
     {
-        if (!(s instanceof Id.NameSegment nameSegment)) {
+        if (!(s instanceof NameSegment nameSegment)) {
             return null;
         }
         // Note that non-exact matches aren't supported at this level,
@@ -2926,7 +2931,7 @@ public class RolapCube extends CubeBase {
         }
 
         if (oe == null) {
-            HierarchyUsage[] usages = getUsagesBySource(nameSegment.name);
+            HierarchyUsage[] usages = getUsagesBySource(nameSegment.getName());
             if (usages.length > 0) {
                 StringBuilder buf = new StringBuilder(64);
                 buf.append("RolapCube.lookupChild: ");
@@ -2960,7 +2965,7 @@ public class RolapCube extends CubeBase {
 
         if (getLogger().isDebugEnabled()) {
             if (!nameSegment.matches("Measures")) {
-                HierarchyUsage hierUsage = getUsageByName(nameSegment.name);
+                HierarchyUsage hierUsage = getUsageByName(nameSegment.getName());
                 if (hierUsage == null) {
                     status = "hierUsage == null";
                 } else {
@@ -3096,23 +3101,23 @@ public class RolapCube extends CubeBase {
         String name,
         Calc calc)
     {
-        final List<Id.Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
-        segmentList.add(new Id.NameSegment(name));
-        final Formula formula = new Formula(
-            new Id(segmentList),
+        final List<Segment> segmentList = new ArrayList<>(Util.parseIdentifier(hierarchy.getUniqueName()));
+        segmentList.add(new IdImpl.NameSegmentImpl(name));
+        final Formula formula = new FormulaImpl(
+            new IdImpl(segmentList),
             createDummyExp(calc),
             new MemberProperty[0]);
         final Statement statement =
             schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                new Query(
+            final QueryImpl query =
+                new QueryImpl(
                     statement,
                     this,
                     new Formula[] {formula},
-                    new QueryAxis[0],
+                    new QueryAxisImpl[0],
                     null,
-                    new QueryPart[0],
+                    new CellProperty[0],
                     new Parameter[0],
                     false);
             query.createValidator().validate(formula);
@@ -3129,14 +3134,14 @@ public class RolapCube extends CubeBase {
         final Statement statement =
                 schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                    new Query(
+            final QueryImpl query =
+                    new QueryImpl(
                             statement,
                             this,
                             new Formula[] {formula},
-                            new QueryAxis[0],
+                            new QueryAxisImpl[0],
                             null,
-                            new QueryPart[0],
+                            new CellProperty[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);
@@ -3152,14 +3157,14 @@ public class RolapCube extends CubeBase {
         final Statement statement =
                 schema.getInternalConnection().getInternalStatement();
         try {
-            final Query query =
-                    new Query(
+            final QueryImpl query =
+                    new QueryImpl(
                             statement,
                             this,
                             new Formula[] {formula},
-                            new QueryAxis[0],
+                            new QueryAxisImpl[0],
                             null,
-                            new QueryPart[0],
+                            new CellProperty[0],
                             new Parameter[0],
                             false);
             query.createValidator().validate(formula);
@@ -3206,7 +3211,7 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public Member getCalculatedMember(List<Id.Segment> nameParts) {
+		public Member getCalculatedMember(List<Segment> nameParts) {
             final String uniqueName = Util.implode(nameParts);
             for (Formula formula : calculatedMemberList) {
                 final String formulaUniqueName =
@@ -3221,9 +3226,9 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public NamedSet getNamedSet(List<Id.Segment> segments) {
+		public NamedSet getNamedSet(List<Segment> segments) {
             if (segments.size() == 1) {
-                Id.Segment segment = segments.get(0);
+                Segment segment = segments.get(0);
                 for (Formula namedSet : namedSetList) {
                     if (segment.matches(namedSet.getName())) {
                         return namedSet.getNamedSet();
@@ -3306,7 +3311,7 @@ public class RolapCube extends CubeBase {
 
         @Override
 		public Member getMemberByUniqueName(
-            List<Id.Segment> uniqueNameParts,
+            List<Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
         {
@@ -3437,7 +3442,7 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public Object visit(MemberExpr memberExpr)
+		public Object visit(MemberExpressionImpl memberExpr)
         {
             Member member = memberExpr.getMember();
             if (member instanceof RolapCalculatedMember calcMember) {
@@ -3514,7 +3519,7 @@ public class RolapCube extends CubeBase {
      * @see mondrian.olap.type.TypeWrapperExp
      */
     static Exp createDummyExp(final Calc calc) {
-        return new ResolvedFunCall(
+        return new ResolvedFunCallImpl(
             new FunDefBase("dummy", null, "fn") {
                 @Override
 				public Calc compileCall(

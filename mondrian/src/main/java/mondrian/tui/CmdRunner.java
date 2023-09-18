@@ -36,11 +36,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
 import org.eigenbase.xom.XOMException;
@@ -52,12 +52,13 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 
 import mondrian.olap.Category;
 import mondrian.olap.DriverManager;
-import mondrian.olap.FunTable;
+import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
-import mondrian.olap.Query;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunInfo;
+import mondrian.olap.fun.FunctionInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
@@ -108,6 +109,12 @@ public class CmdRunner {
     private String connectString;
     private Connection connection;
     private final PrintWriter out;
+
+    private static final String[][] commentDelimDefault = {
+            new String[] {"//", null},
+            new String[] {"--", null},
+            new String[] {"/*", "*/"}
+    };
 
     static {
         setDefaultCommentState();
@@ -244,7 +251,7 @@ public class CmdRunner {
         }
     }
 
-    public void loadParameters(Query query) {
+    public void loadParameters(QueryImpl query) {
         Parameter[] params = query.getParameters();
         for (Parameter param : params) {
             loadParameter(query, param);
@@ -335,7 +342,7 @@ public class CmdRunner {
         }
     }
 
-    public void loadParameter(Query query, Parameter param) {
+    public void loadParameter(QueryImpl query, Parameter param) {
         int category = TypeUtil.typeToCategory(param.getType());
         String name = param.getName();
         String value = CmdRunner.paraNameValues.get(name);
@@ -426,7 +433,7 @@ public class CmdRunner {
         }
 
         debug("parseParameter. MEMBER_TYPE: " + trimmed);
-        Query query = this.connection.parseQuery(this.mdxCmd);
+        QueryImpl query = this.connection.parseQuery(this.mdxCmd);
 
         // assume member, dimension, hierarchy, level
         OlapElement element = Util.lookup(query, Util.parseIdentifier(trimmed));
@@ -437,7 +444,7 @@ public class CmdRunner {
 
         if (element instanceof Member member) {
             return new Expr(member, Expr.Type.MEMBER);
-        } else if (element instanceof org.eclipse.daanse.olap.api.model.Level level) {
+        } else if (element instanceof org.eclipse.daanse.olap.api.element.Level level) {
             return new Expr(level, Expr.Type.MEMBER);
         } else if (element instanceof Hierarchy hier) {
             return new Expr(hier, Expr.Type.MEMBER);
@@ -619,7 +626,7 @@ public class CmdRunner {
         try {
             this.connection = getConnection();
             debug("CmdRunner.runQuery: AFTER getConnection");
-            Query query = this.connection.parseQuery(queryString);
+            QueryImpl query = this.connection.parseQuery(queryString);
             debug("CmdRunner.runQuery: AFTER parseQuery");
             if (loadParams) {
                 loadParameters(query);
@@ -1828,14 +1835,14 @@ public class CmdRunner {
 
         String[] tokens = mdxCmd.split("\\s+");
 
-        final FunTable funTable = getConnection().getSchema().getFunTable();
+        final FunctionTable funTable = getConnection().getSchema().getFunTable();
         if (tokens.length == 1) {
             // prints names only once
-            List<FunInfo> funInfoList = funTable.getFunInfoList();
-            Iterator<FunInfo> it = funInfoList.iterator();
+            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
+            Iterator<FunctionInfo> it = funInfoList.iterator();
             String prevName = null;
             while (it.hasNext()) {
-                FunInfo fi = it.next();
+                FunctionInfo fi = it.next();
                 String name = fi.getName();
                 if (prevName == null || ! prevName.equals(name)) {
                     buf.append(name);
@@ -1846,10 +1853,10 @@ public class CmdRunner {
 
         } else if (tokens.length == 2) {
             String funcname = tokens[1];
-            List<FunInfo> funInfoList = funTable.getFunInfoList();
-            List<FunInfo> matches = new ArrayList<>();
+            List<FunctionInfo> funInfoList = funTable.getFunctionInfos();
+            List<FunctionInfo> matches = new ArrayList<>();
 
-            for (FunInfo fi : funInfoList) {
+            for (FunctionInfo fi : funInfoList) {
                 if (fi.getName().equalsIgnoreCase(funcname)) {
                     matches.add(fi);
                 }
@@ -1862,10 +1869,10 @@ public class CmdRunner {
                 buf.append(NL);
                 appendList(buf);
             } else {
-                Iterator<FunInfo> it = matches.iterator();
+                Iterator<FunctionInfo> it = matches.iterator();
                 boolean doname = true;
                 while (it.hasNext()) {
-                    FunInfo fi = it.next();
+                    FunctionInfo fi = it.next();
                     if (doname) {
                         buf.append(fi.getName());
                         buf.append(NL);
@@ -2399,9 +2406,8 @@ public class CmdRunner {
      * plus all the comment delimiters in Scanner.
      */
     private static void setDefaultCommentState() {
-        allowNestedComments = mondrian.olap.Scanner.getNestedCommentsState();
-        String[][] scannerCommentsDelimiters =
-            mondrian.olap.Scanner.getCommentDelimiters();
+        allowNestedComments =true;
+        String[][] scannerCommentsDelimiters = commentDelimDefault;
         commentDelim = new String[scannerCommentsDelimiters.length + 1][2];
         commentStartChars = new char[scannerCommentsDelimiters.length + 1];
 

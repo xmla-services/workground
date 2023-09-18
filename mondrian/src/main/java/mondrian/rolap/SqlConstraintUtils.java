@@ -31,10 +31,11 @@ import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
@@ -658,7 +658,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     if ( expression == null ) {
       expression = member.getExpression();
     }
-    if ( expression instanceof ResolvedFunCall fun ) {
+    if ( expression instanceof ResolvedFunCallImpl fun ) {
       if ( fun.getFunDef() instanceof ParenthesesFunDef ) {
         assert ( fun.getArgCount() == 1 );
         expandExpressions( member, fun.getArg( 0 ), evaluator, expandedSet );
@@ -671,7 +671,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         // Extract the list of members
         expandSetFromCalculatedMember( evaluator, member, expandedSet );
       }
-    } else if ( expression instanceof MemberExpr memberExpr) {
+    } else if ( expression instanceof MemberExpression memberExpr) {
       expandedSet.addMember( memberExpr.getMember() );
     } else {
       expandedSet.addMember( member );
@@ -690,7 +690,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
   }
 
   public static boolean isSupportedExpressionForCalculatedMember( final Exp expression ) {
-    if ( expression instanceof ResolvedFunCall fun ) {
+    if ( expression instanceof ResolvedFunCallImpl fun ) {
       if ( fun.getFunDef() instanceof AggregateFunDef ) {
         return true;
       }
@@ -716,16 +716,16 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       }
     }
 
-    return  expression instanceof MemberExpr;
+    return  expression instanceof MemberExpression;
   }
 
   public static void expandSetFromCalculatedMember( Evaluator evaluator, Member member,
       TupleConstraintStruct expandedSet ) {
-    if (!(member.getExpression() instanceof ResolvedFunCall)) {
+    if (!(member.getExpression() instanceof ResolvedFunCallImpl)) {
         throw new IllegalArgumentException("Expression should be instanceof ResolvedFunCall");
     }
 
-    ResolvedFunCall fun = (ResolvedFunCall) member.getExpression();
+    ResolvedFunCallImpl fun = (ResolvedFunCallImpl) member.getExpression();
 
     // Calling the main set evaluator to extend this.
     Exp exp = fun.getArg( 0 );
@@ -1905,7 +1905,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
 
   public static boolean containsValidMeasure( Exp... expressions ) {
     for ( Exp expression : expressions ) {
-      if ( expression instanceof ResolvedFunCall fun ) {
+      if ( expression instanceof ResolvedFunCallImpl fun ) {
         return fun.getFunDef() instanceof ValidMeasureFunDef || containsValidMeasure( fun.getArgs() );
       }
     }

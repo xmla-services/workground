@@ -47,8 +47,8 @@ import org.apache.commons.collections.map.ReferenceMap;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
@@ -261,7 +261,6 @@ public class RolapStar {
      * it is accessed via a thread-local, the data structures can be accessed
      * without acquiring locks.
      *
-     * @see Util#deprecated(Object)
      */
     public static class Bar {
         /** Holds all thread-local aggregations of this star. */
@@ -626,7 +625,6 @@ public class RolapStar {
      *
      * <p>Must be called from synchronized context.
      *
-     * @see Util#deprecated(Object)  currently always returns null -- remove
      */
     public Aggregation lookupSegment(AggregationKey aggregationKey) {
         return localBars.get().aggregations.get(aggregationKey);

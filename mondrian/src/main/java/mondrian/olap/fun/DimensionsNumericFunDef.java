@@ -11,13 +11,13 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.IntegerCalc;
-import mondrian.calc.impl.AbstractHierarchyCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
@@ -53,21 +53,21 @@ class DimensionsNumericFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler)
     {
         final IntegerCalc integerCalc =
             compiler.compileInteger(call.getArg(0));
-        return new AbstractHierarchyCalc(call.getFunName(),call.getType(), new Calc[] {integerCalc})
+        return new AbstractProfilingNestedHierarchyCalc(call.getType(), new Calc[] {integerCalc})
         {
             @Override
-			public Hierarchy evaluateHierarchy(Evaluator evaluator) {
-                int n = integerCalc.evaluateInteger(evaluator);
+			public Hierarchy evaluate(Evaluator evaluator) {
+                Integer n = integerCalc.evaluate(evaluator);
                 return nthHierarchy(evaluator, n);
             }
         };
     }
 
-    RolapHierarchy nthHierarchy(Evaluator evaluator, int n) {
+    RolapHierarchy nthHierarchy(Evaluator evaluator, Integer n) {
         RolapCube cube = (RolapCube) evaluator.getCube();
         List<RolapHierarchy> hierarchies = cube.getHierarchies();
         if (n >= hierarchies.size() || n < 0) {

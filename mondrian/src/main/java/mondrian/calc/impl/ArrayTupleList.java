@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
@@ -236,7 +236,7 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
     }
 
     @Override
-    public TupleList cloneList( int capacity ) {
+    public TupleList copyList( int capacity ) {
         if ( capacity < 0 ) {
             // copy of this list with the same contents
             return new ArrayTupleList( arity, objectData.clone(), size() );

@@ -9,15 +9,15 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.StringCalc;
+import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.calc.StringCalc;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.FunDef;
+import mondrian.olap.FunctionDefinition;
 import mondrian.resource.MondrianResource;
 
 /**
@@ -28,7 +28,7 @@ import mondrian.resource.MondrianResource;
  * </code></blockquote>
  */
 class StrToMemberFunDef extends FunDefBase {
-    public static final FunDef INSTANCE = new StrToMemberFunDef();
+    public static final FunctionDefinition INSTANCE = new StrToMemberFunDef();
 
     private StrToMemberFunDef() {
         super(
@@ -38,14 +38,14 @@ class StrToMemberFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc memberNameCalc =
             compiler.compileString(call.getArg(0));
-        return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[] {memberNameCalc}) {
+        return new AbstractProfilingNestedMemberCalc(call.getType(), new Calc[] {memberNameCalc}) {
             @Override
-			public Member evaluateMember(Evaluator evaluator) {
+			public Member evaluate(Evaluator evaluator) {
                 String memberName =
-                    memberNameCalc.evaluateString(evaluator);
+                    memberNameCalc.evaluate(evaluator);
                 if (memberName == null) {
                     throw FunUtil.newEvalException(
                         MondrianResource.instance().NullValue.ex());
