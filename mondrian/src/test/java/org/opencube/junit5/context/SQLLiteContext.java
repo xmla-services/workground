@@ -89,18 +89,4 @@ public class SQLLiteContext  implements Context {
         return Optional.empty();
     }
 
-    @Override
-    public boolean isEnableSessionCaching() {
-        return false;
-    }
-
-    @Override
-    public boolean enableRolapCubeMemberCache() {
-        return true;
-    }
-
-    @Override
-    public int cellBatchSize() {
-        return -1;
-    }
 }
