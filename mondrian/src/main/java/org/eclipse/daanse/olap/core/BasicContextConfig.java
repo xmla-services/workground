@@ -14,7 +14,7 @@
 *   Stefan Bischof (bipolis.org) - initial
 *
 */
-package org.eclipse.daanse.engine.impl;
+package org.eclipse.daanse.olap.core;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
