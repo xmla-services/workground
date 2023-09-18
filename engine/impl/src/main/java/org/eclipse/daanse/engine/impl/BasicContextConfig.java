@@ -33,6 +33,365 @@ public interface BasicContextConfig {
         return null;
     }
 
+    //<p>Maximum number of simultaneous queries the system will allow.</p> <p>Oracle fails if you try to run more than the 'processes' parameter in init.ora, typically 150. The throughput of Oracle and other databases will probably reduce long before you get to their limit.</p>
+    @AttributeDefinition(name = "%queryLimit.name", description = "%queryLimit.description", type = AttributeType.INTEGER)
+    default Integer queryLimit() {
+        return 40;
+    }
+
+    //Property containing a list of JDBC drivers to load automatically. Must be a comma-separated list of class names, and the classes must be on the class path.
+    @AttributeDefinition(name = "%jdbcDrivers.name", description = "%jdbcDrivers.description", type = AttributeType.STRING)
+    default String jdbcDrivers() {
+        return "sun.jdbc.odbc.JdbcOdbcDriver,org.hsqldb.jdbcDriver,oracle.jdbc.OracleDriver,com.mysql.jdbc.Driver";
+    }
+
+    //Integer property that, if set to a value greater than zero, sets a hard limit on the number of cells that are batched together when building segments.
+    @AttributeDefinition(name = "%cellBatchSize.name", description = "%cellBatchSize.description", type = AttributeType.INTEGER)
+    default Integer cellBatchSize() {
+        return -1;
+    }
+
+    //Integer property that, if set to a value greater than zero, limits the maximum size of a result set.
+    @AttributeDefinition(name = "%resultLimit.name", description = "%resultLimit.description", type = AttributeType.INTEGER)
+    default Integer resultLimit() {
+        return 0;
+    }
+
+    //Property that establishes the amount of chunks for querying cells involving high-cardinality dimensions. Should prime with {@link #ResultLimit mondrian.result.limit}.
+    @AttributeDefinition(name = "%highCardChunkSize.name", description = "%highCardChunkSize.description", type = AttributeType.INTEGER)
+    default Integer highCardChunkSize() {
+        return 1;
+    }
+
+    //<p>String property that determines which tests are run.</p> <p>This is a regular expression as defined by {@link java.util.regex.Pattern}. If this property is specified, only tests whose names match the pattern in its entirety will be run.</p> @see #TestClass
+    @AttributeDefinition(name = "%testName.name", description = "%testName.description", type = AttributeType.STRING)
+    default String testName() {
+        return null;
+    }
+
+    //<p>String property that determines which test class to run.</p> <p>This is the name of the class. It must either implement {@code junit.framework.Test} or have a method {@code public [static] junit.framework.Test suite()}.</p> <p>Example:</p> <blockquote><code>mondrian.test.Class=mondrian.test.FoodMartTestCase</code></blockquote> @see #TestName
+    @AttributeDefinition(name = "%testClass.name", description = "%testClass.description", type = AttributeType.STRING)
+    default String testClass() {
+        return null;
+    }
+
+    //<p>Property containing the connect string which regression tests should use to connect to the database.</p> <p>Format is specified in {@link Util#parseConnectString(String)}.</p>
+    @AttributeDefinition(name = "%testConnectString.name", description = "%testConnectString.description", type = AttributeType.STRING)
+    default String testConnectString() {
+        return null;
+    }
+
+    //Property containing a list of dimensions in the Sales cube that should be treated as high-cardinality dimensions by the testing infrastructure. This allows us to run the full suite of tests with high-cardinality functionality enabled.
+    @AttributeDefinition(name = "%testHighCardinalityDimensionList.name", description = "%testHighCardinalityDimensionList.description", type = AttributeType.STRING)
+    default String testHighCardinalityDimensionList() {
+        return null;
+    }
+
+    /*
+    <p>Property containing the JDBC URL of the FoodMart database. The default value is to connect to an ODBC data source called "MondrianFoodMart".</p>
+
+    <p>To run the test suite, first load the FoodMart data set into the database of your choice. Then set the driver.classpath,
+    mondrian.foodmart.jdbcURL and mondrian.jdbcDrivers properties, by
+    un-commenting and modifying one of the sections below.
+    Put the JDBC driver jar into mondrian/testlib.</p>
+
+    <p>Here are example property settings for various databases.</p>
+
+<h3>Derby: needs user and password</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:derby:demo/derby/foodmart<br/>
+    mondrian.foodmart.jdbcUser=sa<br/>
+    mondrian.foodmart.jdbcPassword=sa<br/>
+    mondrian.jdbcDrivers=org.apache.derby.jdbc.EmbeddedDriver<br/>
+    driver.classpath=testlib/derby.jar</code></blockquote>
+
+<h3>FireBirdSQL</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:firebirdsql:localhost/3050:/mondrian/foodmart.gdb<br/>
+    mondrian.jdbcDrivers=org.firebirdsql.jdbc.FBDriver<br/>
+    driver.classpath=/jdbc/fb/firebirdsql-full.jar</code></blockquote>
+
+    <h3>Greenplum (similar to Postgres)</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:postgresql://localhost/foodmart?user=gpadmin&amp;password=xxxx<br/>
+    mondrian.foodmart.jdbcUser=foodmart<br/>
+    mondrian.foodmart.jdbcPassword=foodmart<br/>
+    mondrian.jdbcDrivers=org.postgresql.Driver<br/>
+    driver.classpath=lib/postgresql-8.2-504.jdbc3.jar</code></blockquote>
+
+    <h3>LucidDB (see <a href="http://docs.eigenbase.org/LucidDbOlap">instructions</a>)</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:luciddb:http://localhost<br/>
+    mondrian.foodmart.jdbcUser=foodmart<br/>
+    mondrian.jdbcDrivers=org.luciddb.jdbc.LucidDbClientDriver<br/>
+    driver.classpath=/path/to/luciddb/plugin/LucidDbClient.jar</code></blockquote>
+
+    <h3>Oracle (needs user and password)</h3>
+<blockquote><code>
+    oracle.home=G:/oracle/product/10.1.0/Db_1<br/>
+    mondrian.foodmart.jdbcURL.oracle=jdbc:oracle:thin:@//<i>host</i>:<i>port</i>/<i>service_name</i><br/>
+        mondrian.foodmart.jdbcURL=jdbc:oracle:thin:foodmart/foodmart@//stilton:1521/orcl<br/>
+        mondrian.foodmart.jdbcURL=jdbc:oracle:oci8:foodmart/foodmart@orcl<br/>
+    mondrian.foodmart.jdbcUser=FOODMART<br/>
+    mondrian.foodmart.jdbcPassword=oracle<br/>
+    mondrian.jdbcDrivers=oracle.jdbc.OracleDriver<br/>
+    driver.classpath=/home/jhyde/open/mondrian/lib/ojdbc14.jar</code></blockquote>
+
+    <h3>ODBC (Microsoft Access)</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:odbc:MondrianFoodMart<br/>
+    mondrian.jdbcDrivers=sun.jdbc.odbc.JdbcOdbcDriver<br/>
+    driver.classpath=</code></blockquote>
+
+<h3> Hypersonic</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:hsqldb:demo/hsql/FoodMart<br/>
+    mondrian.jdbcDrivers=org.hsqldb.jdbcDriver<br/>
+    driver.classpath=xx</code></blockquote>
+
+<h3> MySQL: can have user and password set in JDBC URL</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:mysql://localhost/foodmart?user=foodmart&amp;password=foodmart<br/>
+    mondrian.foodmart.jdbcURL=jdbc:mysql://localhost/foodmart<br/>
+    mondrian.foodmart.jdbcUser=foodmart<br/>
+    mondrian.foodmart.jdbcPassword=foodmart<br/>
+    mondrian.jdbcDrivers=com.mysql.jdbc.Driver<br/>
+    driver.classpath=D:/mysql-connector-3.1.12</code></blockquote>
+
+<h3> MariaDB: can have user and password set in JDBC URL</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:mariadb://localhost/foodmart?user=foodmart&amp;password=foodmart<br/>
+    mondrian.foodmart.jdbcURL=jdbc:mariadb://localhost/foodmart<br/>
+    mondrian.foodmart.jdbcUser=foodmart<br/>
+    mondrian.foodmart.jdbcPassword=foodmart<br/>
+    mondrian.jdbcDrivers=org.mariadb.jdbc.Driver<br/>
+    driver.classpath=D:/mariadb-java-client-1.4.6.jar</code></blockquote>
+
+<h3> NuoDB</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:com.nuodb://localhost/foodmart?schema=mondrian<br/>
+    mondrian.foodmart.jdbcUser=foodmart<br/>
+    mondrian.foodmart.jdbcPassword=foodmart<br/>
+    mondrian.jdbcDrivers=com.nuodb.jdbc.Driver<br/>
+    mondrian.foodmart.jdbcSchema=mondrian<br/>
+    driver.classpath=/opt/nuodb/jar/nuodbjdbc.jar</code></blockquote>
+
+<h3>Infobright</h3>
+    <p>As MySQL. (Infobright uses a MySQL driver, version 5.1 and later.)</p>
+
+<h3>Ingres</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:ingres://192.168.200.129:II7/MondrianFoodMart;LOOP=on;AUTO=multi;UID=ingres;PWD=sergni<br/>
+    mondrian.jdbcDrivers=com.ingres.jdbc.IngresDriver<br/>
+    driver.classpath=c:/ingres2006/ingres/lib/iijdbc.jar</code></blockquote>
+
+<h3>Postgres: needs user and password</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:postgresql://localhost/FM3<br/>
+    mondrian.foodmart.jdbcUser=postgres<br/>
+    mondrian.foodmart.jdbcPassword=pgAdmin<br/>
+    mondrian.jdbcDrivers=org.postgresql.Driver</code></blockquote>
+
+<h3>Neoview</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:hpt4jdbc://localhost:18650/:schema=PENTAHO;serverDataSource=PENTAHO_DataSource<br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=com.hp.t4jdbc.HPT4Driver<br/>
+    driver.classpath=/some/path/hpt4jdbc.jar</code></blockquote>
+
+<h3>Netezza: mimics Postgres</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:netezza://127.0.1.10/foodmart<br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=org.netezza.Driver<br/>
+    driver.classpath=/some/path/nzjdbc.jar</code></blockquote>
+
+<h3>Sybase</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:jtds:sybase://xxx.xxx.xxx.xxx:<i>port</i>/<i>dbName</i><br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=net.sourceforge.jtds.jdbc.Driver<br/>
+    driver.classpath=/some/path/jtds-1.2.jar</code></blockquote>
+
+<h3>Teradata</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:teradata://DatabaseServerName/DATABASE=FoodMart<br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=com.ncr.teradata.TeraDriver<br/>
+    driver.classpath=/some/path/terajdbc/classes/terajdbc4.jar</code></blockquote>
+
+<h3>Vertica</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:vertica://xxx.xxx.xxx.xxx:<i>port</i>/<i>dbName</i><br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=com.vertica.Driver<br/>
+    driver.classpath=/some/path/vertica.jar</code></blockquote>
+
+<h3>Vectorwise</h3>
+<blockquote><code>
+    mondrian.foodmart.jdbcURL=jdbc:ingres://xxx.xxx.xxx.xxx<i>port</i>/<i>dbName</i><br/>
+    mondrian.foodmart.jdbcUser=<i>user</i><br/>
+    mondrian.foodmart.jdbcPassword=<i>password</i><br/>
+    mondrian.jdbcDrivers=com.ingres.jdbc.IngresDriver <br/>
+    driver.classpath=/some/path/iijdbc.jar</code></blockquote>
+     */
+    @AttributeDefinition(name = "%foodmartJdbcURL.name", description = "%foodmartJdbcURL.description", type = AttributeType.STRING)
+    default String foodmartJdbcURL() {
+        return "jdbc:odbc:MondrianFoodMart";
+    }
+
+    //Property containing the JDBC user of a test database. The default value is null, to cope with DBMSs that don't need this.
+    @AttributeDefinition(name = "%testJdbcUser.name", description = "%testJdbcUser.description", type = AttributeType.STRING)
+    default String testJdbcUser() {
+        return null;
+    }
+
+    //Property containing the JDBC password of a test database. The default value is null, to cope with DBMSs that don't need this.
+    @AttributeDefinition(name = "%testJdbcPassword.name", description = "%testJdbcPassword.description", type = AttributeType.STRING)
+    default String testJdbcPassword() {
+        return null;
+    }
+
+    //Property which turns on or off the in-memory rollup of segment data. Defaults to true.
+    @AttributeDefinition(name = "%enableInMemoryRollup.name", description = "%enableInMemoryRollup.description", type = AttributeType.BOOLEAN)
+    default Boolean enableInMemoryRollup() {
+        return true;
+    }
+
+    //Property which defines which SegmentCache implementation to use. Specify the value as a fully qualified class name, such as <code>org.example.SegmentCacheImpl</code> where SegmentCacheImpl is an implementation of {@link mondrian.spi.SegmentCache}.
+    @AttributeDefinition(name = "%segmentCache.name", description = "%segmentCache.description", type = AttributeType.STRING)
+    default String segmentCache() {
+        return null;
+    }
+
+    /*
+    <p>Property that, with {@link #SparseSegmentDensityThreshold}, determines whether to choose a sparse or dense representation when storing collections of cell values in memory.</p>
+
+    <p>When storing collections of cell values, Mondrian has to choose
+    between a sparse and a dense representation, based upon the
+<code>possible</code> and <code>actual</code> number of values.
+    The <code>density</code> is <code>actual / possible</code>.</p>
+
+    <p>We use a sparse representation if
+<code>(possible -
+    {@link #SparseSegmentCountThreshold countThreshold}) *
+    {@link #SparseSegmentDensityThreshold densityThreshold} &gt;
+    actual</code></p>
+
+    <p>For example, at the default values
+        ({@link #SparseSegmentCountThreshold countThreshold} = 1000,
+    {@link #SparseSegmentDensityThreshold} = 0.5),
+    we use a dense representation for</p>
+
+<ul>
+<li>(1000 possible, 0 actual), or</li>
+<li>(2000 possible, 500 actual), or</li>
+<li>(3000 possible, 1000 actual).</li>
+</ul>
+
+    <p>Any fewer actual values, or any more
+    possible values, and Mondrian will use a sparse representation.</p>
+
+     */
+    @AttributeDefinition(name = "%sparseSegmentCountThreshold.name", description = "%sparseSegmentCountThreshold.description", type = AttributeType.INTEGER)
+    default Integer sparseSegmentCountThreshold() {
+        return 1000;
+    }
+
+    //Property that, with {@link #SparseSegmentCountThreshold}, determines whether to choose a sparse or dense representation when storing collections of cell values in memory.
+    @AttributeDefinition(name = "%sparseSegmentDensityThreshold.name", description = "%sparseSegmentDensityThreshold.description", type = AttributeType.DOUBLE)
+    default Double sparseSegmentDensityThreshold() {
+        return 0.5;
+    }
+
+    /*
+        Property that defines
+    a pattern for which test XML files to run.  Pattern has to
+    match a file name of the form:
+    <code>query<i>whatever</i>.xml</code> in the directory.
+
+<p>Example:</p>
+
+<blockquote><code>
+    mondrian.test.QueryFilePattern=queryTest_fec[A-Za-z0-9_]*.xml
+        </code></blockquote>
+     */
+    @AttributeDefinition(name = "%queryFilePattern.name", description = "%queryFilePattern.description", type = AttributeType.STRING)
+    default String queryFilePattern() {
+        return null;
+    }
+
+    //Property defining where the test XML files are.
+    @AttributeDefinition(name = "%queryFileDirectory.name", description = "%queryFileDirectory.description", type = AttributeType.STRING)
+    default String queryFileDirectory() {
+        return null;
+    }
+
+    //Not documented.
+    @AttributeDefinition(name = "%iterations.name", description = "%iterations.description", type = AttributeType.INTEGER)
+    default Integer iterations() {
+        return 1;
+    }
+
+    //Not documented.
+    @AttributeDefinition(name = "%vUsers.name", description = "%vUsers.description", type = AttributeType.INTEGER)
+    default Integer vUsers() {
+        return 1;
+    }
+
+    //Property that returns the time limit for the test run in seconds. If the test is running after that time, it is terminated.
+    @AttributeDefinition(name = "%timeLimit.name", description = "%timeLimit.description", type = AttributeType.INTEGER)
+    default Integer timeLimit() {
+        return 0;
+    }
+
+    //Property that indicates whether this is a warmup test.
+    @AttributeDefinition(name = "%warmup.name", description = "%warmup.description", type = AttributeType.BOOLEAN)
+    default Boolean warmup() {
+        return false;
+    }
+
+    //Property that contains the URL of the catalog to be used by {@link mondrian.tui.CmdRunner} and XML/A Test.
+    @AttributeDefinition(name = "%catalogURL.name", description = "%catalogURL.description", type = AttributeType.STRING)
+    default String catalogURL() {
+        return null;
+    }
+
+    //<p>Property that controls whether warning messages should be printed if a SQL comparison test does not contain expected SQL statements for the specified dialect. The tests are skipped if no expected SQL statements are found for the current dialect.</p> <p>Possible values are the following:</p> NONE: no warning (default); ANY: any dialect; ACCESS; DERBY; LUCIDDB; MYSQL ... and any Dialect enum in SqlPattern.Dialect <p>Specific tests can overwrite the default setting. The priority is: Settings besides "ANY" in mondrian.properties file; Any setting in the test; ANY</p>
+    @AttributeDefinition(name = "%warnIfNoPatternForDialect.name", description = "%warnIfNoPatternForDialect.description", type = AttributeType.STRING)
+    default String warnIfNoPatternForDialect() {
+        return "NONE";
+    }
+
+    //<p>Boolean property that controls whether Mondrian uses aggregate tables.</p> <p>If true, then Mondrian uses aggregate tables. This property is queried prior to each aggregate query so that changing the value of this property dynamically (not just at startup) is meaningful.</p> <p>Aggregates can be read from the database using the {@link #ReadAggregates} property but will not be used unless this property is set to true.</p>
+    @AttributeDefinition(name = "%useAggregates.name", description = "%useAggregates.description", type = AttributeType.BOOLEAN)
+    default Boolean useAggregates() {
+        return false;
+    }
+
+    //<p>Boolean property that determines whether Mondrian should read aggregate tables.</p> <p>If set to true, then Mondrian scans the database for aggregate tables. Unless mondrian.rolap.aggregates.Use is set to true, the aggregates found will not be used.</p>
+    @AttributeDefinition(name = "%readAggregates.name", description = "%readAggregates.description", type = AttributeType.BOOLEAN)
+    default Boolean readAggregates() {
+        return false;
+    }
+
+    //<p>Boolean property that controls whether aggregate tables are ordered by their volume or row count.</p> <p>If true, Mondrian uses the aggregate table with the smallest volume (number of rows multiplied by number of columns); if false, Mondrian uses the aggregate table with the fewest rows.</p>
+    @AttributeDefinition(name = "%chooseAggregateByVolume.name", description = "%chooseAggregateByVolume.description", type = AttributeType.BOOLEAN)
+    default Boolean chooseAggregateByVolume() {
+        return false;
+    }
+
+    //<p>String property containing the name of the file which defines the rules for recognizing an aggregate table. Can be either a resource in the Mondrian jar or a URL.</p> <p>The default value is "/DefaultRules.xml", which is in the mondrian.rolap.aggmatcher package in Mondrian.jar.</p> <p>Normally, this property is not set by a user.</p>
+    @AttributeDefinition(name = "%aggregateRules.name", description = "%aggregateRules.description", type = AttributeType.STRING)
+    default String aggregateRules() {
+        return "/DefaultRules.xml";
+    }
+
     @AttributeDefinition(name = "%aggregateRuleTag.name", description = "%aggregateRuleTag.description", type = AttributeType.STRING)
     default String aggregateRuleTag() {
         return "default";

@@ -14,7 +14,6 @@
 package org.eclipse.daanse.engine.impl;
 
 import java.sql.Connection;
-import java.util.Dictionary;
 import java.util.Map;
 import java.util.Optional;
 
@@ -106,6 +105,21 @@ public class BasicContext implements Context {
     @Override
     public Optional<String> getDescription() {
         return Optional.ofNullable(config.description());
+    }
+
+    @Override
+    public boolean isEnableSessionCaching() {
+        return config.enableSessionCaching();
+    }
+
+    @Override
+    public boolean enableRolapCubeMemberCache() {
+        return config.enableRolapCubeMemberCache();
+    }
+
+    @Override
+    public int cellBatchSize() {
+        return config.cellBatchSize();
     }
 
 //	@Override
