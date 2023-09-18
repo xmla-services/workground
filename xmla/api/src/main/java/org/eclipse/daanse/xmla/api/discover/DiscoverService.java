@@ -82,6 +82,14 @@ import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 public interface DiscoverService {
 
 	/**
+	 * returns a list of the data sources that are available on the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request);
+
+	/**
 	 * returns the catalogs that are accessible on the server.
 	 *
 	 * @param request the request
@@ -90,12 +98,53 @@ public interface DiscoverService {
 	List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest request);
 
 	/**
+	 * describes the structure of cubes within a database. Perspectives are also
+	 * returned in this schema.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request);
+
+	/**
+	 * describes the properties of members and cell properties.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest request);
+
+	/**
+	 * identifies the (base) data types supported by the server.
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest request);
+
+	/**
+	 *
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest request);
+
+	/**
 	 * returns dimensions, measure groups, or schema rowsets exposed as tables.
 	 *
 	 * @param request the request
 	 * @return the list
 	 */
 	List<DbSchemaTablesResponseRow> dbSchemaTables(DbSchemaTablesRequest request);
+
+	/**
+	 * 
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest request);
 
 	/**
 	 * returns a row for each measure, each cube dimension attribute, and each
@@ -185,46 +234,12 @@ public interface DiscoverService {
 	List<MdSchemaHierarchiesResponseRow> mdSchemaHierarchies(MdSchemaHierarchiesRequest request);
 
 	/**
-	 * returns a list of the data sources that are available on the server.
+	 * describes the KPIs within a database
 	 *
 	 * @param request the request
 	 * @return the list
 	 */
-	List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest request);
-
-	/**
-	 * returns a rowset with one row and one column. The single cell in the rowset
-	 * contains an XML document that contains the requested XML metadata.
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request);
-
-	/**
-	 * describes the structure of cubes within a database. Perspectives are also
-	 * returned in this schema.
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest request);
-
-	/**
-	 * describes the properties of members and cell properties.
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest request);
-
-	/**
-	 * identifies the (base) data types supported by the server.
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest request);
+	List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request);
 
 	/**
 	 * describes each level within a particular hierarchy.
@@ -242,6 +257,14 @@ public interface DiscoverService {
 	 */
 	List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(
 			MdSchemaMeasureGroupDimensionsRequest request);
+
+	/**
+	 * describes the MeasureGroups within a database
+	 *
+	 * @param request the request
+	 * @return the list
+	 */
+	List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request);
 
 	/**
 	 * describes the members within a database
@@ -277,34 +300,11 @@ public interface DiscoverService {
 	List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest request);
 
 	/**
-	 * describes the KPIs within a database
+	 * returns a rowset with one row and one column. The single cell in the rowset
+	 * contains an XML document that contains the requested XML metadata.
 	 *
 	 * @param request the request
 	 * @return the list
 	 */
-	List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest request);
-
-	/**
-	 * describes the MeasureGroups within a database
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<MdSchemaMeasureGroupsResponseRow> mdSchemaMeasureGroups(MdSchemaMeasureGroupsRequest request);
-
-	/**
-	 *
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DbSchemaSourceTablesResponseRow> dbSchemaSourceTables(DbSchemaSourceTablesRequest request);
-
-	/**
-	 * 
-	 *
-	 * @param request the request
-	 * @return the list
-	 */
-	List<DbSchemaTablesInfoResponseRow> dbSchemaTablesInfo(DbSchemaTablesInfoRequest request);
+	List<DiscoverXmlMetaDataResponseRow> xmlMetaData(DiscoverXmlMetaDataRequest request);
 }
