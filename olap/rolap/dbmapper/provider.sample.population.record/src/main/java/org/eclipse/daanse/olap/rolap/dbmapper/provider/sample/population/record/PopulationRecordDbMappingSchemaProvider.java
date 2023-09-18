@@ -29,13 +29,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.HierarchyRBui
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=Population",
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample.name=Population",
     "sample.type=record"})
-public class PopulationRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
+public class PopulationRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 
     public static final String STATE = "state";
     public static final String GENDER = "Gender";

@@ -19,14 +19,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.LevelRBuilder
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.PrivateDimensionRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample" +
+@Component(service = DatabaseMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = {"sample" +
     ".name=SteelWheels",
     "sample.type=record"})
-public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
+public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingSchemaProvider {
 
     private static final String PRODUCTS = "products";
 	private static final String STATUS = "STATUS";

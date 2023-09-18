@@ -36,7 +36,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -389,10 +389,8 @@ class DbCreatorServiceImplTest {
 
     @Test
     @SuppressWarnings("java:S5961")
-    void testCreatorForPopulationSchema(
-        @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
-        @InjectService(timeout = 15000, filter = "(&(sample.type=record)(sample.name=Population))") DbMappingSchemaProvider provider
-    ) throws SQLException {
+    void testCreatorForPopulationSchema(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory,
+                                        @InjectService(timeout = 15000,filter = "(&(sample.type=record)(sample.name=Population))") DatabaseMappingSchemaProvider provider) throws SQLException {
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(provider.get());
 
@@ -795,7 +793,7 @@ class DbCreatorServiceImplTest {
         c = getColumn(t.getColumns(), "KEY");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.STRING);
-        
+
         //2
         t = getTable(dbStructure.getTables(), "Cube1Fact");
         assertThat(t).isNotNull();
@@ -804,10 +802,10 @@ class DbCreatorServiceImplTest {
             .extracting(Column::name)
             .contains(
                 "VALUE",
-                "D1",              
+                "D1",
                 "VALUE_COUNT"
             );
-        
+
         c = getColumn(t.getColumns(), "VALUE");
         assertThat(c).isNotNull();
         assertThat(c.type()).isEqualTo(Type.INTEGER);

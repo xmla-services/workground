@@ -47,7 +47,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
@@ -852,7 +852,7 @@ class FoodMartReadTest {
 
 	@Test
 	void test_Foodmart(
-			@InjectService(timeout = 100000,filter = "(&(sample.type=xml)(sample.name=FoodMart))") DbMappingSchemaProvider provider)
+			@InjectService(timeout = 100000,filter = "(&(sample.type=xml)(sample.name=FoodMart))") DatabaseMappingSchemaProvider provider)
 			throws Exception {
 
 		Schema schema = provider.get();

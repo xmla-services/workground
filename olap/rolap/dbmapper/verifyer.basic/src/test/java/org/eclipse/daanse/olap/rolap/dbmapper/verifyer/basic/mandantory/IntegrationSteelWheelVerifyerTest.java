@@ -3,7 +3,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.mandantory;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,19 +22,19 @@ class IntegrationSteelWheelVerifyerTest {
 
 	@Test
 	void testSteelWheelsXml(
-			@InjectService(filter = "(&(sample.type=xml)(sample.name=SteelWheels))") DbMappingSchemaProvider provider)
+			@InjectService(filter = "(&(sample.type=xml)(sample.name=SteelWheels))") DatabaseMappingSchemaProvider provider)
 			throws CloneNotSupportedException {
 		doTest(provider);
 	}
 
 	@Test
 	void testSteelWheelsRecord(
-			@InjectService(filter = "(&(sample.type=record)(sample.name=SteelWheels))") DbMappingSchemaProvider provider)
+			@InjectService(filter = "(&(sample.type=record)(sample.name=SteelWheels))") DatabaseMappingSchemaProvider provider)
 			throws CloneNotSupportedException {
 		doTest(provider);
 	}
 
-	private void doTest(DbMappingSchemaProvider provider) {
+	private void doTest(DatabaseMappingSchemaProvider provider) {
 		Schema schema = provider.get();
 		assertThat(schema).isNotNull();
 	}

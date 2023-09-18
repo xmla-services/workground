@@ -1,0 +1,104 @@
+-runstartlevel: \
+    order=sortbynameversion,\
+    begin=-1
+
+-runtrace: true
+
+-tester: biz.aQute.tester.junit-platform
+
+# JaCoCo calculates test coverage    
+-runpath.jacoco:\
+	org.jacoco.agent,\
+	org.jacoco.agent.rt
+
+-runvm.coverage: -javaagent:${repo;org.jacoco.agent.rt}=destfile=${target-dir}/jacoco.exec
+
+
+-runsystemcapabilities: ${native_capability}
+
+-runproperties: \
+    org.slf4j.simpleLogger.defaultLogLevel=debug
+
+-runfw: org.apache.felix.framework
+
+-runee: JavaSE-17
+
+-runrequires: \
+	bnd.identity;id='${project.artifactId}-tests',\
+	bnd.identity;id=junit-jupiter-engine,\
+	bnd.identity;id=junit-platform-launcher
+
+# -runbundles is calculated by the bnd-resolver-maven-plugin
+
+-runbundles: \
+	assertj-core;version='[3.24.2,3.24.3)',\
+	com.github.ben-manes.caffeine;version='[3.1.2,3.1.3)',\
+	eigenbase.xom;version='[1.3.5,1.3.6)',\
+	jakarta.activation-api;version='[2.1.0,2.1.1)',\
+	jakarta.xml.bind-api;version='[3.0.1,3.0.2)',\
+	junit-jupiter-api;version='[5.9.2,5.9.3)',\
+	junit-jupiter-engine;version='[5.9.2,5.9.3)',\
+	junit-jupiter-params;version='[5.9.2,5.9.3)',\
+	junit-platform-commons;version='[1.9.2,1.9.3)',\
+	junit-platform-engine;version='[1.9.2,1.9.3)',\
+	junit-platform-launcher;version='[1.9.2,1.9.3)',\
+	net.bytebuddy.byte-buddy;version='[1.12.16,1.12.17)',\
+	net.bytebuddy.byte-buddy-agent;version='[1.12.16,1.12.17)',\
+	org.apache.aries.spifly.dynamic.bundle;version='[1.3.6,1.3.7)',\
+	org.apache.commons.collections;version='[3.2.2,3.2.3)',\
+	org.apache.commons.lang3;version='[3.12.0,3.12.1)',\
+	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
+	org.apache.commons.math3;version='[3.6.1,3.6.2)',\
+	org.apache.commons.pool;version='[1.6.0,1.6.1)',\
+	org.apache.commons.vfs2;version='[2.9.0,2.9.1)',\
+	org.apache.felix.configadmin;version='[1.9.26,1.9.27)',\
+	org.apache.felix.http.servlet-api;version='[2.1.0,2.1.1)',\
+	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
+	org.apache.geronimo.specs.geronimo-stax-api_1.2_spec;version='[1.2.0,1.2.1)',\
+	org.apache.logging.log4j.api;version='[2.17.2,2.17.3)',\
+	org.apache.servicemix.bundles.dom4j;version='[2.1.3,2.1.4)',\
+	org.apache.servicemix.bundles.xerces;version='[2.12.2,2.12.3)',\
+	org.apache.servicemix.bundles.xmlresolver;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.monetdb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.statistics.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.provider.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.xmla.bridge;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.xmla.bridge-tests;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.repackage.apache.commons.dbcp;version='[1.2.1,1.2.2)',\
+	org.eclipse.daanse.repackage.eigenbase.properties;version='[1.1.2,1.1.3)',\
+	org.eclipse.daanse.repackage.eigenbase.resgen;version='[1.3.1,1.3.2)',\
+	org.eclipse.daanse.repackage.olap4j;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.repackage.olap4j.xmla;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.repackage.rhino.engine;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
+	org.mockito.junit-jupiter;version='[4.9.0,4.9.1)',\
+	org.mockito.mockito-core;version='[4.9.0,4.9.1)',\
+	org.objectweb.asm;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm.commons;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm.tree;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm.tree.analysis;version='[9.4.0,9.4.1)',\
+	org.objectweb.asm.util;version='[9.4.0,9.4.1)',\
+	org.objenesis;version='[3.3.0,3.3.1)',\
+	org.opentest4j;version='[1.2.0,1.2.1)',\
+	org.osgi.service.component;version='[1.5.1,1.5.2)',\
+	org.osgi.test.assertj.framework;version='[1.2.1,1.2.2)',\
+	org.osgi.test.common;version='[1.2.1,1.2.2)',\
+	org.osgi.test.junit5;version='[1.2.1,1.2.2)',\
+	org.osgi.test.junit5.cm;version='[1.2.1,1.2.2)',\
+	org.osgi.util.converter;version='[1.0.9,1.0.10)',\
+	org.osgi.util.function;version='[1.2.0,1.2.1)',\
+	org.osgi.util.promise;version='[1.2.0,1.2.1)',\
+	slf4j.api;version='[2.0.4,2.0.5)',\
+	slf4j.simple;version='[2.0.4,2.0.5)'
+	
+-systemproperties.tester:\
+    tempIgnoreStrageTests=true#,\
+    
+

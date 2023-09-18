@@ -47,7 +47,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
 import org.osgi.test.common.annotation.InjectService;
@@ -462,7 +462,7 @@ class SteelwheelReadTest {
 
 
     @Test
-    void test_SteelWheel(@InjectService(filter = "(&(sample.type=xml)(sample.name=SteelWheels))") DbMappingSchemaProvider provider) throws Exception {
+    void test_SteelWheel(@InjectService(filter = "(&(sample.type=xml)(sample.name=SteelWheels))") DatabaseMappingSchemaProvider provider) throws Exception {
         Schema schema = provider.get();
         assertThat(schema).isNotNull();
         assertEquals("SteelWheels", schema.name());

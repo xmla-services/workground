@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.xml;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
 import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
@@ -30,7 +30,7 @@ class PopulationReadTest {
 
     @Test
     void test_Population(
-        @InjectService(timeout = 100000, filter = "(&(sample.type=xml)(sample.name=Population))") DbMappingSchemaProvider provider
+        @InjectService(timeout = 100000, filter = "(&(sample.type=xml)(sample.name=Population))") DatabaseMappingSchemaProvider provider
     )  throws Exception {
     	
         Schema schema = provider.get();

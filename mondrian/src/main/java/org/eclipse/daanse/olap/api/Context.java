@@ -20,6 +20,8 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
+import org.eclipse.daanse.olap.api.query.QueryProvider;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 /**
  * The Context gives access to all resources and configurations that are needed
@@ -55,11 +57,11 @@ public interface Context {
     StatisticsProvider getStatisticsProvider();
 
     /**
-     * Gives access to a {@link DataBaseMappingSchemaProvider}.
+     * Gives access to a {@link DatabaseMappingSchemaProvider}.
      *
-     * @return {@link DataBaseMappingSchemaProvider}.
+     * @return {@link DatabaseMappingSchemaProvider}.
      */
-//    DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider();
+    DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider();
 
     /**
      * Gives access to a {@link QueryProvider}.

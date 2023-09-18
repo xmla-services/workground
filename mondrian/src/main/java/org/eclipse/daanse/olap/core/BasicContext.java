@@ -23,6 +23,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -44,7 +45,7 @@ public class BasicContext implements Context {
     public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
     public static final String REF_NAME_DATA_SOURCE = "dataSource";
     public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
-    public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "dataBaseMappingSchemaProvider";
+    public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProvider";
 	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 
@@ -65,9 +66,9 @@ public class BasicContext implements Context {
 //    private QueryProvider queryProvider;
 //
 //
-//    @Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-//    private DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
-
+    @Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+    private DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
+    
 
     private BasicContextConfig config;
 
@@ -108,10 +109,10 @@ public class BasicContext implements Context {
         return Optional.ofNullable(config.description());
     }
 
-//	@Override
-//	public DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider() {
-//		return dataBaseMappingSchemaProvider;
-//	}
+	@Override
+	public DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider() {
+		return databaseMappingSchemaProvider;
+	}
 //
 //	@Override
 //	public QueryProvider getQueryProvider() {
