@@ -108,21 +108,6 @@ public class BasicContext implements Context {
         return Optional.ofNullable(config.description());
     }
 
-    @Override
-    public boolean isEnableSessionCaching() {
-        return config.enableSessionCaching();
-    }
-
-    @Override
-    public boolean enableRolapCubeMemberCache() {
-        return config.enableRolapCubeMemberCache();
-    }
-
-    @Override
-    public int cellBatchSize() {
-        return config.cellBatchSize();
-    }
-
 //	@Override
 //	public DataBaseMappingSchemaProvider getDataBaseMappingSchemaProvider() {
 //		return dataBaseMappingSchemaProvider;
