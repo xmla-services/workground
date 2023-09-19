@@ -69,14 +69,16 @@ public interface Context {
      * @return {@link QueryProvider}.
      */
 //    QueryProvider getQueryProvider();
-    /*
-     * The human readable name of the Context
-     */
-    String getName();
+	/*
+	 * The human readable name of the Context. By default the name of the Schema.
+	 * May be overridden.
+	 */
+	String getName();
 
-    /*
-     * The human readable description of the Context.
-     */
-    Optional<String> getDescription();
+	/*
+	 * The human readable description of the Context. By default the getDescription
+	 * of the Schema. May be overridden.
+	 */
+	Optional<String> getDescription();
 
 }

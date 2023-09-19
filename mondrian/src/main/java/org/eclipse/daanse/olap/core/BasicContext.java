@@ -40,74 +40,83 @@ import aQute.bnd.metatype.annotations.Designate;
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
 public class BasicContext implements Context {
 
-    public static final String PID = "org.eclipse.daanse.engine.impl.BasicContext";
-    public static final String REF_NAME_DIALECT = "dialect";
-    public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
-    public static final String REF_NAME_DATA_SOURCE = "dataSource";
-    public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
-    public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProvider";
+	public static final String PID = "org.eclipse.daanse.engine.impl.BasicContext";
+	public static final String REF_NAME_DIALECT = "dialect";
+	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
+	public static final String REF_NAME_DATA_SOURCE = "dataSource";
+	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
+	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProvider";
 	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 
 	private static final Converter CONVERTER = Converters.standardConverter();
 
 	@Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-    private DataSource dataSource = null;
+	private DataSource dataSource = null;
 
-    @Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-    private DialectFactory dialectFactory = null;
+	@Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	private DialectFactory dialectFactory = null;
 
-    private Dialect dialect = null;
+	private Dialect dialect = null;
 
-    @Reference(name = REF_NAME_STATISTICS_PROVIDER)
-    private StatisticsProvider statisticsProvider = null;
+	@Reference(name = REF_NAME_STATISTICS_PROVIDER)
+	private StatisticsProvider statisticsProvider = null;
 
 //    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 //    private QueryProvider queryProvider;
 //
 //
-    @Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-    private DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
-    
+	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	private DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
 
-    private BasicContextConfig config;
+	private BasicContextConfig config;
 
-    @Activate
-    public void activate(Map<String, Object> coniguration) throws Exception {
+	@Activate
+	public void activate(Map<String, Object> coniguration) throws Exception {
+		activate(CONVERTER.convert(coniguration).to(BasicContextConfig.class));
+	}
 
-        this.config = CONVERTER.convert(coniguration)
-                .to(BasicContextConfig.class);
-        try (Connection connection = dataSource.getConnection()) {
-            Optional<Dialect> optionalDialect =  dialectFactory.tryCreateDialect(connection);
-            dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
-        }
-        statisticsProvider.initialize(dataSource, getDialect());
-    }
+	public void activate(BasicContextConfig coniguration) throws Exception {
 
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+		this.config = CONVERTER.convert(coniguration).to(BasicContextConfig.class);
+		try (Connection connection = dataSource.getConnection()) {
+			Optional<Dialect> optionalDialect = dialectFactory.tryCreateDialect(connection);
+			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
+		}
+		statisticsProvider.initialize(dataSource, getDialect());
+	}
 
-    @Override
-    public Dialect getDialect() {
-        return dialect;
-    }
+	@Override
+	public DataSource getDataSource() {
+		return dataSource;
+	}
 
-    @Override
-    public StatisticsProvider getStatisticsProvider() {
-        return statisticsProvider;
-    }
+	@Override
+	public Dialect getDialect() {
+		return dialect;
+	}
 
-    @Override
-    public String getName() {
-        return config.name();
-    }
+	@Override
+	public StatisticsProvider getStatisticsProvider() {
+		return statisticsProvider;
+	}
 
-    @Override
-    public Optional<String> getDescription() {
-        return Optional.ofNullable(config.description());
-    }
+	@Override
+	public String getName() {
+		return config.nameOverride().orElseGet(() -> databaseMappingSchemaProvider.get().name());
+
+	}
+
+	@Override
+	public Optional<String> getDescription() {
+
+		Optional<String> oDescriptionOverride = config.descriptionOverride();
+		if (oDescriptionOverride.isPresent()) {
+			return oDescriptionOverride;
+		}
+		return Optional.ofNullable(databaseMappingSchemaProvider.get().description());
+
+	}
 
 	@Override
 	public DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider() {
