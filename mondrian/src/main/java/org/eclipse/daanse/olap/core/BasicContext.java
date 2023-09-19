@@ -78,9 +78,9 @@ public class BasicContext implements Context {
 		activate(CONVERTER.convert(coniguration).to(BasicContextConfig.class));
 	}
 
-	public void activate(BasicContextConfig coniguration) throws Exception {
+	public void activate(BasicContextConfig configuration) throws Exception {
 
-		this.config = CONVERTER.convert(coniguration).to(BasicContextConfig.class);
+		this.config = configuration;
 		try (Connection connection = dataSource.getConnection()) {
 			Optional<Dialect> optionalDialect = dialectFactory.tryCreateDialect(connection);
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
