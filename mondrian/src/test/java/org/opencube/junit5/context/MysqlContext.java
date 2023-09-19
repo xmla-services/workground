@@ -15,6 +15,7 @@ package org.opencube.junit5.context;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -87,8 +88,7 @@ public class MysqlContext implements Context {
     }
 
 	@Override
-	public DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider() {
-		// TODO Auto-generated method stub
+	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
 		return null;
 	}
 

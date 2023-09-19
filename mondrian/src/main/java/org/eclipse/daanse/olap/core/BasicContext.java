@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.core;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
@@ -45,7 +47,7 @@ public class BasicContext implements Context {
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
-	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProvider";
+	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProviders";
 	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 
@@ -66,8 +68,8 @@ public class BasicContext implements Context {
 //    private QueryProvider queryProvider;
 //
 //
-	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-	private DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
+	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.MULTIPLE)
+	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 
 	private BasicContextConfig config;
 
@@ -103,24 +105,21 @@ public class BasicContext implements Context {
 
 	@Override
 	public String getName() {
-		return config.nameOverride().orElseGet(() -> databaseMappingSchemaProvider.get().name());
+		return config.name();
 
 	}
 
 	@Override
 	public Optional<String> getDescription() {
 
-		Optional<String> oDescriptionOverride = config.descriptionOverride();
-		if (oDescriptionOverride.isPresent()) {
-			return oDescriptionOverride;
-		}
-		return Optional.ofNullable(databaseMappingSchemaProvider.get().description());
+		return config.descriptionOverride();
+		
 
 	}
 
 	@Override
-	public DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider() {
-		return databaseMappingSchemaProvider;
+	public List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders() {
+		return databaseMappingSchemaProviders;
 	}
 //
 //	@Override

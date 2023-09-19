@@ -25,12 +25,12 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx")
 public interface BasicContextConfig {
 
-    @AttributeDefinition(name = "%nameOverride.name", description = "%nameOverride.description", required = false, type = AttributeType.STRING)
-    default Optional<String> nameOverride() {
-        return Optional.empty();
+    @AttributeDefinition(name = "%name.name", description = "%name.description", required = false)
+    default String name() {
+        return null;
     }
 
-    @AttributeDefinition(name = "%descriptionOverride.name", description = "%descriptionOverride.description", type = AttributeType.STRING)
+    @AttributeDefinition(name = "%description.name", description = "%description.description", type = AttributeType.STRING)
     default Optional<String> descriptionOverride() {
         return Optional.empty();
     }
