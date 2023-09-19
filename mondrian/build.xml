@@ -87,29 +87,17 @@
   </target>
 
   <target name="def" depends="define-tasks">
-    <xomgen
-        model="${relative.java.dir}/mondrian/olap/Mondrian.xml"
-        destdir="${relative.generated.java.dir}"
-        classname="mondrian.olap.MondrianDef"
-        dtdname="mondrian.dtd"/>
-    <!--<copy file="${generated.java.dir}/mondrian/olap/mondrian.dtd"-->
-      <!--todir="${project.build.directory}"/>-->
-
-    <xomgen
+   <xomgen
         model="${relative.resources.dir}/DefaultRulesSchema.xml"
         destdir="${relative.generated.java.dir}"
         classname="mondrian.rolap.aggmatcher.DefaultDef"
         dtdname="aggregates.dtd"/>
-    <!--<copy file="${generated.java.dir}/mondrian/rolap/aggmatcher/aggregates.dtd"-->
-      <!--todir="${project.build.directory}"/>-->
 
     <xomgen
         model="${relative.java.dir}/mondrian/xmla/DataSourcesConfig.xml"
         destdir="${relative.generated.java.dir}"
         classname="mondrian.xmla.DataSourcesConfig"
         dtdname="datasourcesconfig.dtd"/>
-    <!--<copy file="${generated.java.dir}/mondrian/xmla/datasourcesconfig.dtd"-->
-        <!--todir="${project.build.directory}"/>-->
   </target>
 
 </project>
