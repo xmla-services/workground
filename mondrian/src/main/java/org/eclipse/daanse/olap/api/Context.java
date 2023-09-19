@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.api;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -57,11 +58,11 @@ public interface Context {
     StatisticsProvider getStatisticsProvider();
 
     /**
-     * Gives access to a {@link DatabaseMappingSchemaProvider}.
+     * Gives access to a {@link List} of {@link DatabaseMappingSchemaProvider}s.
      *
-     * @return {@link DatabaseMappingSchemaProvider}.
+     * @return {@link List} of {@link DatabaseMappingSchemaProvider}s.
      */
-    DatabaseMappingSchemaProvider getDatabaseMappingSchemaProvider();
+    List<DatabaseMappingSchemaProvider> getDatabaseMappingSchemaProviders();
 
     /**
      * Gives access to a {@link QueryProvider}.
