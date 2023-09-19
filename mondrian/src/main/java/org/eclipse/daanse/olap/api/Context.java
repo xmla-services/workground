@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.api.query.QueryProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 /**
- * The Context gives access to all resources and configurations that are needed
+ * The {@link Context} gives access to all resources and configurations that are needed
  * to calculate and Data Cubes
  *
  * @author stbischof

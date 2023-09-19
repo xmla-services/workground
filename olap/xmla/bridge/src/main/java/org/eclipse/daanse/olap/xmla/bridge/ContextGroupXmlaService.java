@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.xmla.bridge;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.ContextGroup;
 import org.eclipse.daanse.olap.xmla.bridge.discover.DelegatingDiscoverService;
 import org.eclipse.daanse.olap.xmla.bridge.execute.OlapExecuteService;
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -34,46 +34,53 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 
 @Component(service = XmlaService.class)
-@Designate(factory = true, ocd = Config.class)
-public class MultiContextXmlaService implements XmlaService {
+@Designate(factory = true, ocd = ContextGroupXmlaServiceConfig.class)
+public class ContextGroupXmlaService implements XmlaService {
 
 	private static final Converter CONVERTER = Converters.standardConverter();
-	private Config config;
+	private ContextGroupXmlaServiceConfig config;
 
 	@Activate
-	public MultiContextXmlaService(Map<String, Object> props) {
-		this(CONVERTER.convert(props).to(Config.class));
+	public ContextGroupXmlaService(Map<String, Object> props) {
+		this(CONVERTER.convert(props).to(ContextGroupXmlaServiceConfig.class));
 	}
 
-	public MultiContextXmlaService(Config config) {
+	public ContextGroupXmlaService(ContextGroupXmlaServiceConfig config) {
 		this.config = config;
 		reInit();
 	}
 
-	public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.MultiContextXmlaService";
-	public static final String REF_NAME_CONTEXT = "context";
+	public static final String PID = "org.eclipse.daanse.olap.xmla.bridge.ContextGroupXmlaService";
+	public static final String REF_NAME_CONTEXT_GROUP = "contextGroup";
 
 	private ExecuteService executeService;
 	private DiscoverService discoverService;
-	private List<Context> contexts = new CopyOnWriteArrayList<>();
+	private ContextGroup contextGroup = null;
 
 	/*
-	 * target must be configured. no auto fetch of a Context
+	 * target must be configured. no auto fetch of a ContextGroup
 	 */
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, name = REF_NAME_CONTEXT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-	void bindContext(Context context) {
-		contexts.add(context);
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC, name = REF_NAME_CONTEXT_GROUP, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	void bindContext(ContextGroup contextGroup) {
+		this.contextGroup = contextGroup;
 		reInit();
 	}
 
 	private void reInit() {
-		ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(getContexts());
+
+		List<Context> contexts;
+		if (contextGroup == null) {
+			contexts = List.of();
+		} else {
+			contexts = contextGroup.getValidContexts();
+		}
+		ContextListSupplyer contextsListSupplyer = new ContextsSupplyerImpl(contexts);
 		executeService = new OlapExecuteService(contextsListSupplyer);
 		discoverService = new DelegatingDiscoverService(contextsListSupplyer);
 	}
 
-	void unbindContext(Context context) {
-		contexts.remove(context);
+	void unbindContext(ContextGroup contextGroup) {
+		this.contextGroup = null;
 		reInit();
 
 	}
@@ -86,10 +93,6 @@ public class MultiContextXmlaService implements XmlaService {
 	@Override
 	public ExecuteService execute() {
 		return executeService;
-	}
-
-	List<Context> getContexts() {
-		return contexts;
 	}
 
 }
