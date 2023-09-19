@@ -368,7 +368,7 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.util.converter</artifactId>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -465,7 +465,6 @@
 								<ant target="generate.properties" />
 								<ant target="generate.resources" />
 								<ant target="parser" />
-								<ant target="version" />
 							</target>
 						</configuration>
 					</execution>
