@@ -25,7 +25,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition(name = "%ctx.ocd.name", description = "%ctx.ocd.description", localization = "OSGI-INF/l10n/ctx")
 public interface BasicContextConfig {
 
-    @AttributeDefinition(name = "%nameOverride.name", description = "%nameOverride.description", required = false)
+    @AttributeDefinition(name = "%nameOverride.name", description = "%nameOverride.description", required = false, type = AttributeType.STRING)
     default Optional<String> nameOverride() {
         return Optional.empty();
     }
