@@ -10,9 +10,6 @@
   -->
 <project name="mondrian">
   <target name="define-tasks">
-    <taskdef name="javacup" classname="java_cup.JavaCUPTask">
-      <classpath path="${classpath}"/>
-    </taskdef>
 
     <taskdef name="xomgen" classname="org.eigenbase.xom.XOMGenTask">
       <classpath path="${classpath}"/>
