@@ -50,6 +50,7 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
@@ -92,7 +93,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
@@ -3523,7 +3523,7 @@ public class RolapCube extends CubeBase {
             new FunDefBase("dummy", null, "fn") {
                 @Override
 				public Calc compileCall(
-                    ResolvedFunCall call, ExpCompiler compiler)
+                    ResolvedFunCall call, ExpressionCompiler compiler)
                 {
                     return calc;
                 }

@@ -24,6 +24,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
@@ -48,7 +49,10 @@ public class BasicContext implements Context {
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
 	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProviders";
+    public static final String REF_NAME_EXPRESSION_COMPILER_FACTORY = "expressionCompilerFactory";
+    
 	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
+	
 	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 
 	private static final Converter CONVERTER = Converters.standardConverter();
@@ -71,6 +75,10 @@ public class BasicContext implements Context {
 	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.MULTIPLE)
 	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 
+
+    @Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY)
+    private ExpressionCompilerFactory expressionCompilerFactory = null;
+    
 	private BasicContextConfig config;
 
 	@Activate
@@ -127,4 +135,8 @@ public class BasicContext implements Context {
 //		return queryProvider;
 //	}
 
+	@Override
+	public ExpressionCompilerFactory getExpressionCompilerFactory() {
+		return expressionCompilerFactory;
+	}
 }

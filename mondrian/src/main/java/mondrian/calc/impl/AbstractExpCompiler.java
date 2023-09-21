@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
@@ -54,7 +55,6 @@ import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
-import mondrian.calc.ExpCompiler;
 import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleListCalc;
 import mondrian.calc.ParameterSlot;
@@ -91,12 +91,12 @@ import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 
 /**
- * Abstract implementation of the {@link mondrian.calc.ExpCompiler} interface.
+ * Abstract implementation of the {@link org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler} interface.
  *
  * @author jhyde
  * @since Sep 29, 2005
  */
-public class AbstractExpCompiler implements ExpCompiler {
+public class AbstractExpCompiler implements ExpressionCompiler {
     private final Evaluator evaluator;
     private final Validator validator;
     private final Map<Parameter, ParameterSlotImpl> parameterSlots =

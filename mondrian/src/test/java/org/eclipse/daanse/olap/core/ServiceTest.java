@@ -30,6 +30,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +74,10 @@ class ServiceTest {
 //    @Mock
 //    DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
 
+//  DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
 
+	@Mock
+	ExpressionCompilerFactory expressionCompilerFactory;
 
     @BeforeEach
     public void setup() throws SQLException {
@@ -98,7 +102,8 @@ class ServiceTest {
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
         bc.registerService(DialectFactory.class, dialectFactory, dictionaryOf("d", "2"));
         bc.registerService(StatisticsProvider.class, statisticsProvider, dictionaryOf("sp", "3"));
-//        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
+        bc.registerService(ExpressionCompilerFactory.class, expressionCompilerFactory, dictionaryOf("ecf", "1"));
+        //        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
 //        bc.registerService(DataBaseMappingSchemaProvider.class, dataBaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));
 
         Dictionary<String, Object> props = new Hashtable<>();
@@ -106,7 +111,8 @@ class ServiceTest {
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
         props.put(BasicContext.REF_NAME_DIALECT + TARGET_EXT, "(d=2)");
         props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(sp=3)");
-//        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
+        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(ecf=1)");
+        //        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 //        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
 
         String theName = "theName";
@@ -130,7 +136,8 @@ class ServiceTest {
             assertThat(x.getDataSource()).isEqualTo(dataSource);
             assertThat(x.getDialect()).isEqualTo(dialect);
             assertThat(x.getStatisticsProvider()).isEqualTo(statisticsProvider);
-//            assertThat(x.getQueryProvider()).isEqualTo(queryProvider);
+            assertThat(x.getExpressionCompilerFactory()).isEqualTo(expressionCompilerFactory);
+            //            assertThat(x.getQueryProvider()).isEqualTo(queryProvider);
 //            assertThat(x.getDataBaseMappingSchemaProvider()).isEqualTo(dataBaseMappingSchemaProvider);
         });
 
