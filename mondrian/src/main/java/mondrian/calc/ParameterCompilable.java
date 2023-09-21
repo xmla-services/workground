@@ -10,6 +10,7 @@
 package mondrian.calc;
 
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.olap.Parameter;
 
@@ -20,5 +21,5 @@ import mondrian.olap.Parameter;
  * @since Jul 22, 2006
  */
 public interface ParameterCompilable extends Parameter {
-    Calc compile(ExpCompiler compiler);
+    Calc compile(ExpressionCompiler compiler);
 }

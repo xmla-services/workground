@@ -22,8 +22,8 @@ import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
@@ -126,7 +126,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     }
 
     @Override
-    public Calc compile(ExpCompiler compiler, ResultStyle resultStyle) {
+    public Calc compile(ExpressionCompiler compiler, ResultStyle resultStyle) {
         Exp expInner = this.exp;
         if (axisOrdinal.isFilter()) {
             expInner = normalizeSlicerExpression(expInner);

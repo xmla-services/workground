@@ -323,7 +323,7 @@ public class RolapResult extends ResultBase {
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
                           @Override
 						public Calc compileCall(
-                                  ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
+                                  ResolvedFunCall call, org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler compiler)
                           {
                             return partialCalc;
                           }

@@ -22,11 +22,11 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleIteratorCalc;
@@ -65,7 +65,7 @@ class OrderFunDef extends FunDefBase {
   }
 
   @Override
-public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final TupleIteratorCalc listCalc = compiler.compileIter( call.getArg( 0 ) );
     List<SortKeySpec> keySpecList = new ArrayList<>();
     buildKeySpecList( keySpecList, call, compiler );
@@ -114,7 +114,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     return new CurrentMemberCalc( call.getType(), calcList, keySpecList );
   }
 
-  private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
+  private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpressionCompiler compiler ) {
     final int argCount = call.getArgs().length;
     int j = 1; // args[0] is the input set
     Calc key;
