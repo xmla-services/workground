@@ -8,10 +8,10 @@
 */
 package org.eclipse.daanse.db.dialect.db.vectorwise;
 
+import java.sql.Connection;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.ingres.IngresDialect;
-
-import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the Vertica database.

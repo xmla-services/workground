@@ -8,13 +8,13 @@
 */
 package org.eclipse.daanse.db.dialect.db.googlebigquery;
 
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
 import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 
 /**
  * This is the Mondrian dialect for Google BigQuery. It was tested against

@@ -9,14 +9,14 @@
 
 package org.eclipse.daanse.db.dialect.db.redshift;
 
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
-
 import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.Util;
+import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
 
 /**
  * User: cboyden Date: 2/8/13

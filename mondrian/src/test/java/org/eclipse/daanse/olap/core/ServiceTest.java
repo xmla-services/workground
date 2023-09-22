@@ -30,6 +30,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
+import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,38 +51,39 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 @ExtendWith(MockitoExtension.class)
 class ServiceTest {
 
-    private static final String TARGET_EXT = ".target";
-    @InjectBundleContext
-    BundleContext bc;
-    @Mock
-    Dialect dialect;
+	private static final String TARGET_EXT = ".target";
+	@InjectBundleContext
+	BundleContext bc;
+	@Mock
+	Dialect dialect;
 
-    @Mock
-    DialectFactory dialectFactory;
+	@Mock
+	DialectFactory dialectFactory;
 
-    @Mock
-    DataSource dataSource;
+	@Mock
+	DataSource dataSource;
 
-    @Mock
-    Connection connection;
+	@Mock
+	Connection connection;
 
-    @Mock
-    StatisticsProvider statisticsProvider;
+	@Mock
+	StatisticsProvider statisticsProvider;
 
 //    @Mock
 //    QueryProvider queryProvider;
 //
-//    @Mock
-//    DataBaseMappingSchemaProvider dataBaseMappingSchemaProvider;
+	@Mock
+	DatabaseMappingSchemaProvider databaseMappingSchemaProvider;
 
+	@Mock
+	ExpressionCompilerFactory expressionCompilerFactory;
 
+	@BeforeEach
+	public void setup() throws SQLException {
 
-    @BeforeEach
-    public void setup() throws SQLException {
+	}
 
-    }
-
-    @Test
+	@Test
     public void serviceExists(
             @InjectConfiguration(withFactoryConfig = @WithFactoryConfiguration(factoryPid = BasicContext.PID, name = "name1")) Configuration c,
             @InjectService(cardinality = 0) ServiceAware<Context> saContext) throws Exception {
@@ -98,16 +101,18 @@ class ServiceTest {
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
         bc.registerService(DialectFactory.class, dialectFactory, dictionaryOf("d", "2"));
         bc.registerService(StatisticsProvider.class, statisticsProvider, dictionaryOf("sp", "3"));
-//        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
-//        bc.registerService(DataBaseMappingSchemaProvider.class, dataBaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));
+        bc.registerService(ExpressionCompilerFactory.class, expressionCompilerFactory, dictionaryOf("ecf", "1"));
+        bc.registerService(DatabaseMappingSchemaProvider.class, databaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));
+        //        bc.registerService(QueryProvider.class, queryProvider, dictionaryOf("qp", "1"));
 
         Dictionary<String, Object> props = new Hashtable<>();
 
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
         props.put(BasicContext.REF_NAME_DIALECT + TARGET_EXT, "(d=2)");
         props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(sp=3)");
-//        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
-//        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
+        props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(ecf=1)");
+        props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
+        //        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 
         String theName = "theName";
         System.setProperty("test.name", theName);
@@ -120,7 +125,7 @@ class ServiceTest {
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
                 .isEqualTo(1);
-        System.getProperty("test.name");
+
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
             assertThat(x.getDescription()
@@ -130,8 +135,9 @@ class ServiceTest {
             assertThat(x.getDataSource()).isEqualTo(dataSource);
             assertThat(x.getDialect()).isEqualTo(dialect);
             assertThat(x.getStatisticsProvider()).isEqualTo(statisticsProvider);
-//            assertThat(x.getQueryProvider()).isEqualTo(queryProvider);
-//            assertThat(x.getDataBaseMappingSchemaProvider()).isEqualTo(dataBaseMappingSchemaProvider);
+            assertThat(x.getExpressionCompilerFactory()).isEqualTo(expressionCompilerFactory);
+            assertThat(x.getDatabaseMappingSchemaProviders()).hasSize(1).contains(databaseMappingSchemaProvider);
+            //            assertThat(x.getQueryProvider()).isEqualTo(queryProvider);
         });
 
     }

@@ -13,15 +13,14 @@
  */
 package org.eclipse.daanse.db.dialect.db.clickhouse;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import java.sql.Connection;
+import java.util.function.Function;
+
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.dialect.db.common.AbstractDialectFactory;
 import org.osgi.service.component.annotations.Component;
-import java.sql.Connection;
-import java.util.AbstractMap;
-import java.util.Optional;
-import java.util.function.Function;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='CLICKHOUSE'",
     "database.product:String='CLICKHOUSE'" })

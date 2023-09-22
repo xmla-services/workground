@@ -43,13 +43,13 @@ import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
@@ -139,7 +139,7 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler) {
+	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
@@ -326,14 +326,14 @@ public class NativizeSetFunDef extends FunDefBase {
     public static class NativeListCalc extends AbstractListCalc {
         private final SubstitutionMap substitutionMap;
         private final TupleListCalc simpleCalc;
-        private final ExpCompiler compiler;
+        private final ExpressionCompiler compiler;
 
         private final Exp originalExp;
 
         protected NativeListCalc(
         	ResolvedFunCall call,
             Calc[] calcs,
-            ExpCompiler compiler,
+            ExpressionCompiler compiler,
             SubstitutionMap substitutionMap,
             Exp originalExp)
         {
@@ -731,9 +731,9 @@ public class NativizeSetFunDef extends FunDefBase {
 
     static class TransformFromFormulasVisitor extends MdxVisitorImpl {
         private final Query query;
-        private final ExpCompiler compiler;
+        private final ExpressionCompiler compiler;
 
-        public TransformFromFormulasVisitor(Query query, ExpCompiler compiler) {
+        public TransformFromFormulasVisitor(Query query, ExpressionCompiler compiler) {
             NativizeSetFunDef.LOGGER.debug("---- TransformFromFormulasVisitor constructor");
             this.query = query;
             this.compiler = compiler;
