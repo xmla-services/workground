@@ -45,7 +45,7 @@ public class BasicContext implements Context {
 
 	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
 
-	public static final String REF_NAME_DIALECT = "dialect";
+	public static final String REF_NAME_DIALECT_FACTORY = "dialectFactory";
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
@@ -60,7 +60,7 @@ public class BasicContext implements Context {
 	@Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private DataSource dataSource = null;
 
-	@Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	@Reference(name = REF_NAME_DIALECT_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private DialectFactory dialectFactory = null;
 
 	@Reference(name = REF_NAME_STATISTICS_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -87,6 +87,7 @@ public class BasicContext implements Context {
 	public void activate(BasicContextConfig configuration) throws Exception {
 
 		this.config = configuration;
+
 		try (Connection connection = dataSource.getConnection()) {
 			Optional<Dialect> optionalDialect = dialectFactory.tryCreateDialect(connection);
 			dialect = optionalDialect.orElseThrow(() -> new Exception(ERR_MSG_DIALECT_INIT));
@@ -112,12 +113,11 @@ public class BasicContext implements Context {
 	@Override
 	public String getName() {
 		return config.name();
-
 	}
 
 	@Override
 	public Optional<String> getDescription() {
-		return config.descriptionOverride();
+		return Optional.ofNullable(config.description());
 	}
 
 	@Override

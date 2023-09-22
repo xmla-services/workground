@@ -16,8 +16,6 @@
 */
 package org.eclipse.daanse.olap.core;
 
-import java.util.Optional;
-
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -31,8 +29,8 @@ public interface BasicContextConfig {
     }
 
     @AttributeDefinition(name = "%description.name", description = "%description.description", type = AttributeType.STRING)
-    default Optional<String> descriptionOverride() {
-        return Optional.empty();
+    default String description() {
+    	 return null;
     }
 
     //<p>Maximum number of simultaneous queries the system will allow.</p> <p>Oracle fails if you try to run more than the 'processes' parameter in init.ora, typically 150. The throughput of Oracle and other databases will probably reduce long before you get to their limit.</p>
