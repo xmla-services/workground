@@ -28,7 +28,7 @@ import mondrian.olap.Validator;
 import mondrian.util.CreationException;
 
 @Component(scope = ServiceScope.SINGLETON, service = ExpressionCompilerFactory.class)
-public class BetterExpressionCompilerFactory implements ExpressionCompilerFactory {
+public class BaseExpressionCompilerFactory implements ExpressionCompilerFactory {
 
 	@Override
 	public ExpressionCompiler createExpressionCompiler(Evaluator evaluator, Validator validator,

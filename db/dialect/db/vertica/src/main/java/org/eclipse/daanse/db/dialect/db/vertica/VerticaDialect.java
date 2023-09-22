@@ -8,11 +8,6 @@
 */
 package org.eclipse.daanse.db.dialect.db.vertica;
 
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -23,6 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 
 /**
  * Implementation of {@link Dialect} for the Vertica database.

@@ -11,7 +11,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
-import org.eclipse.daanse.olap.calc.base.compiler.BetterExpressionCompilerFactory;
+import org.eclipse.daanse.olap.calc.base.compiler.BaseExpressionCompilerFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 
 public abstract class AbstractTestContext implements Context {
@@ -40,7 +40,7 @@ public abstract class AbstractTestContext implements Context {
 	};
 	private DataSource dataSource;
 
-	private ExpressionCompilerFactory expressionCompilerFactory = new BetterExpressionCompilerFactory();
+	private ExpressionCompilerFactory expressionCompilerFactory = new BaseExpressionCompilerFactory();
 
 	public AbstractTestContext(DataSource dataSource) {
 		this.dataSource = dataSource;

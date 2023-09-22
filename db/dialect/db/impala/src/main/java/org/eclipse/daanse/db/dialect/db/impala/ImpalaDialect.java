@@ -9,15 +9,15 @@
 */
 package org.eclipse.daanse.db.dialect.db.impala;
 
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
 
 /**
  * Dialect for Cloudera's Impala DB.

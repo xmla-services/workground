@@ -12,12 +12,6 @@
 */
 package org.eclipse.daanse.db.dialect.db.mysql;
 
-import org.eclipse.daanse.db.dialect.db.common.DialectException;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -28,6 +22,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import org.eclipse.daanse.db.dialect.db.common.DialectException;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link org.eclipse.daanse.db.dialect.api.Dialect} for the

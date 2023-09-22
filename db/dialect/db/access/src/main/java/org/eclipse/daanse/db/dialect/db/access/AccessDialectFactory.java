@@ -13,13 +13,14 @@
  */
 package org.eclipse.daanse.db.dialect.db.access;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
+import java.util.function.Function;
+
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.dialect.db.common.AbstractDialectFactory;
 import org.osgi.service.component.annotations.Component;
 
-import java.sql.Connection;
-import java.util.function.Function;
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='ACCESS'",
     "database.product:String='ACCESS'" })

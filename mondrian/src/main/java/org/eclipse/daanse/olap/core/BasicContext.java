@@ -43,18 +43,18 @@ import aQute.bnd.metatype.annotations.Designate;
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
 public class BasicContext implements Context {
 
-	public static final String PID = "org.eclipse.daanse.engine.impl.BasicContext";
+	public static final String PID = "org.eclipse.daanse.olap.core.BasicContext";
+
 	public static final String REF_NAME_DIALECT = "dialect";
 	public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
 	public static final String REF_NAME_DATA_SOURCE = "dataSource";
 	public static final String REF_NAME_QUERY_PROVIDER = "queryProvier";
 	public static final String REF_NAME_DB_MAPPING_SCHEMA_PROVIDER = "databaseMappingSchemaProviders";
-    public static final String REF_NAME_EXPRESSION_COMPILER_FACTORY = "expressionCompilerFactory";
-    
-	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
-	
-	private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
+	public static final String REF_NAME_EXPRESSION_COMPILER_FACTORY = "expressionCompilerFactory";
 
+	private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
 	private static final Converter CONVERTER = Converters.standardConverter();
 
 	@Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -63,23 +63,21 @@ public class BasicContext implements Context {
 	@Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private DialectFactory dialectFactory = null;
 
-	private Dialect dialect = null;
-
-	@Reference(name = REF_NAME_STATISTICS_PROVIDER)
+	@Reference(name = REF_NAME_STATISTICS_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
 	private StatisticsProvider statisticsProvider = null;
 
-//    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-//    private QueryProvider queryProvider;
-//
-//
 	@Reference(name = REF_NAME_DB_MAPPING_SCHEMA_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER, cardinality = ReferenceCardinality.MULTIPLE)
 	private List<DatabaseMappingSchemaProvider> databaseMappingSchemaProviders;
 
+	@Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+	private ExpressionCompilerFactory expressionCompilerFactory = null;
 
-    @Reference(name = REF_NAME_EXPRESSION_COMPILER_FACTORY)
-    private ExpressionCompilerFactory expressionCompilerFactory = null;
-    
+//    @Reference(name = REF_NAME_QUERY_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+//    private QueryProvider queryProvider;
+
 	private BasicContextConfig config;
+
+	private Dialect dialect = null;
 
 	@Activate
 	public void activate(Map<String, Object> coniguration) throws Exception {
@@ -119,10 +117,7 @@ public class BasicContext implements Context {
 
 	@Override
 	public Optional<String> getDescription() {
-
 		return config.descriptionOverride();
-		
-
 	}
 
 	@Override

@@ -9,12 +9,12 @@
 
 package org.eclipse.daanse.db.dialect.db.infobright;
 
+import java.sql.Connection;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the Infobright database.

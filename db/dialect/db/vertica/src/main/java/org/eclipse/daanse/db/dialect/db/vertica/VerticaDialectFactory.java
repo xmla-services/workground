@@ -13,17 +13,17 @@
  */
 package org.eclipse.daanse.db.dialect.db.vertica;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import java.sql.Connection;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
-
 import org.eclipse.daanse.db.dialect.db.common.AbstractDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-import java.sql.Connection;
-import java.util.Optional;
-import java.util.function.Function;
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='VERTICA'",
     "database.product:String='VERTICA'" })

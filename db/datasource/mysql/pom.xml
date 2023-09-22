@@ -44,6 +44,7 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.util.converter</artifactId>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>

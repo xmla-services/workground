@@ -18,10 +18,10 @@
  */
 package org.eclipse.daanse.db.dialect.db.db2;
 
+import java.sql.Connection;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
-import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the IBM DB2 database.

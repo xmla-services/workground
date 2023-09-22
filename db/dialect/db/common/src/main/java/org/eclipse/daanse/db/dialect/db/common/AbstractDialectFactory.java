@@ -13,11 +13,6 @@
  */
 package org.eclipse.daanse.db.dialect.db.common;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.api.DialectFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -25,6 +20,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.function.Function;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDialectFactory<T extends Dialect> implements DialectFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDialectFactory.class);
