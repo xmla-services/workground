@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggMeasure")
-public class AggMeasureImpl implements AggMeasure {
+public class AggMeasureImpl implements MappingAggMeasure {
 
     @XmlAttribute(name = "column", required = true)
     protected String column;

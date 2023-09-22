@@ -16,7 +16,7 @@ package mondrian.rolap.util;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
 import mondrian.rolap.sql.SqlQuery;
 
@@ -25,20 +25,20 @@ public class SQLUtil {
      * Converts an array of SQL to a
      * {@link mondrian.rolap.sql.SqlQuery.CodeSet} object.
      */
-    public static SqlQuery.CodeSet toCodeSet(List<? extends SQL> sqls) {
+    public static SqlQuery.CodeSet toCodeSet(List<? extends MappingSQL> sqls) {
         SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
-        for (SQL sql : sqls) {
+        for (MappingSQL sql : sqls) {
             codeSet.put(sql.dialect(), sql.content());
         }
         return codeSet;
     }
 
-    public static int hashCode(SQL sql) {
+    public static int hashCode(MappingSQL sql) {
         return sql.dialect().hashCode();
     }
 
-    public boolean equals(SQL sql, Object obj) {
-        if (!(obj instanceof SQL that)) {
+    public boolean equals(MappingSQL sql, Object obj) {
+        if (!(obj instanceof MappingSQL that)) {
             return false;
         }
         return sql.dialect().equals(that.dialect()) &&

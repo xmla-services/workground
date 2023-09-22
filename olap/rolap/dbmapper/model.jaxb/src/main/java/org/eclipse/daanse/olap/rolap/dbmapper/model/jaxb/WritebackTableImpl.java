@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackColumn;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WritebackTable")
-public class WritebackTableImpl implements WritebackTable {
+public class WritebackTableImpl implements MappingWritebackTable {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;
@@ -35,7 +35,7 @@ public class WritebackTableImpl implements WritebackTable {
     protected String schema;
     @XmlElements({ @XmlElement(name = "WritebackAttribute", type = WritebackAttributeImpl.class),
         @XmlElement(name = "WritebackMeasure", type = WritebackMeasureImpl.class) })
-    private List<WritebackColumn> columns;
+    private List<MappingWritebackColumn> columns;
 
     @Override
     public String name() {
@@ -43,7 +43,7 @@ public class WritebackTableImpl implements WritebackTable {
     }
 
     @Override
-    public List<WritebackColumn> columns() {
+    public List<MappingWritebackColumn> columns() {
         return columns;
     }
 

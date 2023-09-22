@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class AggLevelPropertyImpl implements AggLevelProperty {
+public class AggLevelPropertyImpl implements MappingAggLevelProperty {
 
     @XmlAttribute(name = "column")
     protected String column;

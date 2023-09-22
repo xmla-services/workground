@@ -17,9 +17,9 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SQLImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
 import org.junit.jupiter.api.Test;
@@ -43,13 +43,13 @@ class RolapStarTest {
         public RolapStarForTests(
             final RolapSchema schema,
             final Context context,
-            final Relation fact)
+            final MappingRelation fact)
         {
             super(schema, context, fact);
         }
 
-        public RelationOrJoin cloneRelationForTests(
-            Relation rel,
+        public MappingRelationOrJoin cloneRelationForTests(
+            MappingRelation rel,
             String possibleName)
         {
             return cloneRelation(rel, possibleName);
@@ -72,7 +72,7 @@ class RolapStarTest {
     }
 
     /**
-     * Tests that given a {@link Table}, cloneRelation
+     * Tests that given a {@link MappingTable}, cloneRelation
      * respects the existing filters.
      */
     @ParameterizedTest
@@ -87,7 +87,7 @@ class RolapStarTest {
       original.sql().setDialect("generic");
       original.sql().setContent("Alias.clicked = 'true'");
 
-      Table cloned = (Table)rs.cloneRelationForTests(
+      MappingTable cloned = (MappingTable)rs.cloneRelationForTests(
           original,
           "NewAlias");
 

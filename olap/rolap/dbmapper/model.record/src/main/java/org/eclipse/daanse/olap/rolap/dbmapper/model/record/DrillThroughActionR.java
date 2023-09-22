@@ -15,16 +15,16 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
 
 public record DrillThroughActionR(String name,
                                   String caption,
                                   String description,
                                   Boolean defaultt,
-                                  List<Annotation> annotations,
-                                  List<DrillThroughElement> drillThroughElements)
-        implements DrillThroughAction {
+                                  List<MappingAnnotation> annotations,
+                                  List<MappingDrillThroughElement> drillThroughElements)
+        implements MappingDrillThroughAction {
 
 }

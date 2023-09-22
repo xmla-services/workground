@@ -17,11 +17,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -34,15 +34,15 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Hierarchy", propOrder = { "relation", "levels", "annotations",
         "memberReaderParameters" })
-public class HierarchyImpl implements Hierarchy {
+public class HierarchyImpl implements MappingHierarchy {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Level", required = true, type = LevelImpl.class)
-    protected List<Level> levels;
+    protected List<MappingLevel> levels;
     @XmlElement(name = "MemberReaderParameter", type = MemberReaderParameterImpl.class)
-    protected List<MemberReaderParameter> memberReaderParameters;
+    protected List<MappingMemberReaderParameter> memberReaderParameters;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "hasAll", required = true)
@@ -76,19 +76,19 @@ public class HierarchyImpl implements Hierarchy {
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
         @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
         @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
-    protected RelationOrJoin relation;
+    protected MappingRelationOrJoin relation;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<Level> levels() {
+    public List<MappingLevel> levels() {
         if (levels == null) {
             levels = new ArrayList<>();
         }
@@ -96,7 +96,7 @@ public class HierarchyImpl implements Hierarchy {
     }
 
     @Override
-    public List<MemberReaderParameter> memberReaderParameters() {
+    public List<MappingMemberReaderParameter> memberReaderParameters() {
         if (memberReaderParameters == null) {
             memberReaderParameters = new ArrayList<>();
         }
@@ -218,7 +218,7 @@ public class HierarchyImpl implements Hierarchy {
     }
 
     @Override
-    public RelationOrJoin relation() {
+    public MappingRelationOrJoin relation() {
         return relation;
     }
 
@@ -239,15 +239,15 @@ public class HierarchyImpl implements Hierarchy {
         this.uniqueKeyLevelName = value;
     }
 
-    public void setLevels(List<Level> levels) {
+    public void setLevels(List<MappingLevel> levels) {
         this.levels = levels;
     }
 
-    public void setRelation(RelationOrJoin relation) {
+    public void setRelation(MappingRelationOrJoin relation) {
         this.relation = relation;
     }
 
-    public void setMemberReaderParameters(List<MemberReaderParameter> memberReaderParameters) {
+    public void setMemberReaderParameters(List<MappingMemberReaderParameter> memberReaderParameters) {
         this.memberReaderParameters = memberReaderParameters;
     }
 

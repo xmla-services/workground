@@ -15,26 +15,26 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 public record VirtualCubeR(String name,
                            String caption,
                            String description,
                            String defaultMeasure,
                            boolean enabled,
-                           List<Annotation> annotations,
-                           List<CubeUsage> cubeUsages,
-                           List<VirtualCubeDimension> virtualCubeDimensions,
-                           List<VirtualCubeMeasure> virtualCubeMeasures,
-                           List<CalculatedMember> calculatedMembers,
-                           List<NamedSet> namedSets,
+                           List<MappingAnnotation> annotations,
+                           List<MappingCubeUsage> cubeUsages,
+                           List<MappingVirtualCubeDimension> virtualCubeDimensions,
+                           List<MappingVirtualCubeMeasure> virtualCubeMeasures,
+                           List<MappingCalculatedMember> calculatedMembers,
+                           List<MappingNamedSet> namedSets,
                            boolean visible
-) implements VirtualCube {
+) implements MappingVirtualCube {
 
 }

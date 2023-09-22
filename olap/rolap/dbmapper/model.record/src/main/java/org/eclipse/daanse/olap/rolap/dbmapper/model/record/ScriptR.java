@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
-public record  ScriptR(String language, String cdata) implements Script {
+public record  ScriptR(String language, String cdata) implements MappingScript {
 
 }

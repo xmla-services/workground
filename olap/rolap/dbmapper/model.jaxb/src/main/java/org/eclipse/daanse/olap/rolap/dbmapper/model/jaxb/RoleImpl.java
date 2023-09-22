@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -25,34 +25,34 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "schemaGrants", "union" })
-public class RoleImpl implements Role {
+public class RoleImpl implements MappingRole {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "SchemaGrant", type = SchemaGrantImpl.class)
-    protected List<SchemaGrant> schemaGrants;
+    protected List<MappingSchemaGrant> schemaGrants;
     @XmlElement(name = "Union", required = true, type = UnionImpl.class)
-    protected Union union;
+    protected MappingUnion union;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<SchemaGrant> schemaGrants() {
+    public List<MappingSchemaGrant> schemaGrants() {
         if (schemaGrants == null) {
             schemaGrants = new ArrayList<>();
         }
@@ -60,7 +60,7 @@ public class RoleImpl implements Role {
     }
 
     @Override
-    public Union union() {
+    public MappingUnion union() {
         return union;
     }
 
@@ -77,7 +77,7 @@ public class RoleImpl implements Role {
         this.name = value;
     }
 
-    public void setSchemaGrants(List<SchemaGrant> schemaGrants) {
+    public void setSchemaGrants(List<MappingSchemaGrant> schemaGrants) {
         this.schemaGrants = schemaGrants;
     }
 }

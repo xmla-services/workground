@@ -11,7 +11,7 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class RolapProperty extends Property {
     private final boolean dependsOnLevelValue;
 
     /** The column or expression which yields the property's value. */
-    private final Expression exp;
+    private final MappingExpression exp;
 
 
     /**
@@ -53,7 +53,7 @@ public class RolapProperty extends Property {
     RolapProperty(
         String name,
         Datatype type,
-        Expression exp,
+        MappingExpression exp,
         PropertyFormatter formatter,
         String caption,
         Boolean dependsOnLevelValue,
@@ -68,7 +68,7 @@ public class RolapProperty extends Property {
             dependsOnLevelValue != null && dependsOnLevelValue;
     }
 
-    public Expression getExp() {
+    public MappingExpression getExp() {
         return exp;
     }
 

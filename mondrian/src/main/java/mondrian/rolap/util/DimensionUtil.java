@@ -14,12 +14,12 @@
 package mondrian.rolap.util;
 
 import mondrian.rolap.RolapRuntimeException;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 import mondrian.olap.Util;
 
@@ -31,8 +31,8 @@ public class DimensionUtil {
         // constructor
     }
 
-    public static PrivateDimension getDimension(Schema schema, CubeDimension dimension) {
-        if (dimension instanceof DimensionUsage dimensionUsage) {
+    public static MappingPrivateDimension getDimension(MappingSchema schema, MappingCubeDimension dimension) {
+        if (dimension instanceof MappingDimensionUsage dimensionUsage) {
             Util.assertPrecondition(schema != null, SCHEMA_NULL);
             for (int i = 0; i < schema.dimensions().size(); i++) {
                 if (schema.dimensions().get(i).name().equals(dimensionUsage.source())) {
@@ -43,23 +43,23 @@ public class DimensionUtil {
                 new StringBuilder("Cannot find shared dimension '")
                     .append(dimensionUsage.source()).append("'").toString());
         }
-        if (dimension instanceof PrivateDimension privateDimension) {
+        if (dimension instanceof MappingPrivateDimension privateDimension) {
             Util.assertPrecondition(schema != null, SCHEMA_NULL);
             return privateDimension;
         }
-        if (dimension instanceof VirtualCubeDimension virtualCubeDimension) {
+        if (dimension instanceof MappingVirtualCubeDimension virtualCubeDimension) {
             Util.assertPrecondition(schema != null, SCHEMA_NULL);
             if (virtualCubeDimension.cubeName() == null) {
                 return getPublicDimension(schema, dimension.name());
             } else {
-                Cube cube = getCube(schema, virtualCubeDimension.cubeName());
+                MappingCube cube = getCube(schema, virtualCubeDimension.cubeName());
                 return getDimension(cube, schema, dimension.name());
             }
         }
         throw new RolapRuntimeException("getDimension error");
     }
 
-    private static PrivateDimension  getPublicDimension(Schema schema, String dimensionName) {
+    private static MappingPrivateDimension  getPublicDimension(MappingSchema schema, String dimensionName) {
         for (int i = 0; i < schema.dimensions().size(); i++) {
             if (schema.dimensions().get(i).name().equals(dimensionName)) {
                 return schema.dimensions().get(i);
@@ -70,7 +70,7 @@ public class DimensionUtil {
     }
 
 
-    private static Cube getCube(Schema schema, String cubeName) {
+    private static MappingCube getCube(MappingSchema schema, String cubeName) {
         for (int i = 0; i < schema.cubes().size(); i++) {
             if (schema.cubes().get(i).name().equals(cubeName)) {
                 return schema.cubes().get(i);
@@ -79,7 +79,7 @@ public class DimensionUtil {
         throw Util.newInternal(new StringBuilder("Cannot find cube '").append(cubeName).append("'").toString());
     }
 
-    private static PrivateDimension getDimension(Cube cube, Schema schema, String dimensionName) {
+    private static MappingPrivateDimension getDimension(MappingCube cube, MappingSchema schema, String dimensionName) {
         for (int i = 0; i < cube.dimensionUsageOrDimensions().size(); i++) {
             if (cube.dimensionUsageOrDimensions().get(i).name().equals(dimensionName)) {
                 return getDimension(schema, cube.dimensionUsageOrDimensions().get(i));

@@ -15,34 +15,34 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 public record CubeR(String name,
                     String caption,
                     String description,
                     String defaultMeasure,
-                    List<Annotation> annotations,
-                    List<CubeDimension> dimensionUsageOrDimensions,
-                    List<Measure> measures,
-                    List<CalculatedMember> calculatedMembers,
-                    List<NamedSet> namedSets,
-                    List<DrillThroughAction> drillThroughActions,
-                    List<WritebackTable> writebackTables,
+                    List<MappingAnnotation> annotations,
+                    List<MappingCubeDimension> dimensionUsageOrDimensions,
+                    List<MappingMeasure> measures,
+                    List<MappingCalculatedMember> calculatedMembers,
+                    List<MappingNamedSet> namedSets,
+                    List<MappingDrillThroughAction> drillThroughActions,
+                    List<MappingWritebackTable> writebackTables,
                     boolean enabled,
                     boolean cache,
                     boolean visible,
-                    Relation fact,
-                    List<Action> actions
+                    MappingRelation fact,
+                    List<MappingAction> actions
                     )
-        implements Cube {
+        implements MappingCube {
 
 }

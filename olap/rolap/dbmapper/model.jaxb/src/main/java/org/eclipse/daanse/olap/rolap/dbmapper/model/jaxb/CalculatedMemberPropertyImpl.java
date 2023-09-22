@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedMemberProperty")
-public class CalculatedMemberPropertyImpl implements CalculatedMemberProperty {
+public class CalculatedMemberPropertyImpl implements MappingCalculatedMemberProperty {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;

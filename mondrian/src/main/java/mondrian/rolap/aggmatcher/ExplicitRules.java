@@ -31,18 +31,18 @@ import mondrian.olap.api.Segment;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggPattern;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelPropertyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
@@ -119,26 +119,26 @@ public class ExplicitRules {
          */
         public static ExplicitRules.Group make(
             final RolapCube cube,
-            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube)
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube xmlCube)
         {
             Group group = new Group(cube);
 
-            Relation relation = xmlCube.fact();
+            MappingRelation relation = xmlCube.fact();
 
-            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table) {
-                List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> aggExcludes =
+            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table) {
+                List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude> aggExcludes =
                     table.aggExcludes();
                 if (aggExcludes != null) {
-                    for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude : aggExcludes) {
+                    for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude aggExclude : aggExcludes) {
                         Exclude exclude =
                             ExplicitRules.make(aggExclude);
                         group.addExclude(exclude);
                     }
                 }
-                List<? extends AggTable> aggTables =
+                List<? extends MappingAggTable> aggTables =
                     table.aggTables();
                 if (aggTables != null) {
-                    for (AggTable aggTable : aggTables) {
+                    for (MappingAggTable aggTable : aggTables) {
                         TableDef tableDef = TableDef.make(aggTable, group);
                         group.addTableDef(tableDef);
                     }
@@ -258,7 +258,7 @@ public class ExplicitRules {
          */
         public String getTableName() {
             RolapStar.Table table = getStar().getFactTable();
-            Relation relation = table.getRelation();
+            MappingRelation relation = table.getRelation();
             return getAlias(relation);
         }
 
@@ -270,9 +270,9 @@ public class ExplicitRules {
             String schema = null;
 
             RolapStar.Table table = getStar().getFactTable();
-            Relation relation = table.getRelation();
+            MappingRelation relation = table.getRelation();
 
-            if (relation instanceof Table mtable) {
+            if (relation instanceof MappingTable mtable) {
                 schema = mtable.schema();
             }
             return schema;
@@ -329,7 +329,7 @@ public class ExplicitRules {
         }
     }
 
-    private static Exclude make(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude) {
+    private static Exclude make(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude aggExclude) {
         return (aggExclude.name() != null)
             ? new ExcludeName(
                 aggExclude.name(),
@@ -524,14 +524,14 @@ public class ExplicitRules {
          * which is either a NameTableDef or PatternTableDef.
          */
         static ExplicitRules.TableDef make(
-            final AggTable aggTable,
+            final MappingAggTable aggTable,
             final ExplicitRules.Group group)
         {
-            return (aggTable instanceof AggName aggName)
+            return (aggTable instanceof MappingAggName aggName)
                 ? ExplicitRules.NameTableDef.make(aggName, group)
                 : (ExplicitRules.TableDef)
                 ExplicitRules.PatternTableDef.make(
-                    (AggPattern) aggTable, group);
+                    (MappingAggPattern) aggTable, group);
         }
 
         /**
@@ -542,14 +542,14 @@ public class ExplicitRules {
          */
         private static void add(
             final ExplicitRules.TableDef tableDef,
-            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable aggTable)
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable aggTable)
         {
 
-            if (aggTable instanceof AggName aggName) {
+            if (aggTable instanceof MappingAggName aggName) {
                 tableDef.setFactCountName(
                     aggName.aggFactCount().column());
             }
-            if (aggTable instanceof AggPattern aggPattern) {
+            if (aggTable instanceof MappingAggPattern aggPattern) {
                 tableDef.setFactCountName(
                     aggPattern.aggFactCount().column());
             }
@@ -558,7 +558,7 @@ public class ExplicitRules {
             if (aggTable.measuresFactCounts() != null) {
                 Map<String, String> measuresFactCount =
                         tableDef.getMeasuresFactCount();
-                for (AggMeasureFactCount measureFact
+                for (MappingAggMeasureFactCount measureFact
                         : aggTable.measuresFactCounts())
                 {
                     measuresFactCount.put
@@ -567,31 +567,31 @@ public class ExplicitRules {
                 }
             }
 
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName> ignores =
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName> ignores =
                 aggTable.aggIgnoreColumns();
 
             if (ignores != null) {
-                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName ignore : ignores) {
+                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName ignore : ignores) {
                     tableDef.addIgnoreColumnName(ignore.column());
                 }
             }
 
-            List<? extends AggForeignKey> fks = aggTable.aggForeignKeys();
+            List<? extends MappingAggForeignKey> fks = aggTable.aggForeignKeys();
             if (fks != null) {
-                for (AggForeignKey fk : fks) {
+                for (MappingAggForeignKey fk : fks) {
                     tableDef.addFK(fk);
                 }
             }
-            List<? extends AggMeasure> measures = aggTable.aggMeasures();
+            List<? extends MappingAggMeasure> measures = aggTable.aggMeasures();
             if (measures != null) {
-                for (AggMeasure measure : measures) {
+                for (MappingAggMeasure measure : measures) {
                     addTo(tableDef, measure);
                 }
             }
 
-            List<? extends AggLevel> levels = aggTable.aggLevels();
+            List<? extends MappingAggLevel> levels = aggTable.aggLevels();
             if (levels != null) {
-                for (AggLevel level : levels) {
+                for (MappingAggLevel level : levels) {
                     addTo(tableDef, level);
                 }
             }
@@ -599,7 +599,7 @@ public class ExplicitRules {
 
         private static void addTo(
             final ExplicitRules.TableDef tableDef,
-            final AggLevel aggLevel)
+            final MappingAggLevel aggLevel)
         {
             if (aggLevel.nameColumn() != null) {
                 handleNameColumn(aggLevel);
@@ -617,15 +617,15 @@ public class ExplicitRules {
         /**
          * nameColumn is mapped to the internal property $name
          */
-        private static void handleNameColumn(AggLevel aggLevel) {
-            AggLevelProperty nameProp =
+        private static void handleNameColumn(MappingAggLevel aggLevel) {
+            MappingAggLevelProperty nameProp =
                 new AggLevelPropertyR(Property.NAME_PROPERTY.getName(), aggLevel.nameColumn());
             aggLevel.properties().add(nameProp);
         }
 
         private static void addTo(
             final ExplicitRules.TableDef tableDef,
-            final AggMeasure aggMeasure)
+            final MappingAggMeasure aggMeasure)
         {
             addMeasureTo(
                 tableDef,
@@ -641,7 +641,7 @@ public class ExplicitRules {
             final boolean collapsed,
             String ordinalColumn,
             String captionColumn,
-            List<? extends AggLevelProperty> properties)
+            List<? extends MappingAggLevelProperty> properties)
         {
             Level level = tableDef.new Level(
                 name, columnName, collapsed, ordinalColumn, captionColumn,
@@ -678,7 +678,7 @@ public class ExplicitRules {
                 final boolean collapsed,
                 String ordinalColumn,
                 String captionColumn,
-                List<? extends AggLevelProperty> properties)
+                List<? extends MappingAggLevelProperty> properties)
             {
                 this.name = name;
                 this.columnName = columnName;
@@ -689,10 +689,10 @@ public class ExplicitRules {
             }
 
             private Map<String, String> makePropertyMap(
-                List<? extends AggLevelProperty> properties)
+                List<? extends MappingAggLevelProperty> properties)
             {
                 Map<String, String> map = new HashMap<>();
-                for (AggLevelProperty prop : properties) {
+                for (MappingAggLevelProperty prop : properties) {
                     map.put(prop.name(), prop.column());
                 }
                 return Collections.unmodifiableMap(map);
@@ -727,7 +727,7 @@ public class ExplicitRules {
                 return rlevel;
             }
 
-            public Expression getRolapFieldName() {
+            public MappingExpression getRolapFieldName() {
                 return rlevel.getKeyExp();
             }
 
@@ -1220,7 +1220,7 @@ public class ExplicitRules {
          * Add foreign key mapping entry (maps from fact table foreign key
          * column name to aggregate table foreign key column name).
          */
-        protected void addFK(final AggForeignKey fk) {
+        protected void addFK(final MappingAggForeignKey fk) {
             if (this.foreignKeyMap == EMPTY_MAP) {
                 this.foreignKeyMap = new HashMap<>();
             }
@@ -1376,7 +1376,7 @@ public class ExplicitRules {
                         columnsToObjects.put(aggFKName, baseFKName);
                     }
 
-                    Column c =
+                    MappingColumn c =
                         new ColumnR(tableName, baseFKName);
                     if (factTable.findTableWithLeftCondition(c) == null) {
                         msgRecorder.reportError(
@@ -1435,7 +1435,7 @@ public class ExplicitRules {
          * Makes a NameTableDef from the catalog schema.
          */
         static ExplicitRules.NameTableDef make(
-            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName aggName,
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName aggName,
             final ExplicitRules.Group group)
         {
             ExplicitRules.NameTableDef name =
@@ -1524,7 +1524,7 @@ public class ExplicitRules {
          * Make a PatternTableDef from the catalog schema.
          */
         static ExplicitRules.PatternTableDef make(
-            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern aggPattern,
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggPattern aggPattern,
             final ExplicitRules.Group group)
         {
             ExplicitRules.PatternTableDef pattern =
@@ -1533,9 +1533,9 @@ public class ExplicitRules {
                     aggPattern.ignorecase(),
                     group);
 
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> excludes = aggPattern.aggExcludes();
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude> excludes = aggPattern.aggExcludes();
             if (excludes != null) {
-                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude exclude1 : excludes) {
+                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude exclude1 : excludes) {
                     Exclude exclude = ExplicitRules.make(exclude1);
                     pattern.add(exclude);
                 }

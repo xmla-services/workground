@@ -16,39 +16,39 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
-public class TableR implements Table {
+public class TableR implements MappingTable {
 
-    private SQL sql;
+    private MappingSQL sql;
     private String alias;
-    private List<AggExclude> aggExcludes;
+    private List<MappingAggExclude> aggExcludes;
     private String name;
     private String schema;
-    private List<Hint> hints;
-    private List<AggTable> aggTables;
+    private List<MappingHint> hints;
+    private List<MappingAggTable> aggTables;
 
-    public TableR(Table table) {
+    public TableR(MappingTable table) {
         this(table.schema(), table.name(), table.alias(), table.hints());
     }
 
-    public TableR(String name, List<AggExclude> aggExcludes, List<AggTable> aggTables) {
+    public TableR(String name, List<MappingAggExclude> aggExcludes, List<MappingAggTable> aggTables) {
         this.name = name;
         this.aggExcludes = aggExcludes;
         this.aggTables = aggTables;
     }
-    public TableR(String schema, String name, String alias, List<Hint> hints) {
+    public TableR(String schema, String name, String alias, List<MappingHint> hints) {
         this.name = name;
         this.schema = schema;
         this.alias = alias;
         this.hints = hints;
     }
 
-    public TableR(Table tbl, String possibleName) {
+    public TableR(MappingTable tbl, String possibleName) {
         this(tbl.schema(), tbl.name(), possibleName, tbl.hints());
 
         // Remake the filter with the new alias
@@ -72,22 +72,22 @@ public class TableR implements Table {
     }
 
     @Override
-    public SQL sql() {
+    public MappingSQL sql() {
         return sql;
     }
 
     @Override
-    public List<AggExclude> aggExcludes() {
+    public List<MappingAggExclude> aggExcludes() {
         return aggExcludes;
     }
 
     @Override
-    public List<AggTable> aggTables() {
+    public List<MappingAggTable> aggTables() {
         return aggTables;
     }
 
     @Override
-    public List<Hint> hints() {
+    public List<MappingHint> hints() {
         return hints;
     }
 
@@ -103,7 +103,7 @@ public class TableR implements Table {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Table that) {
+        if (o instanceof MappingTable that) {
             return this.name.equals(that.name()) &&
                 Objects.equals(this.alias, that.alias()) &&
                 Objects.equals(this.schema, that.schema());

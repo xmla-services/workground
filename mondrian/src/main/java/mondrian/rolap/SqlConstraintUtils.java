@@ -36,7 +36,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,8 +165,8 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
           }
       }
 
-      Map<Expression, Set<RolapMember>> mapOfSlicerMembers = null;
-      HashMap<Expression, Boolean> done = new HashMap<>();
+      Map<MappingExpression, Set<RolapMember>> mapOfSlicerMembers = null;
+      HashMap<MappingExpression, Boolean> done = new HashMap<>();
 
       for (int i = 0; i < columns.length; i++) {
           final RolapStar.Column column = columns[i];
@@ -179,7 +179,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
               mapOfSlicerMembers = getSlicerMemberMap(evaluator);
           }
 
-          final Expression keyForSlicerMap = column.getExpression();
+          final MappingExpression keyForSlicerMap = column.getExpression();
 
           if (mapOfSlicerMembers.containsKey(keyForSlicerMap)) {
               if (!done.containsKey(keyForSlicerMap)) {
@@ -565,8 +565,8 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
    * This map is used by addContextConstraint() to get the set of slicer members associated with each column in the cell
    * request's constrained columns array, {@link CellRequest#getConstrainedColumns}
    */
-  private static Map<Expression, Set<RolapMember>> getSlicerMemberMap( Evaluator evaluator ) {
-    Map<Expression, Set<RolapMember>> mapOfSlicerMembers =
+  private static Map<MappingExpression, Set<RolapMember>> getSlicerMemberMap( Evaluator evaluator ) {
+    Map<MappingExpression, Set<RolapMember>> mapOfSlicerMembers =
         new HashMap<>();
     List<Member> slicerMembers = ( (RolapEvaluator) evaluator ).getSlicerMembers();
     List<Member> expandedSlicers =
@@ -589,13 +589,13 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
    * Expression.
    *
    */
-  private static void addSlicedMemberToMap( Map<Expression, Set<RolapMember>> mapOfSlicerMembers,
+  private static void addSlicedMemberToMap( Map<MappingExpression, Set<RolapMember>> mapOfSlicerMembers,
       Member slicerMember ) {
     if ( slicerMember == null || slicerMember.isAll() || slicerMember.isNull() ) {
       return;
     }
     assert slicerMember instanceof RolapMember;
-    Expression expression = ( (RolapLevel) slicerMember.getLevel() ).getKeyExp();
+    MappingExpression expression = ( (RolapLevel) slicerMember.getLevel() ).getKeyExp();
     mapOfSlicerMembers.computeIfAbsent(expression, k -> new LinkedHashSet<RolapMember>()).add( (RolapMember) slicerMember );
     addSlicedMemberToMap( mapOfSlicerMembers, slicerMember.getParentMember() );
   }
@@ -1382,7 +1382,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       }
     } else {
       assert ( aggStar == null );
-      Expression exp = level.getNameExp();
+      MappingExpression exp = level.getNameExp();
       if ( exp == null ) {
         exp = level.getKeyExp();
         datatype = level.getDatatype();
@@ -1483,7 +1483,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
    *
    * @return generated string corresponding to the expression
    */
-  public static String constrainLevel2(SqlQuery query, Expression exp, Datatype datatype,
+  public static String constrainLevel2(SqlQuery query, MappingExpression exp, Datatype datatype,
                                        Comparable columnValue ) {
     String columnString = getExpression( exp, query );
     if ( columnValue == RolapUtil.sqlNullValue ) {
@@ -1667,7 +1667,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       assert ( aggStar == null );
       hierarchy.addToFrom( sqlQuery, level.getKeyExp() );
 
-      Expression nameExp = level.getNameExp();
+      MappingExpression nameExp = level.getNameExp();
       if ( nameExp == null ) {
         nameExp = level.getKeyExp();
       }

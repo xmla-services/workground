@@ -16,13 +16,13 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -43,25 +43,25 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "keyExpression", "nameExpression", "captionExpression",
         "ordinalExpression", "parentExpression", "closure", "properties", "memberFormatter" })
-public class LevelImpl implements Level {
+public class LevelImpl implements MappingLevel {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "KeyExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView keyExpression;
+    protected MappingExpressionView keyExpression;
     @XmlElement(name = "NameExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView nameExpression;
+    protected MappingExpressionView nameExpression;
     @XmlElement(name = "CaptionExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView captionExpression;
+    protected MappingExpressionView captionExpression;
     @XmlElement(name = "OrdinalExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView ordinalExpression;
+    protected MappingExpressionView ordinalExpression;
     @XmlElement(name = "ParentExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView parentExpression;
+    protected MappingExpressionView parentExpression;
     @XmlElement(name = "Closure")
     protected ClosureImpl closure;
     @XmlElement(name = "Property", type = PropertyImpl.class)
-    protected List<Property> properties;
+    protected List<MappingProperty> properties;
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlAttribute(name = "name", required = true)
@@ -106,16 +106,16 @@ public class LevelImpl implements Level {
     ElementFormatterImpl memberFormatter;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public Expression keyExpression() {
+    public MappingExpression keyExpression() {
         return keyExpression;
     }
 
@@ -124,7 +124,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Expression nameExpression() {
+    public MappingExpression nameExpression() {
         return nameExpression;
     }
 
@@ -133,7 +133,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Expression captionExpression() {
+    public MappingExpression captionExpression() {
         return captionExpression;
     }
 
@@ -142,7 +142,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Expression ordinalExpression() {
+    public MappingExpression ordinalExpression() {
         return ordinalExpression;
     }
 
@@ -151,7 +151,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Expression parentExpression() {
+    public MappingExpression parentExpression() {
         return  parentExpression;
     }
 
@@ -160,7 +160,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Closure closure() {
+    public MappingClosure closure() {
         return closure;
     }
 
@@ -169,7 +169,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Property> properties() {
+    public List<MappingProperty> properties() {
         if (properties == null) {
             properties = new ArrayList<>();
         }
@@ -339,7 +339,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ElementFormatter memberFormatter() {
+    public MappingElementFormatter memberFormatter() {
         return memberFormatter;
     }
 
@@ -347,7 +347,7 @@ public class LevelImpl implements Level {
         this.captionColumn = value;
     }
 
-    public void setProperties(List<Property> properties) {
+    public void setProperties(List<MappingProperty> properties) {
         this.properties = properties;
     }
 

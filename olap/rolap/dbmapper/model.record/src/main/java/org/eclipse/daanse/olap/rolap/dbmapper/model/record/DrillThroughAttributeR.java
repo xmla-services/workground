@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
 
 public record DrillThroughAttributeR(String dimension,
                                      String level,
                                      String hierarchy)
-        implements DrillThroughAttribute {
+        implements MappingDrillThroughAttribute {
 
 }

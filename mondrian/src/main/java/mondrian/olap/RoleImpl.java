@@ -564,7 +564,7 @@ public class RoleImpl implements Role {
      * <li>The order of grants matters. If you grant/deny access to a
      *     member, previous grants/denials to its descendants are ignored.</li>
      * <li>Member grants do not supersde top/bottom levels set using
-     *     {@link #grant(Hierarchy, Access, Level, Level, org.eclipse.daanse.olap.api.access.Role.RollupPolicy)}.
+     *     {@link #grant(Hierarchy, Access, Level, Level, org.eclipse.daanse.olap.api.access.MappingRole.RollupPolicy)}.
      * <li>If you have access to a member, then you can see its ancestors
      *     <em>even those explicitly denied</em>, up to the top level.
      * </ol>
@@ -1073,7 +1073,7 @@ public class RoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.MappingRole.HierarchyAccess} that
      * delegates all methods to an underlying hierarchy access.
      */
     public abstract static class DelegatingHierarchyAccess
@@ -1127,7 +1127,7 @@ public class RoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that caches
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.MappingRole.HierarchyAccess} that caches
      * the access of each member and level.
      *
      * <p>This reduces the number of calls to the underlying HierarchyAccess,

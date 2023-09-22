@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CellFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CellFormatter", propOrder = { "script" })
-public class CellFormatterImpl implements CellFormatter {
+public class CellFormatterImpl implements MappingCellFormatter {
 
     @XmlAttribute(name = "className")
     protected  String className;
@@ -37,7 +37,7 @@ public class CellFormatterImpl implements CellFormatter {
     }
 
     @Override
-    public Script script() {
+    public MappingScript script() {
         return script;
     }
 }

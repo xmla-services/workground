@@ -16,12 +16,12 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -31,18 +31,18 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumns", "aggForeignKeys", "aggMeasures", "aggLevels", "measuresFactCounts" })
-public class AggNameImpl implements AggName {
+public class AggNameImpl implements MappingAggName {
 
     @XmlElement(name = "AggFactCount", required = true)
     protected AggColumnNameImpl aggFactCount;
     @XmlElement(name = "AggIgnoreColumn", type = AggColumnNameImpl.class)
-    protected List<AggColumnName> aggIgnoreColumns;
+    protected List<MappingAggColumnName> aggIgnoreColumns;
     @XmlElement(name = "AggForeignKey", type = AggForeignKeyImpl.class)
-    protected List<AggForeignKey> aggForeignKeys;
+    protected List<MappingAggForeignKey> aggForeignKeys;
     @XmlElement(name = "AggMeasure", required = true, type = AggMeasureImpl.class)
-    protected List<AggMeasure> aggMeasures;
+    protected List<MappingAggMeasure> aggMeasures;
     @XmlElement(name = "AggLevel", type = AggLevelImpl.class)
-    protected List<AggLevel> aggLevels;
+    protected List<MappingAggLevel> aggLevels;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "ignorecase")
@@ -50,7 +50,7 @@ public class AggNameImpl implements AggName {
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlElement(name = "AggMeasureFactCount", type = AggMeasureFactCountImpl.class)
-    private List<AggMeasureFactCount> measuresFactCounts;
+    private List<MappingAggMeasureFactCount> measuresFactCounts;
 
     @Override
     public AggColumnNameImpl aggFactCount() {
@@ -62,7 +62,7 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggColumnName> aggIgnoreColumns() {
+    public List<MappingAggColumnName> aggIgnoreColumns() {
         if (aggIgnoreColumns == null) {
             aggIgnoreColumns = new ArrayList<>();
         }
@@ -70,7 +70,7 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggForeignKey> aggForeignKeys() {
+    public List<MappingAggForeignKey> aggForeignKeys() {
         if (aggForeignKeys == null) {
             aggForeignKeys = new ArrayList<>();
         }
@@ -78,7 +78,7 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggMeasure> aggMeasures() {
+    public List<MappingAggMeasure> aggMeasures() {
         if (aggMeasures == null) {
             aggMeasures = new ArrayList<>();
         }
@@ -86,7 +86,7 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggLevel> aggLevels() {
+    public List<MappingAggLevel> aggLevels() {
         if (aggLevels == null) {
             aggLevels = new ArrayList<>();
         }
@@ -117,7 +117,7 @@ public class AggNameImpl implements AggName {
     }
 
     @Override
-    public List<AggMeasureFactCount> measuresFactCounts() {
+    public List<MappingAggMeasureFactCount> measuresFactCounts() {
         if (measuresFactCounts == null) {
             measuresFactCounts = new ArrayList<>();
         }

@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -27,11 +27,11 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations" })
-public class VirtualCubeMeasureImpl implements VirtualCubeMeasure {
+public class VirtualCubeMeasureImpl implements MappingVirtualCubeMeasure {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlAttribute(name = "cubeName", required = true)
     protected String cubeName;
     @XmlAttribute(name = "name", required = true)
@@ -40,11 +40,11 @@ public class VirtualCubeMeasureImpl implements VirtualCubeMeasure {
     protected Boolean visible;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggExclude")
-public class AggExcludeImpl implements AggExclude {
+public class AggExcludeImpl implements MappingAggExclude {
 
     @XmlAttribute(name = "pattern")
     protected String pattern;

@@ -18,13 +18,13 @@
  */
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 
 public class TestPublicRolapDimension extends RolapDimension{
 
-	TestPublicRolapDimension(RolapSchema schema, RolapCube cube, PrivateDimension xmlDimension,
-                             CubeDimension xmlCubeDimension) {
+	TestPublicRolapDimension(RolapSchema schema, RolapCube cube, MappingPrivateDimension xmlDimension,
+                             MappingCubeDimension xmlCubeDimension) {
 		super(schema, cube, xmlDimension, xmlCubeDimension);
 	}
 

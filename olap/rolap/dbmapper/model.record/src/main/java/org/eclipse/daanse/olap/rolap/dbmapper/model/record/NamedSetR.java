@@ -15,17 +15,17 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
 public record NamedSetR(String name,
                         String caption,
                         String description,
                         String formula,
-                        List<Annotation> annotations,
+                        List<MappingAnnotation> annotations,
                         String displayFolder,
-                        Formula formulaElement)
-        implements NamedSet {
+                        MappingFormula formulaElement)
+        implements MappingNamedSet {
 
 }

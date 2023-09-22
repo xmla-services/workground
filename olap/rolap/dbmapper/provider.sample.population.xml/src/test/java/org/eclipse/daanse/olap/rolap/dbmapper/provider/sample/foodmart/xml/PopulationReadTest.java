@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.xml;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.cm.annotations.RequireConfigurationAdmin;
@@ -33,14 +33,14 @@ class PopulationReadTest {
         @InjectService(timeout = 100000, filter = "(&(sample.type=xml)(sample.name=Population))") DatabaseMappingSchemaProvider provider
     )  throws Exception {
     	
-        Schema schema = provider.get();
+        MappingSchema schema = provider.get();
         assertThat(schema).isNotNull();
         assertEquals("Population", schema.name());
         assertThat(schema.cubes()).isNotNull().hasSize(1);
         assertThat(schema.cubes().get(0).name()).isEqualTo("Population");
         assertThat(schema.cubes().get(0).dimensionUsageOrDimensions()).isNotNull().hasSize(4);
         assertThat(schema.cubes().get(0).dimensionUsageOrDimensions())
-        .extracting(CubeDimension::name)
+        .extracting(MappingCubeDimension::name)
         .contains("Year")
         .contains("Geographical")
         .contains("Gender")

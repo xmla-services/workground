@@ -2,7 +2,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.mandantory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class IntegrationSteelWheelVerifyerTest {
 	}
 
 	private void doTest(DatabaseMappingSchemaProvider provider) {
-		Schema schema = provider.get();
+		MappingSchema schema = provider.get();
 		assertThat(schema).isNotNull();
 	}
 }

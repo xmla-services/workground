@@ -17,9 +17,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -351,11 +351,11 @@ public class AggTableManager {
 
             dbFactTable.setTableUsageType(JdbcSchema.TableUsageType.FACT);
 
-            RelationOrJoin relation =
+            MappingRelationOrJoin relation =
                 star.getFactTable().getRelation();
             String schemaInner = null;
-            List<Hint> tableHints = null;
-            if (relation instanceof Table table) {
+            List<MappingHint> tableHints = null;
+            if (relation instanceof MappingTable table) {
                 schemaInner = table.schema();
                 tableHints = table.hints();
             }

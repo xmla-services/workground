@@ -15,12 +15,12 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 
 public record ActionR(String name,
                       String caption,
                       String description,
-                      List<Annotation> annotations) implements Action {
+                      List<MappingAnnotation> annotations) implements MappingAction {
 
 }

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class WritebackAttributeImpl implements WritebackAttribute {
+public class WritebackAttributeImpl implements MappingWritebackAttribute {
 
     @XmlAttribute(name = "dimension")
     private String dimension;

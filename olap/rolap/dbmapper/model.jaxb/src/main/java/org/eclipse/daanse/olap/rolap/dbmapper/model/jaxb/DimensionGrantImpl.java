@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.AccessAdaptor;
 
@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class DimensionGrantImpl implements DimensionGrant {
+public class DimensionGrantImpl implements MappingDimensionGrant {
 
     @XmlAttribute(name = "dimension", required = true)
     protected String dimension;

@@ -43,12 +43,12 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ViewImpl;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
@@ -455,7 +455,7 @@ public class RolapUtil {
     /**
      * Creates a compiler which will generate programs which will test
      * whether the dependencies declared via
-     * {@link mondrian.calc.Calc#dependsOn(Hierarchy)} are accurate.
+     * {@link mondrian.calc.Calc#dependsOn(MappingHierarchy)} are accurate.
      */
     public static ExpressionCompiler createDependencyTestingCompiler(
         ExpressionCompiler compiler)
@@ -544,8 +544,8 @@ public class RolapUtil {
         return bestMatch;
     }
 
-    public static Relation convertInlineTableToRelation(
-        InlineTable inlineTable,
+    public static MappingRelation convertInlineTableToRelation(
+        MappingInlineTable inlineTable,
         final Dialect dialect)
     {
         ViewImpl view = new ViewImpl();
@@ -559,9 +559,9 @@ public class RolapUtil {
             columnTypes.add(inlineTable.columnDefs().get(i).type().getValue());
         }
         List<String[]> valueList = new ArrayList<>();
-        for (Row row : inlineTable.rows()) {
+        for (MappingRow row : inlineTable.rows()) {
             String[] values = new String[columnCount];
-            for (Value value : row.values()) {
+            for (MappingValue value : row.values()) {
                 final int columnOrdinal = columnNames.indexOf(value.column());
                 if (columnOrdinal < 0) {
                     throw Util.newError(
@@ -755,12 +755,12 @@ public class RolapUtil {
      * @return the rolap star key
      */
     public static List<String> makeRolapStarKey(
-        final Relation fact)
+        final MappingRelation fact)
     {
       List<String> rlStarKey = new ArrayList<>();
-      Table table = null;
+      MappingTable table = null;
       rlStarKey.add(getAlias(fact));
-      if (fact instanceof Table t) {
+      if (fact instanceof MappingTable t) {
         table = t;
       }
       // Add SQL filter to the key

@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -33,17 +33,17 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExcludes", "aggTables", "hints" })
 @XmlRootElement(name = "Table")
-public class TableImpl implements Table {
+public class TableImpl implements MappingTable {
 
     @XmlElement(name = "SQL")
     protected SQLImpl sql;
     @XmlElement(name = "AggExclude", type = AggExcludeImpl.class)
-    protected List<AggExclude> aggExcludes;
+    protected List<MappingAggExclude> aggExcludes;
     @XmlElements({ @XmlElement(name = "AggName", type = AggNameImpl.class),
             @XmlElement(name = "AggPattern", type = AggPatternImpl.class) })
-    protected List<AggTable> aggTables;
+    protected List<MappingAggTable> aggTables;
     @XmlElement(name = "Hint", type = HintImpl.class)
-    protected List<Hint> hints;
+    protected List<MappingHint> hints;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "schema")
@@ -61,7 +61,7 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<AggExclude> aggExcludes() {
+    public List<MappingAggExclude> aggExcludes() {
         if (aggExcludes == null) {
             aggExcludes = new ArrayList<>();
         }
@@ -69,7 +69,7 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<AggTable> aggTables() {
+    public List<MappingAggTable> aggTables() {
         if (aggTables == null) {
             aggTables = new ArrayList<>();
         }
@@ -77,7 +77,7 @@ public class TableImpl implements Table {
     }
 
     @Override
-    public List<Hint> hints() {
+    public List<MappingHint> hints() {
         if (hints == null) {
             hints = new ArrayList<>();
         }
@@ -113,7 +113,7 @@ public class TableImpl implements Table {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Table that) {
+        if (o instanceof MappingTable that) {
             return this.name.equals(that.name()) &&
                 Objects.equals(this.alias, that.alias()) &&
                 Objects.equals(this.schema, that.schema());

@@ -14,7 +14,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DrillThroughMeasure")
-public class DrillThroughMeasureImpl implements DrillThroughMeasure {
+public class DrillThroughMeasureImpl implements MappingDrillThroughMeasure {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;

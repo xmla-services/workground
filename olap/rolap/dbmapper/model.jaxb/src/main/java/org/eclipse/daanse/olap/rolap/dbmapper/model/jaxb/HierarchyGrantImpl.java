@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.AccessAdaptor;
 
@@ -30,10 +30,10 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "memberGrants" })
-public class HierarchyGrantImpl implements HierarchyGrant {
+public class HierarchyGrantImpl implements MappingHierarchyGrant {
 
     @XmlElement(name = "MemberGrant", type = MemberGrantImpl.class)
-    protected List<MemberGrant> memberGrants;
+    protected List<MappingMemberGrant> memberGrants;
     @XmlAttribute(name = "hierarchy", required = true)
     protected String hierarchy;
     @XmlAttribute(name = "access", required = true)
@@ -47,7 +47,7 @@ public class HierarchyGrantImpl implements HierarchyGrant {
     protected String rollupPolicy;
 
     @Override
-    public List<MemberGrant> memberGrants() {
+    public List<MappingMemberGrant> memberGrants() {
         if (memberGrants == null) {
             memberGrants = new ArrayList<>();
         }
@@ -103,7 +103,7 @@ public class HierarchyGrantImpl implements HierarchyGrant {
         this.rollupPolicy = value;
     }
 
-    public void setMemberGrants(List<MemberGrant> memberGrants) {
+    public void setMemberGrants(List<MappingMemberGrant> memberGrants) {
         this.memberGrants = memberGrants;
     }
 

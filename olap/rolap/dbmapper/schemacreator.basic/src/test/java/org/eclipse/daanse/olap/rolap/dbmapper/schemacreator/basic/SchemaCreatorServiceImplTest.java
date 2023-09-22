@@ -16,14 +16,14 @@ package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.util.SchemaTransformer;
@@ -60,18 +60,18 @@ class SchemaCreatorServiceImplTest {
         SchemaCreatorService schemaCreatorService = schemaCreatorServiceFactory.create(dataSource);
         SchemaInitData schemaInitData = new SchemaInitData();
         schemaInitData.setFactTables(List.of("population"));
-        Schema s = schemaCreatorService.createSchema(schemaInitData);
+        MappingSchema s = schemaCreatorService.createSchema(schemaInitData);
         assertThat(s).isNotNull();
         assertThat(s.dimensions()).isNotNull().hasSize(4);
 
-        PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension State");
+        MappingPrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension State");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
-        Hierarchy h =  d.hierarchies().get(0);
-        List <Level> levels = h.levels();
+        MappingHierarchy h =  d.hierarchies().get(0);
+        List <MappingLevel> levels = h.levels();
         assertThat(levels).isNotNull().hasSize(3);
         // check level0
-        Level level = levels.get(0);
+        MappingLevel level = levels.get(0);
         assertThat(level).isNotNull();
         assertThat(level.name()).isEqualTo("Continent");
         assertThat(level.column()).isEqualTo("id");
@@ -145,17 +145,17 @@ class SchemaCreatorServiceImplTest {
 
         // check cubes
         assertThat(s.cubes()).isNotNull().hasSize(1);
-        Cube c = s.cubes().get(0);
+        MappingCube c = s.cubes().get(0);
         assertThat(c.name()).isEqualTo("Population");
         assertThat(c.description()).isEqualTo("Population");
         assertThat(c.caption()).isEqualTo("Population");
         assertThat(c.dimensionUsageOrDimensions()).isNotNull().hasSize(4);
-        List<DimensionUsage> dimensionUsageList = c.dimensionUsageOrDimensions()
-            .stream().filter(du -> (du instanceof DimensionUsage))
-            .map(du -> (DimensionUsage) du).collect(Collectors.toList());
+        List<MappingDimensionUsage> dimensionUsageList = c.dimensionUsageOrDimensions()
+            .stream().filter(du -> (du instanceof MappingDimensionUsage))
+            .map(du -> (MappingDimensionUsage) du).collect(Collectors.toList());
         assertThat(dimensionUsageList).hasSize(4);
 
-        DimensionUsage du = getDimensionUsage(dimensionUsageList, "Dimension State");
+        MappingDimensionUsage du = getDimensionUsage(dimensionUsageList, "Dimension State");
         assertThat(du).isNotNull();
         assertThat(du.source()).isEqualTo("Dimension State");
         assertThat(du.foreignKey()).isEqualTo("state_id");
@@ -176,7 +176,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(du.foreignKey()).isEqualTo("age");
 
         assertThat(s.cubes()).hasSize(1);
-        Table t = (Table)c.fact();
+        MappingTable t = (MappingTable)c.fact();
         assertThat(t.name()).isEqualTo("population");
 
         marshallSchema(s);
@@ -190,19 +190,19 @@ class SchemaCreatorServiceImplTest {
         SchemaCreatorService schemaCreatorService = schemaCreatorServiceFactory.create(dataSource);
         SchemaInitData schemaInitData = new SchemaInitData();
         schemaInitData.setFactTables(List.of("employees"));
-        Schema s = schemaCreatorService.createSchema(schemaInitData);
+        MappingSchema s = schemaCreatorService.createSchema(schemaInitData);
         assertThat(s).isNotNull();
         assertThat(s.dimensions()).isNotNull().hasSize(3);
 
         // check Dimension Jobs
-        PrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension Jobs");
+        MappingPrivateDimension d = getPrivateDimension(s.dimensions(), "Dimension Jobs");
         assertThat(d).isNotNull();
         assertThat(d.hierarchies()).isNotNull().hasSize(1);
-        Hierarchy h =  d.hierarchies().get(0);
-        List <Level> levels = h.levels();
+        MappingHierarchy h =  d.hierarchies().get(0);
+        List <MappingLevel> levels = h.levels();
         assertThat(levels).isNotNull().hasSize(1);
         // check level0
-        Level level = levels.get(0);
+        MappingLevel level = levels.get(0);
         assertThat(level).isNotNull();
         assertThat(level.name()).isEqualTo("Jobs");
         assertThat(level.column()).isEqualTo("job_id");
@@ -353,7 +353,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.uniqueMembers()).isTrue();
 
         assertThat(s.cubes()).hasSize(1);
-        Cube c = s.cubes().get(0);
+        MappingCube c = s.cubes().get(0);
         assertThat(c.name()).isEqualTo("Employees");
         assertThat(c.caption()).isEqualTo("Employees");
         assertThat(c.description()).isEqualTo("Employees");
@@ -361,21 +361,21 @@ class SchemaCreatorServiceImplTest {
         assertThat(c.enabled()).isTrue();
         assertThat(c.visible()).isTrue();
         assertThat(c.fact()).isNotNull();
-        assertThat(c.fact()).isInstanceOf(Table.class);
-        Table t = (Table)c.fact();
+        assertThat(c.fact()).isInstanceOf(MappingTable.class);
+        MappingTable t = (MappingTable)c.fact();
         assertThat(t.name()).isEqualTo("employees");
         assertThat(c.dimensionUsageOrDimensions()).hasSize(8);
-        assertThat(c.dimensionUsageOrDimensions().get(0)).isInstanceOf(DimensionUsage.class);
-        assertThat(c.dimensionUsageOrDimensions().get(1)).isInstanceOf(DimensionUsage.class);
-        assertThat(c.dimensionUsageOrDimensions().get(2)).isInstanceOf(DimensionUsage.class);
+        assertThat(c.dimensionUsageOrDimensions().get(0)).isInstanceOf(MappingDimensionUsage.class);
+        assertThat(c.dimensionUsageOrDimensions().get(1)).isInstanceOf(MappingDimensionUsage.class);
+        assertThat(c.dimensionUsageOrDimensions().get(2)).isInstanceOf(MappingDimensionUsage.class);
 
-        assertThat(c.dimensionUsageOrDimensions().get(3)).isInstanceOf(PrivateDimension.class);
-        assertThat(c.dimensionUsageOrDimensions().get(4)).isInstanceOf(PrivateDimension.class);
-        assertThat(c.dimensionUsageOrDimensions().get(5)).isInstanceOf(PrivateDimension.class);
-        assertThat(c.dimensionUsageOrDimensions().get(6)).isInstanceOf(PrivateDimension.class);
-        assertThat(c.dimensionUsageOrDimensions().get(7)).isInstanceOf(PrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(3)).isInstanceOf(MappingPrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(4)).isInstanceOf(MappingPrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(5)).isInstanceOf(MappingPrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(6)).isInstanceOf(MappingPrivateDimension.class);
+        assertThat(c.dimensionUsageOrDimensions().get(7)).isInstanceOf(MappingPrivateDimension.class);
 
-        DimensionUsage du = (DimensionUsage) c.dimensionUsageOrDimensions().get(0);
+        MappingDimensionUsage du = (MappingDimensionUsage) c.dimensionUsageOrDimensions().get(0);
         assertThat(du.name()).isEqualTo("Dimension Departments");
         assertThat(du.source()).isEqualTo("Dimension Departments");
         assertThat(du.foreignKey()).isEqualTo("department_id");
@@ -383,7 +383,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(du.description()).isEqualTo("Dimension for department_id");
         assertThat(du.visible()).isTrue();
 
-        du = (DimensionUsage) c.dimensionUsageOrDimensions().get(1);
+        du = (MappingDimensionUsage) c.dimensionUsageOrDimensions().get(1);
         assertThat(du.name()).isEqualTo("Dimension Employees");
         assertThat(du.source()).isEqualTo("Dimension Employees");
         assertThat(du.foreignKey()).isEqualTo("manager_id");
@@ -391,7 +391,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(du.description()).isEqualTo("Dimension for manager_id");
         assertThat(du.visible()).isTrue();
 
-        du = (DimensionUsage) c.dimensionUsageOrDimensions().get(2);
+        du = (MappingDimensionUsage) c.dimensionUsageOrDimensions().get(2);
         assertThat(du.name()).isEqualTo("Dimension Jobs");
         assertThat(du.source()).isEqualTo("Dimension Jobs");
         assertThat(du.foreignKey()).isEqualTo("job_id");
@@ -399,7 +399,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(du.description()).isEqualTo("Dimension for job_id");
         assertThat(du.visible()).isTrue();
 
-        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(3);
+        d = (MappingPrivateDimension) c.dimensionUsageOrDimensions().get(3);
         assertThat(d.name()).isEqualTo("first_name");
         assertThat(d.caption()).isEqualTo("first_name");
         assertThat(d.description()).isEqualTo("first_name");
@@ -426,7 +426,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.type()).isEqualTo(TypeEnum.STRING);
         assertThat(level.visible()).isTrue();
 
-        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(4);
+        d = (MappingPrivateDimension) c.dimensionUsageOrDimensions().get(4);
         assertThat(d.name()).isEqualTo("last_name");
         assertThat(d.caption()).isEqualTo("last_name");
         assertThat(d.description()).isEqualTo("last_name");
@@ -453,7 +453,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.type()).isEqualTo(TypeEnum.STRING);
         assertThat(level.visible()).isTrue();
 
-        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(5);
+        d = (MappingPrivateDimension) c.dimensionUsageOrDimensions().get(5);
         assertThat(d.name()).isEqualTo("email");
         assertThat(d.caption()).isEqualTo("email");
         assertThat(d.description()).isEqualTo("email");
@@ -480,7 +480,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.type()).isEqualTo(TypeEnum.STRING);
         assertThat(level.visible()).isTrue();
 
-        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(6);
+        d = (MappingPrivateDimension) c.dimensionUsageOrDimensions().get(6);
         assertThat(d.name()).isEqualTo("phone_number");
         assertThat(d.caption()).isEqualTo("phone_number");
         assertThat(d.description()).isEqualTo("phone_number");
@@ -507,7 +507,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.type()).isEqualTo(TypeEnum.STRING);
         assertThat(level.visible()).isTrue();
 
-        d = (PrivateDimension) c.dimensionUsageOrDimensions().get(7);
+        d = (MappingPrivateDimension) c.dimensionUsageOrDimensions().get(7);
         assertThat(d.name()).isEqualTo("hire_date");
         assertThat(d.caption()).isEqualTo("hire_date");
         assertThat(d.description()).isEqualTo("hire_date");
@@ -535,7 +535,7 @@ class SchemaCreatorServiceImplTest {
         assertThat(level.visible()).isTrue();
 
         assertThat(c.measures()).hasSize(3);
-        Measure m = c.measures().get(0);
+        MappingMeasure m = c.measures().get(0);
         assertThat(m.name()).isEqualTo("employee_id");
         assertThat(m.column()).isEqualTo("employee_id");
         assertThat(m.caption()).isEqualTo("employee_id");
@@ -568,7 +568,7 @@ class SchemaCreatorServiceImplTest {
         marshallSchema(s);
     }
 
-    private void marshallSchema(Schema s) {
+    private void marshallSchema(MappingSchema s) {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
@@ -579,13 +579,13 @@ class SchemaCreatorServiceImplTest {
         }
     }
 
-    private PrivateDimension getPrivateDimension(List<PrivateDimension> dimensions, String name) {
+    private MappingPrivateDimension getPrivateDimension(List<MappingPrivateDimension> dimensions, String name) {
         return dimensions.stream().filter(d -> name.equals(d.name()))
             .findAny()
             .orElse(null);
     }
 
-    private DimensionUsage getDimensionUsage(List<DimensionUsage> dimensions, String name) {
+    private MappingDimensionUsage getDimensionUsage(List<MappingDimensionUsage> dimensions, String name) {
         return dimensions.stream().filter(d -> name.equals(d.name()))
             .findAny()
             .orElse(null);

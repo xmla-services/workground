@@ -134,4 +134,9 @@ public class BasicContext implements Context {
 	public ExpressionCompilerFactory getExpressionCompilerFactory() {
 		return expressionCompilerFactory;
 	}
+
+	@Override
+	public org.eclipse.daanse.olap.api.Connection getConnection() {
+		return null;
+	}
 }

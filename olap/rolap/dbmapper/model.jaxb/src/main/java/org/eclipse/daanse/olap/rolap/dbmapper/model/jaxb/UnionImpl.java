@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -26,20 +26,20 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "roleUsages" })
-public class UnionImpl implements Union {
+public class UnionImpl implements MappingUnion {
 
     @XmlElement(name = "RoleUsage", required = true, type = RoleUsageImpl.class)
-    protected List<RoleUsage> roleUsages;
+    protected List<MappingRoleUsage> roleUsages;
 
     @Override
-    public List<RoleUsage> roleUsages() {
+    public List<MappingRoleUsage> roleUsages() {
         if (roleUsages == null) {
             roleUsages = new ArrayList<>();
         }
         return this.roleUsages;
     }
 
-    public void setRoleUsages(List<RoleUsage> roleUsages) {
+    public void setRoleUsages(List<MappingRoleUsage> roleUsages) {
         this.roleUsages = roleUsages;
     }
 

@@ -15,8 +15,8 @@ package mondrian.rolap.util;
 
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ColumnImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 
@@ -26,7 +26,7 @@ public class LevelUtil {
         // constructor
     }
 
-    public static Expression getKeyExp(Level level) {
+    public static MappingExpression getKeyExp(MappingLevel level) {
         if (level.keyExpression() != null) {
             return level.keyExpression();
         } else if (level.column() != null) {
@@ -36,7 +36,7 @@ public class LevelUtil {
         }
     }
 
-    public static Expression getNameExp(Level level) {
+    public static MappingExpression getNameExp(MappingLevel level) {
         if (level.nameExpression() != null) {
             return level.nameExpression();
         } else if (level.nameColumn() != null && !Objects.equals(level.nameColumn(), level.column())) {
@@ -46,7 +46,7 @@ public class LevelUtil {
         }
     }
 
-    public static Expression getCaptionExp(Level level) {
+    public static MappingExpression getCaptionExp(MappingLevel level) {
         if (level.captionExpression() != null) {
             return level.captionExpression();
         } else if (level.captionColumn() != null) {
@@ -56,7 +56,7 @@ public class LevelUtil {
         }
     }
 
-    public static Expression getOrdinalExp(Level level) {
+    public static MappingExpression getOrdinalExp(MappingLevel level) {
         if (level.ordinalExpression() != null) {
             return level.ordinalExpression();
         } else if (level.ordinalColumn() != null) {
@@ -66,7 +66,7 @@ public class LevelUtil {
         }
     }
 
-    public static Expression getParentExp(Level level) {
+    public static MappingExpression getParentExp(MappingLevel level) {
         if (level.parentExpression() != null) {
             return level.parentExpression();
         } else if (level.parentColumn() != null) {
@@ -76,7 +76,7 @@ public class LevelUtil {
         }
     }
 
-    public static Expression getPropertyExp(Level level, int i) {
+    public static MappingExpression getPropertyExp(MappingLevel level, int i) {
         return new ColumnImpl(level.table(), level.properties().get(i).column());
     }
 }

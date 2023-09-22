@@ -19,10 +19,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
@@ -46,14 +46,14 @@ public class RolapStatisticsCache {
     }
 
     public long getRelationCardinality(
-        Relation relation,
+        MappingRelation relation,
         String alias,
         long approxRowCount)
     {
         if (approxRowCount >= 0) {
             return approxRowCount;
         }
-        if (relation instanceof Table table) {
+        if (relation instanceof MappingTable table) {
             return getTableCardinality(
                 null, table.schema(), table.name());
         } else {
@@ -131,15 +131,15 @@ public class RolapStatisticsCache {
     }
 
     public long getColumnCardinality(
-        Relation relation,
-        Expression expression,
+        MappingRelation relation,
+        MappingExpression expression,
         long approxCardinality)
     {
         if (approxCardinality >= 0) {
             return approxCardinality;
         }
-        if (relation instanceof Table table
-            && expression instanceof Column column)
+        if (relation instanceof MappingTable table
+            && expression instanceof MappingColumn column)
         {
             return getColumnCardinality(
                 null,

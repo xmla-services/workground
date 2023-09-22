@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class CubeUsageImpl implements CubeUsage {
+public class CubeUsageImpl implements MappingCubeUsage {
 
     @XmlAttribute(name = "cubeName", required = true)
     protected String cubeName;

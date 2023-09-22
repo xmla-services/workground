@@ -14,14 +14,14 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.AbstractSchemaWalker;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaExplorer;
@@ -80,10 +80,10 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCube(Cube cube) {
+    protected void checkCube(MappingCube cube) {
         super.checkCube(cube);
 
-        if (cube.fact() instanceof Table table) {
+        if (cube.fact() instanceof MappingTable table) {
             String schemaName = table.schema();
             String factTable = table.name();
             try {
@@ -107,9 +107,9 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkMeasure(Measure measure, Cube cube) {
+    protected void checkMeasure(MappingMeasure measure, MappingCube cube) {
         super.checkMeasure(measure, cube);
-        if (cube != null && cube.fact() != null && cube.fact() instanceof Table factTable) {
+        if (cube != null && cube.fact() != null && cube.fact() instanceof MappingTable factTable) {
             // Database validity check, if database connection is
             // successful
             String column = measure.column();
@@ -130,13 +130,13 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
+    protected void checkCubeDimension(MappingCubeDimension cubeDimension, MappingCube cube) {
         super.checkCubeDimension(cubeDimension, cube);
 
-        if (cubeDimension instanceof PrivateDimension &&
+        if (cubeDimension instanceof MappingPrivateDimension &&
             !isEmpty((cubeDimension).foreignKey()) &&
             cube != null &&
-            cube.fact() instanceof Table factTable) {
+            cube.fact() instanceof MappingTable factTable) {
 
             String foreignKey = (cubeDimension).foreignKey();
             try {
@@ -158,18 +158,18 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
+    protected void checkHierarchy(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension, MappingCube cube) {
         super.checkHierarchy(hierarchy, cubeDimension, cube);
 
         // Validates that value in primaryKey exists in Table.
         String schema = null;
         String pkTable = null;
-        if (hierarchy.relation() instanceof Join) {
+        if (hierarchy.relation() instanceof MappingJoin) {
             String[] schemaAndTable = SchemaExplorer.getTableNameForAlias(hierarchy.relation(),
                 hierarchy.primaryKeyTable());
             schema = schemaAndTable[0];
             pkTable = schemaAndTable[1];
-        } else if (hierarchy.relation() instanceof Table table) {
+        } else if (hierarchy.relation() instanceof MappingTable table) {
             pkTable = table.name();
             schema = table.schema();
         }
@@ -192,8 +192,8 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkProperty(
-        Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Hierarchy hierarchy, Cube cube
+        MappingProperty property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingHierarchy hierarchy, MappingCube cube
     ) {
         super.checkProperty(property, level, hierarchy, cube);
         // Check 'column' exists in 'table' if [level table] is
@@ -233,7 +233,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkTable(Table table) {
+    protected void checkTable(MappingTable table) {
         super.checkTable(table);
         String tableName = table.name();
         try {
@@ -273,9 +273,9 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     protected void checkColumn(
         String column,
         String fieldName,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Cube cube,
-        Hierarchy parentHierarchy
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingCube cube,
+        MappingHierarchy parentHierarchy
     ) {
         super.checkColumn(column, fieldName, level, cube, parentHierarchy);
         if (!isEmpty(column)) {
@@ -294,16 +294,16 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         return config.isSchemaRequired();
     }
 
-    private void checkPropertyHierarchy(String column, Hierarchy hierarchy, Cube cube) {
+    private void checkPropertyHierarchy(String column, MappingHierarchy hierarchy, MappingCube cube) {
         if (hierarchy.relation() == null && cube != null) {
             checkPropertyHierarchyRelationNull(column, cube);
-        } else if (hierarchy.relation() instanceof Table parentTable) {
+        } else if (hierarchy.relation() instanceof MappingTable parentTable) {
             checkPropertyHierarchyRelationTable(parentTable, column);
             checkTable(parentTable);
         }
     }
 
-    private void checkPropertyHierarchyRelationTable(Table parentTable, String column) {
+    private void checkPropertyHierarchyRelationTable(MappingTable parentTable, String column) {
         try {
             if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
                 String msg = String.format(COLUMN_0_DOES_NOT_EXIST_IN_DIMENSION_TABLE,
@@ -318,10 +318,10 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkPropertyHierarchyRelationNull(String column, Cube cube) {
+    private void checkPropertyHierarchyRelationNull(String column, MappingCube cube) {
         // Case of degenerate dimension within cube,
         // hierarchy table not specified
-        final Table factTable = (Table) cube.fact();
+        final MappingTable factTable = (MappingTable) cube.fact();
         try {
             if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), column)) {
                 String msg = String.format(
@@ -336,7 +336,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkMeasureColumnDataType(Measure measure, Table factTable) {
+    private void checkMeasureColumnDataType(MappingMeasure measure, MappingTable factTable) {
         // Check if aggregator selected is valid on
         // the data type of the column selected.
         Optional<Integer> oColType = Optional.empty();
@@ -373,26 +373,26 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkColumnIfLevelTableEmpty(String column, String fieldName, Cube cube, Hierarchy parentHierarchy) {
+    private void checkColumnIfLevelTableEmpty(String column, String fieldName, MappingCube cube, MappingHierarchy parentHierarchy) {
         if (parentHierarchy != null) {
             if (parentHierarchy.relation() == null && cube != null) {
                 // case of degenerate dimension within cube,
                 // hierarchy table not specified
                 checkColumnWithCubeFctTable(column, fieldName, cube);
-            } else if (parentHierarchy.relation() instanceof Table parentTable) {
+            } else if (parentHierarchy.relation() instanceof MappingTable parentTable) {
                 checkColumnWithHierarchyRelationTable(parentTable, column, fieldName, parentHierarchy);
             }
         }
     }
 
-    private void checkColumnWithHierarchyRelationTable(Table parentTable, String column, String fieldName, Hierarchy parentHierarchy) {
+    private void checkColumnWithHierarchyRelationTable(MappingTable parentTable, String column, String fieldName, MappingHierarchy parentHierarchy) {
         try {
             if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
                 String msg = String.format(COLUMN_DEFINED_IN_FIELD_DOES_NOT_EXIST_IN_TABLE,
                     isEmpty(column.trim()) ? "' '" : column, fieldName,
                     parentTable.name());
                 results.add(new VerificationResultR(LEVEL, msg, ERROR, DATABASE));
-                checkTable((Table) parentHierarchy.relation());
+                checkTable((MappingTable) parentHierarchy.relation());
             }
         } catch (SQLException e) {
             String msg = String.format(COULD_NOT_LOOKUP_EXISTANCE_OF_COLUMN_DEFINED_IN_FIELD_IN_TABLE,
@@ -401,9 +401,9 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkColumnWithCubeFctTable(String column, String fieldName, Cube cube) {
+    private void checkColumnWithCubeFctTable(String column, String fieldName, MappingCube cube) {
         try {
-            if (!jmds.doesColumnExist(((Table) cube.fact()).schema(), ((Table) cube.fact()).name(),
+            if (!jmds.doesColumnExist(((MappingTable) cube.fact()).schema(), ((MappingTable) cube.fact()).name(),
                 column)) {
                 String msg =
                     String.format(DEGENERATE_DIMENSION_VALIDATION_CHECK_COLUMN_S_DOES_NOT_EXIST_IN_FACT_TABLE1, column);
@@ -412,16 +412,16 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         } catch (SQLException e) {
             String msg =
                 String.format(COULD_NOT_LOOKUP_EXISTANCE_OF_COLUMN_S_DEFINED_IN_FIELD_S_IN_TABLE_24,
-                    isEmpty(column.trim()) ? "' '" : column, fieldName, ((Table) cube.fact()).name());
+                    isEmpty(column.trim()) ? "' '" : column, fieldName, ((MappingTable) cube.fact()).name());
             results.add(new VerificationResultR(LEVEL, msg, ERROR, DATABASE));
         }
     }
 
-    private void checkColumnIfLevelTableNotEmpty(String table, String column, String fieldName, Hierarchy parentHierarchy) {
+    private void checkColumnIfLevelTableNotEmpty(String table, String column, String fieldName, MappingHierarchy parentHierarchy) {
         String schema = null;
         // if using Joins then gets the table name for doesColumnExist
         // validation.
-        if (parentHierarchy != null && parentHierarchy.relation() instanceof Join join) {
+        if (parentHierarchy != null && parentHierarchy.relation() instanceof MappingJoin join) {
             String[] schemaAndTable = SchemaExplorer.getTableNameForAlias(parentHierarchy.relation(), table);
             schema = schemaAndTable[0];
             table = schemaAndTable[1];

@@ -31,15 +31,15 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,16 +62,16 @@ class DatabaseVerifyerTest {
     DatabaseMetaData metaData = mock(DatabaseMetaData.class);
     ResultSet rs = mock(ResultSet.class);
 
-    Schema schema = mock(Schema.class);
-    Cube cube = mock(Cube.class);
-    CubeDimension dimension = mock(PrivateDimension.class);
-    PrivateDimension privateDimension = mock(PrivateDimension.class);
-    Measure measure = mock(Measure.class);
-    Hierarchy hierarchy = mock(Hierarchy.class);
-    Level level = mock(Level.class);
-    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property property = mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property.class);
-    Table table = mock(Table.class);
-    Closure closure = mock(Closure.class);
+    MappingSchema schema = mock(MappingSchema.class);
+    MappingCube cube = mock(MappingCube.class);
+    MappingCubeDimension dimension = mock(MappingPrivateDimension.class);
+    MappingPrivateDimension privateDimension = mock(MappingPrivateDimension.class);
+    MappingMeasure measure = mock(MappingMeasure.class);
+    MappingHierarchy hierarchy = mock(MappingHierarchy.class);
+    MappingLevel level = mock(MappingLevel.class);
+    org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty property = mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty.class);
+    MappingTable table = mock(MappingTable.class);
+    MappingClosure closure = mock(MappingClosure.class);
 
     @BeforeEach
     void beforeEach() throws Exception {

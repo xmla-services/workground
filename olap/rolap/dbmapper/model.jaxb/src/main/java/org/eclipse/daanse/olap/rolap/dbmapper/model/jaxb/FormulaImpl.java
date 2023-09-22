@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class FormulaImpl implements Formula {
+public class FormulaImpl implements MappingFormula {
 
     @XmlValue
     protected String cdata;

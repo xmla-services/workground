@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 
 public record AggExcludeR(String pattern,
                           String name,
                           boolean ignorecase)
-        implements AggExclude {
+        implements MappingAggExclude {
 
     public AggExcludeR(String pattern, String name) {
         this(pattern, name, true);

@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.population.record
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.HierarchyR;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
@@ -57,7 +57,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DatabaseMappingS
         null,
         "id");
 
-    private static final Join JOIN1 = new JoinR(List.of(TABLE21, JOIN21),
+    private static final MappingJoin JOIN1 = new JoinR(List.of(TABLE21, JOIN21),
         null,
         "contry_id",
         null,
@@ -240,7 +240,7 @@ public class PopulationRecordDbMappingSchemaProvider implements DatabaseMappingS
         .hierarchies(List.of(HIERARCHY41, HIERARCHY42, HIERARCHY43, HIERARCHY44))
         .build();
 
-    private static final Cube CUBE = CubeRBuilder
+    private static final MappingCube CUBE = CubeRBuilder
         .builder()
         .name(POPULATION)
         .description("Population Cube")
@@ -252,14 +252,14 @@ public class PopulationRecordDbMappingSchemaProvider implements DatabaseMappingS
             DIMENSION4))
         .build();
 
-    private static final Schema
+    private static final MappingSchema
         SCHEMA = SchemaRBuilder.builder()
         .name(POPULATION)
         .cubes(List.of(CUBE))
         .build();
 
     @Override
-    public Schema get() {
+    public MappingSchema get() {
         return SCHEMA;
     }
 

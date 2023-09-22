@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -26,14 +26,14 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations" })
-public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
+public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
 
     @XmlAttribute(name = "cubeName")
     protected String cubeName;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlAttribute(name = "foreignKey")
     protected String foreignKey;
     @XmlAttribute(name = "highCardinality")
@@ -55,7 +55,7 @@ public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
     }
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 

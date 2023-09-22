@@ -15,18 +15,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
-public class JoinR implements Join {
+public class JoinR implements MappingJoin {
 
-    private List<RelationOrJoin> relations;
+    private List<MappingRelationOrJoin> relations;
     private String leftAlias;
     private String leftKey;
     private String rightAlias;
     private String rightKey;
 
-    public JoinR(List<RelationOrJoin> relations,
+    public JoinR(List<MappingRelationOrJoin> relations,
                     String leftAlias,
                     String leftKey,
                     String rightAlias,
@@ -40,7 +40,7 @@ public class JoinR implements Join {
     }
 
     @Override
-    public List<RelationOrJoin> relations() {
+    public List<MappingRelationOrJoin> relations() {
         return relations;
     }
 

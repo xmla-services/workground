@@ -17,9 +17,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,13 +30,13 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SharedDimension", propOrder = { "annotations", "hierarchies" })
-public class SharedDimensionImpl implements SharedDimension {
+public class SharedDimensionImpl implements MappingSharedDimension {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
-    protected List<Hierarchy> hierarchies;
+    protected List<MappingHierarchy> hierarchies;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -49,7 +49,7 @@ public class SharedDimensionImpl implements SharedDimension {
     private String foreignKey;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }
@@ -57,7 +57,7 @@ public class SharedDimensionImpl implements SharedDimension {
     }
 
     @Override
-    public List<Hierarchy> hierarchies() {
+    public List<MappingHierarchy> hierarchies() {
         if (hierarchies == null) {
             hierarchies = new ArrayList<>();
         }

@@ -2,9 +2,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.foodmart.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
@@ -1596,43 +1596,43 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
             LEVEL_SHARED_6_4))
         .build();
 
-    private static final DimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_1 = DimensionUsageRBuilder
         .builder()
         .name(STORE)
         .source(STORE)
         .foreignKey(STORE_ID_KEY)
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_2 = DimensionUsageRBuilder
         .builder()
         .name(STORE_SIZE_IN_SQFT)
         .source(STORE_SIZE_IN_SQFT)
         .foreignKey(STORE_ID_KEY)
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_3 = DimensionUsageRBuilder
         .builder()
         .name(STORE_TYPE)
         .source(STORE_TYPE)
         .foreignKey(STORE_ID_KEY)
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_4 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_4 = DimensionUsageRBuilder
         .builder()
         .name("Time")
         .source("Time")
         .foreignKey(TIME_ID_KEY)
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_5 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_5 = DimensionUsageRBuilder
         .builder()
         .name(PRODUCT)
         .source(PRODUCT)
         .foreignKey(PRODUCT_ID)
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_6 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_6 = DimensionUsageRBuilder
         .builder()
         .name(WAREHOUSE)
         .source(WAREHOUSE)
         .foreignKey("warehouse_id")
         .build();
-    private static final DimensionUsage DIMENSION_USAGE_3_1 = DimensionUsageRBuilder
+    private static final MappingDimensionUsage DIMENSION_USAGE_3_1 = DimensionUsageRBuilder
         .builder()
         .name(STORE)
         .source(STORE)
@@ -1868,7 +1868,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .name("agg_pc_10_sales_fact_1997")
         .build();
 
-    private static final AggTable CUBE1_TABLE_AGG_TABLE1 = AggNameRBuilder
+    private static final MappingAggTable CUBE1_TABLE_AGG_TABLE1 = AggNameRBuilder
         .builder()
         .name(AGG_C_SPECIAL_SALES_FACT_1997)
         .aggFactCount(
@@ -2353,7 +2353,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
             .build()))
         .build();
 
-    private static final Schema
+    private static final MappingSchema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
         .dimensions(List.of(
@@ -2375,7 +2375,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .build();
 
     @Override
-    public Schema get() {
+    public MappingSchema get() {
         return SCHEMA;
     }
 

@@ -9,56 +9,56 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggPattern;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
@@ -79,7 +79,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    public List<VerificationResult> checkSchema(Schema schema) {
+    public List<VerificationResult> checkSchema(MappingSchema schema) {
         super.checkSchema(schema);
         if (schema != null) {
             if (isEmpty(schema.name())) {
@@ -95,7 +95,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCube(Cube cube) {
+    protected void checkCube(MappingCube cube) {
         super.checkCube(cube);
         if (cube != null) {
             if (isEmpty(cube.name())) {
@@ -104,8 +104,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             }
 
             if (cube.fact() == null
-                || ((cube.fact() instanceof Table table) && isEmpty(table.name()))
-                || ((cube.fact() instanceof View view) && isEmpty(view.alias()))) {
+                || ((cube.fact() instanceof MappingTable table) && isEmpty(table.name()))
+                || ((cube.fact() instanceof MappingView view) && isEmpty(view.alias()))) {
                 String msg = String.format(FACT_NAME_MUST_BE_SET, orNotSet(cube.name()));
                 results.add(new VerificationResultR(CUBE, msg, ERROR,
                     Cause.SCHEMA));
@@ -130,7 +130,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkMeasure(Measure measure, Cube cube) {
+    protected void checkMeasure(MappingMeasure measure, MappingCube cube) {
         super.checkMeasure(measure, cube);
         if (measure != null) {
             if (isEmpty(measure.name())) {
@@ -156,7 +156,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkElementFormatter(ElementFormatter elementFormatter) {
+    protected void checkElementFormatter(MappingElementFormatter elementFormatter) {
         super.checkElementFormatter(elementFormatter);
         if (elementFormatter != null
             && isEmpty(elementFormatter.className())
@@ -168,7 +168,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
+    protected void checkCubeDimension(MappingCubeDimension cubeDimension, MappingCube cube) {
         super.checkCubeDimension(cubeDimension, cube);
         if (cube != null) {
             if (isEmpty(cubeDimension.name())) {
@@ -177,7 +177,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
             }
 
-            if (cubeDimension instanceof DimensionUsage dimensionUsage && isEmpty(dimensionUsage.source())) {
+            if (cubeDimension instanceof MappingDimensionUsage dimensionUsage && isEmpty(dimensionUsage.source())) {
                 String msg = String.format(SOURCE_MUST_BE_SET, orNotSet(cubeDimension.name()));
                 results.add(new VerificationResultR(CUBE_DIMENSION, msg, ERROR, Cause.SCHEMA));
             }
@@ -185,7 +185,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
+    protected void checkHierarchy(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension, MappingCube cube) {
         super.checkHierarchy(hierarchy, cubeDimension, cube);
 
         if (hierarchy != null) {
@@ -208,7 +208,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkJoin(Join join) {
+    protected void checkJoin(MappingJoin join) {
         super.checkJoin(join);
         if (join != null) {
             if (isEmpty(join.leftKey())) {
@@ -227,7 +227,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkTable(Table table) {
+    protected void checkTable(MappingTable table) {
         super.checkTable(table);
         if (table != null) {
             if (isEmpty(table.name())) {
@@ -245,8 +245,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkLevel(
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, Hierarchy hierarchy,
-        PrivateDimension parentDimension, Cube cube
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level, MappingHierarchy hierarchy,
+        MappingPrivateDimension parentDimension, MappingCube cube
     ) {
         super.checkLevel(level, hierarchy, parentDimension, cube);
         // Check 'column' exists in 'table' if table is specified
@@ -277,8 +277,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkProperty(
-        Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Hierarchy hierarchy, Cube cube
+        MappingProperty property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingHierarchy hierarchy, MappingCube cube
     ) {
         super.checkProperty(property, level, hierarchy, cube);
         // Check 'column' exists in 'table' if [level table] is
@@ -306,7 +306,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkVirtualCube(VirtualCube virtCube) {
+    protected void checkVirtualCube(MappingVirtualCube virtCube) {
         super.checkVirtualCube(virtCube);
         if (virtCube != null) {
             if (isEmpty(virtCube.name())) {
@@ -327,7 +327,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCalculatedMember(CalculatedMember calculatedMember) {
+    protected void checkCalculatedMember(MappingCalculatedMember calculatedMember) {
         super.checkCalculatedMember(calculatedMember);
         if (calculatedMember != null) {
             if (isEmpty(calculatedMember.name())) {
@@ -348,7 +348,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkFormula(Formula formula) {
+    protected void checkFormula(MappingFormula formula) {
         super.checkFormula(formula);
         if (formula != null && isEmpty(formula.cdata())) {
             results.add(
@@ -367,8 +367,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
      */
     @Override
     protected void checkColumn(
-        String column, String fieldName, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Cube cube, Hierarchy parentHierarchy
+        String column, String fieldName, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingCube cube, MappingHierarchy parentHierarchy
     ) {
         super.checkColumn(column, fieldName, level, cube, parentHierarchy);
         if (!isEmpty(column)) {
@@ -380,7 +380,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             checkColumnView(table, parentHierarchy);
 
             if (isEmpty(table)) {
-                if (parentHierarchy != null && parentHierarchy.relation() instanceof Join join) {
+                if (parentHierarchy != null && parentHierarchy.relation() instanceof MappingJoin join) {
                     // relation is join, table should be specified
                     results.add(new VerificationResultR(LEVEL, TABLE_MUST_BE_SET, ERROR,
                         Cause.DATABASE));
@@ -390,7 +390,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             } else {
                 // if using Joins then gets the table name for doesColumnExist
                 // validation.
-                if (parentHierarchy != null && parentHierarchy.relation() instanceof Join join) {
+                if (parentHierarchy != null && parentHierarchy.relation() instanceof MappingJoin join) {
                     checkJoin(join);
                 }
             }
@@ -398,7 +398,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkNamedSet(NamedSet namedSet) {
+    protected void checkNamedSet(MappingNamedSet namedSet) {
         super.checkNamedSet(namedSet);
         if (namedSet != null) {
             if (isEmpty(namedSet.name())) {
@@ -417,7 +417,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
      */
     @Deprecated(since="new version", forRemoval=true)
     @Override
-    protected void checkUserDefinedFunction(UserDefinedFunction udf) {
+    protected void checkUserDefinedFunction(MappingUserDefinedFunction udf) {
         super.checkUserDefinedFunction(udf);
         if (udf != null) {
             if (isEmpty(udf.name())) {
@@ -433,7 +433,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
 
     // were add from mondrian.xml
     @Override
-    protected void checkCubeUsage(CubeUsage cubeUsage) {
+    protected void checkCubeUsage(MappingCubeUsage cubeUsage) {
         super.checkCubeUsage(cubeUsage);
         if (cubeUsage != null && cubeUsage.cubeName() == null) {
             results.add(new VerificationResultR(CUBE_USAGE, CUBE_USAGE_CUBE_NAME_MUST_BE_SET,
@@ -442,7 +442,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkClosure(Closure closure) {
+    protected void checkClosure(MappingClosure closure) {
         super.checkClosure(closure);
         if (closure != null) {
             if (isEmpty(closure.parentColumn())) {
@@ -461,7 +461,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
+    protected void checkCalculatedMemberProperty(MappingCalculatedMemberProperty calculatedMemberProperty) {
         super.checkCalculatedMemberProperty(calculatedMemberProperty);
         if (calculatedMemberProperty != null && isEmpty(calculatedMemberProperty.name())) {
             results.add(new VerificationResultR(CALCULATED_MEMBER_PROPERTY, CALCULATED_MEMBER_PROPERTY_NAME_MUST_BE_SET,
@@ -470,7 +470,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkView(View view) {
+    protected void checkView(MappingView view) {
         super.checkView(view);
         if (view != null && isEmpty(view.alias())) {
             results.add(new VerificationResultR(VIEW, VIEW_ALIAS_MUST_BE_SET,
@@ -479,7 +479,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkSQL(SQL sql) {
+    protected void checkSQL(MappingSQL sql) {
         super.checkSQL(sql);
         if (sql != null && isEmpty(sql.dialect())) {
             results.add(new VerificationResultR(SQL, SQL_DIALECT_MUST_BE_SET,
@@ -488,7 +488,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHint(Hint hint) {
+    protected void checkHint(MappingHint hint) {
         super.checkHint(hint);
         if (hint != null && isEmpty(hint.type())) {
             results.add(new VerificationResultR(HINT, HINT_TYPE_MUST_BE_SET,
@@ -497,7 +497,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkInlineTable(InlineTable inlineTable) {
+    protected void checkInlineTable(MappingInlineTable inlineTable) {
         super.checkInlineTable(inlineTable);
         if (inlineTable != null) {
             if (inlineTable.columnDefs() == null) {
@@ -512,7 +512,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkColumnDef(ColumnDef columnDef) {
+    protected void checkColumnDef(MappingColumnDef columnDef) {
         super.checkColumnDef(columnDef);
         if (columnDef != null) {
             if (isEmpty(columnDef.name())) {
@@ -527,7 +527,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkValue(Value value) {
+    protected void checkValue(MappingValue value) {
         super.checkValue(value);
         if (value != null && isEmpty(value.column())) {
             results.add(new VerificationResultR(VALUE, VALUE_COLUMN_MUST_BE_SET,
@@ -536,7 +536,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggTable(AggTable aggTable) {
+    protected void checkAggTable(MappingAggTable aggTable) {
         super.checkAggTable(aggTable);
         if (aggTable != null && aggTable.aggFactCount() == null) {
             results.add(new VerificationResultR(AGG_TABLE, AGG_TABLE_AGG_FACT_COUNT_MUST_BE_SET,
@@ -545,7 +545,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggName(AggName aggName) {
+    protected void checkAggName(MappingAggName aggName) {
         super.checkAggName(aggName);
         if (aggName != null && isEmpty(aggName.name())) {
             results.add(new VerificationResultR(AGG_NAME, AGG_NAME_NAME_MUST_BE_SET,
@@ -554,7 +554,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggPattern(AggPattern aggPattern) {
+    protected void checkAggPattern(MappingAggPattern aggPattern) {
         super.checkAggPattern(aggPattern);
         if (aggPattern != null && isEmpty(aggPattern.pattern())) {
             results.add(new VerificationResultR(AGG_PATTERN, AGG_PATTERN_PATTERN_MUST_BE_SET,
@@ -563,7 +563,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggColumnName(AggColumnName aggColumnName) {
+    protected void checkAggColumnName(MappingAggColumnName aggColumnName) {
         super.checkAggColumnName(aggColumnName);
         if (aggColumnName != null && isEmpty(aggColumnName.column())) {
             results.add(new VerificationResultR(AGG_COLUMN_NAME, AGG_COLUMN_NAME_COLUMN_MUST_BE_SET,
@@ -572,7 +572,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggMeasureFactCount(AggMeasureFactCount aggMeasureFactCount) {
+    protected void checkAggMeasureFactCount(MappingAggMeasureFactCount aggMeasureFactCount) {
         super.checkAggMeasureFactCount(aggMeasureFactCount);
         if (aggMeasureFactCount != null && isEmpty(aggMeasureFactCount.factColumn())) {
             results.add(new VerificationResultR(AGG_MEASURE_FACT_COUNT, AGG_MEASURE_FACT_COUNT_FACT_COLUMN_MUST_BE_SET,
@@ -581,7 +581,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggForeignKey(AggForeignKey aggForeignKey) {
+    protected void checkAggForeignKey(MappingAggForeignKey aggForeignKey) {
         super.checkAggForeignKey(aggForeignKey);
         if (aggForeignKey != null) {
             if (isEmpty(aggForeignKey.factColumn())) {
@@ -596,7 +596,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggLevel(AggLevel aggLevel) {
+    protected void checkAggLevel(MappingAggLevel aggLevel) {
         super.checkAggLevel(aggLevel);
         if (aggLevel != null) {
             if (aggLevel.name() == null) {
@@ -611,7 +611,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAggMeasure(AggMeasure aggMeasure) {
+    protected void checkAggMeasure(MappingAggMeasure aggMeasure) {
         super.checkAggMeasure(aggMeasure);
         if (aggMeasure != null) {
             if (aggMeasure.column() == null) {
@@ -626,7 +626,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkColumn(Column column) {
+    protected void checkColumn(MappingColumn column) {
         super.checkColumn(column);
         if (column != null && column.name() == null) {
             results.add(new VerificationResultR(COLUMN, COLUMN_NAME_MUST_BE_SET,
@@ -635,7 +635,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkRole(Role role) {
+    protected void checkRole(MappingRole role) {
         super.checkRole(role);
         if (role != null && role.name() == null) {
             results.add(new VerificationResultR(ROLE, ROLE_NAME_MUST_BE_SET,
@@ -644,7 +644,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkSchemaGrant(SchemaGrant schemaGrant) {
+    protected void checkSchemaGrant(MappingSchemaGrant schemaGrant) {
         super.checkSchemaGrant(schemaGrant);
         if (schemaGrant != null && schemaGrant.access() == null) {
             results.add(new VerificationResultR(SCHEMA_GRANT, SCHEMA_GRANT_ACCESS_MUST_BE_SET,
@@ -653,7 +653,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCubeGrant(CubeGrant cubeGrant) {
+    protected void checkCubeGrant(MappingCubeGrant cubeGrant) {
         super.checkCubeGrant(cubeGrant);
         if (cubeGrant != null && isEmpty(cubeGrant.cube())) {
             results.add(new VerificationResultR(CUBE_GRANT, CUBE_GRANT_CUBE_MUST_BE_SET,
@@ -662,7 +662,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkDimensionGrant(DimensionGrant dimensionGrant) {
+    protected void checkDimensionGrant(MappingDimensionGrant dimensionGrant) {
         super.checkDimensionGrant(dimensionGrant);
         if (dimensionGrant != null && isEmpty(dimensionGrant.dimension())) {
             results.add(new VerificationResultR(DIMENSION_GRANT, DIMENSION_GRANT_DIMENSION_MUST_BE_SET,
@@ -671,7 +671,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHierarchyGrant(HierarchyGrant hierarchyGrant) {
+    protected void checkHierarchyGrant(MappingHierarchyGrant hierarchyGrant) {
         super.checkHierarchyGrant(hierarchyGrant);
         if (hierarchyGrant != null && isEmpty(hierarchyGrant.hierarchy())) {
             results.add(new VerificationResultR(HIERARCHY_GRANT, HIERARCHY_GRANT_HIERARCHY_MUST_BE_SET,
@@ -680,7 +680,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkMemberGrant(MemberGrant memberGrant) {
+    protected void checkMemberGrant(MappingMemberGrant memberGrant) {
         super.checkMemberGrant(memberGrant);
         if (memberGrant != null) {
             if (isEmpty(memberGrant.member())) {
@@ -695,7 +695,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkUnion(Union union) {
+    protected void checkUnion(MappingUnion union) {
         super.checkUnion(union);
         if (union != null && union.roleUsages() == null) {
             results.add(new VerificationResultR(UNION, UNION_ROLE_USAGE_MUST_BE_SET,
@@ -704,7 +704,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkRoleUsage(RoleUsage roleUsage) {
+    protected void checkRoleUsage(MappingRoleUsage roleUsage) {
         super.checkRoleUsage(roleUsage);
         if (roleUsage != null && isEmpty(roleUsage.roleName())) {
             results.add(new VerificationResultR(ROLE_USAGE, ROLE_USAGE_ROLE_NAME_MUST_BE_SET,
@@ -713,7 +713,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkParameter(Parameter parameter) {
+    protected void checkParameter(MappingParameter parameter) {
         super.checkParameter(parameter);
         if (parameter != null) {
             if (isEmpty(parameter.name())) {
@@ -728,7 +728,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAnnotation(Annotation annotation) {
+    protected void checkAnnotation(MappingAnnotation annotation) {
         if (annotation != null) {
             super.checkAnnotation(annotation);
             if (isEmpty(annotation.name())) {
@@ -739,7 +739,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkDrillThroughAttribute(DrillThroughAttribute drillThroughAttribute) {
+    protected void checkDrillThroughAttribute(MappingDrillThroughAttribute drillThroughAttribute) {
 
         super.checkDrillThroughAttribute(drillThroughAttribute);
         if (drillThroughAttribute != null && isEmpty(drillThroughAttribute.dimension())) {
@@ -749,7 +749,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkDrillThroughMeasure(DrillThroughMeasure drillThroughMeasure) {
+    protected void checkDrillThroughMeasure(MappingDrillThroughMeasure drillThroughMeasure) {
         super.checkDrillThroughMeasure(drillThroughMeasure);
         if (drillThroughMeasure != null && isEmpty(drillThroughMeasure.name())) {
             results.add(new VerificationResultR(DRILL_THROUGH_MEASURE, DRILL_THROUGH_MEASURE_NAME_MUST_BE_SET,
@@ -758,7 +758,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAction(Action action) {
+    protected void checkAction(MappingAction action) {
         super.checkAction(action);
         if (action != null && isEmpty(action.name())) {
             results.add(new VerificationResultR(ACTION, ACTION_NAME_MUST_BE_SET,
@@ -767,7 +767,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkWritebackAttribute(WritebackAttribute writebackAttribute) {
+    protected void checkWritebackAttribute(MappingWritebackAttribute writebackAttribute) {
         super.checkWritebackAttribute(writebackAttribute);
         if (writebackAttribute != null) {
             if (isEmpty(writebackAttribute.dimension())) {
@@ -782,7 +782,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkWritebackMeasure(WritebackMeasure writebackMeasure) {
+    protected void checkWritebackMeasure(MappingWritebackMeasure writebackMeasure) {
         super.checkWritebackMeasure(writebackMeasure);
         if (writebackMeasure != null) {
             if (isEmpty(writebackMeasure.name())) {
@@ -797,7 +797,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkWritebackTable(WritebackTable writebackTable) {
+    protected void checkWritebackTable(MappingWritebackTable writebackTable) {
         super.checkWritebackTable(writebackTable);
         if (writebackTable != null && isEmpty(writebackTable.name())) {
             results.add(new VerificationResultR(WRITEBACK_TABLE, WRITEBACK_TABLE_NAME_MUST_BE_SET,
@@ -805,8 +805,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkHierarchyJoin(Hierarchy hierarchy, PrivateDimension cubeDimension) {
-        if (hierarchy.relation() instanceof Join) {
+    private void checkHierarchyJoin(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension) {
+        if (hierarchy.relation() instanceof MappingJoin) {
             if (isEmpty(hierarchy.primaryKeyTable())) {
                 if (isEmpty(hierarchy.primaryKey())) {
                     String msg = String.format(PRIMARY_KEY_TABLE_AND_PRIMARY_KEY_MUST_BE_SET_FOR_JOIN,
@@ -827,8 +827,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkHierarchyLevels(Hierarchy hierarchy, PrivateDimension cubeDimension) {
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level> levels = hierarchy.levels();
+    private void checkHierarchyLevels(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension) {
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel> levels = hierarchy.levels();
         if (levels == null || levels.isEmpty()) {
             String msg = String.format(LEVEL_MUST_BE_SET_FOR_HIERARCHY, orNotSet(cubeDimension.name()));
             results.add(new VerificationResultR(HIERARCHY,
@@ -836,8 +836,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkHierarchyTable(Hierarchy hierarchy, PrivateDimension cubeDimension) {
-        if (hierarchy.relation() instanceof Table table) {
+    private void checkHierarchyTable(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension) {
+        if (hierarchy.relation() instanceof MappingTable table) {
             if (!isEmpty(hierarchy.primaryKeyTable())) {
                 String msg = String.format(HIERARCHY_TABLE_FIELD_MUST_BE_EMPTY, orNotSet(cubeDimension.name()));
                 results.add(new VerificationResultR(HIERARCHY, msg, ERROR, Cause.SCHEMA));
@@ -846,9 +846,9 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkHierarchyPrimaryKeyTable(Hierarchy hierarchy, PrivateDimension cubeDimension) {
+    private void checkHierarchyPrimaryKeyTable(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension) {
         String primaryKeyTable = hierarchy.primaryKeyTable();
-        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Join join)) {
+        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof MappingJoin join)) {
             TreeSet<String> joinTables = new TreeSet<>();
             SchemaExplorer.getTableNamesForJoin(hierarchy.relation(), joinTables);
             if (!joinTables.contains(primaryKeyTable)) {
@@ -859,7 +859,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             checkJoin(join);
         }
 
-        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof Table theTable)) {
+        if (!isEmpty(primaryKeyTable) && (hierarchy.relation() instanceof MappingTable theTable)) {
             String compareTo = (theTable.alias() != null && theTable.alias()
                 .trim()
                 .length() > 0) ? theTable.alias() : theTable.name();
@@ -874,7 +874,7 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkLevelType(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, PrivateDimension parentDimension) {
+    private void checkLevelType(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level, MappingPrivateDimension parentDimension) {
         if (level.levelType() != null && parentDimension != null) {
             // Empty leveltype is treated as default value of "Regular""
             // which is ok with standard/time dimension.
@@ -905,8 +905,8 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkLevelColumn(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, Hierarchy hierarchy,
-                                  Cube cube) {
+    private void checkLevelColumn(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level, MappingHierarchy hierarchy,
+                                  MappingCube cube) {
         String column = level.column();
         if (isEmpty(column)) {
             if (level.properties() == null || level.properties().isEmpty()) {
@@ -932,11 +932,11 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkColumnJoin(String table, Hierarchy parentHierarchy) {
+    private void checkColumnJoin(String table, MappingHierarchy parentHierarchy) {
         // If table has been changed in join then sets the table value
         // to null to cause "tableMustBeSet" validation fail.
         if (!isEmpty(table) && parentHierarchy != null
-            && parentHierarchy.relation() instanceof Join) {
+            && parentHierarchy.relation() instanceof MappingJoin) {
             TreeSet<String> joinTables = new TreeSet<>();
             SchemaExplorer.getTableNamesForJoin(parentHierarchy.relation(), joinTables);
             if (!joinTables.contains(table)) {
@@ -947,10 +947,10 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkColumnTable(String table, Hierarchy parentHierarchy) {
+    private void checkColumnTable(String table, MappingHierarchy parentHierarchy) {
         if (!isEmpty(table) && parentHierarchy != null
-            && parentHierarchy.relation() instanceof Table parentTable) {
-            Table theTable = parentTable;
+            && parentHierarchy.relation() instanceof MappingTable parentTable) {
+            MappingTable theTable = parentTable;
             String compareTo = (theTable.alias() != null && theTable.alias()
                 .trim()
                 .length() > 0) ? theTable.alias() : theTable.name();
@@ -962,9 +962,9 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkColumnView(String table, Hierarchy parentHierarchy) {
+    private void checkColumnView(String table, MappingHierarchy parentHierarchy) {
         if (!isEmpty(table) && parentHierarchy != null
-            && parentHierarchy.relation() instanceof View) {
+            && parentHierarchy.relation() instanceof MappingView) {
             results.add(new VerificationResultR(LEVEL,
                 TABLE_FOR_COLUMN_CANNOT_BE_SET_IN_VIEW, ERROR, Cause.SCHEMA));
         }

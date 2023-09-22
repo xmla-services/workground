@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackMeasure;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 
-public class WritebackMeasureImpl implements WritebackMeasure {
+public class WritebackMeasureImpl implements MappingWritebackMeasure {
 
     @XmlAttribute(name = "name")
     private String name;

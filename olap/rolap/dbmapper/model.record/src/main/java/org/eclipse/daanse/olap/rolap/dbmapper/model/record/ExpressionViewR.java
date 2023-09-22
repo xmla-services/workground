@@ -15,17 +15,17 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
-public record ExpressionViewR(List<SQL> sqls,
+public record ExpressionViewR(List<MappingSQL> sqls,
                               String gnericExpression,
                               String table,
-                              String name) implements ExpressionView {
+                              String name) implements MappingExpressionView {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof ExpressionView that)) {
+        if (!(obj instanceof MappingExpressionView that)) {
             return false;
         }
         if (sqls().size() != that.sqls().size()) {

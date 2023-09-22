@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 
 public record PropertyR(String name,
@@ -24,7 +24,7 @@ public record PropertyR(String name,
                         String caption,
                         String description,
                         boolean dependsOnLevelValue,
-                        ElementFormatter propertyFormatter)
-        implements Property {
+                        MappingElementFormatter propertyFormatter)
+        implements MappingProperty {
 
 }

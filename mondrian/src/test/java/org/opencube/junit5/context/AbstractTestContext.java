@@ -83,5 +83,10 @@ public abstract class AbstractTestContext implements Context {
 	}
 
 	abstract Dialect createDialect(Connection connection);
+	
+	@Override
+	public org.eclipse.daanse.olap.api.Connection getConnection() {
+		return null;
+	}
 
 }

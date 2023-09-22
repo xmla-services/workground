@@ -232,7 +232,7 @@ class UnionRoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.MappingRole.HierarchyAccess} that
      * gives access to an object if any one of the constituent hierarchy
      * accesses has access to that object.
      */

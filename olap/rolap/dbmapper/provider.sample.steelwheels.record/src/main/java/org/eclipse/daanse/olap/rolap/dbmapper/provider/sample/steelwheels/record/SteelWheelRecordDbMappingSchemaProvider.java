@@ -2,7 +2,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.recor
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -252,14 +252,14 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .dimensionUsageOrDimensions(List.of(DIMENSION_1, DIMENSION_2, DIMENSION_3, DIMENSION_4, DIMENSION_5))
         .build();
 
-    private static final Schema
+    private static final MappingSchema
         SCHEMA = SchemaRBuilder.builder()
         .name(SCHEMA_NAME)
         .cubes(List.of(CUBE_1))
         .build();
 
     @Override
-    public Schema get() {
+    public MappingSchema get() {
         return SCHEMA;
     }
 

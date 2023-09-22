@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.DimensionTypeAdaptor;
 
@@ -34,13 +34,13 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchies" })
 @XmlRootElement(name = "Dimension")
-public class PrivateDimensionImpl implements PrivateDimension {
+public class PrivateDimensionImpl implements MappingPrivateDimension {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Hierarchy", required = true, type = HierarchyImpl.class)
-    protected List<Hierarchy> hierarchies;
+    protected List<MappingHierarchy> hierarchies;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
@@ -61,7 +61,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     private String usagePrefix;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }
@@ -69,7 +69,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     }
 
     @Override
-    public List<Hierarchy> hierarchies() {
+    public List<MappingHierarchy> hierarchies() {
         if (hierarchies == null) {
             hierarchies = new ArrayList<>();
         }
@@ -148,7 +148,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
         this.visible = visible;
     }
 
-    public void setHierarchies(List<Hierarchy> hierarchies) {
+    public void setHierarchies(List<MappingHierarchy> hierarchies) {
         this.hierarchies = hierarchies;
     }
 }

@@ -18,74 +18,74 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackColumn;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggPattern;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 
 public abstract class AbstractSchemaWalker {
 
     protected List<VerificationResult> results = new ArrayList<>();
 
-    public List<VerificationResult> checkSchema(Schema schema) {
+    public List<VerificationResult> checkSchema(MappingSchema schema) {
 
         if (schema != null) {
             checkAnnotationList(schema.annotations());
@@ -101,7 +101,7 @@ public abstract class AbstractSchemaWalker {
         return results;
     }
 
-    protected void checkCube(Cube cube) {
+    protected void checkCube(MappingCube cube) {
         if (cube != null) {
             checkAnnotationList(cube.annotations());
             checkCubeDimensionList(cube.dimensionUsageOrDimensions(), cube);
@@ -116,40 +116,40 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkAction(Action action) {
+    protected void checkAction(MappingAction action) {
         if (action != null) {
             checkAnnotationList(action.annotations());
         }
     }
 
-    protected void checkDrillThroughAction(DrillThroughAction drillThroughAction) {
+    protected void checkDrillThroughAction(MappingDrillThroughAction drillThroughAction) {
         if (drillThroughAction != null) {
             checkAnnotationList(drillThroughAction.annotations());
             checkDrillThroughElementList(drillThroughAction.drillThroughElements());
         }
     }
 
-    protected void checkDrillThroughElement(DrillThroughElement drillThroughElement) {
+    protected void checkDrillThroughElement(MappingDrillThroughElement drillThroughElement) {
         if (drillThroughElement != null) {
-            if (drillThroughElement instanceof DrillThroughMeasure drillThroughMeasure) {
+            if (drillThroughElement instanceof MappingDrillThroughMeasure drillThroughMeasure) {
                 checkDrillThroughMeasure(drillThroughMeasure);
             }
-            if (drillThroughElement instanceof DrillThroughAttribute drillThroughAttribute) {
+            if (drillThroughElement instanceof MappingDrillThroughAttribute drillThroughAttribute) {
                 checkDrillThroughAttribute(drillThroughAttribute);
             }
         }
     }
 
-    protected void checkDrillThroughAttribute(DrillThroughAttribute drillThroughElement) {
+    protected void checkDrillThroughAttribute(MappingDrillThroughAttribute drillThroughElement) {
         //empty
     }
 
-    protected void checkDrillThroughMeasure(DrillThroughMeasure drillThroughElement) {
+    protected void checkDrillThroughMeasure(MappingDrillThroughMeasure drillThroughElement) {
         //empty
     }
 
     @SuppressWarnings("java:S1172")
-    protected void checkMeasure(Measure measure, Cube cube) {
+    protected void checkMeasure(MappingMeasure measure, MappingCube cube) {
         if (measure != null) {
             checkAnnotationList(measure.annotations());
             checkCalculatedMemberPropertyList(measure.calculatedMemberProperties());
@@ -158,35 +158,35 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
+    protected void checkCalculatedMemberProperty(MappingCalculatedMemberProperty calculatedMemberProperty) {
         //empty
     }
 
-    protected void checkExpressionView(ExpressionView measureExpression) {
+    protected void checkExpressionView(MappingExpressionView measureExpression) {
         if (measureExpression != null) {
             checkSQLList(measureExpression.sqls());
         }
     }
 
-    protected void checkSQL(SQL sql) {
+    protected void checkSQL(MappingSQL sql) {
         //empty
     }
 
-    protected void checkElementFormatter(ElementFormatter elementFormatter) {
+    protected void checkElementFormatter(MappingElementFormatter elementFormatter) {
         //empty
     }
 
-    protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
+    protected void checkCubeDimension(MappingCubeDimension cubeDimension, MappingCube cube) {
         if (cubeDimension != null) {
             checkAnnotationList(cubeDimension.annotations());
-            if (cubeDimension instanceof PrivateDimension privateDimension && privateDimension.hierarchies() != null) {
+            if (cubeDimension instanceof MappingPrivateDimension privateDimension && privateDimension.hierarchies() != null) {
                 privateDimension.hierarchies()
-                    .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
+                    .forEach(h -> checkHierarchy(h, (MappingPrivateDimension) cubeDimension, cube));
             }
         }
     }
 
-    protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
+    protected void checkHierarchy(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension, MappingCube cube) {
         if (hierarchy != null) {
             checkAnnotationList(hierarchy.annotations());
             checkMemberReaderParameterList(hierarchy.memberReaderParameters());
@@ -198,61 +198,61 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkMemberReaderParameter(MemberReaderParameter memberReaderParameter) {
+    protected void checkMemberReaderParameter(MappingMemberReaderParameter memberReaderParameter) {
         //empty
     }
 
-    protected void checkJoin(Join join) {
+    protected void checkJoin(MappingJoin join) {
         if (join != null) {
             checkRelationOrJoinList(join.relations());
         }
     }
 
-    protected void checkRelationOrJoin(RelationOrJoin relationOrJoin) {
+    protected void checkRelationOrJoin(MappingRelationOrJoin relationOrJoin) {
         if (relationOrJoin != null) {
-            if (relationOrJoin instanceof InlineTable inlineTable) {
+            if (relationOrJoin instanceof MappingInlineTable inlineTable) {
                 checkInlineTable(inlineTable);
             }
-            if (relationOrJoin instanceof Join join) {
+            if (relationOrJoin instanceof MappingJoin join) {
                 checkJoin(join);
             }
-            if (relationOrJoin instanceof Table table) {
+            if (relationOrJoin instanceof MappingTable table) {
                 checkTable(table);
             }
-            if (relationOrJoin instanceof View view) {
+            if (relationOrJoin instanceof MappingView view) {
                 checkView(view);
             }
         }
     }
 
-    protected void checkView(View relationOrJoin) {
+    protected void checkView(MappingView relationOrJoin) {
         if (relationOrJoin != null) {
             checkSQLList(relationOrJoin.sqls());
         }
     }
 
-    protected void checkInlineTable(InlineTable relationOrJoin) {
+    protected void checkInlineTable(MappingInlineTable relationOrJoin) {
         if (relationOrJoin != null) {
             checkColumnDefList(relationOrJoin.columnDefs());
             checkRowList(relationOrJoin.rows());
         }
     }
 
-    protected void checkRow(Row row) {
+    protected void checkRow(MappingRow row) {
         if (row != null) {
             checkValueList(row.values());
         }
     }
 
-    protected void checkValue(Value value) {
+    protected void checkValue(MappingValue value) {
         //empty
     }
 
-    protected void checkColumnDef(ColumnDef columnDef) {
+    protected void checkColumnDef(MappingColumnDef columnDef) {
         //empty
     }
 
-    protected void checkTable(Table table) {
+    protected void checkTable(MappingTable table) {
         if (table != null) {
             checkSQL(table.sql());
 
@@ -264,11 +264,11 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkHint(Hint hint) {
+    protected void checkHint(MappingHint hint) {
         //empty
     }
 
-    protected void checkAggTable(AggTable aggTable) {
+    protected void checkAggTable(MappingAggTable aggTable) {
         if (aggTable != null) {
             checkAggColumnName(aggTable.aggFactCount());
             checkAggColumnNameList(aggTable.aggIgnoreColumns());
@@ -276,61 +276,61 @@ public abstract class AbstractSchemaWalker {
             checkAggMeasureList(aggTable.aggMeasures());
             checkAggLevelList(aggTable.aggLevels());
             checkAggMeasureFactCountList(aggTable.measuresFactCounts());
-            if (aggTable instanceof AggName aggName) {
+            if (aggTable instanceof MappingAggName aggName) {
                 checkAggName(aggName);
             }
-            if (aggTable instanceof AggPattern aggPattern) {
+            if (aggTable instanceof MappingAggPattern aggPattern) {
                 checkAggPattern(aggPattern);
             }
         }
     }
 
-    protected void checkAggPattern(AggPattern aggTable) {
+    protected void checkAggPattern(MappingAggPattern aggTable) {
         if (aggTable != null) {
             checkAggExcludeList(aggTable.aggExcludes());
         }
     }
 
-    protected void checkAggName(AggName aggTable) {
+    protected void checkAggName(MappingAggName aggTable) {
         //empty
     }
 
-    protected void checkAggMeasureFactCount(AggMeasureFactCount aggMeasureFactCount) {
+    protected void checkAggMeasureFactCount(MappingAggMeasureFactCount aggMeasureFactCount) {
         //empty
     }
 
-    protected void checkAggLevel(AggLevel aggLevel) {
+    protected void checkAggLevel(MappingAggLevel aggLevel) {
         if (aggLevel != null) {
             checkAggLevelPropertyList(aggLevel.properties());
         }
     }
 
-    protected void checkAggLevelProperty(AggLevelProperty aggLevelProperty) {
+    protected void checkAggLevelProperty(MappingAggLevelProperty aggLevelProperty) {
         //empty
     }
 
-    protected void checkAggMeasure(AggMeasure aggMeasure) {
+    protected void checkAggMeasure(MappingAggMeasure aggMeasure) {
         //empty
     }
 
-    protected void checkAggForeignKey(AggForeignKey aggForeignKey) {
+    protected void checkAggForeignKey(MappingAggForeignKey aggForeignKey) {
         //empty
     }
 
-    protected void checkAggColumnName(AggColumnName aggFactCount) {
-        if (aggFactCount != null && aggFactCount instanceof AggMeasureFactCount aggMeasureFactCount) {
+    protected void checkAggColumnName(MappingAggColumnName aggFactCount) {
+        if (aggFactCount != null && aggFactCount instanceof MappingAggMeasureFactCount aggMeasureFactCount) {
             checkAggMeasureFactCount(aggMeasureFactCount);
         }
     }
 
-    protected void checkAggExclude(AggExclude aggExclude) {
+    protected void checkAggExclude(MappingAggExclude aggExclude) {
         //empty
     }
 
     @SuppressWarnings("java:S1172")
     protected void checkLevel(
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level, Hierarchy hierarchy,
-        PrivateDimension parentDimension, Cube cube
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level, MappingHierarchy hierarchy,
+        MappingPrivateDimension parentDimension, MappingCube cube
     ) {
         if (level != null) {
             checkAnnotationList(level.annotations());
@@ -354,31 +354,31 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkClosure(Closure closure) {
+    protected void checkClosure(MappingClosure closure) {
         if (closure != null) {
             checkTable(closure.table());
         }
     }
 
-    protected void checkExpression(Expression keyExpression) {
+    protected void checkExpression(MappingExpression keyExpression) {
         if (keyExpression != null) {
-            if (keyExpression instanceof Column column) {
+            if (keyExpression instanceof MappingColumn column) {
                 checkColumn(column);
             }
-            if (keyExpression instanceof ExpressionView expressionView) {
+            if (keyExpression instanceof MappingExpressionView expressionView) {
                 checkExpressionView(expressionView);
             }
         }
     }
 
-    protected void checkColumn(Column keyExpression) {
+    protected void checkColumn(MappingColumn keyExpression) {
         //empty
     }
 
     @SuppressWarnings("java:S1172")
     protected void checkProperty(
-        Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Hierarchy hierarchy, Cube cube
+        MappingProperty property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingHierarchy hierarchy, MappingCube cube
     ) {
         if (property != null) {
             //ElementFormatter
@@ -386,7 +386,7 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkVirtualCube(VirtualCube virtCube) {
+    protected void checkVirtualCube(MappingVirtualCube virtCube) {
         if (virtCube != null) {
             checkAnnotationList(virtCube.annotations());
 
@@ -406,17 +406,17 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkCubeUsage(CubeUsage cubeUsage) {
+    protected void checkCubeUsage(MappingCubeUsage cubeUsage) {
         //empty
     }
 
-    protected void checkVirtualCubeMeasure(VirtualCubeMeasure virtualCubeMeasure) {
+    protected void checkVirtualCubeMeasure(MappingVirtualCubeMeasure virtualCubeMeasure) {
         if (virtualCubeMeasure != null) {
             checkAnnotationList(virtualCubeMeasure.annotations());
         }
     }
 
-    protected void checkCalculatedMember(CalculatedMember calculatedMember) {
+    protected void checkCalculatedMember(MappingCalculatedMember calculatedMember) {
         if (calculatedMember != null) {
             checkAnnotationList(calculatedMember.annotations());
             checkCalculatedMemberPropertyList(calculatedMember.calculatedMemberProperties());
@@ -431,7 +431,7 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkFormula(Formula formula) {
+    protected void checkFormula(MappingFormula formula) {
         //empty
     }
 
@@ -445,13 +445,13 @@ public abstract class AbstractSchemaWalker {
      * @param parentHierarchy Hierarchy
      */
     protected void checkColumn(
-        String column, String fieldName, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Cube cube, Hierarchy parentHierarchy
+        String column, String fieldName, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingCube cube, MappingHierarchy parentHierarchy
     ) {
         //empty
     }
 
-    protected void checkNamedSet(NamedSet namedSet) {
+    protected void checkNamedSet(MappingNamedSet namedSet) {
         if (namedSet != null) {
             checkAnnotationList(namedSet.annotations());
 
@@ -465,19 +465,19 @@ public abstract class AbstractSchemaWalker {
      * @return @deprecated
      */
     @Deprecated(since="new version", forRemoval=true)
-    protected void checkUserDefinedFunction(UserDefinedFunction udf) {
+    protected void checkUserDefinedFunction(MappingUserDefinedFunction udf) {
         //empty
     }
 
-    protected void checkParameter(Parameter parameter) {
+    protected void checkParameter(MappingParameter parameter) {
         //empty
     }
 
-    protected void checkAnnotation(Annotation annotation) {
+    protected void checkAnnotation(MappingAnnotation annotation) {
         //empty
     }
 
-    protected void checkRole(Role role) {
+    protected void checkRole(MappingRole role) {
         if (role != null) {
             checkAnnotationList(role.annotations());
             checkSchemaGrantList(role.schemaGrants());
@@ -485,46 +485,46 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    protected void checkUnion(Union union){
+    protected void checkUnion(MappingUnion union){
         if (union != null) {
             checkRoleUsageList(union.roleUsages());
         }
     }
 
-    private void checkRoleUsageList(List<? extends RoleUsage> list) {
+    private void checkRoleUsageList(List<? extends MappingRoleUsage> list) {
         if (list != null) {
             list.forEach(this::checkRoleUsage);
         }
     }
 
-    protected void checkRoleUsage(RoleUsage roleUsage) {
+    protected void checkRoleUsage(MappingRoleUsage roleUsage) {
         //empty
     }
 
-    protected void checkSchemaGrant(SchemaGrant schemaGrant) {
+    protected void checkSchemaGrant(MappingSchemaGrant schemaGrant) {
         if (schemaGrant != null) {
             checkCubeGrantList(schemaGrant.cubeGrants());
         }
     }
 
-    protected void checkCubeGrant(CubeGrant cubeGrant) {
+    protected void checkCubeGrant(MappingCubeGrant cubeGrant) {
         if (cubeGrant != null) {
             checkDimensionGrantList(cubeGrant.dimensionGrants());
             checkHierarchyGrantList(cubeGrant.hierarchyGrants());
         }
     }
 
-    protected void checkHierarchyGrant(HierarchyGrant hierarchyGrant) {
+    protected void checkHierarchyGrant(MappingHierarchyGrant hierarchyGrant) {
         if (hierarchyGrant != null) {
             checkMemberGrantList(hierarchyGrant.memberGrants());
         }
     }
 
-    protected void checkMemberGrant(MemberGrant memberGrant) {
+    protected void checkMemberGrant(MappingMemberGrant memberGrant) {
         //empty
     }
 
-    protected void checkDimensionGrant(DimensionGrant dimensionGrant) {
+    protected void checkDimensionGrant(MappingDimensionGrant dimensionGrant) {
         //empty
     }
 
@@ -532,39 +532,39 @@ public abstract class AbstractSchemaWalker {
         return (v == null) || v.equals("");
     }
 
-    protected void checkNamedSetList(List<? extends NamedSet> namedSet) {
+    protected void checkNamedSetList(List<? extends MappingNamedSet> namedSet) {
         if (namedSet != null) {
             namedSet.forEach(this::checkNamedSet);
 
         }
     }
 
-    protected void checkWritebackTable(WritebackTable writebackTable) {
+    protected void checkWritebackTable(MappingWritebackTable writebackTable) {
         if (writebackTable != null && writebackTable.columns() != null) {
             writebackTable.columns().forEach(this::checkWritebackColumn);
         }
     }
 
-    protected void checkWritebackColumn(WritebackColumn writebackColumn) {
+    protected void checkWritebackColumn(MappingWritebackColumn writebackColumn) {
         if (writebackColumn != null) {
-            if (writebackColumn instanceof WritebackAttribute writebackAttribute) {
+            if (writebackColumn instanceof MappingWritebackAttribute writebackAttribute) {
                 checkWritebackAttribute(writebackAttribute);
             }
-            if (writebackColumn instanceof WritebackMeasure writebackMeasure) {
+            if (writebackColumn instanceof MappingWritebackMeasure writebackMeasure) {
                 checkWritebackMeasure(writebackMeasure);
             }
         }
     }
 
-    protected void checkWritebackMeasure(WritebackMeasure writebackColumn) {
+    protected void checkWritebackMeasure(MappingWritebackMeasure writebackColumn) {
         //empty
     }
 
-    protected void checkWritebackAttribute(WritebackAttribute writebackColumn) {
+    protected void checkWritebackAttribute(MappingWritebackAttribute writebackColumn) {
         //empty
     }
 
-    protected void checkSharedDimension(final SharedDimension sharedDimension) {
+    protected void checkSharedDimension(final MappingSharedDimension sharedDimension) {
         //empty
     }
 
@@ -576,112 +576,112 @@ public abstract class AbstractSchemaWalker {
         return value == null ? NOT_SET : value;
     }
 
-    private void checkHintList(List<? extends Hint> list) {
+    private void checkHintList(List<? extends MappingHint> list) {
         if (list != null) {
             list.forEach(this::checkHint);
         }
     }
 
-    private void checkCalculatedMemberPropertyList(List<? extends CalculatedMemberProperty> list) {
+    private void checkCalculatedMemberPropertyList(List<? extends MappingCalculatedMemberProperty> list) {
         if (list != null) {
             list.forEach(this::checkCalculatedMemberProperty);
         }
     }
 
-    private void checkAggTableList(List<? extends AggTable> list) {
+    private void checkAggTableList(List<? extends MappingAggTable> list) {
         if (list != null) {
             list.forEach(this::checkAggTable);
         }
     }
 
-    private void checkDrillThroughElementList(List<? extends DrillThroughElement> list) {
+    private void checkDrillThroughElementList(List<? extends MappingDrillThroughElement> list) {
         if (list != null) {
             list.forEach(this::checkDrillThroughElement);
         }
     }
 
-    private void checkSQLList(List<? extends SQL> list) {
+    private void checkSQLList(List<? extends MappingSQL> list) {
         if (list != null) {
             list.forEach(this::checkSQL);
         }
     }
 
-    private void checkMemberReaderParameterList(List<? extends MemberReaderParameter> list) {
+    private void checkMemberReaderParameterList(List<? extends MappingMemberReaderParameter> list) {
         if (list != null) {
             list.forEach(this::checkMemberReaderParameter);
         }
     }
 
-    private void checkRelationOrJoinList(List<RelationOrJoin> list) {
+    private void checkRelationOrJoinList(List<MappingRelationOrJoin> list) {
         if (list != null) {
             list.forEach(this::checkRelationOrJoin);
         }
     }
 
-    private void checkRowList(List<? extends Row> list) {
+    private void checkRowList(List<? extends MappingRow> list) {
         if (list != null) {
             list.forEach(this::checkRow);
         }
     }
 
-    private void checkValueList(List<? extends Value> list) {
+    private void checkValueList(List<? extends MappingValue> list) {
         if (list != null) {
             list.forEach(this::checkValue);
         }
     }
 
-    private void checkColumnDefList(List<? extends ColumnDef> list) {
+    private void checkColumnDefList(List<? extends MappingColumnDef> list) {
         if (list != null) {
             list.forEach(this::checkColumnDef);
         }
     }
 
-    private void checkAggMeasureFactCountList(List<? extends AggMeasureFactCount> list) {
+    private void checkAggMeasureFactCountList(List<? extends MappingAggMeasureFactCount> list) {
         if (list != null) {
             list.forEach(this::checkAggMeasureFactCount);
         }
     }
 
-    private void checkAggLevelList(List<? extends AggLevel> list) {
+    private void checkAggLevelList(List<? extends MappingAggLevel> list) {
         if (list != null) {
             list.forEach(this::checkAggLevel);
         }
     }
 
-    private void checkAggLevelPropertyList(List<AggLevelProperty> list) {
+    private void checkAggLevelPropertyList(List<MappingAggLevelProperty> list) {
         if (list != null) {
             list.forEach(this::checkAggLevelProperty);
         }
     }
 
-    private void checkAggMeasureList(List<? extends AggMeasure> list) {
+    private void checkAggMeasureList(List<? extends MappingAggMeasure> list) {
         if (list != null) {
             list.forEach(this::checkAggMeasure);
         }
     }
 
-    private void checkAggForeignKeyList(List<? extends AggForeignKey> list) {
+    private void checkAggForeignKeyList(List<? extends MappingAggForeignKey> list) {
         if (list != null) {
             list.forEach(this::checkAggForeignKey);
         }
     }
 
-    private void checkAggColumnNameList(List<? extends AggColumnName> list) {
+    private void checkAggColumnNameList(List<? extends MappingAggColumnName> list) {
         if (list != null) {
             list.forEach(this::checkAggColumnName);
         }
     }
 
-    private void checkAggExcludeList(List<? extends AggExclude> list) {
+    private void checkAggExcludeList(List<? extends MappingAggExclude> list) {
         if (list != null) {
             list.forEach(this::checkAggExclude);
         }
     }
 
     private void checkPropertyList(
-        List<? extends Property> list,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-        Hierarchy hierarchy, Cube cube
+        List<? extends MappingProperty> list,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+        MappingHierarchy hierarchy, MappingCube cube
     ) {
         if (list != null) {
             list.forEach(it -> checkProperty(it, level,
@@ -689,55 +689,55 @@ public abstract class AbstractSchemaWalker {
         }
     }
 
-    private void checkCubeUsageList(List<? extends CubeUsage> list) {
+    private void checkCubeUsageList(List<? extends MappingCubeUsage> list) {
         if (list != null) {
             list.forEach(this::checkCubeUsage);
         }
     }
 
-    private void checkVirtualCubeMeasureList(List<? extends VirtualCubeMeasure> list) {
+    private void checkVirtualCubeMeasureList(List<? extends MappingVirtualCubeMeasure> list) {
         if (list != null) {
             list.forEach(this::checkVirtualCubeMeasure);
         }
     }
 
-    private void checkCubeGrantList(List<? extends CubeGrant> list) {
+    private void checkCubeGrantList(List<? extends MappingCubeGrant> list) {
         if (list != null) {
             list.forEach(this::checkCubeGrant);
         }
     }
 
-    private void checkHierarchyGrantList(List<? extends HierarchyGrant> list) {
+    private void checkHierarchyGrantList(List<? extends MappingHierarchyGrant> list) {
         if (list != null) {
             list.forEach(this::checkHierarchyGrant);
         }
     }
 
-    private void checkMemberGrantList(List<? extends MemberGrant> list) {
+    private void checkMemberGrantList(List<? extends MappingMemberGrant> list) {
         if (list != null) {
             list.forEach(this::checkMemberGrant);
         }
     }
 
-    private void checkDimensionGrantList(List<? extends DimensionGrant> list) {
+    private void checkDimensionGrantList(List<? extends MappingDimensionGrant> list) {
         if (list != null) {
             list.forEach(this::checkDimensionGrant);
         }
     }
 
-    private void checkSchemaGrantList(List<? extends SchemaGrant> list) {
+    private void checkSchemaGrantList(List<? extends MappingSchemaGrant> list) {
         if (list != null) {
             list.forEach(this::checkSchemaGrant);
         }
     }
 
-    private void checkCubeDimensionList(List<? extends CubeDimension> list, Cube cube) {
+    private void checkCubeDimensionList(List<? extends MappingCubeDimension> list, MappingCube cube) {
         if (list != null) {
             list.forEach(it -> checkCubeDimension(it, cube));
         }
     }
 
-    private void checkVirtualCubeList(List<? extends VirtualCube> list) {
+    private void checkVirtualCubeList(List<? extends MappingVirtualCube> list) {
         if (list != null) {
             list.forEach(this::checkVirtualCube);
         }
@@ -747,55 +747,55 @@ public abstract class AbstractSchemaWalker {
      * @return @deprecated
      */
     @Deprecated(since="new version", forRemoval=true)
-    private void checkUserDefinedFunctionList(List<? extends UserDefinedFunction> list) {
+    private void checkUserDefinedFunctionList(List<? extends MappingUserDefinedFunction> list) {
         if (list != null) {
             list.forEach(this::checkUserDefinedFunction);
         }
     }
 
-    private void checkCubeList(List<? extends Cube> list) {
+    private void checkCubeList(List<? extends MappingCube> list) {
         if (list != null) {
             list.forEach(this::checkCube);
         }
     }
 
-    private void checkAnnotationList(List<? extends Annotation> list) {
+    private void checkAnnotationList(List<? extends MappingAnnotation> list) {
         if (list != null) {
             list.forEach(this::checkAnnotation);
         }
     }
 
-    private void checkParameterList(List<? extends Parameter> list) {
+    private void checkParameterList(List<? extends MappingParameter> list) {
         if (list != null) {
             list.forEach(this::checkParameter);
         }
     }
 
-    private void checkCalculatedMemberList(List<? extends CalculatedMember> list) {
+    private void checkCalculatedMemberList(List<? extends MappingCalculatedMember> list) {
         if (list != null) {
             list.forEach(this::checkCalculatedMember);
         }
     }
 
-    private void checkMeasureList(List<? extends Measure> list, Cube cube) {
+    private void checkMeasureList(List<? extends MappingMeasure> list, MappingCube cube) {
         if (list != null) {
             list.forEach(m -> checkMeasure(m, cube));
         }
     }
 
-    private void checkRoleList(List<? extends Role> list) {
+    private void checkRoleList(List<? extends MappingRole> list) {
         if (list != null) {
             list.forEach(this::checkRole);
         }
     }
 
-    private void checkWritebackTableList(List<? extends WritebackTable> list) {
+    private void checkWritebackTableList(List<? extends MappingWritebackTable> list) {
         if (list != null) {
             list.forEach(this::checkWritebackTable);
         }
     }
 
-    private void checkDrillThroughActionList(List<? extends DrillThroughAction> list) {
+    private void checkDrillThroughActionList(List<? extends MappingDrillThroughAction> list) {
         if (list != null) {
             list.forEach(this::checkDrillThroughAction);
         }

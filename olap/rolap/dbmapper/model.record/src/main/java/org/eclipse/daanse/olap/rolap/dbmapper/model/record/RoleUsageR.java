@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
 
-public record RoleUsageR(String roleName) implements RoleUsage {
+public record RoleUsageR(String roleName) implements MappingRoleUsage {
 
 }

@@ -16,31 +16,31 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "dimensionGrants", "hierarchyGrants" })
-public class CubeGrantImpl implements CubeGrant {
+public class CubeGrantImpl implements MappingCubeGrant {
 
     @XmlElement(name = "DimensionGrant", type = DimensionGrantImpl.class)
-    protected List<DimensionGrant> dimensionGrants;
+    protected List<MappingDimensionGrant> dimensionGrants;
     @XmlElement(name = "HierarchyGrant", type = HierarchyGrantImpl.class)
-    protected List<HierarchyGrant> hierarchyGrants;
+    protected List<MappingHierarchyGrant> hierarchyGrants;
     @XmlAttribute(name = "cube", required = true)
     protected String cube;
     @XmlAttribute(name = "access", required = true)
     protected String access;
 
     @Override
-    public List<DimensionGrant> dimensionGrants() {
+    public List<MappingDimensionGrant> dimensionGrants() {
         if (dimensionGrants == null) {
             dimensionGrants = new ArrayList<>();
         }
@@ -48,7 +48,7 @@ public class CubeGrantImpl implements CubeGrant {
     }
 
     @Override
-    public List<HierarchyGrant> hierarchyGrants() {
+    public List<MappingHierarchyGrant> hierarchyGrants() {
         if (hierarchyGrants == null) {
             hierarchyGrants = new ArrayList<>();
         }
@@ -73,11 +73,11 @@ public class CubeGrantImpl implements CubeGrant {
         this.access = value;
     }
 
-    public void setDimensionGrant(List<DimensionGrant> dimensionGrants) {
+    public void setDimensionGrant(List<MappingDimensionGrant> dimensionGrants) {
         this.dimensionGrants = dimensionGrants;
     }
 
-    public void setHierarchyGrant(List<HierarchyGrant> hierarchyGrants) {
+    public void setHierarchyGrant(List<MappingHierarchyGrant> hierarchyGrants) {
         this.hierarchyGrants = hierarchyGrants;
     }
 }

@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,8 +101,8 @@ class RolapDimension extends DimensionBase {
     RolapDimension(
         RolapSchema schema,
         RolapCube cube,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension xmlDimension,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension xmlCubeDimension)
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension xmlDimension,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension xmlCubeDimension)
     {
         this(
             schema,
@@ -180,7 +180,7 @@ class RolapDimension extends DimensionBase {
     /**
      * Initializes a dimension within the context of a cube.
      */
-    void init(CubeDimension xmlDimension) {
+    void init(MappingCubeDimension xmlDimension) {
         for (int i = 0; i < hierarchies.length; i++) {
             if (hierarchies[i] != null) {
                 ((RolapHierarchy) hierarchies[i]).init(xmlDimension);

@@ -13,7 +13,7 @@ import java.util.Map;
 
 import mondrian.olap.StringLiteralImpl;
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
 import mondrian.olap.Property;
@@ -42,7 +42,7 @@ public class RolapBaseCubeMeasure
     /**
      * For SQL generator. Column which holds the value of the measure.
      */
-    private final Expression expression;
+    private final MappingExpression expression;
 
     /**
      * For SQL generator. Has values "SUM", "COUNT", etc.
@@ -84,7 +84,7 @@ public class RolapBaseCubeMeasure
         String caption,
         String description,
         String formatString,
-        Expression expression,
+        MappingExpression expression,
         String aggregatorName,
         MeasureDataTypeEnum datatype,
         Map<String, Object> metadata)
@@ -149,7 +149,7 @@ public class RolapBaseCubeMeasure
     }
 
     @Override
-	public Expression getMondrianDefExpression() {
+	public MappingExpression getMondrianDefExpression() {
         return expression;
     }
 

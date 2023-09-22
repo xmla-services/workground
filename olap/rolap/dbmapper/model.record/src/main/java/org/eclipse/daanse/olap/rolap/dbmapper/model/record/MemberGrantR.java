@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 
 public record MemberGrantR(String member,
                            MemberGrantAccessEnum access)
-        implements MemberGrant {
+        implements MappingMemberGrant {
 
 }

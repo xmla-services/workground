@@ -16,25 +16,25 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
-public record InlineTableR(List<ColumnDef> columnDefs,
-                           List<Row> rows, String alias)
-        implements InlineTable {
+public record InlineTableR(List<MappingColumnDef> columnDefs,
+                           List<MappingRow> rows, String alias)
+        implements MappingInlineTable {
 
-    public InlineTableR(InlineTable inlineTable) {
+    public InlineTableR(MappingInlineTable inlineTable) {
         this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), inlineTable.alias());
     }
 
-    public InlineTableR(InlineTable inlineTable, String alias) {
+    public InlineTableR(MappingInlineTable inlineTable, String alias) {
         this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), alias);
     }
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof InlineTable that) {
+        if (o instanceof MappingInlineTable that) {
             return alias().equals(that.alias());
         } else {
             return false;

@@ -15,26 +15,26 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 public record HierarchyR(String name,
                          String caption,
                          String description,
-                         List<Annotation> annotations,
-                         Table table,
-                         View view,
-                         Join join,
-                         InlineTable inlineTable,
-                         List<Level> levels,
-                         List<MemberReaderParameter> memberReaderParameters,
+                         List<MappingAnnotation> annotations,
+                         MappingTable table,
+                         MappingView view,
+                         MappingJoin join,
+                         MappingInlineTable inlineTable,
+                         List<MappingLevel> levels,
+                         List<MappingMemberReaderParameter> memberReaderParameters,
                          boolean hasAll,
                          String allMemberName,
                          String allMemberCaption,
@@ -46,9 +46,9 @@ public record HierarchyR(String name,
                          String uniqueKeyLevelName,
                          boolean visible,
                          String displayFolder,
-                         RelationOrJoin relation,
+                         MappingRelationOrJoin relation,
                          String origin
                          )
-        implements Hierarchy {
+        implements MappingHierarchy {
 
 }

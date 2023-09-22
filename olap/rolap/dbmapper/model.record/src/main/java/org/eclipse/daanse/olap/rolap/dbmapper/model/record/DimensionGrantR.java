@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public record DimensionGrantR(AccessEnum access,
                               String dimension)
-        implements DimensionGrant {
+        implements MappingDimensionGrant {
 
 }

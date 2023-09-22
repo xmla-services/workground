@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.dbcreator.api;
 import java.sql.SQLException;
 
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 public interface DbCreatorService {
 
-    DBStructure createSchema(Schema schema) throws SQLException;
+    DBStructure createSchema(MappingSchema schema) throws SQLException;
 }

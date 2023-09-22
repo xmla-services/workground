@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
 
-public record AggLevelPropertyR(String name, String column) implements AggLevelProperty {
+public record AggLevelPropertyR(String name, String column) implements MappingAggLevelProperty {
 
 }

@@ -5286,7 +5286,7 @@ TODO: see above
             }
             else {
                 RolapHierarchy rolapHierarchy = (RolapHierarchy)mondrianOlap4jHierarchy.getHierarchy();
-                org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy xmlHierarchy = rolapHierarchy.getXmlHierarchy();
+                org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy xmlHierarchy = rolapHierarchy.getXmlHierarchy();
                 try {
                     hierarchyOrigin = Integer.parseInt(xmlHierarchy.origin());
                 }
