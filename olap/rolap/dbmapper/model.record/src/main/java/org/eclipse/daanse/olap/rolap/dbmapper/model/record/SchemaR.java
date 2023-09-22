@@ -18,27 +18,27 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 
 public record SchemaR(String name,
                       String description,
                       String measuresCaption,
                       String defaultRole,
                       List<MappingAnnotation> annotations,
-                      List<Parameter> parameters,
-                      List<PrivateDimension> dimensions,
+                      List<MappingParameter> parameters,
+                      List<MappingPrivateDimension> dimensions,
                       List<MappingCube> cubes,
-                      List<VirtualCube> virtualCubes,
-                      List<NamedSet> namedSets,
-                      List<Role> roles,
-                      List<UserDefinedFunction> userDefinedFunctions)
-        implements Schema {
+                      List<MappingVirtualCube> virtualCubes,
+                      List<MappingNamedSet> namedSets,
+                      List<MappingRole> roles,
+                      List<MappingUserDefinedFunction> userDefinedFunctions)
+        implements MappingSchema {
 
     @Override
     public void display(PrintWriter pw, int i) {

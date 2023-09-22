@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class ScriptImpl implements Script {
+public class ScriptImpl implements MappingScript {
 
     @XmlAttribute(name = "language")
     private String language = "JavaScript";  // attribute default: JavaScript

@@ -15,37 +15,30 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
-public interface Measure {
+public interface MappingVirtualCube {
 
     List<MappingAnnotation> annotations();
 
-    MappingExpressionView measureExpression();
+    List<MappingCubeUsage> cubeUsages();
 
-    List<MappingCalculatedMemberProperty> calculatedMemberProperties();
+    List<MappingVirtualCubeDimension> virtualCubeDimensions();
+
+    List<MappingVirtualCubeMeasure> virtualCubeMeasures();
+
+    List<MappingCalculatedMember> calculatedMembers();
+
+    List<MappingNamedSet> namedSets();
+
+    boolean enabled();
 
     String name();
 
-    String column();
-
-    MeasureDataTypeEnum datatype();
-
-    String formatString();
-
-    String aggregator();
-
-    String formatter();
+    String defaultMeasure();
 
     String caption();
 
     String description();
 
     boolean visible();
-
-    String displayFolder();
-
-    MappingElementFormatter cellFormatter();
-
-    String backColor();
 }

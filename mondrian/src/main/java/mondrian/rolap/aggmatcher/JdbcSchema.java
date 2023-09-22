@@ -364,7 +364,7 @@ public class JdbcSchema {
                 public RolapStar.Measure rMeasure;
 
                 // hierarchy stuff
-                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation relation;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation relation;
                 public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression joinExp;
                 public String levelColumnName;
 
@@ -864,7 +864,7 @@ public class JdbcSchema {
         private final String tableType;
 
         // mondriandef stuff
-        public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table;
+        public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table;
 
         private boolean allColumnsLoaded;
 

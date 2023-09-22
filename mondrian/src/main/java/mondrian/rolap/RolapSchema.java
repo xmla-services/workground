@@ -49,9 +49,9 @@ import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.DimensionUsageImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
@@ -191,7 +191,7 @@ public class RolapSchema implements Schema {
      */
     private FunctionTable funTable;
 
-    private org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema;
+    private org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema xmlSchema;
 
     final List<RolapSchemaParameter > parameterList =
         new ArrayList< >();
@@ -426,7 +426,7 @@ public class RolapSchema implements Schema {
                 JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             xmlSchema =
-                (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
+                (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
 
             if (getLogger().isDebugEnabled()) {
                 StringWriter sw = new StringWriter(4096);
@@ -512,7 +512,7 @@ public class RolapSchema implements Schema {
         return defaultRole;
     }
 
-    public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema getXMLSchema() {
+    public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema getXMLSchema() {
         return xmlSchema;
     }
 
@@ -557,7 +557,7 @@ public class RolapSchema implements Schema {
         return context.getDialect();
     }
 
-    private void load(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema) {
+    private void load(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema xmlSchema) {
         this.name = xmlSchema.name();
         if (name == null || name.equals("")) {
             throw Util.newError("<Schema> name must be set");
@@ -570,7 +570,7 @@ public class RolapSchema implements Schema {
         // function table.
         final Map<String, UdfResolver.UdfFactory> mapNameToUdf =
             new HashMap<>();
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction udf
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction udf
             : xmlSchema.userDefinedFunctions())
         {
             final Scripts.ScriptDefinition scriptDef = toScriptDef(udf.script());
@@ -582,7 +582,7 @@ public class RolapSchema implements Schema {
         this.funTable = funTable;
 
         // Validate public dimensions.
-        for (PrivateDimension xmlDimension : xmlSchema.dimensions()) {
+        for (MappingPrivateDimension xmlDimension : xmlSchema.dimensions()) {
             if (xmlDimension.foreignKey() != null) {
                 throw MondrianResource.instance()
                     .PublicDimensionMustNotHaveForeignKey.ex(
@@ -592,7 +592,7 @@ public class RolapSchema implements Schema {
 
         // Create parameters.
         Set<String> parameterNames = new HashSet<>();
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter xmlParameter : xmlSchema.parameters()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter xmlParameter : xmlSchema.parameters()) {
             String name = xmlParameter.name();
             if (!parameterNames.add(name)) {
                 throw MondrianResource.instance().DuplicateSchemaParameter.ex(
@@ -624,7 +624,7 @@ public class RolapSchema implements Schema {
         }
 
         // Create virtual cubes.
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube xmlVirtualCube : xmlSchema.virtualCubes()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube xmlVirtualCube : xmlSchema.virtualCubes()) {
             if (xmlVirtualCube.enabled()) {
                 RolapCube cube =
                     new RolapCube(this, xmlSchema, xmlVirtualCube, context);
@@ -633,12 +633,12 @@ public class RolapSchema implements Schema {
         }
 
         // Create named sets.
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet : xmlSchema.namedSets()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet xmlNamedSet : xmlSchema.namedSets()) {
             mapNameToSet.put(xmlNamedSet.name(), createNamedSet(xmlNamedSet));
         }
 
         // Create roles.
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role xmlRole : xmlSchema.roles()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole xmlRole : xmlSchema.roles()) {
             Role role = createRole(xmlRole);
             mapNameToRole.put(xmlRole.name(), role);
         }
@@ -658,7 +658,7 @@ public class RolapSchema implements Schema {
         }
     }
 
-    static Scripts.ScriptDefinition toScriptDef(Script script) {
+    static Scripts.ScriptDefinition toScriptDef(MappingScript script) {
         if (script == null) {
             return null;
         }
@@ -680,7 +680,7 @@ public class RolapSchema implements Schema {
      * @param attributeName Attribute name, or null
      * @return Location of node or attribute in an XML document
      */
-    XmlLocation locate(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema node, String attributeName) {
+    XmlLocation locate(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema node, String attributeName) {
         return null;
     }
 
@@ -710,7 +710,7 @@ public class RolapSchema implements Schema {
         }
     }
 
-    private NamedSet createNamedSet(org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet) {
+    private NamedSet createNamedSet(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet xmlNamedSet) {
         final String formulaString = getFormula(xmlNamedSet);
         final Exp exp;
         try {
@@ -729,13 +729,13 @@ public class RolapSchema implements Schema {
         return formula.getNamedSet();
     }
 
-    private Role createRole(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role xmlRole) {
+    private Role createRole(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole xmlRole) {
         if (xmlRole.union() != null) {
             return createUnionRole(xmlRole);
         }
 
         RoleImpl role = new RoleImpl();
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant schemaGrant : xmlRole.schemaGrants()) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant schemaGrant : xmlRole.schemaGrants()) {
             handleSchemaGrant(role, schemaGrant);
         }
         role.makeImmutable();
@@ -743,14 +743,14 @@ public class RolapSchema implements Schema {
     }
 
     // package-local visibility for testing purposes
-    Role createUnionRole(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role xmlRole) {
+    Role createUnionRole(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole xmlRole) {
         if (xmlRole.schemaGrants() != null && !xmlRole.schemaGrants().isEmpty()) {
             throw MondrianResource.instance().RoleUnionGrants.ex();
         }
 
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage> usages = xmlRole.union().roleUsages();
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage> usages = xmlRole.union().roleUsages();
         List<Role> roleList = new ArrayList<>(usages.size());
-        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage roleUsage : usages) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage roleUsage : usages) {
             Role role = mapNameToRole.get(roleUsage.roleName());
             if (role == null) {
                 throw MondrianResource.instance().UnknownRole.ex(
@@ -762,7 +762,7 @@ public class RolapSchema implements Schema {
     }
 
     // package-local visibility for testing purposes
-    void handleSchemaGrant(RoleImpl role, org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant schemaGrant) {
+    void handleSchemaGrant(RoleImpl role, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant schemaGrant) {
         role.grant(this, getAccess(schemaGrant.access().name(), schemaAllowed));
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant cubeGrant : schemaGrant.cubeGrants()) {
             handleCubeGrant(role, cubeGrant);
@@ -839,7 +839,7 @@ public class RolapSchema implements Schema {
                     "You may only specify <MemberGrant> if <Hierarchy> has access='custom'");
             }
 
-            for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant memberGrant
+            for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberGrant memberGrant
                 : grant.memberGrants())
             {
                 Member member = reader.withLocus()
@@ -923,7 +923,7 @@ public class RolapSchema implements Schema {
             if (tagName.equals("Dimension")) {
                 JAXBContext jaxbContext = JAXBContext.newInstance(PrivateDimensionImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension) jaxbUnmarshaller.unmarshal(new StringReader(xml));
+                xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension) jaxbUnmarshaller.unmarshal(new StringReader(xml));
             } else if (tagName.equals("DimensionUsage")) {
                 JAXBContext jaxbContext = JAXBContext.newInstance(DimensionUsageImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -952,17 +952,17 @@ public class RolapSchema implements Schema {
             if (tagName.equals("Cube")) {
                 // Create empty XML schema, to keep the method happy. This is
                 // okay, because there are no forward-references to resolve.
-                final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema = new org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl();
+                final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema xmlSchema = new org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl();
                 JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CubeImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
                 cube = new RolapCube(this, xmlSchema, xmlDimension, context);
             } else if (tagName.equals("VirtualCube")) {
                 // Need the real schema here.
-                org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema = getXMLSchema();
+                org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema xmlSchema = getXMLSchema();
                 JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
+                org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube) jaxbUnmarshaller.unmarshal(new StringReader(xml));
                 cube = new RolapCube(this, xmlSchema, xmlDimension, context);
             } else {
                 throw new XOMException(
@@ -1413,7 +1413,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     }
 
  // package-local visibility for testing purposes
-    public RolapStar makeRolapStar(final Relation fact) {
+    public RolapStar makeRolapStar(final MappingRelation fact) {
         return new RolapStar(this, context, fact);
     }
 
@@ -1433,7 +1433,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
          * <p> {@link RolapStar.Table#addJoin} works in a similar way.
          */
         synchronized RolapStar getOrCreateStar(
-            final Relation fact)
+            final MappingRelation fact)
         {
             final List<String> rolapStarKey = RolapUtil.makeRolapStarKey(fact);
             RolapStar star = stars.get(rolapStarKey);

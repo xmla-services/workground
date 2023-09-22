@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class RoleUsageImpl implements RoleUsage {
+public class RoleUsageImpl implements MappingRoleUsage {
 
     @XmlAttribute(name = "roleName")
     protected String roleName;

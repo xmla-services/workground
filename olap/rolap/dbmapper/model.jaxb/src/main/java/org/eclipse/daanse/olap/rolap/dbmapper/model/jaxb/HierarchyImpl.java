@@ -20,8 +20,8 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -42,7 +42,7 @@ public class HierarchyImpl implements MappingHierarchy {
     @XmlElement(name = "Level", required = true, type = LevelImpl.class)
     protected List<MappingLevel> levels;
     @XmlElement(name = "MemberReaderParameter", type = MemberReaderParameterImpl.class)
-    protected List<MemberReaderParameter> memberReaderParameters;
+    protected List<MappingMemberReaderParameter> memberReaderParameters;
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "hasAll", required = true)
@@ -76,7 +76,7 @@ public class HierarchyImpl implements MappingHierarchy {
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
         @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
         @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
-    protected RelationOrJoin relation;
+    protected MappingRelationOrJoin relation;
 
     @Override
     public List<MappingAnnotation> annotations() {
@@ -96,7 +96,7 @@ public class HierarchyImpl implements MappingHierarchy {
     }
 
     @Override
-    public List<MemberReaderParameter> memberReaderParameters() {
+    public List<MappingMemberReaderParameter> memberReaderParameters() {
         if (memberReaderParameters == null) {
             memberReaderParameters = new ArrayList<>();
         }
@@ -218,7 +218,7 @@ public class HierarchyImpl implements MappingHierarchy {
     }
 
     @Override
-    public RelationOrJoin relation() {
+    public MappingRelationOrJoin relation() {
         return relation;
     }
 
@@ -243,11 +243,11 @@ public class HierarchyImpl implements MappingHierarchy {
         this.levels = levels;
     }
 
-    public void setRelation(RelationOrJoin relation) {
+    public void setRelation(MappingRelationOrJoin relation) {
         this.relation = relation;
     }
 
-    public void setMemberReaderParameters(List<MemberReaderParameter> memberReaderParameters) {
+    public void setMemberReaderParameters(List<MappingMemberReaderParameter> memberReaderParameters) {
         this.memberReaderParameters = memberReaderParameters;
     }
 

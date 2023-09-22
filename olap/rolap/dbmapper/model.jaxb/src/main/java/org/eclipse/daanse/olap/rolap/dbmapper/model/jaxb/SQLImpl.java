@@ -14,7 +14,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SQL", propOrder = { "content" })
-public class SQLImpl implements SQL {
+public class SQLImpl implements MappingSQL {
 
     @XmlValue
     protected String content;

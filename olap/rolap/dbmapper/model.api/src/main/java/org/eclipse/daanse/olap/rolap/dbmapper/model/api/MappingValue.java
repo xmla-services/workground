@@ -9,12 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *
+ *   
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface Relation extends RelationOrJoin {
+public interface MappingValue {
 
-    String alias();
+    String content();
+
+    String column();
 
 }

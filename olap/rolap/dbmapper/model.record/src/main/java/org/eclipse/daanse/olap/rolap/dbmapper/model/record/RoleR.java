@@ -16,14 +16,14 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
 public record RoleR(List<MappingAnnotation> annotations,
-                    List<SchemaGrant> schemaGrants,
-                    Union union,
+                    List<MappingSchemaGrant> schemaGrants,
+                    MappingUnion union,
                     String name)
-        implements Role {
+        implements MappingRole {
 
 }

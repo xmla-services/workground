@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
 public record NamedSetR(String name,
                         String caption,
@@ -26,6 +26,6 @@ public record NamedSetR(String name,
                         List<MappingAnnotation> annotations,
                         String displayFolder,
                         MappingFormula formulaElement)
-        implements NamedSet {
+        implements MappingNamedSet {
 
 }

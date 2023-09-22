@@ -15,18 +15,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.provider.api;
 
 import java.util.function.Supplier;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 
 
 /*
  * Provides a Schema
  */
-public interface DatabaseMappingSchemaProvider extends Supplier<Schema> {
+public interface DatabaseMappingSchemaProvider extends Supplier<MappingSchema> {
 
     /*
      * Provides a Schema.
      */
     @Override
-    Schema get();
+    MappingSchema get();
 }

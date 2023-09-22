@@ -15,38 +15,37 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-public interface MappingCube {
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
+
+public interface MappingMeasure {
 
     List<MappingAnnotation> annotations();
 
-    List<MappingCubeDimension> dimensionUsageOrDimensions();
+    MappingExpressionView measureExpression();
 
-    List<MappingMeasure> measures();
-
-    List<MappingCalculatedMember> calculatedMembers();
-
-    List<MappingNamedSet> namedSets();
-
-    List<MappingDrillThroughAction> drillThroughActions();
-
-    List<MappingWritebackTable> writebackTables();
-
+    List<MappingCalculatedMemberProperty> calculatedMemberProperties();
 
     String name();
+
+    String column();
+
+    MeasureDataTypeEnum datatype();
+
+    String formatString();
+
+    String aggregator();
+
+    String formatter();
 
     String caption();
 
     String description();
 
-    String defaultMeasure();
-
-    boolean cache();
-
-    boolean enabled();
-
     boolean visible();
 
-    MappingRelation fact();
+    String displayFolder();
 
-    Iterable<MappingAction> actions();
+    MappingElementFormatter cellFormatter();
+
+    String backColor();
 }

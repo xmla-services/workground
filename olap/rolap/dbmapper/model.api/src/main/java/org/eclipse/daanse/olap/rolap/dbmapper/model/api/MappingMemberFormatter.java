@@ -13,20 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import java.util.List;
+public interface MappingMemberFormatter {
 
-public interface Table extends Relation {
+    String className();
 
-    SQL sql();
-
-    List<MappingAggExclude> aggExcludes();
-
-    List<MappingAggTable> aggTables();
-
-    List<MappingHint> hints();
-
-    String name();
-
-    String schema();
+    MappingScript script();
 
 }

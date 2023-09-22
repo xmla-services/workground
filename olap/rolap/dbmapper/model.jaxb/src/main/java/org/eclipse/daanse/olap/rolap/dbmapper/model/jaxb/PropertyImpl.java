@@ -14,7 +14,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.PropertyTypeAdaptor;
 
@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "propertyFormatter" })
-public class PropertyImpl implements Property {
+public class PropertyImpl implements MappingProperty {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;

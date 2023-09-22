@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.mandantory;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.osgi.service.component.annotations.Activate;
@@ -47,7 +47,7 @@ public class MandantoriesVerifyer implements Verifyer {
     }
 
     @Override
-    public List<VerificationResult> verify(Schema schema, DataSource dataSource) {
+    public List<VerificationResult> verify(MappingSchema schema, DataSource dataSource) {
 
         return new MandantoriesSchemaWalker(config).checkSchema(schema);
     }

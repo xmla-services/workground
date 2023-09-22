@@ -17,10 +17,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 public interface Verifyer {
 
-    List<VerificationResult> verify(Schema schema, DataSource dataSource);
+    List<VerificationResult> verify(MappingSchema schema, DataSource dataSource);
 
 }

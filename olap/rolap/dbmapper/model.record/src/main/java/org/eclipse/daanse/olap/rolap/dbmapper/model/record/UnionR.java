@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Union;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRoleUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUnion;
 
-public record UnionR(List<RoleUsage> roleUsages) implements Union {
+public record UnionR(List<MappingRoleUsage> roleUsages) implements MappingUnion {
 
 }

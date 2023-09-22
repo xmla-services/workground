@@ -9,14 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface Value {
+import java.util.List;
 
-    String content();
+public interface MappingUnion {
 
-    String column();
+    List<MappingRoleUsage> roleUsages();
 
 }

@@ -31,7 +31,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.olap4j.impl.UnmodifiableArrayMap;
@@ -409,7 +409,7 @@ public class RolapLevel extends LevelBase {
                     Property.NAME_PROPERTY.description));
         }
         for (int i = 0; i < xmlLevel.properties().size(); i++) {
-            org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property xmlProperty = xmlLevel.properties().get(i);
+            org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty xmlProperty = xmlLevel.properties().get(i);
 
             FormatterCreateContext formatterContext =
                     new FormatterCreateContext.Builder(xmlProperty.name())
@@ -462,7 +462,7 @@ public class RolapLevel extends LevelBase {
     private void checkColumn(MappingColumn nameColumn) {
         final RolapHierarchy rolapHierarchy = (RolapHierarchy) hierarchy;
         if (nameColumn.table() == null) {
-            final Relation table = rolapHierarchy.getUniqueTable();
+            final MappingRelation table = rolapHierarchy.getUniqueTable();
             if (table == null) {
                 throw Util.newError(
                     new StringBuilder("must specify a table for level ").append(getUniqueName())

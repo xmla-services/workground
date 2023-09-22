@@ -13,10 +13,16 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface WritebackMeasure extends WritebackColumn {
+import java.util.List;
+
+public interface MappingVirtualCubeMeasure {
+
+    List<MappingAnnotation> annotations();
+
+    String cubeName();
 
     String name();
 
-    String column();
+    boolean visible();
 
 }

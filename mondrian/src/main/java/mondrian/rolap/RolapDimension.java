@@ -101,7 +101,7 @@ class RolapDimension extends DimensionBase {
     RolapDimension(
         RolapSchema schema,
         RolapCube cube,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension xmlDimension,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension xmlDimension,
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension xmlCubeDimension)
     {
         this(

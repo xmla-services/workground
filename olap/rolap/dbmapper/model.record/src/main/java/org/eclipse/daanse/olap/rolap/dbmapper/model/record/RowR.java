@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
-public record RowR(List<Value> values) implements Row {
+public record RowR(List<MappingValue> values) implements MappingRow {
 
 }

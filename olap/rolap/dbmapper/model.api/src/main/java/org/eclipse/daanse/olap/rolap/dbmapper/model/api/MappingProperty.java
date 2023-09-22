@@ -9,14 +9,27 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface MemberReaderParameter {
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
+
+public interface MappingProperty {
 
     String name();
 
-    String value();
+    String column();
 
+    PropertyTypeEnum type();
+
+    String formatter();
+
+    String caption();
+
+    String description();
+
+    boolean dependsOnLevelValue();
+
+    MappingElementFormatter propertyFormatter();
 }

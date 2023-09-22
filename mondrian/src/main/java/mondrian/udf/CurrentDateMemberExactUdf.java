@@ -9,7 +9,7 @@
 
 package mondrian.udf;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.type.HierarchyType;
@@ -36,7 +36,7 @@ import mondrian.util.Format;
  *
  * @author Zelaine Fong
  */
-@ServiceProvider(value = UserDefinedFunction.class)
+@ServiceProvider(value = MappingUserDefinedFunction.class)
 public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
     private final static String CURRENT_DATE_MEMBER_EXACT_UDF_DESCRIPTION =
         "Returns the exact member within the specified dimension "

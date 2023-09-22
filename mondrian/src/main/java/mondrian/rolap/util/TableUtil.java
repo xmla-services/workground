@@ -15,10 +15,10 @@ package mondrian.rolap.util;
 
 import java.util.Map;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 public class TableUtil {
-    public static Map<String,String> getHintMap(Table table) {
+    public static Map<String,String> getHintMap(MappingTable table) {
         java.util.Map<String,String> h =
             new java.util.HashMap<>();
         if (table.hints() != null) {
@@ -30,7 +30,7 @@ public class TableUtil {
         return h;
     }
 
-    public static String getFilter(Table table) {
+    public static String getFilter(MappingTable table) {
         return (table.sql() == null) ? null : table.sql().content();
     }
 }

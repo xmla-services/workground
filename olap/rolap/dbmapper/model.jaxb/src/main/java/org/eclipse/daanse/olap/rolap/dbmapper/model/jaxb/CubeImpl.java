@@ -22,9 +22,9 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -34,7 +34,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Cube", propOrder = { "fact", "dimensionUsageOrDimensions", "measures", "annotations",
@@ -49,15 +49,15 @@ public class CubeImpl implements MappingCube {
             @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class) })
     protected List<MappingCubeDimension> dimensionUsageOrDimensions;
     @XmlElement(name = "Measure", required = true, type = MeasureImpl.class)
-    protected List<Measure> measures;
+    protected List<MappingMeasure> measures;
     @XmlElement(name = "CalculatedMember",  type = CalculatedMemberImpl.class)
     protected List<MappingCalculatedMember> calculatedMembers;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
-    protected List<NamedSet> namedSets;
+    protected List<MappingNamedSet> namedSets;
     @XmlElement(name = "DrillThroughAction", type = DrillThroughActionImpl.class)
     protected List<MappingDrillThroughAction> drillThroughActions;
     @XmlElement(name = "WritebackTable", type = WritebackTableImpl.class)
-    protected List<WritebackTable> writebackTables;
+    protected List<MappingWritebackTable> writebackTables;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
@@ -74,7 +74,7 @@ public class CubeImpl implements MappingCube {
     protected boolean visible = true;
     @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
         @XmlElement(name = "Table", type = TableImpl.class), @XmlElement(name = "View", type = ViewImpl.class)})
-    protected Relation fact;
+    protected MappingRelation fact;
     @XmlElement(name = "Action", type = ActionImpl.class)
     protected List<MappingAction> actions;
 
@@ -96,7 +96,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public List<Measure> measures() {
+    public List<MappingMeasure> measures() {
         if (measures == null) {
             measures = new ArrayList<>();
         }
@@ -112,7 +112,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public List<NamedSet> namedSets() {
+    public List<MappingNamedSet> namedSets() {
         if (namedSets == null) {
             namedSets = new ArrayList<>();
         }
@@ -190,7 +190,7 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public List<WritebackTable> writebackTables() {
+    public List<MappingWritebackTable> writebackTables() {
         if (writebackTables == null) {
             writebackTables = new ArrayList<>();
         }
@@ -203,11 +203,11 @@ public class CubeImpl implements MappingCube {
     }
 
     @Override
-    public Relation fact() {
+    public MappingRelation fact() {
         return fact;
     }
 
-    public void setFact(Relation fact) {
+    public void setFact(MappingRelation fact) {
         this.fact = fact;
     }
 
@@ -223,7 +223,7 @@ public class CubeImpl implements MappingCube {
         this.dimensionUsageOrDimensions = dimensionUsageOrDimensions;
     }
 
-    public void setMeasures(List<Measure> measures) {
+    public void setMeasures(List<MappingMeasure> measures) {
         this.measures = measures;
     }
 
@@ -231,7 +231,7 @@ public class CubeImpl implements MappingCube {
         this.calculatedMembers = calculatedMembers;
     }
 
-    public void setNamedSets(List<NamedSet> namedSets) {
+    public void setNamedSets(List<MappingNamedSet> namedSets) {
         this.namedSets = namedSets;
     }
 
@@ -239,7 +239,7 @@ public class CubeImpl implements MappingCube {
         this.drillThroughActions = drillThroughActions;
     }
 
-    public void setWritebackTables(List<WritebackTable> writebackTables) {
+    public void setWritebackTables(List<MappingWritebackTable> writebackTables) {
         this.writebackTables = writebackTables;
     }
 

@@ -20,7 +20,7 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -33,7 +33,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExcludes", "aggTables", "hints" })
 @XmlRootElement(name = "Table")
-public class TableImpl implements Table {
+public class TableImpl implements MappingTable {
 
     @XmlElement(name = "SQL")
     protected SQLImpl sql;
@@ -113,7 +113,7 @@ public class TableImpl implements Table {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Table that) {
+        if (o instanceof MappingTable that) {
             return this.name.equals(that.name()) &&
                 Objects.equals(this.alias, that.alias()) &&
                 Objects.equals(this.schema, that.schema());

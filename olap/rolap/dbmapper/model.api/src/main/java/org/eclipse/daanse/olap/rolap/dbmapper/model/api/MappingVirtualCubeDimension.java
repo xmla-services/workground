@@ -13,10 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface WritebackAttribute extends WritebackColumn{
+public interface MappingVirtualCubeDimension extends  MappingCubeDimension{
 
-    String dimension();
+    String cubeName();
 
-    String column();
+    @Override
+	String name();
 
 }

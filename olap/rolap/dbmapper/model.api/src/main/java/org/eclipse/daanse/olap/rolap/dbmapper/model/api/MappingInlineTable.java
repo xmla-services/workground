@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-public interface MappingInlineTable extends Relation {
+public interface MappingInlineTable extends MappingRelation {
 
     List<MappingColumnDef> columnDefs();
 
-    List<Row> rows();
+    List<MappingRow> rows();
 
 }

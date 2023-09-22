@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -61,7 +61,7 @@ public class LevelImpl implements MappingLevel {
     @XmlElement(name = "Closure")
     protected ClosureImpl closure;
     @XmlElement(name = "Property", type = PropertyImpl.class)
-    protected List<Property> properties;
+    protected List<MappingProperty> properties;
     @XmlAttribute(name = "approxRowCount")
     protected String approxRowCount;
     @XmlAttribute(name = "name", required = true)
@@ -169,7 +169,7 @@ public class LevelImpl implements MappingLevel {
     }
 
     @Override
-    public List<Property> properties() {
+    public List<MappingProperty> properties() {
         if (properties == null) {
             properties = new ArrayList<>();
         }
@@ -347,7 +347,7 @@ public class LevelImpl implements MappingLevel {
         this.captionColumn = value;
     }
 
-    public void setProperties(List<Property> properties) {
+    public void setProperties(List<MappingProperty> properties) {
         this.properties = properties;
     }
 

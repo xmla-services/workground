@@ -1,7 +1,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.provider.xml;
 
 import jakarta.xml.bind.JAXBException;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchemaProvider;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.xml.XmlDbMappingSchemaProvider.Config;
 import org.osgi.service.component.annotations.Activate;
@@ -28,7 +28,7 @@ public class XmlDbMappingSchemaProvider implements DatabaseMappingSchemaProvider
 	}
 
 	private XmlSchemaReader reader = new XmlSchemaReader();
-	private Schema schema;
+	private MappingSchema schema;
 
 	@Activate
 	public void activate(Config config) throws IOException, JAXBException {
@@ -42,7 +42,7 @@ public class XmlDbMappingSchemaProvider implements DatabaseMappingSchemaProvider
 	}
 
 	@Override
-	public Schema get() {
+	public MappingSchema get() {
 		return schema;
 	}
 

@@ -28,7 +28,7 @@ import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1510,7 +1510,7 @@ class BatchLoader {
                     && measure.getExpression() instanceof
                     MappingExpressionView measureExpr)
                 {
-                    SQL measureSql = measureExpr.sqls().get(0);
+                    MappingSQL measureSql = measureExpr.sqls().get(0);
                     // Checks if the SQL contains "SELECT" to detect the case a
                     // subquery is used to define the measure. This is not a
                     // perfect check, because a SQL expression on column names

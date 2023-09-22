@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
@@ -36,7 +36,7 @@ class RolapUtilTest {
   private static final String TABLE_ALIAS = "TableAlias";
   private static final String RELATION_ALIAS = "RelationAlias";
   private static final String FACT_NAME = "order_fact";
-  private Relation fact;
+  private MappingRelation fact;
 
   @Test
   void testMakeRolapStarKeyUnmodifiable() throws Exception {
@@ -127,8 +127,8 @@ class RolapUtilTest {
     return fact;
   }
 
-  private static Relation getFactRelationMock() throws Exception {
-    Relation factMock = mock(Relation.class);
+  private static MappingRelation getFactRelationMock() throws Exception {
+    MappingRelation factMock = mock(MappingRelation.class);
     when(factMock.alias()).thenReturn(RELATION_ALIAS);
     return factMock;
   }

@@ -30,8 +30,8 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
@@ -56,7 +56,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     private final RolapCubeLevel currentNullLevel;
     private RolapCubeMember currentNullMember;
     private RolapCubeMember currentAllMember;
-    private final RelationOrJoin currentRelation;
+    private final MappingRelationOrJoin currentRelation;
     private final RolapCubeHierarchyMemberReader reader;
     private HierarchyUsage usage;
     private final Map<String, String> aliases = new HashMap<>();
@@ -308,12 +308,12 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      * shared between all cubes with similar structure
      */
     protected void extractNewAliases(
-        RelationOrJoin oldrel,
-        RelationOrJoin newrel)
+        MappingRelationOrJoin oldrel,
+        MappingRelationOrJoin newrel)
     {
         if (oldrel != null && newrel != null) {
-            if (oldrel instanceof Relation oldrelRelation
-                && newrel instanceof Relation newrelRelation) {
+            if (oldrel instanceof MappingRelation oldrelRelation
+                && newrel instanceof MappingRelation newrelRelation) {
                 aliases.put(
                     RelationUtil.getAlias(oldrelRelation),
                     RelationUtil.getAlias(newrelRelation));
@@ -399,7 +399,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      * @return rolap cube hierarchy relation
      */
     @Override
-	public RelationOrJoin getRelation() {
+	public MappingRelationOrJoin getRelation() {
         return currentRelation;
     }
 

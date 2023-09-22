@@ -10,7 +10,7 @@
 package mondrian.rolap.format;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingScript;
 
 import mondrian.olap.Util;
 
@@ -113,7 +113,7 @@ public class FormatterCreateContext {
          * A script data used to create
          * a script based implementation of a requested formatter.
          */
-        public Builder script(Script script) {
+        public Builder script(MappingScript script) {
             if (script != null) {
                 scriptText = script.cdata();
                 scriptLanguage = script.language();
@@ -127,7 +127,7 @@ public class FormatterCreateContext {
 
         private static void checkIfFormatterSpecifiedCorrectly(
             String className,
-            Script script)
+            MappingScript script)
         {
             if (className == null && script == null) {
                 throw Util.newError(

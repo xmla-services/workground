@@ -20,11 +20,11 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -33,8 +33,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 
 /**
  * A schema is a collection of cubes and virtual cubes. It can also contain
@@ -45,7 +45,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
 @XmlType(name = "", propOrder = {"annotations", "parameters", "dimensions", "cubes", "virtualCubes", "namedSets", "roles",
     "userDefinedFunctions"})
 @XmlRootElement(name = "Schema")
-public class SchemaImpl implements Schema {
+public class SchemaImpl implements MappingSchema {
 
     /**
      * A bcd
@@ -54,23 +54,23 @@ public class SchemaImpl implements Schema {
     @XmlElementWrapper(name = "Annotations")
     protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Parameter", type = ParameterImpl.class)
-    protected List<Parameter> parameters;
+    protected List<MappingParameter> parameters;
     @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class)
-    protected List<PrivateDimension> dimensions;
+    protected List<MappingPrivateDimension> dimensions;
     @XmlElement(name = "Cube", required = true, type = CubeImpl.class)
     protected List<MappingCube> cubes;
     @XmlElement(name = "VirtualCube", type = VirtualCubeImpl.class)
-    protected List<VirtualCube> virtualCubes;
+    protected List<MappingVirtualCube> virtualCubes;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
-    protected List<NamedSet> namedSets;
+    protected List<MappingNamedSet> namedSets;
     @XmlElement(name = "Role", type = RoleImpl.class)
-    protected List<Role> roles;
+    protected List<MappingRole> roles;
     /**
      * @deprecated
      */
     @Deprecated(since = "new version")
     @XmlElement(name = "UserDefinedFunction", type = UserDefinedFunctionImpl.class)
-    protected List<UserDefinedFunction> userDefinedFunctions;
+    protected List<MappingUserDefinedFunction> userDefinedFunctions;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "description")
@@ -90,7 +90,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<Parameter> parameters() {
+    public List<MappingParameter> parameters() {
         if (parameters == null) {
             parameters = new ArrayList<>();
         }
@@ -98,7 +98,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<PrivateDimension> dimensions() {
+    public List<MappingPrivateDimension> dimensions() {
         if (dimensions == null) {
             dimensions = new ArrayList<>();
         }
@@ -114,7 +114,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<VirtualCube> virtualCubes() {
+    public List<MappingVirtualCube> virtualCubes() {
         if (virtualCubes == null) {
             virtualCubes = new ArrayList<>();
         }
@@ -122,7 +122,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<NamedSet> namedSets() {
+    public List<MappingNamedSet> namedSets() {
         if (namedSets == null) {
             namedSets = new ArrayList<>();
         }
@@ -130,7 +130,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<Role> roles() {
+    public List<MappingRole> roles() {
         if (roles == null) {
             roles = new ArrayList<>();
         }
@@ -142,7 +142,7 @@ public class SchemaImpl implements Schema {
      */
     @Deprecated(since="new version")
     @Override
-    public List<UserDefinedFunction> userDefinedFunctions() {
+    public List<MappingUserDefinedFunction> userDefinedFunctions() {
         if (userDefinedFunctions == null) {
             userDefinedFunctions = new ArrayList<>();
         }
@@ -190,17 +190,17 @@ public class SchemaImpl implements Schema {
         this.defaultRole = value;
     }
 
-    public void setNamedSets(List<NamedSet> namedSets) {
+    public void setNamedSets(List<MappingNamedSet> namedSets) {
         this.namedSets = namedSets;
 
     }
 
-    public void setParameters(List<Parameter> parameters) {
+    public void setParameters(List<MappingParameter> parameters) {
         this.parameters = parameters;
 
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<MappingRole> roles) {
         this.roles = roles;
 
     }
@@ -210,15 +210,15 @@ public class SchemaImpl implements Schema {
      * @return @deprecated
      */
     @Deprecated(since="new version")
-    public void setUserDefinedFunctions(List<UserDefinedFunction> userDefinedFunctions) {
+    public void setUserDefinedFunctions(List<MappingUserDefinedFunction> userDefinedFunctions) {
         this.userDefinedFunctions = userDefinedFunctions;
     }
 
-    public void setVirtualCubes(List<VirtualCube> virtualCubs) {
+    public void setVirtualCubes(List<MappingVirtualCube> virtualCubs) {
         this.virtualCubes = virtualCubs;
     }
 
-    public void setDimensions(List<PrivateDimension> dimensions) {
+    public void setDimensions(List<MappingPrivateDimension> dimensions) {
         this.dimensions = dimensions;
     }
 

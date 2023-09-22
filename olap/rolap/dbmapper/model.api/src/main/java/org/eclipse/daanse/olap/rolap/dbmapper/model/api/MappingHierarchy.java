@@ -21,7 +21,7 @@ public interface MappingHierarchy {
 
     List<MappingLevel> levels();
 
-    List<MemberReaderParameter> memberReaderParameters();
+    List<MappingMemberReaderParameter> memberReaderParameters();
 
     String name();
 
@@ -51,7 +51,7 @@ public interface MappingHierarchy {
 
     String displayFolder();
 
-    RelationOrJoin relation();
+    MappingRelationOrJoin relation();
 
     String origin();
 }

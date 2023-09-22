@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
 
 public record SharedDimensionR(String name,
                                String type,
@@ -26,6 +26,6 @@ public record SharedDimensionR(String name,
                                List<MappingAnnotation> annotations,
                                List<MappingHierarchy> hierarchies,
                                String foreignKey)
-        implements SharedDimension {
+        implements MappingSharedDimension {
 
 }

@@ -24,9 +24,9 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class HierarchyUsage {
      * identifies the usage, and determines which join conditions need to be
      * used.
      */
-    protected final Relation fact;
+    protected final MappingRelation fact;
 
     /**
      * This matches the hierarchy - may not be unique.
@@ -119,7 +119,7 @@ public class HierarchyUsage {
      * Dimension table which contains the primary key for the hierarchy.
      * (Usually the table of the lowest level of the hierarchy.)
      */
-    private Relation joinTable;
+    private MappingRelation joinTable;
 
     /**
      * The expression (usually a {@link mondrian.olap.MappingColumn}) by
@@ -185,13 +185,13 @@ public class HierarchyUsage {
 
             init(cube, hierarchy, du);
 
-        } else if (cubeDim instanceof PrivateDimension privateDimension) {
+        } else if (cubeDim instanceof MappingPrivateDimension privateDimension) {
             this.kind = Kind.PRIVATE;
 
             // Private Hierarchy attributes
             // type
             // caption
-            PrivateDimension d = privateDimension;
+            MappingPrivateDimension d = privateDimension;
 
             this.hierarchyName = deriveHierarchyName(hierarchy);
             this.fullName = this.name;
@@ -202,7 +202,7 @@ public class HierarchyUsage {
 
             init(cube, hierarchy, null);
 
-        } else if (cubeDim instanceof VirtualCubeDimension) {
+        } else if (cubeDim instanceof MappingVirtualCubeDimension) {
             this.kind = Kind.VIRTUAL;
 
             this.hierarchyName = cubeDim.name();
@@ -281,7 +281,7 @@ public class HierarchyUsage {
         return this.usagePrefix;
     }
 
-    public Relation getJoinTable() {
+    public MappingRelation getJoinTable() {
         return this.joinTable;
     }
 
@@ -421,11 +421,11 @@ public class HierarchyUsage {
      *   has only one table
      * @return A table, never null
      */
-    private Relation findJoinTable(
+    private MappingRelation findJoinTable(
         RolapHierarchy hierarchy,
         String tableName)
     {
-        final Relation table;
+        final MappingRelation table;
         if (tableName == null) {
             table = hierarchy.getUniqueTable();
             if (table == null) {

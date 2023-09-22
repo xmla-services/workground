@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
 public record ValueR(String column,
                      String content)
-        implements Value {
+        implements MappingValue {
 
 }

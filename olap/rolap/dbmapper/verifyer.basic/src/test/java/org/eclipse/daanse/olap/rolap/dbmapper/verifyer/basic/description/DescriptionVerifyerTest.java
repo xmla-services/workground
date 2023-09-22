@@ -43,13 +43,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.Test;
@@ -88,22 +88,22 @@ public class DescriptionVerifyerTest {
     @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")")
     Verifyer verifyer;
 
-    Schema schema = mock(Schema.class);
+    MappingSchema schema = mock(MappingSchema.class);
     MappingCube cube = mock(MappingCube.class);
-    VirtualCube virtualCube = mock(VirtualCube.class);
-    MappingCubeDimension dimension = mock(PrivateDimension.class);
-    PrivateDimension privateDimension = mock(PrivateDimension.class);
+    MappingVirtualCube virtualCube = mock(MappingVirtualCube.class);
+    MappingCubeDimension dimension = mock(MappingPrivateDimension.class);
+    MappingPrivateDimension privateDimension = mock(MappingPrivateDimension.class);
     MappingCalculatedMemberProperty calculatedMemberProperty = mock(MappingCalculatedMemberProperty.class);
     MappingCalculatedMember calculatedMember = mock(MappingCalculatedMember.class);
-    Measure measure = mock(Measure.class);
+    MappingMeasure measure = mock(MappingMeasure.class);
     MappingHierarchy hierarchy = mock(MappingHierarchy.class);
     MappingLevel level = mock(MappingLevel.class);
-    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property property = mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property.class);
-    NamedSet namedSet = mock(NamedSet.class);
-    Parameter parameter = mock(Parameter.class);
+    org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty property = mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty.class);
+    MappingNamedSet namedSet = mock(MappingNamedSet.class);
+    MappingParameter parameter = mock(MappingParameter.class);
     MappingDrillThroughAction drillThroughAction = mock(MappingDrillThroughAction.class);
     MappingAction action = mock(MappingAction.class);
-    SharedDimension sharedDimension = mock(SharedDimension.class);
+    MappingSharedDimension sharedDimension = mock(MappingSharedDimension.class);
 
     @Test
     void testSchema() {

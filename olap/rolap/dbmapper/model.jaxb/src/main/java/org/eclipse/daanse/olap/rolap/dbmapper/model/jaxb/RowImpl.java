@@ -16,23 +16,23 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Value;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "value" })
-public class RowImpl implements Row {
+public class RowImpl implements MappingRow {
 
     @XmlElement(name = "Value", required = true, type = ValueImpl.class)
-    protected List<Value> value;
+    protected List<MappingValue> value;
 
     @Override
-    public List<Value> values() {
+    public List<MappingValue> values() {
         if (value == null) {
             value = new ArrayList<>();
         }

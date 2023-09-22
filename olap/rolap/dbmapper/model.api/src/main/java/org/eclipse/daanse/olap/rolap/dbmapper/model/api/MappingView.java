@@ -13,23 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
+import java.util.List;
 
-public interface Property {
+public interface MappingView extends MappingRelation {
 
-    String name();
+    List<MappingSQL> sqls();
 
-    String column();
-
-    PropertyTypeEnum type();
-
-    String formatter();
-
-    String caption();
-
-    String description();
-
-    boolean dependsOnLevelValue();
-
-    MappingElementFormatter propertyFormatter();
+    void addCode(String generic, String generateInline);
 }

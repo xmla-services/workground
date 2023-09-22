@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 public interface MappingClosure {
 
-    Table table();
+    MappingTable table();
 
     String parentColumn();
 
