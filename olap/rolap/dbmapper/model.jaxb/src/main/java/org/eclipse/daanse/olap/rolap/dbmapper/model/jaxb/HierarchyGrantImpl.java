@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.AccessAdaptor;
@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "memberGrants" })
-public class HierarchyGrantImpl implements HierarchyGrant {
+public class HierarchyGrantImpl implements MappingHierarchyGrant {
 
     @XmlElement(name = "MemberGrant", type = MemberGrantImpl.class)
     protected List<MemberGrant> memberGrants;

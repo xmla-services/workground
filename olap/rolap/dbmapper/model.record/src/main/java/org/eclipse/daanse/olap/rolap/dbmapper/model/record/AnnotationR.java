@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 
 public record AnnotationR(String name,
                           String content)
-        implements Annotation {
+        implements MappingAnnotation {
 
 }
 

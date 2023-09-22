@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.util;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
@@ -47,7 +47,7 @@ public class CopyUtil {
 
     }
 
-    private static List<Annotation> copyAnnotation(List<Annotation> annotations) {
+    private static List<MappingAnnotation> copyAnnotation(List<MappingAnnotation> annotations) {
 
         // Please no null checks in List. getList must provide minimal a empty List.
         return annotations.stream()
@@ -69,13 +69,13 @@ public class CopyUtil {
     }
 
     //I'm not sure about this one, added it, because it fits the pattern; Daniel
-    private static FormulaImpl copyFormula(Formula formulaApi) {
+    private static FormulaImpl copyFormula(MappingFormula formulaApi) {
         FormulaImpl impl = new FormulaImpl();
         impl.setCdata(formulaApi.cdata());
         return impl;
     }
 
-    private static Annotation copy(Annotation annotationApi) {
+    private static MappingAnnotation copy(MappingAnnotation annotationApi) {
         AnnotationImpl impl = new AnnotationImpl();
         impl.setContent(annotationApi.content());
         impl.setName(annotationApi.name());

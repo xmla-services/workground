@@ -27,7 +27,7 @@ import java.util.SortedSet;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1508,7 +1508,7 @@ class BatchLoader {
             for (RolapStar.Measure measure : measuresList) {
                 if (measure.getAggregator().isDistinct()
                     && measure.getExpression() instanceof
-                    ExpressionView measureExpr)
+                    MappingExpressionView measureExpr)
                 {
                     SQL measureSql = measureExpr.sqls().get(0);
                     // Checks if the SQL contains "SELECT" to detect the case a

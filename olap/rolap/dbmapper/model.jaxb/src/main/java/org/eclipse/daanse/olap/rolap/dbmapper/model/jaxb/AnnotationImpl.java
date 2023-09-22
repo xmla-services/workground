@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "content" })
-public class AnnotationImpl implements Annotation {
+public class AnnotationImpl implements MappingAnnotation {
 
     @XmlValue
     protected String content;

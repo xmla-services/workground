@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -34,7 +34,7 @@ public class RoleImpl implements Role {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "SchemaGrant", type = SchemaGrantImpl.class)
     protected List<SchemaGrant> schemaGrants;
     @XmlElement(name = "Union", required = true, type = UnionImpl.class)
@@ -43,11 +43,11 @@ public class RoleImpl implements Role {
     protected String name;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 

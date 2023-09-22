@@ -35,8 +35,8 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Query;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1296,15 +1296,15 @@ public TupleList readTuples(
         continue;
       }
 
-      Map<Expression, Expression>
+      Map<MappingExpression, MappingExpression>
         targetExp = getLevelTargetExpMap( currLevel, aggStar );
-      Expression keyExp =
+      MappingExpression keyExp =
         targetExp.get( currLevel.getKeyExp() );
-      Expression ordinalExp =
+      MappingExpression ordinalExp =
         targetExp.get( currLevel.getOrdinalExp() );
-      Expression captionExp =
+      MappingExpression captionExp =
         targetExp.get( currLevel.getCaptionExp() );
-      Expression parentExp = currLevel.getParentExp();
+      MappingExpression parentExp = currLevel.getParentExp();
 
       if ( parentExp != null ) {
         if ( !levelCollapsed ) {
@@ -1402,10 +1402,10 @@ public TupleList readTuples(
 
       RolapProperty[] properties = currLevel.getProperties();
       for ( RolapProperty property : properties ) {
-        final Expression propExp =
+        final MappingExpression propExp =
           targetExp.get( property.getExp() );
         final String propSql;
-        if ( propExp instanceof Column column) {
+        if ( propExp instanceof MappingColumn column) {
           // When dealing with a column, we must use the same table
           // alias as the one used by the level. We also assume that
           // the property lives in the same table as the level.
@@ -1436,8 +1436,8 @@ public TupleList readTuples(
    * (like ordinal). If the targetExp map has any targets not on the agg table then we need to join.
    */
   private boolean requiresJoinToDim(
-    Map<Expression, Expression> targetExp ) {
-    for ( Map.Entry<Expression, Expression> entry
+    Map<MappingExpression, MappingExpression> targetExp ) {
+    for ( Map.Entry<MappingExpression, MappingExpression> entry
       : targetExp.entrySet() ) {
       if ( entry.getKey() != null
         && entry.getKey().equals( entry.getValue() ) ) {
@@ -1454,9 +1454,9 @@ public TupleList readTuples(
    * corresponding target expression to be used.  If there's no aggStar available then we'll just return an identity
    * map. If an AggStar is present the target Expression may be on the aggregate table.
    */
-  private Map<Expression, Expression> getLevelTargetExpMap( RolapLevel level,
+  private Map<MappingExpression, MappingExpression> getLevelTargetExpMap( RolapLevel level,
                                                                                     AggStar aggStar ) {
-    Map<Expression, Expression> map =
+    Map<MappingExpression, MappingExpression> map =
       initializeIdentityMap( level );
     if ( aggStar == null ) {
       return Collections.unmodifiableMap( map );
@@ -1494,8 +1494,8 @@ public TupleList readTuples(
    * Creates a map of the expressions from a RolapLevel to themselves.  This is the starting assumption of what the
    * target expression is.
    */
-  private Map<Expression, Expression> initializeIdentityMap( RolapLevel level ) {
-    Map<Expression, Expression> map = new HashMap<>();
+  private Map<MappingExpression, MappingExpression> initializeIdentityMap( RolapLevel level ) {
+    Map<MappingExpression, MappingExpression> map = new HashMap<>();
     map.put( level.getKeyExp(), level.getKeyExp() );
     map.put( level.getOrdinalExp(), level.getOrdinalExp() );
     map.put( level.getCaptionExp(), level.getCaptionExp() );

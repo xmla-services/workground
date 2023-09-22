@@ -43,8 +43,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
@@ -455,7 +455,7 @@ public class RolapUtil {
     /**
      * Creates a compiler which will generate programs which will test
      * whether the dependencies declared via
-     * {@link mondrian.calc.Calc#dependsOn(Hierarchy)} are accurate.
+     * {@link mondrian.calc.Calc#dependsOn(MappingHierarchy)} are accurate.
      */
     public static ExpressionCompiler createDependencyTestingCompiler(
         ExpressionCompiler compiler)
@@ -545,7 +545,7 @@ public class RolapUtil {
     }
 
     public static Relation convertInlineTableToRelation(
-        InlineTable inlineTable,
+        MappingInlineTable inlineTable,
         final Dialect dialect)
     {
         ViewImpl view = new ViewImpl();

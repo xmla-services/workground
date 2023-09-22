@@ -280,7 +280,7 @@ public class Bug {
      * <p>This is because some tests involving parent-child hierarchies are
      * very slow. If we are running performance tests (indicated by the
      * {@code mondrian.test.PerforceTest} logger set at
-     * {@link org.eclipse.daanse.olap.api.log4j.Level#DEBUG} or higher), we expect the suite to
+     * {@link org.eclipse.daanse.olap.api.MappingLevel.Level#DEBUG} or higher), we expect the suite to
      * take a long time, so we enable the tests.
      *
      * <p>Fixing either {@link #BugMondrian759Fixed MONDRIAN-759} or

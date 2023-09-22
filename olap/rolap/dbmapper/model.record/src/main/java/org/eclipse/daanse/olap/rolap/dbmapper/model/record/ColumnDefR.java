@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 
 public record ColumnDefR(String name,
                          TypeEnum type)
-        implements ColumnDef {
+        implements MappingColumnDef {
 
 }

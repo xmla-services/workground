@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface NamedSet {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
     String formula();
 
@@ -29,5 +29,5 @@ public interface NamedSet {
 
     String displayFolder();
 
-    Formula formulaElement();
+    MappingFormula formulaElement();
 }

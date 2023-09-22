@@ -46,13 +46,13 @@ import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalker
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
@@ -88,7 +88,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCubeDimension(CubeDimension dimension, Cube cube) {
+    protected void checkCubeDimension(MappingCubeDimension dimension, MappingCube cube) {
         super.checkCubeDimension(dimension, cube);
         Level lavel = config.dimension();
         if (lavel != null && (dimension.description() == null || dimension.description()
@@ -110,7 +110,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCube(Cube cube) {
+    protected void checkCube(MappingCube cube) {
         super.checkCube(cube);
         Level lavel = config.cube();
         if (lavel != null && (cube.description() == null || cube.description()
@@ -120,7 +120,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkMeasure(Measure measure, Cube cube) {
+    protected void checkMeasure(Measure measure, MappingCube cube) {
         super.checkMeasure(measure, cube);
         Level lavel = config.measure();
         if (lavel != null && (measure.description() == null || measure.description()
@@ -130,7 +130,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
+    protected void checkCalculatedMemberProperty(MappingCalculatedMemberProperty calculatedMemberProperty) {
         super.checkCalculatedMemberProperty(calculatedMemberProperty);
         Level lavel = config.calculatedMemberProperty();
         if (lavel != null && (calculatedMemberProperty.description() == null || calculatedMemberProperty.description()
@@ -141,7 +141,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkCalculatedMember(CalculatedMember calculatedMember) {
+    protected void checkCalculatedMember(MappingCalculatedMember calculatedMember) {
         super.checkCalculatedMember(calculatedMember);
         Level lavel = config.calculatedMember();
         if (lavel != null && (calculatedMember.description() == null || calculatedMember.description()
@@ -152,7 +152,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
+    protected void checkHierarchy(MappingHierarchy hierarchy, PrivateDimension cubeDimension, MappingCube cube) {
         super.checkHierarchy(hierarchy, cubeDimension, cube);
         Level lavel = config.hierarchy();
         if (lavel != null && (hierarchy.description() == null || hierarchy.description()
@@ -163,9 +163,9 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level l,
-                              Hierarchy hierarchy,
-                              PrivateDimension parentDimension, Cube cube) {
+    protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel l,
+                              MappingHierarchy hierarchy,
+                              PrivateDimension parentDimension, MappingCube cube) {
         super.checkLevel(l, hierarchy, parentDimension, cube);
         Level lavel = config.level();
         if (lavel != null && (l.description() == null || l.description()
@@ -175,7 +175,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkAction(final Action action) {
+    protected void checkAction(final MappingAction action) {
         super.checkAction(action);
         Level lavel = config.action();
         if (lavel != null && (action.description() == null || action.description()
@@ -196,8 +196,8 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkProperty(final Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level,
-                                 Hierarchy hierarchy, Cube cube) {
+    protected void checkProperty(final Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+                                 MappingHierarchy hierarchy, MappingCube cube) {
         super.checkProperty(property, level, hierarchy, cube);
         Level lavel = config.property();
         if (lavel != null && (property.description() == null || property.description()
@@ -228,7 +228,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkDrillThroughAction(final DrillThroughAction drillThroughAction) {
+    protected void checkDrillThroughAction(final MappingDrillThroughAction drillThroughAction) {
         super.checkDrillThroughAction(drillThroughAction);
         Level lavel = config.drillThroughAction();
         if (lavel != null && (drillThroughAction.description() == null || drillThroughAction.description()

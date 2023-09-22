@@ -17,11 +17,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CellFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -34,15 +34,15 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperties", "cellFormatter", "formulaElement" })
 @XmlRootElement(name = "CalculatedMember")
-public class CalculatedMemberImpl implements CalculatedMember {
+public class CalculatedMemberImpl implements MappingCalculatedMember {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlAttribute(name = "formula")
     protected String formula;
     @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
-    protected List<CalculatedMemberProperty> calculatedMemberProperties;
+    protected List<MappingCalculatedMemberProperty> calculatedMemberProperties;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "formatString")
@@ -69,17 +69,17 @@ public class CalculatedMemberImpl implements CalculatedMember {
 
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
     /**
      * Sets the value of the annotations property.
      *
-     * @param value allowed object is {@link Annotation }
+     * @param value allowed object is {@link MappingAnnotation }
      *
      */
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
@@ -128,7 +128,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
      *
      */
     @Override
-    public List<CalculatedMemberProperty> calculatedMemberProperties() {
+    public List<MappingCalculatedMemberProperty> calculatedMemberProperties() {
         if (calculatedMemberProperties == null) {
             calculatedMemberProperties = new ArrayList<>();
         }
@@ -287,7 +287,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
     }
 
     @Override
-    public CellFormatter cellFormatter() {
+    public MappingCellFormatter cellFormatter() {
         return cellFormatter;
     }
 
@@ -306,7 +306,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
     }
 
     @Override
-    public Formula formulaElement() {
+    public MappingFormula formulaElement() {
         return formulaElement;
     }
 }

@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggLevel", propOrder = { "properties" })
-public class AggLevelImpl implements AggLevel {
+public class AggLevelImpl implements MappingAggLevel {
 
     @XmlAttribute(name = "column", required = true)
     protected String column;
@@ -42,7 +42,7 @@ public class AggLevelImpl implements AggLevel {
     @XmlAttribute(name = "collapsed")
     protected Boolean collapsed = true;
     @XmlElement(name = "AggLevelProperty", type = AggLevelPropertyImpl.class)
-    List<AggLevelProperty> properties;
+    List<MappingAggLevelProperty> properties;
 
     @Override
     public String column() {
@@ -79,7 +79,7 @@ public class AggLevelImpl implements AggLevel {
     }
 
     @Override
-    public List<AggLevelProperty> properties() {
+    public List<MappingAggLevelProperty> properties() {
         if (properties == null) {
             properties = new ArrayList<>();
         }

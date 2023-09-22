@@ -29,8 +29,8 @@ import java.util.Set;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
@@ -382,10 +382,10 @@ public class SqlQuery {
             final String sqlString = getCodeSet(view).chooseQuery(dialect);
             return addFromQuery(sqlString, viewAlias, false);
 
-        } else if (relation instanceof InlineTable) {
+        } else if (relation instanceof MappingInlineTable) {
             final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation relation1 =
                 RolapUtil.convertInlineTableToRelation(
-                    (InlineTable) relation, dialect);
+                    (MappingInlineTable) relation, dialect);
             return addFrom(relation1, alias, failIfExists);
 
         } else if (relation instanceof Table table) {
@@ -401,7 +401,7 @@ public class SqlQuery {
                 getHintMap(table),
                 failIfExists);
 
-        } else if (relation instanceof Join join) {
+        } else if (relation instanceof MappingJoin join) {
             return addJoin(
                 left(join),
                 getLeftAlias(join),
@@ -785,7 +785,7 @@ public class SqlQuery {
         String rightKey,
         String rightAlias)
     {
-        if (root instanceof Join join) {
+        if (root instanceof MappingJoin join) {
             flatten(
                 relations, left(join), join.leftKey(), getLeftAlias(join),
                 join.rightKey(), getRightAlias(join));

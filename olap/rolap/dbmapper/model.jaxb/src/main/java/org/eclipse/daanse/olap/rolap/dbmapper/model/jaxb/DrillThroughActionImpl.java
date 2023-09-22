@@ -16,9 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughElement;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,14 +30,14 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DrillThroughAction", propOrder = { "annotations", "drillThroughElements" })
-public class DrillThroughActionImpl implements DrillThroughAction {
+public class DrillThroughActionImpl implements MappingDrillThroughAction {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElements({ @XmlElement(name = "Attribute", type = DrillThroughAttributeImpl.class),
             @XmlElement(name = "Measure", type = DrillThroughMeasureImpl.class) })
-    protected List<DrillThroughElement> drillThroughElements;
+    protected List<MappingDrillThroughElement> drillThroughElements;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "default")
@@ -48,16 +48,16 @@ public class DrillThroughActionImpl implements DrillThroughAction {
     protected String description;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<DrillThroughElement> drillThroughElements() {
+    public List<MappingDrillThroughElement> drillThroughElements() {
         if (drillThroughElements == null) {
             drillThroughElements = new ArrayList<>();
         }

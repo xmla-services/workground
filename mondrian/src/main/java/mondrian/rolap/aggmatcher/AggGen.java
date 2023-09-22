@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,8 +128,8 @@ public class AggGen {
     }
 
     protected String getRolapStarColumnName(RolapStar.Column rColumn) {
-        Expression expr = rColumn.getExpression();
-        if (expr instanceof Column cx) {
+        MappingExpression expr = rColumn.getExpression();
+        if (expr instanceof MappingColumn cx) {
             return cx.name();
         }
         return null;
@@ -230,8 +230,8 @@ public class AggGen {
                 }
 
 
-                Expression expr = column.getExpression();
-                if (expr instanceof Column exprColumn) {
+                MappingExpression expr = column.getExpression();
+                if (expr instanceof MappingColumn exprColumn) {
                     String name = exprColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
@@ -263,8 +263,8 @@ public class AggGen {
                 if (getLogger().isDebugEnabled()) {
                     getLogger().debug("  RolapStar.Condition: cond={}", cond);
                 }
-                Expression left = cond.getLeft();
-                if (left instanceof Column leftColumn) {
+                MappingExpression left = cond.getLeft();
+                if (left instanceof MappingColumn leftColumn) {
                     String name = leftColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {

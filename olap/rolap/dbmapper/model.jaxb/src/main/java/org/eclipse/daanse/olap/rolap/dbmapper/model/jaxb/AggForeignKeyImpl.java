@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AggForeignKey")
-public class AggForeignKeyImpl implements AggForeignKey {
+public class AggForeignKeyImpl implements MappingAggForeignKey {
 
     @XmlAttribute(name = "factColumn", required = true)
     protected String factColumn;

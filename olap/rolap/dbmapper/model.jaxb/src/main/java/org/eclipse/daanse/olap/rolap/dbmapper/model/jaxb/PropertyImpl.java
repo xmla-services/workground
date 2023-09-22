@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.PropertyTypeAdaptor;
@@ -115,7 +115,7 @@ public class PropertyImpl implements Property {
     }
 
     @Override
-    public ElementFormatter propertyFormatter() {
+    public MappingElementFormatter propertyFormatter() {
         return propertyFormatter;
     }
 

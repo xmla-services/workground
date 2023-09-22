@@ -31,5 +31,5 @@ public interface Property {
 
     boolean dependsOnLevelValue();
 
-    ElementFormatter propertyFormatter();
+    MappingElementFormatter propertyFormatter();
 }

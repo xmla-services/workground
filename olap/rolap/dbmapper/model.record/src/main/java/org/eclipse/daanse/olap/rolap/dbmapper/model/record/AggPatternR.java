@@ -15,23 +15,23 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggPattern;
 
 public record AggPatternR(String pattern,
-                          AggColumnName aggFactCount,
-                          List<AggColumnName> aggIgnoreColumns,
-                          List<AggForeignKey> aggForeignKeys,
-                          List<AggMeasure> aggMeasures,
-                          List<AggLevel> aggLevels,
-                          List<AggExclude> aggExcludes,
+                          MappingAggColumnName aggFactCount,
+                          List<MappingAggColumnName> aggIgnoreColumns,
+                          List<MappingAggForeignKey> aggForeignKeys,
+                          List<MappingAggMeasure> aggMeasures,
+                          List<MappingAggLevel> aggLevels,
+                          List<MappingAggExclude> aggExcludes,
                           boolean ignorecase,
-                          List<AggMeasureFactCount> measuresFactCounts)
-        implements AggPattern {
+                          List<MappingAggMeasureFactCount> measuresFactCounts)
+        implements MappingAggPattern {
 
 }

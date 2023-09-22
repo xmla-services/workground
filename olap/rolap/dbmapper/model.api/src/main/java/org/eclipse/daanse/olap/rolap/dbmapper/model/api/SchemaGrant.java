@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
 public interface SchemaGrant {
 
-    List<CubeGrant> cubeGrants();
+    List<MappingCubeGrant> cubeGrants();
 
     AccessEnum access();
 }

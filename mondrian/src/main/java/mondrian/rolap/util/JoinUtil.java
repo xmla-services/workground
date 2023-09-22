@@ -14,7 +14,7 @@
 package mondrian.rolap.util;
 
 import mondrian.rolap.RolapRuntimeException;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
@@ -26,21 +26,21 @@ public class JoinUtil {
         // constructor
     }
 
-    public static RelationOrJoin left(Join join) {
+    public static RelationOrJoin left(MappingJoin join) {
         if (join.relations() != null && !join.relations().isEmpty()) {
             return join.relations().get(0);
         }
         throw new RolapRuntimeException("Join left error");
     }
 
-    public static RelationOrJoin right(Join join) {
+    public static RelationOrJoin right(MappingJoin join) {
         if (join.relations() != null && join.relations().size() > 1) {
             return join.relations().get(1);
         }
         throw new RolapRuntimeException("Join left error");
     }
 
-    public static void changeLeftRight(Join join, RelationOrJoin left, RelationOrJoin right) {
+    public static void changeLeftRight(MappingJoin join, RelationOrJoin left, RelationOrJoin right) {
         join.relations().clear();
         join.relations().add(left);
         join.relations().add(right);
@@ -50,7 +50,7 @@ public class JoinUtil {
      * Returns the alias of the left join key, defaulting to left's
      * alias if left is a table.
      */
-    public static String getLeftAlias(Join join) {
+    public static String getLeftAlias(MappingJoin join) {
         if (join.leftAlias() != null) {
             return join.leftAlias();
         }
@@ -66,7 +66,7 @@ public class JoinUtil {
      * Returns the alias of the right join key, defaulting to right's
      * alias if right is a table.
      */
-    public static String getRightAlias(Join join) {
+    public static String getRightAlias(MappingJoin join) {
         if (join.rightAlias() != null) {
             return join.rightAlias();
         }
@@ -74,7 +74,7 @@ public class JoinUtil {
         if (right instanceof Relation relation) {
             return RelationUtil.getAlias(relation);
         }
-        if (right instanceof Join j) {
+        if (right instanceof MappingJoin j) {
             return getLeftAlias(j);
         }
         throw Util.newInternal(

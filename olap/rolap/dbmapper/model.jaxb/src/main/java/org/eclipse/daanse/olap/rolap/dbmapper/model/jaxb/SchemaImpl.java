@@ -18,8 +18,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
@@ -52,13 +52,13 @@ public class SchemaImpl implements Schema {
      */
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Parameter", type = ParameterImpl.class)
     protected List<Parameter> parameters;
     @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class)
     protected List<PrivateDimension> dimensions;
     @XmlElement(name = "Cube", required = true, type = CubeImpl.class)
-    protected List<Cube> cubes;
+    protected List<MappingCube> cubes;
     @XmlElement(name = "VirtualCube", type = VirtualCubeImpl.class)
     protected List<VirtualCube> virtualCubes;
     @XmlElement(name = "NamedSet", type = NamedSetImpl.class)
@@ -81,11 +81,11 @@ public class SchemaImpl implements Schema {
     protected String defaultRole;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
@@ -106,7 +106,7 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<Cube> cubes() {
+    public List<MappingCube> cubes() {
         if (cubes == null) {
             cubes = new ArrayList<>();
         }
@@ -222,7 +222,7 @@ public class SchemaImpl implements Schema {
         this.dimensions = dimensions;
     }
 
-    public void setCubes(List<Cube> cubes) {
+    public void setCubes(List<MappingCube> cubes) {
         this.cubes = cubes;
     }
 

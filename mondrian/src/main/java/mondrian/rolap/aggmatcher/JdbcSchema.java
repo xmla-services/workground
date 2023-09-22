@@ -365,7 +365,7 @@ public class JdbcSchema {
 
                 // hierarchy stuff
                 public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation relation;
-                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression joinExp;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression joinExp;
                 public String levelColumnName;
 
                 // level stuff
@@ -431,8 +431,8 @@ public class JdbcSchema {
                     return symbolicName;
                 }
 
-                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression getOrdinalExp() {
-                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression ordinalExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression getOrdinalExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression ordinalExp = null;
                     if (ordinalColumn != null) {
                         ordinalExp =
                             new ColumnR(
@@ -441,8 +441,8 @@ public class JdbcSchema {
                     return ordinalExp;
                 }
 
-                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression getCaptionExp() {
-                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression captionExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression getCaptionExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression captionExp = null;
                     if (captionColumn != null) {
                         captionExp =
                             new ColumnR(
@@ -451,8 +451,8 @@ public class JdbcSchema {
                     return captionExp;
                 }
 
-                public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> getProperties() {
-                    Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> map =
+                public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression> getProperties() {
+                    Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression> map =
                         new HashMap<>();
                     if (properties == null) {
                         return map;
@@ -537,7 +537,7 @@ public class JdbcSchema {
              */
             private boolean isNullable;
 
-            public final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column column;
+            public final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn column;
 
             private final List<JdbcSchema.Table.Column.Usage> usages;
 

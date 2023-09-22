@@ -12,11 +12,11 @@
 package mondrian.rolap;
 
 import org.eclipse.daanse.olap.api.element.LevelType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
@@ -95,7 +95,7 @@ public class RolapCubeLevel extends RolapLevel {
     }
 
     @Override
-	void init(CubeDimension xmlDimension) {
+	void init(MappingCubeDimension xmlDimension) {
         if (isAll()) {
             this.levelReader = new AllLevelReaderImpl();
         } else if (getLevelType() == LevelType.NULL) {
@@ -172,8 +172,8 @@ public class RolapCubeLevel extends RolapLevel {
      * @param rel the parent relation
      * @return returns the converted expression
      */
-    private Expression convertExpression(
-        Expression exp,
+    private MappingExpression convertExpression(
+        MappingExpression exp,
         RelationOrJoin rel)
     {
         if (getHierarchy().isUsingCubeFact()) {
@@ -181,12 +181,12 @@ public class RolapCubeLevel extends RolapLevel {
             return exp;
         } else if (exp == null || rel == null) {
             return null;
-        } else if (exp instanceof Column col) {
+        } else if (exp instanceof MappingColumn col) {
             if (rel instanceof Table table) {
                 return new ColumnR(
                     RelationUtil.getAlias(table),
                     col.name());
-            } else if (rel instanceof Join
+            } else if (rel instanceof MappingJoin
                 || rel instanceof Relation)
             {
                 // need to determine correct name of alias for this level.
@@ -195,7 +195,7 @@ public class RolapCubeLevel extends RolapLevel {
                 String alias = getHierarchy().lookupAlias(ExpressionUtil.getTableAlias(col));
                 return new ColumnR(alias, col.name());
             }
-        } else if (exp instanceof ExpressionView) {
+        } else if (exp instanceof MappingExpressionView) {
             // this is a limitation, in the future, we may need
             // to replace the table name in the sql provided
             // with the new aliased name

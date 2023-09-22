@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.AccessAdaptor;
@@ -33,13 +33,13 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class SchemaGrantImpl implements SchemaGrant {
 
     @XmlElement(name = "CubeGrant", required = true, type = CubeGrantImpl.class)
-    protected List<CubeGrant> cubeGrants;
+    protected List<MappingCubeGrant> cubeGrants;
     @XmlAttribute(name = "access", required = true)
     @XmlJavaTypeAdapter(AccessAdaptor.class)
     protected AccessEnum access;
 
     @Override
-    public List<CubeGrant> cubeGrants() {
+    public List<MappingCubeGrant> cubeGrants() {
         if (cubeGrants == null) {
             cubeGrants = new ArrayList<>();
         }
@@ -55,7 +55,7 @@ public class SchemaGrantImpl implements SchemaGrant {
         this.access = value;
     }
 
-    public void setCubeGrants(List<CubeGrant> cubeGrants) {
+    public void setCubeGrants(List<MappingCubeGrant> cubeGrants) {
         this.cubeGrants = cubeGrants;
     }
 }

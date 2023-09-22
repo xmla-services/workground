@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -28,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "relations" })
-public class JoinImpl implements Join {
+public class JoinImpl implements MappingJoin {
 
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
             @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),

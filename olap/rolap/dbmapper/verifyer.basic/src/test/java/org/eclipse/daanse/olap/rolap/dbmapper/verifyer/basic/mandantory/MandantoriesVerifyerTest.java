@@ -93,30 +93,30 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasureFactCount;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasureFactCount;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
@@ -154,43 +154,43 @@ class MandantoriesVerifyerTest {
     Verifyer verifyer;
 
     Schema schema = mock(Schema.class);
-    Cube cube = mock(Cube.class);
+    MappingCube cube = mock(MappingCube.class);
     VirtualCube virtualCube = mock(VirtualCube.class);
     PrivateDimension dimension = mock(PrivateDimension.class);
-    CalculatedMemberProperty calculatedMemberProperty = mock(CalculatedMemberProperty.class);
-    CalculatedMember calculatedMember = mock(CalculatedMember.class);
+    MappingCalculatedMemberProperty calculatedMemberProperty = mock(MappingCalculatedMemberProperty.class);
+    MappingCalculatedMember calculatedMember = mock(MappingCalculatedMember.class);
     Measure measure = mock(Measure.class);
-    Hierarchy hierarchy = mock(Hierarchy.class);
-    Level level = mock(Level.class);
+    MappingHierarchy hierarchy = mock(MappingHierarchy.class);
+    MappingLevel level = mock(MappingLevel.class);
     org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property property =
         mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property.class);
     NamedSet namedSet = mock(NamedSet.class);
     Parameter parameter = mock(Parameter.class);
-    DrillThroughAction drillThroughAction = mock(DrillThroughAction.class);
-    Action action = mock(Action.class);
-    ElementFormatter elementFormatter = mock(ElementFormatter.class);
-    Join join = mock(Join.class);
+    MappingDrillThroughAction drillThroughAction = mock(MappingDrillThroughAction.class);
+    MappingAction action = mock(MappingAction.class);
+    MappingElementFormatter elementFormatter = mock(MappingElementFormatter.class);
+    MappingJoin join = mock(MappingJoin.class);
     Table table = mock(Table.class);
-    Formula formula = mock(Formula.class);
+    MappingFormula formula = mock(MappingFormula.class);
     UserDefinedFunction userDefinedFunction = mock(UserDefinedFunction.class);
     WritebackTable writebackTable = mock(WritebackTable.class);
     WritebackAttribute writebackAttribute = mock(WritebackAttribute.class);
     WritebackMeasure writebackMeasure = mock(WritebackMeasure.class);
-    DrillThroughMeasure drillThroughMeasure = mock(DrillThroughMeasure.class);
-    DrillThroughAttribute drillThroughAttribute = mock(DrillThroughAttribute.class);
-    Annotation annotation = mock(Annotation.class);
+    MappingDrillThroughMeasure drillThroughMeasure = mock(MappingDrillThroughMeasure.class);
+    MappingDrillThroughAttribute drillThroughAttribute = mock(MappingDrillThroughAttribute.class);
+    MappingAnnotation annotation = mock(MappingAnnotation.class);
     Role role = mock(Role.class);
-    CubeUsage cubeUsage = mock(CubeUsage.class);
+    MappingCubeUsage cubeUsage = mock(MappingCubeUsage.class);
     SQL sql = mock(SQL.class);
-    Hint hint = mock(Hint.class);
-    AggTable aggTable = mock(AggName.class);
-    AggColumnName aggColumnName = mock(AggColumnName.class);
-    AggForeignKey aggForeignKey = mock(AggForeignKey.class);
-    AggMeasure aggMeasure = mock(AggMeasure.class);
-    AggLevel aggLevel = mock(AggLevel.class);
-    AggMeasureFactCount measuresFactCount = mock(AggMeasureFactCount.class);
+    MappingHint hint = mock(MappingHint.class);
+    MappingAggTable aggTable = mock(MappingAggName.class);
+    MappingAggColumnName aggColumnName = mock(MappingAggColumnName.class);
+    MappingAggForeignKey aggForeignKey = mock(MappingAggForeignKey.class);
+    MappingAggMeasure aggMeasure = mock(MappingAggMeasure.class);
+    MappingAggLevel aggLevel = mock(MappingAggLevel.class);
+    MappingAggMeasureFactCount measuresFactCount = mock(MappingAggMeasureFactCount.class);
 
-    Level l = new LevelTest("name",
+    MappingLevel l = new LevelTest("name",
         "table",
         "column",
         "nameColumn",
@@ -591,19 +591,19 @@ class MandantoriesVerifyerTest {
                             String caption,
                             String description,
                             String captionColumn,
-                            List<Annotation> annotations,
-                            ExpressionView keyExpression,
-                            ExpressionView nameExpression,
-                            ExpressionView captionExpression,
-                            ExpressionView ordinalExpression,
-                            ExpressionView parentExpression,
-                            Closure closure,
+                            List<MappingAnnotation> annotations,
+                            MappingExpressionView keyExpression,
+                            MappingExpressionView nameExpression,
+                            MappingExpressionView captionExpression,
+                            MappingExpressionView ordinalExpression,
+                            MappingExpressionView parentExpression,
+                            MappingClosure closure,
                             List<Property> properties,
                             boolean visible,
                             InternalTypeEnum internalType,
-                            ElementFormatter memberFormatter
+                            MappingElementFormatter memberFormatter
     )
-        implements Level {
+        implements MappingLevel {
 
     }
 }

@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ColumnDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -28,11 +28,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InlineTable", propOrder = { "columnDefs", "rows" })
-public class InlineTableImpl implements InlineTable {
+public class InlineTableImpl implements MappingInlineTable {
 
     @XmlElementWrapper(name = "ColumnDefs")
     @XmlElement(name = "ColumnDef", required = true, type = ColumnDefImpl.class)
-    protected List<ColumnDef> columnDefs;
+    protected List<MappingColumnDef> columnDefs;
     @XmlElementWrapper(name = "Rows", required = true)
     @XmlElement(name = "Row", required = true, type = RowImpl.class)
     protected List<Row> rows;
@@ -40,11 +40,11 @@ public class InlineTableImpl implements InlineTable {
     private String alias;
 
     @Override
-    public List<ColumnDef> columnDefs() {
+    public List<MappingColumnDef> columnDefs() {
         return columnDefs;
     }
 
-    public void setColumnDefs(List<ColumnDef> value) {
+    public void setColumnDefs(List<MappingColumnDef> value) {
         this.columnDefs = value;
     }
 
@@ -67,7 +67,7 @@ public class InlineTableImpl implements InlineTable {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof InlineTable that) {
+        if (o instanceof MappingInlineTable that) {
             return alias().equals(that.alias());
         } else {
             return false;

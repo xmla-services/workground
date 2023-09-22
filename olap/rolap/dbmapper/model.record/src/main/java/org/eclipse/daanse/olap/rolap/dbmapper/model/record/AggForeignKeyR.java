@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggForeignKey;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
 
 public record AggForeignKeyR(String factColumn,
                              String aggColumn)
-        implements AggForeignKey {
+        implements MappingAggForeignKey {
 
 }

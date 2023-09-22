@@ -15,14 +15,14 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 
 public record CubeGrantR(String cube,
                          String access,
-                         List<DimensionGrant> dimensionGrants,
-                         List<HierarchyGrant> hierarchyGrants)
-        implements CubeGrant {
+                         List<MappingDimensionGrant> dimensionGrants,
+                         List<MappingHierarchyGrant> hierarchyGrants)
+        implements MappingCubeGrant {
 
 }

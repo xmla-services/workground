@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
@@ -41,18 +41,18 @@ public record LevelR(String name,
                      String caption,
                      String description,
                      String captionColumn,
-                     List<Annotation> annotations,
-                     ExpressionView keyExpression,
-                     ExpressionView nameExpression,
-                     ExpressionView captionExpression,
-                     ExpressionView ordinalExpression,
-                     ExpressionView parentExpression,
+                     List<MappingAnnotation> annotations,
+                     MappingExpressionView keyExpression,
+                     MappingExpressionView nameExpression,
+                     MappingExpressionView captionExpression,
+                     MappingExpressionView ordinalExpression,
+                     MappingExpressionView parentExpression,
                      ClosureR closure,
                      List<Property> properties,
                      boolean visible,
                      InternalTypeEnum internalType,
-                     ElementFormatter memberFormatter
+                     MappingElementFormatter memberFormatter
                      )
-        implements Level {
+        implements MappingLevel {
 
 }

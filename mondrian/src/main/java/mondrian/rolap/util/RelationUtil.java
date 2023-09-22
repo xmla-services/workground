@@ -19,8 +19,8 @@ import static mondrian.rolap.util.JoinUtil.right;
 import java.util.Objects;
 
 import mondrian.rolap.RolapRuntimeException;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
@@ -33,7 +33,7 @@ public class RelationUtil {
     }
 
     public static Relation find(RelationOrJoin relationOrJoin, String tableName) {
-        if (relationOrJoin instanceof InlineTable inlineTable) {
+        if (relationOrJoin instanceof MappingInlineTable inlineTable) {
             return tableName.equals(inlineTable.alias()) ? (Relation) relationOrJoin : null;
         }
         if (relationOrJoin instanceof Table table) {
@@ -50,7 +50,7 @@ public class RelationUtil {
                 return null;
             }
         }
-        if (relationOrJoin instanceof Join join) {
+        if (relationOrJoin instanceof MappingJoin join) {
             RelationOrJoin relation = find(left(join), tableName);
             if (relation == null) {
                 relation = find(right(join), tableName);
@@ -101,8 +101,8 @@ public class RelationUtil {
                 return false;
             }
         }
-        if (relation instanceof InlineTable) {
-            if (o instanceof InlineTable that) {
+        if (relation instanceof MappingInlineTable) {
+            if (o instanceof MappingInlineTable that) {
                 return relation.alias().equals(that.alias());
             } else {
                 return false;
@@ -116,7 +116,7 @@ public class RelationUtil {
         if (relation instanceof Table) {
             return toString(relation).hashCode();
         }
-        if (relation instanceof InlineTable) {
+        if (relation instanceof MappingInlineTable) {
             return toString(relation).hashCode();
         }
         return System.identityHashCode(relation);
@@ -128,12 +128,12 @@ public class RelationUtil {
                 table.name() :
                 new StringBuilder(table.schema()).append(".").append(table.name()).toString();
         }
-        if (relation instanceof Join join) {
+        if (relation instanceof MappingJoin join) {
             return new StringBuilder("(").append(left(join)).append(") join (").append(right(join)).append(") on ")
                 .append((join).leftAlias()).append(".").append((join).leftKey()).append(" = ")
                 .append((join).rightAlias()).append(".").append((join).rightKey()).toString();
         }
-        if (relation instanceof InlineTable) {
+        if (relation instanceof MappingInlineTable) {
             return "<inline data>";
         }
         return relation.toString();

@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
@@ -32,12 +32,12 @@ public record MeasureR(String name,
                        String description,
                        boolean visible,
                        String displayFolder,
-                       List<Annotation> annotations,
-                       ExpressionView measureExpression,
-                       List<CalculatedMemberProperty> calculatedMemberProperties,
-                       ElementFormatter cellFormatter,
+                       List<MappingAnnotation> annotations,
+                       MappingExpressionView measureExpression,
+                       List<MappingCalculatedMemberProperty> calculatedMemberProperties,
+                       MappingElementFormatter cellFormatter,
                        String backColor,
-                       List<CalculatedMemberProperty> memberProperties
+                       List<MappingCalculatedMemberProperty> memberProperties
                        )
         implements Measure {
 

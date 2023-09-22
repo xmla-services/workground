@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "table" })
-public class ClosureImpl implements Closure {
+public class ClosureImpl implements MappingClosure {
 
     @XmlElement(name = "Table", required = true)
     protected TableImpl table;
