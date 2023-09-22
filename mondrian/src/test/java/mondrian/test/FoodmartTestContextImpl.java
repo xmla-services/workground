@@ -1610,12 +1610,7 @@ public void assertSqlEquals(
     ResultSet rs = null;
 
     try {
-      String jdbcDrivers =
-        connectProperties.get(
-          RolapConnectionProperties.JdbcDrivers.name() );
-      if ( jdbcDrivers != null ) {
-        RolapUtil.loadDrivers( jdbcDrivers );
-      }
+
       final String jdbcDriversProp =
         MondrianProperties.instance().JdbcDrivers.get();
       RolapUtil.loadDrivers( jdbcDriversProp );

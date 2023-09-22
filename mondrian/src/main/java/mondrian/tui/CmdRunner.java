@@ -718,17 +718,6 @@ public class CmdRunner {
                 jdbcURL);
         }
 
-        // override jdbc drivers
-        String jdbcDrivers = CmdRunner.getJdbcDriversProperty();
-
-        debug("CmdRunner.makeConnectString: jdbcDrivers=" + jdbcDrivers);
-        if (jdbcDrivers != null) {
-            // add jdbc drivers to connect string
-            connectProperties.put(
-                RolapConnectionProperties.JdbcDrivers.name(),
-                jdbcDrivers);
-        }
-
         // override catalog url
         String catalogURL = CmdRunner.getCatalogURLProperty();
 
