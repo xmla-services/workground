@@ -700,9 +700,7 @@ public class CmdRunner {
         if (connectStringInner == null || connectStringInner.equals("")) {
             // create new and add provider
             connectProperties = new Util.PropertyList();
-            connectProperties.put(
-                RolapConnectionProperties.Provider.name(),
-                "mondrian");
+
         } else {
             // load with existing connect string
             connectProperties = Util.parseConnectString(connectStringInner);

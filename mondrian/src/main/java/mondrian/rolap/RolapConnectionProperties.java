@@ -25,10 +25,6 @@ import java.lang.ref.SoftReference;
  * @author jhyde, Mar 18, 2003
  */
 public enum RolapConnectionProperties {
-  /**
-   * The "Provider" property must have the value <code>"Mondrian"</code>.
-   */
-  Provider,
 
   /**
    * The "Jdbc" property is the URL of the JDBC database where the data is
