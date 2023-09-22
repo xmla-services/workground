@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
@@ -59,7 +59,7 @@ public class DatabaseVerifyer implements Verifyer {
     }
 
     @Override
-    public List<VerificationResult> verify(Schema schema, DataSource dataSource) {
+    public List<VerificationResult> verify(MappingSchema schema, DataSource dataSource) {
         List<VerificationResult> results = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {

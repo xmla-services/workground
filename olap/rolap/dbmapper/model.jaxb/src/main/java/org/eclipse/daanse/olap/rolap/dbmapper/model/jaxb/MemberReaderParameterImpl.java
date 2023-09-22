@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class MemberReaderParameterImpl implements MemberReaderParameter {
+public class MemberReaderParameterImpl implements MappingMemberReaderParameter {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;

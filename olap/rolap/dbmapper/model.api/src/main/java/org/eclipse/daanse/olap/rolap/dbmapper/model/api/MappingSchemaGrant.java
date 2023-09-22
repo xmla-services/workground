@@ -13,18 +13,13 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
+import java.util.List;
 
-public interface Parameter {
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
 
-    String name();
+public interface MappingSchemaGrant {
 
-    String description();
+    List<MappingCubeGrant> cubeGrants();
 
-    ParameterTypeEnum type();
-
-    boolean modifiable();
-
-    String defaultValue();
-
+    AccessEnum access();
 }

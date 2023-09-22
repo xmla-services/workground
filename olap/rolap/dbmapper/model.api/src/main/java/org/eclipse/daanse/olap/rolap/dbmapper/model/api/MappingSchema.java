@@ -22,27 +22,27 @@ import java.util.List;
  * declarations of user-defined functions.
  *
  */
-public interface Schema {
+public interface MappingSchema {
 
     List<MappingAnnotation> annotations();
 
-    List<Parameter> parameters();
+    List<MappingParameter> parameters();
 
-    List<PrivateDimension> dimensions();
+    List<MappingPrivateDimension> dimensions();
 
     List<MappingCube> cubes();
 
-    List<VirtualCube> virtualCubes();
+    List<MappingVirtualCube> virtualCubes();
 
-    List<NamedSet> namedSets();
+    List<MappingNamedSet> namedSets();
 
-    List<Role> roles();
+    List<MappingRole> roles();
 
     /**
      * @return @deprecated
      */
     @Deprecated(since="new version")
-    List<UserDefinedFunction> userDefinedFunctions();
+    List<MappingUserDefinedFunction> userDefinedFunctions();
 
     String name();
 

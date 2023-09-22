@@ -13,17 +13,17 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 import java.util.List;
 import java.util.Objects;
 
 public record ViewR(String alias,
-                    List<SQL> sqls)
-        implements View {
+                    List<MappingSQL> sqls)
+        implements MappingView {
 
-    public ViewR(View view, String alias) {
+    public ViewR(MappingView view, String alias) {
         this(alias,  view.sqls());
     }
 
@@ -34,7 +34,7 @@ public record ViewR(String alias,
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof View that) {
+        if (o instanceof MappingView that) {
             if (!Objects.equals(alias(), that.alias())) {
                 return false;
             }

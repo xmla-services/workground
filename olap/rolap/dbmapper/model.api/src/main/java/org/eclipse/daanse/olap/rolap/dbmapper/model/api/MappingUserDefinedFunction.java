@@ -13,10 +13,15 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface MemberFormatter {
+/**
+ * @deprecated will removed in new version
+ */
+@Deprecated(since="new version")
+public interface MappingUserDefinedFunction {
+
+    String name();
 
     String className();
 
-    Script script();
-
+    MappingScript script();
 }

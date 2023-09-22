@@ -15,14 +15,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-public interface VirtualCubeMeasure {
-
+public interface MappingSharedDimension {
     List<MappingAnnotation> annotations();
 
-    String cubeName();
+    List<MappingHierarchy> hierarchies();
 
     String name();
 
-    boolean visible();
+    String type();
 
+    String caption();
+
+    String description();
+
+    String foreignKey();
 }

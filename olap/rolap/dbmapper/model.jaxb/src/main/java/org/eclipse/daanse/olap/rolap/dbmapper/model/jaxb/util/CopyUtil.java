@@ -17,9 +17,9 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AnnotationImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.FormulaImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.NamedSetImpl;
@@ -31,7 +31,7 @@ public class CopyUtil {
 	private CopyUtil() {
 	}
 
-    public static SchemaImpl copy(Schema schemaApi) {
+    public static SchemaImpl copy(MappingSchema schemaApi) {
         SchemaImpl schemaImpl = new SchemaImpl();
         schemaImpl.setAnnotations(copyAnnotation(schemaApi.annotations()));
         schemaImpl.setDefaultRole(schemaApi.defaultRole());
@@ -56,13 +56,13 @@ public class CopyUtil {
 
     }
 
-    private static List<NamedSet> copyNamedSet(List<? extends NamedSet> namedSet) {
+    private static List<MappingNamedSet> copyNamedSet(List<? extends MappingNamedSet> namedSet) {
         return namedSet.stream()
             .map(CopyUtil::copy)
             .toList();
     }
 
-    private static List<Parameter> copyParameter(List<? extends Parameter> parameter) {
+    private static List<MappingParameter> copyParameter(List<? extends MappingParameter> parameter) {
         return parameter.stream()
             .map(CopyUtil::copy)
             .toList();
@@ -82,7 +82,7 @@ public class CopyUtil {
         return impl;
     }
 
-    private static NamedSet copy(NamedSet namedSetApi) {
+    private static MappingNamedSet copy(MappingNamedSet namedSetApi) {
         NamedSetImpl impl = new NamedSetImpl();
         impl.setAnnotations(copyAnnotation(namedSetApi.annotations()));
         impl.setCaption(namedSetApi.caption());
@@ -94,7 +94,7 @@ public class CopyUtil {
         return impl;
     }
 
-    private static Parameter copy(Parameter parameterApi) {
+    private static MappingParameter copy(MappingParameter parameterApi) {
         ParameterImpl impl = new ParameterImpl();
         impl.setDefaultValue(parameterApi.defaultValue());
         impl.setDescription(parameterApi.description());

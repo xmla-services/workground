@@ -13,7 +13,7 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 
 import mondrian.olap.DimensionType;
 
@@ -24,7 +24,7 @@ public class DimensionTypeUtil {
     }
 
     // Return the dimension's enumerated type.
-    public static DimensionType getDimensionType(PrivateDimension dimension) {
+    public static DimensionType getDimensionType(MappingPrivateDimension dimension) {
         if (dimension.type() == null) {
             return null;
         } else {

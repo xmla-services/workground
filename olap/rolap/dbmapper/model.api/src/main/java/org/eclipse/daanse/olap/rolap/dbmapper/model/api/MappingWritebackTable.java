@@ -13,20 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import java.util.List;
+public interface MappingWritebackTable {
 
-public interface SharedDimension {
-    List<MappingAnnotation> annotations();
-
-    List<MappingHierarchy> hierarchies();
+    String schema();
 
     String name();
 
-    String type();
-
-    String caption();
-
-    String description();
-
-    String foreignKey();
+    Iterable<MappingWritebackColumn> columns();
 }

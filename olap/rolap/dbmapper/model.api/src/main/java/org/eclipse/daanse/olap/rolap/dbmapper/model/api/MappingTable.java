@@ -15,30 +15,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
+public interface MappingTable extends MappingRelation {
 
-public interface VirtualCube {
+    MappingSQL sql();
 
-    List<MappingAnnotation> annotations();
+    List<MappingAggExclude> aggExcludes();
 
-    List<MappingCubeUsage> cubeUsages();
+    List<MappingAggTable> aggTables();
 
-    List<VirtualCubeDimension> virtualCubeDimensions();
-
-    List<VirtualCubeMeasure> virtualCubeMeasures();
-
-    List<MappingCalculatedMember> calculatedMembers();
-
-    List<NamedSet> namedSets();
-
-    boolean enabled();
+    List<MappingHint> hints();
 
     String name();
 
-    String defaultMeasure();
+    String schema();
 
-    String caption();
-
-    String description();
-
-    boolean visible();
 }

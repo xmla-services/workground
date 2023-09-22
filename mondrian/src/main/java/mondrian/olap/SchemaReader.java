@@ -36,7 +36,7 @@ import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchema;
 
 /**
- * A <code>SchemaReader</code> queries schema objects ({@link Schema},
+ * A <code>SchemaReader</code> queries schema objects ({@link MappingSchema},
  * {@link Cube}, {@link Dimension}, {@link Hierarchy}, {@link Level},
  * {@link Member}).
  *

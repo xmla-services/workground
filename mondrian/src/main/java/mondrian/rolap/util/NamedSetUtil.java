@@ -13,7 +13,7 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
 public class NamedSetUtil {
     /**
@@ -21,7 +21,7 @@ public class NamedSetUtil {
      * "Formula" first, then looking for an attribute called
      * "formula".
      */
-    public static String getFormula(NamedSet namedSet) {
+    public static String getFormula(MappingNamedSet namedSet) {
         if (namedSet.formulaElement() != null) {
             return namedSet.formulaElement().cdata();
         } else {

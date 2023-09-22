@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
 public record MeasureR(String name,
@@ -39,6 +39,6 @@ public record MeasureR(String name,
                        String backColor,
                        List<MappingCalculatedMemberProperty> memberProperties
                        )
-        implements Measure {
+        implements MappingMeasure {
 
 }

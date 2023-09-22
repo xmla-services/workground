@@ -9,12 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface RoleUsage {
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MemberGrantAccessEnum;
 
-    String roleName();
+public interface MappingMemberGrant {
+
+    String member();
+
+    MemberGrantAccessEnum access();
 
 }

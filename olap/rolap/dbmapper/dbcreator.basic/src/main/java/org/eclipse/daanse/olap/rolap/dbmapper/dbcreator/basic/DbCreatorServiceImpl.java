@@ -33,11 +33,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
 public class DbCreatorServiceImpl implements DbCreatorService {
 
@@ -50,13 +50,13 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     @Override
-    public DBStructure createSchema(Schema schema) throws SQLException {
+    public DBStructure createSchema(MappingSchema schema) throws SQLException {
         DBStructure dbStructure = getDBStructure(schema);
         databaseCreatorService.createDatabaseSchema(dataSource, dbStructure);
         return dbStructure;
     }
 
-    private DBStructure getDBStructure(Schema schema) {
+    private DBStructure getDBStructure(MappingSchema schema) {
 
         String schemaName = schema.name();
         Map<String, Table> tables = new HashMap<>();
@@ -91,7 +91,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
         }
     }
 
-    private void processingMeasure(Measure m, Map<String, Table> tables, String tableName, String schemaName) {
+    private void processingMeasure(MappingMeasure m, Map<String, Table> tables, String tableName, String schemaName) {
 
         if (m.column() != null) {
             String columnName = m.column();
@@ -104,7 +104,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private void processingDimension(MappingCubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
-        if (d instanceof PrivateDimension privateDimension && privateDimension.hierarchies() != null) {
+        if (d instanceof MappingPrivateDimension privateDimension && privateDimension.hierarchies() != null) {
             privateDimension.hierarchies().forEach(h -> processingHierarchy(h, tables, schemaName));
         }
         if (tableName != null) {
@@ -132,8 +132,8 @@ public class DbCreatorServiceImpl implements DbCreatorService {
         }
     }
 
-    private String processingRelation(RelationOrJoin relation, Map<String, Table> tables, String schemaName) {
-        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table) {
+    private String processingRelation(MappingRelationOrJoin relation, Map<String, Table> tables, String schemaName) {
+        if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table) {
             return processingTable(table, tables, schemaName);
         }
         if (relation instanceof MappingJoin join) {
@@ -163,7 +163,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
     }
 
     private String processingTable(
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable table,
         Map<String, Table> tables,
         String schemaName
     ) {
@@ -220,7 +220,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
 
     }
 
-    private void processingProperty(Property property, Map<String, Table> tables, String tableName, String schema) {
+    private void processingProperty(MappingProperty property, Map<String, Table> tables, String tableName, String schema) {
         if (property.column() != null) {
             String columnName = property.column();
             if (tableName != null) {

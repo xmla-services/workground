@@ -26,21 +26,21 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ExpressionView", propOrder = { "sqls" })
 public class ExpressionViewImpl implements MappingExpressionView {
 
     @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
-    protected List<SQL> sqls;
+    protected List<MappingSQL> sqls;
     @XmlAttribute(name = "table")
     protected String table;
     @XmlAttribute(name = "name", required = true)
     protected String name;
 
     @Override
-    public List<SQL> sqls() {
+    public List<MappingSQL> sqls() {
         if (sqls == null) {
             sqls = new ArrayList<>();
         }

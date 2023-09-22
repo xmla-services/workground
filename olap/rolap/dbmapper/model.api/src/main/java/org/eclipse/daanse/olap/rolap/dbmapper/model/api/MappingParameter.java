@@ -13,16 +13,18 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import java.util.List;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 
-public interface Role {
-
-    List<MappingAnnotation> annotations();
-
-    List<SchemaGrant> schemaGrants();
-
-    Union union();
+public interface MappingParameter {
 
     String name();
+
+    String description();
+
+    ParameterTypeEnum type();
+
+    boolean modifiable();
+
+    String defaultValue();
 
 }

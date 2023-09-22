@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -26,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations" })
-public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
+public class VirtualCubeDimensionImpl implements MappingVirtualCubeDimension {
 
     @XmlAttribute(name = "cubeName")
     protected String cubeName;

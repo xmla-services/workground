@@ -15,9 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-public interface View extends Relation {
+public interface MappingRow {
 
-    List<SQL> sqls();
+    List<MappingValue> values();
 
-    void addCode(String generic, String generateInline);
 }

@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InlineTable", propOrder = { "columnDefs", "rows" })
@@ -35,7 +35,7 @@ public class InlineTableImpl implements MappingInlineTable {
     protected List<MappingColumnDef> columnDefs;
     @XmlElementWrapper(name = "Rows", required = true)
     @XmlElement(name = "Row", required = true, type = RowImpl.class)
-    protected List<Row> rows;
+    protected List<MappingRow> rows;
     @XmlAttribute(name = "alias")
     private String alias;
 
@@ -49,11 +49,11 @@ public class InlineTableImpl implements MappingInlineTable {
     }
 
     @Override
-    public List<Row> rows() {
+    public List<MappingRow> rows() {
         return rows;
     }
 
-    public void setRows(List<Row> value) {
+    public void setRows(List<MappingRow> value) {
         this.rows = value;
     }
 

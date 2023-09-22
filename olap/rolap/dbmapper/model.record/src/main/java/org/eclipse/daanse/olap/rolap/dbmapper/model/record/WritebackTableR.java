@@ -15,12 +15,12 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackColumn;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 
 public record WritebackTableR(String schema,
                               String name,
-                              List<WritebackColumn> columns)
-        implements WritebackTable {
+                              List<MappingWritebackColumn> columns)
+        implements MappingWritebackTable {
 
 }

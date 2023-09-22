@@ -13,11 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface WritebackTable {
-
-    String schema();
+public interface MappingWritebackMeasure extends MappingWritebackColumn {
 
     String name();
 
-    Iterable<WritebackColumn> columns();
+    String column();
+
 }

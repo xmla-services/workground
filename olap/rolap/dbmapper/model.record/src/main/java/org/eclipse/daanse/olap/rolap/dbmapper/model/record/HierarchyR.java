@@ -20,21 +20,21 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 public record HierarchyR(String name,
                          String caption,
                          String description,
                          List<MappingAnnotation> annotations,
-                         Table table,
-                         View view,
+                         MappingTable table,
+                         MappingView view,
                          MappingJoin join,
                          MappingInlineTable inlineTable,
                          List<MappingLevel> levels,
-                         List<MemberReaderParameter> memberReaderParameters,
+                         List<MappingMemberReaderParameter> memberReaderParameters,
                          boolean hasAll,
                          String allMemberName,
                          String allMemberCaption,
@@ -46,7 +46,7 @@ public record HierarchyR(String name,
                          String uniqueKeyLevelName,
                          boolean visible,
                          String displayFolder,
-                         RelationOrJoin relation,
+                         MappingRelationOrJoin relation,
                          String origin
                          )
         implements MappingHierarchy {

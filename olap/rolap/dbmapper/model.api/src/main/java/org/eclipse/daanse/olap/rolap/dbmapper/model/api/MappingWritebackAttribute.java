@@ -13,21 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import java.util.List;
+public interface MappingWritebackAttribute extends MappingWritebackColumn{
 
-public interface NamedSet {
+    String dimension();
 
-    List<MappingAnnotation> annotations();
+    String column();
 
-    String formula();
-
-    String name();
-
-    String caption();
-
-    String description();
-
-    String displayFolder();
-
-    MappingFormula formulaElement();
 }

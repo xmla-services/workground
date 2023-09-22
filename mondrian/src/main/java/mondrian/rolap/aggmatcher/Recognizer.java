@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -638,7 +638,7 @@ abstract class Recognizer {
                 {
                     JdbcSchema.Table.Column.Usage aggUsage = uit.next();
 
-                    Relation rel = hierarchyUsage.getJoinTable();
+                    MappingRelation rel = hierarchyUsage.getJoinTable();
 
                     if (! aggUsageMatchesHierarchyUsage(aggUsage,
                         hierarchyUsage, levelColumnName))
@@ -775,7 +775,7 @@ abstract class Recognizer {
         HierarchyUsage hierarchyUsage,
         String levelColumnName)
     {
-        Relation rel = hierarchyUsage.getJoinTable();
+        MappingRelation rel = hierarchyUsage.getJoinTable();
 
         JdbcSchema.Table.Column aggColumn = aggUsage.getColumn();
         String aggColumnName = aggColumn.column.name();

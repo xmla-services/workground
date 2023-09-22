@@ -13,11 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface VirtualCubeDimension extends  MappingCubeDimension{
+public interface MappingRelation extends MappingRelationOrJoin {
 
-    String cubeName();
-
-    @Override
-	String name();
+    String alias();
 
 }

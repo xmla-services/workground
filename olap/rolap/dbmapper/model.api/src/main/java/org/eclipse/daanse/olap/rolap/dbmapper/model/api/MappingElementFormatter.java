@@ -17,6 +17,6 @@ public interface MappingElementFormatter {
 
     String className();
 
-    Script script();
+    MappingScript script();
 
 }

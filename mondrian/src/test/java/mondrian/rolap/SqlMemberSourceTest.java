@@ -26,8 +26,8 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.LevelImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
@@ -122,7 +122,7 @@ class SqlMemberSourceTest {
 
   // Mock for the Store hierarchy
   private RolapHierarchy getStoreHierarchyMock() {
-    Relation relationMock = mock( Table.class );
+    MappingRelation relationMock = mock( MappingTable.class );
     when( relationMock.alias() ).thenReturn( STORE_TABLE );
     Dimension dimMock = mock( Dimension.class );
     when( dimMock.getDimensionType() ).thenReturn( null );

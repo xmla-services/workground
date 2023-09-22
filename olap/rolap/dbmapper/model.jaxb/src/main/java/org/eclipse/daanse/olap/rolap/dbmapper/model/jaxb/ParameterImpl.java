@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.ParameterTypeAdaptor;
 
@@ -25,7 +25,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class ParameterImpl implements Parameter {
+public class ParameterImpl implements MappingParameter {
 
     @XmlAttribute(name = "name", required = true)
     protected String name;

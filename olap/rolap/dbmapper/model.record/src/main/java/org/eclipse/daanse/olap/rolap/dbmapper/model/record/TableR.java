@@ -19,12 +19,12 @@ import java.util.Objects;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggExclude;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 
-public class TableR implements Table {
+public class TableR implements MappingTable {
 
-    private SQL sql;
+    private MappingSQL sql;
     private String alias;
     private List<MappingAggExclude> aggExcludes;
     private String name;
@@ -32,7 +32,7 @@ public class TableR implements Table {
     private List<MappingHint> hints;
     private List<MappingAggTable> aggTables;
 
-    public TableR(Table table) {
+    public TableR(MappingTable table) {
         this(table.schema(), table.name(), table.alias(), table.hints());
     }
 
@@ -48,7 +48,7 @@ public class TableR implements Table {
         this.hints = hints;
     }
 
-    public TableR(Table tbl, String possibleName) {
+    public TableR(MappingTable tbl, String possibleName) {
         this(tbl.schema(), tbl.name(), possibleName, tbl.hints());
 
         // Remake the filter with the new alias
@@ -72,7 +72,7 @@ public class TableR implements Table {
     }
 
     @Override
-    public SQL sql() {
+    public MappingSQL sql() {
         return sql;
     }
 
@@ -103,7 +103,7 @@ public class TableR implements Table {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Table that) {
+        if (o instanceof MappingTable that) {
             return this.name.equals(that.name()) &&
                 Objects.equals(this.alias, that.alias()) &&
                 Objects.equals(this.schema, that.schema());

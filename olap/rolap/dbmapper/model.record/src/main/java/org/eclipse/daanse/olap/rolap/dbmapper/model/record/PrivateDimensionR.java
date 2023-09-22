@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 
 public record PrivateDimensionR(String name,
@@ -32,5 +32,5 @@ public record PrivateDimensionR(String name,
                                 List<MappingAnnotation> annotation,
                                 String usagePrefix
                                 )
-        implements PrivateDimension {
+        implements MappingPrivateDimension {
 }

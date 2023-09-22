@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCubeDimension;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
@@ -98,7 +98,7 @@ public class RolapCubeDimension extends RolapDimension {
     RolapCube lookupFactCube(
         MappingCubeDimension cubeDim, RolapSchema schema)
     {
-      if (cubeDim instanceof VirtualCubeDimension virtualCubeDim && virtualCubeDim.cubeName() != null) {
+      if (cubeDim instanceof MappingVirtualCubeDimension virtualCubeDim && virtualCubeDim.cubeName() != null) {
           return schema.lookupCube(virtualCubeDim.cubeName());
       }
       return null;

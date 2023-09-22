@@ -20,8 +20,8 @@ import javax.sql.DataSource;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -169,7 +169,7 @@ class RolapCubeHierarchyTest {
     Hierarchy rolapHierarchy_hierarchy = null;
     String rolapHierarchy_uniqueName = "TheDimUniqueName";
     Level[] rolapHierarchy_levels = new Level[]{};
-    RelationOrJoin rolapHierarchy_relation = mock(Relation.class);
+    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingRelation.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
     String subName = null;
@@ -177,7 +177,7 @@ class RolapCubeHierarchyTest {
     int ordinal = 0;
 
     RolapCube factCube = mock(RolapCube.class);
-    RelationOrJoin factCube_Fact = mock(Relation.class);
+    MappingRelationOrJoin factCube_Fact = mock(MappingRelation.class);
     boolean factCube_Fact_equals = false;
 
     // check
@@ -225,14 +225,14 @@ class RolapCubeHierarchyTest {
     Hierarchy rolapHierarchy_hierarchy = null;
     String rolapHierarchy_uniqueName = "TheDimUniqueName";
     Level[] rolapHierarchy_levels = new Level[]{};
-    RelationOrJoin rolapHierarchy_relation = mock(Relation.class);
+    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingRelation.class);
 
     String subName = null;
 
     int ordinal = 0;
 
     RolapCube factCube = mock(RolapCube.class);
-    RelationOrJoin factCube_Fact = rolapHierarchy_relation;
+    MappingRelationOrJoin factCube_Fact = rolapHierarchy_relation;
     boolean factCube_Fact_equals = true;
 
     // check

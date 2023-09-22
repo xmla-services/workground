@@ -18,10 +18,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Row;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRow;
 
 public record InlineTableR(List<MappingColumnDef> columnDefs,
-                           List<Row> rows, String alias)
+                           List<MappingRow> rows, String alias)
         implements MappingInlineTable {
 
     public InlineTableR(MappingInlineTable inlineTable) {

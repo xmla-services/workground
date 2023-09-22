@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.ParameterTypeEnum;
 
 public record ParameterR(String name,
@@ -21,6 +21,6 @@ public record ParameterR(String name,
                          ParameterTypeEnum type,
                          boolean modifiable,
                          String defaultValue)
-        implements Parameter {
+        implements MappingParameter {
 
 }

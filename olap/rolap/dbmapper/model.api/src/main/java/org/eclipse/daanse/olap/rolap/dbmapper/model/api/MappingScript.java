@@ -13,15 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-import java.util.List;
+public interface MappingScript {
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
+    String language();
 
-public interface PrivateDimension extends MappingCubeDimension {
+    String cdata();
 
-    List<MappingHierarchy> hierarchies();
-
-    DimensionTypeEnum type();
-
-    String usagePrefix();
 }

@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
 
 public record MemberReaderParameterR(String name,
                                      String value)
-        implements MemberReaderParameter {
+        implements MappingMemberReaderParameter {
 
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -33,7 +33,7 @@ public class JoinImpl implements MappingJoin {
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
             @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
             @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
-    protected List<RelationOrJoin> relations;
+    protected List<MappingRelationOrJoin> relations;
     @XmlAttribute(name = "leftAlias")
     protected String leftAlias;
     @XmlAttribute(name = "leftKey")
@@ -44,7 +44,7 @@ public class JoinImpl implements MappingJoin {
     protected String rightKey;
 
     @Override
-    public List<RelationOrJoin> relations() {
+    public List<MappingRelationOrJoin> relations() {
         if (relations == null) {
             relations = new ArrayList<>();
         }
@@ -91,7 +91,7 @@ public class JoinImpl implements MappingJoin {
         this.rightKey = value;
     }
 
-    public void setRelations(List<RelationOrJoin> relations) {
+    public void setRelations(List<MappingRelationOrJoin> relations) {
         this.relations = relations;
     }
 }

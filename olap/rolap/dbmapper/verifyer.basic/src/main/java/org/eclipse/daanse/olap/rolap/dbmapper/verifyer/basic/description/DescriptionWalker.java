@@ -53,14 +53,14 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughAction;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
@@ -76,7 +76,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    public List<VerificationResult> checkSchema(Schema schema) {
+    public List<VerificationResult> checkSchema(MappingSchema schema) {
         super.checkSchema(schema);
         Level lavel = config.schema();
         if (lavel != null && (schema.description() == null || schema.description()
@@ -99,7 +99,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkVirtualCube(VirtualCube virtualCube) {
+    protected void checkVirtualCube(MappingVirtualCube virtualCube) {
         super.checkVirtualCube(virtualCube);
         Level lavel = config.virtualCube();
         if (lavel != null && (virtualCube.description() == null || virtualCube.description()
@@ -120,7 +120,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkMeasure(Measure measure, MappingCube cube) {
+    protected void checkMeasure(MappingMeasure measure, MappingCube cube) {
         super.checkMeasure(measure, cube);
         Level lavel = config.measure();
         if (lavel != null && (measure.description() == null || measure.description()
@@ -152,7 +152,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkHierarchy(MappingHierarchy hierarchy, PrivateDimension cubeDimension, MappingCube cube) {
+    protected void checkHierarchy(MappingHierarchy hierarchy, MappingPrivateDimension cubeDimension, MappingCube cube) {
         super.checkHierarchy(hierarchy, cubeDimension, cube);
         Level lavel = config.hierarchy();
         if (lavel != null && (hierarchy.description() == null || hierarchy.description()
@@ -165,7 +165,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     @Override
     protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel l,
                               MappingHierarchy hierarchy,
-                              PrivateDimension parentDimension, MappingCube cube) {
+                              MappingPrivateDimension parentDimension, MappingCube cube) {
         super.checkLevel(l, hierarchy, parentDimension, cube);
         Level lavel = config.level();
         if (lavel != null && (l.description() == null || l.description()
@@ -185,7 +185,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkSharedDimension(final SharedDimension sharedDimension) {
+    protected void checkSharedDimension(final MappingSharedDimension sharedDimension) {
         super.checkSharedDimension(sharedDimension);
         Level lavel = config.sharedDimension();
         if (lavel != null && (sharedDimension.description() == null || sharedDimension.description()
@@ -196,7 +196,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkProperty(final Property property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
+    protected void checkProperty(final MappingProperty property, org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel level,
                                  MappingHierarchy hierarchy, MappingCube cube) {
         super.checkProperty(property, level, hierarchy, cube);
         Level lavel = config.property();
@@ -207,7 +207,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkNamedSet(final NamedSet namedSet) {
+    protected void checkNamedSet(final MappingNamedSet namedSet) {
         super.checkNamedSet(namedSet);
         Level lavel = config.namedSet();
         if (lavel != null && (namedSet.description() == null || namedSet.description()
@@ -217,7 +217,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     @Override
-    protected void checkParameter(final Parameter parameter) {
+    protected void checkParameter(final MappingParameter parameter) {
         super.checkParameter(parameter);
         Level lavel = config.parameter();
         if (lavel != null && (parameter.description() == null || parameter.description()

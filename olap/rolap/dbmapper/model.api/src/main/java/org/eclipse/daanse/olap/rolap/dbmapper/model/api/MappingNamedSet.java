@@ -9,14 +9,25 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-public interface SQL {
+import java.util.List;
 
-    String content();
+public interface MappingNamedSet {
 
-    String dialect();
+    List<MappingAnnotation> annotations();
 
+    String formula();
+
+    String name();
+
+    String caption();
+
+    String description();
+
+    String displayFolder();
+
+    MappingFormula formulaElement();
 }

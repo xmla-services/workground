@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
 
 public record SQLR(String content,
                    String dialect)
-        implements SQL {
+        implements MappingSQL {
 
 }

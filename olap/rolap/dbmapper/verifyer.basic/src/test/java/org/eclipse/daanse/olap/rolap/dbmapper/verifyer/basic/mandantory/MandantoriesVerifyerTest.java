@@ -117,20 +117,20 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackAttribute;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackMeasure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingWritebackTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -153,35 +153,35 @@ class MandantoriesVerifyerTest {
     @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")")
     Verifyer verifyer;
 
-    Schema schema = mock(Schema.class);
+    MappingSchema schema = mock(MappingSchema.class);
     MappingCube cube = mock(MappingCube.class);
-    VirtualCube virtualCube = mock(VirtualCube.class);
-    PrivateDimension dimension = mock(PrivateDimension.class);
+    MappingVirtualCube virtualCube = mock(MappingVirtualCube.class);
+    MappingPrivateDimension dimension = mock(MappingPrivateDimension.class);
     MappingCalculatedMemberProperty calculatedMemberProperty = mock(MappingCalculatedMemberProperty.class);
     MappingCalculatedMember calculatedMember = mock(MappingCalculatedMember.class);
-    Measure measure = mock(Measure.class);
+    MappingMeasure measure = mock(MappingMeasure.class);
     MappingHierarchy hierarchy = mock(MappingHierarchy.class);
     MappingLevel level = mock(MappingLevel.class);
-    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property property =
-        mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property.class);
-    NamedSet namedSet = mock(NamedSet.class);
-    Parameter parameter = mock(Parameter.class);
+    org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty property =
+        mock(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingProperty.class);
+    MappingNamedSet namedSet = mock(MappingNamedSet.class);
+    MappingParameter parameter = mock(MappingParameter.class);
     MappingDrillThroughAction drillThroughAction = mock(MappingDrillThroughAction.class);
     MappingAction action = mock(MappingAction.class);
     MappingElementFormatter elementFormatter = mock(MappingElementFormatter.class);
     MappingJoin join = mock(MappingJoin.class);
-    Table table = mock(Table.class);
+    MappingTable table = mock(MappingTable.class);
     MappingFormula formula = mock(MappingFormula.class);
-    UserDefinedFunction userDefinedFunction = mock(UserDefinedFunction.class);
-    WritebackTable writebackTable = mock(WritebackTable.class);
-    WritebackAttribute writebackAttribute = mock(WritebackAttribute.class);
-    WritebackMeasure writebackMeasure = mock(WritebackMeasure.class);
+    MappingUserDefinedFunction userDefinedFunction = mock(MappingUserDefinedFunction.class);
+    MappingWritebackTable writebackTable = mock(MappingWritebackTable.class);
+    MappingWritebackAttribute writebackAttribute = mock(MappingWritebackAttribute.class);
+    MappingWritebackMeasure writebackMeasure = mock(MappingWritebackMeasure.class);
     MappingDrillThroughMeasure drillThroughMeasure = mock(MappingDrillThroughMeasure.class);
     MappingDrillThroughAttribute drillThroughAttribute = mock(MappingDrillThroughAttribute.class);
     MappingAnnotation annotation = mock(MappingAnnotation.class);
-    Role role = mock(Role.class);
+    MappingRole role = mock(MappingRole.class);
     MappingCubeUsage cubeUsage = mock(MappingCubeUsage.class);
-    SQL sql = mock(SQL.class);
+    MappingSQL sql = mock(MappingSQL.class);
     MappingHint hint = mock(MappingHint.class);
     MappingAggTable aggTable = mock(MappingAggName.class);
     MappingAggColumnName aggColumnName = mock(MappingAggColumnName.class);
@@ -598,7 +598,7 @@ class MandantoriesVerifyerTest {
                             MappingExpressionView ordinalExpression,
                             MappingExpressionView parentExpression,
                             MappingClosure closure,
-                            List<Property> properties,
+                            List<MappingProperty> properties,
                             boolean visible,
                             InternalTypeEnum internalType,
                             MappingElementFormatter memberFormatter

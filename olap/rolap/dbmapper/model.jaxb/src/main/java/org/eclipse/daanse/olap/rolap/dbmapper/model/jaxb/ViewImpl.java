@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -29,15 +29,15 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "View", propOrder = { "sqls" })
-public class ViewImpl implements View {
+public class ViewImpl implements MappingView {
 
     @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
-    protected List<SQL> sqls;
+    protected List<MappingSQL> sqls;
     @XmlAttribute(name = "alias", required = true)
     protected String alias;
 
     @Override
-    public List<SQL> sqls() {
+    public List<MappingSQL> sqls() {
         if (sqls == null) {
             sqls = new ArrayList<>();
         }
@@ -71,7 +71,7 @@ public class ViewImpl implements View {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof View that) {
+        if (o instanceof MappingView that) {
             if (!Objects.equals(alias(), that.alias())) {
                 return false;
             }

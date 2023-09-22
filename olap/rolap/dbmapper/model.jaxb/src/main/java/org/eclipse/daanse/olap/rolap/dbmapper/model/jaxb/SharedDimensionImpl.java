@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSharedDimension;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +30,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SharedDimension", propOrder = { "annotations", "hierarchies" })
-public class SharedDimensionImpl implements SharedDimension {
+public class SharedDimensionImpl implements MappingSharedDimension {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")

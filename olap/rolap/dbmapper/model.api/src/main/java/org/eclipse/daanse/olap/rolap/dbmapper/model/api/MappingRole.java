@@ -13,15 +13,16 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
-/**
- * @deprecated will removed in new version
- */
-@Deprecated(since="new version")
-public interface UserDefinedFunction {
+import java.util.List;
+
+public interface MappingRole {
+
+    List<MappingAnnotation> annotations();
+
+    List<MappingSchemaGrant> schemaGrants();
+
+    MappingUnion union();
 
     String name();
 
-    String className();
-
-    Script script();
 }

@@ -23,17 +23,17 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Role;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingParameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingPrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRole;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingVirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
@@ -91,7 +91,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     }
 
     @Override
-    public Schema createSchema(SchemaInitData sid) {
+    public MappingSchema createSchema(SchemaInitData sid) {
         try (Connection connection = dataSource.getConnection()) {
             JdbcMetaDataService jmds = jmdsf.create(connection);
             String schemaName = connection.getSchema();
@@ -99,15 +99,15 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             String measuresCaption = null;
             String defaultRole = null;
             List<MappingAnnotation> annotations = List.of();
-            List<Parameter> parameters = List.of();
-            Map<String, PrivateDimension> sharedDimensionsMap = getSharedDimensions(schemaName, sid.getFactTables(),
+            List<MappingParameter> parameters = List.of();
+            Map<String, MappingPrivateDimension> sharedDimensionsMap = getSharedDimensions(schemaName, sid.getFactTables(),
                 jmds);
-            List<PrivateDimension> sharedDimensions = new ArrayList<>(sharedDimensionsMap.values());
+            List<MappingPrivateDimension> sharedDimensions = new ArrayList<>(sharedDimensionsMap.values());
             List<MappingCube> cubes = getCubes(schemaName, sid.getFactTables(), sharedDimensionsMap, jmds);
-            List<VirtualCube> virtualCubes = List.of();
-            List<NamedSet> namedSets = List.of();
-            List<Role> roles = List.of();
-            List<UserDefinedFunction> userDefinedFunctions = List.of();
+            List<MappingVirtualCube> virtualCubes = List.of();
+            List<MappingNamedSet> namedSets = List.of();
+            List<MappingRole> roles = List.of();
+            List<MappingUserDefinedFunction> userDefinedFunctions = List.of();
 
             return new SchemaR(schemaName,
                 description,
@@ -128,7 +128,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         }
     }
 
-    private Map<String, PrivateDimension> getSharedDimensions(
+    private Map<String, MappingPrivateDimension> getSharedDimensions(
         String schemaName,
         List<String> factTables,
         JdbcMetaDataService jmds
@@ -165,7 +165,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             .toString();
     }
 
-    private PrivateDimension getSharedDimensions(
+    private MappingPrivateDimension getSharedDimensions(
         String schemaName,
         ForeignKey fk,
         JdbcMetaDataService jmds,
@@ -217,10 +217,10 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         JdbcMetaDataService jmds,
         List<String> ignoreTables
     ) {
-        List<RelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds, ignoreTables);
+        List<MappingRelationOrJoin> relationList = getHierarchyRelation(schemaName, fk, jmds, ignoreTables);
         List<MappingHierarchy> result = new ArrayList<>();
         Map<String, Integer> hierarchyNamesMap = new HashMap<>();
-        for (RelationOrJoin relation : relationList) {
+        for (MappingRelationOrJoin relation : relationList) {
             result.add(
                 getHierarchy(schemaName, fk.getPkTableName(), fk.getPkColumnName(),
                     relation, hierarchyNamesMap, jmds)
@@ -229,7 +229,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return result;
     }
 
-    private List<RelationOrJoin> getHierarchyRelation(
+    private List<MappingRelationOrJoin> getHierarchyRelation(
         String schemaName,
         ForeignKey fk,
         JdbcMetaDataService jmds,
@@ -244,13 +244,13 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 .toList();
         }
         if (listFK != null && !listFK.isEmpty()) {
-            List<RelationOrJoin> result = new ArrayList<>();
+            List<MappingRelationOrJoin> result = new ArrayList<>();
             for (ForeignKey foreignKey : listFK) {
                 List<String> ignoreTab = new ArrayList<>(ignoreTables);
                 ignoreTab.add(foreignKey.getFkTableName());
-                List<RelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds, ignoreTab);
-                for (RelationOrJoin relationOrJoin : rightRelations) {
-                    List<RelationOrJoin> relations = List.of(
+                List<MappingRelationOrJoin> rightRelations = getHierarchyRelation(schemaName, foreignKey, jmds, ignoreTab);
+                for (MappingRelationOrJoin relationOrJoin : rightRelations) {
+                    List<MappingRelationOrJoin> relations = List.of(
                         new TableR(fk.getPkTableName()),
                         relationOrJoin);
                     result.add(new JoinR(relations,
@@ -267,7 +267,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private List<MappingLevel> getHierarchyLevels(
         String schemaName,
-        RelationOrJoin relation,
+        MappingRelationOrJoin relation,
         String tableName,
         String columnName,
         JdbcMetaDataService jmds
@@ -281,13 +281,13 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     }
 
     private Collection<? extends MappingLevel> getHierarchyLevelsForTable(String schemaName,
-                                                                   RelationOrJoin relation,
+                                                                   MappingRelationOrJoin relation,
                                                                    String tableName,
                                                                    String columnName,
                                                                    JdbcMetaDataService jmds
     ) {
         List<MappingLevel> result = new ArrayList<>();
-        if (relation instanceof Table table) {
+        if (relation instanceof MappingTable table) {
             MappingLevel l = new LevelR(getLevelName(tableName),
                 tableName,
                 columnName,
@@ -323,7 +323,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private Collection<? extends MappingLevel> getHierarchyLevelsForJoin(
         String schemaName,
-        RelationOrJoin relation,
+        MappingRelationOrJoin relation,
         String tableName,
         String columnName,
         JdbcMetaDataService jmds
@@ -334,7 +334,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                 join.relations().get(1),
                 tableName,
                 jmds));
-            if (join.relations().get(0) instanceof Table t) {
+            if (join.relations().get(0) instanceof MappingTable t) {
                 result.addAll(getHierarchyLevels(schemaName, t, tableName, columnName, jmds));
             }
         }
@@ -343,12 +343,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private Collection<? extends MappingLevel> getHierarchyLevelsForJoinRight(
         String schemaName,
-        RelationOrJoin relationRight,
+        MappingRelationOrJoin relationRight,
         String tableName,
         JdbcMetaDataService jmds
     ) {
         List<MappingLevel> result = new ArrayList<>();
-        if (relationRight instanceof Table t) {
+        if (relationRight instanceof MappingTable t) {
             List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
             ForeignKey key =
                 listFK.stream().filter(k -> t.name().equals(k.getPkTableName())).findFirst().orElse(null);
@@ -357,7 +357,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                     jmds));
             }
         } else if (relationRight instanceof MappingJoin j) {
-            Table t = getFistTable(j);
+            MappingTable t = getFistTable(j);
             if (t != null) {
                 List<ForeignKey> listFK = jmds.getForeignKeys(schemaName, tableName);
                 ForeignKey key =
@@ -375,11 +375,11 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return capitalize(tableName);
     }
 
-    private Table getFistTable(MappingJoin j) {
-        if (j.relations().get(0) instanceof Table t) {
+    private MappingTable getFistTable(MappingJoin j) {
+        if (j.relations().get(0) instanceof MappingTable t) {
             return t;
         }
-        if (j.relations().get(1) instanceof Table t) {
+        if (j.relations().get(1) instanceof MappingTable t) {
             return t;
         }
         if (j.relations().get(0) instanceof MappingJoin join) {
@@ -492,7 +492,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     private List<MappingCube> getCubes(
         String schemaName,
         List<String> tables,
-        Map<String, PrivateDimension> sharedDimensionsMap,
+        Map<String, MappingPrivateDimension> sharedDimensionsMap,
         JdbcMetaDataService jmds
     ) {
         if (tables != null) {
@@ -504,7 +504,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     private MappingCube getCube(
         String schemaName,
         String tableName,
-        Map<String, PrivateDimension> sharedDimensionsMap,
+        Map<String, MappingPrivateDimension> sharedDimensionsMap,
         JdbcMetaDataService jmds
     ) {
         String name = getCubName(tableName);
@@ -513,8 +513,8 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         String defaultMeasure = null;
         List<MappingCubeDimension> dimensionUsageOrDimensions = getCubeDimensions(schemaName, tableName, sharedDimensionsMap
             , jmds);
-        List<Measure> measures = getMeasures(schemaName, tableName, jmds);
-        Relation fact = new TableR(tableName);
+        List<MappingMeasure> measures = getMeasures(schemaName, tableName, jmds);
+        MappingRelation fact = new TableR(tableName);
         return new CubeR(name,
             caption,
             description,
@@ -545,8 +545,8 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
         return capitalize(tableName);
     }
 
-    private List<Measure> getMeasures(String schemaName, String tableName, JdbcMetaDataService jmds) {
-        List<Measure> result = new ArrayList<>();
+    private List<MappingMeasure> getMeasures(String schemaName, String tableName, JdbcMetaDataService jmds) {
+        List<MappingMeasure> result = new ArrayList<>();
         List<Column> columns = jmds.getColumns(schemaName, tableName);
         // cub Measures for numeric fields sum and count
         List<ForeignKey> foreignKeyList = jmds.getForeignKeys(schemaName, tableName);
@@ -602,7 +602,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     private List<MappingCubeDimension> getCubeDimensions(
         String schemaName,
         String tableName,
-        Map<String, PrivateDimension> sharedDimensionsMap,
+        Map<String, MappingPrivateDimension> sharedDimensionsMap,
         JdbcMetaDataService jmds
     ) {
         List<MappingCubeDimension> result = new ArrayList<>();
@@ -649,7 +649,7 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
     }
 
     private MappingHierarchy getHierarchy(String schemaName, String tableName,
-                                   String columnName, RelationOrJoin relation,
+                                   String columnName, MappingRelationOrJoin relation,
                                    Map<String, Integer> hierarchyNamesMap, JdbcMetaDataService jmds) {
 
         return new HierarchyR(getHierarchyName(tableName, columnName, hierarchyNamesMap),
@@ -679,12 +679,12 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
     private Collection<? extends MappingCubeDimension> getCubDimensionUsage(
         List<ForeignKey> foreignKeyList,
-        Map<String, PrivateDimension> sharedDimensionsMap
+        Map<String, MappingPrivateDimension> sharedDimensionsMap
     ) {
         List<MappingCubeDimension> result = new ArrayList<>();
         for (ForeignKey foreignKey : foreignKeyList) {
             if (sharedDimensionsMap.containsKey(foreignKey.getPkTableName())) {
-                PrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
+                MappingPrivateDimension privateDimension = sharedDimensionsMap.get(foreignKey.getPkTableName());
                 result.add(new DimensionUsageR(getDimensionName(foreignKey),
                     privateDimension.name(),
                     null,

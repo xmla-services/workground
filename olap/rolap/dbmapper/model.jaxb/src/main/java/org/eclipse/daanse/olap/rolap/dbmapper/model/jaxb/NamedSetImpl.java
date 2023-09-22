@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NamedSet", propOrder = {"annotations", "formulaElement"})
-public class NamedSetImpl implements NamedSet {
+public class NamedSetImpl implements MappingNamedSet {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")

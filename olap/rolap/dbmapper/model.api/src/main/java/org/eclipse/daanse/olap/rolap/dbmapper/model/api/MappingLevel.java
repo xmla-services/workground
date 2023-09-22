@@ -36,7 +36,7 @@ public interface MappingLevel {
 
     MappingClosure closure();
 
-    List<Property> properties();
+    List<MappingProperty> properties();
 
     String approxRowCount();
 
