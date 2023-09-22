@@ -13,7 +13,6 @@
 */
 package org.eclipse.daanse.olap.api;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +34,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DatabaseMappingSchema
 public interface Context {
 
     /**
-     * Gives access to the {@link DataSource} that holds the {@link Connection}s to
+     * Gives access to the {@link javax.sql.DataSource} that holds the {@link java.sql.Connection}s to
      * the Database.
      *
      * @return DataSource
@@ -44,7 +43,7 @@ public interface Context {
 
     /**
      * Gives access to the {@link Dialect} that must be used to generate SQL querys
-     * against the {@link DataSource}.
+     * against the {@link javax.sql.DataSource}.
      *
      * @return DataSource
      */
@@ -84,5 +83,11 @@ public interface Context {
 	Optional<String> getDescription();
 
 	ExpressionCompilerFactory getExpressionCompilerFactory();
+	
+	/*
+	 * Gives access to the {@link Connection}.
+	 *TODO: Currently just null implementations.- must see how to implement later. create or get an access...
+	 */
+	Connection getConnection();
 
 }
