@@ -162,8 +162,6 @@ public class RolapConnection extends ConnectionBase {
     final String jdbcUser =
       connectInfo.get( RolapConnectionProperties.JdbcUser.name() );
     final String jdbcConnectString = getJdbcConnectionString( connectInfo );
-    final String strDataSource =
-      connectInfo.get( RolapConnectionProperties.DataSource.name() );
     Role roleInner = null;
 
     // Register this connection before we register its internal statement.
@@ -192,7 +190,6 @@ public class RolapConnection extends ConnectionBase {
             catalogUrl,
             connectionKey,
             jdbcUser,
-            strDataSource,
             connectInfo );
         } else {
           schema = RolapSchemaPool.instance().get(
