@@ -50,7 +50,7 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -474,7 +474,7 @@ public class RolapCell implements Cell {
         // if "cm" is a calc member defined by
         // "with member cm as m" then
         // "cm" is equivalent to "m"
-        final Exp expr = member.getExpression();
+        final Expression expr = member.getExpression();
         if (expr instanceof MemberExpression) {
             members.set(
                 i,
@@ -484,7 +484,7 @@ public class RolapCell implements Cell {
         // "Aggregate({m})" is equivalent to "m"
         if (expr instanceof ResolvedFunCallImpl call) {
             if (call.getFunDef() instanceof AggregateFunDef) {
-                final Exp[] args = call.getArgs();
+                final Expression[] args = call.getArgs();
                 if (args[0] instanceof ResolvedFunCallImpl arg0) {
                     if (arg0.getFunDef() instanceof SetFunDef) {
                         if (arg0.getArgCount() == 1
@@ -760,7 +760,7 @@ public class RolapCell implements Cell {
         @Override
 		public Object visit(ResolvedFunCallImpl call) {
             final FunctionDefinition def = call.getFunDef();
-            final Exp[] args = call.getArgs();
+            final Expression[] args = call.getArgs();
             final String name = def.getName();
             if (name.equals("+")
                 || name.equals("-")

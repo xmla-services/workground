@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 
@@ -58,7 +58,7 @@ public class ReflectiveMultiResolver extends MultiResolver {
     }
 
     @Override
-	protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+	protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
         try {
             return (FunctionDefinition) constructor.newInstance(new Object[] {dummyFunDef});
         } catch (InstantiationException e) {

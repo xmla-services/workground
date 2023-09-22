@@ -47,7 +47,7 @@ public interface FunctionDefinition {
 
     /**
      * Returns the types of the arguments of this function. Values are the same
-     * as those returned by {@link Exp#getCategory()}. The 0<sup>th</sup>
+     * as those returned by {@link Expression#getCategory()}. The 0<sup>th</sup>
      * argument of methods and properties are the object they are applied
      * to. Infix operators have two arguments, and prefix operators have one
      * argument.
@@ -59,7 +59,7 @@ public interface FunctionDefinition {
      * a given set of arguments. The result is usually a {@link ResolvedFunCall} but
      * not always.
      */
-    Exp createCall(Validator validator, Exp[] args);
+    Expression createCall(Validator validator, Expression[] args);
 
     /**
      * Returns an English description of the signature of the function, for
@@ -70,7 +70,7 @@ public interface FunctionDefinition {
     /**
      * Converts a function call into MDX source code.
      */
-    void unparse(Exp[] args, PrintWriter pw);
+    void unparse(Expression[] args, PrintWriter pw);
 
     /**
      * Converts a call to this function into executable objects.

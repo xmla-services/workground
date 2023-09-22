@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.type.NullType;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapMember;
@@ -57,7 +57,7 @@ class RangeFunDef extends FunDefBase {
      * @return two member calcs
      */
     private MemberCalc[] compileMembers(
-        Exp exp0, Exp exp1, ExpressionCompiler compiler)
+        Expression exp0, Expression exp1, ExpressionCompiler compiler)
     {
         MemberCalc[] members = new MemberCalc[2];
 

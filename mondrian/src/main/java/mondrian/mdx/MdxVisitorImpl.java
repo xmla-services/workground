@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryAxisImpl;
 
@@ -25,7 +25,7 @@ import mondrian.olap.QueryAxisImpl;
  * Default implementation of the visitor interface, {@link MdxVisitor}.
  *
  * <p>The method implementations just ask the child nodes to
- * {@link Exp#accept(MdxVisitor)} this visitor.
+ * {@link Expression#accept(MdxVisitor)} this visitor.
  *
  * @author jhyde
  * @since Jul 21, 2006
@@ -127,11 +127,11 @@ public class MdxVisitorImpl implements MdxVisitor {
      * @return Array of visited expressions; same as {@code args} iff none of
      * the expressions are changed.
      */
-    protected Exp[] visitArray(Exp[] args) {
-        Exp[] newArgs = args;
+    protected Expression[] visitArray(Expression[] args) {
+        Expression[] newArgs = args;
         for (int i = 0; i < args.length; i++) {
-            Exp arg = args[i];
-            Exp newArg = (Exp) arg.accept(this);
+            Expression arg = args[i];
+            Expression newArg = (Expression) arg.accept(this);
             if (newArg != arg) {
                 if (newArgs == args) {
                     newArgs = args.clone();

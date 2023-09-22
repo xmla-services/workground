@@ -16,11 +16,11 @@ package org.eclipse.daanse.mdx.model.record.expression;
 import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 
 public record CallExpressionR(String name,
                               CallExpression.Type type,
-                              List<Expression> expressions)
+                              List<MdxExpression> expressions)
         implements CallExpression {
 
     public CallExpressionR {

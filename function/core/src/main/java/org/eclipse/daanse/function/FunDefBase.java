@@ -12,7 +12,7 @@
 package org.eclipse.daanse.function;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.BooleanType;
@@ -300,7 +300,7 @@ public  class FunDefBase implements FunDef {
      * @param args Arguments to the call to this operator
      * @return result type of a call this function
      */
-    public Type getResultType(Validator validator, Exp[] args) {
+    public Type getResultType(Validator validator, Expression[] args) {
         Type firstArgType =
             args.length > 0
                 ? args[0].getType()
@@ -406,9 +406,9 @@ public  class FunDefBase implements FunDef {
      * @param category Expected {@link Category category} of argument
      * @return Validated argument
      */
-    protected Exp validateArg(
+    protected Expression validateArg(
         Validator validator,
-        Exp[] args,
+        Expression[] args,
         int i,
         int category)
     {
@@ -416,7 +416,7 @@ public  class FunDefBase implements FunDef {
     }
 
     @Override
-    public void unparse(Exp[] args, PrintWriter pw) {
+    public void unparse(Expression[] args, PrintWriter pw) {
         getSyntax().unparse(getName(), args, pw);
     }
 

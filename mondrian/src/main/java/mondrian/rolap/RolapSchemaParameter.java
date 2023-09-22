@@ -15,7 +15,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
@@ -78,7 +78,7 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     }
 
     @Override
-	public Exp getDefaultExp() {
+	public Expression getDefaultExp() {
         throw new UnsupportedOperationException();
     }
 
@@ -125,7 +125,7 @@ public class RolapSchemaParameter implements Parameter, CompilableParameter {
     @Override
 	public Calc compile(ExpressionCompiler compiler) {
         // Parse and compile the expression for the default value.
-        Exp defaultExp = compiler.getValidator()
+        Expression defaultExp = compiler.getValidator()
             .getQuery()
             .getConnection()
             .parseExpression(defaultExpString);

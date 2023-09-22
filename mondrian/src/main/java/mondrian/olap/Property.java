@@ -110,7 +110,7 @@ public class Property extends EnumeratedValues.BasicValue {
     public static final int FORMAT_EXP_PARSED_ORDINAL = 0;
     /**
      * Definition of the internal property which
-     * holds the parsed format string (an object of type {@link Exp}).
+     * holds the parsed format string (an object of type {@link Expression}).
      */
     public static final Property FORMAT_EXP_PARSED =
         new Property(

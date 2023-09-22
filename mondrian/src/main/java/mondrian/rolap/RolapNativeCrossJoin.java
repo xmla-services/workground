@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.eclipse.daanse.olap.api.element.Member;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
@@ -106,7 +106,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Exp[] args)
+        Expression[] args)
     {
         if (!isEnabled()) {
             // native crossjoins were explicitly disabled, so no need

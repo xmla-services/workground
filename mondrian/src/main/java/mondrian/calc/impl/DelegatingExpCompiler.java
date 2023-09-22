@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.AbstractQueryPart;
 import mondrian.olap.Validator;
@@ -60,7 +60,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
      * @param mutable Whether the result is mutuable
      * @return Calculator after post-processing
      */
-    protected Calc afterCompile(Exp exp, Calc calc, boolean mutable) {
+    protected Calc afterCompile(Expression exp, Calc calc, boolean mutable) {
         return calc;
     }
 
@@ -75,14 +75,14 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public Calc compile(Exp exp) {
+    public Calc compile(Expression exp) {
         final Calc calc = parent.compile(wrap(exp));
         return afterCompile(exp, calc, false);
     }
 
     @Override
     public Calc compileAs(
-            Exp exp,
+            Expression exp,
             Type resultType,
             List<ResultStyle> preferredResultTypes)
     {
@@ -90,84 +90,84 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public MemberCalc compileMember(Exp exp) {
+    public MemberCalc compileMember(Expression exp) {
         final MemberCalc calc = parent.compileMember(wrap(exp));
         return (MemberCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public LevelCalc compileLevel(Exp exp) {
+    public LevelCalc compileLevel(Expression exp) {
         final LevelCalc calc = parent.compileLevel(wrap(exp));
         return (LevelCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public DimensionCalc compileDimension(Exp exp) {
+    public DimensionCalc compileDimension(Expression exp) {
         final DimensionCalc calc = parent.compileDimension(wrap(exp));
         return (DimensionCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public HierarchyCalc compileHierarchy(Exp exp) {
+    public HierarchyCalc compileHierarchy(Expression exp) {
         final HierarchyCalc calc = parent.compileHierarchy(wrap(exp));
         return (HierarchyCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public IntegerCalc compileInteger(Exp exp) {
+    public IntegerCalc compileInteger(Expression exp) {
         final IntegerCalc calc = parent.compileInteger(wrap(exp));
         return (IntegerCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public StringCalc compileString(Exp exp) {
+    public StringCalc compileString(Expression exp) {
         final StringCalc calc = parent.compileString(wrap(exp));
         return (StringCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public DateTimeCalc compileDateTime(Exp exp) {
+    public DateTimeCalc compileDateTime(Expression exp) {
         final DateTimeCalc calc = parent.compileDateTime(wrap(exp));
         return (DateTimeCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public final TupleListCalc compileList(Exp exp) {
+    public final TupleListCalc compileList(Expression exp) {
         return compileList(exp, false);
     }
 
     @Override
-    public TupleListCalc compileList(Exp exp, boolean mutable) {
+    public TupleListCalc compileList(Expression exp, boolean mutable) {
         final TupleListCalc calc = parent.compileList(wrap(exp), mutable);
         return (TupleListCalc) afterCompile(exp, calc, mutable);
     }
 
     @Override
-    public TupleIteratorCalc compileIter(Exp exp) {
+    public TupleIteratorCalc compileIter(Expression exp) {
         final TupleIteratorCalc calc = parent.compileIter(wrap(exp));
         return (TupleIteratorCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public BooleanCalc compileBoolean(Exp exp) {
+    public BooleanCalc compileBoolean(Expression exp) {
         final BooleanCalc calc = parent.compileBoolean(wrap(exp));
         return (BooleanCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public DoubleCalc compileDouble(Exp exp) {
+    public DoubleCalc compileDouble(Expression exp) {
         final DoubleCalc calc = parent.compileDouble(wrap(exp));
         return (DoubleCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public TupleCalc compileTuple(Exp exp) {
+    public TupleCalc compileTuple(Expression exp) {
         final TupleCalc calc = parent.compileTuple(wrap(exp));
         return (TupleCalc) afterCompile(exp, calc, false);
     }
 
     @Override
-    public Calc compileScalar(Exp exp, boolean scalar) {
+    public Calc compileScalar(Expression exp, boolean scalar) {
         final Calc calc = parent.compileScalar(wrap(exp), scalar);
         return afterCompile(exp, calc, false);
     }
@@ -193,26 +193,26 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
      * <p>If we didn't do this, the decorator would get forgotten at the first
      * level of recursion. It's not pretty, and I thought about other ways
      * of combining Visitor + Decorator. For instance, I tried replacing
-     * {@link #afterCompile(mondrian.olap.Exp, mondrian.calc.Calc, boolean)}
+     * {@link #afterCompile(mondrian.olap.Expression, mondrian.calc.Calc, boolean)}
      * with a callback (Strategy), but the exit points in ExpCompiler not
      * clear because there are so many methods.
      *
      * @param e Expression to be wrapped
      * @return wrapper expression
      */
-    private Exp wrap(Exp e) {
+    private Expression wrap(Expression e) {
         return new WrapExpressionImpl(e, this);
     }
 
     /**
      * See {@link mondrian.calc.impl.DelegatingExpCompiler#wrap}.
      */
-    private static class WrapExpressionImpl extends AbstractQueryPart implements Exp, WrapExpression {
-        private final Exp e;
+    private static class WrapExpressionImpl extends AbstractQueryPart implements Expression, WrapExpression {
+        private final Expression e;
         private final ExpressionCompiler wrappingCompiler;
 
         WrapExpressionImpl(
-                Exp e,
+                Expression e,
                 ExpressionCompiler wrappingCompiler)
         {
             this.e = e;
@@ -220,7 +220,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-        public Exp cloneExp() {
+        public Expression cloneExp() {
             throw new UnsupportedOperationException();
         }
 
@@ -240,7 +240,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-        public Exp accept(Validator validator) {
+        public Expression accept(Validator validator) {
             return e.accept(validator);
         }
 

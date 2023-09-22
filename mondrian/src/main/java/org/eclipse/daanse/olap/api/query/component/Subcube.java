@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public non-sealed interface Subcube extends QueryPart{
 
     String getCubeName();
 
-    List<Exp> getAxisExps();
+    List<Expression> getAxisExps();
 }

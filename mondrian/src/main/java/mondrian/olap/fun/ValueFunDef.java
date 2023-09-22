@@ -13,9 +13,10 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.query.base.Expressions;
+
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
@@ -52,12 +53,12 @@ class ValueFunDef extends FunDefBase {
     }
 
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
-        ExpBase.unparseList(pw, args, "(", ", ", ")");
+	public void unparse(Expression[] args, PrintWriter pw) {
+    	Expressions.unparseExpressions(pw, args, "(", ", ", ")");
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         return null;
     }
 

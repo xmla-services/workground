@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.mdx.model.record.select;
 
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.select.Allocation;
 import org.eclipse.daanse.mdx.model.api.select.UpdateClause;
 
-public record UpdateClauseR(Expression tupleExp, Expression valueExp, Allocation allocation, Expression weight) implements UpdateClause {
+public record UpdateClauseR(MdxExpression tupleExp, MdxExpression valueExp, Allocation allocation, MdxExpression weight) implements UpdateClause {
 
 }

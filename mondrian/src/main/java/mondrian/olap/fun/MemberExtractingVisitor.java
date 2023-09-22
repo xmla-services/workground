@@ -25,7 +25,7 @@ import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
 
@@ -102,7 +102,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
             addMember(member);
         } else if (member.isCalculated()) {
             if (activeMembers.add(member)) {
-                Exp exp = member.getExpression();
+                Expression exp = member.getExpression();
                 finder.found = false;
                 exp.accept(finder);
                 if (! finder.found) {
@@ -138,7 +138,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         if (funCall == call) {
             turnOffVisitChildren();
         } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {
-            for (Exp arg : funCall.getArgs()) {
+            for (Expression arg : funCall.getArgs()) {
                 arg.accept(new MemberExtractingVisitor(memberSet, call, true));
             }
             turnOffVisitChildren();

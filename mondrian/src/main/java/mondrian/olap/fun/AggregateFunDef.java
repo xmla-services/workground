@@ -42,7 +42,7 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Aggregator;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -79,7 +79,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         super(dummyFunDef);
     }
 
-    private Member getMember(Exp exp) {
+    private Member getMember(Expression exp) {
         if (exp instanceof MemberExpression memberExpr) {
             Member m = memberExpr.getMember();
             if (m.isMeasure() && !m.isCalculated()) {

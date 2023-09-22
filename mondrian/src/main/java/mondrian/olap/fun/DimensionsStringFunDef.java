@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedHierarchyCalc;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.HierarchyType;
@@ -46,7 +46,7 @@ class DimensionsStringFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         return HierarchyType.Unknown;
     }
 

@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -237,8 +237,8 @@ public class RolapCubeMember
     // the cube hierarchy vs. shared hierarchy.  this is the case for
     // SqlMemberSource.RolapParentChildMemberNoClosure
     @Override
-	public Exp getExpression() {
-        Exp exp = member.getExpression();
+	public Expression getExpression() {
+        Expression exp = member.getExpression();
         if (exp instanceof ResolvedFunCallImpl fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
                 if (fcall.getArg(i) instanceof HierarchyExpressionImpl expr && expr.getHierarchy().equals(

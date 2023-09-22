@@ -15,7 +15,7 @@ package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
 
@@ -38,7 +38,7 @@ public class AsFunDefResolver extends ResolverBase {
 
     @Override
     public FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {

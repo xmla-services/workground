@@ -13,9 +13,9 @@
 */
 package org.eclipse.daanse.mdx.model.record.select;
 
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 
-public record SelectSlicerAxisClauseR(Expression expression) implements SelectSlicerAxisClause {
+public record SelectSlicerAxisClauseR(MdxExpression expression) implements SelectSlicerAxisClause {
 
 }

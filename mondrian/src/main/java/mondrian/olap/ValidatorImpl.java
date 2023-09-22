@@ -20,6 +20,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
@@ -72,10 +73,10 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public Exp validate(Exp exp, boolean scalar) {
-        Exp resolved;
+	public Expression validate(Expression exp, boolean scalar) {
+        Expression resolved;
         try {
-            resolved = (Exp) resolvedNodes.get(exp);
+            resolved = (Expression) resolvedNodes.get(exp);
         } catch (ClassCastException e) {
             // A classcast exception will occur if there is a String
             // placeholder in the map. This is an internal error -- should
@@ -182,14 +183,14 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public FunctionDefinition getDef(
-        Exp[] args,
+        Expression[] args,
         String funName,
         Syntax syntax)
     {
         // Compute signature first. It makes debugging easier.
         final String signature =
             syntax.getSignature(
-                funName, Category.UNKNOWN, ExpBase.getTypes(args));
+                funName, Category.UNKNOWN, Expressions.categoriesOf(args));
 
         // Resolve function by its upper-case name first.  If there is only one
         // function with that name, stop immediately.  If there is more than
@@ -268,7 +269,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public boolean canConvert(
-        int ordinal, Exp fromExp, int to, List<FunctionResolver.Conversion> conversions)
+        int ordinal, Expression fromExp, int to, List<FunctionResolver.Conversion> conversions)
     {
         return TypeUtil.canConvert(
             ordinal,
@@ -293,7 +294,7 @@ abstract class ValidatorImpl implements Validator {
             if (funCall.getFunDef().getSyntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);
             } else {
-                int k = whichArg(funCall, (Exp) stack.get(n));
+                int k = whichArg(funCall, (Expression) stack.get(n));
                 if (k < 0) {
                     // Arguments of call have mutated since call was placed
                     // on stack. Presumably the call has already been
@@ -311,7 +312,7 @@ abstract class ValidatorImpl implements Validator {
             {
                 return requiresExpression(n - 1);
             } else {
-                int k = whichArg(funCall, (Exp) stack.get(n));
+                int k = whichArg(funCall, (Expression) stack.get(n));
                 if (k < 0) {
                     // Arguments of call have mutated since call was placed
                     // on stack. Presumably the call has already been
@@ -366,7 +367,7 @@ abstract class ValidatorImpl implements Validator {
         boolean definition,
         String name,
         Type type,
-        Exp defaultExp,
+        Expression defaultExp,
         String description)
     {
         final SchemaReader schemaReader = getQuery().getSchemaReader(false);
@@ -397,8 +398,8 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    private int whichArg(final FunCall node, final Exp arg) {
-        final Exp[] children = node.getArgs();
+    private int whichArg(final FunCall node, final Expression arg) {
+        final Expression[] children = node.getArgs();
         for (int i = 0; i < children.length; i++) {
             if (children[i] == arg) {
                 return i;

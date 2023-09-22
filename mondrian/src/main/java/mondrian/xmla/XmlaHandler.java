@@ -3406,7 +3406,7 @@ public class XmlaHandler {
             mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest,
             XmlaResponse response,
             String rowsetName,
-            mondrian.olap.Exp whereExpression,
+            mondrian.olap.Expression whereExpression,
             Map<String, String> parameters)
             throws XmlaException
     {
@@ -3471,7 +3471,7 @@ public class XmlaHandler {
         writer.endDocument();
     }
 
-    private boolean isCompatable(Rowset.Row row, mondrian.olap.Exp exp, Map<String, String> parameters) {
+    private boolean isCompatable(Rowset.Row row, mondrian.olap.Expression exp, Map<String, String> parameters) {
         if(exp == null) {
             return true;
         }
@@ -3515,7 +3515,7 @@ public class XmlaHandler {
         return true;
     }
 
-    private Object getValue(Rowset.Row row, mondrian.olap.Exp exp, Map<String, String> parameters) {
+    private Object getValue(Rowset.Row row, mondrian.olap.Expression exp, Map<String, String> parameters) {
         if(exp instanceof Id) {
             String columnName = ((mondrian.olap.api.NameSegment)((mondrian.olap.IdImpl)exp).getElement(0)).getName();
 

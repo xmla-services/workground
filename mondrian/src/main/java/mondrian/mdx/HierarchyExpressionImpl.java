@@ -14,10 +14,10 @@ import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.HierarchyType;
@@ -29,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class HierarchyExpressionImpl extends ExpBase implements Exp, HierarchyExpression {
+public class HierarchyExpressionImpl extends AbstractExpression implements Expression, HierarchyExpression {
     private final Hierarchy hierarchy;
 
     /**
@@ -73,7 +73,7 @@ public class HierarchyExpressionImpl extends ExpBase implements Exp, HierarchyEx
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         return this;
     }
 

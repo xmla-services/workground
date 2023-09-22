@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.NumericType;
@@ -76,7 +76,7 @@ class GenerateFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         final Type type = args[1].getType();
         if (type instanceof StringType || type instanceof NumericType) {
             // Generate(<Set>, <String>[, <String>])
@@ -100,7 +100,7 @@ class GenerateFunDef extends FunDefBase {
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "str",
                         mondrian.olap.Syntax.Function,
-                        new Exp[] {call.getArg(1)});
+                        new Expression[] {call.getArg(1)});
                 stringCalc = compiler.compileString(unresolvedFunCall.accept(compiler.getValidator()));
             }
             final StringCalc delimCalc;

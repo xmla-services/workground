@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 /**
  * Definition of the <code>SetToStr</code> MDX function.
@@ -38,7 +38,7 @@ class SetToStrFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        Exp arg = call.getArg(0);
+        Expression arg = call.getArg(0);
         final TupleListCalc tupleListCalc = compiler.compileList(arg);
         return new AbstractProfilingNestedStringCalc(call.getType(), new Calc[]{tupleListCalc}) {
             @Override

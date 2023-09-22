@@ -21,6 +21,9 @@ import mondrian.olap.api.Quoting;
 import mondrian.olap.api.Segment;
 
 import org.eclipse.daanse.olap.api.query.component.Id;
+import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import mondrian.mdx.MdxVisitor;
@@ -32,7 +35,7 @@ import mondrian.olap.type.Type;
  * @author jhyde, 21 January, 1999
  */
 public class IdImpl
-    extends ExpBase
+    extends AbstractExpression
     implements Cloneable, Id
 {
 
@@ -112,7 +115,7 @@ public class IdImpl
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         if (segments.size() == 1) {
             final Segment s = segments.get(0);
             if (s.getQuoting() == Quoting.UNQUOTED) {
@@ -123,7 +126,7 @@ public class IdImpl
                 }
             }
         }
-        final Exp element =
+        final Expression element =
             Util.lookup(
                 validator.getQuery(),
                 validator.getSchemaReader().withLocus(),
@@ -371,5 +374,10 @@ public class IdImpl
             return false;
         }
     }
+
+	@Override
+	public Calc<?> accept(ExpressionCompiler compiler) {
+        throw new UnsupportedOperationException(this.toString());
+	}
 
 }

@@ -34,7 +34,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.SetType;
 import mondrian.rolap.RolapMemberBase;
@@ -86,8 +86,8 @@ class UnionFunDefTest {
 
     CrossJoinFunDef crossJoinFunDef =
         new CrossJoinFunDef(new CrossJoinTest.NullFunDef());
-    Exp[] expMock = new Exp[1];
-    expMock[0] = mock(Exp.class);
+    Expression[] expMock = new Expression[1];
+    expMock[0] = mock(Expression.class);
     ResolvedFunCallImpl resolvedFunCall =
         new ResolvedFunCallImpl(mock(FunctionDefinition.class), expMock, mock(SetType.class));
     Calc[] calcs = new Calc[1];

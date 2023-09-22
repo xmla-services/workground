@@ -13,13 +13,13 @@
 */
 package org.eclipse.daanse.mdx.model.record.select;
 
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.select.Axis;
 import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 
 public record SelectQueryAxisClauseR(boolean nonEmpty,
-                                     Expression expression,
+                                     MdxExpression expression,
                                      Axis axis,
                                      SelectDimensionPropertyListClause selectDimensionPropertyListClause)
         implements SelectQueryAxisClause {

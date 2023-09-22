@@ -68,7 +68,7 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.DriverManager;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
@@ -1019,7 +1019,7 @@ public String compileExpression( String expression, final boolean scalar ) {
     }
     Connection connection = getConnection();
     QueryImpl query = connection.parseQuery( queryString );
-    final Exp exp;
+    final Expression exp;
     if ( scalar ) {
       exp = query.getFormulas()[ 0 ].getExpression();
     } else {
@@ -1692,7 +1692,7 @@ public void assertSetExprDependsOn( String expr, String dimList ) {
       "SELECT {" + expr + "} ON COLUMNS FROM [Sales]";
     final QueryImpl query = connection.parseQuery( queryString );
     query.resolve();
-    final Exp expression = query.getAxes()[ 0 ].getSet();
+    final Expression expression = query.getAxes()[ 0 ].getSet();
 
     // Build a list of the dimensions which the expression depends upon,
     // and check that it is as expected.
@@ -1722,7 +1722,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
     final QueryImpl query = connection.parseQuery( queryString );
     query.resolve();
     final Formula formula = query.getFormulas()[ 0 ];
-    final Exp expression = formula.getExpression();
+    final Expression expression = formula.getExpression();
 
     // Build a list of the dimensions which the expression depends upon,
     // and check that it is as expected.
@@ -1731,7 +1731,7 @@ public void assertExprDependsOn( String expr, String hierList ) {
 
   private void checkDependsOn(
     final QueryImpl query,
-    final Exp expression,
+    final Expression expression,
     String expectedHierList,
     final boolean scalar ) {
     final Calc calc =

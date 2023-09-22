@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.element.Schema;
 
 import mondrian.olap.api.Segment;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -125,7 +125,7 @@ public int getSolveOrder() {
   }
 
   @Override
-public Exp getExpression() {
+public Expression getExpression() {
     throw new UnsupportedOperationException();
   }
 

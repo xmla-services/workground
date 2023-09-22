@@ -22,11 +22,10 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -69,12 +68,12 @@ public class TupleFunDef extends FunDefBase {
     }
 
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
-        ExpBase.unparseList(pw, args, "(", ", ", ")");
+	public void unparse(Expression[] args, PrintWriter pw) {
+    	Expressions.unparseExpressions(pw, args, "(", ", ", ")");
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         // _Tuple(<Member1>[,<MemberI>]...), which is written
         // (<Member1>[,<MemberI>]...), has type [Hie1] x ... x [HieN].
         //
@@ -85,7 +84,7 @@ public class TupleFunDef extends FunDefBase {
         } else {
             MemberType[] types = new MemberType[args.length];
             for (int i = 0; i < args.length; i++) {
-                Exp arg = args[i];
+                Expression arg = args[i];
                 types[i] = TypeUtil.toMemberType(arg.getType());
             }
             TupleType.checkHierarchies(types);
@@ -95,7 +94,7 @@ public class TupleFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp[] args = call.getArgs();
+        final Expression[] args = call.getArgs();
         final MemberCalc[] memberCalcs = new MemberCalc[args.length];
         for (int i = 0; i < args.length; i++) {
             memberCalcs[i] = compiler.compileMember(args[i]);
@@ -137,7 +136,7 @@ public class TupleFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {

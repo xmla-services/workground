@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -58,7 +58,7 @@ public interface FunctionResolver {
      *   if no function definition that this resolver knows about matches.
      */
     FunctionDefinition resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions);
 
@@ -121,6 +121,6 @@ public interface FunctionResolver {
          * @param validator Validator
          * @param args Argument list
          */
-        void apply(Validator validator, List<Exp> args);
+        void apply(Validator validator, List<Expression> args);
     }
 }

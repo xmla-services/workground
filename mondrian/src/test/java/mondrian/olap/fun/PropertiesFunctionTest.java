@@ -22,7 +22,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.type.StringType;
@@ -37,7 +37,7 @@ class PropertiesFunctionTest {
   private QueryImpl query;
   private Result result;
   private Connection connection;
-  private Exp resolvedFun;
+  private Expression resolvedFun;
   private static final StringType STRING_TYPE = new StringType();
 
   // The "Time" dimention in foodmart schema contains two hierarchies.

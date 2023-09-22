@@ -47,7 +47,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
 
     private boolean nonEmpty;
     private boolean ordered;
-    private Exp exp;
+    private Expression exp;
     private final AxisOrdinal axisOrdinal;
 
     /**
@@ -69,7 +69,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
      */
     public QueryAxisImpl(
         boolean nonEmpty,
-        Exp set,
+        Expression set,
         AxisOrdinal axisOrdinal,
         SubtotalVisibility subtotalVisibility,
         Id[] dimensionProperties)
@@ -94,7 +94,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
      */
     public QueryAxisImpl(
         boolean nonEmpty,
-        Exp set,
+        Expression set,
         AxisOrdinal axisOrdinal,
         SubtotalVisibility subtotalVisibility)
     {
@@ -127,7 +127,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
 
     @Override
     public Calc compile(ExpressionCompiler compiler, ResultStyle resultStyle) {
-        Exp expInner = this.exp;
+        Expression expInner = this.exp;
         if (axisOrdinal.isFilter()) {
             expInner = normalizeSlicerExpression(expInner);
             expInner = expInner.accept(compiler.getValidator());
@@ -144,14 +144,14 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
         }
     }
 
-    private static Exp normalizeSlicerExpression(Exp exp) {
-        Exp slicer = exp;
+    private static Expression normalizeSlicerExpression(Expression exp) {
+        Expression slicer = exp;
         if (slicer instanceof LevelExpression
             || slicer instanceof HierarchyExpressionImpl
             || slicer instanceof DimensionExpression)
         {
             slicer = new UnresolvedFunCallImpl(
-                "DefaultMember", Syntax.Property, new Exp[] {
+                "DefaultMember", Syntax.Property, new Expression[] {
                     slicer});
         }
 
@@ -160,13 +160,13 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
         {
             slicer =
                 new UnresolvedFunCallImpl(
-                    "{}", Syntax.Braces, new Exp[] {slicer});
+                    "{}", Syntax.Braces, new Expression[] {slicer});
         } else {
             slicer =
                 new UnresolvedFunCallImpl(
-                    "{}", Syntax.Braces, new Exp[] {
+                    "{}", Syntax.Braces, new Expression[] {
                         new UnresolvedFunCallImpl(
-                            "()", Syntax.Parentheses, new Exp[] {
+                            "()", Syntax.Parentheses, new Expression[] {
                                 slicer})});
         }
 
@@ -223,7 +223,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
      * Returns the expression which is used to compute the value of this axis.
      */
     @Override
-    public Exp getSet() {
+    public Expression getSet() {
         return exp;
     }
 
@@ -234,7 +234,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
      * See {@link #getSet()}.
      */
     @Override
-    public void setSet(Exp set) {
+    public void setSet(Expression set) {
         this.exp = set;
     }
 
@@ -255,7 +255,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                     new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
-                        new Exp[] {exp});
+                        new Expression[] {exp});
                 exp = validator.validate(exp, false);
             } else {
                 throw MondrianResource.instance().MdxAxisIsNotSet.ex(
@@ -296,10 +296,10 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
     public void addLevel(Level level) {
         Util.assertTrue(level != null, "addLevel needs level");
         exp = new UnresolvedFunCallImpl(
-            "Crossjoin", Syntax.Function, new Exp[] {
+            "Crossjoin", Syntax.Function, new Expression[] {
                 exp,
                 new UnresolvedFunCallImpl(
-                    "Members", Syntax.Property, new Exp[] {
+                    "Members", Syntax.Property, new Expression[] {
                         new LevelExpressionImpl(level)})});
     }
 

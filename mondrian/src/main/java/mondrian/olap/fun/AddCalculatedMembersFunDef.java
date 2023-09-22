@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.type.MemberType;
@@ -128,9 +128,9 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             if (args.length == 1) {
-                Exp arg = args[0];
+                Expression arg = args[0];
                 final Type type1 = arg.getType();
                 if (type1 instanceof SetType type) {
                     if (type.getElementType() instanceof MemberType) {

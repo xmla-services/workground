@@ -14,12 +14,12 @@
 package org.eclipse.daanse.mdx.model.api.select;
 
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 
 public non-sealed interface CreateSetBodyClause extends SelectWithClause {
 
     CompoundId compoundId();
 
-    Expression expression();
+    MdxExpression expression();
 
 }

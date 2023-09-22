@@ -13,6 +13,8 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.query.base.Expressions;
+
 /**
  * Enumerated values describing the syntax of an expression.
  *
@@ -26,8 +28,8 @@ public enum Syntax {
      */
     Function {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
-            ExpBase.unparseList(pw, args, new StringBuilder(fun).append("(").toString(), ", ", ")");
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
+        	Expressions.unparseExpressions(pw, args, new StringBuilder(fun).append("(").toString(), ", ", ")");
         }
     },
 
@@ -36,7 +38,7 @@ public enum Syntax {
      */
     Property {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             Util.assertTrue(args.length >= 1);
             args[0].unparse(pw); // 'this'
             pw.print(".");
@@ -59,7 +61,7 @@ public enum Syntax {
      */
     Method {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             Util.assertTrue(args.length >= 1);
             args[0].unparse(pw); // 'this'
             pw.print(".");
@@ -93,11 +95,11 @@ public enum Syntax {
      */
     Infix {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, "(", new StringBuilder(" ").append(fun).append(" ").toString(), ")");
+                Expressions.unparseExpressions(pw, args, "(", new StringBuilder(" ").append(fun).append(" ").toString(), ")");
             } else {
-                ExpBase.unparseList(pw, args, "", new StringBuilder(" ").append(fun).append(" ").toString(), "");
+                Expressions.unparseExpressions(pw, args, "", new StringBuilder(" ").append(fun).append(" ").toString(), "");
             }
         }
 
@@ -116,11 +118,11 @@ public enum Syntax {
      */
     Prefix {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, new StringBuilder("(").append(fun).append(" ").toString(), null, ")");
+                Expressions.unparseExpressions(pw, args, new StringBuilder("(").append(fun).append(" ").toString(), null, ")");
             } else {
-                ExpBase.unparseList(pw, args, new StringBuilder(fun).append(" ").toString(), null, "");
+                Expressions.unparseExpressions(pw, args, new StringBuilder(fun).append(" ").toString(), null, "");
             }
         }
 
@@ -138,11 +140,11 @@ public enum Syntax {
      */
     Postfix {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, "(", null, new StringBuilder(" ").append(fun).append(")").toString());
+                Expressions.unparseExpressions(pw, args, "(", null, new StringBuilder(" ").append(fun).append(")").toString());
             } else {
-                ExpBase.unparseList(pw, args, "", null, " " + fun);
+                Expressions.unparseExpressions(pw, args, "", null, " " + fun);
             }
         }
 
@@ -167,8 +169,8 @@ public enum Syntax {
         }
 
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
-            ExpBase.unparseList(pw, args, "{", ", ", "}");
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
+            Expressions.unparseExpressions(pw, args, "{", ", ", "}");
         }
     },
 
@@ -185,8 +187,8 @@ public enum Syntax {
         }
 
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
-            ExpBase.unparseList(pw, args, "(", ", ", ")");
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
+            Expressions.unparseExpressions(pw, args, "(", ", ", ")");
         }
     },
 
@@ -195,7 +197,7 @@ public enum Syntax {
      */
     Case {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             if (fun.equals("_CaseTest")) {
                 pw.print("CASE");
                 int j = 0;
@@ -259,7 +261,7 @@ public enum Syntax {
      */
     Cast {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             pw.print("CAST(");
             args[0].unparse(pw);
             pw.print(" AS ");
@@ -298,7 +300,7 @@ public enum Syntax {
      */
     Empty {
         @Override
-		public void unparse(String fun, Exp[] args, PrintWriter pw) {
+		public void unparse(String fun, Expression[] args, PrintWriter pw) {
             assert args.length == 0;
         }
         @Override
@@ -314,7 +316,7 @@ public enum Syntax {
      * @param args Arguments to the function
      * @param pw Writer
      */
-    public void unparse(String fun, Exp[] args, PrintWriter pw) {
+    public void unparse(String fun, Expression[] args, PrintWriter pw) {
         throw new UnsupportedOperationException();
     }
 
@@ -336,7 +338,7 @@ public enum Syntax {
             .append(")").toString();
     }
 
-    private static boolean needParen(Exp[] args) {
+    private static boolean needParen(Expression[] args) {
         return !(args.length == 1
                  && args[0] instanceof FunCall
                  && ((FunCall) args[0]).getSyntax() == Syntax.Parentheses);

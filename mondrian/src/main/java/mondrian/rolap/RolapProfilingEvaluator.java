@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 
 import mondrian.calc.impl.DelegatingExpCompiler;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 /**
  * Evaluator that collects profiling information as it evaluates expressions.
@@ -89,7 +89,7 @@ public class RolapProfilingEvaluator extends RolapEvaluator {
 		}
 
 		@Override
-		protected ProfilingCalc<?> afterCompile(Exp exp, Calc calc, boolean mutable) {
+		protected ProfilingCalc<?> afterCompile(Expression exp, Calc calc, boolean mutable) {
 			calc = super.afterCompile(exp, calc, mutable);
 			if (calc == null) {
 				return null;

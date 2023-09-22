@@ -15,7 +15,7 @@ package org.eclipse.daanse.mdx.model.record;
 
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 
 import java.util.List;
@@ -23,6 +23,6 @@ import java.util.List;
 //https://docs.microsoft.com/de-de/analysis-services/instances/use-dynamic-management-views-dmvs-to-monitor-analysis-services?view=asallproducts-allversions
 public record DMVStatementR(List<CompoundId> columns,
                             NameObjectIdentifier table,
-                            Expression where) implements DMVStatement {
+                            MdxExpression where) implements DMVStatement {
 
 }

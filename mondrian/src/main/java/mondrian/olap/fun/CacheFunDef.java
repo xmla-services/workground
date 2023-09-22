@@ -21,7 +21,7 @@ import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
@@ -59,13 +59,13 @@ public class CacheFunDef extends FunDefBase {
     }
 
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
+	public void unparse(Expression[] args, PrintWriter pw) {
         args[0].unparse(pw);
     }
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp exp = call.getArg(0);
+        final Expression exp = call.getArg(0);
         final ExpCacheDescriptor cacheDescriptor =
                 new ExpCacheDescriptor(exp, compiler);
         if (call.getType() instanceof SetType) {
@@ -113,14 +113,14 @@ public class CacheFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {
             if (args.length != 1) {
                 return null;
             }
-            final Exp exp = args[0];
+            final Expression exp = args[0];
             final int category = exp.getCategory();
             final Type type = exp.getType();
             return new CacheFunDef(

@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
 public non-sealed interface Formula extends QueryPart {
@@ -33,9 +33,9 @@ public non-sealed interface Formula extends QueryPart {
 
     String getCaption();
 
-    Exp getExpression();
+    Expression getExpression();
 
-    Exp setExpression(Exp exp);
+    Expression setExpression(Expression exp);
 
     Member getMdxMember();
 
@@ -45,7 +45,7 @@ public non-sealed interface Formula extends QueryPart {
 
     Id getId();
 
-    Exp getExp();
+    Expression getExp();
 
     NamedSet getMdxSet();
 

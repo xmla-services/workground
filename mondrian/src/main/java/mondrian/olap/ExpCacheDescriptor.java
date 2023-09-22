@@ -31,7 +31,7 @@ import mondrian.calc.impl.BetterExpCompiler;
  * @since Aug 16, 2005
  */
 public class ExpCacheDescriptor {
-    private final Exp exp;
+    private final Expression exp;
     private int[] dependentHierarchyOrdinals;
     private final Calc calc;
 
@@ -42,7 +42,7 @@ public class ExpCacheDescriptor {
      * @param calc Compiled expression
      * @param evaluator Evaluator
      */
-    public ExpCacheDescriptor(Exp exp, Calc calc, Evaluator evaluator) {
+    public ExpCacheDescriptor(Expression exp, Calc calc, Evaluator evaluator) {
         this.calc = calc;
         this.exp = exp;
         computeDepends(calc, evaluator);
@@ -54,7 +54,7 @@ public class ExpCacheDescriptor {
      * @param exp Expression
      * @param evaluator Evaluator
      */
-    public ExpCacheDescriptor(Exp exp, Evaluator evaluator) {
+    public ExpCacheDescriptor(Expression exp, Evaluator evaluator) {
         this(exp, new BetterExpCompiler(evaluator, null));
     }
 
@@ -64,7 +64,7 @@ public class ExpCacheDescriptor {
      * @param exp Expression
      * @param compiler Compiler
      */
-    public ExpCacheDescriptor(Exp exp, ExpressionCompiler compiler) {
+    public ExpCacheDescriptor(Expression exp, ExpressionCompiler compiler) {
         this.exp = exp;
 
         // Compile expression.
@@ -94,7 +94,7 @@ public class ExpCacheDescriptor {
         }
     }
 
-    public Exp getExp() {
+    public Expression getExp() {
         return exp;
     }
 

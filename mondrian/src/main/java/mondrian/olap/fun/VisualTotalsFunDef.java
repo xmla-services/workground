@@ -26,7 +26,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Property;
 import mondrian.olap.Syntax;
@@ -60,10 +60,10 @@ public class VisualTotalsFunDef extends FunDefBase {
     }
 
     @Override
-	protected Exp validateArg(
-        Validator validator, Exp[] args, int i, int category)
+	protected Expression validateArg(
+        Validator validator, Expression[] args, int i, int category)
     {
-        final Exp validatedArg =
+        final Expression validatedArg =
             super.validateArg(validator, args, i, category);
         if (i == 0) {
             // The function signature guarantees that we have a set of members
@@ -141,9 +141,9 @@ public class VisualTotalsFunDef extends FunDefBase {
             }
             final List<Member> childMemberList =
                 followingDescendants(member, i + 1, list);
-            final Exp exp = makeExpr(childMemberList);
+            final Expression exp = makeExpr(childMemberList);
             final Validator validator = evaluator.getQuery().createValidator();
-            final Exp validatedExp = exp.accept(validator);
+            final Expression validatedExp = exp.accept(validator);
             return new VisualTotalMember(member, name, caption, validatedExp);
         }
 
@@ -190,15 +190,15 @@ public class VisualTotalsFunDef extends FunDefBase {
             return i;
         }
 
-        private Exp makeExpr(final List childMemberList) {
-            Exp[] memberExprs = new Exp[childMemberList.size()];
+        private Expression makeExpr(final List childMemberList) {
+            Expression[] memberExprs = new Expression[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
                 memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
                 "Aggregate",
-                new Exp[] {
+                new Expression[] {
                     new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,
@@ -219,14 +219,14 @@ public class VisualTotalsFunDef extends FunDefBase {
      */
     public static class VisualTotalMember extends RolapMemberBase {
         private final Member member;
-        private Exp exp;
+        private Expression exp;
 
 
         VisualTotalMember(
             Member member,
             String name,
             String caption,
-            final Exp exp)
+            final Expression exp)
         {
             super(
                 (RolapMember) member.getParentMember(),
@@ -285,11 +285,11 @@ public class VisualTotalsFunDef extends FunDefBase {
         }
 
         @Override
-		public Exp getExpression() {
+		public Expression getExpression() {
             return exp;
         }
 
-        public void setExpression(Exp exp) {
+        public void setExpression(Expression exp) {
             this.exp = exp;
         }
 
@@ -297,21 +297,21 @@ public class VisualTotalsFunDef extends FunDefBase {
             Evaluator evaluator,
             List<Member> childMembers)
         {
-            final Exp exp = makeExpr(childMembers);
+            final Expression exp = makeExpr(childMembers);
             final Validator validator = evaluator.getQuery().createValidator();
-            final Exp validatedExp = exp.accept(validator);
+            final Expression validatedExp = exp.accept(validator);
             setExpression(validatedExp);
         }
 
-        private Exp makeExpr(final List childMemberList) {
-            Exp[] memberExprs = new Exp[childMemberList.size()];
+        private Expression makeExpr(final List childMemberList) {
+            Expression[] memberExprs = new Expression[childMemberList.size()];
             for (int i = 0; i < childMemberList.size(); i++) {
                 final Member childMember = (Member) childMemberList.get(i);
                 memberExprs[i] = new MemberExpressionImpl(childMember);
             }
             return new UnresolvedFunCallImpl(
                 "Aggregate",
-                new Exp[] {
+                new Expression[] {
                     new UnresolvedFunCallImpl(
                         "{}",
                         Syntax.Braces,

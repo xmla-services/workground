@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
@@ -43,14 +43,14 @@ public class RolapNativeTopCount extends RolapNativeSet {
     }
 
     static class TopCountConstraint extends SetConstraint {
-        Exp orderByExpr;
+        Expression orderByExpr;
         boolean ascending;
         Integer topCount;
 
         public TopCountConstraint(
             int count,
             CrossJoinArg[] args, RolapEvaluator evaluator,
-            Exp orderByExpr, boolean ascending)
+            Expression orderByExpr, boolean ascending)
         {
             super(args, evaluator, true);
             this.orderByExpr = orderByExpr;
@@ -129,7 +129,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
             }
         }
 
-        private boolean deduceNullability(Exp expr) {
+        private boolean deduceNullability(Expression expr) {
             if (!(expr instanceof MemberExpression memberExpr)) {
                 return true;
             }
@@ -171,7 +171,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
 	NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Exp[] args)
+        Expression[] args)
     {
         if (!isEnabled() || !isValidContext(evaluator)) {
             return null;
@@ -233,7 +233,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
         RolapNativeSql sql =
             new RolapNativeSql(
                 sqlQuery, null, evaluator, null);
-        Exp orderByExpr = null;
+        Expression orderByExpr = null;
         if (args.length == 3) {
             orderByExpr = args[2];
             StringBuilder orderBySQL = sql.generateTopCountOrderBy(args[2]);

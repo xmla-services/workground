@@ -62,7 +62,7 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
@@ -318,7 +318,7 @@ public class RolapResult extends ResultBase {
         final mondrian.olap.type.NumericType returnType = new mondrian.olap.type.NumericType();
         final Calc partialCalc =
                 new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
-        Exp partialExp =
+        Expression partialExp =
                 new ResolvedFunCallImpl(
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
                           @Override
@@ -329,11 +329,11 @@ public class RolapResult extends ResultBase {
                           }
 
                           @Override
-						public void unparse(Exp[] args, PrintWriter pw) {
+						public void unparse(Expression[] args, PrintWriter pw) {
                             pw.print("$RollupAccessibleChildren()");
                           }
                         },
-                        new Exp[0],
+                        new Expression[0],
                         returnType);
 
         final TupleIterable iterable = ( (TupleIteratorCalc) calc ).evaluateIterable( evaluator );
@@ -1448,14 +1448,14 @@ public Cell getCell( int[] pos ) {
     if ( o instanceof Member member && o instanceof RolapCubeMember ) {
       exprMembers.add( member );
     } else if ( o instanceof VisualTotalMember member ) {
-      Exp exp = member.getExpression();
+      Expression exp = member.getExpression();
       processMemberExpr( exp, exprMembers );
-    } else if ( o instanceof Exp exp && !( o instanceof MemberExpression) ) {
+    } else if ( o instanceof Expression exp && !( o instanceof MemberExpression) ) {
       ResolvedFunCallImpl funCall = (ResolvedFunCallImpl) exp;
-      Exp[] exps = funCall.getArgs();
+      Expression[] exps = funCall.getArgs();
       processMemberExpr( exps, exprMembers );
-    } else if ( o instanceof Exp[] exps ) {
-      for ( Exp exp : exps ) {
+    } else if ( o instanceof Expression[] exps ) {
+      for ( Expression exp : exps ) {
         processMemberExpr( exp, exprMembers );
       }
     } else if ( o instanceof MemberExpression memberExp ) {
@@ -1731,7 +1731,7 @@ public Cell getCell( int[] pos ) {
     }
 
     @Override
-	protected Evaluator.SetEvaluator evaluateSet( final Exp exp, boolean create ) {
+	protected Evaluator.SetEvaluator evaluateSet( final Expression exp, boolean create ) {
       // Sanity check: This expression HAS to return a set.
       if ( !( exp.getType() instanceof SetType ) ) {
         throw Util.newInternal( "Trying to evaluate set but expression does not return a set" );
@@ -2310,7 +2310,7 @@ public Cell getCell( int[] pos ) {
     }
 
     @Override
-    public Exp getExpression() {
+    public Expression getExpression() {
       return new TypeWrapperExp( calc.getType() );
     }
 

@@ -38,7 +38,7 @@ public class FactoryImpl
 {
 
 	@Override
-	public Query makeQuery(Statement statement, Formula[] formulae, QueryAxis[] axes, Subcube subcube, Exp slicer,
+	public Query makeQuery(Statement statement, Formula[] formulae, QueryAxis[] axes, Subcube subcube, Expression slicer,
 			CellProperty[] cellProps, boolean strictValidation) {
 		final QueryAxis slicerAxis =
             slicer == null
@@ -55,7 +55,7 @@ public class FactoryImpl
         Query query,
         int maxRowCount,
         int firstRowOrdinal,
-        List<Exp> returnList)
+        List<Expression> returnList)
     {
         return new DrillThroughImpl(
             query, maxRowCount, firstRowOrdinal, returnList);
@@ -93,7 +93,7 @@ public class FactoryImpl
     public DmvQuery makeDmvQuery(
             String tableName,
             List<String> columns,
-            Exp whereExpression)
+            Expression whereExpression)
     {
         return new DmvQueryImpl(tableName, columns, whereExpression);
     }

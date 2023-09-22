@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 
 /**
@@ -38,7 +38,7 @@ class RolapSetEvaluator
 {
 
     private final RolapResult.RolapResultEvaluatorRoot rrer;
-    private final Exp exp;
+    private final Expression exp;
     /**
      * Value of this named set; set on first use.
      */
@@ -63,7 +63,7 @@ class RolapSetEvaluator
      */
     public RolapSetEvaluator(
         RolapResult.RolapResultEvaluatorRoot rrer,
-        Exp exp)
+        Expression exp)
     {
         this.rrer = rrer;
         this.exp = exp;

@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -538,13 +538,13 @@ public class TypeUtil {
         }
 
         @Override
-		public void apply(Validator validator, List<Exp> args) {
-            final Exp arg = args.get(ordinal);
+		public void apply(Validator validator, List<Expression> args) {
+            final Expression arg = args.get(ordinal);
             if ((from == Category.MEMBER || from == Category.TUPLE) && to == Category.SET) {
-                final Exp newArg =
+                final Expression newArg =
                     validator.validate(
                         new UnresolvedFunCallImpl(
-                            "{}", Syntax.Braces, new Exp[]{arg}), false);
+                            "{}", Syntax.Braces, new Expression[]{arg}), false);
                 args.set(ordinal, newArg);
             }
         }

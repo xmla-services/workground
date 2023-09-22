@@ -13,7 +13,7 @@ package org.eclipse.daanse.function;
 
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
@@ -103,7 +103,7 @@ public abstract class MultiResolver implements FunctionResolver {
 
     @Override
 	public FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {
@@ -141,5 +141,5 @@ outer:
         return true;
     }
 
-    protected abstract FunDef createFunDef(Exp[] args, FunDef dummyFunDef);
+    protected abstract FunDef createFunDef(Expression[] args, FunDef dummyFunDef);
 }

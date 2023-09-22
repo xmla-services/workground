@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.api.element;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
@@ -42,7 +42,7 @@ public interface NamedSet extends OlapElement, MetaElement {
     /**
      * Returns the expression used to derive this named set.
      */
-    Exp getExp();
+    Expression getExp();
 
     NamedSet validate(Validator validator);
 

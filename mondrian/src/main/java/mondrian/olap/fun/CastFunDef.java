@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -58,7 +58,7 @@ public class CastFunDef extends FunDefBase {
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
         final Type targetType = call.getType();
-        final Exp arg = call.getArg(0);
+        final Expression arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
         return new CastCalcImpl(arg, calc, targetType);
     }
@@ -138,7 +138,7 @@ public class CastFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args, Validator validator, List<Conversion> conversions)
+            Expression[] args, Validator validator, List<Conversion> conversions)
         {
             if (args.length != 2) {
                 return null;
@@ -170,7 +170,7 @@ public class CastFunDef extends FunDefBase {
         private final Type targetType;
         private final int targetCategory;
 
-        public CastCalcImpl(Exp arg, Calc calc, Type targetType) {
+        public CastCalcImpl(Expression arg, Calc calc, Type targetType) {
             super(arg.getType());
             this.calc = calc;
             this.targetType = targetType;

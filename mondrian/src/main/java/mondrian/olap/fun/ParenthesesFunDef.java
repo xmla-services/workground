@@ -16,9 +16,9 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -44,9 +44,9 @@ public class ParenthesesFunDef extends FunDefBase {
         this.argType = argType;
     }
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
+	public void unparse(Expression[] args, PrintWriter pw) {
         if (args.length != 1) {
-            ExpBase.unparseList(pw, args, "(", ",", ")");
+        	Expressions.unparseExpressions(pw, args, "(", ",", ")");
         } else {
             // Don't use parentheses unless necessary. We add parentheses around
             // expressions because we're not sure of operator precedence, so if
@@ -56,7 +56,7 @@ public class ParenthesesFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         Util.assertTrue(args.length == 1);
         return args[0].getType();
     }

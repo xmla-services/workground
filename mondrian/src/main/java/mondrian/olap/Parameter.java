@@ -42,7 +42,7 @@ public interface Parameter {
      *
      * @return Default value expression of the parameter
      */
-    Exp getDefaultExp();
+    Expression getDefaultExp();
 
     /**
      * Returns the name of this Parameter.

@@ -34,7 +34,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -99,19 +99,19 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       //   Descendants(<set>, <args>)
       // into
       //   Generate(<set>, Descendants(<dimension>.CurrentMember, <args>))
-      Exp[] descendantsArgs = call.getArgs().clone();
+      Expression[] descendantsArgs = call.getArgs().clone();
       descendantsArgs[ 0 ] =
         new UnresolvedFunCallImpl(
           "CurrentMember",
           Syntax.Property,
-          new Exp[] {
+          new Expression[] {
             new HierarchyExpressionImpl( hierarchy )
           } );
       final ResolvedFunCallImpl generateCall =
         (ResolvedFunCallImpl) compiler.getValidator().validate(
           new UnresolvedFunCallImpl(
             "Generate",
-            new Exp[] {
+            new Expression[] {
               call.getArg( 0 ),
               new UnresolvedFunCallImpl(
                 DESCENDANTS,

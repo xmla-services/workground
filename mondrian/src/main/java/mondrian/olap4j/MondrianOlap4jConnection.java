@@ -95,7 +95,7 @@ import org.slf4j.LoggerFactory;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
@@ -790,7 +790,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             namedSet);
     }
 
-    ParseTreeNode toOlap4j(Exp exp) {
+    ParseTreeNode toOlap4j(Expression exp) {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(exp);
     }
 
@@ -1100,7 +1100,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             return list;
         }
 
-        private ParseTreeNode toOlap4j(Exp exp) {
+        private ParseTreeNode toOlap4j(Expression exp) {
             if (exp instanceof Id id) {
                 return toOlap4j(id);
             }
@@ -1186,9 +1186,9 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             return callNode;
         }
 
-        private List<ParseTreeNode> toOlap4j(List<Exp> exprList) {
+        private List<ParseTreeNode> toOlap4j(List<Expression> exprList) {
             final List<ParseTreeNode> result = new ArrayList<>();
-            for (Exp expr : exprList) {
+            for (Expression expr : exprList) {
                 result.add(toOlap4j(expr));
             }
             return result;

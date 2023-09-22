@@ -23,7 +23,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
@@ -34,7 +34,7 @@ import mondrian.test.PropertySaver5;
  * native evaluator for {@code TOPCOUNT} function.
  *
  * @author Andrey Khayrutdinov
- * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunctionDefinition, Exp[])
+ * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunctionDefinition, Expression[])
  */
 class TopCountNativeEvaluatorTest {
 
@@ -87,7 +87,7 @@ class TopCountNativeEvaluatorTest {
         doReturn(true).when(nativeTopCount)
             .isValidContext(any(RolapEvaluator.class));
 
-        Exp[] arguments = new Exp[] {
+        Expression[] arguments = new Expression[] {
             new TypeWrapperExp(new EmptyType()),
             NumericLiteralImpl.create(BigDecimal.ONE)
         };

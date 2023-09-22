@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunCall;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Parameter;
@@ -48,7 +48,7 @@ import mondrian.olap.type.Type;
 public class ParameterFunDef extends FunDefBase {
     public final String parameterName;
     private final Type type;
-    public final Exp exp;
+    public final Expression exp;
     public final String parameterDescription;
 
     ParameterFunDef(
@@ -56,7 +56,7 @@ public class ParameterFunDef extends FunDefBase {
         String parameterName,
         Type type,
         int returnCategory,
-        Exp exp,
+        Expression exp,
         String description)
     {
         super(
@@ -76,7 +76,7 @@ public class ParameterFunDef extends FunDefBase {
     }
 
     @Override
-	public Exp createCall(Validator validator, Exp[] args) {
+	public Expression createCall(Validator validator, Expression[] args) {
         Parameter parameter = validator.createOrLookupParam(
             this.getName().equals("Parameter"),
             parameterName, type, exp, parameterDescription);
@@ -84,11 +84,11 @@ public class ParameterFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         return type;
     }
 
-    private static boolean isConstant(Exp typeArg) {
+    private static boolean isConstant(Expression typeArg) {
         if (typeArg instanceof LevelExpression) {
             // e.g. "[Time].[Quarter]"
             return true;
@@ -118,7 +118,7 @@ public class ParameterFunDef extends FunDefBase {
         return false;
     }
 
-    public static String getParameterName(Exp[] args) {
+    public static String getParameterName(Expression[] args) {
         if (args[0] instanceof Literal
             && args[0].getCategory() == Category.STRING)
         {
@@ -133,7 +133,7 @@ public class ParameterFunDef extends FunDefBase {
      * argument. Does not use the default value expression, so this method
      * can safely be used before the expression has been validated.
      */
-    public static Type getParameterType(Exp[] args) {
+    public static Type getParameterType(Expression[] args) {
         if (args[1] instanceof Id id) {
             String[] names = id.toStringArray();
             if (names.length == 1) {
@@ -188,9 +188,9 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
-            Exp typeArg = args[1];
+            Expression typeArg = args[1];
             int category;
             Type type = typeArg.getType();
             switch (typeArg.getCategory()) {
@@ -242,7 +242,7 @@ public class ParameterFunDef extends FunDefBase {
             }
 
             // Default value
-            Exp exp = args[2];
+            Expression exp = args[2];
             Validator validator =
                 Util.createSimpleValidator(BuiltinFunTable.instance());
             final List<Conversion> conversionList = new ArrayList<>();
@@ -317,7 +317,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         @Override
-		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
                 dummyFunDef, parameterName, null, Category.UNKNOWN, null,

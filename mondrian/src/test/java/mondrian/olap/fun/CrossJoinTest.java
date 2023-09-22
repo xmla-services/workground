@@ -43,7 +43,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
@@ -407,7 +407,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 
   protected ResolvedFunCallImpl getResolvedFunCall() {
     FunctionDefinition funDef = new TestFunDef();
-    Exp[] args = new Exp[ 0 ];
+    Expression[] args = new Expression[ 0 ];
     Type returnType =
       new SetType(
         new TupleType(
@@ -450,7 +450,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Exp createCall( Validator validator, Exp[] args ) {
+	public Expression createCall( Validator validator, Expression[] args ) {
       throw new UnsupportedOperationException();
     }
 
@@ -460,7 +460,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public void unparse( Exp[] args, PrintWriter pw ) {
+	public void unparse( Expression[] args, PrintWriter pw ) {
       throw new UnsupportedOperationException();
     }
 
@@ -500,7 +500,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Exp createCall( Validator validator, Exp[] args ) {
+	public Expression createCall( Validator validator, Expression[] args ) {
       return null;
     }
 
@@ -510,7 +510,7 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public void unparse( Exp[] args, PrintWriter pw ) {
+	public void unparse( Expression[] args, PrintWriter pw ) {
       //
     }
 

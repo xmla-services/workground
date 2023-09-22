@@ -26,7 +26,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -93,13 +93,13 @@ class StrToSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Exp createCall(Validator validator, Exp[] args) {
+	public Expression createCall(Validator validator, Expression[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
             throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getName());
         }
         for (int i = 1; i < argCount; i++) {
-            final Exp arg = args[i];
+            final Expression arg = args[i];
             if (arg instanceof DimensionExpression dimensionExpr) {
                 Dimension dimension = dimensionExpr.getDimension();
                 args[i] = new HierarchyExpressionImpl(dimension.getHierarchy());
@@ -114,7 +114,7 @@ class StrToSetFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         switch (args.length) {
         case 1:
             // This is a call to the standard version of StrToSet,
@@ -142,7 +142,7 @@ class StrToSetFunDef extends FunDefBase {
             //  (<Hier1>, ... ,  <HierN>)
             final List<MemberType> list = new ArrayList<>();
             for (int i = 1; i < args.length; i++) {
-                Exp arg = args[i];
+                Expression arg = args[i];
                 final Type argType = arg.getType();
                 list.add(TypeUtil.toMemberType(argType));
             }
@@ -165,7 +165,7 @@ class StrToSetFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {
@@ -179,7 +179,7 @@ class StrToSetFunDef extends FunDefBase {
                 return null;
             }
             for (int i = 1; i < args.length; i++) {
-                Exp exp = args[i];
+                Expression exp = args[i];
                 if (!(exp instanceof DimensionExpression
                       || exp instanceof HierarchyExpressionImpl))
                 {

@@ -16,10 +16,10 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.query.base.Expressions;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
-import mondrian.olap.FunCall;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -35,13 +35,13 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Jan 6, 2006
  */
-public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCall {
+public final class ResolvedFunCallImpl extends AbstractExpression implements  ResolvedFunCall {
 
     /**
      * The arguments to the function call.  Note that for methods, 0-th arg is
      * 'this'.
      */
-    private final Exp[] args;
+    private final Expression[] args;
 
     /**
      * Return type of this function call.
@@ -60,7 +60,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
      * @param args Arguments
      * @param returnType Return type
      */
-    public ResolvedFunCallImpl(FunctionDefinition funDef, Exp[] args, Type returnType) {
+    public ResolvedFunCallImpl(FunctionDefinition funDef, Expression[] args, Type returnType) {
         if (funDef == null || args == null || returnType == null) {
             throw new IllegalArgumentException("ResolvedFunCall params be not null");
         }
@@ -78,7 +78,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
     public ResolvedFunCallImpl cloneExp() {
         return new ResolvedFunCallImpl(
-            funDef, ExpBase.cloneArray(args), returnType);
+            funDef, Expressions.cloneExpressions(args), returnType);
     }
 
     /**
@@ -90,7 +90,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
      * @see #getArgs()
      */
     @Override
-	public Exp getArg(int index) {
+	public Expression getArg(int index) {
         return args[index];
     }
 
@@ -102,7 +102,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
      * @return the array of expressions
      */
     @Override
-	public Exp[] getArgs() {
+	public Expression[] getArgs() {
         return args;
     }
 
@@ -154,11 +154,11 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         // even though the function has already been validated, we need
         // to walk through the arguments to determine which measures are
         // referenced
-        Exp[] newArgs = new Exp[args.length];
+        Expression[] newArgs = new Expression[args.length];
         FunUtil.resolveFunArgs(
             validator, funDef, args, newArgs, getFunName(), getSyntax());
 
@@ -180,7 +180,7 @@ public final class ResolvedFunCallImpl extends ExpBase implements  ResolvedFunCa
         final Object o = visitor.visit(this);
         if (visitor.shouldVisitChildren()) {
             // visit the call's arguments
-            for (Exp arg : args) {
+            for (Expression arg : args) {
                 arg.accept(visitor);
             }
         }

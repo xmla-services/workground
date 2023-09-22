@@ -33,7 +33,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -64,7 +64,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the topmost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, true );
       }
     };
@@ -76,7 +76,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "Drills down the bottommost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, false );
       }
     };

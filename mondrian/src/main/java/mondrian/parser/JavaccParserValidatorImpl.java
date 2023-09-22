@@ -11,7 +11,7 @@ package mondrian.parser;
 
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FactoryImpl;
 import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianException;
@@ -68,7 +68,7 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
     }
 
     @Override
-	public Exp parseExpression(
+	public Expression parseExpression(
         Statement statement,
         String queryString,
         boolean debug,

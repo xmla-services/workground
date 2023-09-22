@@ -40,14 +40,14 @@ import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.IdentifierParser.Builder;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
@@ -185,7 +185,7 @@ public class FunUtil extends Util {
         return defaultValue;
       }
     }
-    Exp arg = call.getArg( i );
+    Expression arg = call.getArg( i );
     if ( !( arg instanceof Literal)
       || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
@@ -227,7 +227,7 @@ public class FunUtil extends Util {
         return defaultValue;
       }
     }
-    Exp arg = call.getArg( i );
+    Expression arg = call.getArg( i );
     if ( !( arg instanceof Literal )
       || arg.getCategory() != Category.SYMBOL) {
       throw FunUtil.newEvalException(
@@ -258,7 +258,7 @@ public class FunUtil extends Util {
    *
    * @throws MondrianEvaluationException if expressions don't have the same hierarchy
    */
-  static void checkCompatible( Exp left, Exp right, FunctionDefinition funDef ) {
+  static void checkCompatible( Expression left, Expression right, FunctionDefinition funDef ) {
     final Type leftType = TypeUtil.stripSetType( left.getType() );
     final Type rightType = TypeUtil.stripSetType( right.getType() );
     if ( !TypeUtil.isUnionCompatible( leftType, rightType ) ) {
@@ -1459,8 +1459,8 @@ public class FunUtil extends Util {
   public static FunctionDefinition resolveFunArgs(
     Validator validator,
     FunctionDefinition funDef,
-    Exp[] args,
-    Exp[] newArgs,
+    Expression[] args,
+    Expression[] newArgs,
     String name,
     Syntax syntax ) {
     for ( int i = 0; i < args.length; i++ ) {
@@ -1484,7 +1484,7 @@ public class FunUtil extends Util {
   private static void checkNativeCompatible(
     Validator validator,
     FunctionDefinition funDef,
-    Exp[] args ) {
+    Expression[] args ) {
     // If the first argument to a function is either:
     // 1) the measures dimension or
     // 2) a measures member where the function returns another member or
@@ -1509,7 +1509,7 @@ public class FunUtil extends Util {
       int[] paramCategories = funDef.getParameterCategories();
       if ( paramCategories.length > 0 ) {
         final int cat0 = paramCategories[ 0 ];
-        final Exp arg0 = args[ 0 ];
+        final Expression arg0 = args[ 0 ];
         switch ( cat0 ) {
           case Category.DIMENSION, Category.HIERARCHY:
             if ( arg0 instanceof DimensionExpression dimensionExpr
@@ -1584,8 +1584,8 @@ public class FunUtil extends Util {
   static FunctionDefinition createDummyFunDef(
     FunctionResolver resolver,
     int returnCategory,
-    Exp[] args ) {
-    final int[] argCategories = ExpBase.getTypes( args );
+    Expression[] args ) {
+    final int[] argCategories = Expressions.categoriesOf( args );
     return new FunDefBase( resolver, returnCategory, argCategories ) {
     };
   }
@@ -1801,7 +1801,7 @@ public class FunUtil extends Util {
    * @param exp Expression
    * @return Whether worth caching
    */
-  public static boolean worthCaching( Exp exp ) {
+  public static boolean worthCaching( Expression exp ) {
     // Literal is not worth caching.
     if ( exp instanceof Literal ) {
       return false;
@@ -1816,7 +1816,7 @@ public class FunUtil extends Util {
     }
     if ( exp instanceof ResolvedFunCall call && call.getFunDef() instanceof SetFunDef) {
       // A set of literals is not worth caching.
-      for ( Exp setArg : call.getArgs() ) {
+      for ( Expression setArg : call.getArgs() ) {
           if ( FunUtil.worthCaching( setArg ) ) {
             return true;
           }
@@ -2022,7 +2022,7 @@ public class FunUtil extends Util {
     }
 
     @Override
-	public Exp getExpression() {
+	public Expression getExpression() {
       throw new UnsupportedOperationException();
     }
 

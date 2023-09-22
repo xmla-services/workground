@@ -51,7 +51,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Aggregator;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -165,7 +165,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 "mlhn")
         {
             @Override
-			public Type getResultType(Validator validator, Exp[] args) {
+			public Type getResultType(Validator validator, Expression[] args) {
                 final Type argType = args[0].getType();
                 return LevelType.forType(argType);
             }
@@ -209,7 +209,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 "mlhS")
         {
             @Override
-			public Type getResultType(Validator validator, Exp[] args) {
+			public Type getResultType(Validator validator, Expression[] args) {
                 final Type argType = args[0].getType();
                 return LevelType.forType(argType);
             }
@@ -251,7 +251,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 "flS")
         {
             @Override
-			public Type getResultType(Validator validator, Exp[] args) {
+			public Type getResultType(Validator validator, Expression[] args) {
                 final Type argType = args[0].getType();
                 return LevelType.forType(argType);
             }
@@ -652,10 +652,10 @@ public class BuiltinFunTable extends FunTableImpl {
                 "Equivalent to 'Aggregate(<Hierarchy>.CurrentMember.Children); for internal use.",
                 new String[] {"Inh"}) {
             @Override
-			protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+			protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
                 return new FunDefBase(dummyFunDef) {
                     @Override
-					public void unparse(Exp[] args, PrintWriter pw) {
+					public void unparse(Expression[] args, PrintWriter pw) {
                         pw.print(getName());
                         pw.print("(");
                         args[0].unparse(pw);

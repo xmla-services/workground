@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -54,7 +54,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm"})
     {
         @Override
-		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             return new OpeningClosingPeriodFunDef(dummyFunDef, true);
         }
     };
@@ -67,7 +67,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             new String[] {"fm", "fml", "fmlm", "fmm"})
     {
         @Override
-		protected FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef) {
+		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             return new OpeningClosingPeriodFunDef(dummyFunDef, false);
         }
     };
@@ -81,7 +81,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         if (args.length == 0) {
             // With no args, the default implementation cannot
             // guess the hierarchy, so we supply the Time
@@ -96,7 +96,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp[] args = call.getArgs();
+        final Expression[] args = call.getArgs();
         final LevelCalc levelCalc;
         final MemberCalc memberCalc;
         RolapHierarchy defaultTimeHierarchy = null;

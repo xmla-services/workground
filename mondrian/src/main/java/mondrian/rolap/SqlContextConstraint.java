@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
@@ -194,7 +194,7 @@ public class SqlContextConstraint
      * @param baseCubes set of base cubes
      */
     private static void findMeasures(
-        Exp exp,
+        Expression exp,
         Set<RolapCube> baseCubes,
         List<RolapCube> baseCubeList)
     {
@@ -207,8 +207,8 @@ public class SqlContextConstraint
                 findMeasures(member.getExpression(), baseCubes, baseCubeList);
             }
         } else if (exp instanceof ResolvedFunCallImpl funCall) {
-            Exp [] args = funCall.getArgs();
-            for (Exp arg : args) {
+            Expression [] args = funCall.getArgs();
+            for (Expression arg : args) {
                 findMeasures(arg, baseCubes, baseCubeList);
             }
         }

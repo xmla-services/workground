@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 public non-sealed interface UpdateClause extends QueryPart {
 
-    Exp getTupleExp();
+    Expression getTupleExp();
 
-    Exp getValueExp();
+    Expression getValueExp();
 
 }

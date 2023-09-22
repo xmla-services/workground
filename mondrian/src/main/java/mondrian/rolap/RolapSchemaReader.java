@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MatchType;
@@ -770,7 +770,7 @@ public class RolapSchemaReader
 
     @Override
 	public NativeEvaluator getNativeSetEvaluator(
-        FunctionDefinition fun, Exp[] args, Evaluator evaluator, Calc calc)
+        FunctionDefinition fun, Expression[] args, Evaluator evaluator, Calc calc)
     {
         RolapEvaluator revaluator = (RolapEvaluator)
 ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);

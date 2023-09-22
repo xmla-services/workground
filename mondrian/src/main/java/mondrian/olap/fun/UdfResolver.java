@@ -32,7 +32,7 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -104,7 +104,7 @@ public class UdfResolver implements FunctionResolver {
 
     @Override
 	public FunctionDefinition resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {
@@ -116,7 +116,7 @@ public class UdfResolver implements FunctionResolver {
         Type[] castArgTypes = new Type[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             Type parameterType = parameterTypes[i];
-            final Exp arg = args[i];
+            final Expression arg = args[i];
             final Type argType = arg.getType();
             final int parameterCategory =
                 TypeUtil.typeToCategory(parameterType);
@@ -162,18 +162,18 @@ public class UdfResolver implements FunctionResolver {
         }
 
         @Override
-		public Type getResultType(Validator validator, Exp[] args) {
+		public Type getResultType(Validator validator, Expression[] args) {
             return returnType;
         }
 
         @Override
 		public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-            final Exp[] args = call.getArgs();
+            final Expression[] args = call.getArgs();
             Calc[] calcs = new Calc[args.length];
             UserDefinedFunction.Argument[] expCalcs =
                 new UserDefinedFunction.Argument[args.length];
             for (int i = 0; i < args.length; i++) {
-                Exp arg = args[i];
+                Expression arg = args[i];
                 final Calc calc = calcs[i] = compiler.compileAs(
                     arg,
                     FunDefBase.castType(arg.getType(), parameterCategories[i]),
@@ -312,7 +312,7 @@ public class UdfResolver implements FunctionResolver {
     }
 
     /**
-     * Wrapper around a {@link Calc} to make it appear as an {@link Exp}.
+     * Wrapper around a {@link Calc} to make it appear as an {@link Expression}.
      * Only the {@link #evaluate(org.eclipse.daanse.olap.api.Evaluator)}
      * and {@link #evaluateScalar(org.eclipse.daanse.olap.api.Evaluator)} methods are
      * supported.

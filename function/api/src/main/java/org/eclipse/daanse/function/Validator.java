@@ -11,7 +11,7 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionTable;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
@@ -31,7 +31,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
  * calls to specific functions.
  *
  * <p>An expression calls {@link #validate} on each of its children,
- * which in turn calls {@link Exp#accept}.
+ * which in turn calls {@link Expression#accept}.
  *
  * @author jhyde
  */
@@ -48,7 +48,7 @@ public interface Validator {
      * @param scalar Whether the context requires that the expression is
      *   evaluated to a value, as opposed to a tuple
      */
-    Exp validate(Exp exp, boolean scalar);
+    Expression validate(Expression exp, boolean scalar);
 
     /**
      * Validates a usage of a parameter.
@@ -96,7 +96,7 @@ public interface Validator {
      */
     boolean canConvert(
         int ordinal,
-        Exp fromExp,
+        Expression fromExp,
         int to,
         List<FunctionResolver.Conversion> conversions);
 
@@ -113,7 +113,7 @@ public interface Validator {
         boolean definition,
         String name,
         Type type,
-        Exp defaultExp,
+        Expression defaultExp,
         String description);
 
     /**
@@ -122,7 +122,7 @@ public interface Validator {
      * possible.
      */
     FunDef getDef(
-        Exp[] args,
+        Expression[] args,
         String name,
         Syntax syntax);
 

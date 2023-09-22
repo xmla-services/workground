@@ -178,7 +178,7 @@ public final class IdBatchResolver {
             if (!supportedIdentifier(parent)) {
                 continue;
             }
-            Exp exp = (Exp)resolvedIdentifiers.get(parent);
+            Expression exp = (Expression)resolvedIdentifiers.get(parent);
             if (exp == null) {
                 exp = lookupExp(parent);
             }
@@ -214,10 +214,10 @@ public final class IdBatchResolver {
         }
     }
 
-    private Exp lookupExp(Id parent)
+    private Expression lookupExp(Id parent)
     {
         try {
-            Exp exp = Util.lookup(query, parent.getSegments(), false);
+            Expression exp = Util.lookup(query, parent.getSegments(), false);
             return exp;
         } catch (Exception exception) {
             LOGGER.info(
@@ -337,7 +337,7 @@ public final class IdBatchResolver {
      * Returns the member associated with a MemberExpr.
      * For all other Exp returns null.
      */
-    private Member getMemberFromExp(Exp exp) {
+    private Member getMemberFromExp(Expression exp) {
         if (exp instanceof DimensionExpression dimensionExpr) {
             Hierarchy hier = dimensionExpr
                 .getDimension().getHierarchy();

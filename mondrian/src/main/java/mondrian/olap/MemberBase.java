@@ -263,7 +263,7 @@ public int getSolveOrder() {
    * @post (return ! = null) == (isCalculated())
    */
   @Override
-public Exp getExpression() {
+public Expression getExpression() {
     return null;
   }
 

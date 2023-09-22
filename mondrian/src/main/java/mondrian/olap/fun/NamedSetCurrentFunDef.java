@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.resource.MondrianResource;
 
@@ -41,9 +41,9 @@ public class NamedSetCurrentFunDef extends FunDefBase {
     }
 
     @Override
-	public Exp createCall(Validator validator, Exp[] args) {
+	public Expression createCall(Validator validator, Expression[] args) {
         assert args.length == 1;
-        final Exp arg0 = args[0];
+        final Expression arg0 = args[0];
         if (!(arg0 instanceof NamedSetExpression)) {
             throw MondrianResource.instance().NotANamedSet.ex();
         }
@@ -52,7 +52,7 @@ public class NamedSetCurrentFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp arg0 = call.getArg(0);
+        final Expression arg0 = call.getArg(0);
         assert arg0 instanceof NamedSetExpression : "checked this in createCall";
         final NamedSetExpression namedSetExpr = (NamedSetExpression) arg0;
         if (arg0.getType().getArity() == 1) {

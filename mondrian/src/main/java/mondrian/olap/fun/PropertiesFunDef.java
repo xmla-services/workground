@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -103,7 +103,7 @@ class PropertiesFunDef extends FunDefBase {
         }
 
         private boolean matches(
-            Exp[] args,
+            Expression[] args,
             int[] parameterTypes,
             Validator validator,
             List<Conversion> conversions)
@@ -123,7 +123,7 @@ class PropertiesFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {
@@ -146,8 +146,8 @@ class PropertiesFunDef extends FunDefBase {
          * @return Category of the property
          */
         private int deducePropertyCategory(
-            Exp memberExp,
-            Exp propertyNameExp)
+            Expression memberExp,
+            Expression propertyNameExp)
         {
             if (!(propertyNameExp instanceof Literal)) {
                 return Category.VALUE;

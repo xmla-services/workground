@@ -344,7 +344,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * Adds a new formula specifying a set
      * to an existing query.
      */
-    public void addFormula(Id id, Exp exp) {
+    public void addFormula(Id id, Expression exp) {
         addFormula(
             new FormulaImpl(false, id, exp, new MemberProperty[0], null, null));
     }
@@ -359,7 +359,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void addFormula(
         Id id,
-        Exp exp,
+        Expression exp,
         MemberProperty[] memberProperties)
     {
         addFormula(new FormulaImpl(true, id, exp, memberProperties, null, null));
@@ -576,40 +576,40 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 org.eclipse.daanse.olap.api.element.Level[] levels = hierarchy.getLevels();
                 org.eclipse.daanse.olap.api.element.Level lastLevel = levels[levels.length - 1];
                 LevelExpressionImpl levelExpr = new LevelExpressionImpl(lastLevel);
-                Exp levelMembers = new UnresolvedFunCallImpl(
+                Expression levelMembers = new UnresolvedFunCallImpl(
                   "AllMembers",
                   Syntax.Property,
-                  new Exp[] {levelExpr}
+                  new Expression[] {levelExpr}
                 );
 
-                Exp resultExp = null;
+                Expression resultExp = null;
 
-                List<Exp> subcubeAxisExps = this.subcube.getAxisExps();
-                ArrayList<Exp> hierarchyExps = new ArrayList<>();
+                List<Expression> subcubeAxisExps = this.subcube.getAxisExps();
+                ArrayList<Expression> hierarchyExps = new ArrayList<>();
                 for(int j = 0; j < subcubeAxisExps.size(); j++) {
-                    Exp subcubeAxisExp = subcubeAxisExps.get(j);
+                    Expression subcubeAxisExp = subcubeAxisExps.get(j);
                     subcubeAxisExp = subcubeAxisExp.accept(compiler.getValidator());
                     Hierarchy[] subcubeAxisHierarchies = collectHierarchies(subcubeAxisExp);
                     if(Arrays.asList(subcubeAxisHierarchies).contains(hierarchy)) {
                         hierarchyExps.add(subcubeAxisExp);
                     }
                 }
-                for(Exp hierarchyExp: hierarchyExps) {
-                    Exp prevExp;
+                for(Expression hierarchyExp: hierarchyExps) {
+                    Expression prevExp;
                     if(resultExp == null) {
                         prevExp = levelMembers;
                     }
                     else {
                         prevExp = resultExp;
                     }
-                    Exp axisInBracesExp =
+                    Expression axisInBracesExp =
                             new UnresolvedFunCallImpl(
-                                    "{}", Syntax.Braces, new Exp[] {hierarchyExp});
+                                    "{}", Syntax.Braces, new Expression[] {hierarchyExp});
                     if(hierarchyExps.size() > 1) {
                         resultExp = new UnresolvedFunCallImpl(
                                 "Exists",
                                 Syntax.Function,
-                                new Exp[] {prevExp, axisInBracesExp}
+                                new Expression[] {prevExp, axisInBracesExp}
                         );
                     }
                     else {
@@ -619,16 +619,16 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
                 if(resultExp != null) {
                     HierarchyExpressionImpl hierarchyExpr = new HierarchyExpressionImpl(hierarchy);
-                    Exp hierarchyAllMembersExp = new UnresolvedFunCallImpl(
+                    Expression hierarchyAllMembersExp = new UnresolvedFunCallImpl(
                             "AllMembers",
                             Syntax.Property,
-                            new Exp[] {hierarchyExpr}
+                            new Expression[] {hierarchyExpr}
                     );
 
                     resultExp = new UnresolvedFunCallImpl(
                             "Exists",
                             Syntax.Function,
-                            new Exp[] {hierarchyAllMembersExp, resultExp}
+                            new Expression[] {hierarchyAllMembersExp, resultExp}
                     );
 
                     resultExp = resultExp.accept(compiler.getValidator());
@@ -879,7 +879,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * <code>[Time].LastSibling</code> might return a member of either
      * [Time.Monthly] or [Time.Weekly].
      */
-    private Hierarchy[] collectHierarchies(Exp queryPart) {
+    private Hierarchy[] collectHierarchies(Expression queryPart) {
         Type exprType = queryPart.getType();
         if (exprType instanceof SetType setType) {
             exprType = setType.getElementType();
@@ -1069,9 +1069,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public void swapAxes() {
         if (axes.length == 2) {
-            Exp e0 = axes[0].getSet();
+            Expression e0 = axes[0].getSet();
             boolean nonEmpty0 = axes[0].isNonEmpty();
-            Exp e1 = axes[1].getSet();
+            Expression e1 = axes[1].getSet();
             boolean nonEmpty1 = axes[1].isNonEmpty();
             axes[1].setSet(e0);
             axes[1].setNonEmpty(nonEmpty0);
@@ -1166,7 +1166,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     public ScopedNamedSet createScopedNamedSet(
         String name,
         QueryPart scope,
-        Exp expr)
+        Expression expr)
     {
         final ScopedNamedSet scopedNamedSet =
             new ScopedNamedSet(
@@ -1415,7 +1415,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * @return compiled expression
      */
     public Calc compileExpression(
-        Exp exp,
+        Expression exp,
         boolean scalar,
         ResultStyle resultStyle)
     {
@@ -2139,7 +2139,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     public static class ScopedNamedSet implements NamedSet {
         private final String name;
         private final QueryPart scope;
-        private Exp expr;
+        private Expression expr;
 
         /**
          * Creates a ScopedNamedSet.
@@ -2149,7 +2149,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          *     the 'expr AS name', often GENERATE or FILTER)
          * @param expr Expression that defines the set
          */
-        private ScopedNamedSet(String name, QueryPart scope, Exp expr) {
+        private ScopedNamedSet(String name, QueryPart scope, Expression expr) {
             this.name = name;
             this.scope = scope;
             this.expr = expr;
@@ -2171,11 +2171,11 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Exp getExp() {
+		public Expression getExp() {
             return expr;
         }
 
-        public void setExp(Exp expr) {
+        public void setExp(Expression expr) {
             this.expr = expr;
         }
 
@@ -2196,14 +2196,14 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
         @Override
 		public NamedSet validate(Validator validator) {
-            Exp newExpr = expr.accept(validator);
+            Expression newExpr = expr.accept(validator);
             final Type type = newExpr.getType();
             if (type instanceof MemberType
                 || type instanceof TupleType)
             {
                 newExpr =
                     new UnresolvedFunCallImpl(
-                        "{}", Syntax.Braces, new Exp[] {newExpr})
+                        "{}", Syntax.Braces, new Expression[] {newExpr})
                     .accept(validator);
             }
             this.expr = newExpr;
@@ -2329,7 +2329,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param call Function call
          */
         private void registerAliasArgs(FunCall call) {
-            for (Exp exp : call.getArgs()) {
+            for (Expression exp : call.getArgs()) {
                 registerAlias((QueryPart) call, exp);
             }
         }
@@ -2341,7 +2341,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param parent Parent node
          * @param exp Expression that may be an "AS"
          */
-        private void registerAlias(QueryPart parent, Exp exp) {
+        private void registerAlias(QueryPart parent, Expression exp) {
             if (exp instanceof FunCall call2 && call2.getSyntax() == Syntax.Infix
                 && call2.getFunName().equals("AS")) {
                 // Scope is the function enclosing the 'AS' expression.
@@ -2367,15 +2367,15 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
     public void replaceSubcubeMembers() {
         for(QueryAxis queryAxis: this.axes) {
-            Exp exp = queryAxis.getSet();
+            Expression exp = queryAxis.getSet();
             queryAxis.setSet(replaceSubcubeMember(exp));
         }
         if(this.slicerAxis != null) {
-            Exp exp = this.slicerAxis.getSet();
+            Expression exp = this.slicerAxis.getSet();
             this.slicerAxis.setSet(replaceSubcubeMember(exp));
         }
         for(Formula formula: this.formulas) {
-            Exp exp = formula.getExpression();
+            Expression exp = formula.getExpression();
             if(exp != null){
                 formula.setExpression(replaceSubcubeMember(exp));
             }
@@ -2449,7 +2449,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return member;
     }
 
-    private Exp replaceSubcubeMember(Exp exp) {
+    private Expression replaceSubcubeMember(Expression exp) {
         if(exp instanceof MemberExpression memberExpr) {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
             return new MemberExpressionImpl(subcubeMember);

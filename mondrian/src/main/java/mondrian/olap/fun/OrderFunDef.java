@@ -39,7 +39,7 @@ import mondrian.calc.impl.MemberValueCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -119,7 +119,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     int j = 1; // args[0] is the input set
     Calc key;
     Flag dir;
-    Exp arg;
+    Expression arg;
     while ( j < argCount ) {
       arg = call.getArg( j );
       key = compiler.compileScalar( arg, true );
@@ -357,7 +357,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     @Override
-	public FunctionDefinition resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
+	public FunctionDefinition resolve( Expression[] args, Validator validator, List<Conversion> conversions ) {
       ResolverImpl.argTypes = new int[args.length];
 
       if ( args.length < 2 ) {

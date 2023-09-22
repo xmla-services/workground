@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
@@ -1116,12 +1116,12 @@ public class RolapMemberBase
      * @param exp Expression
      * @return Whether expression contains a call to an aggregate function.
      */
-    private static boolean foundAggregateFunction(Exp exp) {
+    private static boolean foundAggregateFunction(Expression exp) {
         if (exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             if (resolvedFunCall.getFunDef() instanceof AggregateFunDef) {
                 return true;
             } else {
-                for (Exp argExp : resolvedFunCall.getArgs()) {
+                for (Expression argExp : resolvedFunCall.getArgs()) {
                     if (foundAggregateFunction(argExp)) {
                         return true;
                     }

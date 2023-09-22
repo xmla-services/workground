@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.CacheCalc;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
@@ -92,7 +92,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
   public Calc compileCall2( ResolvedFunCall call, ExpressionCompiler compiler ) {
     final boolean tuple = call.getArg( 0 ).getType() instanceof TupleType;
-    final Exp listExp = call.getArg( 1 );
+    final Expression listExp = call.getArg( 1 );
     final TupleListCalc listCalc0 = compiler.compileList( listExp );
     Calc listCalc1 = new RankedListCalc( listCalc0, tuple );
     final Calc listCalc;
