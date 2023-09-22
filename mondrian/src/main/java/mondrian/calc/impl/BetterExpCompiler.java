@@ -86,14 +86,16 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 		if (mutable && tupleListCalc.getResultStyle() == ResultStyle.LIST) {
 			// Wrap the expression in an expression which creates a mutable
 			// copy.
+			
+			//TODO:	use org.eclipse.daanse.olap.calc.base.type.tuplelist.CopyOfTupleListCalc
 			return new CopyListCalc(tupleListCalc);
 		}
 		return tupleListCalc;
 	}
 
-	
-
-	private static class CopyListCalc extends AbstractListCalc {
+//TODO:	use org.eclipse.daanse.olap.calc.base.type.tuplelist.CopyOfTupleListCalc
+@Deprecated
+private static class CopyListCalc extends AbstractListCalc {
 		private final TupleListCalc tupleListCalc;
 
 		public CopyListCalc(TupleListCalc tupleListCalc) {

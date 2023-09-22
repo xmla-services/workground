@@ -10,10 +10,10 @@
 
 package org.eclipse.daanse.db.dialect.db.mariadb;
 
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 
 public class MariaDBDialect extends MySqlDialect {
 

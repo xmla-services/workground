@@ -43,22 +43,17 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
-import org.eigenbase.util.property.StringProperty;
 
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIteratorCalc;
 import mondrian.calc.TupleList;
 import mondrian.calc.TupleListCalc;
-import mondrian.calc.impl.BetterExpCompiler;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
-import mondrian.util.CreationException;
-import mondrian.util.ObjectFactory;
 
 /**
  * Mediates the compilation of an expression ({@link mondrian.olap.Exp})

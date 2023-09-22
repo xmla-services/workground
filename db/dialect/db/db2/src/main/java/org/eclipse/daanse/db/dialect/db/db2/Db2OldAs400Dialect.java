@@ -18,9 +18,9 @@
  */
 package org.eclipse.daanse.db.dialect.db.db2;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-
 import java.sql.Connection;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 /**
  * Implementation of {@link Dialect} for old versions of the IBM DB2/AS400

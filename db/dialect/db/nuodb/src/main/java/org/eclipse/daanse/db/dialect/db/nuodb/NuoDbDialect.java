@@ -8,14 +8,14 @@
 */
 package org.eclipse.daanse.db.dialect.db.nuodb;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.util.List;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.db.dialect.db.common.Util;
 
 /**
  * Implementation of {@link Dialect} for the NuoDB database. In order to use

@@ -13,30 +13,29 @@
  */
 package org.eclipse.daanse.db.dialect.db.mysql;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import java.sql.Connection;
+import java.util.function.Function;
+
 import org.eclipse.daanse.db.dialect.api.DialectFactory;
 import org.eclipse.daanse.db.dialect.db.common.AbstractDialectFactory;
 import org.osgi.service.component.annotations.Component;
 
-import java.sql.Connection;
-import java.util.Optional;
-import java.util.function.Function;
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='MYSQL'",
-    "database.product:String='MYSQL'" })
+		"database.product:String='MYSQL'" })
 @Component(service = DialectFactory.class)
-public class MySqlDialectFactory extends AbstractDialectFactory {
-    private static final String SUPPORTED_PRODUCT_NAME = "MYSQL";
+public class MySqlDialectFactory extends AbstractDialectFactory<MySqlDialect> {
+	private static final String SUPPORTED_PRODUCT_NAME = "MYSQL";
 
-    @Override
-    public boolean isSupportedProduct(String productName, String productVersion, Connection connection) {
-        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
+	@Override
+	public boolean isSupportedProduct(String productName, String productVersion, Connection connection) {
+		return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+	}
 
-    @Override
-    public Function<Connection, MySqlDialect> getConstructorFunction() {
-        return MySqlDialect::new;
-    }
+	@Override
+	public Function<Connection, MySqlDialect> getConstructorFunction() {
+		return MySqlDialect::new;
+	}
 
 }

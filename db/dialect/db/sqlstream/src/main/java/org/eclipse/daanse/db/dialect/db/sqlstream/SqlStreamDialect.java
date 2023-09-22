@@ -9,10 +9,10 @@
 
 package org.eclipse.daanse.db.dialect.db.sqlstream;
 
+import java.sql.Connection;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.luciddb.LucidDbDialect;
-
-import java.sql.Connection;
 
 /**
  * Implementation of {@link Dialect} for the SQLstream streaming SQL system.

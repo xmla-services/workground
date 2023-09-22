@@ -9,11 +9,11 @@
 
 package org.eclipse.daanse.db.dialect.db.teradata;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
 import java.sql.Connection;
 import java.util.List;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 
 /**
  * Implementation of {@link Dialect} for the Teradata database.

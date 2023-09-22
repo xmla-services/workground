@@ -23,7 +23,7 @@ import mondrian.util.CreationException;
 
 /**
  * The {@link ExpressionCompilerFactory} create a new {@link ExpressionCompiler}
- * instance, each call of a 
+ * instance, each call of a
  * {@link #createExpressionCompiler(Evaluator, Validator)} or
  * {@link #createExpressionCompiler(Evaluator, Validator, List)}
  */
@@ -40,7 +40,7 @@ public interface ExpressionCompilerFactory {
 	 * @throws {@link CreationException} if the {@link ExpressionCompiler} can not
 	 *                be created
 	 */
-	public default ExpressionCompiler createExpressionCompiler(final Evaluator evaluator, final Validator validator)
+	default ExpressionCompiler createExpressionCompiler(final Evaluator evaluator, final Validator validator)
 			throws CreationException {
 		return createExpressionCompiler(evaluator, validator, ResultStyle.ANY_LIST);
 	}
@@ -58,7 +58,7 @@ public interface ExpressionCompilerFactory {
 	 * @throws {@link CreationException} if the {@link ExpressionCompiler} can not
 	 *                be created
 	 */
-	public ExpressionCompiler createExpressionCompiler(final Evaluator evaluator, final Validator validator,
+	ExpressionCompiler createExpressionCompiler(final Evaluator evaluator, final Validator validator,
 			final List<ResultStyle> resultStyles) throws CreationException;
 
 }
