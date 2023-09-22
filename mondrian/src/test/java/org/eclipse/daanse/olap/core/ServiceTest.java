@@ -99,7 +99,7 @@ class ServiceTest {
                 .isNull();
 
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
-        bc.registerService(DialectFactory.class, dialectFactory, dictionaryOf("d", "2"));
+        bc.registerService(DialectFactory.class, dialectFactory, dictionaryOf("df", "2"));
         bc.registerService(StatisticsProvider.class, statisticsProvider, dictionaryOf("sp", "3"));
         bc.registerService(ExpressionCompilerFactory.class, expressionCompilerFactory, dictionaryOf("ecf", "1"));
         bc.registerService(DatabaseMappingSchemaProvider.class, databaseMappingSchemaProvider, dictionaryOf("dbmsp", "1"));
@@ -108,16 +108,16 @@ class ServiceTest {
         Dictionary<String, Object> props = new Hashtable<>();
 
         props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
-        props.put(BasicContext.REF_NAME_DIALECT + TARGET_EXT, "(d=2)");
+        props.put(BasicContext.REF_NAME_DIALECT_FACTORY + TARGET_EXT, "(df=2)");
         props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(sp=3)");
         props.put(BasicContext.REF_NAME_EXPRESSION_COMPILER_FACTORY + TARGET_EXT, "(ecf=1)");
         props.put(BasicContext.REF_NAME_DB_MAPPING_SCHEMA_PROVIDER + TARGET_EXT, "(dbmsp=1)");
         //        props.put(BasicContext.REF_NAME_QUERY_PROVIDER+ TARGET_EXT, "(qp=1)");
 
         String theName = "theName";
-        System.setProperty("test.name", theName);
         String theDescription = "theDescription";
-        props.put("name", "$[env:test.name]");
+        
+        props.put("name", theName);
         props.put("description", theDescription);
         c.update(props);
         Context ctx = saContext.waitForService(1000000);
@@ -129,7 +129,7 @@ class ServiceTest {
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
             assertThat(x.getDescription()
-                    .isPresent()).isTrue();
+                    .isPresent());
             assertThat(x.getDescription()
                     .get()).isEqualTo(theDescription);
             assertThat(x.getDataSource()).isEqualTo(dataSource);
