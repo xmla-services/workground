@@ -153,9 +153,7 @@ public class RolapConnection extends ConnectionBase {
     this.id = ID_GENERATOR.getAndIncrement();
 
     assert connectInfo != null;
-    String provider = connectInfo.get(
-      RolapConnectionProperties.Provider.name(), "mondrian" );
-    Util.assertTrue( provider.equalsIgnoreCase( "mondrian" ) );
+
     this.connectInfo = connectInfo;
     this.catalogUrl =
       connectInfo.get( RolapConnectionProperties.Catalog.name() );

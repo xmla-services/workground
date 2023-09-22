@@ -56,7 +56,6 @@ class MondrianTest {
 
 		org.sqlite.JDBC j = new org.sqlite.JDBC();
 		PropertyList propertyList = new PropertyList();
-		propertyList.put(RolapConnectionProperties.Provider.name(), "mondrian");
 		propertyList.put(RolapConnectionProperties.Catalog.name(),
 				Constants.TESTFILES_DIR + "Mensch.xml");
 
@@ -92,7 +91,6 @@ class MondrianTest {
 
 		org.sqlite.JDBC j = new org.sqlite.JDBC();
 		PropertyList propertyList = new PropertyList();
-		propertyList.put(RolapConnectionProperties.Provider.name(), "mondrian");
 		propertyList.put("Jdbc", "jdbc:sqlite:" + Constants.TESTFILES_DIR + "sqlite.db");
 		propertyList.put(RolapConnectionProperties.Catalog.name(),
 				Constants.TESTFILES_DIR + "Mensch.xml");

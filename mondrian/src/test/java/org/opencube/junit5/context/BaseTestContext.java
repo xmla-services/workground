@@ -43,7 +43,7 @@ public class BaseTestContext implements TestingContext {
 	public void init(Entry<PropertyList, Context> contextEntry) {
 		this.context = contextEntry.getValue();
 		this.properties = Util.PropertyList.newInstance(contextEntry.getKey());
-		init();
+
 
 	}
 
@@ -51,12 +51,6 @@ public class BaseTestContext implements TestingContext {
 		properties = updater.update(properties);
 	}
 
-	private void init() {
-
-		properties.put(RolapConnectionProperties.Provider.name(), provider());
-
-//		olapConnectString = "jdbc:mondrian:" + olapConnectString;
-	}
 
 	@Override
 	public Connection createConnection() {
@@ -70,10 +64,6 @@ public class BaseTestContext implements TestingContext {
 
 	protected String getCatalogContent() {
 		return "";
-	}
-
-	protected String provider() {
-		return "mondrian";
 	}
 
 	/*
