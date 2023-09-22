@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -16,8 +17,6 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
-
-import mondrian.olap.Evaluator;
 
 /**
  * Definition of the <code>&lt;Level&gt;.Dimension</code>

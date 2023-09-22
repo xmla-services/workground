@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -25,7 +26,6 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;

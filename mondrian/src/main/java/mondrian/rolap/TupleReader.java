@@ -14,8 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Context;
-
-import mondrian.calc.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
  * Describes the public methods of {@link mondrian.rolap.SqlTupleReader}.

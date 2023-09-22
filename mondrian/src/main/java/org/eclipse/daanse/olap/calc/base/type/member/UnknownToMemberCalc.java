@@ -14,11 +14,11 @@
 
 package org.eclipse.daanse.olap.calc.base.type.member;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 public class UnknownToMemberCalc extends AbstractProfilingNestedMemberCalc<Calc<?>> {

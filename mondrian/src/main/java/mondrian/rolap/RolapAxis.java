@@ -17,8 +17,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
-
-import mondrian.calc.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
  * Implementation of the Axis interface.

@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -19,7 +20,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;

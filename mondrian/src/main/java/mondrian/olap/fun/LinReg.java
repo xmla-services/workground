@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil.SetWrapper;

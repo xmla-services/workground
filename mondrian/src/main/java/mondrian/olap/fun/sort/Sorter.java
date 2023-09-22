@@ -29,18 +29,18 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
@@ -63,7 +63,7 @@ public class Sorter {
    * For each member in a list, evaluates an expression and creates a map from members to values.
    *
    * <p>If the list contains tuples, use
-   * {@link #evaluateTuples(mondrian.olap.Evaluator, mondrian.calc.Calc, mondrian.calc.TupleList)}.
+   * {@link #evaluateTuples(org.eclipse.daanse.olap.api.Evaluator, mondrian.calc.Calc, org.eclipse.daanse.olap.calc.api.todo.TupleList)}.
    *
    * @param evaluator  Evaluation context
    * @param exp        Expression to evaluate
@@ -495,7 +495,7 @@ public class Sorter {
    *
    * @param memberList List of members
    * @param post       Whether to sort in post order; if false, sorts in pre order
-   * @see #hierarchizeTupleList(mondrian.calc.TupleList, boolean)
+   * @see #hierarchizeTupleList(org.eclipse.daanse.olap.calc.api.todo.TupleList, boolean)
    */
   public static void hierarchizeMemberList(
     List<Member> memberList,

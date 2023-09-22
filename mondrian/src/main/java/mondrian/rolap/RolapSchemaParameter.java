@@ -9,12 +9,12 @@
 
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
-import mondrian.calc.ParameterCompilable;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
@@ -26,7 +26,7 @@ import mondrian.resource.MondrianResource;
  * @author jhyde
  * @since Jul 20, 2006
  */
-public class RolapSchemaParameter implements Parameter, ParameterCompilable {
+public class RolapSchemaParameter implements Parameter, CompilableParameter {
     private final RolapSchema schema;
     private final String name;
     private String description;

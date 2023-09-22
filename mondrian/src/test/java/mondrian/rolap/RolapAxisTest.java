@@ -16,10 +16,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.junit.jupiter.api.Test;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.fun.TestMember;
 
 /**

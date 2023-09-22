@@ -1,14 +1,14 @@
 
 package org.eclipse.daanse.olap.calc.base.type.tuplelist;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.TupleIterableCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleListCalc;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 
 
 public class TupleIteratableToTupleListCalc extends AbstractProfilingNestedTupleListCalc<TupleIterableCalc> {

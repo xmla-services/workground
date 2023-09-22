@@ -9,15 +9,15 @@
 
 package org.eclipse.daanse.function.definition;
 
-import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.QueryImpl;
 
 import org.eclipse.daanse.function.FunDefBase;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
 /**
  * Definition of the <code>AS</code> MDX operator.

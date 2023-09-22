@@ -10,15 +10,10 @@
 */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterator;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Aggregator;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -28,6 +23,7 @@ import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
 import mondrian.rolap.RolapAggregator;
 import org.eclipse.daanse.function.FunDef;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -37,6 +33,10 @@ import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eigenbase.util.property.IntegerProperty;
 import org.slf4j.Logger;

@@ -14,10 +14,9 @@ package mondrian.olap.fun.sort;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
-
-import mondrian.olap.Evaluator;
 
 class HierarchicalTupleComparator extends TupleExpMemoComparator {
   private final boolean desc;

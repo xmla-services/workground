@@ -14,11 +14,10 @@
 
 package org.eclipse.daanse.olap.calc.base.type.tuplelist;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.TupleListCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleListCalc;
-
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
 
 public class CopyOfTupleListCalc extends AbstractProfilingNestedTupleListCalc<TupleListCalc> {
 

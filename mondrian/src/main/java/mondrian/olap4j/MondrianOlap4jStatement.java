@@ -23,6 +23,7 @@ import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetListener;
 import org.olap4j.OlapConnection;
@@ -32,7 +33,6 @@ import org.olap4j.mdx.ParseTreeNode;
 import org.olap4j.mdx.ParseTreeWriter;
 import org.olap4j.mdx.SelectNode;
 
-import mondrian.calc.ResultStyle;
 import mondrian.olap.MondrianException;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;

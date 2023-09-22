@@ -29,16 +29,16 @@ import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;

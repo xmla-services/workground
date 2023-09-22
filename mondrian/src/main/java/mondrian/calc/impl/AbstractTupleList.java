@@ -17,12 +17,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterator;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
  * Abstract implementation of {@link TupleList}.
@@ -94,7 +93,7 @@ implements RandomAccess, Cloneable, TupleList
     }
 
     /**
-     * Implementation of {@link mondrian.calc.TupleIterator} for
+     * Implementation of {@link org.eclipse.daanse.olap.calc.api.todo.TupleIterator} for
      * {@link ArrayTupleList}.
      * Based upon AbstractList.Itr, but with concurrent modification checking
      * removed.

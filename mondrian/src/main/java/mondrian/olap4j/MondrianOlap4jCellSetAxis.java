@@ -15,6 +15,7 @@ import java.util.ListIterator;
 
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -22,7 +23,6 @@ import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
-import mondrian.calc.TupleList;
 import mondrian.rolap.RolapAxis;
 import mondrian.server.Locus;
 

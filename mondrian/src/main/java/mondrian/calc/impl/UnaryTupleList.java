@@ -17,12 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterator;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
  * Implementation of {@link TupleList} where the tuples are unary (each tuple
@@ -209,7 +208,7 @@ implements TupleList
     }
 
     /**
-     * Implementation of {@link mondrian.calc.TupleIterator} for {@link UnaryTupleList}.
+     * Implementation of {@link org.eclipse.daanse.olap.calc.api.todo.TupleIterator} for {@link UnaryTupleList}.
      * Based upon AbstractList.Itr, but with concurrent modification checking
      * removed.
      */

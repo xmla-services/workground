@@ -10,7 +10,8 @@
 */
 package mondrian.rolap.sql;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;

@@ -2,11 +2,11 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.TupleIterableCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleIterable;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 

@@ -9,19 +9,19 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
 
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.FunctionDefinition;
 
 /**

@@ -10,11 +10,11 @@
 package org.eclipse.daanse.function.definition;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunDefBase;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;

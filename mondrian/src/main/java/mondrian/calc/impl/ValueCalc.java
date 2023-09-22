@@ -9,10 +9,10 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 /**

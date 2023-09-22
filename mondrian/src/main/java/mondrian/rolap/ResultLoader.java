@@ -17,7 +17,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.calc.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+
 import mondrian.olap.Util;
 
 /**

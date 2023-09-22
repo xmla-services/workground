@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.calc.ResultStyle;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Exp;
 import mondrian.olap.QueryAxisImpl;
@@ -22,6 +21,7 @@ import mondrian.olap.api.SubtotalVisibility;
 
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 public non-sealed interface QueryAxis extends QueryPart {

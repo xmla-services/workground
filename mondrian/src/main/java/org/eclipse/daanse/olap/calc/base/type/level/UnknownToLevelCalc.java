@@ -14,11 +14,11 @@
 
 package org.eclipse.daanse.olap.calc.base.type.level;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 public class UnknownToLevelCalc extends AbstractProfilingNestedLevelCalc<Calc<?>> {

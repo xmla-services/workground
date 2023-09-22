@@ -37,15 +37,15 @@ import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eigenbase.util.property.StringProperty;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;

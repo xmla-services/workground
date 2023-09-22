@@ -13,7 +13,8 @@ package mondrian.spi;
 
 import java.util.List;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import mondrian.olap.Syntax;
 import mondrian.olap.type.Type;
 
@@ -95,7 +96,7 @@ public interface UserDefinedFunction {
          * Evaluates the argument as a scalar expression.
          *
          * <p>The effect is the same as
-         * {@link #evaluate(mondrian.olap.Evaluator)} except if the argument
+         * {@link #evaluate(org.eclipse.daanse.olap.api.Evaluator)} except if the argument
          * evaluates to a member or tuple. This method will set the context
          * to the member or tuple and evaluate the current measure, whereas
          * {@code evaluate} would return the member or tuple.
@@ -124,8 +125,8 @@ public interface UserDefinedFunction {
          * <p>If the argument is a set of members or tuples, this method may
          * return either a {@link List} or an {@link Iterable}. It is not safe
          * to blindly cast to {@code List}. For guaranteed type, call
-         * {@link #evaluateList(mondrian.olap.Evaluator)} or
-         * {@link #evaluateIterable(mondrian.olap.Evaluator)}.
+         * {@link #evaluateList(org.eclipse.daanse.olap.api.Evaluator)} or
+         * {@link #evaluateIterable(org.eclipse.daanse.olap.api.Evaluator)}.
          *
          * @param evaluator Evaluation context
          * @return Result of evaluating the argument

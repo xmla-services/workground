@@ -14,11 +14,11 @@
 
 package org.eclipse.daanse.olap.calc.base.type.tuple;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 public class MemberCalcToTupleCalc extends AbstractProfilingNestedTupleCalc<MemberCalc> {

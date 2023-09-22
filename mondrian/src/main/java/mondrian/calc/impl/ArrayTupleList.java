@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterator;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;

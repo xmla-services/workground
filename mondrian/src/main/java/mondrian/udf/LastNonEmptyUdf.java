@@ -11,11 +11,11 @@ package mondrian.udf;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;

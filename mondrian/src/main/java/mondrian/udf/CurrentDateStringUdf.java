@@ -12,8 +12,9 @@ package mondrian.udf;
 import java.util.Date;
 import java.util.Locale;
 
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;

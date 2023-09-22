@@ -14,24 +14,24 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.udf.impl.BooleanScalarUserDefinedFunctionCalcImpl;
 
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
@@ -313,8 +313,8 @@ public class UdfResolver implements FunctionResolver {
 
     /**
      * Wrapper around a {@link Calc} to make it appear as an {@link Exp}.
-     * Only the {@link #evaluate(mondrian.olap.Evaluator)}
-     * and {@link #evaluateScalar(mondrian.olap.Evaluator)} methods are
+     * Only the {@link #evaluate(org.eclipse.daanse.olap.api.Evaluator)}
+     * and {@link #evaluateScalar(org.eclipse.daanse.olap.api.Evaluator)} methods are
      * supported.
      */
     private static class CalcExp implements UserDefinedFunction.Argument {

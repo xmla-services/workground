@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -23,7 +24,6 @@ import org.olap4j.Scenario;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.ScalarType;

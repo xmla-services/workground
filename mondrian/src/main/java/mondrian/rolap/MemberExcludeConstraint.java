@@ -15,7 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.MemberChildrenConstraint;

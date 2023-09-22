@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
 public interface TupleIterableCalc extends Calc<TupleIterable> {
 

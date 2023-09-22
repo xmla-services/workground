@@ -20,10 +20,10 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.daanse.olap.api.CacheControl;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;

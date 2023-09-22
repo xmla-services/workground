@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.olap.calc.base.type.booleanx;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
 

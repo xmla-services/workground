@@ -12,7 +12,8 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.SqlQuery;

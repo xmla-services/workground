@@ -13,9 +13,8 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.NamedSet;
-
-import mondrian.olap.Evaluator;
 
 public non-sealed interface NamedSetExpression extends QueryPart {
 

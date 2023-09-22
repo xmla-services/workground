@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
 
 /**
  * Abstract implementation of {@link TupleIterator}.

@@ -13,17 +13,18 @@ package mondrian.olap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
-import mondrian.calc.ParameterCompilable;
-import mondrian.calc.ParameterSlot;
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
@@ -37,7 +38,7 @@ import mondrian.olap.type.Type;
  * @since Jul 22, 2006
  */
 public class ParameterImpl
-    implements Parameter, ParameterCompilable {
+    implements Parameter, CompilableParameter {
 
     private final String name;
     private String description;

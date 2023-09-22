@@ -9,17 +9,16 @@
 
 package org.eclipse.daanse.function.definition;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.fun.ReflectiveMultiResolver;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.function.FunUtil;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -28,6 +27,7 @@ import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import java.util.ArrayList;
 import java.util.List;

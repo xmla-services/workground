@@ -9,13 +9,12 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleCursor;
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 
 /**
- * Abstract implementation of {@link mondrian.calc.TupleIterator}.
+ * Abstract implementation of {@link org.eclipse.daanse.olap.calc.api.todo.TupleIterator}.
  *
  * <p>Derived classes need to implement only {@link #forward()}.
  *
