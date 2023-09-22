@@ -35,7 +35,7 @@ import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -179,7 +179,7 @@ public class JavaFunDef extends FunDefBase {
      * @param clazz Desired class
      * @return compiled expression
      */
-    private static Calc compileTo(ExpressionCompiler compiler, Exp exp, Class clazz) {
+    private static Calc compileTo(ExpressionCompiler compiler, Expression exp, Class clazz) {
         if (clazz == String.class) {
             return compiler.compileString(exp);
         } else if (clazz == Date.class) {
@@ -354,7 +354,7 @@ public class JavaFunDef extends FunDefBase {
          * @param exp Source expression
          * @param calc Child compiled expression
          */
-        protected AbstractCalc2(Exp exp, Calc calc) {
+        protected AbstractCalc2(Expression exp, Calc calc) {
             super(exp.getType(), new Calc[] {calc});
         }
     }

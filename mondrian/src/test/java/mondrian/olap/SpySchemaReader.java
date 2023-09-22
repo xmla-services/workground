@@ -253,7 +253,7 @@ public class SpySchemaReader implements SchemaReader {
 	}
 
 	@Override
-	public NativeEvaluator getNativeSetEvaluator(FunctionDefinition fun, Exp[] args, Evaluator evaluator, Calc calc) {
+	public NativeEvaluator getNativeSetEvaluator(FunctionDefinition fun, Expression[] args, Evaluator evaluator, Calc calc) {
 		return delegate.getNativeSetEvaluator(fun, args, evaluator, calc);
 	}
 

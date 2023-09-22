@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 
 import mondrian.calc.impl.DelegatingExpCompiler;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
@@ -90,14 +90,14 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
     }
 
     @Override
-	public Calc compile(Exp exp) {
+	public Calc compile(Expression exp) {
         List<ResultStyle> resultStyles = getAcceptableResultStyles();
         return compileAs(exp, null, resultStyles);
     }
 
     @Override
 	public Calc compileAs(
-        Exp exp,
+        Expression exp,
         Type resultType,
         List<ResultStyle> resultStyles)
     {

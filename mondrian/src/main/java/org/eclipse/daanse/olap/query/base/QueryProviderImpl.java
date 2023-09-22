@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.query.base;
 
 import mondrian.olap.DmvQueryImpl;
 import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
@@ -45,13 +45,13 @@ import org.eclipse.daanse.olap.api.query.component.Update;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getColumns;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getFormulaList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getName;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getParameterList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxis;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getQueryAxisList;
-import static org.eclipse.daanse.olap.query.base.QueryUtil.getSubcube;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertColumns;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertFormulaList;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertName;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertParameterList;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxis;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertQueryAxisList;
+import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertSubcube;
 
 public class QueryProviderImpl implements QueryProvider {
 
@@ -78,22 +78,22 @@ public class QueryProviderImpl implements QueryProvider {
 
     @Override
     public Refresh createRefresh(RefreshStatement refreshStatement) {
-        return new RefreshImpl(getName(refreshStatement.cubeName()));
+        return new RefreshImpl(convertName(refreshStatement.cubeName()));
     }
 
     @Override
     public Update createUpdate(UpdateStatement updateStatement) {
-        return new UpdateImpl(getName(updateStatement.cubeName()), List.of());
+        return new UpdateImpl(convertName(updateStatement.cubeName()), List.of());
     }
 
     @Override
     public DmvQuery createDMV(DMVStatement dmvStatement) {
-        String tableName = getName(dmvStatement.table());
+        String tableName = convertName(dmvStatement.table());
         List<String> columns = new ArrayList<>();
         if (dmvStatement.columns() != null) {
-            dmvStatement.columns().forEach(c -> columns.addAll(getColumns(c.objectIdentifiers())));
+            dmvStatement.columns().forEach(c -> columns.addAll(convertColumns(c.objectIdentifiers())));
         }
-        Exp whereExpression = null;
+        Expression whereExpression = null;
         return new DmvQueryImpl(tableName,
             columns,
             whereExpression);
@@ -108,7 +108,7 @@ public class QueryProviderImpl implements QueryProvider {
     @Override
     public DrillThrough createDrillThrough(DrillthroughStatement drillthroughStatement) {
         Query query = createQuery(drillthroughStatement.selectStatement());
-        List<Exp> returnList = List.of();
+        List<Expression> returnList = List.of();
         return new DrillThroughImpl(query,
             drillthroughStatement.maxRows().orElse(0),
             drillthroughStatement.firstRowSet().orElse(0),
@@ -119,11 +119,11 @@ public class QueryProviderImpl implements QueryProvider {
     public Query createQuery(SelectStatement selectStatement) {
         Statement statement = null;
         boolean strictValidation = false;
-        Subcube subcube = getSubcube(selectStatement.selectSubcubeClause());
-        List<Formula> formulaList = getFormulaList(selectStatement.selectWithClauses());
-        List<QueryAxisImpl> axesList = getQueryAxisList(selectStatement.selectQueryClause());
-        QueryAxisImpl slicerAxis = getQueryAxis(selectStatement.selectSlicerAxisClause());
-        List<CellProperty> cellProps = getParameterList(selectStatement.selectCellPropertyListClause());
+        Subcube subcube = convertSubcube(selectStatement.selectSubcubeClause());
+        List<Formula> formulaList = convertFormulaList(selectStatement.selectWithClauses());
+        List<QueryAxisImpl> axesList = convertQueryAxisList(selectStatement.selectQueryClause());
+        QueryAxisImpl slicerAxis = convertQueryAxis(selectStatement.selectSlicerAxisClause());
+        List<CellProperty> cellProps = convertParameterList(selectStatement.selectCellPropertyListClause());
 
         return new QueryImpl(
             statement,

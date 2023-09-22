@@ -43,7 +43,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     private Map<String, Object> metaMap;
     private String description;
     private final String uniqueName;
-    private Exp exp;
+    private Expression exp;
     private boolean validated;
     private String displayFolder;
 
@@ -61,7 +61,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
         String name,
         String caption,
         String description,
-        Exp exp,
+        Expression exp,
         boolean validated,
         Map<String, Object> metaMap)
     {
@@ -163,7 +163,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     }
 
     @Override
-	public Exp getExp() {
+	public Expression getExp() {
         return exp;
     }
 

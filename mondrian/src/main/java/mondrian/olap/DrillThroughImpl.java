@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 /**
  * Drill through statement.
@@ -40,7 +41,7 @@ public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough 
         Query query,
         int maxRowCount,
         int firstRowOrdinal,
-        List<Exp> returnList)
+        List<Expression> returnList)
     {
         this.query = query;
         this.maxRowCount = maxRowCount;
@@ -65,8 +66,8 @@ public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough 
         pw.print(" ");
         query.unparse(pw);
         if (returnList != null) {
-            ExpBase.unparseList(
-                pw, returnList.toArray(new Exp[returnList.size()]),
+        	Expressions.unparseExpressions(
+                pw, returnList.toArray(new Expression[returnList.size()]),
                 " RETURN ", ", ", "");
         }
     }
@@ -93,13 +94,13 @@ public class DrillThroughImpl extends AbstractQueryPart implements DrillThrough 
     }
 
 
-    private List<OlapElement> resolveReturnList(List<Exp> returnList) {
+    private List<OlapElement> resolveReturnList(List<Expression> returnList) {
         if (returnList == null) {
             return Collections.emptyList();
         }
         List<OlapElement> returnClauseElements = new ArrayList<>();
         SchemaReader reader = query.getSchemaReader(true);
-        for (Exp exp : returnList) {
+        for (Expression exp : returnList) {
             final OlapElement olapElement =
                 reader.lookupCompound(
                     query.getCube(),

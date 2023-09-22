@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -43,7 +43,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp[] args = call.getArgs();
+        final Expression[] args = call.getArgs();
         final Calc[] calcs = new Calc[args.length];
         for (int i = 0; i < args.length; i++) {
             calcs[i] = compiler.compileScalar(args[i], true);
@@ -78,7 +78,7 @@ public class CoalesceEmptyFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {

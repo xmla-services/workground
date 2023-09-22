@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 /**
  * Visitor class used to locate a resolved function call within an
@@ -50,7 +50,7 @@ public class ResolvedFunCallFinder
         Member member = memberExpr.getMember();
         if (member.isCalculated()) {
             if (activeMembers.add(member)) {
-                Exp memberExp = member.getExpression();
+                Expression memberExp = member.getExpression();
                 memberExp.accept(this);
                 activeMembers.remove(member);
             }

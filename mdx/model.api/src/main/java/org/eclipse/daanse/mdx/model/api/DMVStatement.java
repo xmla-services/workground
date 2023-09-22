@@ -14,7 +14,7 @@
 package org.eclipse.daanse.mdx.model.api;
 
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 
 import java.util.List;
@@ -25,5 +25,5 @@ public non-sealed interface DMVStatement extends MdxStatement {
 
     NameObjectIdentifier table();
 
-    Expression where();
+    MdxExpression where();
 }

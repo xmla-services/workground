@@ -30,7 +30,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
@@ -52,7 +52,7 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the top of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, true );
       }
     };
@@ -64,7 +64,7 @@ class TopBottomCountFunDef extends FunDefBase {
       "Returns a specified number of items from the bottom of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
       @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, false );
       }
     };

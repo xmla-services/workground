@@ -68,7 +68,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.FunctionTable;
 import mondrian.olap.IdImpl;
@@ -712,7 +712,7 @@ public class RolapSchema implements Schema {
 
     private NamedSet createNamedSet(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingNamedSet xmlNamedSet) {
         final String formulaString = getFormula(xmlNamedSet);
-        final Exp exp;
+        final Expression exp;
         try {
             exp = getInternalConnection().parseExpression(formulaString);
         } catch (Exception e) {

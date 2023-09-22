@@ -15,11 +15,11 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -33,7 +33,7 @@ import mondrian.olap.type.TypeUtil;
  *
  * @author jhyde
  */
-public class ParameterExpressionImpl extends ExpBase implements ParameterExpression {
+public class ParameterExpressionImpl extends AbstractExpression implements ParameterExpression {
 
     private Parameter parameter;
 
@@ -58,7 +58,7 @@ public class ParameterExpressionImpl extends ExpBase implements ParameterExpress
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         // There must be some Parameter with this name registered with the
         // Query.  After clone(), there will be many copies of the same
         // parameter, and we rely on this method to bring them down to one.

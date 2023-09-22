@@ -53,7 +53,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     /** name of set or member */
     private final Id id;
     /** defining expression */
-    private Exp exp;
+    private Expression exp;
     // properties/solve order of member
     private final MemberProperty[] memberProperties;
 
@@ -69,7 +69,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     /**
      * Constructs formula specifying a set.
      */
-    public FormulaImpl(Id id, Exp exp) {
+    public FormulaImpl(Id id, Expression exp) {
         this(false, id, exp, new MemberProperty[0], null, null);
         createElement(null);
     }
@@ -79,7 +79,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
      */
     public FormulaImpl(
         Id id,
-        Exp exp,
+        Expression exp,
         MemberProperty[] memberProperties)
     {
         this(true, id, exp, memberProperties, null, null);
@@ -88,7 +88,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     FormulaImpl(
         boolean isMember,
         Id id,
-        Exp exp,
+        Expression exp,
         MemberProperty[] memberProperties,
         Member mdxMember,
         NamedSet mdxSet)
@@ -148,7 +148,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         // Get the format expression from the property list, or derive it from
         // the formula.
         if (isMember) {
-            Exp formatExp = getFormatExp(validator);
+            Expression formatExp = getFormatExp(validator);
             if (formatExp != null) {
                 mdxMember.setProperty(
                     Property.FORMAT_EXP_PARSED.name, formatExp);
@@ -179,7 +179,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                 {
                     continue; // we already dealt with format_string props
                 }
-                final Exp expInner = memberProperty.getExp();
+                final Expression expInner = memberProperty.getExp();
                 if (expInner instanceof Literal literal) {
                     String value = String.valueOf(literal.getValue());
                     mdxMember.setProperty(memberProperty.getName(), value);
@@ -412,16 +412,16 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     }
 
     @Override
-    public Exp getExpression() {
+    public Expression getExpression() {
         return exp;
     }
 
     @Override
-    public Exp setExpression(Exp exp) {
+    public Expression setExpression(Expression exp) {
         return this.exp = exp;
     }
 
-    private Exp getMemberProperty(String name) {
+    private Expression getMemberProperty(String name) {
         return MemberPropertyImpl.get(memberProperties, name);
     }
 
@@ -459,7 +459,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
      *   value is not an integer, or its value is not a constant.
      */
     private Number getIntegerMemberProperty(String name) {
-        Exp expInner = getMemberProperty(name);
+        Expression expInner = getMemberProperty(name);
         if (expInner != null && expInner.getType() instanceof NumericType) {
             return quickEval(expInner);
         }
@@ -472,7 +472,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
      * @return Result as a number, or null if the expression is not a constant
      *   or not a number.
      */
-    private static Number quickEval(Exp exp) {
+    private static Number quickEval(Expression exp) {
         if (exp instanceof Literal literal) {
             final Object value = literal.getValue();
             if (value instanceof Number number) {
@@ -503,11 +503,11 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
      * first member it finds.
      * @param validator
      */
-    private Exp getFormatExp(Validator validator) {
+    private Expression getFormatExp(Validator validator) {
         // If they have specified a format string (which they can do under
         // several names) return that.
         for (String prop : Property.FORMAT_PROPERTIES) {
-            Exp formatExp = getMemberProperty(prop);
+            Expression formatExp = getMemberProperty(prop);
             if (formatExp != null) {
                 return formatExp;
             }
@@ -557,7 +557,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     }
 
     @Override
-    public Exp getExp() {
+    public Expression getExp() {
         return exp;
     }
 
@@ -590,9 +590,9 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     }
 
     private static class FoundOne extends RuntimeException {
-        private final Exp exp;
+        private final Expression exp;
 
-        public FoundOne(Exp exp) {
+        public FoundOne(Expression exp) {
             super();
             this.exp = exp;
         }
@@ -634,12 +634,12 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
          * @return true if there is cyclic reference in expression.
          * This check is required to avoid infinite recursion
          */
-        private boolean hasCyclicReference(Exp expr) {
+        private boolean hasCyclicReference(Expression expr) {
             List<MemberExpression> expList = new ArrayList<>();
             return hasCyclicReference(expr, expList);
         }
 
-        private boolean hasCyclicReference(Exp expr, List<MemberExpression> expList) {
+        private boolean hasCyclicReference(Expression expr, List<MemberExpression> expList) {
             if (expr instanceof MemberExpression memberExpr) {
                 if (expList.contains(expr)) {
                     return true;
@@ -647,13 +647,13 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                 expList.add(memberExpr);
                 Member member = memberExpr.getMember();
                 if (member instanceof RolapCalculatedMember calculatedMember) {
-                    Exp exp1 =
+                    Expression exp1 =
                         calculatedMember.getExpression().accept(validator);
                     return hasCyclicReference(exp1, expList);
                 }
             }
             if (expr instanceof FunCall funCall) {
-                Exp[] exps = funCall.getArgs();
+                Expression[] exps = funCall.getArgs();
                 for (int i = 0; i < exps.length; i++) {
                     if (hasCyclicReference(
                             exps[i], cloneForEachBranch(expList)))
@@ -675,8 +675,8 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             }
         }
 
-        private Exp getFormula(Member member) {
-            return (Exp)
+        private Expression getFormula(Member member) {
+            return (Expression)
                 member.getPropertyValue(Property.FORMAT_EXP_PARSED.name);
         }
     }

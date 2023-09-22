@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
@@ -94,7 +94,7 @@ public class RolapCalculatedMember extends RolapMemberBase {
     }
 
     @Override
-	public Exp getExpression() {
+	public Expression getExpression() {
         return formula.getExpression();
     }
 

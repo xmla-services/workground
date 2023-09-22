@@ -48,7 +48,7 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
@@ -658,7 +658,7 @@ public QueryPart parseStatement(String query ) {
   }
 
   @Override
-public Exp parseExpression( String expr ) {
+public Expression parseExpression( String expr ) {
     boolean debug = false;
     if ( getLogger().isDebugEnabled() ) {
         String msg  = Util.NL + expr;

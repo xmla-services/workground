@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
@@ -81,7 +81,7 @@ class AsFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {

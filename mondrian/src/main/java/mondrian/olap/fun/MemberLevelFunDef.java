@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
@@ -37,7 +37,7 @@ public class MemberLevelFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         final Type argType = args[0].getType();
         return LevelType.forType(argType);
     }

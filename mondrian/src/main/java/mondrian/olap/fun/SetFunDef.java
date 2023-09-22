@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedVoidCalc;
+import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
@@ -44,8 +45,7 @@ import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.ResultStyleException;
 import mondrian.olap.Syntax;
@@ -71,12 +71,12 @@ public class SetFunDef extends FunDefBase {
     }
 
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
-        ExpBase.unparseList(pw, args, "{", ", ", "}");
+	public void unparse(Expression[] args, PrintWriter pw) {
+    	Expressions.unparseExpressions(pw, args, "{", ", ", "}");
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         // All of the members in {<Member1>[,<MemberI>]...} must have the same
         // Hierarchy.  But if there are no members, we can't derive a
         // hierarchy.
@@ -86,7 +86,7 @@ public class SetFunDef extends FunDefBase {
             type0 = MemberType.Unknown;
         } else {
             for (int i = 0; i < args.length; i++) {
-                Exp arg = args[i];
+                Expression arg = args[i];
                 Type type = arg.getType();
                 type = TypeUtil.toMemberOrTupleType(type);
                 if (i == 0) {
@@ -104,7 +104,7 @@ public class SetFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp[] args = call.getArgs();
+        final Expression[] args = call.getArgs();
         if (args.length == 0) {
             // Special treatment for empty set, because we don't know whether it
             // is a set of members or tuples, and so we need it to implement
@@ -140,7 +140,7 @@ public class SetFunDef extends FunDefBase {
 
         public SetListCalc(
             Type type,
-            Exp[] args,
+            Expression[] args,
             ExpressionCompiler compiler,
             List<ResultStyle> resultStyles)
         {
@@ -155,7 +155,7 @@ public class SetFunDef extends FunDefBase {
         }
 
         private VoidCalc[] compileSelf(
-            Exp[] args,
+            Expression[] args,
             ExpressionCompiler compiler,
             List<ResultStyle> resultStyles)
         {
@@ -167,7 +167,7 @@ public class SetFunDef extends FunDefBase {
         }
 
         private VoidCalc createCalc(
-            Exp arg,
+            Expression arg,
             ExpressionCompiler compiler,
             List<ResultStyle> resultStyles)
         {
@@ -200,7 +200,7 @@ public class SetFunDef extends FunDefBase {
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "Members",
                         mondrian.olap.Syntax.Property,
-                        new Exp[] {arg});
+                        new Expression[] {arg});
                 final TupleListCalc tupleListCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
                 return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {
                     @Override
@@ -257,19 +257,19 @@ public class SetFunDef extends FunDefBase {
     }
 
     private static List<Calc> compileSelf(
-        Exp[] args,
+        Expression[] args,
         ExpressionCompiler compiler,
         List<ResultStyle> resultStyles)
     {
         List<Calc> calcs = new ArrayList<>(args.length);
-        for (Exp arg : args) {
+        for (Expression arg : args) {
             calcs.add(SetFunDef.createCalc(arg, compiler, resultStyles));
         }
         return calcs;
     }
 
     private static TupleIteratorCalc createCalc(
-        Exp arg,
+        Expression arg,
         ExpressionCompiler compiler,
         List<ResultStyle> resultStyles)
     {
@@ -367,12 +367,12 @@ public class SetFunDef extends FunDefBase {
      * @param args Expressions
      * @return Call to set operator
      */
-    public static ResolvedFunCall wrapAsSet(Exp... args) {
+    public static ResolvedFunCall wrapAsSet(Expression... args) {
         assert args.length > 0;
         final int[] categories = new int[args.length];
         Type type = null;
         for (int i = 0; i < args.length; i++) {
-            final Exp arg = args[i];
+            final Expression arg = args[i];
             categories[i] = arg.getCategory();
             final Type argType = arg.getType();
             if (argType instanceof SetType) {
@@ -397,7 +397,7 @@ public class SetFunDef extends FunDefBase {
 
         public ExprIterCalc(
 			Type type,
-            Exp[] args,
+            Expression[] args,
             ExpressionCompiler compiler,
             List<ResultStyle> resultStyles)
         {
@@ -480,7 +480,7 @@ public class SetFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {

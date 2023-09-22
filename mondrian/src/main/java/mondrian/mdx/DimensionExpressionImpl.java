@@ -14,10 +14,10 @@ import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.DimensionType;
@@ -29,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class DimensionExpressionImpl extends ExpBase implements Exp, DimensionExpression {
+public class DimensionExpressionImpl extends AbstractExpression implements Expression, DimensionExpression {
     private final Dimension dimension;
 
     /**
@@ -74,7 +74,7 @@ public class DimensionExpressionImpl extends ExpBase implements Exp, DimensionEx
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         return this;
     }
 

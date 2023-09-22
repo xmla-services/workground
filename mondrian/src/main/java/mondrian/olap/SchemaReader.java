@@ -500,7 +500,7 @@ public interface SchemaReader {
      */
     NativeEvaluator getNativeSetEvaluator(
         FunctionDefinition fun,
-        Exp[] args,
+        Expression[] args,
         Evaluator evaluator,
         Calc calc);
 

@@ -63,7 +63,7 @@ import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -148,7 +148,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
      * Uses the current ResultStyle to compile the expression.
      */
     @Override
-    public Calc<?> compile(Exp exp) {
+    public Calc<?> compile(Expression exp) {
         return exp.accept(this);
     }
 
@@ -159,7 +159,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
      */
     @Override
     public Calc<?> compileAs(
-            Exp exp,
+            Expression exp,
             Type resultType,
             List<ResultStyle> preferredResultTypes)
     {
@@ -217,7 +217,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public MemberCalc compileMember(Exp exp) {
+    public MemberCalc compileMember(Expression exp) {
         final Type type = exp.getType();
         if (type instanceof HierarchyType) {
             final HierarchyCalc hierarchyCalc = compileHierarchy(exp);
@@ -256,7 +256,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public LevelCalc compileLevel(Exp exp) {
+    public LevelCalc compileLevel(Expression exp) {
         final Type type = exp.getType();
         if (type instanceof MemberType) {
             // <Member> --> <Member>.Level
@@ -276,7 +276,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public DimensionCalc compileDimension(Exp exp) {
+    public DimensionCalc compileDimension(Expression exp) {
         final Type type = exp.getType();
         if (type instanceof HierarchyType) {
             final HierarchyCalc hierarchyCalc = compileHierarchy(exp);
@@ -294,7 +294,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public HierarchyCalc compileHierarchy(Exp exp) {
+    public HierarchyCalc compileHierarchy(Expression exp) {
         final Type type = exp.getType();
         if (type instanceof DimensionType) {
             // <Dimension> --> unique Hierarchy else error
@@ -331,7 +331,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public IntegerCalc compileInteger(Exp exp) {
+    public IntegerCalc compileInteger(Expression exp) {
         final Calc<?> calc = compileScalar(exp, false);
         final Type type = calc.getType();
         if (type instanceof DecimalType decimalType
@@ -368,7 +368,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
 	@Override
-	public StringCalc compileString(Exp exp) {
+	public StringCalc compileString(Expression exp) {
 		Calc<?> calc = compileScalar(exp, false);
 
 		if (calc instanceof StringCalc stringCalc) {
@@ -386,7 +386,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 	}
 
 	@Override
-	public DateTimeCalc compileDateTime(Exp exp) {
+	public DateTimeCalc compileDateTime(Expression exp) {
 
 		Calc<?> calc = compileScalar(exp, false);
 		if (calc instanceof DateTimeCalc dtc) {
@@ -396,12 +396,12 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 	}
 
     @Override
-    public TupleListCalc compileList(Exp exp) {
+    public TupleListCalc compileList(Expression exp) {
         return compileList(exp, false);
     }
 
     @Override
-    public TupleListCalc compileList(Exp exp, boolean mutable) {
+    public TupleListCalc compileList(Expression exp, boolean mutable) {
         if (!(exp.getType() instanceof SetType)) {
             throw new IllegalArgumentException("must be a set: " + exp);
         }
@@ -443,7 +443,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public TupleIteratorCalc compileIter(Exp exp) {
+    public TupleIteratorCalc compileIter(Expression exp) {
         TupleIteratorCalc calc =
                 (TupleIteratorCalc) compileAs(exp, null, ResultStyle.ITERABLE_ONLY);
         if (calc == null) {
@@ -454,7 +454,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public BooleanCalc compileBoolean(Exp exp) {
+    public BooleanCalc compileBoolean(Expression exp) {
         final Calc<?> calc = compileScalar(exp, false);
         if (calc instanceof BooleanCalc bc) {
             return bc;
@@ -489,7 +489,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public DoubleCalc compileDouble(Exp exp) {
+    public DoubleCalc compileDouble(Expression exp) {
         final Calc<?> calc = compileScalar(exp, false);
         if (calc instanceof ConstantCalc constantCalc
                 && !(calc.evaluate(null) instanceof Double))
@@ -523,12 +523,12 @@ public class AbstractExpCompiler implements ExpressionCompiler {
     }
 
     @Override
-    public TupleCalc compileTuple(Exp exp) {
+    public TupleCalc compileTuple(Expression exp) {
         return (TupleCalc) compile(exp);
     }
 
     @Override
-    public Calc<?> compileScalar(Exp exp, boolean specific) {
+    public Calc<?> compileScalar(Expression exp, boolean specific) {
         final Type type = exp.getType();
         if (type instanceof MemberType) {
             final MemberCalc calc = compileMember(exp);
@@ -591,7 +591,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
         // Compile the expression only AFTER the parameter has been
         // registered with a slot. Otherwise a cycle is possible.
         final Type type = parameter.getType();
-        Exp defaultExp = parameter.getDefaultExp();
+        Expression defaultExp = parameter.getDefaultExp();
         Calc<?> calc;
         if (type instanceof ScalarType) {
             if (!defaultExp.getType().equals(type)) {
@@ -599,7 +599,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
                         new UnresolvedFunCallImpl(
                                 "Cast",
                                 Syntax.Cast,
-                                new Exp[] {
+                                new Expression[] {
                                         defaultExp,
                                     SymbolLiteralImpl.create(
                                                 Category.instance.getName(

@@ -14,7 +14,7 @@
 package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.MultiResolver;
@@ -33,7 +33,7 @@ public class StarCrossJoinFunResolver extends MultiResolver {
     }
 
     @Override
-    public FunDef resolve(Exp[] args, Validator validator, List<Conversion> conversions ) {
+    public FunDef resolve(Expression[] args, Validator validator, List<Conversion> conversions ) {
         // This function only applies in contexts which require a set.
         // Elsewhere, "*" is the multiplication operator.
         // This means that [Measures].[Unit Sales] * [Gender].[M] is
@@ -51,7 +51,7 @@ public class StarCrossJoinFunResolver extends MultiResolver {
     }
 
     @Override
-    protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+    protected FunDef createFunDef( Expression[] args, FunDef dummyFunDef ) {
         return new CrossJoinFunDef( dummyFunDef );
     }
 }

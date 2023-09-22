@@ -23,9 +23,9 @@ import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 public class MemberPropertyImpl extends AbstractQueryPart implements MemberProperty {
 
     private final String name;
-    private Exp exp;
+    private Expression exp;
 
-    public MemberPropertyImpl(String name, Exp exp) {
+    public MemberPropertyImpl(String name, Expression exp) {
         this.name = name;
         this.exp = exp;
     }
@@ -48,7 +48,7 @@ public class MemberPropertyImpl extends AbstractQueryPart implements MemberPrope
     }
 
     @Override
-    public Exp getExp() {
+    public Expression getExp() {
         return exp;
     }
 
@@ -59,7 +59,7 @@ public class MemberPropertyImpl extends AbstractQueryPart implements MemberPrope
 
     @Override
 	public Object[] getChildren() {
-        return new Exp[] {exp};
+        return new Expression[] {exp};
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MemberPropertyImpl extends AbstractQueryPart implements MemberPrope
     /**
      * Retrieves a property by name from an array.
      */
-    static Exp get(MemberProperty[] a, String name) {
+    static Expression get(MemberProperty[] a, String name) {
         // TODO: Linear search may be a performance problem.
         for (int i = 0; i < a.length; i++) {
             if (Util.equalName(a[i].getName(), name)) {

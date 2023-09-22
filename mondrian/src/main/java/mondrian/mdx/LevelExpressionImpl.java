@@ -14,10 +14,10 @@ import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.LevelType;
@@ -29,7 +29,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class LevelExpressionImpl extends ExpBase implements Exp, LevelExpression {
+public class LevelExpressionImpl extends AbstractExpression implements Expression, LevelExpression {
     private final Level level;
 
     /**
@@ -74,7 +74,7 @@ public class LevelExpressionImpl extends ExpBase implements Exp, LevelExpression
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         return this;
     }
 

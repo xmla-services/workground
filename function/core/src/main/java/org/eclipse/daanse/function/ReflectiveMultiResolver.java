@@ -11,7 +11,7 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 
 import java.lang.reflect.Constructor;
@@ -57,7 +57,7 @@ public class ReflectiveMultiResolver extends MultiResolver {
     }
 
     @Override
-	protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+	protected FunDef createFunDef(Expression[] args, FunDef dummyFunDef) {
         try {
             return (FunDef) constructor.newInstance(new Object[] {dummyFunDef});
         } catch (InstantiationException e) {

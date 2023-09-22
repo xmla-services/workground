@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
@@ -37,8 +37,8 @@ public class MdxParserUtil {
 		return s;
 	}
 
-	public static Expression createCall(Expression left, ObjectIdentifier objectIdentifier,
-			List<Expression> expressions) {
+	public static MdxExpression createCall(MdxExpression left, ObjectIdentifier objectIdentifier,
+			List<MdxExpression> expressions) {
 		final String name = objectIdentifier instanceof NameObjectIdentifier nameObjectIdentifier
 				?  nameObjectIdentifier.name()
 				: null;

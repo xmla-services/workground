@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCal
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.NumericType;
@@ -54,7 +54,7 @@ public class IifFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         // This is messy. We have already decided which variant of Iif to use,
         // and that involves some upcasts. For example, Iif(b, n, NULL) resolves
         // to the type of n. We don't want to throw it away and take the most

@@ -102,8 +102,8 @@ public class SubcubeImpl extends AbstractQueryPart implements Subcube {
     }
 
     @Override
-    public List<Exp> getAxisExps() {
-        ArrayList<Exp> exps = new ArrayList<>();
+    public List<Expression> getAxisExps() {
+        ArrayList<Expression> exps = new ArrayList<>();
         if(this.subcube != null) {
             exps.addAll(this.subcube.getAxisExps());
         }

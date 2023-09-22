@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Validator;
@@ -64,7 +64,7 @@ class SimpleResolver implements FunctionResolver {
 
     @Override
 	public FunctionDefinition resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {

@@ -19,7 +19,7 @@ import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Parameter;
@@ -91,10 +91,10 @@ public class CrossJoinFunDef extends FunDefBase {
   }
 
   @Override
-public Type getResultType(Validator validator, Exp[] args ) {
+public Type getResultType(Validator validator, Expression[] args ) {
     // CROSSJOIN(<Set1>,<Set2>) has type [Hie1] x [Hie2].
     List<MemberType> list = new ArrayList<>();
-    for ( Exp arg : args ) {
+    for ( Expression arg : args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
         CrossJoinFunDef.addTypes( type, list );
@@ -165,7 +165,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
   ///////////////////////////////////////////////////////////////////////////
 
   protected TupleIteratorCalc compileCallIterable( final ResolvedFunCall call, ExpressionCompiler compiler ) {
-    final Exp[] args = call.getArgs();
+    final Expression[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
       calcs[i] = toIter( compiler, args[i] );
@@ -204,7 +204,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     return new CrossJoinIterCalc( call, calcs );
   }
 
-  private Calc toIter( ExpressionCompiler compiler, final Exp exp ) {
+  private Calc toIter( ExpressionCompiler compiler, final Expression exp ) {
     // Want iterable, immutable list or mutable list in that order
     // It is assumed that an immutable list is easier to get than
     // a mutable list.
@@ -214,7 +214,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       return compiler.compileAs( exp, null, ResultStyle.ITERABLE_LIST_MUTABLELIST );
     } else {
       // this always returns an TupleIteratorCalc
-      return new SetFunDef.ExprIterCalc(  new SetType( type ) , new Exp[] { exp }, compiler,
+      return new SetFunDef.ExprIterCalc(  new SetType( type ) , new Expression[] { exp }, compiler,
           ResultStyle.ITERABLE_LIST_MUTABLELIST );
     }
   }
@@ -334,7 +334,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
   ///////////////////////////////////////////////////////////////////////////
 
   protected TupleListCalc compileCallImmutableList( final ResolvedFunCall call, ExpressionCompiler compiler ) {
-    final Exp[] args = call.getArgs();
+    final Expression[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
       calcs[i] = toList( compiler, args[i] );
@@ -384,7 +384,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
    *          Expression
    * @return Compiled expression that yields a list or mutable list
    */
-  private TupleListCalc toList( ExpressionCompiler compiler, final Exp exp ) {
+  private TupleListCalc toList( ExpressionCompiler compiler, final Expression exp ) {
     // Want immutable list or mutable list in that order
     // It is assumed that an immutable list is easier to get than
     // a mutable list.
@@ -396,7 +396,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       }
       return (TupleListCalc) calc;
     } else {
-      return new SetFunDef.SetListCalc(  new SetType( type ), new Exp[] { exp }, compiler,
+      return new SetFunDef.SetListCalc(  new SetType( type ), new Expression[] { exp }, compiler,
           ResultStyle.LIST_MUTABLELIST );
     }
   }
@@ -476,7 +476,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
   }
 
   protected TupleListCalc compileCallMutableList( final ResolvedFunCall call, ExpressionCompiler compiler ) {
-    final Exp[] args = call.getArgs();
+    final Expression[] args = call.getArgs();
     Calc[] calcs =  new Calc[args.length];
     for (int i = 0; i < args.length; i++) {
       calcs[i] = toList( compiler, args[i] );
@@ -689,7 +689,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       if ( member.isMeasure() ) {
         if ( member.isCalculated() ) {
           if ( activeMeasures.add( member ) ) {
-            Exp exp = member.getExpression();
+            Expression exp = member.getExpression();
             finder.found = false;
             exp.accept( finder );
             if ( !finder.found ) {
@@ -796,7 +796,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
 
       for ( Member m : queryMeasureSet ) {
         if ( m.isCalculated() ) {
-          Exp exp = m.getExpression();
+          Expression exp = m.getExpression();
           exp.accept( measureVisitor );
           exp.accept( memVisitor );
         } else {

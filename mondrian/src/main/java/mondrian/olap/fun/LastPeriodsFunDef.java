@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -54,7 +54,7 @@ class LastPeriodsFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         if (args.length == 1) {
             // If Member is not specified,
             // it is Time.CurrentMember.
@@ -73,7 +73,7 @@ class LastPeriodsFunDef extends FunDefBase {
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
         // Member defaults to [Time].currentmember
-        Exp[] args = call.getArgs();
+        Expression[] args = call.getArgs();
         final MemberCalc memberCalc;
         if (args.length == 1) {
             final RolapHierarchy timeHierarchy =

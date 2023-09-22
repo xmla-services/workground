@@ -41,7 +41,7 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.SchemaReader;
@@ -294,7 +294,7 @@ public interface Evaluator{
      * @param create Whether to create evaluator if not found
      * @return Evaluator of named set
      */
-    SetEvaluator getSetEvaluator(Exp exp, boolean create);
+    SetEvaluator getSetEvaluator(Expression exp, boolean create);
 
     /**
      * Returns an evaluator for a named set.

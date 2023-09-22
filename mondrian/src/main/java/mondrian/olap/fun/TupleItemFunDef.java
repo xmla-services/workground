@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
@@ -47,7 +47,7 @@ class TupleItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         // Suppose we are called as follows:
         //   ([Gender].CurrentMember, [Store].CurrentMember).Item(n)
         //

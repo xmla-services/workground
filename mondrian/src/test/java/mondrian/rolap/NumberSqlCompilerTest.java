@@ -24,7 +24,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.TypeWrapperExp;
@@ -69,13 +69,13 @@ class NumberSqlCompilerTest {
 
     @Test
     void testRejectsNonLiteral() {
-        Exp exp = new TypeWrapperExp(new NullType());
+        Expression exp = new TypeWrapperExp(new NullType());
         assertNull(compiler.compile(exp));
     }
 
     @Test
     void testAcceptsNumeric() {
-        Exp exp = NumericLiteralImpl.create(BigDecimal.ONE);
+        Expression exp = NumericLiteralImpl.create(BigDecimal.ONE);
         assertNotNull(compiler.compile(exp));
     }
 
@@ -100,7 +100,7 @@ class NumberSqlCompilerTest {
     }
 
     private void checkAcceptsString(String value) {
-        Exp exp = StringLiteralImpl.create(value);
+        Expression exp = StringLiteralImpl.create(value);
         assertNotNull(value, compiler.compile(exp).toString());
     }
 
@@ -136,7 +136,7 @@ class NumberSqlCompilerTest {
     }
 
     private void checkRejectsString(String value) {
-        Exp exp = StringLiteralImpl.create(value);
+        Expression exp = StringLiteralImpl.create(value);
         try {
             compiler.compile(exp);
         } catch (MondrianEvaluationException e) {

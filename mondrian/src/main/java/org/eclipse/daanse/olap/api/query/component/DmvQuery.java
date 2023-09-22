@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public non-sealed interface DmvQuery extends QueryPart {
 
     String getTableName();
 
-    Exp getWhereExpression();
+    Expression getWhereExpression();
 
     List<String> getColumns();
 }

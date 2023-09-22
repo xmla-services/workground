@@ -14,11 +14,11 @@
 package org.eclipse.daanse.mdx.model.record.select;
 
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
 
 public record CreateSetBodyClauseR(CompoundId compoundId,
-                                   Expression expression)
+                                   MdxExpression expression)
         implements CreateSetBodyClause {
 
 }

@@ -22,19 +22,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.fun.SetFunDef.SetListCalc;
 import mondrian.olap.type.SetType;
 
 class IifFunDefTest {
 
-  private Exp logicalParamMock = mock( Exp.class );
-  private Exp trueCaseParamMock = mock( Exp.class );
-  private Exp falseCaseParamMock = mock( Exp.class );
+  private Expression logicalParamMock = mock( Expression.class );
+  private Expression trueCaseParamMock = mock( Expression.class );
+  private Expression falseCaseParamMock = mock( Expression.class );
   private FunctionDefinition funDefMock = mock( FunctionDefinition.class );
   private ExpressionCompiler compilerMock = mock( ExpressionCompiler.class );
-  private Exp[] args = new Exp[] { logicalParamMock, trueCaseParamMock, falseCaseParamMock };
+  private Expression[] args = new Expression[] { logicalParamMock, trueCaseParamMock, falseCaseParamMock };
   private SetType setTypeMock = mock( SetType.class );
   private SetListCalc setListCalc;
   ResolvedFunCallImpl call;
@@ -42,7 +42,7 @@ class IifFunDefTest {
   @BeforeEach
   protected void setUp() throws Exception {
     when( trueCaseParamMock.getType() ).thenReturn( setTypeMock );
-    setListCalc = new SetListCalc( setTypeMock, new Exp[] { args[1] }, compilerMock, ResultStyle.LIST_MUTABLELIST );
+    setListCalc = new SetListCalc( setTypeMock, new Expression[] { args[1] }, compilerMock, ResultStyle.LIST_MUTABLELIST );
     call = new ResolvedFunCallImpl( funDefMock, args, setTypeMock );
     when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn(  setListCalc );
   }

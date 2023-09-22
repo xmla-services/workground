@@ -28,7 +28,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunCall;
 import mondrian.olap.fun.MondrianEvaluationException;
@@ -107,7 +107,7 @@ public class RolapNativeSql {
          * @param exp Expression
          * @return SQL, or null if cannot be converted into SQL
          */
-        StringBuilder compile(Exp exp);
+        StringBuilder compile(Expression exp);
     }
 
     /**
@@ -122,7 +122,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             for (SqlCompiler compiler : compilers) {
                 StringBuilder s = compiler.compile(exp);
                 if (s != null) {
@@ -143,7 +143,7 @@ public class RolapNativeSql {
      */
     class NumberSqlCompiler implements SqlCompiler {
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             if (!(exp instanceof Literal)) {
                 return null;
             }
@@ -170,7 +170,7 @@ public class RolapNativeSql {
      * Base class to remove MemberScalarExp.
      */
     abstract class MemberSqlCompiler implements SqlCompiler {
-        protected Exp unwind(Exp exp) {
+        protected Expression unwind(Expression exp) {
             return exp;
         }
     }
@@ -182,7 +182,7 @@ public class RolapNativeSql {
     class StoredMeasureSqlCompiler extends MemberSqlCompiler {
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpression)) {
                 return null;
@@ -249,7 +249,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             if (!match(exp)) {
                 return null;
             }
@@ -260,8 +260,8 @@ public class RolapNativeSql {
                 return null;
             }
 
-            final Exp arg0 = ((ResolvedFunCallImpl)exp).getArg(0);
-            final Exp arg1 = ((ResolvedFunCallImpl)exp).getArg(1);
+            final Expression arg0 = ((ResolvedFunCallImpl)exp).getArg(0);
+            final Expression arg1 = ((ResolvedFunCallImpl)exp).getArg(1);
 
             // Must finish by ".Caption" or ".Name"
             if (!(arg0 instanceof ResolvedFunCallImpl)
@@ -282,7 +282,7 @@ public class RolapNativeSql {
             }
 
             // Must be ".CurrentMember"
-            final Exp currMemberExpr = ((ResolvedFunCallImpl)arg0).getArg(0);
+            final Expression currMemberExpr = ((ResolvedFunCallImpl)arg0).getArg(0);
             if (!(currMemberExpr instanceof ResolvedFunCallImpl)
                 || ((ResolvedFunCallImpl)currMemberExpr).getArgCount() != 1
                 || !(currMemberExpr.getType() instanceof MemberType)
@@ -294,7 +294,7 @@ public class RolapNativeSql {
 
             // Must be a dimension, a hierarchy or a level.
             final RolapCubeDimension dimension;
-            final Exp dimExpr = ((ResolvedFunCallImpl)currMemberExpr).getArg(0);
+            final Expression dimExpr = ((ResolvedFunCallImpl)currMemberExpr).getArg(0);
             if (dimExpr instanceof DimensionExpression) {
                 dimension =
                     (RolapCubeDimension) evaluator.getCachedResult(
@@ -395,7 +395,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpression)) {
                 return null;
@@ -434,7 +434,7 @@ public class RolapNativeSql {
         /**
          * @return true if exp is a matching FunCall
          */
-        protected boolean match(Exp exp) {
+        protected boolean match(Expression exp) {
             if ((exp.getCategory() & category) == 0) {
                 return false;
             }
@@ -444,7 +444,7 @@ public class RolapNativeSql {
             if (!mdx.equalsIgnoreCase(fc.getFunName())) {
                 return false;
             }
-            Exp[] args = fc.getArgs();
+            Expression[] args = fc.getArgs();
             if (args.length != argCount) {
                 return false;
             }
@@ -457,11 +457,11 @@ public class RolapNativeSql {
          * @return array of expressions or null if either exp does not match or
          * any argument could not be compiled.
          */
-        protected StringBuilder[] compileArgs(Exp exp, SqlCompiler compiler) {
+        protected StringBuilder[] compileArgs(Expression exp, SqlCompiler compiler) {
             if (!match(exp)) {
                 return null;
             }
-            Exp[] args = ((FunCall) exp).getArgs();
+            Expression[] args = ((FunCall) exp).getArgs();
             StringBuilder[] sqls = new StringBuilder[args.length];
             for (int i = 0; i < args.length; i++) {
                 sqls[i] = compiler.compile(args[i]);
@@ -490,7 +490,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -565,7 +565,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -595,7 +595,7 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -623,11 +623,11 @@ public class RolapNativeSql {
         }
 
         @Override
-		public StringBuilder compile(Exp exp) {
+		public StringBuilder compile(Expression exp) {
             if (!match(exp)) {
                 return null;
             }
-            Exp[] args = ((FunCall) exp).getArgs();
+            Expression[] args = ((FunCall) exp).getArgs();
             StringBuilder cond = booleanCompiler.compile(args[0]);
             StringBuilder val1 = valueCompiler.compile(args[1]);
             StringBuilder val2 = valueCompiler.compile(args[2]);
@@ -723,11 +723,11 @@ public class RolapNativeSql {
      * TopCount. The returned expr will be added to the select list and to the
      * order by clause.
      */
-    public StringBuilder generateTopCountOrderBy(Exp exp) {
+    public StringBuilder generateTopCountOrderBy(Expression exp) {
         return numericCompiler.compile(exp);
     }
 
-    public StringBuilder generateFilterCondition(Exp exp) {
+    public StringBuilder generateFilterCondition(Expression exp) {
     	return booleanCompiler.compile(exp);
     }
 

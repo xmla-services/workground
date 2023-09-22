@@ -27,12 +27,12 @@ import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 public class DmvQueryImpl extends AbstractQueryPart implements DmvQuery {
     private final String tableName;
     private final List<String> columns;
-    private final Exp whereExpression;
+    private final Expression whereExpression;
 
     public DmvQueryImpl(
             String tableName,
             List<String> columns,
-            Exp whereExpression)
+            Expression whereExpression)
     {
         this.tableName = tableName;
         this.columns = columns;
@@ -45,7 +45,7 @@ public class DmvQueryImpl extends AbstractQueryPart implements DmvQuery {
     }
 
     @Override
-    public Exp getWhereExpression() {
+    public Expression getWhereExpression() {
         return this.whereExpression;
     }
 

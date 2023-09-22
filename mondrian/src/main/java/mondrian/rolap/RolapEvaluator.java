@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
@@ -138,7 +138,7 @@ public class RolapEvaluator implements Evaluator {
    *
    * @return Mutable set of expressions being expanded
    */
-  public Set<Exp> getActiveNativeExpansions() {
+  public Set<Expression> getActiveNativeExpansions() {
     return root.activeNativeExpansions;
   }
 
@@ -1002,7 +1002,7 @@ public final Object getProperty( String name, Object defaultValue ) {
    */
   @Override
 public final String getFormatString() {
-    final Exp formatExp = (Exp) getProperty( Property.FORMAT_EXP_PARSED.name, null );
+    final Expression formatExp = (Expression) getProperty( Property.FORMAT_EXP_PARSED.name, null );
     if ( formatExp == null ) {
       return "Standard";
     }
@@ -1154,7 +1154,7 @@ public final NamedSetEvaluator getNamedSetEvaluator( NamedSet namedSet, boolean 
   }
 
   @Override
-public final SetEvaluator getSetEvaluator( Exp exp, boolean create ) {
+public final SetEvaluator getSetEvaluator( Expression exp, boolean create ) {
     return root.evaluateSet( exp, create );
   }
 

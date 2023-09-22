@@ -42,7 +42,7 @@ public class ParameterImpl
 
     private final String name;
     private String description;
-    private Exp defaultExp;
+    private Expression defaultExp;
     private Type type;
     private ParameterSlot slot = new ParameterSlot() {
         Object value;
@@ -103,7 +103,7 @@ public class ParameterImpl
 
     public ParameterImpl(
         String name,
-        Exp defaultExp,
+        Expression defaultExp,
         String description,
         Type type
     ) {
@@ -128,7 +128,7 @@ public class ParameterImpl
     }
 
     @Override
-	public Exp getDefaultExp() {
+	public Expression getDefaultExp() {
         return defaultExp;
     }
 
@@ -216,7 +216,7 @@ public class ParameterImpl
         this.type = type;
     }
 
-    public void setDefaultExp(Exp defaultExp) {
+    public void setDefaultExp(Expression defaultExp) {
         assert defaultExp != null;
         this.defaultExp = defaultExp;
     }

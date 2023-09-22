@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantIntegerCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;
 import mondrian.olap.type.DecimalType;
@@ -52,7 +52,7 @@ class ParallelPeriodFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         if (args.length == 0) {
             // With no args, the default implementation cannot
             // guess the hierarchy, so we supply the Time
@@ -68,7 +68,7 @@ class ParallelPeriodFunDef extends FunDefBase {
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
         // Member defaults to [Time].currentmember
-        Exp[] args = call.getArgs();
+        Expression[] args = call.getArgs();
 
         // Numeric Expression defaults to 1.
         final IntegerCalc lagValueCalc =

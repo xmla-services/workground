@@ -70,7 +70,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
@@ -134,7 +134,7 @@ public class RolapHierarchy extends HierarchyBase {
     private String sharedHierarchyName;
     private String uniqueKeyLevelName;
 
-    private Exp aggregateChildrenExpression;
+    private Expression aggregateChildrenExpression;
 
     /**
      * The level that the null member belongs too.
@@ -985,7 +985,7 @@ public class RolapHierarchy extends HierarchyBase {
                 final Calc partialCalc =
                     new LimitedRollupAggregateCalc(returnType, tupleListCalc);
 
-                final Exp partialExp =
+                final Expression partialExp =
                     new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
@@ -997,17 +997,17 @@ public class RolapHierarchy extends HierarchyBase {
                             }
 
                             @Override
-							public void unparse(Exp[] args, PrintWriter pw) {
+							public void unparse(Expression[] args, PrintWriter pw) {
                                 pw.print("$RollupAccessibleChildren()");
                             }
                         },
-                        new Exp[0],
+                        new Expression[0],
                         returnType);
                 return new LimitedRollupSubstitutingMemberReader(
                     getMemberReader(), role, hierarchyAccess, partialExp);
 
             case HIDDEN:
-                Exp hiddenExp =
+                Expression hiddenExp =
                     new ResolvedFunCallImpl(
                         new FunDefBase("$x", "x", "In") {
                             @Override
@@ -1018,11 +1018,11 @@ public class RolapHierarchy extends HierarchyBase {
                             }
 
                             @Override
-							public void unparse(Exp[] args, PrintWriter pw) {
+							public void unparse(Expression[] args, PrintWriter pw) {
                                 pw.print("$RollupAccessibleChildren()");
                             }
                         },
-                        new Exp[0],
+                        new Expression[0],
                         returnType);
                 return new LimitedRollupSubstitutingMemberReader(
                     getMemberReader(), role, hierarchyAccess, hiddenExp);
@@ -1114,12 +1114,12 @@ public class RolapHierarchy extends HierarchyBase {
      * in a parent-child hierarchy, so we only need need to validate the
      * expression once.
      */
-    synchronized Exp getAggregateChildrenExpression() {
+    synchronized Expression getAggregateChildrenExpression() {
         if (aggregateChildrenExpression == null) {
             UnresolvedFunCallImpl fc = new UnresolvedFunCallImpl(
                 "$AggregateChildren",
                 Syntax.Internal,
-                new Exp[] {new HierarchyExpressionImpl(this)});
+                new Expression[] {new HierarchyExpressionImpl(this)});
             Validator validator =
                     Util.createSimpleValidator(BuiltinFunTable.instance());
             aggregateChildrenExpression = fc.accept(validator);
@@ -1415,12 +1415,12 @@ public class RolapHierarchy extends HierarchyBase {
      */
     public static class LimitedRollupMember extends RolapCubeMember {
         public final RolapMember member;
-        private final Exp exp;
+        private final Expression exp;
         final HierarchyAccess hierarchyAccess;
 
         LimitedRollupMember(
             RolapCubeMember member,
-            Exp exp,
+            Expression exp,
             HierarchyAccess hierarchyAccess)
         {
             super(
@@ -1445,7 +1445,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
 
         @Override
-		public Exp getExpression() {
+		public Expression getExpression() {
             return exp;
         }
 
@@ -1476,7 +1476,7 @@ public class RolapHierarchy extends HierarchyBase {
         extends SubstitutingMemberReader
     {
         private final HierarchyAccess hierarchyAccess;
-        private final Exp exp;
+        private final Expression exp;
 
         /**
          * Creates a LimitedRollupSubstitutingMemberReader.
@@ -1490,7 +1490,7 @@ public class RolapHierarchy extends HierarchyBase {
             MemberReader memberReader,
             Role role,
             HierarchyAccess hierarchyAccess,
-            Exp exp)
+            Expression exp)
         {
             super(
                 new SmartRestrictedMemberReader(

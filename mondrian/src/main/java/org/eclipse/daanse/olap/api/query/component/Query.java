@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Parameter;
 import mondrian.olap.SchemaReader;
@@ -45,7 +45,7 @@ public non-sealed interface Query extends QueryPart {
 
     QueryAxis[] getAxes();
 
-    Calc compileExpression(Exp exp, boolean scalar, ResultStyle resultStyle);
+    Calc compileExpression(Expression exp, boolean scalar, ResultStyle resultStyle);
 
     Map<Hierarchy, Calc> getSubcubeHierarchyCalcs();
 

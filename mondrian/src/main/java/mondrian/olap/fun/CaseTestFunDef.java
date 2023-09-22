@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -53,7 +53,7 @@ class CaseTestFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp[] args = call.getArgs();
+        final Expression[] args = call.getArgs();
         final BooleanCalc[] conditionCalcs =
                 new BooleanCalc[args.length / 2];
         final Calc[] exprCalcs =
@@ -117,7 +117,7 @@ class CaseTestFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {

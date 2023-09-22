@@ -14,10 +14,10 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.query.base.Expressions;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
-import mondrian.olap.FunCall;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -33,22 +33,22 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 28, 2005
  */
-public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall {
+public class UnresolvedFunCallImpl extends AbstractExpression implements UnresolvedFunCall {
     private final String name;
     private final Syntax syntax;
-    private final Exp[] args;
+    private final Expression[] args;
 
     /**
      * Creates a function call with {@link Syntax#Function} syntax.
      */
-    public UnresolvedFunCallImpl(String name, Exp[] args) {
+    public UnresolvedFunCallImpl(String name, Expression[] args) {
         this(name, Syntax.Function, args);
     }
 
     /**
      * Creates a function call.
      */
-    public UnresolvedFunCallImpl(String name, Syntax syntax, Exp[] args) {
+    public UnresolvedFunCallImpl(String name, Syntax syntax, Expression[] args) {
         if (name == null || syntax == null || args == null) {
             throw new IllegalArgumentException("UnresolvedFunCall: params should be not null");
         }
@@ -80,7 +80,7 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall 
     @Override
 	@SuppressWarnings({"CloneDoesntCallSuperClone"})
     public UnresolvedFunCallImpl cloneExp() {
-        return new UnresolvedFunCallImpl(name, syntax, ExpBase.cloneArray(args));
+        return new UnresolvedFunCallImpl(name, syntax, Expressions.cloneExpressions(args));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall 
         final Object o = visitor.visit(this);
         if (visitor.shouldVisitChildren()) {
             // visit the call's arguments
-            for (Exp arg : args) {
+            for (Expression arg : args) {
                 arg.accept(visitor);
             }
         }
@@ -111,8 +111,8 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall 
     }
 
     @Override
-	public Exp accept(Validator validator) {
-        Exp[] newArgs = new Exp[args.length];
+	public Expression accept(Validator validator) {
+        Expression[] newArgs = new Expression[args.length];
         FunctionDefinition funDef =
             FunUtil.resolveFunArgs(
                 validator, null, args, newArgs, name, syntax);
@@ -153,7 +153,7 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall 
      * @see #getArgs()
      */
     @Override
-	public Exp getArg(int index) {
+	public Expression getArg(int index) {
         return args[index];
     }
 
@@ -165,7 +165,7 @@ public class UnresolvedFunCallImpl extends ExpBase implements UnresolvedFunCall 
      * @return the array of expressions
      */
     @Override
-	public Exp[] getArgs() {
+	public Expression[] getArgs() {
         return args;
     }
 

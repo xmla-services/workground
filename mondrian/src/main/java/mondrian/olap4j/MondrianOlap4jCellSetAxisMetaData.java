@@ -27,7 +27,7 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;
@@ -110,7 +110,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
      * @return List of hierarchies, never null
      */
     private List<Hierarchy> getHierarchiesNonFilter() {
-        final Exp exp = queryAxis.getSet();
+        final Expression exp = queryAxis.getSet();
         if (exp == null) {
             return Collections.emptyList();
         }

@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
@@ -72,7 +72,7 @@ class XtdFunDef extends FunDefBase {
   }
 
   @Override
-public Type getResultType( Validator validator, Exp[] args ) {
+public Type getResultType( Validator validator, Expression[] args ) {
     if ( args.length == 0 ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
@@ -151,7 +151,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
       return new XtdFunDef( dummyFunDef, levelType );
     }
   }

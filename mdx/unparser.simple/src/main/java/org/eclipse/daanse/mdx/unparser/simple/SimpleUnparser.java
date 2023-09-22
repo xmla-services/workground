@@ -28,7 +28,7 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.Literal;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
@@ -255,7 +255,7 @@ public class SimpleUnparser implements UnParser {
         return sb;
     }
 
-    public StringBuilder unparseExpression(Expression expression) {
+    public StringBuilder unparseExpression(MdxExpression expression) {
 
         if (expression instanceof CallExpression ce) {
             return unparseCallExpression(ce);
@@ -351,7 +351,7 @@ public class SimpleUnparser implements UnParser {
     private StringBuilder unparseCallExpression(CallExpression callExpression) {
         StringBuilder sb = new StringBuilder();
         String name = callExpression.name();
-        List<? extends Expression> expressions = callExpression.expressions();
+        List<? extends MdxExpression> expressions = callExpression.expressions();
         String expressionText;
         String object = "";
         if (CallExpression.Type.METHOD.equals(callExpression.type()) && !expressions.isEmpty()) {
@@ -403,7 +403,7 @@ public class SimpleUnparser implements UnParser {
         return sb;
     }
 
-    private String unparseExpressions(List<? extends Expression> expressions) {
+    private String unparseExpressions(List<? extends MdxExpression> expressions) {
         return expressions.stream().map(this::unparseExpression).map(Object::toString).collect(Collectors.joining(","));
     }
 

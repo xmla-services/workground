@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 
 import mondrian.olap.*;
 import mondrian.olap.api.*;
+import org.eclipse.daanse.olap.api.*;
 import org.eclipse.daanse.olap.api.query.*;
 import org.eclipse.daanse.olap.api.query.component.*;
 import mondrian.mdx.*;
@@ -75,7 +76,7 @@ public class MdxParserImpl
         jj_input_stream.setTabSize(tabSize);
     }
 
-    Exp recursivelyParseExp(String s) throws ParseException {
+    Expression recursivelyParseExp(String s) throws ParseException {
         MdxParserImpl parser =
             new MdxParserImpl(
                 factory,
@@ -95,11 +96,11 @@ public class MdxParserImpl
         }
     }
 
-    static Exp[] toExpArray(List<Exp> expList) {
+    static Expression[] toExpArray(List<Expression> expList) {
         if (expList == null || expList.size() == 0) {
             return EmptyExpArray;
         } else {
-            return expList.toArray(new Exp[expList.size()]);
+            return expList.toArray(new Expression[expList.size()]);
         }
     }
 
@@ -137,7 +138,7 @@ public class MdxParserImpl
 
     private static final MemberProperty[] EmptyMemberPropertyArray =
         new MemberProperty[0];
-    private static final Exp[] EmptyExpArray = new Exp[0];
+    private static final Expression[] EmptyExpArray = new Expression[0];
     private static final Formula[] EmptyFormulaArray = new Formula[0];
     private static final Id[] EmptyIdArray = new Id[0];
     private static final CellProperty[] EmptyQueryPartArray = new CellProperty[0];
@@ -155,10 +156,10 @@ public class MdxParserImpl
         return s;
     }
 
-    private Exp createCall(
-        Exp left,
+    private Expression createCall(
+        Expression left,
         Segment segment,
-        List<Exp> argList)
+        List<Expression> argList)
     {
         final String name = segment instanceof NameSegment
             ? ((NameSegment) segment).getName()
@@ -197,7 +198,7 @@ public class MdxParserImpl
                 return  new IdImpl(segment);
             } else {
                 return  new UnresolvedFunCallImpl(
-                    name, syntax, new Exp[] {left});
+                    name, syntax, new Expression[] {left});
             }
         }
     }
@@ -438,9 +439,9 @@ QueryPart statementEof() :
     }
 }
 
-Exp expressionEof() :
+Expression expressionEof() :
 {
-    Exp e;
+    Expression e;
 }
 {
     e = expression() <EOF> {
@@ -563,23 +564,23 @@ IdImpl compoundId() :
 
 // ----------------------------------------------------------------------------
 // Expressions
-Exp unaliasedExpression() :
+Expression unaliasedExpression() :
 {
-    Exp x, y;
+    Expression x, y;
 }
 {
     x = term5()
     (
         <OR> y = term5() {
-            x =  new UnresolvedFunCallImpl("OR", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("OR", Syntax.Infix, new Expression[] {x, y});
         }
     |   <XOR> y = term5() {
-            x =  new UnresolvedFunCallImpl("XOR", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("XOR", Syntax.Infix, new Expression[] {x, y});
         }
     |
         // range 'm1 : m2' yields set of members
         <COLON> y = term5() {
-            x =  new UnresolvedFunCallImpl(":", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl(":", Syntax.Infix, new Expression[] {x, y});
         }
     )*
     {
@@ -587,15 +588,15 @@ Exp unaliasedExpression() :
     }
 }
 
-Exp term5() :
+Expression term5() :
 {
-    Exp x, y;
+    Expression x, y;
 }
 {
     x = term4()
     (
         <AND> y = term4() {
-            x =  new UnresolvedFunCallImpl("AND", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("AND", Syntax.Infix, new Expression[] {x, y});
         }
     )*
     {
@@ -603,22 +604,22 @@ Exp term5() :
     }
 }
 
-Exp term4() :
+Expression term4() :
 {
-    Exp x;
+    Expression x;
 }
 {
     x = term3() {
         return x;
     }
 |   <NOT> x = term4() {
-        return  new UnresolvedFunCallImpl("NOT", Syntax.Prefix, new Exp[] {x});
+        return  new UnresolvedFunCallImpl("NOT", Syntax.Prefix, new Expression[] {x});
     }
 }
 
-Exp term3() :
+Expression term3() :
 {
-    Exp x, y;
+    Expression x, y;
     Token op;
 }
 {
@@ -634,43 +635,43 @@ Exp term3() :
         |   <GE>  { op = token; }
         )
         y = term2() {
-            x =  new UnresolvedFunCallImpl(op.image, Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl(op.image, Syntax.Infix, new Expression[] {x, y});
         }
     |
         // We expect a shift-reduce conflict here, because NULL is a literal and
         // so is a valid argument to the IS operator. We want to shift.
         LOOKAHEAD(2)
         <IS> <NULL> {
-            x =  new UnresolvedFunCallImpl("IS NULL", Syntax.Postfix, new Exp[] {x});
+            x =  new UnresolvedFunCallImpl("IS NULL", Syntax.Postfix, new Expression[] {x});
         }
     |
         // e.g. "x IS y"; but "x IS NULL" is handled elsewhere
         LOOKAHEAD(2)
         <IS> y = term2() {
-            x =  new UnresolvedFunCallImpl("IS", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("IS", Syntax.Infix, new Expression[] {x, y});
         }
     |   <IS> <EMPTY> {
             x =  new UnresolvedFunCallImpl(
-                "IS EMPTY", Syntax.Postfix, new Exp[] {x});
+                "IS EMPTY", Syntax.Postfix, new Expression[] {x});
         }
     |   <MATCHES> y = term2() {
-            x =  new UnresolvedFunCallImpl("MATCHES", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("MATCHES", Syntax.Infix, new Expression[] {x, y});
         }
     |   LOOKAHEAD(2)
         <NOT> <MATCHES> y = term2() {
             x =  new UnresolvedFunCallImpl(
-                "NOT", Syntax.Prefix, new Exp[] {
+                "NOT", Syntax.Prefix, new Expression[] {
                      new UnresolvedFunCallImpl(
-                        "MATCHES", Syntax.Infix, new Exp[] {x, y})});
+                        "MATCHES", Syntax.Infix, new Expression[] {x, y})});
         }
     |   <IN> y = term2() {
-            x =  new UnresolvedFunCallImpl("IN", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("IN", Syntax.Infix, new Expression[] {x, y});
         }
     |   <NOT> <IN> y = term2() {
             x =  new UnresolvedFunCallImpl(
-                "NOT", Syntax.Prefix, new Exp[] {
+                "NOT", Syntax.Prefix, new Expression[] {
                      new UnresolvedFunCallImpl(
-                        "IN", Syntax.Infix, new Exp[] {x, y})});
+                        "IN", Syntax.Infix, new Expression[] {x, y})});
         }
     )*
     {
@@ -678,21 +679,21 @@ Exp term3() :
     }
 }
 
-Exp term2() :
+Expression term2() :
 {
-    Exp x, y;
+    Expression x, y;
 }
 {
     x = term()
     (
         <PLUS> y = term() {
-            x =  new UnresolvedFunCallImpl("+", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("+", Syntax.Infix, new Expression[] {x, y});
         }
     |   <MINUS> y = term() {
-            x =  new UnresolvedFunCallImpl("-", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("-", Syntax.Infix, new Expression[] {x, y});
         }
     |   <CONCAT> y = term() {
-            x =  new UnresolvedFunCallImpl("||", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("||", Syntax.Infix, new Expression[] {x, y});
         }
     )*
     {
@@ -700,18 +701,18 @@ Exp term2() :
     }
 }
 
-Exp term() :
+Expression term() :
 {
-    Exp x, y;
+    Expression x, y;
 }
 {
     x = factor()
     (
         <ASTERISK> y = factor() {
-            x =  new UnresolvedFunCallImpl("*", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("*", Syntax.Infix, new Expression[] {x, y});
         }
     |   <SOLIDUS> y = factor() {
-            x =  new UnresolvedFunCallImpl("/", Syntax.Infix, new Exp[] {x, y});
+            x =  new UnresolvedFunCallImpl("/", Syntax.Infix, new Expression[] {x, y});
         }
     )*
     {
@@ -719,9 +720,9 @@ Exp term() :
     }
 }
 
-Exp factor() :
+Expression factor() :
 {
-    Exp p;
+    Expression p;
 }
 {
     p = primary() {
@@ -731,16 +732,16 @@ Exp factor() :
         return p;
     }
 |   <MINUS> p = primary() {
-        return  new UnresolvedFunCallImpl("-", Syntax.Prefix, new Exp[] {p});
+        return  new UnresolvedFunCallImpl("-", Syntax.Prefix, new Expression[] {p});
     }
 |   <EXISTING> p = primary() {
-        return  new UnresolvedFunCallImpl("Existing", Syntax.Prefix, new Exp[] {p});
+        return  new UnresolvedFunCallImpl("Existing", Syntax.Prefix, new Expression[] {p});
     }
 }
 
-Exp primary() :
+Expression primary() :
 {
-    Exp e;
+    Expression e;
 }
 {
     e = atom()
@@ -752,10 +753,10 @@ Exp primary() :
     }
 }
 
-Exp segmentOrFuncall(Exp left) :
+Expression segmentOrFuncall(Expression left) :
 {
     Segment segment;
-    List<Exp> argList = null;
+    List<Expression> argList = null;
 }
 {
     segment = identifier()
@@ -790,11 +791,11 @@ NumericLiteralImpl numericLiteral() :
     }
 }
 
-Exp atom() :
+Expression atom() :
 {
-    Exp e;
+    Expression e;
     NameSegment segment;
-    List<Exp> lis;
+    List<Expression> lis;
 }
 {
     <SINGLE_QUOTED_STRING> {
@@ -813,7 +814,7 @@ Exp atom() :
     <AS> segment = nameSegment() <RPAREN>
     {
         return  new UnresolvedFunCallImpl(
-            "CAST", Syntax.Cast, new Exp[] {
+            "CAST", Syntax.Cast, new Expression[] {
                 e,
                 SymbolLiteralImpl.create(segment.getName())});
     }
@@ -870,10 +871,10 @@ Exp atom() :
     }
 }
 
-Exp caseExpression() :
+Expression caseExpression() :
 {
-    Exp e, e2;
-    List<Exp> list = new ArrayList<Exp>();
+    Expression e, e2;
+    List<Expression> list = new ArrayList<Expression>();
     boolean match = false;
 }
 {
@@ -910,9 +911,9 @@ Exp caseExpression() :
 
 // ----------------------------------------------------------------------------
 // Member Value Expression
-Exp expression() :
+Expression expression() :
 {
-    Exp e;
+    Expression e;
     Segment i;
 }
 {
@@ -920,7 +921,7 @@ Exp expression() :
     (
         <AS> i = identifier() {
             IdImpl id =  new IdImpl(i);
-            e =  new UnresolvedFunCallImpl("AS", Syntax.Infix, new Exp[] {e, id});
+            e =  new UnresolvedFunCallImpl("AS", Syntax.Infix, new Expression[] {e, id});
         }
     )*
     {
@@ -928,25 +929,25 @@ Exp expression() :
     }
 }
 
-Exp expressionOrEmpty() :
+Expression expressionOrEmpty() :
 {
-    Exp e;
+    Expression e;
 }
 {
     e = expression() {
         return e;
     }
 |   /* empty */ {
-        return  new UnresolvedFunCallImpl("", Syntax.Empty, new Exp[] {});
+        return  new UnresolvedFunCallImpl("", Syntax.Empty, new Expression[] {});
     }
 }
 
 // Comma-separated list of expressions, some of which may be empty. Used
 // for functions.
-List<Exp> expOrEmptyList() :
+List<Expression> expOrEmptyList() :
 {
-    Exp e;
-    List<Exp> list = new LinkedList<Exp>();
+    Expression e;
+    List<Expression> list = new LinkedList<Expression>();
 }
 {
     e = expressionOrEmpty() {
@@ -964,10 +965,10 @@ List<Exp> expOrEmptyList() :
 }
 
 // List of expressions, none of which may be empty.
-List<Exp> expList() :
+List<Expression> expList() :
 {
-    Exp e;
-    List<Exp> list = new LinkedList<Exp>();
+    Expression e;
+    List<Expression> list = new LinkedList<Expression>();
 }
 {
     e = expression() {
@@ -1056,7 +1057,7 @@ QueryPart dmvSelectStatement() :
     NameSegment tableId;
     Id c;
     List<Id> columns = new ArrayList<Id>();
-    Exp w = null;
+    Expression w = null;
 }
 {
     <SELECT>
@@ -1086,7 +1087,7 @@ Query selectStatement() :
 {
      Formula e;
      List<Formula> f = new ArrayList<Formula>();
-     Exp w = null;
+     Expression w = null;
      QueryAxis i;
      List<QueryAxis> a = new ArrayList<QueryAxis>();
      Subcube subcube;
@@ -1156,7 +1157,7 @@ Subcube selectSubcubeClause() :
      QueryAxis i;
      List<QueryAxis> a = new ArrayList<QueryAxis>();
      Subcube subcube = null;
-     Exp w = null;
+     Expression w = null;
 }
 {
     (
@@ -1210,7 +1211,7 @@ QueryPart createFormula() :
     boolean isMember = true;
     NameSegment cubeId;
     Id m;
-    Exp e;
+    Expression e;
     List<MemberProperty> l = new ArrayList<MemberProperty>();
     MemberProperty mp;
 }
@@ -1280,7 +1281,7 @@ QueryPart updateStatement() :
 
 UpdateClause updateClause() :
 {
-    Exp t, v, w = null;
+    Expression t, v, w = null;
     UpdateImpl.Allocation a = UpdateImpl.Allocation.NO_ALLOCATION;
 }
 {
@@ -1333,7 +1334,7 @@ QueryPart transactionCommandStatement() :
 Formula memberSpecification() :
 {
     Id m;
-    Exp e;
+    Expression e;
     List<MemberProperty> l = new ArrayList<MemberProperty>();
     MemberProperty mp;
 }
@@ -1350,9 +1351,9 @@ Formula memberSpecification() :
     }
 }
 
-Exp formulaExpression() :
+Expression formulaExpression() :
 {
-    Exp e;
+    Expression e;
 }
 {
     LOOKAHEAD(<SINGLE_QUOTED_STRING>)
@@ -1370,7 +1371,7 @@ Exp formulaExpression() :
 MemberProperty memberPropertyDefinition() :
 {
     NameSegment id;
-    Exp e;
+    Expression e;
 }
 {
     id = nameSegment() <EQ> e = expression() {
@@ -1381,7 +1382,7 @@ MemberProperty memberPropertyDefinition() :
 Formula setSpecification() :
 {
     Id n;
-    Exp e;
+    Expression e;
 }
 {
     <SET> n = compoundId() <AS> e = formulaExpression() {
@@ -1393,7 +1394,7 @@ Formula setSpecification() :
 QueryAxis axisSpecification() :
 {
     boolean nonEmpty = false;
-    Exp e;
+    Expression e;
     List<Id> dp = new ArrayList<Id>();
     AxisOrdinal axis;
     Literal n;
@@ -1469,7 +1470,7 @@ QueryAxis axisSpecification() :
 QueryPart drillthroughStatement() :
 {
     int m = 0, f = 0;
-    List<Exp> rl = null;
+    List<Expression> rl = null;
     Query s;
 }
 {
@@ -1493,9 +1494,9 @@ QueryPart drillthroughStatement() :
     }
 }
 
-List<Exp> returnItemList() :
+List<Expression> returnItemList() :
 {
-    List<Exp> list = new ArrayList<Exp>();
+    List<Expression> list = new ArrayList<Expression>();
     IdImpl i;
 }
 {

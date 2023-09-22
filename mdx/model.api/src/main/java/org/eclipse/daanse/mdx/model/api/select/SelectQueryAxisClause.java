@@ -13,13 +13,13 @@
 */
 package org.eclipse.daanse.mdx.model.api.select;
 
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 
 public interface SelectQueryAxisClause {
 
     boolean nonEmpty();
 
-    Expression expression();
+    MdxExpression expression();
 
     Axis axis();
 

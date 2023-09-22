@@ -11,7 +11,7 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -48,5 +48,5 @@ public interface FunDef {
      */
     Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler);
 
-    void unparse(Exp[] args, PrintWriter pw);
+    void unparse(Expression[] args, PrintWriter pw);
 }

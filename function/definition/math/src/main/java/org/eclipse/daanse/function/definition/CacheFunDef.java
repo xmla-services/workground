@@ -11,7 +11,7 @@ package org.eclipse.daanse.function.definition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.SetType;
@@ -50,13 +50,13 @@ public class CacheFunDef extends FunDefBase {
     }
 
     @Override
-	public void unparse(Exp[] args, PrintWriter pw) {
+	public void unparse(Expression[] args, PrintWriter pw) {
         args[0].unparse(pw);
     }
 
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Exp exp = call.getArg(0);
+        final Expression exp = call.getArg(0);
         final ExpCacheDescriptor cacheDescriptor =
                 new ExpCacheDescriptor(exp, compiler);
         if (call.getType() instanceof SetType) {

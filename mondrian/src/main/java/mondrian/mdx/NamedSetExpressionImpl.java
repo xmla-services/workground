@@ -19,11 +19,11 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpBase;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
@@ -34,7 +34,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class NamedSetExpressionImpl extends ExpBase implements Exp, NamedSetExpression {
+public class NamedSetExpressionImpl extends AbstractExpression implements Expression, NamedSetExpression {
     private final NamedSet namedSet;
 
     /**
@@ -74,7 +74,7 @@ public class NamedSetExpressionImpl extends ExpBase implements Exp, NamedSetExpr
     }
 
     @Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
         // A set is sometimes used in more than one cube. So, clone the
         // expression and re-validate every time it is used.
         //

@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
 import mondrian.olap.api.Segment;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
@@ -124,7 +124,7 @@ public class DelegatingRolapMember extends RolapMemberBase {
     }
 
     @Override
-	public Exp getExpression() {
+	public Expression getExpression() {
         return member.getExpression();
     }
 

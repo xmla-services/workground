@@ -15,7 +15,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
 /**
@@ -25,7 +25,7 @@ import mondrian.olap.Validator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public class TypeWrapperExp implements Exp {
+public class TypeWrapperExp implements Expression {
     private final Type type;
 
     public TypeWrapperExp(Type type) {
@@ -53,7 +53,7 @@ public class TypeWrapperExp implements Exp {
     }
 
     @Override
-    public Exp accept(Validator validator) {
+    public Expression accept(Validator validator) {
         throw new UnsupportedOperationException();
     }
 

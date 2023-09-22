@@ -26,7 +26,7 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
@@ -106,7 +106,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
     }
 
     @Override
-	protected FunctionDefinition createFunDef( Exp[] args, FunctionDefinition dummyFunDef ) {
+	protected FunctionDefinition createFunDef( Expression[] args, FunctionDefinition dummyFunDef ) {
       return new TopBottomPercentSumFunDef( dummyFunDef, top, percent );
     }
   }

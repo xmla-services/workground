@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -104,7 +104,7 @@ public abstract class MultiResolver implements FunctionResolver {
 
     @Override
 	public FunctionDefinition resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {
@@ -142,5 +142,5 @@ outer:
         return true;
     }
 
-    protected abstract FunctionDefinition createFunDef(Exp[] args, FunctionDefinition dummyFunDef);
+    protected abstract FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef);
 }

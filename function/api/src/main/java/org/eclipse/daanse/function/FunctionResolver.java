@@ -11,7 +11,7 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public interface FunctionResolver {
      *   if no function definition that this resolver knows about matches.
      */
     FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions);
 
@@ -126,6 +126,6 @@ public interface FunctionResolver {
          * @param validator Validator
          * @param args Argument list
          */
-        void apply(Validator validator, List<Exp> args);
+        void apply(Validator validator, List<Expression> args);
     }
 }

@@ -14,7 +14,7 @@
 package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import org.eclipse.daanse.function.FunDef;
@@ -40,7 +40,7 @@ public class CaseMatchFunDefResolver extends ResolverBase {
 
     @Override
     public FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {

@@ -23,7 +23,7 @@ package mondrian.olap;
  * @author jhyde
  * @since Jan 6, 2006
  */
-public interface FunCall extends Exp {
+public interface FunCall extends Expression {
     /**
      * Returns the <code>index</code><sup>th</sup> argument to this function
      * call.
@@ -31,14 +31,14 @@ public interface FunCall extends Exp {
      * @param index Ordinal of the argument
      * @return <code>index</code><sup>th</sup> argument to this function call
      */
-    Exp getArg(int index);
+    Expression getArg(int index);
 
     /**
      * Returns the arguments to this function.
      *
      * @return array of arguments
      */
-    Exp[] getArgs();
+    Expression[] getArgs();
 
     /**
      * Returns the number of arguments to this function.

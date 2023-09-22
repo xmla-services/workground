@@ -49,13 +49,13 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
 /**
- * Mediates the compilation of an expression ({@link mondrian.olap.Exp})
+ * Mediates the compilation of an expression ({@link mondrian.olap.Expression})
  * into a compiled expression ({@link Calc}).
  *
  * @author jhyde
@@ -82,7 +82,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Compiled expression
      */
-    Calc<?> compile(Exp exp);
+    Calc<?> compile(Expression exp);
 
     /**
      * Compiles an expression to a given result type.
@@ -105,47 +105,47 @@ public interface ExpressionCompiler {
      * @return Compiled expression, or null if none can satisfy
      */
     Calc compileAs(
-            Exp exp,
+            Expression exp,
             Type resultType,
             List<ResultStyle> preferredResultStyles);
 
     /**
      * Compiles an expression which yields a {@link Member} result.
      */
-    MemberCalc compileMember(Exp exp);
+    MemberCalc compileMember(Expression exp);
 
     /**
      * Compiles an expression which yields a {@link Level} result.
      */
-    LevelCalc compileLevel(Exp exp);
+    LevelCalc compileLevel(Expression exp);
 
     /**
      * Compiles an expression which yields a {@link Dimension} result.
      */
-    DimensionCalc compileDimension(Exp exp);
+    DimensionCalc compileDimension(Expression exp);
 
     /**
      * Compiles an expression which yields a {@link Hierarchy} result.
      */
-    HierarchyCalc compileHierarchy(Exp exp);
+    HierarchyCalc compileHierarchy(Expression exp);
 
     /**
      * Compiles an expression which yields an <code>int</code> result.
      * The expression is implicitly converted into a scalar.
      */
-    IntegerCalc compileInteger(Exp exp);
+    IntegerCalc compileInteger(Expression exp);
 
     /**
      * Compiles an expression which yields a {@link String} result.
      * The expression is implicitly converted into a scalar.
      */
-    StringCalc compileString(Exp exp);
+    StringCalc compileString(Expression exp);
 
     /**
      * Compiles an expression which yields a {@link java.util.Date} result.
      * The expression is implicitly converted into a scalar.
      */
-    DateTimeCalc compileDateTime(Exp exp);
+    DateTimeCalc compileDateTime(Expression exp);
 
     /**
      * Compiles an expression which yields an immutable {@link TupleList}
@@ -153,7 +153,7 @@ public interface ExpressionCompiler {
      *
      * <p>Always equivalent to <code>{@link #compileList}(exp, false)</code>.
      */
-    TupleListCalc compileList(Exp exp);
+    TupleListCalc compileList(Expression exp);
 
     /**
      * Compiles an expression which yields {@link TupleList} result.
@@ -161,12 +161,12 @@ public interface ExpressionCompiler {
      * <p>Such an expression is generally a list of {@link Member} objects or a
      * list of tuples (each represented by a {@link Member} array).
      *
-     * <p>See {@link #compileList(mondrian.olap.Exp)}.
+     * <p>See {@link #compileList(mondrian.olap.Expression)}.
      *
      * @param exp Expression
      * @param mutable Whether resulting list is mutable
      */
-    TupleListCalc compileList(Exp exp, boolean mutable);
+    TupleListCalc compileList(Expression exp, boolean mutable);
 
     /**
      * Compiles an expression which yields an immutable {@link Iterable} result.
@@ -174,7 +174,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Calculator which yields an Iterable
      */
-    TupleIteratorCalc compileIter(Exp exp);
+    TupleIteratorCalc compileIter(Expression exp);
 
     /**
      * Compiles an expression which yields a <code>boolean</code> result.
@@ -182,7 +182,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Calculator which yields a boolean
      */
-    BooleanCalc compileBoolean(Exp exp);
+    BooleanCalc compileBoolean(Expression exp);
 
     /**
      * Compiles an expression which yields a <code>double</code> result.
@@ -190,7 +190,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Calculator which yields a double
      */
-    DoubleCalc compileDouble(Exp exp);
+    DoubleCalc compileDouble(Expression exp);
 
     /**
      * Compiles an expression which yields a tuple result.
@@ -198,7 +198,7 @@ public interface ExpressionCompiler {
      * @param exp Expression
      * @return Calculator which yields a tuple
      */
-    TupleCalc compileTuple(Exp exp);
+    TupleCalc compileTuple(Expression exp);
 
     /**
      * Compiles an expression to yield a scalar result.
@@ -211,10 +211,10 @@ public interface ExpressionCompiler {
      * @param specific Whether to try to use the specific compile method for
      *   scalar types. For example, if <code>specific</code> is true and
      *   <code>exp</code> is a string expression, calls
-     *   {@link #compileString(mondrian.olap.Exp)}
+     *   {@link #compileString(mondrian.olap.Expression)}
      * @return Calculation which returns the scalar value of the expression
      */
-    Calc<?> compileScalar(Exp exp, boolean specific);
+    Calc<?> compileScalar(Expression exp, boolean specific);
 
     /**
      * Implements a parameter, returning a unique slot which will hold the

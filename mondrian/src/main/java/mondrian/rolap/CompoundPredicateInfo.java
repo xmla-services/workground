@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.olap.type.SetType;
@@ -348,7 +348,7 @@ public class CompoundPredicateInfo {
 
     ResolvedFunCallImpl fun = (ResolvedFunCallImpl) member.getExpression();
 
-    final Exp exp = fun.getArg( 0 );
+    final Expression exp = fun.getArg( 0 );
     final Type type = exp.getType();
 
     if ( type instanceof SetType ) {
@@ -387,7 +387,7 @@ public class CompoundPredicateInfo {
     return r;
   }
 
-  private StarPredicate makeSetPredicate( final Exp exp, Evaluator evaluator ) {
+  private StarPredicate makeSetPredicate( final Expression exp, Evaluator evaluator ) {
     TupleIterable evaluatedSet = evaluator.getSetEvaluator( exp, true ).evaluateTupleIterable();
     ArrayList<StarPredicate> orList = new ArrayList<>();
     OrPredicate orPredicate = null;

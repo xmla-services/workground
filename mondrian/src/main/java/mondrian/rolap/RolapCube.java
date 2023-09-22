@@ -100,7 +100,7 @@ import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
 import mondrian.olap.CubeBase;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
@@ -3518,7 +3518,7 @@ public class RolapCube extends CubeBase {
      *
      * @see mondrian.olap.type.TypeWrapperExp
      */
-    static Exp createDummyExp(final Calc calc) {
+    static Expression createDummyExp(final Calc calc) {
         return new ResolvedFunCallImpl(
             new FunDefBase("dummy", null, "fn") {
                 @Override
@@ -3528,7 +3528,7 @@ public class RolapCube extends CubeBase {
                     return calc;
                 }
             },
-            new Exp[0],
+            new Expression[0],
             calc.getType());
     }
 

@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -653,7 +653,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     return member;
   }
 
-  public static void expandExpressions( Member member, Exp expression, Evaluator evaluator,
+  public static void expandExpressions( Member member, Expression expression, Evaluator evaluator,
       TupleConstraintStruct expandedSet ) {
     if ( expression == null ) {
       expression = member.getExpression();
@@ -663,8 +663,8 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
         assert ( fun.getArgCount() == 1 );
         expandExpressions( member, fun.getArg( 0 ), evaluator, expandedSet );
       } else if ( fun.getFunName().equals( "+" ) ) {
-        Exp[] expressions = fun.getArgs();
-        for ( Exp innerExp : expressions ) {
+        Expression[] expressions = fun.getArgs();
+        for ( Expression innerExp : expressions ) {
           expandExpressions( member, innerExp, evaluator, expandedSet );
         }
       } else {
@@ -689,7 +689,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     return isSupportedExpressionForCalculatedMember( member.getExpression() );
   }
 
-  public static boolean isSupportedExpressionForCalculatedMember( final Exp expression ) {
+  public static boolean isSupportedExpressionForCalculatedMember( final Expression expression ) {
     if ( expression instanceof ResolvedFunCallImpl fun ) {
       if ( fun.getFunDef() instanceof AggregateFunDef ) {
         return true;
@@ -697,7 +697,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
 
       if ( fun.getFunDef() instanceof ParenthesesFunDef ) {
         if ( fun.getArgs().length == 1 ) {
-          for ( Exp argsExp : fun.getArgs() ) {
+          for ( Expression argsExp : fun.getArgs() ) {
             if ( !isSupportedExpressionForCalculatedMember( argsExp ) ) {
               return false;
             }
@@ -707,7 +707,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
       }
 
       if ( fun.getFunDef().getName().equals( "+" ) ) {
-        for ( Exp argsExp : fun.getArgs() ) {
+        for ( Expression argsExp : fun.getArgs() ) {
           if ( !isSupportedExpressionForCalculatedMember( argsExp ) ) {
             return false;
           }
@@ -728,7 +728,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     ResolvedFunCallImpl fun = (ResolvedFunCallImpl) member.getExpression();
 
     // Calling the main set evaluator to extend this.
-    Exp exp = fun.getArg( 0 );
+    Expression exp = fun.getArg( 0 );
     TupleIterable tupleIterable = evaluator.getSetEvaluator( exp, true ).evaluateTupleIterable();
 
     Iterator<List<Member>> tupleIterator = tupleIterable.iterator();
@@ -1892,7 +1892,7 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     Set<Member> membersNestedInMeasures = new HashSet<>();
     for ( Member m : measures ) {
       if ( m.isCalculated() ) {
-        Exp exp = m.getExpression();
+        Expression exp = m.getExpression();
         exp.accept( new MemberExtractingVisitor( membersNestedInMeasures, null, false ) );
       }
     }
@@ -1903,8 +1903,8 @@ private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.cl
     return measuresConflictWithMembers( measuresMembers, getCJArgMembers( cjArgs ) );
   }
 
-  public static boolean containsValidMeasure( Exp... expressions ) {
-    for ( Exp expression : expressions ) {
+  public static boolean containsValidMeasure( Expression... expressions ) {
+    for ( Expression expression : expressions ) {
       if ( expression instanceof ResolvedFunCallImpl fun ) {
         return fun.getFunDef() instanceof ValidMeasureFunDef || containsValidMeasure( fun.getArgs() );
       }

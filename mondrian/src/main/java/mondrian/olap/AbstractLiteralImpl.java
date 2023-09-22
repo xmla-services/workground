@@ -13,7 +13,9 @@
  */
 package mondrian.olap;
 
-public abstract class AbstractLiteralImpl<R> extends ExpBase {
+import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
+
+public abstract class AbstractLiteralImpl<R> extends AbstractExpression {
 
 	private final R value;
 
@@ -27,7 +29,7 @@ public abstract class AbstractLiteralImpl<R> extends ExpBase {
 	}
 
 	@Override
-	public Exp accept(Validator validator) {
+	public Expression accept(Validator validator) {
 		return this;
 	}
 

@@ -12,7 +12,7 @@ package mondrian.rolap;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.fun.AggregateFunDef;
 
 /**
@@ -73,7 +73,7 @@ class RolapMemberCalculation implements RolapCalculation {
 
     @Override
 	public Calc getCompiledExpression(RolapEvaluatorRoot root) {
-        final Exp exp = member.getExpression();
+        final Expression exp = member.getExpression();
         return root.getCompiled(exp, true, null);
     }
 
@@ -99,12 +99,12 @@ class RolapMemberCalculation implements RolapCalculation {
      * @param exp Expression
      * @return Whether expression contains a call to an aggregate function.
      */
-    private static boolean foundAggregateFunction(Exp exp) {
+    private static boolean foundAggregateFunction(Expression exp) {
         if (exp instanceof ResolvedFunCallImpl resolvedFunCall) {
             if (resolvedFunCall.getFunDef() instanceof AggregateFunDef) {
                 return true;
             } else {
-                for (Exp argExp : resolvedFunCall.getArgs()) {
+                for (Expression argExp : resolvedFunCall.getArgs()) {
                     if (foundAggregateFunction(argExp)) {
                         return true;
                     }

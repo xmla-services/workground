@@ -53,7 +53,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;
@@ -169,8 +169,8 @@ class SqlConstraintUtilsTest {
         return member;
     }
 
-    private Exp makeSupportedExpressionForCalculatedMember() {
-        Exp memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
+    private Expression makeSupportedExpressionForCalculatedMember() {
+        Expression memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             true,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -178,9 +178,9 @@ class SqlConstraintUtilsTest {
         return memberExpr;
     }
 
-    private Exp makeUnsupportedExpressionForCalculatedMember() {
-        Exp nullFunDefExpr = new ResolvedFunCallImpl(
-            new NullFunDef(), new Exp[]{}, new NullType());
+    private Expression makeUnsupportedExpressionForCalculatedMember() {
+        Expression nullFunDefExpr = new ResolvedFunCallImpl(
+            new NullFunDef(), new Expression[]{}, new NullType());
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -189,7 +189,7 @@ class SqlConstraintUtilsTest {
     }
 
     private Member makeUnsupportedCalculatedMember(String toString) {
-        Exp memberExp = makeUnsupportedExpressionForCalculatedMember();
+        Expression memberExp = makeUnsupportedExpressionForCalculatedMember();
         Member member = Mockito.mock(Member.class);
         Mockito.doReturn("mock[" + toString + "]").when(member).toString();
         Mockito.doReturn(true).when(member).isCalculated();
@@ -203,7 +203,7 @@ class SqlConstraintUtilsTest {
     }
 
     private Member makeMemberExprMember(Member resultMember) {
-        Exp memberExp = new MemberExpressionImpl(resultMember);
+        Expression memberExp = new MemberExpressionImpl(resultMember);
         Member member = Mockito.mock(Member.class);
         Mockito.doReturn(true).when(member).isCalculated();
         Mockito.doReturn(memberExp).when(member).getExpression();
@@ -217,16 +217,16 @@ class SqlConstraintUtilsTest {
         Mockito.doReturn(true).when(member).isCalculated();
 
         Member aggregatedMember0 = Mockito.mock(Member.class);
-        Exp aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
+        Expression aggregateArg0 = new MemberExpressionImpl(aggregatedMember0);
 
         FunctionDefinition dummy = Mockito.mock(FunctionDefinition.class);
         Mockito.doReturn(Syntax.Function).when(dummy).getSyntax();
         Mockito.doReturn("dummy").when(dummy).getName();
 
         FunctionDefinition funDef = new AggregateFunDef(dummy);
-        Exp[] args = new Exp[]{aggregateArg0};
+        Expression[] args = new Expression[]{aggregateArg0};
         Type returnType = new DecimalType(1, 1);
-        Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
+        Expression memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
 
         Mockito.doReturn(memberExp).when(member).getExpression();
 
@@ -251,12 +251,12 @@ class SqlConstraintUtilsTest {
         Mockito.doReturn("mock[" + toString + "]").when(member).toString();
         Mockito.doReturn(true).when(member).isCalculated();
 
-        Exp parenthesesArg = new MemberExpressionImpl(parenthesesInnerMember);
+        Expression parenthesesArg = new MemberExpressionImpl(parenthesesInnerMember);
 
         FunctionDefinition funDef = new ParenthesesFunDef(Category.MEMBER);
-        Exp[] args = new Exp[]{parenthesesArg};
+        Expression[] args = new Expression[]{parenthesesArg};
         Type returnType = new DecimalType(1, 1);
-        Exp memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
+        Expression memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
 
         Mockito.doReturn(memberExp).when(member).getExpression();
 
@@ -275,23 +275,23 @@ class SqlConstraintUtilsTest {
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(null),
             "null expression");
 
-        Exp memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
+        Expression memberExpr = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             true,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 memberExpr), "MemberExpr");
 
-        Exp nullFunDefExpr = new ResolvedFunCallImpl(
-            new NullFunDef(), new Exp[]{}, new NullType());
+        Expression nullFunDefExpr = new ResolvedFunCallImpl(
+            new NullFunDef(), new Expression[]{}, new NullType());
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 nullFunDefExpr), "ResolvedFunCall-NullFunDef");
 
         // ResolvedFunCall arguments
-        final Exp argUnsupported = new ResolvedFunCallImpl(
-            new NullFunDef(), new Exp[]{}, new NullType());
-        final Exp argSupported = new MemberExpressionImpl(Mockito.mock(Member.class));
+        final Expression argUnsupported = new ResolvedFunCallImpl(
+            new NullFunDef(), new Expression[]{}, new NullType());
+        final Expression argSupported = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -300,15 +300,15 @@ class SqlConstraintUtilsTest {
             true,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
                 argSupported));
-        final Exp[] noArgs = new Exp[]{};
-        final Exp[] args1Unsupported = new Exp[]{argUnsupported};
-        final Exp[] args1Supported = new Exp[]{argSupported};
-        final Exp[] args2Different = new Exp[]{argUnsupported, argSupported};
+        final Expression[] noArgs = new Expression[]{};
+        final Expression[] args1Unsupported = new Expression[]{argUnsupported};
+        final Expression[] args1Supported = new Expression[]{argSupported};
+        final Expression[] args2Different = new Expression[]{argUnsupported, argSupported};
 
         final ParenthesesFunDef parenthesesFunDef =
             new ParenthesesFunDef(Category.MEMBER);
         Type parenthesesReturnType = new DecimalType(1, 1);
-        Exp parenthesesExpr = new ResolvedFunCallImpl(
+        Expression parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, noArgs, parenthesesReturnType);
         assertEquals(
             true,
@@ -341,7 +341,7 @@ class SqlConstraintUtilsTest {
         FunctionDefinition aggregateFunDef = new AggregateFunDef(dummy);
         Type aggregateReturnType = new DecimalType(1, 1);
 
-        Exp aggregateExpr = new ResolvedFunCallImpl(
+        Expression aggregateExpr = new ResolvedFunCallImpl(
             aggregateFunDef, noArgs, aggregateReturnType);
         assertEquals(
             true, SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -719,12 +719,12 @@ class SqlConstraintUtilsTest {
     {
         Member memberMock = mock(Member.class);
 
-        Exp[] funCallArgExps = new Exp[0];
+        Expression[] funCallArgExps = new Expression[0];
         ResolvedFunCallImpl funCallArgMock = new ResolvedFunCallImpl(
             mock(FunctionDefinition.class),
             funCallArgExps, mock(TupleType.class));
 
-        Exp[] funCallExps = {funCallArgMock};
+        Expression[] funCallExps = {funCallArgMock};
         ResolvedFunCallImpl funCallMock = new ResolvedFunCallImpl(
             mock(FunctionDefinition.class), funCallExps, mock(TupleType.class));
 

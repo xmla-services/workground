@@ -1,6 +1,6 @@
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
@@ -28,9 +28,9 @@ public class AddCalculatedMembersFunResolver extends MultiResolver {
     }
 
     @Override
-    protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+    protected FunDef createFunDef(Expression[] args, FunDef dummyFunDef) {
         if (args.length == 1) {
-            Exp arg = args[0];
+            Expression arg = args[0];
             final Type type1 = arg.getType();
             if (type1 instanceof SetType type) {
                 if (type.getElementType() instanceof MemberType) {

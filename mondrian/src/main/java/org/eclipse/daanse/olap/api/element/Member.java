@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.List;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
 
@@ -136,7 +136,7 @@ Hierarchy getHierarchy();
 
   int getSolveOrder();
 
-  Exp getExpression();
+  Expression getExpression();
 
   /**
    * Returns a list of the ancestor members of this member.

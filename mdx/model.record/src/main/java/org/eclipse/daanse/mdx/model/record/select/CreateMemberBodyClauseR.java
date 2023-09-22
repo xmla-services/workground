@@ -16,12 +16,12 @@ package org.eclipse.daanse.mdx.model.record.select;
 import java.util.List;
 
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 
 public record CreateMemberBodyClauseR(CompoundId compoundId,
-                                      Expression expression,
+                                      MdxExpression expression,
                                       List<MemberPropertyDefinition> memberPropertyDefinitions)
         implements CreateMemberBodyClause {
 

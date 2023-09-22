@@ -25,7 +25,7 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -66,14 +66,14 @@ class SetItemFunDef extends FunDefBase {
     {
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {
             if (args.length < 1) {
                 return null;
             }
-            final Exp setExp = args[0];
+            final Expression setExp = args[0];
             if (!(setExp.getType() instanceof SetType)) {
                 return null;
             }
@@ -102,7 +102,7 @@ class SetItemFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         SetType setType = (SetType) args[0].getType();
         return setType.getElementType();
     }

@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.MemberCalcToTupleCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.UnknownToTupleCalc;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
@@ -48,13 +48,13 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 	}
 
 	@Override
-	public TupleCalc compileTuple(Exp exp) {
+	public TupleCalc compileTuple(Expression exp) {
 		final Calc<?> calc = compile(exp);
 		final Type type = exp.getType();
 		if (type instanceof mondrian.olap.type.DimensionType || type instanceof mondrian.olap.type.HierarchyType) {
 			final mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl("DefaultMember",
-					mondrian.olap.Syntax.Property, new Exp[] { exp });
-			final Exp defaultMember = unresolvedFunCall.accept(getValidator());
+					mondrian.olap.Syntax.Property, new Expression[] { exp });
+			final Expression defaultMember = unresolvedFunCall.accept(getValidator());
 			return compileTuple(defaultMember);
 		}
 		if (type instanceof TupleType) {
@@ -81,7 +81,7 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 	}
 
 	@Override
-	public TupleListCalc compileList(Exp exp, boolean mutable) {
+	public TupleListCalc compileList(Expression exp, boolean mutable) {
 		final TupleListCalc tupleListCalc = super.compileList(exp, mutable);
 		if (mutable && tupleListCalc.getResultStyle() == ResultStyle.LIST) {
 			// Wrap the expression in an expression which creates a mutable

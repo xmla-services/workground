@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 /**
  * <code>Category</code> enumerates the possible expression types.
  *
- * <p>Values of this enumeration are returned by {@link Exp#getCategory()},
+ * <p>Values of this enumeration are returned by {@link Expression#getCategory()},
  * {@link FunctionDefinition#getParameterCategories()}, and
  * {@link FunctionDefinition#getReturnCategory()}.
  *

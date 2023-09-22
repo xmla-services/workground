@@ -14,7 +14,7 @@
 package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunUtil;
 import org.eclipse.daanse.function.FunctionResolver;
@@ -36,7 +36,7 @@ public class CrossJoinFunResolver extends ResolverBase {
 
     @Override
     public FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {
@@ -61,7 +61,7 @@ public class CrossJoinFunResolver extends ResolverBase {
         //TODO
     }
 
-    protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+    protected FunDef createFunDef(Expression[] args, FunDef dummyFunDef) {
         return new CrossJoinFunDef(dummyFunDef);
     }
 }

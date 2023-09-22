@@ -39,7 +39,7 @@ import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -1509,7 +1509,7 @@ RME is this right
         }
 
         @Override
-		public Exp getExpression() {
+		public Expression getExpression() {
             return super.getHierarchy().getAggregateChildrenExpression();
         }
 

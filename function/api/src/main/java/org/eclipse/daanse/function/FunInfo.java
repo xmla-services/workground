@@ -36,13 +36,13 @@ public interface FunInfo extends Comparable<FunInfo>{
 
     /**
      * Returns the type of value returned by this function. Values are the same
-     * as those returned by {@link mondrian.olap.Exp#getCategory()}.
+     * as those returned by {@link mondrian.olap.Expression#getCategory()}.
      */
     int[] getReturnCategories();
 
     /**
      * Returns the types of the arguments of this function. Values are the same
-     * as those returned by {@link mondrian.olap.Exp#getCategory()}. The
+     * as those returned by {@link mondrian.olap.Expression#getCategory()}. The
      * 0<sup>th</sup> argument of methods and properties are the object they
      * are applied to. Infix operators have two arguments, and prefix operators
      * have one argument.

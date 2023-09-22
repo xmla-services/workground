@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
 public non-sealed interface MemberProperty extends QueryPart{
 
-    Exp getExp();
+    Expression getExp();
 
     String getName();
 

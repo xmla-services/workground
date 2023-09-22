@@ -14,7 +14,7 @@
 package org.eclipse.daanse.olap.api.query.component;
 
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Validator;
 import mondrian.olap.api.SubtotalVisibility;
@@ -34,9 +34,9 @@ public non-sealed interface QueryAxis extends QueryPart {
 
     void setNonEmpty(boolean nonEmpty);
 
-    Exp getSet();
+    Expression getSet();
 
-    void setSet(Exp set);
+    void setSet(Expression set);
 
     Calc compile(ExpressionCompiler compiler, ResultStyle resultStyle);
 

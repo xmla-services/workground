@@ -24,7 +24,7 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SolveOrderMode;
@@ -67,7 +67,7 @@ class RolapEvaluatorRoot {
       Util.lookup( SolveOrderMode.class, MondrianProperties.instance().SolveOrderMode.get().toUpperCase(),
           SolveOrderMode.ABSOLUTE );
 
-  final Set<Exp> activeNativeExpansions = new HashSet<>();
+  final Set<Expression> activeNativeExpansions = new HashSet<>();
 
   /**
    * The size of the command stack at which we will next check for recursion.
@@ -144,7 +144,7 @@ public RolapEvaluatorRoot( Statement statement ) {
    *          Preferred result style; if null, use query's default result style; ignored if expression is scalar
    * @return compiled expression
    */
-  final Calc getCompiled( Exp exp, boolean scalar, ResultStyle resultStyle ) {
+  final Calc getCompiled( Expression exp, boolean scalar, ResultStyle resultStyle ) {
     CompiledExpKey key = new CompiledExpKey( exp, scalar, resultStyle );
     Calc calc = compiledExps.get( key );
     if ( calc == null ) {
@@ -160,12 +160,12 @@ public RolapEvaluatorRoot( Statement statement ) {
    * on equals, hashCode, and construction.
    */
   private static class CompiledExpKey {
-    private final Exp exp;
+    private final Expression exp;
     private final boolean scalar;
     private final ResultStyle resultStyle;
     private int hashCode = Integer.MIN_VALUE;
 
-    private CompiledExpKey( Exp exp, boolean scalar, ResultStyle resultStyle ) {
+    private CompiledExpKey( Expression exp, boolean scalar, ResultStyle resultStyle ) {
       this.exp = exp;
       this.scalar = scalar;
       this.resultStyle = resultStyle;
@@ -223,7 +223,7 @@ public RolapEvaluatorRoot( Statement statement ) {
    * @param create
    *          Whether to create named set evaluator if not found
    */
-  protected Evaluator.SetEvaluator evaluateSet( Exp exp, boolean create ) {
+  protected Evaluator.SetEvaluator evaluateSet( Expression exp, boolean create ) {
     throw new UnsupportedOperationException();
   }
 

@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
@@ -47,9 +47,9 @@ public class RolapNativeFilter extends RolapNativeSet {
   }
 
   static class FilterConstraint extends SetConstraint {
-    Exp filterExpr;
+    Expression filterExpr;
 
-    public FilterConstraint( CrossJoinArg[] args, RolapEvaluator evaluator, Exp filterExpr ) {
+    public FilterConstraint( CrossJoinArg[] args, RolapEvaluator evaluator, Expression filterExpr ) {
       super( args, evaluator, true );
       this.filterExpr = filterExpr;
     }
@@ -160,7 +160,7 @@ protected boolean restrictMemberTypes() {
   }
 
   @Override
-NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Exp[] args ) {
+NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fun, Expression[] args ) {
     if ( !isEnabled() ) {
       return null;
     }
@@ -203,7 +203,7 @@ NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunctionDefinition fu
     // condition could change to use an aggregate table later in evaluation
     SqlQuery sqlQuery = SqlQuery.newQuery( context, "NativeFilter" );
     RolapNativeSql sql = new RolapNativeSql( sqlQuery, null, evaluator, cjArgs[0].getLevel() );
-    final Exp filterExpr = args[1];
+    final Expression filterExpr = args[1];
     StringBuilder filterExprStr = sql.generateFilterCondition( filterExpr );
     if ( filterExprStr == null ) {
       return null;

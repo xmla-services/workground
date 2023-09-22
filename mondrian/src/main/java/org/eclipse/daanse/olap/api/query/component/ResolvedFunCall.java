@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunCall;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.Type;
@@ -24,9 +24,9 @@ public non-sealed interface ResolvedFunCall extends QueryPart, FunCall {
 
     FunctionDefinition getFunDef();
 
-    Exp getArg(int i);
+    Expression getArg(int i);
 
-    Exp[] getArgs();
+    Expression[] getArgs();
 
     Type getType();
 }

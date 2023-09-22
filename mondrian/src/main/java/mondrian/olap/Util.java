@@ -813,7 +813,7 @@ public class Util extends XOMUtil {
     }
 
     public static OlapElement lookup(Query q, List<Segment> nameParts) {
-        final Exp exp = lookup(q, nameParts, false);
+        final Expression exp = lookup(q, nameParts, false);
         if (exp instanceof MemberExpression memberExpr) {
             return memberExpr.getMember();
         } else if (exp instanceof LevelExpression levelExpr) {
@@ -842,7 +842,7 @@ public class Util extends XOMUtil {
      * @param allowProp Whether to allow property references
      * @return OLAP object or property reference
      */
-    public static Exp lookup(
+    public static Expression lookup(
         Query q,
         List<Segment> nameParts,
         boolean allowProp)
@@ -866,7 +866,7 @@ public class Util extends XOMUtil {
      * @param allowProp Whether to allow property references
      * @return OLAP object or property reference
      */
-    public static Exp lookup(
+    public static Expression lookup(
         Query q,
         SchemaReader schemaReader,
         List<Segment> segments,
@@ -895,7 +895,7 @@ public class Util extends XOMUtil {
                     && isValidProperty(propertyName, member.getLevel()))
             {
                 return new UnresolvedFunCallImpl(
-                        propertyName, Syntax.Property, new Exp[] {
+                        propertyName, Syntax.Property, new Expression[] {
                         createExpr(member)});
             }
             final Level level =
@@ -906,7 +906,7 @@ public class Util extends XOMUtil {
                     && isValidProperty(propertyName, level))
             {
                 return new UnresolvedFunCallImpl(
-                        propertyName, Syntax.Property, new Exp[] {
+                        propertyName, Syntax.Property, new Expression[] {
                         createExpr(level)});
             }
         }
@@ -988,7 +988,7 @@ public class Util extends XOMUtil {
      * Converts an olap element (dimension, hierarchy, level or member) into
      * an expression representing a usage of that element in an MDX statement.
      */
-    public static Exp createExpr(OlapElement element)
+    public static Expression createExpr(OlapElement element)
     {
         if (element instanceof Member member) {
             return new MemberExpressionImpl(member);
@@ -2450,7 +2450,7 @@ public class Util extends XOMUtil {
     /**
      * Converts an expression to a string.
      */
-    public static String unparse(Exp exp) {
+    public static String unparse(Expression exp) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exp.unparse(pw);
@@ -2963,7 +2963,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public Exp validate(Exp exp, boolean scalar) {
+			public Expression validate(Expression exp, boolean scalar) {
                 return exp;
             }
 
@@ -2988,7 +2988,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public FunctionDefinition getDef(Exp[] args, String name, Syntax syntax) {
+			public FunctionDefinition getDef(Expression[] args, String name, Syntax syntax) {
                 // Very simple resolution. Assumes that there is precisely
                 // one resolver (i.e. no overloading) and no argument
                 // conversions are necessary.
@@ -3009,7 +3009,7 @@ public class Util extends XOMUtil {
 
             @Override
 			public boolean canConvert(
-                int ordinal, Exp fromExp,
+                int ordinal, Expression fromExp,
                 int to,
                 List<FunctionResolver.Conversion> conversions)
             {
@@ -3031,7 +3031,7 @@ public class Util extends XOMUtil {
                 boolean definition,
                 String name,
                 Type type,
-                Exp defaultExp,
+                Expression defaultExp,
                 String description)
             {
                 return null;

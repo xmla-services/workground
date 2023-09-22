@@ -30,7 +30,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -59,7 +59,7 @@ class ExtractFunDef extends FunDefBase {
     {
         @Override
 		public FunctionDefinition resolve(
-            Exp[] args,
+            Expression[] args,
             Validator validator,
             List<Conversion> conversions)
         {
@@ -107,7 +107,7 @@ class ExtractFunDef extends FunDefBase {
     }
 
     @Override
-	public Type getResultType(Validator validator, Exp[] args) {
+	public Type getResultType(Validator validator, Expression[] args) {
         final List<Hierarchy> extractedHierarchies =
             new ArrayList<>();
         final List<Integer> extractedOrdinals = new ArrayList<>();
@@ -130,7 +130,7 @@ class ExtractFunDef extends FunDefBase {
     }
 
     private static void findExtractedHierarchies(
-        Exp[] args,
+        Expression[] args,
         List<Hierarchy> extractedHierarchies,
         List<Integer> extractedOrdinals)
     {
@@ -149,7 +149,7 @@ class ExtractFunDef extends FunDefBase {
         }
 
         for (int i = 1; i < args.length; i++) {
-            Exp arg = args[i];
+            Expression arg = args[i];
             Hierarchy extractedHierarchy = null;
             if (arg instanceof HierarchyExpressionImpl hierarchyExpr) {
                 extractedHierarchy = hierarchyExpr.getHierarchy();
@@ -196,7 +196,7 @@ class ExtractFunDef extends FunDefBase {
             extractedOrdinalList);
         Util.assertTrue(
             extractedOrdinalList.size() == extractedHierarchyList.size());
-        Exp arg = call.getArg(0);
+        Expression arg = call.getArg(0);
         final TupleListCalc tupleListCalc = compiler.compileList(arg, false);
         int inArity = arg.getType().getArity();
         final int outArity = extractedOrdinalList.size();

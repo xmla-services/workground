@@ -11,7 +11,7 @@ package org.eclipse.daanse.function.definition;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Syntax;
 import mondrian.resource.MondrianResource;
@@ -49,19 +49,19 @@ public class AbstractAggregateFunDef extends FunDefBase {
     }
 
     @Override
-	protected Exp validateArg(
-        Validator validator, Exp[] args, int i, int category)
+	protected Expression validateArg(
+        Validator validator, Expression[] args, int i, int category)
     {
         // If expression cache is enabled, wrap first expression (the set)
         // in a function which will use the expression cache.
         if (i == 0 && MondrianProperties.instance().EnableExpCache.get()) {
-            Exp arg = args[0];
+            Expression arg = args[0];
             if (FunUtil.worthCaching(arg)) {
-                final Exp cacheCall =
+                final Expression cacheCall =
                     new UnresolvedFunCallImpl(
                         CacheFunResolver.NAME,
                         Syntax.Function,
-                        new Exp[] {arg});
+                        new Expression[] {arg});
                 return validator.validate(cacheCall, false);
             }
         }

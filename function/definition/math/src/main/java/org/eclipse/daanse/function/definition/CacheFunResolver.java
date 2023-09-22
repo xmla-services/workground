@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.Type;
 import org.eclipse.daanse.function.FunDef;
@@ -36,14 +36,14 @@ public class CacheFunResolver  extends ResolverBase {
 
     @Override
     public FunDef resolve(
-        Exp[] args,
+        Expression[] args,
         Validator validator,
         List<Conversion> conversions)
     {
         if (args.length != 1) {
             return null;
         }
-        final Exp exp = args[0];
+        final Expression exp = args[0];
         final int category = exp.getCategory();
         final Type type = exp.getType();
         return new CacheFunDef(

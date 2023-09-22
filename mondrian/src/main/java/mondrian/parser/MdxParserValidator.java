@@ -28,7 +28,7 @@ import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.FunctionTable;
 import mondrian.olap.api.Command;
@@ -55,7 +55,7 @@ public interface MdxParserValidator {
         FunctionTable funTable,
         boolean strictValidation);
 
-    Exp parseExpression(
+    Expression parseExpression(
         Statement statement,
         String queryString,
         boolean debug,
@@ -72,7 +72,7 @@ public interface MdxParserValidator {
             Formula[] formulae,
             QueryAxis[] axes,
             Subcube subcube,
-            Exp slicer,
+            Expression slicer,
             CellProperty[] cellProps,
             boolean strictValidation);
 
@@ -83,7 +83,7 @@ public interface MdxParserValidator {
             Query query,
             int maxRowCount,
             int firstRowOrdinal,
-            List<Exp> returnList);
+            List<Expression> returnList);
 
         CalculatedFormula makeCalculatedFormula(
                 String cubeName,
@@ -105,7 +105,7 @@ public interface MdxParserValidator {
         DmvQuery makeDmvQuery(
                 String tableName,
                 List<String> columns,
-                Exp whereExpression);
+                Expression whereExpression);
 
         TransactionCommand makeTransactionCommand(
                 Command c);

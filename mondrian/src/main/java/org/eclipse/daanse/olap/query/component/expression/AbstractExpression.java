@@ -11,8 +11,17 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.mdx.model.api.expression;
 
-public sealed interface Expression permits CallExpression, Literal, CompoundId, ObjectIdentifier {
+package org.eclipse.daanse.olap.query.component.expression;
+
+import mondrian.olap.AbstractQueryPart;
+import mondrian.olap.Expression;
+
+public abstract class AbstractExpression extends AbstractQueryPart implements Expression {
+
+	protected AbstractExpression() {
+	}
+
+	
 
 }

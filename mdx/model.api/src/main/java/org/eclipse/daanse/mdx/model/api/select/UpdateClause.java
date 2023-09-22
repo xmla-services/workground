@@ -13,16 +13,16 @@
  */
 package org.eclipse.daanse.mdx.model.api.select;
 
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 
 public interface UpdateClause {
 
-    Expression tupleExp();
+    MdxExpression tupleExp();
 
-    Expression valueExp();
+    MdxExpression valueExp();
 
     Allocation allocation();
 
-    Expression weight();
+    MdxExpression weight();
 
 }

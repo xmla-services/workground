@@ -533,7 +533,7 @@ class IdBatchResolverTest  {
             Formula[] formulae,
             QueryAxis[] axes,
             Subcube subcube,
-            Exp slicer,
+            Expression slicer,
             CellProperty[] cellProps,
             boolean strictValidation)
         {

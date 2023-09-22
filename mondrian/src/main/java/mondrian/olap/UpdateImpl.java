@@ -65,12 +65,12 @@ public class UpdateImpl extends AbstractQueryPart implements Update {
     }
 
     public static class UpdateClauseImpl extends AbstractQueryPart implements UpdateClause {
-        private final Exp tuple;
-        private Exp value;
+        private final Expression tuple;
+        private Expression value;
         private Allocation allocation;
-        private Exp weight;
+        private Expression weight;
 
-        public UpdateClauseImpl(Exp tuple, Exp value, Allocation allocation, Exp weight) {
+        public UpdateClauseImpl(Expression tuple, Expression value, Allocation allocation, Expression weight) {
             this.tuple = tuple;
             this.value = value;
             this.allocation = allocation;
@@ -78,12 +78,12 @@ public class UpdateImpl extends AbstractQueryPart implements Update {
         }
 
         @Override
-        public Exp getTupleExp() {
+        public Expression getTupleExp() {
             return this.tuple;
         }
 
         @Override
-        public Exp getValueExp() {
+        public Expression getValueExp() {
             return this.value;
         }
     }

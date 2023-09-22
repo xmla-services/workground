@@ -14,7 +14,7 @@ package mondrian.rolap;
 
 import java.util.EventObject;
 
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
 
@@ -73,7 +73,7 @@ public abstract class RolapNative {
     abstract NativeEvaluator createEvaluator(
         RolapEvaluator evaluator,
         FunctionDefinition fun,
-        Exp[] args);
+        Expression[] args);
 
     /**
      * if enabled == false, then createEvaluator will always return null

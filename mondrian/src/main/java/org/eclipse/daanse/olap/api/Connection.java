@@ -27,7 +27,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryPart;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.SchemaReader;
 
@@ -92,7 +92,7 @@ public interface Connection {
     /**
      * Parses an expresion.
      */
-    Exp parseExpression(String s);
+    Expression parseExpression(String s);
 
     /**
      * Parses a query.

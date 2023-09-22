@@ -28,7 +28,7 @@ import mondrian.calc.impl.DelegatingExpCompiler;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.Exp;
+import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -401,7 +401,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         }
 
         @Override
-		protected Calc afterCompile(Exp exp, Calc calc, boolean mutable) {
+		protected Calc afterCompile(Expression exp, Calc calc, boolean mutable) {
             Hierarchy[] dimensions = getIndependentHierarchies(calc);
             calc = super.afterCompile(exp, calc, mutable);
             if (calc.getType() instanceof SetType) {
