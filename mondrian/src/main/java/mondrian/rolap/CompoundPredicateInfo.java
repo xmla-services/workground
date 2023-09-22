@@ -16,11 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
-import mondrian.calc.TupleIterable;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;

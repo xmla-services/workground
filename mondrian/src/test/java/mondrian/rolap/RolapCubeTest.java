@@ -31,6 +31,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;

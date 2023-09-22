@@ -21,8 +21,8 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Util;

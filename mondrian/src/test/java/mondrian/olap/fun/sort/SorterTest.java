@@ -26,9 +26,12 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import org.apache.commons.collections.comparators.ComparatorChain;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,10 +39,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.server.Execution;

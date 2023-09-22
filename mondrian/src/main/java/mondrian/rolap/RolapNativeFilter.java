@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;

@@ -21,9 +21,9 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.olap.api.Segment;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.olap.Category;
 import mondrian.olap.MondrianProperties;

@@ -13,17 +13,17 @@ package mondrian.calc.impl;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.MemberCalcToTupleCalc;
 import org.eclipse.daanse.olap.calc.base.type.tuple.UnknownToTupleCalc;
 
-import mondrian.calc.TupleListCalc;
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;

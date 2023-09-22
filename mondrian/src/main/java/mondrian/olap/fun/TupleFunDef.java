@@ -15,6 +15,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc
 
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunctionDefinition;

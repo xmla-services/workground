@@ -25,6 +25,7 @@ import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Segment;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -44,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.AbstractLiteralImpl;

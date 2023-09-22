@@ -11,9 +11,9 @@ package mondrian.rolap.sql;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 
-import mondrian.olap.Evaluator;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapMember;

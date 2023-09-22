@@ -16,9 +16,11 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,9 +29,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianException;
 import mondrian.olap.SchemaReader;

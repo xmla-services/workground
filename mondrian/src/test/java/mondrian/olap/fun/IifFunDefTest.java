@@ -16,11 +16,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.calc.ResultStyle;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;

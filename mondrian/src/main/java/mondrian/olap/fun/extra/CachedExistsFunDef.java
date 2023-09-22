@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -20,12 +21,11 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;

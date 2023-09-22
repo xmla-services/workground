@@ -21,6 +21,7 @@ import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Segment;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;

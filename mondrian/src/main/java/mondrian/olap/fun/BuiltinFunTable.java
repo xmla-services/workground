@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -35,6 +36,8 @@ import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
@@ -42,15 +45,12 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.olap.Aggregator;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;

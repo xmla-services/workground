@@ -25,19 +25,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.ParameterSlot;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunctionDefinition;
@@ -70,7 +70,7 @@ import mondrian.util.Format;
  *
  * <p>
  * The {@code savepoint} method is recommended for most purposes, because the initial checkpoint is extremely cheap.
- * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.element.Member)}) creates, at
+ * Each call that modifies state (such as {@link org.eclipse.daanse.olap.api.Evaluator#setContext(org.eclipse.daanse.olap.api.element.Member)}) creates, at
  * a modest cost, an entry on an internal command stack.
  *
  * <p>

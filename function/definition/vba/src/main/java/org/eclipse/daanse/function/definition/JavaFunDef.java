@@ -9,20 +9,20 @@
 
 package org.eclipse.daanse.function.definition;
 
-import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.function.FunUtil;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;

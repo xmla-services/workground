@@ -18,11 +18,11 @@ import java.util.stream.Stream;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 
-import mondrian.calc.ResultStyle;
 import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingNestedCalc<E, C extends Calc<?>> extends AbstractProfilingCalc<E>

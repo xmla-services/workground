@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.calc.ResultStyle;
 import mondrian.olap.MemoryLimitExceededException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;

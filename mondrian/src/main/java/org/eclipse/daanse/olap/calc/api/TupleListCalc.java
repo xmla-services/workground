@@ -14,7 +14,7 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.calc.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 
 public interface TupleListCalc extends Calc<TupleList> {

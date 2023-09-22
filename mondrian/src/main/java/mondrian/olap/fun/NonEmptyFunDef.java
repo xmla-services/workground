@@ -11,20 +11,20 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Validator;

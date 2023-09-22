@@ -9,14 +9,14 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
 
@@ -24,8 +24,8 @@ import mondrian.olap.type.Type;
  * Abstract implementation of the {@link mondrian.calc.ListCalc} interface.
  *
  * <p>The derived class must
- * implement the {@link #evaluateList(mondrian.olap.Evaluator)} method, and the {@link
- * #evaluate(mondrian.olap.Evaluator)} method will call it.
+ * implement the {@link #evaluateList(org.eclipse.daanse.olap.api.Evaluator)} method, and the {@link
+ * #evaluate(org.eclipse.daanse.olap.api.Evaluator)} method will call it.
  *
  * @author jhyde
  * @since Sep 27, 2005

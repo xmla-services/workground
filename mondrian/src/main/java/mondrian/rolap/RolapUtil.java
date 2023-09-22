@@ -41,6 +41,7 @@ import mondrian.olap.api.Segment;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
@@ -54,7 +55,6 @@ import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MatchType;
 import mondrian.olap.MondrianException;

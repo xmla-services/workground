@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
@@ -27,7 +28,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunCall;

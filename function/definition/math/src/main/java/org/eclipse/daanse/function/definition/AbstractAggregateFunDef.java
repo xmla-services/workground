@@ -8,14 +8,9 @@
 */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Syntax;
@@ -27,9 +22,14 @@ import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.function.FunUtil;
 import org.eclipse.daanse.function.Validator;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

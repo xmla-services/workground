@@ -14,15 +14,15 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
-import mondrian.olap.Evaluator;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.Exp;
 import mondrian.olap.Util;
 

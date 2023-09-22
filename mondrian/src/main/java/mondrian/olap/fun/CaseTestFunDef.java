@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedBooleanCa
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;

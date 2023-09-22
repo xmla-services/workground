@@ -14,9 +14,10 @@ package mondrian.olap;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.calc.TupleList;
 import mondrian.spi.SegmentBody;
 
 /**

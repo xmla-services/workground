@@ -12,7 +12,7 @@ package mondrian.udf;
 import java.util.Calendar;
 import java.util.Date;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
 
 public class MockCurrentDateMember extends CurrentDateMemberExactUdf {
     public MockCurrentDateMember() {

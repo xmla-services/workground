@@ -33,12 +33,12 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.ResultStyle;
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;

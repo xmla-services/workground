@@ -12,20 +12,20 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Property;

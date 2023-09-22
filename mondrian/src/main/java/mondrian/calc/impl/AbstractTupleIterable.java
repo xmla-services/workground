@@ -13,13 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
 
 /**
- * Abstract implementation of {@link mondrian.calc.TupleIterable}.
+ * Abstract implementation of {@link org.eclipse.daanse.olap.calc.api.todo.TupleIterable}.
  *
  * <p>Derived classes need to implement only {@link #tupleCursor()},
  * and this implementation will implement {@link #tupleIterator()} and

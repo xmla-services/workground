@@ -27,11 +27,10 @@
 
 package org.eclipse.daanse.olap.calc.api;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.calc.ResultStyle;
-import mondrian.olap.Evaluator;
 import mondrian.olap.type.Type;
 
 /**

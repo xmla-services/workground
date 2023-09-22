@@ -12,15 +12,15 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.FunctionDefinition;

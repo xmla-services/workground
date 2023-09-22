@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -25,13 +26,12 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
-import mondrian.calc.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Evaluator;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.SchemaReader;
 

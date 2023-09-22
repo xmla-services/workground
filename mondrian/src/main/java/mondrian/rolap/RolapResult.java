@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -41,27 +42,26 @@ import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
+import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIterator;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.calc.ParameterSlot;
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleCursor;
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleIterator;
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleList;
 import mondrian.calc.impl.CacheCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
+import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.MemberBase;
@@ -286,7 +286,7 @@ public class RolapResult extends ResultBase {
                         null,
                         null);
         SetType setType = new SetType(memberType1);
-        mondrian.calc.TupleListCalc tupleListCalc =
+        org.eclipse.daanse.olap.calc.api.todo.TupleListCalc tupleListCalc =
                 new mondrian.calc.impl.AbstractListCalc(
                         setType, new Calc[0])
                 {

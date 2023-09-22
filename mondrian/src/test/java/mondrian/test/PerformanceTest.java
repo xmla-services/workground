@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -47,7 +48,6 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Syntax;

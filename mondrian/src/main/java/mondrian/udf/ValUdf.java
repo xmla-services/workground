@@ -9,8 +9,9 @@
 
 package mondrian.udf;
 
+import org.eclipse.daanse.olap.api.Evaluator;
+
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;

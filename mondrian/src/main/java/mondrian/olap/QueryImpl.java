@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -49,6 +50,7 @@ import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
@@ -57,7 +59,6 @@ import org.eclipse.daanse.olap.calc.base.profile.SimpleCalculationProfileWriter;
 import org.olap4j.impl.IdentifierParser;
 import org.olap4j.mdx.IdentifierSegment;
 
-import mondrian.calc.ResultStyle;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitor;

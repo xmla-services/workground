@@ -14,11 +14,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
-
-import mondrian.calc.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 /**
- * Abstract implementation of a {@link mondrian.calc.TupleList} that stores
+ * Abstract implementation of a {@link org.eclipse.daanse.olap.calc.api.todo.TupleList} that stores
  * tuples in end-to-end format.
  *
  * <p>For example, if the arity is 3, the tuples {(A1, B1, C1), (A1, B2, C2)}

@@ -13,10 +13,10 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 
 import mondrian.olap.api.NameSegment;
-import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.sql.CrossJoinArg;

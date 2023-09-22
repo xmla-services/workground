@@ -30,6 +30,7 @@ import java.util.List;
 
 import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
@@ -50,7 +51,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.enums.DatabaseProduct;
-import mondrian.olap.Evaluator;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;

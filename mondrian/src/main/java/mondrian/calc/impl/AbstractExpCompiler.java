@@ -18,6 +18,7 @@ import java.util.Objects;
 
 import mondrian.olap.SymbolLiteralImpl;
 
+import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.query.component.Literal;
@@ -32,9 +33,14 @@ import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
+import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
+import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
+import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
+import org.eclipse.daanse.olap.calc.api.todo.TupleList;
+import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantBooleanCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
@@ -55,14 +61,8 @@ import org.eclipse.daanse.olap.calc.base.type.member.UnknownToMemberCalc;
 import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
-import mondrian.calc.TupleIteratorCalc;
-import mondrian.calc.TupleListCalc;
-import mondrian.calc.ParameterSlot;
-import mondrian.calc.ResultStyle;
-import mondrian.calc.TupleList;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;

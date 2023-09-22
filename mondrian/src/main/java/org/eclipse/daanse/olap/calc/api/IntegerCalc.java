@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.olap.calc.api;
 
-import mondrian.olap.Evaluator;
+import org.eclipse.daanse.olap.api.Evaluator;
 
 /**
  * @author: Stefan Bischof 
