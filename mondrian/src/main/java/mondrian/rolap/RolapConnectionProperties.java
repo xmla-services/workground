@@ -90,13 +90,6 @@ public enum RolapConnectionProperties {
   CatalogName,
 
   /**
-   * The "DataSource" property is the name of a data source class. It must
-   * implement the {@link javax.sql.DataSource} interface.
-   * You must specify either {@code DataSource} or {@link #Jdbc}.
-   */
-  DataSource,
-
-  /**
    * The "PoolNeeded" property tells Mondrian whether to add a layer of
    * connection pooling.
    *

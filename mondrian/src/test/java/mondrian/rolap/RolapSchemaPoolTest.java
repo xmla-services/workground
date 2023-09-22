@@ -48,7 +48,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyA",
                 "joeTheUser",
-                "aDataSource",
                 context.getContext(),
                 connectInfo);
         RolapSchema schemaA =
@@ -56,7 +55,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyA",
                 "joeTheUser",
-                "aDataSource",
                 context.getContext(),
                 connectInfo);
         //same arguments, same object
@@ -83,7 +81,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyA",
                 "joeTheUser",
-                "aDataSource",
                 context.getContext(),
                 connectInfo);
 
@@ -98,7 +95,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "aDifferentConnectionKey",
                 "mrDoeTheOtherUser",
-                "someDataSource",
                 context.getContext(),
                 connectInfoA);
         //must fetch the same object
@@ -112,7 +108,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyA",
                 "joeTheUser",
-                "aDataSource",
                 context.getContext(),
                 connectInfo);
         //must create a new object
@@ -144,7 +139,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyA",
                 "joeTheUser",
-                "aDataSource",
                 context.getContext(),
                 connectInfo);
 
@@ -157,7 +151,6 @@ class RolapSchemaPoolTest {
                 catalogUrl,
                 "connectionKeyB",
                 "jed",
-                "dsName",
                 context.getContext(),
                 connectInfo);
 
@@ -171,7 +164,7 @@ class RolapSchemaPoolTest {
             catalogContent);
         RolapSchema schemaCont = pool.get(
             catalogUrl,
-            "connectionKeyC", "--", "--", connectInfo);
+            "connectionKeyC", "--", connectInfo);
 
         assertTrue(schema == schemaCont);
 

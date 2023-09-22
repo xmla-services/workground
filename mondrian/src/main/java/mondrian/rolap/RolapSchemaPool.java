@@ -73,14 +73,12 @@ public class RolapSchemaPool {
         final String catalogUrl,
         final String connectionKey,
         final String jdbcUser,
-        final String dataSourceStr,
         final Util.PropertyList connectInfo)
     {
         return get(
             catalogUrl,
             connectionKey,
             jdbcUser,
-            dataSourceStr,
             null,
             connectInfo);
     }
@@ -94,7 +92,6 @@ public class RolapSchemaPool {
             catalogUrl,
             null,
             null,
-            null,
             context,
             connectInfo);
     }
@@ -103,7 +100,6 @@ public class RolapSchemaPool {
         final String catalogUrl,
         final String connectionKey,
         final String jdbcUser,
-        final String dataSourceStr,
         final Context context,
         final Util.PropertyList connectInfo)
     {
@@ -125,7 +121,6 @@ public class RolapSchemaPool {
                 new StringBuilder("get: catalog=").append(catalogUrl)
                     .append(", connectionKey=").append(connectionKey)
                     .append(", jdbcUser=").append(jdbcUser)
-                    .append(", dataSourceStr=").append(dataSourceStr)
                     .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
                     .append(", jdbcConnectionUuid=").append(connectionUuidStr)
                     .append(", useSchemaPool=").append(useSchemaPool)
@@ -140,7 +135,6 @@ public class RolapSchemaPool {
                 catalogUrl,
                 connectionKey,
                 jdbcUser,
-                dataSourceStr,
                 sessionId);
 
         final String catalogStr = getSchemaContent(connectInfo, catalogUrl);
