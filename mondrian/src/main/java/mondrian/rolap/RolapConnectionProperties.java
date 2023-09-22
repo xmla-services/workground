@@ -33,13 +33,6 @@ public enum RolapConnectionProperties {
   Jdbc,
 
   /**
-   * The "JdbcDrivers" property is a comma-separated list of JDBC driver
-   * classes, for example,
-   * <code>"sun.jdbc.odbc.JdbcOdbcDriver,oracle.jdbc.OracleDriver"</code>.
-   */
-  JdbcDrivers,
-
-  /**
    * The "JdbcUser" property is the name of the user to log on to the JDBC
    * database. (You don't need to specify this parameter if it is already
    * specified in the JDBC URL.)
