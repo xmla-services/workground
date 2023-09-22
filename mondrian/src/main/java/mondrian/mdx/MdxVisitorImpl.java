@@ -11,15 +11,19 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
 
 import mondrian.olap.Expression;
-import mondrian.olap.QueryImpl;
-import mondrian.olap.QueryAxisImpl;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.
@@ -49,12 +53,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(QueryImpl query) {
+	public Object visit(Query query) {
         return null;
     }
 
     @Override
-	public Object visit(QueryAxisImpl queryAxis) {
+	public Object visit(QueryAxis queryAxis) {
         return null;
     }
 
@@ -64,12 +68,12 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(UnresolvedFunCallImpl call) {
+	public Object visit(UnresolvedFunCall call) {
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCallImpl call) {
+	public Object visit(ResolvedFunCall call) {
         return null;
     }
 
@@ -90,7 +94,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
+	public Object visit(HierarchyExpression hierarchyExpr) {
         // do nothing
         return null;
     }
@@ -102,7 +106,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(MemberExpressionImpl memberExpr) {
+	public Object visit(MemberExpression memberExpr) {
         // do nothing
         return null;
     }
@@ -114,7 +118,7 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(Literal literal) {
+	public Object visit(Literal<?> literal) {
         // do nothing
         return null;
     }

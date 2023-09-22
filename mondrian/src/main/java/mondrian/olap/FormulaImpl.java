@@ -18,9 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
-
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -36,7 +33,8 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
+import mondrian.olap.api.NameSegment;
+import mondrian.olap.api.Segment;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
@@ -613,7 +611,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         }
 
         @Override
-		public Object visit(MemberExpressionImpl memberExpr) {
+		public Object visit(MemberExpression memberExpr) {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()

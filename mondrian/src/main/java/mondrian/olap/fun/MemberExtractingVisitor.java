@@ -17,14 +17,14 @@ import java.util.Set;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.type.Type;
@@ -96,7 +96,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExpressionImpl memberExpr) {
+	public Object visit(MemberExpression memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);
@@ -122,7 +122,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(HierarchyExpressionImpl hierarchyExpr) {
+	public Object visit(HierarchyExpression hierarchyExpr) {
         addToDimMemberSet(hierarchyExpr.getHierarchy());
         return null;
     }
@@ -134,7 +134,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(ResolvedFunCallImpl funCall) {
+	public Object visit(ResolvedFunCall funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
         } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {

@@ -33,6 +33,7 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
@@ -57,13 +58,11 @@ import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.Expression;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
@@ -823,14 +822,14 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( HierarchyExpressionImpl hierarchyExpr ) {
+	public Object visit( HierarchyExpression hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( MemberExpressionImpl memberExpr ) {
+	public Object visit( MemberExpression memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;

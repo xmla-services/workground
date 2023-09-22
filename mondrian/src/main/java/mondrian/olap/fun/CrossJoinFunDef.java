@@ -24,6 +24,7 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -46,8 +47,6 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
@@ -680,7 +679,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     }
 
     @Override
-	public Object visit( MemberExpressionImpl memberExpr ) {
+	public Object visit( MemberExpression memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;
