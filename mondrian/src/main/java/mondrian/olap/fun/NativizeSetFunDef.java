@@ -518,7 +518,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCallImpl call) {
+        public Object visit(ResolvedFunCall call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
                 if (call.getArg(0) instanceof LevelExpressionImpl) {
                     Level level = ((LevelExpression) call.getArg(0)).getLevel();
@@ -538,7 +538,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExpressionImpl member) {
+        public Object visit(MemberExpression member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
@@ -561,7 +561,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCallImpl call) {
+        public Object visit(ResolvedFunCall call) {
             if (call.getFunDef() instanceof NativizeSetFunDef) {
                 addFormulasToQuery();
             }
@@ -638,7 +638,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCallImpl call) {
+        public Object visit(ResolvedFunCall call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result = null;
             if (call.getFunDef() instanceof LevelMembersFunDef) {
@@ -652,7 +652,7 @@ public class NativizeSetFunDef extends FunDefBase {
             return result;
         }
 
-        private Object replaceLevelMembersReferences(ResolvedFunCallImpl call) {
+        private Object replaceLevelMembersReferences(ResolvedFunCall call) {
             NativizeSetFunDef.LOGGER.debug("replaceLevelMembersReferences " + call);
             Level level = ((LevelExpression) call.getArg(0)).getLevel();
             Id setId = NativizeSetFunDef.createSetId(level);
@@ -661,7 +661,7 @@ public class NativizeSetFunDef extends FunDefBase {
             return query.createValidator().validate(exp, false);
         }
 
-        private Object visitCallArguments(ResolvedFunCallImpl call) {
+        private Object visitCallArguments(ResolvedFunCall call) {
             Expression[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
@@ -680,7 +680,7 @@ public class NativizeSetFunDef extends FunDefBase {
             return null;
         }
 
-        private Object flattenSetFunDef(ResolvedFunCallImpl call) {
+        private Object flattenSetFunDef(ResolvedFunCall call) {
             List<Expression> newArgs = new ArrayList<>();
             flattenSetMembers(newArgs, call.getArgs());
             addSentinelMembers(newArgs);
@@ -740,7 +740,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCallImpl call) {
+        public Object visit(ResolvedFunCall call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result;
             result = visitCallArguments(call);
@@ -770,7 +770,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
 
-        private Object visitCallArguments(ResolvedFunCallImpl call) {
+        private Object visitCallArguments(ResolvedFunCall call) {
             Expression[] exps = call.getArgs();
             NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 

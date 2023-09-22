@@ -48,6 +48,7 @@ public class HierarchyExpressionImpl extends AbstractExpression implements Expre
      *
      * @post return != null
      */
+    @Override
     public Hierarchy getHierarchy() {
         return hierarchy;
     }

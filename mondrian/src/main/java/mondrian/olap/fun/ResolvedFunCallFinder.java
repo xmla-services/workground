@@ -12,11 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Expression;
 
 /**
@@ -37,7 +36,7 @@ public class ResolvedFunCallFinder
     }
 
     @Override
-	public Object visit(ResolvedFunCallImpl funCall)
+	public Object visit(ResolvedFunCall funCall)
     {
         if (funCall == call) {
             found = true;
@@ -46,7 +45,7 @@ public class ResolvedFunCallFinder
     }
 
     @Override
-	public Object visit(MemberExpressionImpl memberExpr) {
+	public Object visit(MemberExpression memberExpr) {
         Member member = memberExpr.getMember();
         if (member.isCalculated()) {
             if (activeMembers.add(member)) {

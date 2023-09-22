@@ -46,7 +46,9 @@ import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
+import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -64,7 +66,6 @@ import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Segment;
@@ -2275,7 +2276,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Object visit(UnresolvedFunCallImpl call) {
+		public Object visit(UnresolvedFunCall call) {
             if (call.getFunName().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
@@ -2306,19 +2307,19 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private class AliasedExpressionFinder extends MdxVisitorImpl {
         @Override
-        public Object visit(QueryAxisImpl queryAxis) {
+        public Object visit(QueryAxis queryAxis) {
             registerAlias(queryAxis, queryAxis.getSet());
             return super.visit(queryAxis);
         }
 
         @Override
-		public Object visit(UnresolvedFunCallImpl call) {
+		public Object visit(UnresolvedFunCall call) {
             registerAliasArgs(call);
             return super.visit(call);
         }
 
         @Override
-		public Object visit(ResolvedFunCallImpl call) {
+		public Object visit(ResolvedFunCall call) {
             registerAliasArgs(call);
             return super.visit(call);
         }
@@ -2454,7 +2455,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
             return new MemberExpressionImpl(subcubeMember);
         }
-        if(exp instanceof ResolvedFunCallImpl resolvedFunCall) {
+        if(exp instanceof ResolvedFunCall resolvedFunCall) {
             for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {
                 resolvedFunCall.getArgs()[i] = replaceSubcubeMember(resolvedFunCall.getArgs()[i]);
             }

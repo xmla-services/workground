@@ -20,9 +20,9 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpressionImpl;
 import mondrian.olap.Expression;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
@@ -72,7 +72,7 @@ public class RolapNativeFilter extends RolapNativeSet {
       final AtomicBoolean mustJoin = new AtomicBoolean( false );
       filterExpr.accept( new MdxVisitorImpl() {
         @Override
-		public Object visit( MemberExpressionImpl memberExpr ) {
+		public Object visit( MemberExpression memberExpr ) {
           if ( memberExpr.getMember().isMeasure() ) {
             mustJoin.set( true );
             return null;
