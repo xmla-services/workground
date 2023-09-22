@@ -9,7 +9,7 @@
 */
 package mondrian.rolap.format;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
 
 import mondrian.olap.Util;
@@ -73,7 +73,7 @@ public class FormatterCreateContext {
          * Data from Mondrian xml schema file to create
          * a custom implementation of a requested formatter.
          */
-        public Builder formatterDef(ElementFormatter formatterDef) {
+        public Builder formatterDef(MappingElementFormatter formatterDef) {
             if (formatterDef != null) {
                 checkIfFormatterSpecifiedCorrectly(
                     formatterDef.className(),

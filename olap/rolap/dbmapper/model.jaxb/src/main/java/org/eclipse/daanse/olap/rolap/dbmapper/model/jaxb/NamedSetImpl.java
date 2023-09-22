@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -33,7 +33,7 @@ public class NamedSetImpl implements NamedSet {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
@@ -50,14 +50,14 @@ public class NamedSetImpl implements NamedSet {
     /**
      * Gets the value of the annotations property.
      *
-     * @return possible object is {@link Annotation }
+     * @return possible object is {@link MappingAnnotation }
      */
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
@@ -99,7 +99,7 @@ public class NamedSetImpl implements NamedSet {
     }
 
     @Override
-    public Formula formulaElement() {
+    public MappingFormula formulaElement() {
         return formulaElement;
     }
 

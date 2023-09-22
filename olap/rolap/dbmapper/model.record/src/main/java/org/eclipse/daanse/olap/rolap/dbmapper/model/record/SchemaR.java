@@ -16,8 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
@@ -30,10 +30,10 @@ public record SchemaR(String name,
                       String description,
                       String measuresCaption,
                       String defaultRole,
-                      List<Annotation> annotations,
+                      List<MappingAnnotation> annotations,
                       List<Parameter> parameters,
                       List<PrivateDimension> dimensions,
-                      List<Cube> cubes,
+                      List<MappingCube> cubes,
                       List<VirtualCube> virtualCubes,
                       List<NamedSet> namedSets,
                       List<Role> roles,

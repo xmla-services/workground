@@ -13,15 +13,15 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
 
 public class CalculatedMemberUtil {
 
     private CalculatedMemberUtil() {
     }
 
-    public static String getFormula(CalculatedMember calculatedMember) {
+    public static String getFormula(MappingCalculatedMember calculatedMember) {
         if (calculatedMember.formulaElement() != null) {
             return calculatedMember.formulaElement().cdata();
         } else {
@@ -34,8 +34,8 @@ public class CalculatedMemberUtil {
      * "FORMAT_STRING" first, then looking for an attribute called
      * "formatString".
      */
-    public static String getFormatString(CalculatedMember calculatedMember) {
-        for (CalculatedMemberProperty prop : calculatedMember.calculatedMemberProperties()) {
+    public static String getFormatString(MappingCalculatedMember calculatedMember) {
+        for (MappingCalculatedMemberProperty prop : calculatedMember.calculatedMemberProperties()) {
             if (prop.name().equals(
                 mondrian.olap.Property.FORMAT_STRING.name))
             {

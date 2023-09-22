@@ -16,10 +16,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.adapter.MeasureDataTypeAdaptor;
@@ -38,11 +38,11 @@ public class MeasureImpl implements Measure {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "MeasureExpression", type = ExpressionViewImpl.class)
-    protected ExpressionView measureExpression;
+    protected MappingExpressionView measureExpression;
     @XmlElement(name = "CalculatedMemberProperty", type = CalculatedMemberPropertyImpl.class)
-    protected List<CalculatedMemberProperty> calculatedMemberProperties;
+    protected List<MappingCalculatedMemberProperty> calculatedMemberProperties;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "column")
@@ -70,25 +70,25 @@ public class MeasureImpl implements Measure {
     protected String backColor;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public ExpressionView measureExpression() {
+    public MappingExpressionView measureExpression() {
         return measureExpression;
     }
 
-    public void setMeasureExpression(ExpressionView value) {
+    public void setMeasureExpression(MappingExpressionView value) {
         this.measureExpression = value;
     }
 
     @Override
-    public List<CalculatedMemberProperty> calculatedMemberProperties() {
+    public List<MappingCalculatedMemberProperty> calculatedMemberProperties() {
         if (calculatedMemberProperties == null) {
             calculatedMemberProperties = new ArrayList<>();
         }
@@ -186,7 +186,7 @@ public class MeasureImpl implements Measure {
     }
 
     @Override
-    public ElementFormatter cellFormatter() {
+    public MappingElementFormatter cellFormatter() {
         return cellFormatter;
     }
 
@@ -199,7 +199,7 @@ public class MeasureImpl implements Measure {
         this.displayFolder = value;
     }
 
-    public void setCalculatedMemberProperties(List<CalculatedMemberProperty> calculatedMemberProperties) {
+    public void setCalculatedMemberProperties(List<MappingCalculatedMemberProperty> calculatedMemberProperties) {
         this.calculatedMemberProperties = calculatedMemberProperties;
     }
 

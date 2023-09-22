@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface VirtualCubeMeasure {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
     String cubeName();
 

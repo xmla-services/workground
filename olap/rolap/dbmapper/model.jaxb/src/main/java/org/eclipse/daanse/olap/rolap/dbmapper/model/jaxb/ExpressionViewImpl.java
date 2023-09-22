@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +30,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ExpressionView", propOrder = { "sqls" })
-public class ExpressionViewImpl implements ExpressionView {
+public class ExpressionViewImpl implements MappingExpressionView {
 
     @XmlElement(name = "SQL", required = true, type = SQLImpl.class)
     protected List<SQL> sqls;
@@ -57,17 +57,17 @@ public class ExpressionViewImpl implements ExpressionView {
         return name;
     }
 
-    public int hashCode(Expression expression) {
+    public int hashCode(MappingExpression expression) {
             int h = 17;
-            for (int i = 0; i < ((ExpressionView) expression).sqls().size(); i++) {
-                h = 37 * h + ((ExpressionView) expression).sqls().get(i).dialect().hashCode();
+            for (int i = 0; i < ((MappingExpressionView) expression).sqls().size(); i++) {
+                h = 37 * h + ((MappingExpressionView) expression).sqls().get(i).dialect().hashCode();
             }
             return h;
     }
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof ExpressionView that)) {
+        if (!(obj instanceof MappingExpressionView that)) {
             return false;
         }
         if (sqls().size() != that.sqls().size()) {

@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggColumnName;
 
-public record AggColumnNameR(String column) implements AggColumnName {
+public record AggColumnNameR(String column) implements MappingAggColumnName {
 
 }

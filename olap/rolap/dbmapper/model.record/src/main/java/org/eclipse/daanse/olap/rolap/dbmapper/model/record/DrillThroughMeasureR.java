@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDrillThroughMeasure;
 
-public record DrillThroughMeasureR(String name) implements DrillThroughMeasure {
+public record DrillThroughMeasureR(String name) implements MappingDrillThroughMeasure {
 
 }

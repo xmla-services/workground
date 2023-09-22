@@ -15,9 +15,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 
-public class ColumnR implements Column {
+public class ColumnR implements MappingColumn {
 
     private String table;
     private String name;
@@ -51,7 +51,7 @@ public class ColumnR implements Column {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof Column that)) {
+        if (!(obj instanceof MappingColumn that)) {
             return false;
         }
         return name().equals(that.name()) &&

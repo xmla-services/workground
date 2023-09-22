@@ -15,13 +15,13 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
 
 public record VirtualCubeMeasureR(String name,
                                   String cubeName,
                                   boolean visible,
-                                  List<Annotation> annotations)
+                                  List<MappingAnnotation> annotations)
         implements VirtualCubeMeasure {
 
 }

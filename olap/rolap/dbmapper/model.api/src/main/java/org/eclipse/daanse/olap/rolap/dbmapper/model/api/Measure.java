@@ -19,11 +19,11 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnu
 
 public interface Measure {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
-    ExpressionView measureExpression();
+    MappingExpressionView measureExpression();
 
-    List<CalculatedMemberProperty> calculatedMemberProperties();
+    List<MappingCalculatedMemberProperty> calculatedMemberProperties();
 
     String name();
 
@@ -45,7 +45,7 @@ public interface Measure {
 
     String displayFolder();
 
-    ElementFormatter cellFormatter();
+    MappingElementFormatter cellFormatter();
 
     String backColor();
 }

@@ -27,10 +27,10 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.LevelType;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
@@ -66,17 +66,17 @@ public class RolapLevel extends LevelBase {
     /**
      * The column or expression which yields the level's key.
      */
-    protected Expression keyExp;
+    protected MappingExpression keyExp;
 
     /**
      * The column or expression which yields the level's ordinal.
      */
-    protected Expression ordinalExp;
+    protected MappingExpression ordinalExp;
 
     /**
      * The column or expression which yields the level members' caption.
      */
-    protected Expression captionExp;
+    protected MappingExpression captionExp;
 
     private final Datatype datatype;
 
@@ -100,16 +100,16 @@ public class RolapLevel extends LevelBase {
      * Ths expression which gives the name of members of this level. If null,
      * members are named using the key expression.
      */
-    protected Expression nameExp;
+    protected MappingExpression nameExp;
     /** The expression which joins to the parent member in a parent-child
      * hierarchy, or null if this is a regular hierarchy. */
-    protected Expression parentExp;
+    protected MappingExpression parentExp;
     /** Value which indicates a null parent in a parent-child hierarchy. */
     private final String nullParentValue;
 
     /** Condition under which members are hidden. */
     private final HideMemberCondition hideMemberCondition;
-    protected final Closure xmlClosure;
+    protected final MappingClosure xmlClosure;
     private final Map<String, Object> metadata;
     private final BestFitColumnType internalType; // may be null
 
@@ -128,13 +128,13 @@ public class RolapLevel extends LevelBase {
         boolean visible,
         String description,
         int depth,
-        Expression keyExp,
-        Expression nameExp,
-        Expression captionExp,
-        Expression ordinalExp,
-        Expression parentExp,
+        MappingExpression keyExp,
+        MappingExpression nameExp,
+        MappingExpression captionExp,
+        MappingExpression ordinalExp,
+        MappingExpression parentExp,
         String nullParentValue,
-        Closure xmlClosure,
+        MappingClosure xmlClosure,
         RolapProperty[] properties,
         int flags,
         Datatype datatype,
@@ -153,8 +153,8 @@ public class RolapLevel extends LevelBase {
             "hideMemberCondition != null");
         Util.assertPrecondition(levelType != null, "levelType != null");
 
-        if (keyExp instanceof Column) {
-            checkColumn((Column) keyExp);
+        if (keyExp instanceof MappingColumn) {
+            checkColumn((MappingColumn) keyExp);
         }
         this.metadata = metadata;
         this.approxRowCount = loadApproxRowCount(approxRowCount);
@@ -162,27 +162,27 @@ public class RolapLevel extends LevelBase {
         this.datatype = datatype;
         this.keyExp = keyExp;
         if (nameExp != null) {
-            if (nameExp instanceof Column) {
-                checkColumn((Column) nameExp);
+            if (nameExp instanceof MappingColumn) {
+                checkColumn((MappingColumn) nameExp);
             }
         }
         this.nameExp = nameExp;
         if (captionExp != null) {
-            if (captionExp instanceof Column) {
-                checkColumn((Column) captionExp);
+            if (captionExp instanceof MappingColumn) {
+                checkColumn((MappingColumn) captionExp);
             }
         }
         this.captionExp = captionExp;
         if (ordinalExp != null) {
-            if (ordinalExp instanceof Column) {
-                checkColumn((Column) ordinalExp);
+            if (ordinalExp instanceof MappingColumn) {
+                checkColumn((MappingColumn) ordinalExp);
             }
             this.ordinalExp = ordinalExp;
         } else {
             this.ordinalExp = this.keyExp;
         }
-        if (parentExp instanceof Column) {
-            checkColumn((Column) parentExp);
+        if (parentExp instanceof MappingColumn) {
+            checkColumn((MappingColumn) parentExp);
         }
         this.parentExp = parentExp;
         if (parentExp != null) {
@@ -200,8 +200,8 @@ public class RolapLevel extends LevelBase {
             "parentExp != null || nullParentValue == null");
         this.xmlClosure = xmlClosure;
         for (RolapProperty property : properties) {
-            if (property.getExp() instanceof Column) {
-                checkColumn((Column) property.getExp());
+            if (property.getExp() instanceof MappingColumn) {
+                checkColumn((MappingColumn) property.getExp());
             }
         }
         this.properties = properties;
@@ -276,22 +276,22 @@ public class RolapLevel extends LevelBase {
     String getTableName() {
         String tableName = null;
 
-        Expression expr = getKeyExp();
-        if (expr instanceof Column mc) {
+        MappingExpression expr = getKeyExp();
+        if (expr instanceof MappingColumn mc) {
             tableName = ExpressionUtil.getTableAlias(mc);
         }
         return tableName;
     }
 
-    public Expression getKeyExp() {
+    public MappingExpression getKeyExp() {
         return keyExp;
     }
 
-    public Expression getOrdinalExp() {
+    public MappingExpression getOrdinalExp() {
         return ordinalExp;
     }
 
-    public Expression getCaptionExp() {
+    public MappingExpression getCaptionExp() {
         return captionExp;
     }
 
@@ -330,13 +330,13 @@ public class RolapLevel extends LevelBase {
         return parentExp != null;
     }
 
-    public Expression getParentExp() {
+    public MappingExpression getParentExp() {
         return parentExp;
     }
 
     // RME: this has to be public for two of the DrillThroughTest test.
     public
-    Expression getNameExp() {
+    MappingExpression getNameExp() {
         return nameExp;
     }
 
@@ -352,7 +352,7 @@ public class RolapLevel extends LevelBase {
     RolapLevel(
         RolapHierarchy hierarchy,
         int depth,
-        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel)
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel xmlLevel)
     {
 
         this(
@@ -396,10 +396,10 @@ public class RolapLevel extends LevelBase {
     }
 
     // helper for constructor
-    private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel)
+    private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel xmlLevel)
     {
         List<RolapProperty> list = new ArrayList<>();
-        final Expression nameExp = LevelUtil.getNameExp(xmlLevel);
+        final MappingExpression nameExp = LevelUtil.getNameExp(xmlLevel);
 
         if (nameExp != null) {
             list.add(
@@ -459,7 +459,7 @@ public class RolapLevel extends LevelBase {
         }
     }
 
-    private void checkColumn(Column nameColumn) {
+    private void checkColumn(MappingColumn nameColumn) {
         final RolapHierarchy rolapHierarchy = (RolapHierarchy) hierarchy;
         if (nameColumn.table() == null) {
             final Relation table = rolapHierarchy.getUniqueTable();
@@ -478,7 +478,7 @@ public class RolapLevel extends LevelBase {
         }
     }
 
-    void init(CubeDimension xmlDimension) {
+    void init(MappingCubeDimension xmlDimension) {
         if (xmlClosure != null) {
             final RolapDimension dimension = ((RolapHierarchy) hierarchy)
                 .createClosedPeerDimension(this, xmlClosure);
@@ -573,7 +573,7 @@ public class RolapLevel extends LevelBase {
                     keyValues.add(keyValue);
                 }
             }
-            final List<Expression> keyExps = getInheritedKeyExps();
+            final List<MappingExpression> keyExps = getInheritedKeyExps();
             if (keyExps.size() != keyValues.size()) {
                 throw Util.newError(
                     new StringBuilder("Wrong number of values in member key; ")
@@ -608,11 +608,11 @@ public class RolapLevel extends LevelBase {
         return null;
     }
 
-    private List<Expression> getInheritedKeyExps() {
-        final List<Expression> list =
+    private List<MappingExpression> getInheritedKeyExps() {
+        final List<MappingExpression> list =
             new ArrayList<>();
         for (RolapLevel x = this;; x = (RolapLevel) x.getParentLevel()) {
-            final Expression keyExp1 = x.getKeyExp();
+            final MappingExpression keyExp1 = x.getKeyExp();
             if (keyExp1 != null) {
                 list.add(keyExp1);
             }

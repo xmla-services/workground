@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 public record FormulaR(String cdata)
-        implements Formula {
+        implements MappingFormula {
 }

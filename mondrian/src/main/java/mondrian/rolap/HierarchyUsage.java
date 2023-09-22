@@ -21,9 +21,9 @@ import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
@@ -122,10 +122,10 @@ public class HierarchyUsage {
     private Relation joinTable;
 
     /**
-     * The expression (usually a {@link mondrian.olap.Column}) by
+     * The expression (usually a {@link mondrian.olap.MappingColumn}) by
      * which the hierarchy which is joined to the fact table.
      */
-    private Expression joinExp;
+    private MappingExpression joinExp;
 
     private final Kind kind;
 
@@ -139,7 +139,7 @@ public class HierarchyUsage {
     HierarchyUsage(
         RolapCube cube,
         RolapHierarchy hierarchy,
-        CubeDimension cubeDim)
+        MappingCubeDimension cubeDim)
     {
         assert cubeDim != null : "precondition: cubeDim != null";
 
@@ -151,7 +151,7 @@ public class HierarchyUsage {
         this.name = cubeDim.name();
         this.foreignKey = cubeDim.foreignKey();
 
-        if (cubeDim instanceof DimensionUsage du) {
+        if (cubeDim instanceof MappingDimensionUsage du) {
             this.kind = Kind.SHARED;
 
 
@@ -285,7 +285,7 @@ public class HierarchyUsage {
         return this.joinTable;
     }
 
-    public Expression getJoinExp() {
+    public MappingExpression getJoinExp() {
         return this.joinExp;
     }
 
@@ -351,7 +351,7 @@ public class HierarchyUsage {
     void init(
         RolapCube cube,
         RolapHierarchy hierarchy,
-        DimensionUsage cubeDim)
+        MappingDimensionUsage cubeDim)
     {
         // Three ways that a hierarchy can be joined to the fact table.
         if (cubeDim != null && cubeDim.level() != null) {

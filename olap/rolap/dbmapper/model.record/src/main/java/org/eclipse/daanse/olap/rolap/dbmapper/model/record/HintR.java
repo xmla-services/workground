@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 
 public record HintR(String content,
                     String type)
-        implements Hint {
+        implements MappingHint {
 
 }

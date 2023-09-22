@@ -19,8 +19,8 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 
@@ -132,14 +132,14 @@ public class RolapStatisticsCache {
 
     public long getColumnCardinality(
         Relation relation,
-        Expression expression,
+        MappingExpression expression,
         long approxCardinality)
     {
         if (approxCardinality >= 0) {
             return approxCardinality;
         }
         if (relation instanceof Table table
-            && expression instanceof Column column)
+            && expression instanceof MappingColumn column)
         {
             return getColumnCardinality(
                 null,

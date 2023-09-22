@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface Role {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
     List<SchemaGrant> schemaGrants();
 

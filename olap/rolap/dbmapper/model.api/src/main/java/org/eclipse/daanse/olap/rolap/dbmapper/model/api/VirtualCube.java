@@ -18,15 +18,15 @@ import java.util.List;
 
 public interface VirtualCube {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
-    List<CubeUsage> cubeUsages();
+    List<MappingCubeUsage> cubeUsages();
 
     List<VirtualCubeDimension> virtualCubeDimensions();
 
     List<VirtualCubeMeasure> virtualCubeMeasures();
 
-    List<CalculatedMember> calculatedMembers();
+    List<MappingCalculatedMember> calculatedMembers();
 
     List<NamedSet> namedSets();
 

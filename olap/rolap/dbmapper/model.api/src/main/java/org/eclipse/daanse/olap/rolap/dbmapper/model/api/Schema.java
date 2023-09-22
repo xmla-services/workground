@@ -24,13 +24,13 @@ import java.util.List;
  */
 public interface Schema {
 
-    List<Annotation> annotations();
+    List<MappingAnnotation> annotations();
 
     List<Parameter> parameters();
 
     List<PrivateDimension> dimensions();
 
-    List<Cube> cubes();
+    List<MappingCube> cubes();
 
     List<VirtualCube> virtualCubes();
 

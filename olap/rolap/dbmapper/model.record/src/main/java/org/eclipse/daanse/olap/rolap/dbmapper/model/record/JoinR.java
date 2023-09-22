@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
-public class JoinR implements Join {
+public class JoinR implements MappingJoin {
 
     private List<RelationOrJoin> relations;
     private String leftAlias;

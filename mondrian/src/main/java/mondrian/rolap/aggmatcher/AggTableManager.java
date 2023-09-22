@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHint;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
@@ -354,7 +354,7 @@ public class AggTableManager {
             RelationOrJoin relation =
                 star.getFactTable().getRelation();
             String schemaInner = null;
-            List<Hint> tableHints = null;
+            List<MappingHint> tableHints = null;
             if (relation instanceof Table table) {
                 schemaInner = table.schema();
                 tableHints = table.hints();

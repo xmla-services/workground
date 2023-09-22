@@ -15,10 +15,10 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Formula;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 public record CalculatedMemberR(String name,
                                 String formatString,
@@ -27,13 +27,13 @@ public record CalculatedMemberR(String name,
                                 String dimension,
                                 boolean visible,
                                 String displayFolder,
-                                List<Annotation> annotations,
+                                List<MappingAnnotation> annotations,
                                 String formula,
-                                List<CalculatedMemberProperty> calculatedMemberProperties,
+                                List<MappingCalculatedMemberProperty> calculatedMemberProperties,
                                 String hierarchy,
                                 String parent,
                                 CellFormatterR cellFormatter,
-                                Formula formulaElement)
-        implements CalculatedMember {
+                                MappingFormula formulaElement)
+        implements MappingCalculatedMember {
 
 }

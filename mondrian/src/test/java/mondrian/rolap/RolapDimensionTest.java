@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
@@ -35,7 +35,7 @@ class RolapDimensionTest {
   private RolapSchema schema;
   private RolapCube cube;
   private PrivateDimensionImpl xmlDimension;
-  private CubeDimension xmlCubeDimension;
+  private MappingCubeDimension xmlCubeDimension;
   private HierarchyImpl hierarchy;
 
   private PropertySaver5 propSaver;

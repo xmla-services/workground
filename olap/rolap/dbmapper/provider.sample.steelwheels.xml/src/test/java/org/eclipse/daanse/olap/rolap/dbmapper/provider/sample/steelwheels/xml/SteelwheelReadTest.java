@@ -23,18 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
@@ -469,7 +469,7 @@ class SteelwheelReadTest {
         assertThat(schema.cubes()).isNotNull();
         assertEquals(1, schema.cubes().size());
 
-        Cube cube = schema.cubes().get(0);
+        MappingCube cube = schema.cubes().get(0);
         assertThat(cube).isNotNull();
         assertEquals("SteelWheelsSales", cube.name());
         assertNull(cube.annotations());
@@ -524,7 +524,7 @@ class SteelwheelReadTest {
         assertEquals(schemaGrant.access() == null ? null : schemaGrant.access().getValue(), get(ACCESS, map) == null ? "none" : get(ACCESS, map));
     }
 
-    private void checkCubeGrant(List<? extends CubeGrant> cubeGrant, Object o) {
+    private void checkCubeGrant(List<? extends MappingCubeGrant> cubeGrant, Object o) {
         if (o == null) {
             assertNotNull(cubeGrant);
         } else {
@@ -536,14 +536,14 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkCubeGrantItem(CubeGrant cubeGrant, Map<String, Object> map) {
+    private void checkCubeGrantItem(MappingCubeGrant cubeGrant, Map<String, Object> map) {
         assertNotNull(cubeGrant.dimensionGrants());
         checkHierarchyGrant(cubeGrant.hierarchyGrants(), get(HIERARCHY_GRANT, map));
         assertEquals(cubeGrant.cube(), get(CUBE, map));
         assertEquals(cubeGrant.access(), get(ACCESS, map));
     }
 
-    private void checkHierarchyGrant(List<? extends HierarchyGrant> hierarchyGrant, Object o) {
+    private void checkHierarchyGrant(List<? extends MappingHierarchyGrant> hierarchyGrant, Object o) {
         if (o == null) {
             assertNotNull(hierarchyGrant);
         } else {
@@ -555,7 +555,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkhierarchyGrantItem(HierarchyGrant hierarchyGrant, Map<String, Object> map) {
+    private void checkhierarchyGrantItem(MappingHierarchyGrant hierarchyGrant, Map<String, Object> map) {
         checkMemberGrant(hierarchyGrant.memberGrants(), get(MEMBER_GRANT, map));
         assertEquals(hierarchyGrant.hierarchy(), get(HIERARCHY, map));
         assertEquals(hierarchyGrant.access() == null ?  null : hierarchyGrant.access().getValue(), get(ACCESS, map));
@@ -603,7 +603,7 @@ class SteelwheelReadTest {
         assertNull(virtualCube.description());
     }
 
-    private void checkVirtualCubeCalculatedMember(List<? extends CalculatedMember> calculatedMember, Object o) {
+    private void checkVirtualCubeCalculatedMember(List<? extends MappingCalculatedMember> calculatedMember, Object o) {
         if (o == null) {
             assertNull(calculatedMember);
         } else {
@@ -615,7 +615,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkVirtualCubeCalculatedMemberItem(CalculatedMember calculatedMember, Map<String, Object> map) {
+    private void checkVirtualCubeCalculatedMemberItem(MappingCalculatedMember calculatedMember, Map<String, Object> map) {
         assertNull(calculatedMember.annotations());
         //TODO formula
         assertNull(calculatedMember.formula());
@@ -692,7 +692,7 @@ class SteelwheelReadTest {
         assertEquals(sharedDimension.description(), get("description", map));
     }
 
-    private void checkCubes(List<? extends Cube> cubes, List<Map<String, Object>> foodmartCubeList) {
+    private void checkCubes(List<? extends MappingCube> cubes, List<Map<String, Object>> foodmartCubeList) {
         assertThat(cubes).isNotNull();
         assertEquals(cubes.size(), foodmartCubeList.size());
         for (int i = 0; i < cubes.size(); i++) {
@@ -700,7 +700,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkCubeItem(Cube cube, Map<String, Object> map) {
+    private void checkCubeItem(MappingCube cube, Map<String, Object> map) {
         assertThat(cube).isNotNull();
         assertEquals(map.get(NAME), cube.name());
         checkCubeAnnotations(cube.annotations(), get(ANNOTATIONS, map));
@@ -739,7 +739,7 @@ class SteelwheelReadTest {
             assertNull(dimension.description());
             checkHierarchy(dimension.hierarchies(), (List) map.get(HIERARCHY));
         }
-        if (object instanceof DimensionUsage dimension) {
+        if (object instanceof MappingDimensionUsage dimension) {
             assertNotNull(dimension.annotations());
             assertEquals(map.get(NAME), dimension.name());
             assertEquals(get(SOURCE, map), dimension.source());
@@ -751,7 +751,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkHierarchy(List<? extends Hierarchy> hierarchy, List<Map<String, Object>> listHierarchy) {
+    private void checkHierarchy(List<? extends MappingHierarchy> hierarchy, List<Map<String, Object>> listHierarchy) {
         assertThat(hierarchy).isNotNull();
         assertEquals(hierarchy.size(), listHierarchy.size());
         for (int i = 0; i < hierarchy.size(); i++) {
@@ -759,7 +759,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkHierarchyItem(Hierarchy hierarchy, Map<String, Object> map) {
+    private void checkHierarchyItem(MappingHierarchy hierarchy, Map<String, Object> map) {
         assertNull(hierarchy.annotations());
         assertNotNull(hierarchy.levels());
         checkLevel(hierarchy.levels(), (List) map.get(LEVEL));
@@ -778,7 +778,7 @@ class SteelwheelReadTest {
         assertNull(hierarchy.uniqueKeyLevelName());
     }
 
-    private void checkHierarchyJoin(Join join, Object o) {
+    private void checkHierarchyJoin(MappingJoin join, Object o) {
         if (o == null) {
             assertNull(join);
         } else {
@@ -812,7 +812,7 @@ class SteelwheelReadTest {
         assertNull(table.alias());
     }
 
-    private void checkLevel(List<? extends Level> level, List<Map<String, Object>> list) {
+    private void checkLevel(List<? extends MappingLevel> level, List<Map<String, Object>> list) {
         assertThat(level).isNotNull();
         assertEquals(level.size(), list.size());
         for (int i = 0; i < level.size(); i++) {
@@ -820,7 +820,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkLevelItem(Level level, Map<String, Object> map) {
+    private void checkLevelItem(MappingLevel level, Map<String, Object> map) {
         assertNull(level.annotations());
         checkExpression(level.keyExpression(), get(KEY_EXPRESSION, map));
         checkExpression(level.nameExpression(), get(NAME_EXPRESSION, map));
@@ -848,7 +848,7 @@ class SteelwheelReadTest {
         assertNull(level.captionColumn());
     }
 
-    private void checkClosure(Closure closure, Object o) {
+    private void checkClosure(MappingClosure closure, Object o) {
         if (o == null) {
             assertNull(closure);
         } else {
@@ -859,7 +859,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkMeasure(Cube cube, List<Map<String, Object>> list) {
+    private void checkMeasure(MappingCube cube, List<Map<String, Object>> list) {
         List<? extends Measure> measureList = cube.measures();
         assertThat(measureList).isNotNull();
         assertEquals(measureList.size(), list.size(), "Wrong measuries size for cube " + cube.name());
@@ -868,7 +868,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkMeasureItem(Cube cube, Measure measure, Map<String, Object> map, int ixdex) {
+    private void checkMeasureItem(MappingCube cube, Measure measure, Map<String, Object> map, int ixdex) {
         assertNull(measure.annotations());
         checkExpression(measure.measureExpression(), get(MEASURE_EXPRESSION, map));
         assertNotNull(measure.calculatedMemberProperties());
@@ -892,12 +892,12 @@ class SteelwheelReadTest {
         assertNull(measure.displayFolder());
     }
 
-    private void checkExpression(Expression expression, Object o) {
+    private void checkExpression(MappingExpression expression, Object o) {
         if (o == null) {
             assertNull(expression);
         } else {
             List<Map<String, Object>> list = (List<Map<String, Object>>) o;
-            if (expression instanceof ExpressionView expressionView) {
+            if (expression instanceof MappingExpressionView expressionView) {
                 assertEquals(expressionView.sqls().size(), list.size());
                 for (int i = 0; i < expressionView.sqls().size(); i++) {
                     checkExpressionItem(expressionView.sqls().get(i), list.get(i));
@@ -911,7 +911,7 @@ class SteelwheelReadTest {
         assertEquals(sql.dialect(), get(DIALECT, map));
     }
 
-    private void checkCubeAnnotations(List<? extends Annotation> annotations, Object o) {
+    private void checkCubeAnnotations(List<? extends MappingAnnotation> annotations, Object o) {
         if (o == null) {
             assertNull(annotations);
         } else {
@@ -923,7 +923,7 @@ class SteelwheelReadTest {
         }
     }
 
-    private void checkCubeAnnotationItem(Annotation annotation, Map<String, Object> map) {
+    private void checkCubeAnnotationItem(MappingAnnotation annotation, Map<String, Object> map) {
         assertEquals(annotation.content(), get(CONTENT, map));
         assertEquals(annotation.name(), get(NAME, map));
     }

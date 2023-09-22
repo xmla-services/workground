@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Closure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingClosure;
 
 public record ClosureR(TableR table,
                         String parentColumn,
                         String childColumn)
-        implements Closure {
+        implements MappingClosure {
 
 }

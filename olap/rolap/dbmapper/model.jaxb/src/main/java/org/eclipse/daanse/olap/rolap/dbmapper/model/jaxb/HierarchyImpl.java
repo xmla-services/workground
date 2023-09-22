@@ -17,9 +17,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberReaderParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 
@@ -34,13 +34,13 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Hierarchy", propOrder = { "relation", "levels", "annotations",
         "memberReaderParameters" })
-public class HierarchyImpl implements Hierarchy {
+public class HierarchyImpl implements MappingHierarchy {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlElement(name = "Level", required = true, type = LevelImpl.class)
-    protected List<Level> levels;
+    protected List<MappingLevel> levels;
     @XmlElement(name = "MemberReaderParameter", type = MemberReaderParameterImpl.class)
     protected List<MemberReaderParameter> memberReaderParameters;
     @XmlAttribute(name = "name")
@@ -79,16 +79,16 @@ public class HierarchyImpl implements Hierarchy {
     protected RelationOrJoin relation;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> value) {
+    public void setAnnotations(List<MappingAnnotation> value) {
         this.annotations = value;
     }
 
     @Override
-    public List<Level> levels() {
+    public List<MappingLevel> levels() {
         if (levels == null) {
             levels = new ArrayList<>();
         }
@@ -239,7 +239,7 @@ public class HierarchyImpl implements Hierarchy {
         this.uniqueKeyLevelName = value;
     }
 
-    public void setLevels(List<Level> levels) {
+    public void setLevels(List<MappingLevel> levels) {
         this.levels = levels;
     }
 

@@ -16,19 +16,19 @@ package mondrian.rolap.util;
 import java.util.Objects;
 
 import mondrian.rolap.RolapRuntimeException;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpressionView;
 
 import mondrian.rolap.sql.SqlQuery;
 
 public class ExpressionUtil {
 
-    public static String getExpression(Expression expression, final SqlQuery query) {
-        if (expression instanceof Column) {
+    public static String getExpression(MappingExpression expression, final SqlQuery query) {
+        if (expression instanceof MappingColumn) {
             return query.getDialect().quoteIdentifier(expression.table(), expression.name());
         }
-        if (expression instanceof ExpressionView expressionView) {
+        if (expression instanceof MappingExpressionView expressionView) {
             SqlQuery.CodeSet codeSet = new SqlQuery.CodeSet();
             expressionView.sqls().forEach(e -> codeSet.put(e.dialect(), e.content()));
             return codeSet.chooseQuery(query.getDialect());
@@ -36,11 +36,11 @@ public class ExpressionUtil {
         throw new RolapRuntimeException("getExpression error. Expression is not ExpressionView or Column");
     }
 
-    public static int hashCode(Expression expression) {
-        if (expression instanceof Column) {
+    public static int hashCode(MappingExpression expression) {
+        if (expression instanceof MappingColumn) {
             return expression.name().hashCode() ^ (expression.table()==null ? 0 : expression.table().hashCode());
         }
-        if (expression instanceof ExpressionView expressionView) {
+        if (expression instanceof MappingExpressionView expressionView) {
             int h = 17;
             for (int i = 0; i < expressionView.sqls().size(); i++) {
                 h = 37 * h + SQLUtil.hashCode(expressionView.sqls().get(i));
@@ -50,16 +50,16 @@ public class ExpressionUtil {
         return expression.hashCode();
     }
 
-    public static boolean equals(Expression expression, Object obj) {
-        if (expression instanceof Column) {
-            if (!(obj instanceof Column that)) {
+    public static boolean equals(MappingExpression expression, Object obj) {
+        if (expression instanceof MappingColumn) {
+            if (!(obj instanceof MappingColumn that)) {
                 return false;
             }
             return expression.name().equals(that.name()) &&
                 Objects.equals(expression.table(), that.table());
         }
-        if (expression instanceof ExpressionView expressionView) {
-            if (!(obj instanceof ExpressionView that)) {
+        if (expression instanceof MappingExpressionView expressionView) {
+            if (!(obj instanceof MappingExpressionView that)) {
                 return false;
             }
             if (expressionView.sqls().size() != that.sqls().size()) {
@@ -75,37 +75,37 @@ public class ExpressionUtil {
         return expression.equals(obj);
     }
 
-    public static String genericExpression(Expression expression) {
-        if (expression instanceof Column column) {
+    public static String genericExpression(MappingExpression expression) {
+        if (expression instanceof MappingColumn column) {
             return column.genericExpression();
         }
-        if (expression instanceof ExpressionView expressionView) {
+        if (expression instanceof MappingExpressionView expressionView) {
             for (int i = 0; i < expressionView.sqls().size(); i++) {
                 if (expressionView.sqls().get(i).dialect().equals("generic")) {
                     return expressionView.sqls().get(i).content();
                 }
             }
-            return ((ExpressionView) expression).sqls().get(0).content();
+            return ((MappingExpressionView) expression).sqls().get(0).content();
         }
         throw new RolapRuntimeException("genericExpression error");
     }
 
-    public static String toString(Expression expression) {
-        if (expression instanceof ExpressionView expressionView) {
+    public static String toString(MappingExpression expression) {
+        if (expression instanceof MappingExpressionView expressionView) {
             return expressionView.sqls().get(0).content();
         }
         return expression.toString();
     }
 
-    public String getExpression(ExpressionView expression, SqlQuery query) {
+    public String getExpression(MappingExpressionView expression, SqlQuery query) {
         return SQLUtil.toCodeSet(expression.sqls()).chooseQuery(query.getDialect());
     }
 
-    public static String getTableAlias(Expression expression) {
-        if (expression instanceof Column) {
+    public static String getTableAlias(MappingExpression expression) {
+        if (expression instanceof MappingColumn) {
             return expression.table();
         }
-        if (expression instanceof ExpressionView) {
+        if (expression instanceof MappingExpressionView) {
             return null;
         }
         throw new RolapRuntimeException("Expression getTableAlias error");

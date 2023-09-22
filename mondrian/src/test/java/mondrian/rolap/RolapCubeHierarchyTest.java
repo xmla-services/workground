@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    CubeDimension cubeDim = null;
+    MappingCubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -118,7 +118,7 @@ class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    CubeDimension cubeDim = null;
+    MappingCubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -163,7 +163,7 @@ class RolapCubeHierarchyTest {
         mock(RolapConnection.class);
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
 
-    CubeDimension cubeDim = null;
+    MappingCubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -219,7 +219,7 @@ class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    CubeDimension cubeDim = null;
+    MappingCubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;

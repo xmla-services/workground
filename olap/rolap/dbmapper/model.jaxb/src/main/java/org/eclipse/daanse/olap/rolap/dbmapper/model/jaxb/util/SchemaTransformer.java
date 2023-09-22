@@ -13,12 +13,12 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
@@ -61,7 +61,7 @@ public class SchemaTransformer {
         return sch;
     }
 
-    private static Cube transformCube(Cube c) {
+    private static MappingCube transformCube(MappingCube c) {
         CubeImpl cube = new CubeImpl();
         cube.setName(c.name());
         cube.setCaption(c.caption());
@@ -106,9 +106,9 @@ public class SchemaTransformer {
         return measure;
     }
 
-    private static CubeDimension transformDimensionUsageOrDimensions(CubeDimension d) {
-        CubeDimension cd = null;
-        if (d instanceof DimensionUsage du) {
+    private static MappingCubeDimension transformDimensionUsageOrDimensions(MappingCubeDimension d) {
+        MappingCubeDimension cd = null;
+        if (d instanceof MappingDimensionUsage du) {
             DimensionUsageImpl dimensionUsage = new DimensionUsageImpl();
             dimensionUsage.setName(du.name());
             dimensionUsage.setSource(du.source());
@@ -142,7 +142,7 @@ public class SchemaTransformer {
         return privateDimension;
     }
 
-    public static Hierarchy transformHierarchy(Hierarchy h) {
+    public static MappingHierarchy transformHierarchy(MappingHierarchy h) {
         HierarchyImpl hierarchyImpl = new HierarchyImpl();
         hierarchyImpl.setName(h.name());
         hierarchyImpl.setCaption(h.caption());
@@ -176,7 +176,7 @@ public class SchemaTransformer {
 
     private static RelationOrJoin transformRelationOrJoin(RelationOrJoin relation) {
         RelationOrJoin r = null;
-        if (relation instanceof Join j) {
+        if (relation instanceof MappingJoin j) {
             r = transformJoin(j);
         }
         if (relation instanceof Table t) {
@@ -194,7 +194,7 @@ public class SchemaTransformer {
         return table;
     }
 
-    private static JoinImpl transformJoin(Join j) {
+    private static JoinImpl transformJoin(MappingJoin j) {
         JoinImpl join = new JoinImpl();
         join.setLeftAlias(j.leftAlias());
         join.setLeftKey(j.leftKey());
@@ -206,7 +206,7 @@ public class SchemaTransformer {
         return join;
     }
 
-    private static Level transformLevel(Level l) {
+    private static MappingLevel transformLevel(MappingLevel l) {
         LevelImpl level = new LevelImpl();
         level.setName(l.name());
         level.setTable(l.table());

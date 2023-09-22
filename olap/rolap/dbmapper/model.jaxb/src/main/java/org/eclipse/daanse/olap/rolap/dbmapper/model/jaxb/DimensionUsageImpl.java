@@ -17,8 +17,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingDimensionUsage;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -31,11 +31,11 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DimensionUsage", propOrder = { "annotations" })
 @XmlRootElement(name = "DimensionUsage")
-public class DimensionUsageImpl implements DimensionUsage {
+public class DimensionUsageImpl implements MappingDimensionUsage {
 
     @XmlElement(name = "Annotation", type = AnnotationImpl.class)
     @XmlElementWrapper(name = "Annotations")
-    protected List<Annotation> annotations;
+    protected List<MappingAnnotation> annotations;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "source", required = true)
@@ -56,7 +56,7 @@ public class DimensionUsageImpl implements DimensionUsage {
     protected  String description;
 
     @Override
-    public List<Annotation> annotations() {
+    public List<MappingAnnotation> annotations() {
         if (annotations == null) {
             annotations = new ArrayList<>();
         }
@@ -136,7 +136,7 @@ public class DimensionUsageImpl implements DimensionUsage {
         this.highCardinality = value;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(List<MappingAnnotation> annotations) {
         this.annotations = annotations;
     }
 

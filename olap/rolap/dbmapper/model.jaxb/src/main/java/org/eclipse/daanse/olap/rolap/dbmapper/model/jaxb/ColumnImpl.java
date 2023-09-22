@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;
 
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingColumn;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-public class ColumnImpl implements Column {
+public class ColumnImpl implements MappingColumn {
 
     @XmlAttribute(name = "table")
     protected String table;
@@ -67,7 +67,7 @@ public class ColumnImpl implements Column {
 
     @Override
 	public boolean equals(Object obj) {
-            if (!(obj instanceof Column that)) {
+            if (!(obj instanceof MappingColumn that)) {
                 return false;
             }
             return name().equals(that.name()) &&

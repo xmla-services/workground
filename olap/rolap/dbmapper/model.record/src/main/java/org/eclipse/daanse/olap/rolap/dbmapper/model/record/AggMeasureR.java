@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggMeasure;
 
 public record AggMeasureR(String column,
                           String name,
                           String rollupType)
-        implements AggMeasure {
+        implements MappingAggMeasure {
 
 }

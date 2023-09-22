@@ -15,8 +15,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevel;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggLevelProperty;
 
 public record AggLevelR(String column,
                         String name,
@@ -24,7 +24,7 @@ public record AggLevelR(String column,
                         String nameColumn,
                         String captionColumn,
                         Boolean collapsed,
-                        List<AggLevelProperty> properties)
-        implements AggLevel {
+                        List<MappingAggLevelProperty> properties)
+        implements MappingAggLevel {
 
 }

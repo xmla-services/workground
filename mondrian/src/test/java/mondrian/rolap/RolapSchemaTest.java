@@ -36,8 +36,8 @@ import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.AccessEnum;
@@ -169,7 +169,7 @@ class RolapSchemaTest {
         schema = spy(schema);
         doNothing().when(schema)
             .handleCubeGrant(
-                any(mondrian.olap.RoleImpl.class), any(CubeGrant.class));
+                any(mondrian.olap.RoleImpl.class), any(MappingCubeGrant.class));
 
         SchemaGrantImpl grant = new SchemaGrantImpl();
         grant.setAccess(AccessEnum.CUSTOM);
@@ -180,7 +180,7 @@ class RolapSchemaTest {
         schema.handleSchemaGrant(role, grant);
         assertEquals(Access.CUSTOM, role.getAccess(schema));
         verify(schema, times(2))
-            .handleCubeGrant(eq(role), any(CubeGrant.class));
+            .handleCubeGrant(eq(role), any(MappingCubeGrant.class));
     }
 
 
@@ -212,7 +212,7 @@ class RolapSchemaTest {
                 any(mondrian.olap.RoleImpl.class),
                 any(RolapCube.class),
                 any(SchemaReader.class),
-                any(HierarchyGrant.class));
+                any(MappingHierarchyGrant.class));
 
         final Dimension dimension = mock(Dimension.class);
         SchemaReader reader = mockSchemaReader(mondrian.olap.Category.DIMENSION, dimension);
@@ -243,7 +243,7 @@ class RolapSchemaTest {
                 eq(role),
                 eq(cube),
                 eq(reader),
-                any(HierarchyGrant.class));
+                any(MappingHierarchyGrant.class));
     }
 
     @Test
