@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.type.Type;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.MatchType;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;

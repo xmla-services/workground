@@ -99,7 +99,7 @@ class GenerateFunDef extends FunDefBase {
                 //NumericType
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "str",
-                        mondrian.olap.Syntax.Function,
+                        org.eclipse.daanse.olap.api.Syntax.Function,
                         new Expression[] {call.getArg(1)});
                 stringCalc = compiler.compileString(unresolvedFunCall.accept(compiler.getValidator()));
             }

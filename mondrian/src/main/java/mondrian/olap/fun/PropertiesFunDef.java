@@ -13,7 +13,9 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
@@ -28,10 +30,8 @@ import org.eclipse.daanse.olap.calc.api.StringCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Category;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 /**

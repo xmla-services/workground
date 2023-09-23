@@ -9,7 +9,7 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 /**
  * <code>MatchType</code> enumerates the allowable match modes when

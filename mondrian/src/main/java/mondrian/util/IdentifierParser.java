@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -26,7 +27,6 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.ArrayTupleList;
-import mondrian.olap.Category;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;

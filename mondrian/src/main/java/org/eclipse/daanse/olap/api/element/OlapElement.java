@@ -16,10 +16,9 @@ package org.eclipse.daanse.olap.api.element;
 
 import java.util.Locale;
 
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
-
-import mondrian.olap.MatchType;
 
 /**
  * An <code>OlapElement</code> is a catalog object (dimension, hierarchy,

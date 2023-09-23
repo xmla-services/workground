@@ -15,7 +15,9 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -28,8 +30,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.TypeUtil;

@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -38,7 +39,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.EmptyType;

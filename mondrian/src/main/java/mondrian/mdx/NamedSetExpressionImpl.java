@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -26,7 +27,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.olap.Category;
 import mondrian.olap.Util;
 
 /**

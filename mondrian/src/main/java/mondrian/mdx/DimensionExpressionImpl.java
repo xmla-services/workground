@@ -9,6 +9,7 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -20,7 +21,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
-import mondrian.olap.Category;
 import mondrian.olap.Util;
 import mondrian.olap.type.DimensionType;
 

@@ -14,9 +14,8 @@ package mondrian.spi;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.type.Type;
-
-import mondrian.olap.Syntax;
 
 /**
  * Definition of a user-defined function.

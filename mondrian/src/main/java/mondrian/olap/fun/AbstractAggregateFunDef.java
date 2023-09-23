@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -29,7 +30,6 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Syntax;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapMember;

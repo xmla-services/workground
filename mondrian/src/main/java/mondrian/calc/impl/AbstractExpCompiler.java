@@ -18,8 +18,10 @@ import java.util.Objects;
 
 import mondrian.olap.SymbolLiteralImpl;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -66,8 +68,6 @@ import org.eclipse.daanse.olap.calc.base.type.string.UnknownToStringCalc;
 import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;

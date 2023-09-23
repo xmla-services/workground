@@ -11,10 +11,11 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.type.Type;
 
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.ServiceDiscovery;

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Syntax;
+import org.eclipse.daanse.olap.api.Syntax;
 
 public interface FunInfo extends Comparable<FunInfo>{
 

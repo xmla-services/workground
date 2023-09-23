@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Position;
@@ -51,7 +52,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.Syntax;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;
 import mondrian.spi.UserDefinedFunction;

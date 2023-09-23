@@ -21,10 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 
-import mondrian.olap.Syntax;
 import mondrian.util.Pair;
 
 /**
@@ -38,7 +40,7 @@ import mondrian.util.Pair;
 public abstract class FunTableImpl implements FunctionTable {
     /**
      * Maps the upper-case name of a function plus its
-     * {@link mondrian.olap.Syntax} to an array of
+     * {@link org.eclipse.daanse.olap.api.Syntax} to an array of
      * {@link FunctionResolver} objects for that name.
      */
     private Map<Pair<String, Syntax>, List<FunctionResolver>> mapNameToResolvers;

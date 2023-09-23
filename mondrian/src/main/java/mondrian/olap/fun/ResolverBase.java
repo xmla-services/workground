@@ -11,9 +11,9 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
-
-import mondrian.olap.Syntax;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 
 /**
  * <code>ResolverBase</code> provides a skeleton implementation of

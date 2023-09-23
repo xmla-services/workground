@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -61,7 +62,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.SchemaUtil;
 
-import mondrian.olap.Category;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
 import mondrian.resource.MondrianResource;
@@ -215,7 +215,7 @@ class RolapSchemaTest {
                 any(MappingHierarchyGrant.class));
 
         final Dimension dimension = mock(Dimension.class);
-        SchemaReader reader = mockSchemaReader(mondrian.olap.Category.DIMENSION, dimension);
+        SchemaReader reader = mockSchemaReader(org.eclipse.daanse.olap.api.Category.DIMENSION, dimension);
 
         RolapCube cube = mockCube(schema);
         when(cube.getSchemaReader(any())).thenReturn(reader);

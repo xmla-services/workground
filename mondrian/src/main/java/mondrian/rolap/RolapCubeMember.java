@@ -10,6 +10,7 @@
 */
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -18,7 +19,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
 import mondrian.util.Bug;

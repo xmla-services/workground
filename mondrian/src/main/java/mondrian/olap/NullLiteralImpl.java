@@ -15,6 +15,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.query.component.NullLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;

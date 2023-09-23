@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.fun.FunctionResolver;
 
 /**
  * Utility methods relating to types.
@@ -483,7 +483,7 @@ public class TypeUtil {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.fun.FunctionResolver.Conversion}.
+     * Implementation of {@link org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion}.
      */
     private static class ConversionImpl implements FunctionResolver.Conversion {
         final int from;

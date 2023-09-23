@@ -11,8 +11,6 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.CubeType;
@@ -30,6 +28,8 @@ import mondrian.olap.type.StringType;
 import mondrian.olap.type.SymbolType;
 import mondrian.olap.type.TypeUtil;
 
+import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;

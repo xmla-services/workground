@@ -9,13 +9,15 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.query.base.Expressions;
+
+import mondrian.olap.Util;
 
 /**
  * Enumerated values describing the syntax of an expression.

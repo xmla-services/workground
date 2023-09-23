@@ -48,8 +48,6 @@ import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
-import mondrian.olap.Category;
-import mondrian.olap.MatchType;
 import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;
 import mondrian.rolap.RolapHierarchy;

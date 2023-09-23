@@ -9,6 +9,7 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCal
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
-import mondrian.olap.Category;
 import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;

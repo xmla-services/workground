@@ -14,6 +14,7 @@ package mondrian.olap;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;

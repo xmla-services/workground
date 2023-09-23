@@ -53,7 +53,7 @@ public class BetterExpCompiler extends AbstractExpCompiler {
 		final Type type = exp.getType();
 		if (type instanceof mondrian.olap.type.DimensionType || type instanceof mondrian.olap.type.HierarchyType) {
 			final mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl("DefaultMember",
-					mondrian.olap.Syntax.Property, new Expression[] { exp });
+					org.eclipse.daanse.olap.api.Syntax.Property, new Expression[] { exp });
 			final Expression defaultMember = unresolvedFunCall.accept(getValidator());
 			return compileTuple(defaultMember);
 		}

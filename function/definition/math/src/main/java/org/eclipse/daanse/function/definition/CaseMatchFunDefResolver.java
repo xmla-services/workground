@@ -14,13 +14,13 @@
 package org.eclipse.daanse.function.definition;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunUtil;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.ResolverBase;
 import org.eclipse.daanse.function.Validator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;

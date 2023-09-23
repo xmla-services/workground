@@ -13,6 +13,7 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Dimension;
