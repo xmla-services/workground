@@ -11,12 +11,13 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Syntax;
 
 public class FunInfoImpl implements FunInfo {
 

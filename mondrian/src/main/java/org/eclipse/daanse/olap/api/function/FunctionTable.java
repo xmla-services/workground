@@ -32,9 +32,7 @@ package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
 
-import mondrian.olap.Syntax;
-import mondrian.olap.fun.FunctionInfo;
-import mondrian.olap.fun.FunctionResolver;
+import org.eclipse.daanse.olap.api.Syntax;
 
 /**
  * List of all MDX functions.
@@ -65,7 +63,7 @@ public interface FunctionTable {
     List<String> getReservedWords();
 
     /**
-     * Returns a list of {@link mondrian.olap.fun.FunctionResolver} objects.
+     * Returns a list of {@link org.eclipse.daanse.olap.api.function.FunctionResolver} objects.
      */
     List<FunctionResolver> getResolvers();
 

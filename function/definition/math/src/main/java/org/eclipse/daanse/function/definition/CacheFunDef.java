@@ -12,11 +12,11 @@ package org.eclipse.daanse.function.definition;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.Syntax;
 import mondrian.olap.type.SetType;
 
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;

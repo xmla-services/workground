@@ -31,15 +31,14 @@ package org.eclipse.daanse.olap.api.function;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 
 /**
  * Definition of an MDX function. See also {@link FunctionTable}.

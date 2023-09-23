@@ -14,6 +14,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -29,7 +30,6 @@ import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ParameterExpressionImpl;
-import mondrian.olap.Category;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;

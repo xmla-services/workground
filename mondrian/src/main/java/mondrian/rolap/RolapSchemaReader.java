@@ -24,6 +24,7 @@ import mondrian.olap.NullLiteralImpl;
 
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -50,7 +51,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.AbstractLiteralImpl;
-import mondrian.olap.MatchType;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;

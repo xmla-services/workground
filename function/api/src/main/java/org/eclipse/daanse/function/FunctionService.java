@@ -1,8 +1,8 @@
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Syntax;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Syntax;
 
 public interface FunctionService {
 

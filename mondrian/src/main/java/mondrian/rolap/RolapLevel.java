@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -42,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.DimensionType;
 import mondrian.olap.IdImpl;
 import mondrian.olap.LevelBase;
-import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;

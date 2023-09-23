@@ -9,15 +9,13 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap.fun;
+package org.eclipse.daanse.olap.api.function;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
-import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
-
-import mondrian.olap.Syntax;
 
 /**
  * A <code>Resolver</code> converts a function name, invocation type, and set

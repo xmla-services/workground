@@ -12,7 +12,9 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -29,8 +31,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCal
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedTupleCalc;
 
 import mondrian.mdx.HierarchyExpressionImpl;
-import mondrian.olap.Category;
-import mondrian.olap.Syntax;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NullType;
 import mondrian.olap.type.StringType;

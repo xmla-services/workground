@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import mondrian.olap.Syntax;
-
+import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.MetaElement;
+import org.eclipse.daanse.olap.api.function.FunctionInfo;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.Cell;
@@ -37,13 +38,11 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.olap4j.metadata.Schema;
 
-import mondrian.olap.Category;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
-import mondrian.olap.fun.FunctionInfo;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;

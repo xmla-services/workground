@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -26,7 +27,6 @@ import org.eigenbase.xom.XOMUtil;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.Syntax;
 import mondrian.olap.type.SetType;
 
 /**

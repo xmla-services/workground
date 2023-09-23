@@ -15,9 +15,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionInfo;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 /**

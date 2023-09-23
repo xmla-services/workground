@@ -45,6 +45,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.impl.ArrayNamedListImpl;
@@ -67,7 +68,6 @@ import org.olap4j.metadata.Schema;
 import org.olap4j.metadata.XmlaConstant;
 import org.olap4j.metadata.XmlaConstants;
 
-import mondrian.olap.Category;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.SetBase;

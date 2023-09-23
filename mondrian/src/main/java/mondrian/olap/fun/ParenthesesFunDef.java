@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 /**

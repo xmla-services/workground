@@ -47,6 +47,7 @@ import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.SubtotalVisibility;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -64,7 +65,6 @@ import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.StringLiteralImpl;
 import mondrian.olap.SubcubeImpl;
 import mondrian.olap.SymbolLiteralImpl;
-import mondrian.olap.Syntax;
 
 public class MdxToQueryConverter {
 

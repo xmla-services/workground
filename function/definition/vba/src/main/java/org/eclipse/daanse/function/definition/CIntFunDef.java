@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Syntax;
+import org.eclipse.daanse.olap.api.Syntax;
 
 
 public class CIntFunDef extends JavaFunDef {

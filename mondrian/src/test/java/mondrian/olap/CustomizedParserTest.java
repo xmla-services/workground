@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

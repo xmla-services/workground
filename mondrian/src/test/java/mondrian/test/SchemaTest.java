@@ -34,6 +34,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -64,7 +65,6 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Category;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;

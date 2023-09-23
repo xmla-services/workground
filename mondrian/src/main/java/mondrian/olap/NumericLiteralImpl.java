@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;

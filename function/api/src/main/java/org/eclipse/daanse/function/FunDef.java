@@ -11,8 +11,7 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Syntax;
-
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;

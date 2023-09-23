@@ -19,10 +19,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -48,9 +51,7 @@ import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Category;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.Syntax;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeUtil;
@@ -199,7 +200,7 @@ public class SetFunDef extends FunDefBase {
             } else if (type instanceof mondrian.olap.type.LevelType) {
                 mondrian.mdx.UnresolvedFunCallImpl unresolvedFunCall = new mondrian.mdx.UnresolvedFunCallImpl(
                         "Members",
-                        mondrian.olap.Syntax.Property,
+                        org.eclipse.daanse.olap.api.Syntax.Property,
                         new Expression[] {arg});
                 final TupleListCalc tupleListCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
                 return new AbstractProfilingNestedVoidCalc(type, new Calc[] {tupleListCalc}) {

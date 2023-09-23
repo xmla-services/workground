@@ -32,7 +32,7 @@ public class CrossJoinFunResolver extends ResolverBase {
 
     public CrossJoinFunResolver() {
         super("Crossjoin", "Crossjoin(<Set1>, <Set2>[, <Set3>...])", "Returns the cross product of two sets.",
-            mondrian.olap.Syntax.Function);
+            org.eclipse.daanse.olap.api.Syntax.Function);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class CrossJoinFunResolver extends ResolverBase {
         } else {
             for (int i = 0; i < args.length; i++) {
                 if (!validator.canConvert(
-                    i, args[i], mondrian.olap.Category.SET, conversions)) {
+                    i, args[i], org.eclipse.daanse.olap.api.Category.SET, conversions)) {
                     return null;
                 }
             }
 
-            FunDef dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.SET, args);
+            FunDef dummy = FunUtil.createDummyFunDef(this, org.eclipse.daanse.olap.api.Category.SET, args);
             return new CrossJoinFunDef(dummy);
         }
     }

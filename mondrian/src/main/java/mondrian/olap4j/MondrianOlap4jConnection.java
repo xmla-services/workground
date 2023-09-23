@@ -30,6 +30,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -95,7 +96,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Category;
 import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
@@ -1194,7 +1194,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             return result;
         }
 
-        private org.olap4j.mdx.Syntax toOlap4j(mondrian.olap.Syntax syntax) {
+        private org.olap4j.mdx.Syntax toOlap4j(org.eclipse.daanse.olap.api.Syntax syntax) {
             return org.olap4j.mdx.Syntax.valueOf(syntax.name());
         }
 

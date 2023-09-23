@@ -15,6 +15,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -35,7 +36,6 @@ import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
-import mondrian.olap.Category;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.ScalarType;

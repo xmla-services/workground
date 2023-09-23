@@ -11,9 +11,8 @@
 
 package org.eclipse.daanse.olap.api.query.component;
 
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
-
-import mondrian.olap.Syntax;
 
 /**
  * A <code>FunCall</code> is a function applied to a list of operands.

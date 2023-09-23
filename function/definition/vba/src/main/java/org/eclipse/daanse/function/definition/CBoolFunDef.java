@@ -13,11 +13,9 @@
  */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Syntax;
-
-
-
 import static org.eclipse.daanse.function.definition.CIntFunDef.cInt;
+
+import org.eclipse.daanse.olap.api.Syntax;
 
 public class CBoolFunDef extends JavaFunDef {
     public static final String NAME = "CBool";

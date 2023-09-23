@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 
 /**

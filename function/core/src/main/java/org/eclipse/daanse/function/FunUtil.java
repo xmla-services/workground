@@ -12,11 +12,8 @@
 package org.eclipse.daanse.function;
 
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Category;
-import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
@@ -37,9 +34,12 @@ import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;

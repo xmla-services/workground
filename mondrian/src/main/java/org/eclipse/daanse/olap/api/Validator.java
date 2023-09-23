@@ -32,6 +32,7 @@ package org.eclipse.daanse.olap.api;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionResolver;
 import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
@@ -40,9 +41,6 @@ import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.type.Type;
-
-import mondrian.olap.Syntax;
-import mondrian.olap.fun.FunctionResolver;
 
 /**
  * Provides context necessary to resolve identifiers to objects, function

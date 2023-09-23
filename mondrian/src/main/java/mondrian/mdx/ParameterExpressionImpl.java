@@ -12,6 +12,7 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
-import mondrian.olap.Category;
 import mondrian.olap.Util;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeUtil;
