@@ -1,14 +1,32 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2005-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara
-// Copyright (C) 2021-2022 Sergei Semenkov
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2005-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara
+ * Copyright (C) 2021-2022 Sergei Semenkov
+ * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package mondrian.olap.type;
 
 import java.util.ArrayList;
@@ -284,167 +302,250 @@ public class TypeUtil {
         RuntimeException e = null;
         switch (from) {
         case Category.ARRAY:
-            return false;
+            return convertFromArray();
         case Category.DIMENSION:
-            // We can go from Dimension to Hierarchy if the dimension has a
-            // default hierarchy. From there, we can go to Member or Tuple.
-            // Even if the dimension does not have a default hierarchy, we claim
-            // now that we can do the conversion, to prevent other overloads
-            // from being chosen; we will hit an error either at compile time or
-            // at run time.
-            switch (to) {
-            case Category.MEMBER, Category.TUPLE, Category.HIERARCHY:
-                // It is more difficult to convert dimension->hierarchy than
-                // hierarchy->dimension
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, e));
-                return true;
-            case Category.LEVEL:
-                // It is more difficult to convert dimension->level than
-                // dimension->member or dimension->hierarchy->member.
-                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
-                return true;
-            default:
-                return false;
-            }
+            return convertFromDimension(ordinal, to, conversions, from, e);
         case Category.HIERARCHY:
-            // Seems funny that you can 'downcast' from a hierarchy, doesn't
-            // it? But we add an implicit 'CurrentMember', for example,
-            // '[Product].PrevMember' actually means
-            // '[Product].CurrentMember.PrevMember'.
-            if (to == Category.DIMENSION || to == Category.MEMBER || to == Category.TUPLE) {
-                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
-                return true;
-            } else {
-                return false;
-            }
+            return convertFromHierarchy(ordinal, to, conversions, from);
         case Category.LEVEL:
-            switch (to) {
-            case Category.DIMENSION:
-                // It's more difficult to convert to a dimension than a
-                // hierarchy. For example, we want '[Store City].CurrentMember'
-                // to resolve to <Hierarchy>.CurrentMember rather than
-                // <Dimension>.CurrentMember.
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            case Category.HIERARCHY, Category.SET:
-                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
-                return true;
-            default:
-                return false;
-            }
+            return convertFromLevel(ordinal, to, conversions, from);
         case Category.LOGICAL:
-            return Category.VALUE == to;
+            return convertFromLogical(to);
         case Category.MEMBER:
-            switch (to) {
-            case Category.DIMENSION, Category.HIERARCHY, Category.LEVEL, Category.TUPLE:
-                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
-                return true;
-            case Category.SET:
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            case Category.NUMERIC:
-                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
-                return true;
-            case Category.VALUE, Category.STRING:
-                // We assume that measures are numeric, so a cast to a string or
-                // general value expression is more expensive (cost=4) than a
-                // conversion to a numeric expression (cost=3).
-                conversions.add(new ConversionImpl(from, to, ordinal, 4, null));
-                return true;
-            default:
-                return false;
-            }
+            return convertFromMember(ordinal, to, conversions, from);
         case Category.NUMERIC | Category.CONSTANT:
-            return (to == Category.VALUE || to == Category.NUMERIC);
+            return connvertFromConstantNumeric(to);
         case Category.NUMERIC:
-            switch (to) {
-            case Category.LOGICAL:
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            case Category.VALUE, Category.INTEGER:
-            case (Category.INTEGER | Category.CONSTANT):
-            case (Category.NUMERIC | Category.CONSTANT):
-                return true;
-            default:
-                return false;
-            }
+            return convertFromNumeric(ordinal, to, conversions, from);
         case Category.INTEGER:
-            switch (to) {
-            case Category.VALUE, Category.NUMERIC:
-            case (Category.INTEGER | Category.CONSTANT):
-            case (Category.NUMERIC | Category.CONSTANT):
-                return true;
-            default:
-                return false;
-            }
+            return convertFromInteger(to);
         case Category.SET:
-            return false;
+            return convertFromSet();
         case Category.STRING | Category.CONSTANT:
-            return (to == Category.VALUE || to == Category.STRING);
+            return convertFromConstantString(to);
         case Category.STRING:
-            switch (to) {
-            case Category.VALUE:
-            case (Category.STRING | Category.CONSTANT):
-                return true;
-            default:
-                return false;
-            }
+            return convertFromString(to);
         case Category.DATE_TIME | Category.CONSTANT:
-            return to == Category.VALUE || to == Category.DATE_TIME;
+            return convertFromConstantDateTime(to);
         case Category.DATE_TIME:
-            switch (to) {
-            case Category.VALUE:
-            case (Category.DATE_TIME | Category.CONSTANT):
-                return true;
-            default:
-                return false;
-            }
+            return convertFromDateTime(to);
         case Category.TUPLE:
-            switch (to) {
-            case Category.NUMERIC:
-                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
-                return true;
-            case Category.SET:
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            case Category.STRING, Category.VALUE:
-                // We assume that measures are numeric, so a cast to a string or
-                // general value expression is more expensive (cost=4) than a
-                // conversion to a numeric expression (cost=3).
-                conversions.add(new ConversionImpl(from, to, ordinal, 4, null));
-                return true;
-            default:
-                return false;
-            }
+            return convertFromTuple(ordinal, to, conversions, from);
         case Category.VALUE:
-            // We can implicitly cast from value to a more specific scalar type,
-            // but the cost is significant.
-            if (to == Category.STRING || to == Category.NUMERIC || to == Category.LOGICAL) {
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            } else {
-                return false;
-            }
+            return convertFromValue(ordinal, to, conversions, from);
         case Category.SYMBOL:
-            return false;
+            return convertFromSymbol();
         case Category.NULL:
-            // now null supports members as well as scalars; but scalar is
-            // preferred
-            if (Category.isScalar(to)) {
-                return true;
-            } else if (to == Category.MEMBER) {
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
-            } else {
-                return false;
-            }
+            return convertFromNull(ordinal, to, conversions, from);
         case Category.EMPTY:
-            return false;
+            return convertFromEmpty();
         default:
             throw Util.newInternal(
                 new StringBuilder("unknown category ").append(from).append(" for type ").append(fromType).toString());
         }
     }
+
+	private static boolean convertFromNull(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		// now null supports members as well as scalars; but scalar is
+		// preferred
+		if (Category.isScalar(to)) {
+			return true;
+		} else if (to == Category.MEMBER) {
+			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean convertFromValue(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		switch (to) {
+		case Category.STRING:
+		case Category.NUMERIC:
+		case Category.LOGICAL:
+			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static boolean convertFromTuple(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		switch (to) {
+		case Category.NUMERIC:
+		    conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+		    return true;
+		case Category.SET:
+		    conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+		    return true;
+		case Category.STRING, Category.VALUE:
+		    // We assume that measures are numeric, so a cast to a string or
+		    // general value expression is more expensive (cost=4) than a
+		    // conversion to a numeric expression (cost=3).
+		    conversions.add(new ConversionImpl(from, to, ordinal, 4, null));
+		    return true;
+		default:
+		    return false;
+		}
+	}
+
+	private static boolean convertFromDateTime(int to) {
+		switch (to) {
+		case Category.VALUE:
+		case (Category.DATE_TIME | Category.CONSTANT):
+		    return true;
+		default:
+		    return false;
+		}
+	}
+
+	private static boolean convertFromConstantDateTime(int to) {
+		return to == Category.VALUE || to == Category.DATE_TIME;
+	}
+
+	private static boolean convertFromString(int to) {
+		switch (to) {
+		case Category.VALUE:
+		case (Category.STRING | Category.CONSTANT):
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static boolean convertFromConstantString(int to) {
+		return to == Category.VALUE || to == Category.STRING;
+	}
+
+	private static boolean convertFromInteger(int to) {
+		switch (to) {
+		case Category.VALUE, Category.NUMERIC:
+		case (Category.INTEGER | Category.CONSTANT):
+		case (Category.NUMERIC | Category.CONSTANT):
+		    return true;
+		default:
+		    return false;
+		}
+	}
+
+	private static boolean convertFromNumeric(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		switch (to) {
+		case Category.LOGICAL:
+			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+			return true;
+		case Category.VALUE, Category.INTEGER:
+		case (Category.INTEGER | Category.CONSTANT):
+		case (Category.NUMERIC | Category.CONSTANT):
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static boolean connvertFromConstantNumeric(int to) {
+		return to == Category.VALUE || to == Category.NUMERIC;
+	}
+
+	private static boolean convertFromMember(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		switch (to) {
+		case Category.DIMENSION, Category.HIERARCHY, Category.LEVEL, Category.TUPLE:
+		    conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
+		    return true;
+		case Category.SET:
+		    conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+		    return true;
+		case Category.NUMERIC:
+		    conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+		    return true;
+		case Category.VALUE, Category.STRING:
+		    // We assume that measures are numeric, so a cast to a string or
+		    // general value expression is more expensive (cost=4) than a
+		    // conversion to a numeric expression (cost=3).
+		    conversions.add(new ConversionImpl(from, to, ordinal, 4, null));
+		    return true;
+		default:
+		    return false;
+		}
+	}
+
+	private static boolean convertFromLogical(int to) {
+		return Category.VALUE == to;
+	}
+
+	private static boolean convertFromSet() {
+		return false;
+	}
+	private static boolean convertFromSymbol() {
+		return false;
+	}
+	private static boolean convertFromEmpty() {
+		return false;
+	}
+	private static boolean convertFromArray() {
+		return false;
+	}
+
+	private static boolean convertFromLevel(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		switch (to) {
+		case Category.DIMENSION:
+			// It's more difficult to convert to a dimension than a
+			// hierarchy. For example, we want '[Store City].CurrentMember'
+			// to resolve to <Hierarchy>.CurrentMember rather than
+			// <Dimension>.CurrentMember.
+			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+			return true;
+		case Category.HIERARCHY, Category.SET:
+			conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static boolean convertFromHierarchy(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from) {
+		// Seems funny that you can 'downcast' from a hierarchy, doesn't
+		// it? But we add an implicit 'CurrentMember', for example,
+		// '[Product].PrevMember' actually means
+		// '[Product].CurrentMember.PrevMember'.
+		switch (to) {
+		case Category.DIMENSION, Category.MEMBER, Category.TUPLE:
+			conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static boolean convertFromDimension(int ordinal, int to, List<FunctionResolver.Conversion> conversions,
+			final int from, RuntimeException e) {
+		// We can go from Dimension to Hierarchy if the dimension has a
+		// default hierarchy. From there, we can go to Member or Tuple.
+		// Even if the dimension does not have a default hierarchy, we claim
+		// now that we can do the conversion, to prevent other overloads
+		// from being chosen; we will hit an error either at compile time or
+		// at run time.
+		switch (to) {
+		case Category.MEMBER, Category.TUPLE, Category.HIERARCHY:
+			// It is more difficult to convert dimension->hierarchy than
+			// hierarchy->dimension
+			conversions.add(new ConversionImpl(from, to, ordinal, 2, e));
+			return true;
+		case Category.LEVEL:
+			// It is more difficult to convert dimension->level than
+			// dimension->member or dimension->hierarchy->member.
+			conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+			return true;
+		default:
+			return false;
+		}
+	}
 
     static <T> T neq(T t1, T t2) {
         if (t1 == null) {
