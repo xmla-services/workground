@@ -14,9 +14,9 @@ package mondrian.rolap;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 
-import mondrian.olap.Expression;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.Property;
 import mondrian.olap.Util;

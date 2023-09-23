@@ -13,13 +13,15 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
-import mondrian.olap.api.Segment;
 import mondrian.olap.fun.FunUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;

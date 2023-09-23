@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.fun.FunctionResolver;
 
 /**

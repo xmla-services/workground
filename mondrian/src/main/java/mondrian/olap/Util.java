@@ -85,8 +85,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import mondrian.mdx.ParameterExpressionImpl;
-import mondrian.olap.api.Segment;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -94,6 +92,10 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -104,13 +106,18 @@ import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
+import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
@@ -136,7 +143,6 @@ import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.FunctionResolver;
 import mondrian.olap.fun.sort.Sorter;
-import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapCubeDimension;
@@ -571,8 +577,8 @@ public class Util extends XOMUtil {
             //   names.get(i).toString(sb);
             // but that causes some tests to fail
             Segment segment = names.get(i);
-            if (mondrian.olap.api.Quoting.UNQUOTED.equals(segment.getQuoting())) {
-                segment = new IdImpl.NameSegmentImpl(((mondrian.olap.api.NameSegment) segment).getName());
+            if (org.eclipse.daanse.olap.api.Quoting.UNQUOTED.equals(segment.getQuoting())) {
+                segment = new IdImpl.NameSegmentImpl(((org.eclipse.daanse.olap.api.NameSegment) segment).getName());
             }
             segment.toString(sb);
         }
@@ -679,8 +685,8 @@ public class Util extends XOMUtil {
         // Now resolve the name one part at a time.
         for (int i = 0; i < names.size(); i++) {
             OlapElement child;
-            mondrian.olap.api.NameSegment name;
-            if (names.get(i) instanceof mondrian.olap.api.NameSegment nameSegment) {
+            org.eclipse.daanse.olap.api.NameSegment name;
+            if (names.get(i) instanceof org.eclipse.daanse.olap.api.NameSegment nameSegment) {
                 name = nameSegment;
                 child = schemaReader.getElementChild(parent, name, matchType);
             } else if (parent instanceof RolapLevel
@@ -884,7 +890,7 @@ public class Util extends XOMUtil {
                     segments.subList(0, segments.size() - 1);
             final Segment lastSegment = last(segments);
             final String propertyName =
-                    lastSegment instanceof mondrian.olap.api.NameSegment nameSegment
+                    lastSegment instanceof org.eclipse.daanse.olap.api.NameSegment nameSegment
                             ? nameSegment.getName()
                             : null;
             final Member member =
@@ -1006,7 +1012,7 @@ public class Util extends XOMUtil {
     }
 
     public static Member lookupHierarchyRootMember(
-        SchemaReader reader, Hierarchy hierarchy, mondrian.olap.api.NameSegment memberName)
+        SchemaReader reader, Hierarchy hierarchy, org.eclipse.daanse.olap.api.NameSegment memberName)
     {
         return lookupHierarchyRootMember(
             reader, hierarchy, memberName, MatchType.EXACT);
@@ -1022,7 +1028,7 @@ public class Util extends XOMUtil {
     public static Member lookupHierarchyRootMember(
         SchemaReader reader,
         Hierarchy hierarchy,
-        mondrian.olap.api.NameSegment memberName,
+        org.eclipse.daanse.olap.api.NameSegment memberName,
         MatchType matchType)
     {
         // Lookup member at first level.
@@ -1754,9 +1760,9 @@ public class Util extends XOMUtil {
 
     private static IdImpl.KeySegment convert(final KeySegment keySegment) {
         return new IdImpl.KeySegment(
-            new AbstractList<mondrian.olap.api.NameSegment>() {
+            new AbstractList<org.eclipse.daanse.olap.api.NameSegment>() {
                 @Override
-				public mondrian.olap.api.NameSegment get(int index) {
+				public org.eclipse.daanse.olap.api.NameSegment get(int index) {
                     return convert(keySegment.getKeyParts().get(index));
                 }
 
@@ -1767,20 +1773,20 @@ public class Util extends XOMUtil {
             });
     }
 
-    private static mondrian.olap.api.NameSegment convert(NameSegment nameSegment) {
+    private static org.eclipse.daanse.olap.api.NameSegment convert(NameSegment nameSegment) {
         return new IdImpl.NameSegmentImpl(
             nameSegment.getName(),
             convert(nameSegment.getQuoting()));
     }
 
-    private static mondrian.olap.api.Quoting convert(Quoting quoting) {
+    private static org.eclipse.daanse.olap.api.Quoting convert(Quoting quoting) {
         switch (quoting) {
         case QUOTED:
-            return mondrian.olap.api.Quoting.QUOTED;
+            return org.eclipse.daanse.olap.api.Quoting.QUOTED;
         case UNQUOTED:
-            return mondrian.olap.api.Quoting.UNQUOTED;
+            return org.eclipse.daanse.olap.api.Quoting.UNQUOTED;
         case KEY:
-            return mondrian.olap.api.Quoting.KEY;
+            return org.eclipse.daanse.olap.api.Quoting.KEY;
         default:
             throw Util.unexpected(quoting);
         }
@@ -1886,10 +1892,10 @@ public class Util extends XOMUtil {
     }
 
     public static IdentifierSegment toOlap4j(Segment segment) {
-        if (mondrian.olap.api.Quoting.KEY.equals(segment.getQuoting())) {
+        if (org.eclipse.daanse.olap.api.Quoting.KEY.equals(segment.getQuoting())) {
             return toOlap4j((IdImpl.KeySegment) segment);
         } else {
-            return toOlap4j((mondrian.olap.api.NameSegment) segment);
+            return toOlap4j((org.eclipse.daanse.olap.api.NameSegment) segment);
         }
     }
 
@@ -1908,14 +1914,14 @@ public class Util extends XOMUtil {
             });
     }
 
-    private static NameSegment toOlap4j(mondrian.olap.api.NameSegment nameSegment) {
+    private static NameSegment toOlap4j(org.eclipse.daanse.olap.api.NameSegment nameSegment) {
         return new NameSegment(
             null,
             nameSegment.getName(),
             toOlap4j(nameSegment.getQuoting()));
     }
 
-    public static Quoting toOlap4j(mondrian.olap.api.Quoting quoting) {
+    public static Quoting toOlap4j(org.eclipse.daanse.olap.api.Quoting quoting) {
         return Quoting.valueOf(quoting.name());
     }
 
@@ -2968,7 +2974,7 @@ public class Util extends XOMUtil {
             }
 
             @Override
-			public void validate(ParameterExpressionImpl parameterExpr) {
+			public void validate(ParameterExpression parameterExpr) {
                 //empty
             }
 

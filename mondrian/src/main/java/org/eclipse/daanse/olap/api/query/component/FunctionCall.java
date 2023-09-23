@@ -9,7 +9,11 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api.query.component;
+
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+
+import mondrian.olap.Syntax;
 
 /**
  * A <code>FunCall</code> is a function applied to a list of operands.
@@ -23,7 +27,7 @@ package mondrian.olap;
  * @author jhyde
  * @since Jan 6, 2006
  */
-public interface FunCall extends Expression {
+public interface FunctionCall extends Expression {
     /**
      * Returns the <code>index</code><sup>th</sup> argument to this function
      * call.

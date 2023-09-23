@@ -12,19 +12,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.element.Schema;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
-import mondrian.olap.api.Segment;
 import mondrian.olap.DimensionType;
-import mondrian.olap.Expression;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import mondrian.olap.SchemaReader;
 
 /**
  * Mock implementation of {@link Member} for testing.

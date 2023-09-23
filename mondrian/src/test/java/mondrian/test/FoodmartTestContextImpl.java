@@ -47,6 +47,7 @@ import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
@@ -68,7 +69,6 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 
 import mondrian.enums.DatabaseProduct;
 import mondrian.olap.DriverManager;
-import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;

@@ -14,10 +14,10 @@ import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.rolap.agg.Aggregator;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
-import mondrian.olap.Aggregator;
 import mondrian.olap.EnumeratedValues;
 import mondrian.olap.MondrianException;
 import mondrian.olap.fun.FunUtil;

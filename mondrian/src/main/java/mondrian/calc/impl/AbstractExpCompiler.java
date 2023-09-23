@@ -19,10 +19,14 @@ import java.util.Objects;
 import mondrian.olap.SymbolLiteralImpl;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;
@@ -63,11 +67,8 @@ import org.eclipse.daanse.olap.calc.base.util.DimensionUtil;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
-import mondrian.olap.Parameter;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.HierarchyDimensionFunDef;
@@ -86,7 +87,6 @@ import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 

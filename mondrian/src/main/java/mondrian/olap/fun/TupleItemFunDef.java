@@ -10,8 +10,11 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
@@ -19,11 +22,8 @@ import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedMemberCalc;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 
 /**
  * Definition of the <code>&lt;Tuple&gt;.Item</code> MDX function.

@@ -15,8 +15,9 @@ package mondrian.rolap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Segment;
+
 import mondrian.olap.IdImpl;
-import mondrian.olap.api.Segment;
 
 /**
  * A <code>MemberSource</code> has the basic operations to read the members of a

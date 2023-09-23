@@ -13,12 +13,14 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Walkable;
+
 /**
  * Component of an MDX query (derived classes include Query, Axis, Exp, Level).
  *
  * @author jhyde, 23 January, 1999
  */
-public abstract class AbstractQueryPart implements Walkable {
+public abstract class AbstractQueryPart implements Walkable<Object> {
     /**
      * Creates a QueryPart.
      */

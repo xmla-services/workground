@@ -15,11 +15,10 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.TupleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
-
-import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingNestedTupleCalc<C  extends Calc<?>> extends AbstractProfilingNestedCalc<Member[],C>
 		implements TupleCalc {

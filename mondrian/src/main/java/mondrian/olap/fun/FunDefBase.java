@@ -14,18 +14,19 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.Context;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Cube;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.CubeType;
 import mondrian.olap.type.DateTimeType;
@@ -40,7 +41,6 @@ import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.SymbolType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 
 /**

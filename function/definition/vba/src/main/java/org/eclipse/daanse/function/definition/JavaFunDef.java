@@ -11,13 +11,13 @@ package org.eclipse.daanse.function.definition;
 
 import mondrian.calc.impl.GenericCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
 import org.eclipse.daanse.function.FunDefBase;
 import org.eclipse.daanse.function.FunUtil;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;

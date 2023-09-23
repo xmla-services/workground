@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
 import mondrian.spi.PropertyFormatter;
 

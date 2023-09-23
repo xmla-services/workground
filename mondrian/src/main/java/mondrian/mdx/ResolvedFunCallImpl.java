@@ -13,20 +13,20 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.base.Expressions;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.Type;
 
 /**
  * A <code>ResolvedFunCall</code> is a function applied to a list of operands,

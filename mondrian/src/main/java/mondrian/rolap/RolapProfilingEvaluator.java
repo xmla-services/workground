@@ -12,12 +12,12 @@ package mondrian.rolap;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.profile.ProfilingCalc;
 
 import mondrian.calc.impl.DelegatingExpCompiler;
-import mondrian.olap.Expression;
 
 /**
  * Evaluator that collects profiling information as it evaluates expressions.

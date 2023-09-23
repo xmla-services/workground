@@ -10,18 +10,18 @@
 package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedLevelCalc;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
 import mondrian.olap.type.LevelType;
-import mondrian.olap.type.Type;
 
 /**
  * Definition of the <code>&lt;Member&gt;.Level</code> MDX builtin function.

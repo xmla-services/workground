@@ -11,9 +11,9 @@ package mondrian.server;
 
 import java.sql.SQLException;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.query.component.Query;
 
-import mondrian.olap.SchemaReader;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;

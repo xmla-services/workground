@@ -29,10 +29,14 @@ package org.eclipse.daanse.olap.calc.api.compiler;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
@@ -49,13 +53,8 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Parameter;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
-
 /**
- * Mediates the compilation of an expression ({@link mondrian.olap.Expression})
+ * Mediates the compilation of an expression ({@link org.eclipse.daanse.olap.api.query.component.Expression})
  * into a compiled expression ({@link Calc}).
  *
  * @author jhyde
@@ -161,7 +160,7 @@ public interface ExpressionCompiler {
      * <p>Such an expression is generally a list of {@link Member} objects or a
      * list of tuples (each represented by a {@link Member} array).
      *
-     * <p>See {@link #compileList(mondrian.olap.Expression)}.
+     * <p>See {@link #compileList(org.eclipse.daanse.olap.api.query.component.Expression)}.
      *
      * @param exp Expression
      * @param mutable Whether resulting list is mutable
@@ -211,7 +210,7 @@ public interface ExpressionCompiler {
      * @param specific Whether to try to use the specific compile method for
      *   scalar types. For example, if <code>specific</code> is true and
      *   <code>exp</code> is a string expression, calls
-     *   {@link #compileString(mondrian.olap.Expression)}
+     *   {@link #compileString(org.eclipse.daanse.olap.api.query.component.Expression)}
      * @return Calculation which returns the scalar value of the expression
      */
     Calc<?> compileScalar(Expression exp, boolean specific);

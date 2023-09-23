@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import mondrian.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Member;
 

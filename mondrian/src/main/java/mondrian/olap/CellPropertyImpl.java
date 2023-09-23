@@ -11,10 +11,9 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.Segment;
-
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 
 /**

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.api.SubtotalVisibility;
-
+import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
@@ -27,7 +27,6 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Expression;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.TypeUtil;

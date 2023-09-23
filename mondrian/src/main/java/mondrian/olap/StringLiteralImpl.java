@@ -17,16 +17,16 @@ import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.query.component.StringLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.Type;
 
 public class StringLiteralImpl extends AbstractLiteralImpl<String> implements StringLiteral {
     public static final StringLiteralImpl EMPTY_STRING_LITERAL = new StringLiteralImpl("");
-
+    private static final StringType TYPE=new StringType();
 	protected StringLiteralImpl(String text) {
 		super(text);
 	}
@@ -47,7 +47,7 @@ public class StringLiteralImpl extends AbstractLiteralImpl<String> implements St
 
 	@Override
 	public Type getType() {
-		return new StringType();
+		return TYPE;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class StringLiteralImpl extends AbstractLiteralImpl<String> implements St
 
 	@Override
 	public Calc<String> accept(ExpressionCompiler compiler) {
-		return new ConstantStringCalc(new StringType(), getValue());
+		return new ConstantStringCalc(TYPE, getValue());
 	}
 
 }

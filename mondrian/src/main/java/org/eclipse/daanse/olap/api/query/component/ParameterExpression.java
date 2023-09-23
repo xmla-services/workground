@@ -13,9 +13,9 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Parameter;
+import org.eclipse.daanse.olap.api.Parameter;
 
-public non-sealed interface ParameterExpression extends QueryComponent {
+public non-sealed interface ParameterExpression extends QueryComponent , Expression{
 
     Parameter getParameter();
 }

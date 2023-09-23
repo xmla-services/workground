@@ -26,12 +26,11 @@
  */
 package org.eclipse.daanse.olap.calc.api.compiler;
 
+import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
-import mondrian.olap.Parameter;
-
 /**
- * A {@link mondrian.olap.Parameter} can be compiled in an {@link Calc} using an
+ * A {@link org.eclipse.daanse.olap.api.Parameter} can be compiled in an {@link Calc} using an
  * {@link ExpressionCompiler}.
  */
 public interface CompilableParameter extends Parameter {

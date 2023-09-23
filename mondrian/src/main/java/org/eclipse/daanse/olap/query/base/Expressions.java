@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.query.base;
 import java.io.PrintWriter;
 import java.util.stream.Stream;
 
-import mondrian.olap.Expression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
 public class Expressions {
 	public static void unparseExpressions(PrintWriter printWriter, Expression[] expressions, String start, String mid,

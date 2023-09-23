@@ -13,13 +13,13 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 
 /**
  * A <code>ValueFunDef</code> is a pseudo-function to evaluate a member or

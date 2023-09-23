@@ -13,12 +13,12 @@
 */
 package org.eclipse.daanse.olap.calc.base.nested;
 
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
 
 /**
  * Abstract implementation of the

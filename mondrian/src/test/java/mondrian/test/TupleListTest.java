@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.Schema;
@@ -39,7 +40,6 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;

@@ -18,15 +18,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 
-import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.SolveOrderMode;
 import mondrian.olap.Util;
 import mondrian.server.Execution;

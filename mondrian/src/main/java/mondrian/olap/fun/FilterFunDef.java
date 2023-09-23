@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
@@ -34,7 +35,6 @@ import mondrian.calc.impl.AbstractTupleIterable;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.SchemaReader;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.util.CancellationChecker;

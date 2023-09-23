@@ -14,8 +14,11 @@ package mondrian.olap;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
@@ -29,7 +32,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.Type;
 
 /**
  * Implementation of {@link Parameter}.

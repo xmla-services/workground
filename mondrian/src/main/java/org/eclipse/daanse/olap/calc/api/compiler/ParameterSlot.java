@@ -27,9 +27,8 @@
 
 package org.eclipse.daanse.olap.calc.api.compiler;
 
+import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.calc.api.Calc;
-
-import mondrian.olap.Parameter;
 
 public interface ParameterSlot {
     /**

@@ -13,6 +13,8 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 /**
@@ -340,8 +342,8 @@ public enum Syntax {
 
     private static boolean needParen(Expression[] args) {
         return !(args.length == 1
-                 && args[0] instanceof FunCall
-                 && ((FunCall) args[0]).getSyntax() == Syntax.Parentheses);
+                 && args[0] instanceof FunctionCall
+                 && ((FunctionCall) args[0]).getSyntax() == Syntax.Parentheses);
     }
 
     private static String getTypeDescription(int type) {

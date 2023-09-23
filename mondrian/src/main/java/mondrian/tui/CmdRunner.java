@@ -36,11 +36,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
 import org.eigenbase.xom.XOMException;
@@ -52,9 +54,7 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 
 import mondrian.olap.Category;
 import mondrian.olap.DriverManager;
-import mondrian.olap.FunctionTable;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Parameter;
 import mondrian.olap.QueryImpl;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunInfo;

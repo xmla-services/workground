@@ -1,27 +1,39 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2003-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara
-// Copyright (C) 2021 Sergei Semenkov
-// All Rights Reserved.
-*/
-package mondrian.olap;
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2003-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara
+ * Copyright (C) 2021 Sergei Semenkov
+ * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+package org.eclipse.daanse.olap.api;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
-
-import org.eclipse.daanse.olap.api.Connection;
-import org.eclipse.daanse.olap.api.Context;
-import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -31,8 +43,15 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingSchema;
 
+import mondrian.olap.Category;
+import mondrian.olap.MatchType;
+import mondrian.olap.NameResolver;
+import mondrian.olap.NativeEvaluator;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapSchema;
 

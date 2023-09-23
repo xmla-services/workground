@@ -15,8 +15,11 @@ import java.util.AbstractList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
@@ -30,10 +33,7 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.NativeEvaluator;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
 
 /**

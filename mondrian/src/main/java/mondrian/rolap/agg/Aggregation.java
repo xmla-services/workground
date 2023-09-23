@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.BitKey;
 import mondrian.rolap.CellKey;

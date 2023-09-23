@@ -11,11 +11,12 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Expression;
 import mondrian.olap.Util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
  * Resolver which uses reflection to instantiate a {@link FunDef}.

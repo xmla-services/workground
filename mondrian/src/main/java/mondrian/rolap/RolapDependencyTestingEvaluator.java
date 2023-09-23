@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Random;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -28,9 +30,7 @@ import mondrian.calc.impl.DelegatingExpCompiler;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.Expression;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.type.SetType;
 

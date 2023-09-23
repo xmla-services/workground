@@ -13,12 +13,10 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunCall;
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.type.Type;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.type.Type;
 
-public non-sealed interface ResolvedFunCall extends QueryComponent, FunCall {
+public non-sealed interface ResolvedFunCall extends QueryComponent, FunctionCall {
 
     int getArgCount();
 

@@ -12,8 +12,8 @@ package mondrian.olap.fun;
 import java.util.HashSet;
 import java.util.Set;
 
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.FunctionTable;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 
 /**
  * Interface to build a customized function table, selecting functions from the

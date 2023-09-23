@@ -15,11 +15,11 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.Type;
 
 /**
  * Adapter which computes a scalar or tuple expression and converts it to any

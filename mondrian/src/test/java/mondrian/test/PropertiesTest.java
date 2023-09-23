@@ -14,8 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.Id;
@@ -33,7 +34,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.SchemaReader;
 
 /**
  * Tests intrinsic member and cell properties as specified in OLE DB for OLAP

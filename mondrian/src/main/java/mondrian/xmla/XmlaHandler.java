@@ -74,9 +74,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import mondrian.olap.api.Command;
-import mondrian.olap.api.NameSegment;
-
+import org.eclipse.daanse.olap.api.Command;
+import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
@@ -3406,7 +3405,7 @@ public class XmlaHandler {
             mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest,
             XmlaResponse response,
             String rowsetName,
-            mondrian.olap.Expression whereExpression,
+            org.eclipse.daanse.olap.api.query.component.Expression whereExpression,
             Map<String, String> parameters)
             throws XmlaException
     {
@@ -3471,7 +3470,7 @@ public class XmlaHandler {
         writer.endDocument();
     }
 
-    private boolean isCompatable(Rowset.Row row, mondrian.olap.Expression exp, Map<String, String> parameters) {
+    private boolean isCompatable(Rowset.Row row, org.eclipse.daanse.olap.api.query.component.Expression exp, Map<String, String> parameters) {
         if(exp == null) {
             return true;
         }
@@ -3515,9 +3514,9 @@ public class XmlaHandler {
         return true;
     }
 
-    private Object getValue(Rowset.Row row, mondrian.olap.Expression exp, Map<String, String> parameters) {
+    private Object getValue(Rowset.Row row, org.eclipse.daanse.olap.api.query.component.Expression exp, Map<String, String> parameters) {
         if(exp instanceof Id) {
-            String columnName = ((mondrian.olap.api.NameSegment)((mondrian.olap.IdImpl)exp).getElement(0)).getName();
+            String columnName = ((org.eclipse.daanse.olap.api.NameSegment)((mondrian.olap.IdImpl)exp).getElement(0)).getName();
 
             if(columnName.startsWith("@")) {
                 columnName = columnName.substring(1);

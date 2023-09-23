@@ -14,13 +14,13 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.Type;
 import mondrian.rolap.RolapUtil;
 import mondrian.spi.UserDefinedFunction;
 

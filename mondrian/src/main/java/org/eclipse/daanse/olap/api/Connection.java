@@ -7,9 +7,24 @@
  * Copyright (C) 2000-2005 Julian Hyde
  * Copyright (C) 2005-2017 Hitachi Vantara and others
  * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
  *
- * Contributors:
- *   SmartCity Jena - refactor, clean API
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
  */
 
 package org.eclipse.daanse.olap.api;
@@ -19,17 +34,15 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.DriverManager;
-import mondrian.olap.Expression;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.SchemaReader;
 
 /**
  * Connection to a multi-dimensional database.

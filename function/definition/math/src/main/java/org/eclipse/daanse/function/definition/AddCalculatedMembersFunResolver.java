@@ -1,13 +1,14 @@
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Expression;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.Type;
+
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunUtil;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.MultiResolver;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 

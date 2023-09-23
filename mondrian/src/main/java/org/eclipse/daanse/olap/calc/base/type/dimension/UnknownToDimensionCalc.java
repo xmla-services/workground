@@ -16,10 +16,9 @@ package org.eclipse.daanse.olap.calc.base.type.dimension;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDimensionCalc;
-
-import mondrian.olap.type.Type;
 
 public class UnknownToDimensionCalc extends AbstractProfilingNestedDimensionCalc<Calc<?>> {
 

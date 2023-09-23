@@ -15,24 +15,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.fun.FunctionResolver;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.util.ArrayStack;
 
 /**
- * Default implementation of {@link mondrian.olap.Validator}.
+ * Default implementation of {@link org.eclipse.daanse.olap.api.Validator}.
  *
  * <p>Uses a stack to help us guess the type of our parent expression
  * before we've completely resolved our children -- necessary,
@@ -115,7 +122,7 @@ abstract class ValidatorImpl implements Validator {
     }
 
     @Override
-	public void validate(ParameterExpressionImpl parameterExpr) {
+	public void validate(ParameterExpression parameterExpr) {
         ParameterExpression resolved =
             (ParameterExpression) resolvedNodes.get(parameterExpr);
         if (resolved != null) {
@@ -398,7 +405,7 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    private int whichArg(final FunCall node, final Expression arg) {
+    private int whichArg(final FunctionCall node, final Expression arg) {
         final Expression[] children = node.getArgs();
         for (int i = 0; i < children.length; i++) {
             if (children[i] == arg) {

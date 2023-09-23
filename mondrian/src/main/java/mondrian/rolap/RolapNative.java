@@ -14,8 +14,9 @@ package mondrian.rolap;
 
 import java.util.EventObject;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+
 import mondrian.olap.NativeEvaluator;
 
 /**

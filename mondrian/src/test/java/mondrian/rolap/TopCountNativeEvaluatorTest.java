@@ -19,12 +19,13 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 
 import mondrian.olap.NumericLiteralImpl;
+
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.TypeWrapperExp;
 import mondrian.test.PropertySaver5;

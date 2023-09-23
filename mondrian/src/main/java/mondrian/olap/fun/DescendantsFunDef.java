@@ -18,10 +18,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.IntegerCalc;
 import org.eclipse.daanse.olap.calc.api.LevelCalc;
@@ -34,9 +38,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
@@ -45,7 +46,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
 
 /**

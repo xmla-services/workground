@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
@@ -23,7 +24,6 @@ import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Expression;
 import mondrian.olap.type.NullType;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapMember;

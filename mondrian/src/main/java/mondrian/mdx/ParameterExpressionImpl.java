@@ -12,25 +12,25 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 import org.eclipse.daanse.olap.calc.api.compiler.CompilableParameter;
 
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
-import mondrian.olap.Parameter;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 
 /**
- * MDX expression which is a usage of a {@link mondrian.olap.Parameter}.
+ * MDX expression which is a usage of a {@link org.eclipse.daanse.olap.api.Parameter}.
  *
  * @author jhyde
  */

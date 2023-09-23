@@ -16,18 +16,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
-
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 import org.olap4j.impl.UnmodifiableArrayList;
-
-import mondrian.olap.type.Type;
 
 /**
  * Multi-part identifier.
@@ -155,10 +155,10 @@ public class IdImpl
      *
      * <p>For example, the identifier
      * <code>[Store].USA.[New Mexico].&[45]</code> has four segments:<ul>
-     * <li>"Store", {@link mondrian.olap.Quoting#QUOTED}</li>
-     * <li>"USA", {@link mondrian.olap.Quoting#UNQUOTED}</li>
-     * <li>"New Mexico", {@link mondrian.olap.Quoting#QUOTED}</li>
-     * <li>"45", {@link mondrian.olap.Quoting#KEY}</li>
+     * <li>"Store", {@link org.eclipse.daanse.olap.api.Quoting#QUOTED}</li>
+     * <li>"USA", {@link org.eclipse.daanse.olap.api.Quoting#UNQUOTED}</li>
+     * <li>"New Mexico", {@link org.eclipse.daanse.olap.api.Quoting#QUOTED}</li>
+     * <li>"45", {@link org.eclipse.daanse.olap.api.Quoting#KEY}</li>
      * </ul>
      */
     public static abstract class AbstractSegment implements Segment {

@@ -179,7 +179,7 @@ class MondrianOlap4jLevel
             new Locus.Action<List<Member>>() {
                 @Override
 				public List<Member> execute() {
-                    final mondrian.olap.SchemaReader schemaReader =
+                    final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
                         mondrianConnection.getSchemaReader().withLocus();
                     final List<org.eclipse.daanse.olap.api.element.Member> levelMembers =
                         schemaReader.getLevelMembers(level, true);

@@ -11,13 +11,13 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.olap.fun.sort.OrderKey;
-import mondrian.olap.type.Type;
 
 /**
  * Definition of the <code>&lt;Member&gt;.OrderKey</code> MDX builtin function.

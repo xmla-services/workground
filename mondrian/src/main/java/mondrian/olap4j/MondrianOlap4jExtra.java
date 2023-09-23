@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 import mondrian.olap.Syntax;
 
 import org.eclipse.daanse.olap.api.element.MetaElement;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -37,7 +38,6 @@ import org.olap4j.metadata.MetadataElement;
 import org.olap4j.metadata.Schema;
 
 import mondrian.olap.Category;
-import mondrian.olap.FunctionTable;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Property;
@@ -91,7 +91,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     @Override
 	public int getLevelCardinality(Level level) throws OlapException {
         if (level instanceof MondrianOlap4jLevel olap4jLevel) {
-            final mondrian.olap.SchemaReader schemaReader =
+            final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
                 olap4jLevel.olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                     .olap4jConnection.getMondrianConnection().getSchemaReader()
                     .withLocus();
@@ -189,7 +189,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     {
         final MondrianOlap4jHierarchy olap4jHierarchy =
             (MondrianOlap4jHierarchy) hierarchy;
-        final mondrian.olap.SchemaReader schemaReader =
+        final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
             olap4jHierarchy.olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                 .olap4jConnection.getMondrianConnection().getSchemaReader()
                 .withLocus();
@@ -257,7 +257,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         if (member.getOrdinal() == -1) {
             MondrianOlap4jMember olap4jMember =
                 (MondrianOlap4jMember) member;
-            final mondrian.olap.SchemaReader schemaReader =
+            final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
                 olap4jMember.olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                     .olap4jConnection.getMondrianConnection().getSchemaReader()
                     .withLocus();

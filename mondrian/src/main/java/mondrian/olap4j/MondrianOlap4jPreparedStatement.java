@@ -25,6 +25,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 
+import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetMetaData;
@@ -51,7 +52,6 @@ import org.olap4j.type.SymbolType;
 import org.olap4j.type.TupleType;
 import org.olap4j.type.Type;
 
-import mondrian.olap.Parameter;
 import mondrian.util.Pair;
 
 import static org.eigenbase.xom.XOMUtil.discard;

@@ -23,10 +23,10 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 
 import mondrian.olap.*;
-import mondrian.olap.api.*;
 import org.eclipse.daanse.olap.api.*;
 import org.eclipse.daanse.olap.api.query.*;
 import org.eclipse.daanse.olap.api.query.component.*;
+import org.eclipse.daanse.olap.api.function.*;
 import mondrian.mdx.*;
 import mondrian.parser.*;
 import mondrian.resource.MondrianResource;

@@ -21,8 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.FunctionTable;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
+
 import mondrian.olap.Syntax;
 import mondrian.util.Pair;
 
@@ -30,7 +31,7 @@ import mondrian.util.Pair;
  * Abstract implementation of {@link FunctionTable}.
  *
  * <p>The derived class must implement
- * {@link #defineFunctions(mondrian.olap.FunctionTable.FunctionTableCollector)} to define
+ * {@link #defineFunctions(org.eclipse.daanse.olap.api.function.FunctionTable.FunctionTableCollector)} to define
  * each function which will be recognized by this table. This method is called
  * from the constructor, after which point, no further functions can be added.
  */
@@ -134,7 +135,7 @@ public abstract class FunTableImpl implements FunctionTable {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.FunctionTable.FunctionTableCollector}.
+     * Implementation of {@link org.eclipse.daanse.olap.api.function.FunctionTable.FunctionTableCollector}.
      * Functions are added to lists each time {@link #define(FunctionResolver)} is
      * called, then {@link #organizeFunctions()} sorts and indexes the map.
      */

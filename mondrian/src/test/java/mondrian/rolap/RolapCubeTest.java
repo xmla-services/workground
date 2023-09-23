@@ -26,8 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -46,7 +47,6 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.test.PropertySaver5;
 

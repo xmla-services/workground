@@ -11,12 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.api;
-
-import mondrian.olap.IdImpl;
+package org.eclipse.daanse.olap.api;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.olap.IdImpl;
 
 public interface Segment {
 

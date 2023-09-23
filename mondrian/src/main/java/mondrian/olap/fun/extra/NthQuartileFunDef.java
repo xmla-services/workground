@@ -11,6 +11,7 @@ package mondrian.olap.fun.extra;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
@@ -21,7 +22,6 @@ import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCal
 import org.eclipse.daanse.olap.calc.base.util.HirarchyDependsChecker;
 import org.eclipse.daanse.olap.calc.base.value.CurrentValueDoubleCalc;
 
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.MultiResolver;

@@ -12618,7 +12618,7 @@ Intel platforms):
   }
 
   /**
-   * Tests {@link mondrian.olap.FunctionTable#getFunctionInfos()}, but more importantly, generates an HTML table of all
+   * Tests {@link org.eclipse.daanse.olap.api.function.FunctionTable#getFunctionInfos()}, but more importantly, generates an HTML table of all
    * implemented functions into a file called "functions.html". You can manually include that table in the <a
    * href="{@docRoot}/../mdx.html">MDX specification</a>.
    */

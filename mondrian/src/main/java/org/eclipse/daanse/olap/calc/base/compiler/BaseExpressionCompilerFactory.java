@@ -17,6 +17,7 @@ package org.eclipse.daanse.olap.calc.base.compiler;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
@@ -24,7 +25,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompilerFactory;
 import aQute.bnd.component.annotations.Component;
 import aQute.bnd.component.annotations.ServiceScope;
 import mondrian.calc.impl.BetterExpCompiler;
-import mondrian.olap.Validator;
 import mondrian.util.CreationException;
 
 @Component(scope = ServiceScope.SINGLETON, service = ExpressionCompilerFactory.class)

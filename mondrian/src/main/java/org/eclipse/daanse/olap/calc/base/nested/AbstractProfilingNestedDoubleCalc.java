@@ -15,13 +15,13 @@
 package org.eclipse.daanse.olap.calc.base.nested;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingNestedCalc;
 
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
 
 /**
  * Abstract implementation of the {@link org.eclipse.daanse.olap.calc.api.IntegerCalc} interface.

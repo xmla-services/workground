@@ -15,10 +15,9 @@
 package org.eclipse.daanse.olap.calc.base.type.integer;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedIntegerCalc;
-
-import mondrian.olap.type.Type;
 
 public class DoubleToIntegerCalc extends AbstractProfilingNestedIntegerCalc<DoubleCalc> {
 

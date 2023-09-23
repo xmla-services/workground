@@ -16,11 +16,11 @@ package org.eclipse.daanse.olap.calc.base.type.doublex;
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedDoubleCalc;
 
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.Type;
 
 public class UnknownToDoubleCalc extends AbstractProfilingNestedDoubleCalc<Calc<?>> {
 

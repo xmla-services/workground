@@ -13,18 +13,17 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.Parameter;
-import mondrian.olap.SchemaReader;
-import mondrian.olap.Validator;
 import mondrian.rolap.RolapCube;
 import mondrian.server.Statement;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;

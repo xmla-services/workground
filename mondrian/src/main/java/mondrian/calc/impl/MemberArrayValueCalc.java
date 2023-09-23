@@ -12,11 +12,11 @@ package mondrian.calc.impl;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.MemberCalc;
 
 import mondrian.olap.type.ScalarType;
-import mondrian.olap.type.Type;
 
 /**
  * Expression which evaluates a few member expressions,

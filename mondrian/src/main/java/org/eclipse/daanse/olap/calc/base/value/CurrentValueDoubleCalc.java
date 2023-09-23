@@ -1,10 +1,10 @@
 package org.eclipse.daanse.olap.calc.base.value;
 
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingValueCalc;
 
 import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.Type;
 
 public class CurrentValueDoubleCalc extends AbstractProfilingValueCalc<Double> implements DoubleCalc{
 

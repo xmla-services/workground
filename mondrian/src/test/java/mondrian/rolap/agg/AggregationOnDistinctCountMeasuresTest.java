@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -54,7 +55,6 @@ import mondrian.enums.DatabaseProduct;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.ResultBase;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.CrossJoinFunDef;
@@ -1286,7 +1286,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1295,7 +1295,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers"),
                     salesCubeSchemaReader)));
@@ -1303,7 +1303,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1312,7 +1312,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                     salesCubeSchemaReader)));
@@ -1336,14 +1336,14 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Store", "All Stores", "USA", "OR", "Portland"),
                     salesCubeSchemaReader)));
         assertTrue(
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList("Store", "All Stores", "USA", "OR"),
+                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "USA", "OR"),
                     salesCubeSchemaReader)));
         assertEquals(16, tuples.size());
     }
@@ -1364,7 +1364,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans",
                         "Cormorant"),
@@ -1373,7 +1373,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pots and Pans"),
                 salesCubeSchemaReader)));
@@ -1381,7 +1381,7 @@ class AggregationOnDistinctCountMeasuresTest {
             tuppleListContains(
                 tuples,
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                         "Product", "All Products", "Non-Consumable",
                         "Household", "Kitchen Products", "Pot Scrubbers",
                         "Cormorant"),
@@ -1407,10 +1407,10 @@ class AggregationOnDistinctCountMeasuresTest {
   void testShouldNotRemoveDuplicateTuples(TestingContext context) {
       prepareContext(context);
         Member maleChildMember = member(
-            mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
+            org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
             salesCubeSchemaReader);
         Member femaleChildMember = member(
-            mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
+            org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
             salesCubeSchemaReader);
 
         List<Member> memberList = new ArrayList<>();
@@ -1449,15 +1449,15 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member maleChild =
             member(
-                mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
+                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
                 salesCubeSchemaReader);
         Member femaleChild =
             member(
-                mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member mexicoMember =
             member(
-                mondrian.olap.api.Segment.toList("Store", "All Stores", "Mexico"),
+                org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "Mexico"),
                 salesCubeSchemaReader);
 
         TupleList memberList =
@@ -1588,22 +1588,22 @@ class AggregationOnDistinctCountMeasuresTest {
       prepareContext(context);
         Member caMember =
             member(
-                mondrian.olap.api.Segment.toList(
+                org.eclipse.daanse.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "CA"),
                 salesCubeSchemaReader);
         Member orMember =
             member(
-                mondrian.olap.api.Segment.toList(
+                org.eclipse.daanse.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "OR"),
                 salesCubeSchemaReader);
         Member waMember =
             member(
-                mondrian.olap.api.Segment.toList(
+                org.eclipse.daanse.olap.api.Segment.toList(
                     "Store", "All Stores", "USA", "WA"),
                 salesCubeSchemaReader);
         Member femaleMember =
             member(
-                mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
                 salesCubeSchemaReader);
         Member [] tupleMembersArity1 =
             new Member[] {
@@ -1960,11 +1960,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member maleMember =
                 member(
-                    mondrian.olap.api.Segment.toList("Gender", "All Gender", "M"),
+                    org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "M"),
                         salesCubeSchemaReader);
         Member femaleMember =
                 member(
-                    mondrian.olap.api.Segment.toList("Gender", "All Gender", "F"),
+                    org.eclipse.daanse.olap.api.Segment.toList("Gender", "All Gender", "F"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {
@@ -1983,40 +1983,40 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         return new UnaryTupleList(Arrays.asList(
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Alameda", "HQ"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Beverly Hills",
                                 "Store 6"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "CA", "Los Angeles"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Portland", "Store 11"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem"),
                         salesCubeSchemaReader),
                 member(
-                    mondrian.olap.api.Segment.toList(
+                    org.eclipse.daanse.olap.api.Segment.toList(
                                 "Store", "All Stores", "USA", "OR", "Salem", "Store 13"),
                         salesCubeSchemaReader)));
     }
@@ -2028,11 +2028,11 @@ class AggregationOnDistinctCountMeasuresTest {
     {
         Member usaMember =
                 member(
-                    mondrian.olap.api.Segment.toList("Store", "All Stores", "USA"),
+                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "USA"),
                         salesCubeSchemaReader);
         Member canadaMember =
                 member(
-                    mondrian.olap.api.Segment.toList("Store", "All Stores", "CANADA"),
+                    org.eclipse.daanse.olap.api.Segment.toList("Store", "All Stores", "CANADA"),
                         salesCubeSchemaReader);
         Member [] members;
         if (includeAllMember) {

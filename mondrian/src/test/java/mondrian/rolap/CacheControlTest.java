@@ -21,11 +21,11 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
-
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.CacheControl.CellRegion;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -40,7 +40,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
 

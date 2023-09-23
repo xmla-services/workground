@@ -13,6 +13,8 @@
  */
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 public abstract class AbstractLiteralImpl<R> extends AbstractExpression {

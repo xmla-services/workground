@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
 import mondrian.olap.IdImpl;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;

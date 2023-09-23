@@ -12,6 +12,7 @@
 package mondrian.olap;
 
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.slf4j.Logger;
 

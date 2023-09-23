@@ -12,10 +12,13 @@ package mondrian.mdx;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -24,10 +27,7 @@ import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
 
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 
 /**
  * Usage of a {@link org.eclipse.daanse.olap.api.element.NamedSet} in an MDX expression.
