@@ -83,7 +83,7 @@ import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Literal;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
@@ -973,7 +973,7 @@ public class XmlaHandler {
                 final mondrian.rolap.RolapConnection rolapConnection =
                         ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
                 final String mdx = request.getStatement();
-                QueryPart queryPart = null;
+                QueryComponent queryPart = null;
                 if(mdx != null && !mdx.isEmpty()) {
                     queryPart = rolapConnection.parseStatement(mdx);
                 }
@@ -2292,7 +2292,7 @@ public class XmlaHandler {
                     MondrianProperties.instance().CaseSensitive.get();
             final mondrian.server.Statement statement =
                     (mondrian.server.Statement) cellSet.getStatement();
-            for(QueryPart queryPart: statement.getQuery().getCellProperties()){
+            for(QueryComponent queryPart: statement.getQuery().getCellProperties()){
                 CellProperty cellProperty = (CellProperty)queryPart;
                 mondrian.olap.Property property = mondrian.olap.Property.lookup(cellProperty.toString(), matchCase);
                 String propertyName = ((NameSegment)

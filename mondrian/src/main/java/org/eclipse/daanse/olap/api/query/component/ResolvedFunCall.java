@@ -18,7 +18,7 @@ import mondrian.olap.FunCall;
 import mondrian.olap.FunctionDefinition;
 import mondrian.olap.type.Type;
 
-public non-sealed interface ResolvedFunCall extends QueryPart, FunCall {
+public non-sealed interface ResolvedFunCall extends QueryComponent, FunCall {
 
     int getArgCount();
 

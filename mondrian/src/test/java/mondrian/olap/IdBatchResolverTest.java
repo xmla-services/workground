@@ -36,7 +36,7 @@ import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -425,7 +425,7 @@ class IdBatchResolverTest  {
 
     public Set<String> batchResolve(TestingContext context,String mdx) {
         IdBatchResolver batchResolver = makeTestBatchResolver(context,mdx);
-        Map<QueryPart, QueryPart> resolvedIdents = batchResolver.resolve();
+        Map<QueryComponent, QueryComponent> resolvedIdents = batchResolver.resolve();
         Set<String> resolvedNames = getResolvedNames(resolvedIdents);
         return resolvedNames;
     }
@@ -447,7 +447,7 @@ class IdBatchResolverTest  {
     }
 
     private Set<String> getResolvedNames(
-        Map<QueryPart, QueryPart> resolvedIdents)
+        Map<QueryComponent, QueryComponent> resolvedIdents)
     {
         return new HashSet(
             CollectionUtils

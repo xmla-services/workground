@@ -665,7 +665,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     }
 
     @Override
-	public Object visit( ParameterExpression parameterExpr ) {
+	public Object visitParameterExpression( ParameterExpression parameterExpr ) {
       final Parameter parameter = parameterExpr.getParameter();
       final Type type = parameter.getType();
       if ( type instanceof mondrian.olap.type.MemberType ) {
@@ -679,7 +679,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
     }
 
     @Override
-	public Object visit( MemberExpression memberExpr ) {
+	public Object visitMemberExpression( MemberExpression memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;

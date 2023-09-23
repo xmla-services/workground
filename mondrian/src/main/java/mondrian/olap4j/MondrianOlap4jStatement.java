@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetListener;
@@ -93,7 +93,7 @@ abstract class MondrianOlap4jStatement
             // Do we still need it?
             throw new UnsupportedOperationException();
         }
-        QueryPart parseTree;
+        QueryComponent parseTree;
         try {
             parseTree =
                 olap4jConnection.getMondrianConnection().parseStatement(mdx);
@@ -149,7 +149,7 @@ abstract class MondrianOlap4jStatement
         }
     }
 
-    private String explainInternal(QueryPart query) {
+    private String explainInternal(QueryComponent query) {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw);
         query.explain(pw);

@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.component.expression.AbstractExpression;
@@ -89,8 +90,8 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+        return visitor.visitParameterExpression(this);
     }
 
     @Override

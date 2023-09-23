@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-public non-sealed interface Refresh extends QueryPart {
+public non-sealed interface Refresh extends QueryComponent {
 
     String getCubeName();
 }

@@ -13,18 +13,17 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Expression;
-import mondrian.olap.QueryAxisImpl;
-import mondrian.olap.Validator;
-import mondrian.olap.api.SubtotalVisibility;
-
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-public non-sealed interface QueryAxis extends QueryPart {
+import mondrian.olap.Expression;
+import mondrian.olap.Validator;
+import mondrian.olap.api.SubtotalVisibility;
+
+public non-sealed interface QueryAxis extends QueryComponent {
 
     String getAxisName();
 
@@ -40,7 +39,7 @@ public non-sealed interface QueryAxis extends QueryPart {
 
     Calc compile(ExpressionCompiler compiler, ResultStyle resultStyle);
 
-    Object accept(MdxVisitor visitor);
+    Object accept(QueryComponentVisitor visitor);
 
     Id[] getDimensionProperties();
 

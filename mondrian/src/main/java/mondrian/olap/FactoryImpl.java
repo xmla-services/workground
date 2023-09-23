@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
@@ -34,7 +34,7 @@ import mondrian.server.Statement;
 
 
 public class FactoryImpl
-    implements MdxParserValidator.QueryPartFactory
+    implements MdxParserValidator.QueryComponentFactory
 {
 
 	@Override
@@ -72,7 +72,7 @@ public class FactoryImpl
      * Creates an {@link Explain} object.
      */
     public Explain makeExplain(
-        QueryPart query)
+        QueryComponent query)
     {
         return new ExplainImpl(query);
     }

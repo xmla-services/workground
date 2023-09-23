@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public non-sealed interface Query extends QueryPart {
+public non-sealed interface Query extends QueryComponent {
 
     SchemaReader getSchemaReader(boolean b);
 
@@ -57,7 +57,7 @@ public non-sealed interface Query extends QueryPart {
 
     QueryAxis getSlicerAxis();
 
-    QueryPart[] getCellProperties();
+    QueryComponent[] getCellProperties();
 
     Set<Member> getMeasuresMembers();
 

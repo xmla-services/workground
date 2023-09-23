@@ -16,12 +16,12 @@ package org.eclipse.daanse.olap.api.query.component;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
-public non-sealed interface Formula extends QueryPart {
+public non-sealed interface Formula extends QueryComponent {
 
     boolean isMember();
 
@@ -53,7 +53,7 @@ public non-sealed interface Formula extends QueryPart {
 
     void accept(Validator validator);
 
-    Object accept(MdxVisitor visitor);
+    Object accept(QueryComponentVisitor visitor);
 
     void createElement(Query q);
 

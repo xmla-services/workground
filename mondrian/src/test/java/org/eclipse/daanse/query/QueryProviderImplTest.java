@@ -11,7 +11,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.query.base.QueryProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ class QueryProviderImplTest {
         when(nameObjectIdentifier.name()).thenReturn("cube");
         when(nameObjectIdentifier.quoting()).thenReturn(ObjectIdentifier.Quoting.QUOTED);
         when(refreshStatement.cubeName()).thenReturn(nameObjectIdentifier);
-        QueryPart queryPart = queryProviderImpl.createQuery(refreshStatement);
+        QueryComponent queryPart = queryProviderImpl.createQuery(refreshStatement);
         assertThat(queryPart).isNotNull().isInstanceOf(Refresh.class);
         Refresh refresh = (Refresh) queryPart;
         assertThat(refresh.getCubeName()).isEqualTo("[cube]");
@@ -70,7 +70,7 @@ class QueryProviderImplTest {
         when(nameObjectIdentifier.name()).thenReturn("cube");
         when(nameObjectIdentifier.quoting()).thenReturn(ObjectIdentifier.Quoting.UNQUOTED);
         when(refreshStatement.cubeName()).thenReturn(nameObjectIdentifier);
-        QueryPart queryPart = queryProviderImpl.createQuery(refreshStatement);
+        QueryComponent queryPart = queryProviderImpl.createQuery(refreshStatement);
         assertThat(queryPart).isNotNull().isInstanceOf(Refresh.class);
         Refresh refresh = (Refresh) queryPart;
         assertThat(refresh.getCubeName()).isEqualTo("cube");

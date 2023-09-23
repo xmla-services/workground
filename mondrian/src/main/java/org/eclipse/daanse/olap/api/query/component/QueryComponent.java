@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import java.io.PrintWriter;
 
-public sealed interface QueryPart permits
+public sealed interface QueryComponent permits
     CalculatedFormula,
     CellProperty,
     DimensionExpression,

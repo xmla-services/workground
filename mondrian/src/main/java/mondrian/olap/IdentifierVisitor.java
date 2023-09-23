@@ -23,7 +23,7 @@ public class IdentifierVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(Id id) {
+	public Object visitId(Id id) {
         identifiers.add(id);
         return null;
     }

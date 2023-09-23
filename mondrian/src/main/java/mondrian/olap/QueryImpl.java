@@ -45,10 +45,11 @@ import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.Calc;
@@ -63,7 +64,6 @@ import org.olap4j.mdx.IdentifierSegment;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
-import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
@@ -318,7 +318,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
 
 
-  public QueryPart[] getCellProperties() {
+  public QueryComponent[] getCellProperties() {
         return this.cellProperties;
     }
 
@@ -326,7 +326,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      * Checks whether the property name is present in the query.
      */
     public boolean hasCellProperty(String propertyName) {
-        for (QueryPart cellProp : cellProperties) {
+        for (QueryComponent cellProp : cellProperties) {
             if (((CellProperty)cellProp).isNameEquals(propertyName)) {
                 return true;
             }
@@ -405,7 +405,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
 
     public Validator createValidator(
-        Map<QueryPart, QueryPart> resolvedIdentifiers)
+        Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         return createValidator(
             statement.getSchema().getFunTable(),
@@ -437,7 +437,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     public Validator createValidator(
         FunctionTable functionTable,
         boolean alwaysResolveFunDef,
-        Map<QueryPart, QueryPart> resolvedIdentifiers)
+        Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         return new QueryValidator(
             functionTable,
@@ -492,7 +492,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         // Before commencing validation, create all calculated members
         // and calculated sets
         createFormulaElements();
-        Map<QueryPart, QueryPart> resolvedIdentifiers =
+        Map<QueryComponent, QueryComponent> resolvedIdentifiers =
             new IdBatchResolver(this).resolve();
         final Validator validator = createValidator(resolvedIdentifiers);
         resolve(validator); // resolve self and children
@@ -833,7 +833,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 	public Object[] getChildren() {
         // Chidren are axes, slicer, and formulas (in that order, to be
         // consistent with replaceChild).
-        List<QueryPart> list = new ArrayList<>();
+        List<QueryComponent> list = new ArrayList<>();
         list.addAll(Arrays.asList(axes));
         if (slicerAxis != null) {
             list.add(slicerAxis);
@@ -1166,7 +1166,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     public ScopedNamedSet createScopedNamedSet(
         String name,
-        QueryPart scope,
+        QueryComponent scope,
         Expression expr)
     {
         final ScopedNamedSet scopedNamedSet =
@@ -1184,7 +1184,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     ScopedNamedSet lookupScopedNamedSet(
         List<Segment> nameParts,
-        ArrayStack<QueryPart> scopeList)
+        ArrayStack<QueryComponent> scopeList)
     {
         if (nameParts.size() != 1) {
             return null;
@@ -1530,10 +1530,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         return baseCubes;
     }
 
-    public Object accept(MdxVisitor visitor) {
-        Object o = visitor.visit(this);
+    public Object accept(QueryComponentVisitor visitor) {
+        Object o = visitor.visitQuery(this);
 
-        if (visitor.shouldVisitChildren()) {
+        if (visitor.visitChildren()) {
             // visit formulas
             for (Formula formula : formulas) {
                 formula.accept(visitor);
@@ -2012,7 +2012,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          */
         public QueryValidator(
             FunctionTable functionTable, boolean alwaysResolveFunDef, QueryImpl query,
-            Map<QueryPart, QueryPart> resolvedIdentifiers)
+            Map<QueryComponent, QueryComponent> resolvedIdentifiers)
         {
             super(functionTable, resolvedIdentifiers);
             this.alwaysResolveFunDef = alwaysResolveFunDef;
@@ -2042,7 +2042,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             return alwaysResolveFunDef;
         }
 
-        public ArrayStack<QueryPart> getScopeStack() {
+        public ArrayStack<QueryComponent> getScopeStack() {
             return stack;
         }
     }
@@ -2139,7 +2139,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
 
     public static class ScopedNamedSet implements NamedSet {
         private final String name;
-        private final QueryPart scope;
+        private final QueryComponent scope;
         private Expression expr;
 
         /**
@@ -2150,7 +2150,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          *     the 'expr AS name', often GENERATE or FILTER)
          * @param expr Expression that defines the set
          */
-        private ScopedNamedSet(String name, QueryPart scope, Expression expr) {
+        private ScopedNamedSet(String name, QueryComponent scope, Expression expr) {
             this.name = name;
             this.scope = scope;
             this.expr = expr;
@@ -2266,7 +2266,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private class ParameterFinder extends MdxVisitorImpl {
         @Override
-		public Object visit(ParameterExpression parameterExpr) {
+		public Object visitParameterExpression(ParameterExpression parameterExpr) {
             Parameter parameter = parameterExpr.getParameter();
             if (!parameters.contains(parameter)) {
                 parameters.add(parameter);
@@ -2276,7 +2276,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visitUnresolvedFunCall(UnresolvedFunCall call) {
             if (call.getFunName().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
@@ -2307,21 +2307,21 @@ public class QueryImpl extends AbstractQueryPart implements Query {
      */
     private class AliasedExpressionFinder extends MdxVisitorImpl {
         @Override
-        public Object visit(QueryAxis queryAxis) {
+        public Object visitQueryAxis(QueryAxis queryAxis) {
             registerAlias(queryAxis, queryAxis.getSet());
-            return super.visit(queryAxis);
+            return super.visitQueryAxis(queryAxis);
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visitUnresolvedFunCall(UnresolvedFunCall call) {
             registerAliasArgs(call);
-            return super.visit(call);
+            return super.visitUnresolvedFunCall(call);
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
+		public Object visitResolvedFunCall(ResolvedFunCall call) {
             registerAliasArgs(call);
-            return super.visit(call);
+            return super.visitResolvedFunCall(call);
         }
 
         /**
@@ -2331,7 +2331,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          */
         private void registerAliasArgs(FunCall call) {
             for (Expression exp : call.getArgs()) {
-                registerAlias((QueryPart) call, exp);
+                registerAlias((QueryComponent) call, exp);
             }
         }
 
@@ -2342,7 +2342,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param parent Parent node
          * @param exp Expression that may be an "AS"
          */
-        private void registerAlias(QueryPart parent, Expression exp) {
+        private void registerAlias(QueryComponent parent, Expression exp) {
             if (exp instanceof FunCall call2 && call2.getSyntax() == Syntax.Infix
                 && call2.getFunName().equals("AS")) {
                 // Scope is the function enclosing the 'AS' expression.

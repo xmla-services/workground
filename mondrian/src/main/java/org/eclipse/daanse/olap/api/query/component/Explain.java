@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-public non-sealed interface Explain extends QueryPart {
+public non-sealed interface Explain extends QueryComponent {
 
-    QueryPart getQuery();
+    QueryComponent getQuery();
 }

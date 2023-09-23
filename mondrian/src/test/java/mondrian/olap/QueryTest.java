@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.Formula;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 
 import mondrian.olap.api.Segment;
 import org.junit.jupiter.api.AfterEach;

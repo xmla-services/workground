@@ -72,12 +72,12 @@ public class RolapNativeFilter extends RolapNativeSet {
       final AtomicBoolean mustJoin = new AtomicBoolean( false );
       filterExpr.accept( new MdxVisitorImpl() {
         @Override
-		public Object visit( MemberExpression memberExpr ) {
+		public Object visitMemberExpression( MemberExpression memberExpr ) {
           if ( memberExpr.getMember().isMeasure() ) {
             mustJoin.set( true );
             return null;
           }
-          return super.visit( memberExpr );
+          return super.visitMemberExpression( memberExpr );
         }
       } );
       return mustJoin.get() || ( getEvaluator().isNonEmpty() && super.isJoinRequired() );

@@ -3442,7 +3442,7 @@ public class RolapCube extends CubeBase {
         }
 
         @Override
-		public Object visit(MemberExpression memberExpr)
+		public Object visitMemberExpression(MemberExpression memberExpr)
         {
             Member member = memberExpr.getMember();
             if (member instanceof RolapCalculatedMember calcMember) {

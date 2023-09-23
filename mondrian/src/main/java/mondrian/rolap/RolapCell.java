@@ -752,13 +752,13 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(MemberExpression memberExpr) {
+		public Object visitMemberExpression(MemberExpression memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }
 
         @Override
-		public Object visit(ResolvedFunCall call) {
+		public Object visitResolvedFunCall(ResolvedFunCall call) {
             final FunctionDefinition def = call.getFunDef();
             final Expression[] args = call.getArgs();
             final String name = def.getName();
@@ -801,60 +801,60 @@ public class RolapCell implements Cell {
         }
 
         @Override
-		public Object visit(NamedSetExpression namedSetExpr) {
+		public Object visitNamedSetExpression(NamedSetExpression namedSetExpr) {
             throw Util.newInternal("not valid here: " + namedSetExpr);
         }
 
         @Override
-		public Object visit(Literal literal) {
+		public Object visitLiteral(Literal literal) {
             return null; // literals are drillable
         }
 
         @Override
-		public Object visit(Query query) {
+		public Object visitQuery(Query query) {
             throw Util.newInternal("not valid here: " + query);
         }
 
         @Override
-		public Object visit(QueryAxis queryAxis) {
+		public Object visitQueryAxis(QueryAxis queryAxis) {
             throw Util.newInternal("not valid here: " + queryAxis);
         }
 
         @Override
-		public Object visit(Formula formula) {
+		public Object visitFormula(Formula formula) {
             throw Util.newInternal("not valid here: " + formula);
         }
 
         @Override
-		public Object visit(UnresolvedFunCall call) {
+		public Object visitUnresolvedFunCall(UnresolvedFunCall call) {
             throw Util.newInternal("expected resolved expression");
         }
 
         @Override
-		public Object visit(Id id) {
+		public Object visitId(Id id) {
             throw Util.newInternal("expected resolved expression");
         }
 
         @Override
-		public Object visit(ParameterExpression parameterExpr) {
+		public Object visitParameterExpression(ParameterExpression parameterExpr) {
             // Not valid in general; might contain complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(DimensionExpression dimensionExpr) {
+		public Object visitDimensionExpression(DimensionExpression dimensionExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(HierarchyExpression hierarchyExpr) {
+		public Object visitHierarchyExpression(HierarchyExpression hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
         @Override
-		public Object visit(LevelExpression levelExpr) {
+		public Object visitLevelExpression(LevelExpression levelExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

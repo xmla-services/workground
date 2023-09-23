@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantLevelCalc;
@@ -84,8 +85,8 @@ public class LevelExpressionImpl extends AbstractExpression implements Expressio
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+        return visitor.visitLevelExpression(this);
     }
 
 }

@@ -37,7 +37,7 @@ import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Cell;
@@ -628,7 +628,7 @@ public class RolapResult extends ResultBase {
 
       // Get value for each Cell
       // Cells will not be calculated if only CELL_ORDINAL requested.
-      QueryPart[] cellProperties = query.getCellProperties();
+      QueryComponent[] cellProperties = query.getCellProperties();
       if(!(cellProperties.length == 1
               && ((NameSegment)
               mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).getName().equalsIgnoreCase(
@@ -816,20 +816,20 @@ public final Execution getExecution() {
     }
 
     @Override
-	public Object visit( DimensionExpression dimensionExpr ) {
+	public Object visitDimensionExpression( DimensionExpression dimensionExpr ) {
       dimension = dimensionExpr.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( HierarchyExpression hierarchyExpr ) {
+	public Object visitHierarchyExpression( HierarchyExpression hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
     }
 
     @Override
-	public Object visit( MemberExpression memberExpr ) {
+	public Object visitMemberExpression( MemberExpression memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;

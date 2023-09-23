@@ -17,7 +17,7 @@ import java.util.List;
 
 import mondrian.olap.api.Segment;
 
-public non-sealed interface Id extends QueryPart {
+public non-sealed interface Id extends QueryComponent {
 
     String[] toStringArray();
 

@@ -11,10 +11,10 @@ package mondrian.olap.type;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
@@ -63,7 +63,7 @@ public class TypeWrapperExp implements Expression {
     }
 
     @Override
-    public Object accept(MdxVisitor visitor) {
+    public Object accept(QueryComponentVisitor visitor) {
         throw new UnsupportedOperationException();
     }
 

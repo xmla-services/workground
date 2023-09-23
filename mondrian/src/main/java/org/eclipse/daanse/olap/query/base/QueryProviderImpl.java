@@ -29,7 +29,7 @@ import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Query;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import mondrian.server.Statement;
@@ -56,7 +56,7 @@ import static org.eclipse.daanse.olap.query.base.MdxToQueryConverter.convertSubc
 public class QueryProviderImpl implements QueryProvider {
 
     @Override
-    public QueryPart createQuery(MdxStatement mdxStatement) {
+    public QueryComponent createQuery(MdxStatement mdxStatement) {
 
         if (mdxStatement instanceof SelectStatement selectStatement) {
             return createQuery(selectStatement);
@@ -101,7 +101,7 @@ public class QueryProviderImpl implements QueryProvider {
 
     @Override
     public Explain createExplain(ExplainStatement explainStatement) {
-        QueryPart queryPart = createQuery(explainStatement.mdxStatement());
+        QueryComponent queryPart = createQuery(explainStatement.mdxStatement());
         return new ExplainImpl(queryPart);
     }
 

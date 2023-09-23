@@ -48,13 +48,13 @@ import mondrian.server.Statement;
 })
 public class MdxParserImpl
 {
-    private MdxParserValidator.QueryPartFactory factory;
+    private MdxParserValidator.QueryComponentFactory factory;
     private Statement statement;
     private FunctionTable funTable;
     private boolean strictValidation;
 
     public MdxParserImpl(
-        MdxParserValidator.QueryPartFactory factory,
+        MdxParserValidator.QueryComponentFactory factory,
         Statement statement,
         String queryString,
         boolean debug,
@@ -120,9 +120,9 @@ public class MdxParserImpl
         }
     }
 
-    static CellProperty[] toQueryPartArray(List<QueryPart> qpList) {
+    static CellProperty[] toQueryComponentArray(List<QueryComponent> qpList) {
         if (qpList == null || qpList.size() == 0) {
-            return EmptyQueryPartArray;
+            return EmptyQueryComponentArray;
         } else {
             return qpList.toArray(new CellProperty[qpList.size()]);
         }
@@ -141,7 +141,7 @@ public class MdxParserImpl
     private static final Expression[] EmptyExpArray = new Expression[0];
     private static final Formula[] EmptyFormulaArray = new Formula[0];
     private static final Id[] EmptyIdArray = new Id[0];
-    private static final CellProperty[] EmptyQueryPartArray = new CellProperty[0];
+    private static final CellProperty[] EmptyQueryComponentArray = new CellProperty[0];
     private static final QueryAxis[] EmptyQueryAxisArray = new QueryAxis[0];
 
     private static final String DQ = '"' + "";
@@ -429,9 +429,9 @@ TOKEN :
 // ----------------------------------------------------------------------------
 // Entry points
 
-QueryPart statementEof() :
+QueryComponent statementEof() :
 {
-    QueryPart qp;
+    QueryComponent qp;
 }
 {
     qp = statement() <EOF> {
@@ -1010,9 +1010,9 @@ List<Expression> expList() :
 // <explainStatement> ::=
 //     EXPLAIN PLAN FOR ( <selectStatement> | <drillthroughStatement> )
 //
-QueryPart statement() :
+QueryComponent statement() :
 {
-    QueryPart qp;
+    QueryComponent qp;
 }
 {
     (
@@ -1039,9 +1039,9 @@ QueryPart statement() :
     }
 }
 
-QueryPart selectOrDrillthroughStatement() :
+QueryComponent selectOrDrillthroughStatement() :
 {
-    QueryPart qp;
+    QueryComponent qp;
 }
 {
     qp = selectStatement() {
@@ -1052,7 +1052,7 @@ QueryPart selectOrDrillthroughStatement() :
     }
 }
 
-QueryPart dmvSelectStatement() :
+QueryComponent dmvSelectStatement() :
 {
     NameSegment tableId;
     Id c;
@@ -1092,7 +1092,7 @@ Query selectStatement() :
      List<QueryAxis> a = new ArrayList<QueryAxis>();
      Subcube subcube;
      Id c, p;
-     List<QueryPart> cellPropList = new ArrayList<QueryPart>();
+     List<QueryComponent> cellPropList = new ArrayList<QueryComponent>();
 }
 {
     (
@@ -1146,7 +1146,7 @@ Query selectStatement() :
             toQueryAxisArray(a),
             subcube,
             w,
-            toQueryPartArray(cellPropList),
+            toQueryComponentArray(cellPropList),
             strictValidation);
     }
 }
@@ -1206,7 +1206,7 @@ Subcube selectSubcubeClause() :
     }
 }
 
-QueryPart createFormula() :
+QueryComponent createFormula() :
 {
     boolean isMember = true;
     NameSegment cubeId;
@@ -1243,7 +1243,7 @@ QueryPart createFormula() :
     }
 }
 
-QueryPart refreshStatement() :
+QueryComponent refreshStatement() :
 {
      Id c;
 }
@@ -1255,7 +1255,7 @@ QueryPart refreshStatement() :
     }
 }
 
-QueryPart updateStatement() :
+QueryComponent updateStatement() :
 {
     Id c;
     UpdateClause uc;
@@ -1309,7 +1309,7 @@ UpdateClause updateClause() :
     }
 }
 
-QueryPart transactionCommandStatement() :
+QueryComponent transactionCommandStatement() :
 {
      Command c;
 }
@@ -1467,7 +1467,7 @@ QueryAxis axisSpecification() :
     }
 }
 
-QueryPart drillthroughStatement() :
+QueryComponent drillthroughStatement() :
 {
     int m = 0, f = 0;
     List<Expression> rl = null;
@@ -1525,9 +1525,9 @@ IdImpl returnItem() :
     }
 }
 
-QueryPart explainStatement() :
+QueryComponent explainStatement() :
 {
-    QueryPart qp;
+    QueryComponent qp;
 }
 {
     <EXPLAIN> <PLAN> <FOR>

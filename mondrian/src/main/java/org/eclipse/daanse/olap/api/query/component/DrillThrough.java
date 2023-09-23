@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.element.OlapElement;
 
-public non-sealed interface DrillThrough extends QueryPart {
+public non-sealed interface DrillThrough extends QueryComponent {
 
     Query getQuery();
 

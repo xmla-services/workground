@@ -21,13 +21,13 @@ import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.LevelExpressionImpl;
-import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
@@ -115,10 +115,10 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
         return a2;
     }
 
-    public Object accept(MdxVisitor visitor) {
-        final Object o = visitor.visit(this);
+    public Object accept(QueryComponentVisitor visitor) {
+        final Object o = visitor.visitQueryAxis(this);
 
-        if (visitor.shouldVisitChildren()) {
+        if (visitor.visitChildren()) {
             // visit the expression which forms the axis
             exp.accept(visitor);
         }

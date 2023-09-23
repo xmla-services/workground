@@ -11,11 +11,15 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.api.query.component;
+package org.eclipse.daanse.olap.api.query.component.visit;
 
-import mondrian.olap.Parameter;
-
-public non-sealed interface ParameterExpression extends QueryComponent {
-
-    Parameter getParameter();
+/**
+ * 
+ * Visitee equivalent of QueryComponentVisitor
+ * See also {@link QueryComponentVisitor}
+ */
+public interface Visitee<T> {
+	
+	
+	public T accept(QueryComponentVisitor visitor);
 }
