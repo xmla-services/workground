@@ -47,7 +47,7 @@ import mondrian.resource.MondrianResource;
 class StrToTupleFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private StrToTupleFunDef(int[] parameterTypes) {
+    private StrToTupleFunDef(Category[] parameterTypes) {
         super(
             "StrToTuple",
             null,
@@ -179,7 +179,7 @@ class StrToTupleFunDef extends FunDefBase {
                     return null;
                 }
             }
-            int[] argTypes = new int[args.length];
+            Category[] argTypes = new Category[args.length];
             argTypes[0] = Category.STRING;
             for (int i = 1; i < argTypes.length; i++) {
                 argTypes[i] = Category.HIERARCHY;
@@ -189,7 +189,7 @@ class StrToTupleFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition getRepresentativeFunDef() {
-            return new StrToTupleFunDef(new int[] {Category.STRING});
+            return new StrToTupleFunDef(new Category[] {Category.STRING});
         }
     }
 }

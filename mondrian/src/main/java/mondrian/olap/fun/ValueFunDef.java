@@ -28,9 +28,9 @@ import org.eclipse.daanse.olap.query.base.Expressions;
  * @since Jun 14, 2002
  */
 class ValueFunDef extends FunDefBase {
-    private final int[] argTypes;
+    private final Category[] argTypes;
 
-    ValueFunDef(int[] argTypes) {
+    ValueFunDef(Category[] argTypes) {
         super(
             "_Value()",
             "_Value([<Member>, ...])",
@@ -42,12 +42,12 @@ class ValueFunDef extends FunDefBase {
     }
 
     @Override
-	public int getReturnCategory() {
+	public Category getReturnCategory() {
         return Category.TUPLE;
     }
 
     @Override
-	public int[] getParameterCategories() {
+	public Category[] getParameterCategories() {
         return argTypes;
     }
 

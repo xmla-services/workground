@@ -343,7 +343,7 @@ public class CmdRunner {
     }
 
     public void loadParameter(QueryImpl query, Parameter param) {
-        int category = TypeUtil.typeToCategory(param.getType());
+    	Category category = TypeUtil.typeToCategory(param.getType());
         String name = param.getName();
         String value = CmdRunner.paraNameValues.get(name);
         debug(new StringBuilder("loadParameter: name=").append(name).append(", value=").append(value).toString());
@@ -357,7 +357,7 @@ public class CmdRunner {
         Expr.Type type = expr.type;
         // found the parameter with the given name in the query
         switch (category) {
-        case Category.NUMERIC:
+        case NUMERIC:
             if (type != Expr.Type.NUMERIC) {
                 String msg =
                     new StringBuilder(FOR_PARAMETER_NAMED)
@@ -369,7 +369,7 @@ public class CmdRunner {
                 throw new IllegalArgumentException(msg);
             }
             break;
-        case Category.STRING:
+        case STRING:
             if (type != Expr.Type.STRING) {
                 String msg =
                     new StringBuilder(FOR_PARAMETER_NAMED)
@@ -382,7 +382,7 @@ public class CmdRunner {
             }
             break;
 
-        case Category.MEMBER:
+        case MEMBER:
             if (type != Expr.Type.MEMBER) {
                 String msg = new StringBuilder(FOR_PARAMETER_NAMED)
                     .append(name)

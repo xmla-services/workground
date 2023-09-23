@@ -108,7 +108,7 @@ class RolapSchemaTest {
         return new RolapSchema(key, md5, rolapConnectionMock);
     }
 
-    private SchemaReader mockSchemaReader(int category, OlapElement element) {
+    private SchemaReader mockSchemaReader(Category category, OlapElement element) {
         SchemaReader reader = mock(SchemaReader.class);
         when(reader.withLocus()).thenReturn(reader);
         when(reader.lookupCompound(

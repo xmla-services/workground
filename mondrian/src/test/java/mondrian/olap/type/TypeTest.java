@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -149,7 +150,7 @@ class TypeTest {
                     assertEquals(type, type2,desc);
                 }
 
-                final int toCategory = TypeUtil.typeToCategory(toType);
+                final Category toCategory = TypeUtil.typeToCategory(toType);
                 final List<FunctionResolver.Conversion> conversions =
                     new ArrayList<>();
                 final boolean canConvert =

@@ -48,7 +48,7 @@ import mondrian.olap.Util;
  * @since Jan 5, 2008
 */
 public class JavaFunDef extends FunDefBase {
-    private static final Map<Class, Integer> mapClazzToCategory =
+    private static final Map<Class, Category> mapClazzToCategory =
         new HashMap<>();
     private static final String CLASS_NAME = JavaFunDef.class.getName();
 
@@ -84,8 +84,8 @@ public class JavaFunDef extends FunDefBase {
         String name,
         String desc,
         Syntax syntax,
-        int returnCategory,
-        int[] paramCategories,
+        Category returnCategory,
+        Category[] paramCategories,
         Method method)
     {
         super(name, null, desc, syntax, returnCategory, paramCategories);
@@ -107,16 +107,16 @@ public class JavaFunDef extends FunDefBase {
         return new JavaMethodCalc(call, calcs, method);
     }
 
-    private static int getCategory(Class clazz) {
+    private static Category getCategory(Class clazz) {
         return JavaFunDef.mapClazzToCategory.get(clazz);
     }
 
-    private static int getReturnCategory(Method m) {
+    private static Category getReturnCategory(Method m) {
         return JavaFunDef.getCategory(m.getReturnType());
     }
 
-    private static int[] getParameterCategories(Method m) {
-        int[] arr = new int[m.getParameterTypes().length];
+    private static Category[] getParameterCategories(Method m) {
+    	Category[] arr = new Category[m.getParameterTypes().length];
         for (int i = 0; i < m.getParameterTypes().length; i++) {
             arr[i] = JavaFunDef.getCategory(m.getParameterTypes()[i]);
         }
@@ -134,9 +134,9 @@ public class JavaFunDef extends FunDefBase {
             Util.getAnnotation(
                 method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$SyntaxDef").toString(), Syntax.Function);
 
-        int returnCategory = JavaFunDef.getReturnCategory(method);
+        Category returnCategory = JavaFunDef.getReturnCategory(method);
 
-        int[] paramCategories = JavaFunDef.getParameterCategories(method);
+        Category[] paramCategories = JavaFunDef.getParameterCategories(method);
 
         return new JavaFunDef(
             name, desc, syntax, returnCategory, paramCategories, method);

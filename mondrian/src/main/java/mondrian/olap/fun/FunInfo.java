@@ -15,6 +15,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.function.FunctionInfo;
@@ -32,8 +33,8 @@ public class FunInfo implements FunctionInfo {
     private final Syntax syntax;
     private final String name;
     private final String description;
-    private final int[] returnTypes;
-    private final int[][] parameterTypes;
+    private final Category[] returnTypes;
+    private final Category[][] parameterTypes;
     private String[] sigs;
 
     static FunInfo make(FunctionResolver resolver) {
@@ -52,8 +53,8 @@ public class FunInfo implements FunctionInfo {
         this.name = funDef.getName();
         assert name != null;
         assert syntax != null;
-        this.returnTypes = new int[] { funDef.getReturnCategory() };
-        this.parameterTypes = new int[][] { funDef.getParameterCategories() };
+        this.returnTypes = new Category[] { funDef.getReturnCategory() };
+        this.parameterTypes = new Category[][] { funDef.getParameterCategories() };
 
         // use explicit signature if it has one, otherwise generate a set
         this.sigs = funDef instanceof FunDefBase funDefBase
@@ -71,8 +72,8 @@ public class FunInfo implements FunctionInfo {
         this.description = multiResolver.getDescription();
 
         String[] signatures = multiResolver.getSignatures();
-        this.returnTypes = new int[signatures.length];
-        this.parameterTypes = new int[signatures.length][];
+        this.returnTypes = new Category[signatures.length];
+        this.parameterTypes = new Category[signatures.length][];
         for (int i = 0; i < signatures.length; i++) {
             returnTypes[i] = FunUtil.decodeReturnCategory(signatures[i]);
             parameterTypes[i] =
@@ -104,9 +105,9 @@ public class FunInfo implements FunctionInfo {
         this.name = name;
         this.description = description;
         this.syntax = FunUtil.decodeSyntacticType(flags);
-        this.returnTypes = new int[] {FunUtil.decodeReturnCategory(flags)};
+        this.returnTypes = new Category[] {FunUtil.decodeReturnCategory(flags)};
         this.parameterTypes =
-            new int[][] {FunUtil.decodeParameterCategories(flags)};
+            new Category[][] {FunUtil.decodeParameterCategories(flags)};
     }
 
     @Override
@@ -117,8 +118,8 @@ public class FunInfo implements FunctionInfo {
     private static String[] makeSigs(
         Syntax syntax,
         String name,
-        int[] returnTypes,
-        int[][] parameterTypes)
+        Category[] returnTypes,
+        Category[][] parameterTypes)
     {
         if (parameterTypes == null) {
             return null;
@@ -161,7 +162,7 @@ public class FunInfo implements FunctionInfo {
      * as those returned by {@link org.eclipse.daanse.olap.api.query.component.Expression#getCategory()}.
      */
     @Override
-	public int[] getReturnCategories() {
+	public Category[] getReturnCategories() {
         return this.returnTypes;
     }
 
@@ -173,7 +174,7 @@ public class FunInfo implements FunctionInfo {
      * have one argument.
      */
     @Override
-	public int[][] getParameterCategories() {
+	public Category[][] getParameterCategories() {
         return this.parameterTypes;
     }
 

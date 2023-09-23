@@ -20,8 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
-import mondrian.olap.NullLiteralImpl;
-
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -50,10 +49,10 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.calc.impl.ElevatorSimplifyer;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;
+import mondrian.olap.NullLiteralImpl;
 import mondrian.olap.ParameterImpl;
 import mondrian.olap.Util;
 import mondrian.olap.type.StringType;
@@ -461,7 +460,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category)
+        Category category)
     {
         return lookupCompound(
             parent, names, failIfNotFound, category, MatchType.EXACT);
@@ -472,7 +471,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category,
+        Category category,
         MatchType matchType)
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -496,7 +495,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category,
+        Category category,
         MatchType matchType)
     {
         return Util.lookupCompound(

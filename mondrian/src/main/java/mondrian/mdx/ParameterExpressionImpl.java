@@ -12,6 +12,7 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -54,7 +55,7 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return TypeUtil.typeToCategory(parameter.getType());
     }
 
@@ -124,22 +125,22 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
         }
         final String name = parameter.getName();
         final Type type = parameter.getType();
-        final int category = TypeUtil.typeToCategory(type);
+        final Category category = TypeUtil.typeToCategory(type);
         if (def) {
             pw.print(new StringBuilder("Parameter(").append(Util.quoteForMdx(name)).append(", ").toString());
             switch (category) {
-            case Category.STRING, Category.NUMERIC:
-                pw.print(Category.instance.getName(category).toUpperCase());
+            case STRING, NUMERIC:
+                pw.print(category.getName().toUpperCase());
                 break;
-            case Category.MEMBER:
+            case MEMBER:
                 pw.print(uniqueName(type));
                 break;
-            case Category.SET:
+            case SET:
                 Type elementType = ((SetType) type).getElementType();
                 pw.print(uniqueName(elementType));
                 break;
             default:
-                throw Category.instance.badValue(category);
+                throw new RuntimeException("Bad Category: "+category.getName());
             }
             pw.print(", ");
             final Object value = parameter.getValue();

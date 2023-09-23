@@ -982,9 +982,9 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         QueryImpl query)
         throws NumberFormatException
     {
-        int category = TypeUtil.typeToCategory(type);
+    	Category category = TypeUtil.typeToCategory(type);
         switch (category) {
-        case Category.NUMERIC:
+        case NUMERIC:
             if (value instanceof Number || value == null) {
                 return value;
             }
@@ -998,12 +998,12 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             throw Util.newInternal(
                 new StringBuilder("Invalid value '").append(value).append("' for parameter '").append(parameterName)
                     .append("', type ").append(type).toString());
-        case Category.STRING:
+        case STRING:
             if (value == null) {
                 return null;
             }
             return value.toString();
-        case Category.SET:
+        case SET:
             if (value instanceof String str) {
                 value = IdentifierParser.parseIdentifierList(str);
             }
@@ -1027,7 +1027,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 expList.add(member);
             }
             return expList;
-        case Category.MEMBER:
+        case MEMBER:
             if (value == null) {
                 // Setting a member parameter to null is the same as setting to
                 // the null member of the hierarchy. May not be equivalent to
@@ -1070,7 +1070,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 new StringBuilder("Invalid value '").append(value).append("' for parameter '")
                     .append(parameterName).append("', type ").append(type).toString());
         default:
-            throw Category.instance.badValue(category);
+            throw new RuntimeException("Bad Category: "+category.getName());
         }
     }
 
@@ -1844,7 +1844,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             OlapElement parent,
             List<Segment> names,
             boolean failIfNotFound,
-            int category,
+            Category category,
             MatchType matchType)
         {
             if (matchType == MatchType.EXACT) {
@@ -2108,7 +2108,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             OlapElement parent,
             final List<Segment> names,
             boolean failIfNotFound,
-            int category,
+            Category category,
             MatchType matchType)
         {
             if ( Category.SET == category || Category.UNKNOWN == category ) {

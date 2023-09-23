@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -30,7 +31,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpressionImpl;
-import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.Property;
 import mondrian.olap.type.MemberType;
@@ -62,7 +62,7 @@ public class VisualTotalsFunDef extends FunDefBase {
 
     @Override
 	protected Expression validateArg(
-        Validator validator, Expression[] args, int i, int category)
+        Validator validator, Expression[] args, int i, Category category)
     {
         final Expression validatedArg =
             super.validateArg(validator, args, i, category);

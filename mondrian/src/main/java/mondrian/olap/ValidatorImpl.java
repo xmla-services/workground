@@ -278,7 +278,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public boolean canConvert(
-        int ordinal, Expression fromExp, int to, List<FunctionResolver.Conversion> conversions)
+        int ordinal, Expression fromExp, Category to, List<FunctionResolver.Conversion> conversions)
     {
         return TypeUtil.canConvert(
             ordinal,
@@ -312,7 +312,7 @@ abstract class ValidatorImpl implements Validator {
                     return false;
                 }
                 final FunctionDefinition funDef = funCall.getFunDef();
-                final int[] parameterTypes = funDef.getParameterCategories();
+                final Category[] parameterTypes = funDef.getParameterCategories();
                 return parameterTypes[k] != Category.SET;
             }
         } else if (parent instanceof UnresolvedFunCallImpl funCall) {

@@ -41,9 +41,9 @@ class IsFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final int category = call.getArg(0).getCategory();
+        final Category category = call.getArg(0).getCategory();
         switch (category) {
-        case Category.TUPLE:
+        case TUPLE:
             final TupleCalc tupleCalc0 = compiler.compileTuple(call.getArg(0));
             final TupleCalc tupleCalc1 = compiler.compileTuple(call.getArg(1));
             return new AbstractProfilingNestedBooleanCalc(

@@ -67,7 +67,7 @@ import mondrian.resource.MondrianResource;
 public class SetFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    SetFunDef(FunctionResolver resolver, int[] argTypes) {
+    SetFunDef(FunctionResolver resolver, Category[] argTypes) {
         super(resolver, Category.SET, argTypes);
     }
 
@@ -370,7 +370,7 @@ public class SetFunDef extends FunDefBase {
      */
     public static ResolvedFunCall wrapAsSet(Expression... args) {
         assert args.length > 0;
-        final int[] categories = new int[args.length];
+        final Category[] categories = new Category[args.length];
         Type type = null;
         for (int i = 0; i < args.length; i++) {
             final Expression arg = args[i];
@@ -485,7 +485,7 @@ public class SetFunDef extends FunDefBase {
             Validator validator,
             List<Conversion> conversions)
         {
-            int[] parameterTypes = new int[args.length];
+        	Category[] parameterTypes = new Category[args.length];
             for (int i = 0; i < args.length; i++) {
                 if (validator.canConvert(
                         i, args[i], Category.MEMBER, conversions))

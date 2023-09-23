@@ -9,6 +9,7 @@
 
 package org.eclipse.daanse.olap.api.function;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Syntax;
 
 public interface FunctionInfo  extends Comparable<FunctionInfo>{
@@ -34,7 +35,7 @@ public interface FunctionInfo  extends Comparable<FunctionInfo>{
 	 * Returns the type of value returned by this function. Values are the same
 	 * as those returned by {@link org.eclipse.daanse.olap.api.query.component.Expression#getCategory()}.
 	 */
-	int[] getReturnCategories();
+	Category[] getReturnCategories();
 
 	/**
 	 * Returns the types of the arguments of this function. Values are the same
@@ -43,7 +44,7 @@ public interface FunctionInfo  extends Comparable<FunctionInfo>{
 	 * are applied to. Infix operators have two arguments, and prefix operators
 	 * have one argument.
 	 */
-	int[][] getParameterCategories();
+	Category[][] getParameterCategories();
 
 	int compareTo(FunctionInfo fi);
 

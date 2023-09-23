@@ -60,7 +60,7 @@ class OrderFunDef extends FunDefBase {
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
     public static final String CALC_IMPL = "CurrentMemberCalc";
 
-    public OrderFunDef( ResolverBase resolverBase, int type, int[] types ) {
+    public OrderFunDef( ResolverBase resolverBase, Category type, Category[] types ) {
     super( resolverBase, type, types );
   }
 
@@ -348,7 +348,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
   private static class ResolverImpl extends ResolverBase {
     private final String[] reservedWords;
-    static int[] argTypes;
+    static Category[] argTypes;
 
     private ResolverImpl() {
       super( "Order", "Order(<Set> {, <Key Specification>}...)",
@@ -358,7 +358,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
     @Override
 	public FunctionDefinition resolve( Expression[] args, Validator validator, List<Conversion> conversions ) {
-      ResolverImpl.argTypes = new int[args.length];
+      ResolverImpl.argTypes = new Category[args.length];
 
       if ( args.length < 2 ) {
         return null;

@@ -12,6 +12,7 @@ package mondrian.calc.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Validator;
@@ -225,7 +226,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-        public int getCategory() {
+        public Category getCategory() {
             return e.getCategory();
         }
 

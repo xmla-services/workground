@@ -50,7 +50,7 @@ public interface Expression {
      *
      * @post Category.instance().isValid(return)
      */
-    int getCategory();
+    Category getCategory();
 
     /**
      * Returns the type of this expression. Never null.

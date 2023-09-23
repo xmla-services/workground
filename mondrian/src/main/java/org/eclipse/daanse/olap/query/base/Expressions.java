@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.query.base;
 import java.io.PrintWriter;
 import java.util.stream.Stream;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 
 public class Expressions {
@@ -39,7 +40,7 @@ public class Expressions {
 		return Stream.of(expressions).map(Expression::cloneExp).toArray(Expression[]::new);
 	}
 
-	public static int[] categoriesOf(Expression[] expressions) {
-		return Stream.of(expressions).mapToInt(Expression::getCategory).toArray();
+	public static Category[] categoriesOf(Expression[] expressions) {
+		return Stream.of(expressions).map(Expression::getCategory).toArray(Category[]::new);
 	}
 }

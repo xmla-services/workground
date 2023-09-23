@@ -42,7 +42,7 @@ public class StringLiteralImpl extends AbstractLiteralImpl<String> implements St
 	}
 
 	@Override
-	public int getCategory() {
+	public Category getCategory() {
 		return Category.STRING;
 	}
 

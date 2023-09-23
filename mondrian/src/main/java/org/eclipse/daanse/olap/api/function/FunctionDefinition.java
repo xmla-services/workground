@@ -65,7 +65,7 @@ public interface FunctionDefinition {
      * Returns the {@link Category} code of the value returned by this
      * function.
      */
-    int getReturnCategory();
+    Category getReturnCategory();
 
     /**
      * Returns the types of the arguments of this function. Values are the same
@@ -74,7 +74,7 @@ public interface FunctionDefinition {
      * to. Infix operators have two arguments, and prefix operators have one
      * argument.
      */
-    int[] getParameterCategories();
+    Category[] getParameterCategories();
 
     /**
      * Creates an expression which represents a call to this function with

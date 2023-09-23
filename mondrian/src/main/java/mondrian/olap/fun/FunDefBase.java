@@ -104,8 +104,8 @@ public abstract class FunDefBase implements FunctionDefinition {
     private final String name;
     final String signature;
     private final String description;
-    protected final int returnCategory;
-    protected final int[] parameterCategories;
+    protected final Category returnCategory;
+    protected final Category[] parameterCategories;
     private Context context;
 
     /**
@@ -128,8 +128,8 @@ public abstract class FunDefBase implements FunctionDefinition {
         String signature,
         String description,
         Syntax syntax,
-        int returnCategory,
-        int[] parameterCategories)
+        Category returnCategory,
+        Category[] parameterCategories)
     {
         assert name != null;
         assert syntax != null;
@@ -217,7 +217,7 @@ public abstract class FunDefBase implements FunctionDefinition {
      * @param returnType Return type
      * @param parameterTypes Parameter types
      */
-    FunDefBase(FunctionResolver resolver, int returnType, int[] parameterTypes) {
+    FunDefBase(FunctionResolver resolver, Category returnType, Category[] parameterTypes) {
         this(
             resolver.getName(),
             null,
@@ -259,18 +259,18 @@ public abstract class FunDefBase implements FunctionDefinition {
     }
 
     @Override
-	public int getReturnCategory() {
+	public Category getReturnCategory() {
         return returnCategory;
     }
 
     @Override
-	public int[] getParameterCategories() {
+	public Category[] getParameterCategories() {
         return parameterCategories;
     }
 
     @Override
 	public Expression createCall(Validator validator, Expression[] args) {
-        int[] categories = getParameterCategories();
+    	Category[] categories = getParameterCategories();
         Util.assertTrue(categories.length == args.length);
         for (int i = 0; i < args.length; i++) {
             args[i] = validateArg(validator, args, i, categories[i]);
@@ -298,90 +298,90 @@ public abstract class FunDefBase implements FunctionDefinition {
         Validator validator,
         Expression[] args,
         int i,
-        int category)
+        Category category)
     {
         return args[i];
     }
 
-    /**
-     * Converts a type to a different category, maintaining as much type
-     * information as possible.
-     *
-     * For example, given <code>LevelType(dimension=Time, hierarchy=unknown,
-     * level=unkown)</code> and category=Hierarchy, returns
-     * <code>HierarchyType(dimension=Time)</code>.
-     *
-     * @param type Type
-     * @param category Desired category
-     * @return Type after conversion to desired category
-     */
-    static Type castType(Type type, int category) {
-        switch (category) {
-        case Category.LOGICAL:
-            return BooleanType.INSTANCE;
-        case Category.NUMERIC:
-            return NumericType.INSTANCE;
-        case Category.NUMERIC | Category.INTEGER:
-            return new DecimalType(Integer.MAX_VALUE, 0);
-        case Category.STRING:
-            return StringType.INSTANCE;
-        case Category.DATE_TIME:
-            return DateTimeType.INSTANCE;
-        case Category.SYMBOL:
-            return SymbolType.INSTANCE;
-        case Category.VALUE:
-            return ScalarType.INSTANCE;
-        case Category.CUBE:
-            if (type instanceof Cube cube) {
-                return new CubeType(cube);
-            }
-            return null;
-        case Category.DIMENSION:
-            if (type != null) {
-                return DimensionType.forType(type);
-            }
-            return null;
-        case Category.HIERARCHY:
-            if (type != null) {
-                return HierarchyType.forType(type);
-            }
-            return null;
-        case Category.LEVEL:
-            if (type != null) {
-                return LevelType.forType(type);
-            }
-            return null;
-        case Category.MEMBER:
-            if (type != null) {
-                final MemberType memberType = TypeUtil.toMemberType(type);
-                if (memberType != null) {
-                    return memberType;
-                }
-            }
-            // Take a wild guess.
-            return MemberType.Unknown;
-        case Category.TUPLE:
-            if (type != null) {
-                final Type memberType = TypeUtil.toMemberOrTupleType(type);
-                if (memberType != null) {
-                    return memberType;
-                }
-            }
-            return null;
-        case Category.SET:
-            if (type != null) {
-                final Type memberType = TypeUtil.toMemberOrTupleType(type);
-                if (memberType != null) {
-                    return new SetType(memberType);
-                }
-            }
-            return null;
-        case Category.EMPTY:
-            return EmptyType.INSTANCE;
-        default:
-            throw Category.instance.badValue(category);
-        }
-    }
+	/**
+	 * Converts a type to a different category, maintaining as much type information
+	 * as possible.
+	 *
+	 * For example, given <code>LevelType(dimension=Time, hierarchy=unknown,
+	 * level=unkown)</code> and category=Hierarchy, returns
+	 * <code>HierarchyType(dimension=Time)</code>.
+	 *
+	 * @param type     Type
+	 * @param category Desired category
+	 * @return Type after conversion to desired category
+	 */
+	static Type castType(Type type, Category category) {
+		switch (category) {
+		case LOGICAL:
+			return BooleanType.INSTANCE;
+		case NUMERIC:
+			return NumericType.INSTANCE;// TODO: RIGHT ORDER?
+		case INTEGER:
+			return new DecimalType(Integer.MAX_VALUE, 0);
+		case STRING:
+			return StringType.INSTANCE;
+		case DATE_TIME:
+			return DateTimeType.INSTANCE;
+		case SYMBOL:
+			return SymbolType.INSTANCE;
+		case VALUE:
+			return ScalarType.INSTANCE;
+		case CUBE:
+			if (type instanceof Cube cube) {
+				return new CubeType(cube);
+			}
+			return null;
+		case DIMENSION:
+			if (type != null) {
+				return DimensionType.forType(type);
+			}
+			return null;
+		case HIERARCHY:
+			if (type != null) {
+				return HierarchyType.forType(type);
+			}
+			return null;
+		case LEVEL:
+			if (type != null) {
+				return LevelType.forType(type);
+			}
+			return null;
+		case MEMBER:
+			if (type != null) {
+				final MemberType memberType = TypeUtil.toMemberType(type);
+				if (memberType != null) {
+					return memberType;
+				}
+			}
+			// Take a wild guess.
+			return MemberType.Unknown;
+		case TUPLE:
+			if (type != null) {
+				final Type memberType = TypeUtil.toMemberOrTupleType(type);
+				if (memberType != null) {
+					return memberType;
+				}
+			}
+			return null;
+		case SET:
+			if (type != null) {
+				final Type memberType = TypeUtil.toMemberOrTupleType(type);
+				if (memberType != null) {
+					return new SetType(memberType);
+				}
+			}
+			return null;
+		case EMPTY:
+			return EmptyType.INSTANCE;
+		default:
+			throw new RuntimeException("Unexpected Category: " + category);
+		}
+	}
 
     /**
      * Returns the type of a call to this function with a given set of

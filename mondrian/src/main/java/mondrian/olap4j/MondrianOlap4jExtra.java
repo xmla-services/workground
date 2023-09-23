@@ -121,8 +121,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                 continue;
             }
 
-            int[][] paramCategories = fi.getParameterCategories();
-            int[] returnCategories = fi.getReturnCategories();
+            Category[][] paramCategories = fi.getParameterCategories();
+            Category[] returnCategories = fi.getReturnCategories();
 
             // Convert Windows newlines in 'description' to UNIX format.
             String description = fi.getDescription();
@@ -146,18 +146,16 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                         fi.getName()));
             } else {
                 for (int i = 0; i < paramCategories.length; i++) {
-                    int[] pc = paramCategories[i];
-                    int returnCategory = returnCategories[i];
+                	Category[] pc = paramCategories[i];
+                	Category returnCategory = returnCategories[i];
 
                     buf.setLength(0);
                     for (int j = 0; j < pc.length; j++) {
-                        int v = pc[j];
+                    	Category v = pc[j];
                         if (j > 0) {
                             buf.append(", ");
                         }
-                        buf.append(
-                            Category.instance.getDescription(
-                                v & Category.MASK));
+                        buf.append(v.getPrittyName());
                     }
 
                     RowsetDefinition.MdschemaFunctionsRowset.VarType varType =
