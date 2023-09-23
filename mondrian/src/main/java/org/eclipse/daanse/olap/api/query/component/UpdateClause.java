@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import mondrian.olap.Expression;
 
-public non-sealed interface UpdateClause extends QueryPart {
+public non-sealed interface UpdateClause extends QueryComponent {
 
     Expression getTupleExp();
 

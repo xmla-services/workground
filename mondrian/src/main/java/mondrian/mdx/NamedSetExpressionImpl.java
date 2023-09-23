@@ -15,6 +15,7 @@ import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.query.component.NamedSetExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -132,9 +133,9 @@ public class NamedSetExpressionImpl extends AbstractExpression implements Expres
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        Object o = visitor.visit(this);
-        if (visitor.shouldVisitChildren()) {
+	public Object accept(QueryComponentVisitor visitor) {
+        Object o = visitor.visitNamedSetExpression(this);
+        if (visitor.visitChildren()) {
             namedSet.getExp().accept(visitor);
         }
         return o;

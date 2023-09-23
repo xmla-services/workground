@@ -9,7 +9,7 @@
 
 package mondrian.parser;
 
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 
 import mondrian.olap.Expression;
 import mondrian.olap.FactoryImpl;
@@ -25,7 +25,7 @@ import mondrian.server.Statement;
  * @author jhyde
  */
 public class JavaccParserValidatorImpl implements MdxParserValidator {
-    private final QueryPartFactory factory;
+    private final QueryComponentFactory factory;
 
     /**
      * Creates a JavaccParserValidatorImpl.
@@ -40,12 +40,12 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
      *
      * @param factory Factory for parse tree nodes
      */
-    public JavaccParserValidatorImpl(QueryPartFactory factory) {
+    public JavaccParserValidatorImpl(QueryComponentFactory factory) {
         this.factory = factory;
     }
 
     @Override
-	public QueryPart parseInternal(
+	public QueryComponent parseInternal(
         Statement statement,
         String queryString,
         boolean debug,

@@ -18,7 +18,7 @@ import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
@@ -30,7 +30,7 @@ import org.eclipse.daanse.olap.api.query.component.Update;
 
 public interface QueryProvider {
 
-    QueryPart createQuery(MdxStatement selectStatement);
+    QueryComponent createQuery(MdxStatement selectStatement);
 
     Query createQuery(SelectStatement selectStatement);
 

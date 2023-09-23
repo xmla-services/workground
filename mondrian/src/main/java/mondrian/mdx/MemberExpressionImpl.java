@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantMemberCalc;
@@ -88,7 +89,7 @@ public class MemberExpressionImpl extends AbstractExpression implements Expressi
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+        return visitor.visitMemberExpression(this);
     }
 }

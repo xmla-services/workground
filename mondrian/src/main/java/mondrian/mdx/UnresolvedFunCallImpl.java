@@ -12,6 +12,7 @@ package mondrian.mdx;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.query.base.Expressions;
@@ -99,9 +100,9 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        final Object o = visitor.visit(this);
-        if (visitor.shouldVisitChildren()) {
+	public Object accept(QueryComponentVisitor visitor) {
+        final Object o = visitor.visitUnresolvedFunCall(this);
+        if (visitor.visitChildren()) {
             // visit the call's arguments
             for (Expression arg : args) {
                 arg.accept(visitor);

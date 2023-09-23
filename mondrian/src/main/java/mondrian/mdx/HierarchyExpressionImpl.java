@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.HierarchyCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantHierarchyCalc;
@@ -84,7 +85,7 @@ public class HierarchyExpressionImpl extends AbstractExpression implements Expre
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+        return visitor.visitHierarchyExpression(this);
     }
 }

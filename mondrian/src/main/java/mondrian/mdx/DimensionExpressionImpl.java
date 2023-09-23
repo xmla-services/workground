@@ -11,6 +11,7 @@ package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.DimensionCalc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDimensionCalc;
@@ -84,8 +85,8 @@ public class DimensionExpressionImpl extends AbstractExpression implements Expre
     }
 
     @Override
-	public Object accept(MdxVisitor visitor) {
-        return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+        return visitor.visitDimensionExpression(this);
     }
 
 }

@@ -39,12 +39,12 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.mdx.HierarchyExpressionImpl;
-import mondrian.mdx.MdxVisitor;
 
 /**
  * Used to collect and resolve identifiers in groups of children
@@ -126,7 +126,7 @@ public final class IdBatchResolver {
      *   [Store].[All Store]
      */
     private void initIdentifiers() {
-        MdxVisitor identifierVisitor = new IdentifierVisitor(identifiers);
+        QueryComponentVisitor identifierVisitor = new IdentifierVisitor(identifiers);
         for (QueryAxis axis : axes) {
             axis.accept(identifierVisitor);
         }
@@ -154,7 +154,7 @@ public final class IdBatchResolver {
      * @return  a Map of the expressions Id elements mapped to their
      * respective resolved Exp.
      */
-    public Map<QueryPart, QueryPart> resolve() {
+    public Map<QueryComponent, QueryComponent> resolve() {
         return resolveInParentGroupings(identifiers);
     }
 
@@ -165,10 +165,10 @@ public final class IdBatchResolver {
      *  size from smallest to largest, such that parent identifiers will
      *  occur before their children.
      */
-    private  Map<QueryPart, QueryPart> resolveInParentGroupings(
+    private  Map<QueryComponent, QueryComponent> resolveInParentGroupings(
         SortedSet<Id> identifiers)
     {
-        final Map<QueryPart, QueryPart> resolvedIdentifiers =
+        final Map<QueryComponent, QueryComponent> resolvedIdentifiers =
             new HashMap<>();
 
         while (!identifiers.isEmpty()) {
@@ -186,7 +186,7 @@ public final class IdBatchResolver {
             if (!supportedMember(parentMember)) {
                 continue;
             }
-            resolvedIdentifiers.put(parent, (QueryPart)exp);
+            resolvedIdentifiers.put(parent, (QueryComponent)exp);
             batchResolveChildren(
                 parent, parentMember, identifiers, resolvedIdentifiers);
         }
@@ -200,7 +200,7 @@ public final class IdBatchResolver {
      */
     private void batchResolveChildren(
         Id parent, Member parentMember, SortedSet<Id> identifiers,
-        Map<QueryPart, QueryPart> resolvedIdentifiers)
+        Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         final List<Id> children = findChildIds(parent, identifiers);
         final List<NameSegment> childNameSegments =
@@ -233,7 +233,7 @@ public final class IdBatchResolver {
      * the association.
      */
     private void addChildrenToResolvedMap(
-        Map<QueryPart, QueryPart> resolvedIdentifiers, List<Id> children,
+        Map<QueryComponent, QueryComponent> resolvedIdentifiers, List<Id> children,
         List<Member> childMembers)
     {
         for (Member child : childMembers) {
@@ -242,7 +242,7 @@ public final class IdBatchResolver {
                     && getLastSegment(childId).matches(child.getName()))
                 {
                     resolvedIdentifiers.put(
-                        childId, (QueryPart)Util.createExpr(child));
+                        childId, (QueryComponent)Util.createExpr(child));
                 }
             }
         }

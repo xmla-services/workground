@@ -30,8 +30,8 @@ import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.Query;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.olap.api.NameSegment;
 import mondrian.olap.api.Segment;
@@ -572,15 +572,15 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
     /**
      * Accepts a visitor to this Formula.
      * The default implementation dispatches to the
-     * {@link MdxVisitor#visit(FormulaImpl)} method.
+     * {@link QueryComponentVisitor#visitFormula(FormulaImpl)} method.
      *
      * @param visitor Visitor
      */
     @Override
-    public Object accept(MdxVisitor visitor) {
-        final Object o = visitor.visit(this);
+    public Object accept(QueryComponentVisitor visitor) {
+        final Object o = visitor.visitFormula(this);
 
-        if (visitor.shouldVisitChildren()) {
+        if (visitor.visitChildren()) {
             // visit the expression
             exp.accept(visitor);
         }
@@ -611,7 +611,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
         }
 
         @Override
-		public Object visit(MemberExpression memberExpr) {
+		public Object visitMemberExpression(MemberExpression memberExpr) {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()
@@ -623,7 +623,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                 returnFormula(member);
             }
 
-            return super.visit(memberExpr);
+            return super.visitMemberExpression(memberExpr);
         }
 
         /**

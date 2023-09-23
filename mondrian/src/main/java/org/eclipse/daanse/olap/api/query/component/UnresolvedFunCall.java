@@ -15,6 +15,6 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import mondrian.olap.FunCall;
 
-public non-sealed interface UnresolvedFunCall extends QueryPart,FunCall {
+public non-sealed interface UnresolvedFunCall extends QueryComponent,FunCall {
 
 }

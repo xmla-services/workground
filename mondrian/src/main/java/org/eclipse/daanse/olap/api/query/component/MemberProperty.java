@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.query.component;
 import mondrian.olap.Expression;
 import mondrian.olap.Validator;
 
-public non-sealed interface MemberProperty extends QueryPart{
+public non-sealed interface MemberProperty extends QueryComponent{
 
     Expression getExp();
 

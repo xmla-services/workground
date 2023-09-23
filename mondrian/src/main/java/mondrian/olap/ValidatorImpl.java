@@ -19,7 +19,7 @@ import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.query.base.Expressions;
 
 import mondrian.mdx.ParameterExpressionImpl;
@@ -50,11 +50,11 @@ import mondrian.util.ArrayStack;
  * @author jhyde
  */
 abstract class ValidatorImpl implements Validator {
-    protected final ArrayStack<QueryPart> stack = new ArrayStack<>();
+    protected final ArrayStack<QueryComponent> stack = new ArrayStack<>();
     private final FunctionTable funTable;
-    private final Map<QueryPart, QueryPart> resolvedNodes =
+    private final Map<QueryComponent, QueryComponent> resolvedNodes =
         new HashMap<>();
-    private static final QueryPart placeHolder = NumericLiteralImpl.zero;
+    private static final QueryComponent placeHolder = NumericLiteralImpl.zero;
 
     /**
      * Creates a ValidatorImpl.
@@ -65,7 +65,7 @@ abstract class ValidatorImpl implements Validator {
      * @pre funTable != null
      */
     protected ValidatorImpl(
-        FunctionTable funTable, Map<QueryPart, QueryPart> resolvedIdentifiers)
+        FunctionTable funTable, Map<QueryComponent, QueryComponent> resolvedIdentifiers)
     {
         Util.assertPrecondition(funTable != null, "funTable != null");
         this.funTable = funTable;
@@ -88,13 +88,13 @@ abstract class ValidatorImpl implements Validator {
         }
         if (resolved == null) {
             try {
-                stack.push((QueryPart) exp);
+                stack.push((QueryComponent) exp);
                 // To prevent recursion, put in a placeholder while we're
                 // resolving.
-                resolvedNodes.put((QueryPart) exp, placeHolder);
+                resolvedNodes.put((QueryComponent) exp, placeHolder);
                 resolved = exp.accept(this);
                 Util.assertTrue(resolved != null);
-                resolvedNodes.put((QueryPart) exp, (QueryPart) resolved);
+                resolvedNodes.put((QueryComponent) exp, (QueryComponent) resolved);
             } finally {
             	if (!stack.isEmpty()) {
             		stack.pop();

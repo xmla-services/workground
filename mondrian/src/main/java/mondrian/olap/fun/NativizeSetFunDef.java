@@ -518,7 +518,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visitResolvedFunCall(ResolvedFunCall call) {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
                 if (call.getArg(0) instanceof LevelExpressionImpl) {
                     Level level = ((LevelExpression) call.getArg(0)).getLevel();
@@ -538,7 +538,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
 
         @Override
-        public Object visit(MemberExpression member) {
+        public Object visitMemberExpression(MemberExpression member) {
             dimensions.add(member.getMember().getDimension());
             return null;
         }
@@ -561,7 +561,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visitResolvedFunCall(ResolvedFunCall call) {
             if (call.getFunDef() instanceof NativizeSetFunDef) {
                 addFormulasToQuery();
             }
@@ -638,7 +638,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visitResolvedFunCall(ResolvedFunCall call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result = null;
             if (call.getFunDef() instanceof LevelMembersFunDef) {
@@ -740,7 +740,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(ResolvedFunCall call) {
+        public Object visitResolvedFunCall(ResolvedFunCall call) {
             NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result;
             result = visitCallArguments(call);
@@ -749,7 +749,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         @Override
-        public Object visit(NamedSetExpression namedSetExpr) {
+        public Object visitNamedSetExpression(NamedSetExpression namedSetExpr) {
             String exprName = namedSetExpr.getNamedSet().getName();
             Expression membersExpr;
 

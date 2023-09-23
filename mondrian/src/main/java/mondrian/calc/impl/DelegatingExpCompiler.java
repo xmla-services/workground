@@ -13,8 +13,9 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.WrapExpression;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
@@ -32,7 +33,6 @@ import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Expression;
 import mondrian.olap.Parameter;
 import mondrian.olap.AbstractQueryPart;
@@ -250,13 +250,13 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
         }
 
         @Override
-        public Object accept(MdxVisitor visitor) {
+        public Object accept(QueryComponentVisitor visitor) {
             return e.accept(visitor);
         }
 
         @Override
 		public void explain(PrintWriter pw) {
-            if (e instanceof QueryPart queryPart) {
+            if (e instanceof QueryComponent queryPart) {
                 queryPart.explain(pw);
             } else {
                 super.explain(pw);

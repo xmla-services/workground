@@ -17,7 +17,7 @@ import mondrian.olap.Expression;
 
 import java.util.List;
 
-public non-sealed interface Subcube extends QueryPart{
+public non-sealed interface Subcube extends QueryComponent{
 
     String getCubeName();
 

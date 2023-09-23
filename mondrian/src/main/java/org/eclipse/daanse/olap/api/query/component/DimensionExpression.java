@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import org.eclipse.daanse.olap.api.element.Dimension;
 
-public non-sealed interface DimensionExpression extends QueryPart {
+public non-sealed interface DimensionExpression extends QueryComponent {
 
     Dimension getDimension();
 }

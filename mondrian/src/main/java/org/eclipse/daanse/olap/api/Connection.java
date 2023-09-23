@@ -23,7 +23,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Schema;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.olap.DriverManager;
@@ -106,7 +106,7 @@ public interface Connection {
      * @return A {@link QueryImpl} if it is a SELECT statement, a
      *   {@link DrillThrough} if it is a DRILLTHROUGH statement
      */
-    QueryPart parseStatement(String mdx);
+    QueryComponent parseStatement(String mdx);
 
     /**
      * Sets the privileges for the this connection.

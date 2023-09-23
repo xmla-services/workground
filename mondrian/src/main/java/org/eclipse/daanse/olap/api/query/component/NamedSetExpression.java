@@ -16,7 +16,7 @@ package org.eclipse.daanse.olap.api.query.component;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 
-public non-sealed interface NamedSetExpression extends QueryPart {
+public non-sealed interface NamedSetExpression extends QueryComponent {
 
     NamedSet getNamedSet();
 

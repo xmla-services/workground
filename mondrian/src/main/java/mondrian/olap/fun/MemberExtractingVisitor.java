@@ -79,7 +79,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(ParameterExpression parameterExpr) {
+	public Object visitParameterExpression(ParameterExpression parameterExpr) {
         final Parameter parameter = parameterExpr.getParameter();
         final Type type = parameter.getType();
         if (type instanceof mondrian.olap.type.MemberType) {
@@ -96,7 +96,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(MemberExpression memberExpr) {
+	public Object visitMemberExpression(MemberExpression memberExpr) {
         Member member = memberExpr.getMember();
         if (!member.isMeasure() && !member.isCalculated()) {
             addMember(member);
@@ -115,26 +115,26 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     }
 
     @Override
-	public Object visit(DimensionExpression dimensionExpr) {
+	public Object visitDimensionExpression(DimensionExpression dimensionExpr) {
         // add the default hierarchy
         addToDimMemberSet(dimensionExpr.getDimension().getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExpression hierarchyExpr) {
+	public Object visitHierarchyExpression(HierarchyExpression hierarchyExpr) {
         addToDimMemberSet(hierarchyExpr.getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(LevelExpression levelExpr) {
+	public Object visitLevelExpression(LevelExpression levelExpr) {
         addToDimMemberSet(levelExpr.getLevel().getHierarchy());
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCall funCall) {
+	public Object visitResolvedFunCall(ResolvedFunCall funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
         } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {

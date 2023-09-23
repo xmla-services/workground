@@ -21,7 +21,7 @@ import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.Refresh;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
@@ -48,7 +48,7 @@ public interface MdxParserValidator {
       * Parses a string to create a {@link mondrian.olap.QueryImpl}.
       * Called only by {@link mondrian.olap.ConnectionBase#parseQuery}.
       */
-    QueryPart parseInternal(
+    QueryComponent parseInternal(
         Statement statement,
         String queryString,
         boolean debug,
@@ -61,7 +61,7 @@ public interface MdxParserValidator {
         boolean debug,
         FunctionTable funTable);
 
-    interface QueryPartFactory {
+    interface QueryComponentFactory {
 
         /**
          * Creates a {@link mondrian.olap.QueryImpl} object.
@@ -93,7 +93,7 @@ public interface MdxParserValidator {
          * Creates an {@link ExplainImpl} object.
          */
         Explain makeExplain(
-            QueryPart query);
+            QueryComponent query);
 
         Refresh makeRefresh(
                 String cubeName);

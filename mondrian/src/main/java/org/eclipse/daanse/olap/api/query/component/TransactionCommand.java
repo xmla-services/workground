@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import mondrian.olap.api.Command;
 
-public non-sealed interface TransactionCommand extends QueryPart {
+public non-sealed interface TransactionCommand extends QueryComponent {
 
     Command getCommand();
 }

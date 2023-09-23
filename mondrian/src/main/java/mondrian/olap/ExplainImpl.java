@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
 import org.eclipse.daanse.olap.api.query.component.Query;
-import org.eclipse.daanse.olap.api.query.component.QueryPart;
+import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 
 /**
  * Explain statement.
@@ -22,7 +22,7 @@ import org.eclipse.daanse.olap.api.query.component.QueryPart;
  * @author jhyde
  */
 public class ExplainImpl extends AbstractQueryPart implements Explain {
-    private final QueryPart query;
+    private final QueryComponent query;
 
     /**
      * Creates an Explain statement.
@@ -30,7 +30,7 @@ public class ExplainImpl extends AbstractQueryPart implements Explain {
      * @param query Query (SELECT or DRILLTHROUGH)
      */
     public ExplainImpl(
-        QueryPart query)
+        QueryComponent query)
     {
         this.query = query;
         assert this.query != null;
@@ -49,7 +49,7 @@ public class ExplainImpl extends AbstractQueryPart implements Explain {
         return new Object[] {query};
     }
 
-    public QueryPart getQuery() {
+    public QueryComponent getQuery() {
         return query;
     }
 }

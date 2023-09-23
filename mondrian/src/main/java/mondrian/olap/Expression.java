@@ -31,10 +31,10 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.type.Type;
 
 /**
@@ -87,11 +87,11 @@ public interface Expression {
     Calc accept(ExpressionCompiler compiler);
 
     /**
-     * Accepts a visitor to this Exp.
+     * Accepts a visitor to this {@link Expression}.
      * The implementation should generally dispatches to the
-     * {@link MdxVisitor#visit} method appropriate to the type of expression.
+     * {@link QueryComponentVisitor} method appropriate to the type of expression.
      *
      * @param visitor Visitor
      */
-    Object accept(MdxVisitor visitor);
+    Object accept(QueryComponentVisitor visitor);
 }

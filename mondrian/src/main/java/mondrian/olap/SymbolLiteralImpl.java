@@ -16,11 +16,11 @@ package mondrian.olap;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.query.component.SymbolLiteral;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.SymbolType;
 import mondrian.olap.type.Type;
@@ -36,8 +36,8 @@ public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements Sy
 	}
 
 	@Override
-	public Object accept(MdxVisitor visitor) {
-		return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+		return visitor.visitLiteral(this);
 	}
 
 	@Override

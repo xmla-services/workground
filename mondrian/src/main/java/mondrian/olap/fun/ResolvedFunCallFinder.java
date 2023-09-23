@@ -36,7 +36,7 @@ public class ResolvedFunCallFinder
     }
 
     @Override
-	public Object visit(ResolvedFunCall funCall)
+	public Object visitResolvedFunCall(ResolvedFunCall funCall)
     {
         if (funCall == call) {
             found = true;
@@ -45,7 +45,7 @@ public class ResolvedFunCallFinder
     }
 
     @Override
-	public Object visit(MemberExpression memberExpr) {
+	public Object visitMemberExpression(MemberExpression memberExpr) {
         Member member = memberExpr.getMember();
         if (member.isCalculated()) {
             if (activeMembers.add(member)) {

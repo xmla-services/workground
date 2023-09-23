@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import org.eclipse.daanse.olap.api.element.Level;
 
-public non-sealed interface LevelExpression extends QueryPart {
+public non-sealed interface LevelExpression extends QueryComponent {
 
     Level getLevel();
 }

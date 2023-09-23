@@ -22,23 +22,24 @@ import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 
 import mondrian.olap.Expression;
 
 /**
- * Default implementation of the visitor interface, {@link MdxVisitor}.
+ * Default implementation of the visitor interface, {@link QueryComponentVisitor}.
  *
  * <p>The method implementations just ask the child nodes to
- * {@link Expression#accept(MdxVisitor)} this visitor.
+ * {@link Expression#accept(QueryComponentVisitor)} this visitor.
  *
  * @author jhyde
  * @since Jul 21, 2006
  */
-public class MdxVisitorImpl implements MdxVisitor {
+public class MdxVisitorImpl implements QueryComponentVisitor {
     private boolean shouldVisitChildren = true;
 
     @Override
-	public boolean shouldVisitChildren() {
+	public boolean visitChildren() {
         boolean returnValue = shouldVisitChildren;
         turnOnVisitChildren();
         return returnValue;
@@ -53,72 +54,72 @@ public class MdxVisitorImpl implements MdxVisitor {
     }
 
     @Override
-	public Object visit(Query query) {
+	public Object visitQuery(Query query) {
         return null;
     }
 
     @Override
-	public Object visit(QueryAxis queryAxis) {
+	public Object visitQueryAxis(QueryAxis queryAxis) {
         return null;
     }
 
     @Override
-	public Object visit(Formula formula) {
+	public Object visitFormula(Formula formula) {
         return null;
     }
 
     @Override
-	public Object visit(UnresolvedFunCall call) {
+	public Object visitUnresolvedFunCall(UnresolvedFunCall call) {
         return null;
     }
 
     @Override
-	public Object visit(ResolvedFunCall call) {
+	public Object visitResolvedFunCall(ResolvedFunCall call) {
         return null;
     }
 
     @Override
-	public Object visit(Id id) {
+	public Object visitId(Id id) {
         return null;
     }
 
     @Override
-	public Object visit(ParameterExpression parameterExpr) {
+	public Object visitParameterExpression(ParameterExpression parameterExpr) {
         return null;
     }
 
     @Override
-	public Object visit(DimensionExpression dimensionExpr) {
+	public Object visitDimensionExpression(DimensionExpression dimensionExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(HierarchyExpression hierarchyExpr) {
+	public Object visitHierarchyExpression(HierarchyExpression hierarchyExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(LevelExpression levelExpr) {
+	public Object visitLevelExpression(LevelExpression levelExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(MemberExpression memberExpr) {
+	public Object visitMemberExpression(MemberExpression memberExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(NamedSetExpression namedSetExpr) {
+	public Object visitNamedSetExpression(NamedSetExpression namedSetExpr) {
         // do nothing
         return null;
     }
 
     @Override
-	public Object visit(Literal<?> literal) {
+	public Object visitLiteral(Literal<?> literal) {
         // do nothing
         return null;
     }

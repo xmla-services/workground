@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-public non-sealed interface CellProperty extends QueryPart {
+public non-sealed interface CellProperty extends QueryComponent {
 
     boolean isNameEquals(String propertyName);
 }

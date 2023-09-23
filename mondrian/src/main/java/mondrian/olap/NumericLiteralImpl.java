@@ -18,13 +18,13 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
+import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantDoubleCalc;
 import org.eclipse.daanse.olap.calc.base.constant.ConstantStringCalc;
 import org.olap4j.impl.UnmodifiableArrayMap;
 
-import mondrian.mdx.MdxVisitor;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
@@ -58,8 +58,8 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 	}
 
 	@Override
-	public Object accept(MdxVisitor visitor) {
-		return visitor.visit(this);
+	public Object accept(QueryComponentVisitor visitor) {
+		return visitor.visitLiteral(this);
 	}
 
 	@Override

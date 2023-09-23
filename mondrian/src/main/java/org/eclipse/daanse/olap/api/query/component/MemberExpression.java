@@ -17,7 +17,7 @@ import org.eclipse.daanse.olap.api.element.Member;
 
 import mondrian.olap.Expression;
 
-public non-sealed interface MemberExpression extends QueryPart, Expression {
+public non-sealed interface MemberExpression extends QueryComponent, Expression {
 
     Member getMember();
 
