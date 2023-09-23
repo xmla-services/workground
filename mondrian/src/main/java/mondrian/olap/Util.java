@@ -621,7 +621,7 @@ public class Util extends XOMUtil {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category)
+        Category category)
     {
         return lookupCompound(
             schemaReader, parent, names, failIfNotFound, category,
@@ -652,7 +652,7 @@ public class Util extends XOMUtil {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category,
+        Category category,
         MatchType matchType)
     {
         Util.assertPrecondition(parent != null, "parent != null");
@@ -663,7 +663,7 @@ public class Util extends XOMUtil {
             buf.append("parent.name=");
             buf.append(parent.getName());
             buf.append(", category=");
-            buf.append(Category.instance.getName(category));
+            buf.append(category.getName());
             buf.append(", names=");
             quoteMdxIdentifier(names, buf);
             LOGGER.debug(buf.toString());
@@ -773,7 +773,7 @@ public class Util extends XOMUtil {
         }
 
         switch (category) {
-        case Category.DIMENSION:
+        case DIMENSION:
             if (parent instanceof Dimension) {
                 return parent;
             } else if (parent instanceof Hierarchy) {
@@ -784,7 +784,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.HIERARCHY:
+        case HIERARCHY:
             if (parent instanceof Hierarchy) {
                 return parent;
             } else if (parent instanceof Dimension) {
@@ -795,7 +795,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.LEVEL:
+        case LEVEL:
             if (parent instanceof Level) {
                 return parent;
             } else if (failIfNotFound) {
@@ -804,7 +804,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.MEMBER:
+        case MEMBER:
             if (parent instanceof Member) {
                 return parent;
             } else if (failIfNotFound) {
@@ -813,7 +813,7 @@ public class Util extends XOMUtil {
             } else {
                 return null;
             }
-        case Category.UNKNOWN:
+        case UNKNOWN:
             assertPostcondition(parent != null, "return != null");
             return parent;
         default:
@@ -1975,19 +1975,19 @@ public class Util extends XOMUtil {
 
 
     public static RuntimeException newElementNotFoundException(
-        int category,
+    		Category category,
         IdentifierNode identifierNode)
     {
         String type;
         switch (category) {
-        case Category.MEMBER:
+        case MEMBER:
             return MondrianResource.instance().MemberNotFound.ex(
                 identifierNode.toString());
-        case Category.UNKNOWN:
+        case UNKNOWN:
             type = "Element";
             break;
         default:
-            type = Category.instance().getDescription(category);
+            type = category.getName();
         }
         return newError(new StringBuilder(type).append(" '").append(identifierNode).append("' not found").toString());
     }
@@ -3019,7 +3019,7 @@ public class Util extends XOMUtil {
             @Override
 			public boolean canConvert(
                 int ordinal, Expression fromExp,
-                int to,
+                Category to,
                 List<FunctionResolver.Conversion> conversions)
             {
                 return true;

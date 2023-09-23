@@ -92,7 +92,7 @@ class SetItemFunDef extends FunDefBase {
                 throw Util.newError(
                     "Argument count does not match set's cardinality " + arity);
             }
-            final int category = arity == 1 ? Category.MEMBER : Category.TUPLE;
+            final Category category = arity == 1 ? Category.MEMBER : Category.TUPLE;
             FunctionDefinition dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }

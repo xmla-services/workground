@@ -13,6 +13,7 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -32,15 +33,15 @@ import mondrian.olap.Util;
  * @since 3 March, 2002
  */
 public class ParenthesesFunDef extends FunDefBase {
-    private final int argType;
-    public ParenthesesFunDef(int argType) {
+    private final Category argType;
+    public ParenthesesFunDef(Category argType) {
         super(
             "()",
             "(<Expression>)",
             "Parenthesis enclose an expression and indicate precedence.",
             Syntax.Parentheses,
             argType,
-            new int[] {argType});
+            new Category[] {argType});
         this.argType = argType;
     }
     @Override

@@ -93,7 +93,7 @@ class ExtractFunDef extends FunDefBase {
                 new ArrayList<>();
             ExtractFunDef.findExtractedHierarchies(
                 args, extractedHierarchies, extractedOrdinals);
-            int[] parameterTypes = new int[args.length];
+            Category[] parameterTypes = new Category[args.length];
             parameterTypes[0] = Category.SET;
             Arrays.fill(
                 parameterTypes, 1, parameterTypes.length, Category.HIERARCHY);
@@ -102,7 +102,7 @@ class ExtractFunDef extends FunDefBase {
     };
 
     private ExtractFunDef(
-        FunctionResolver resolver, int returnType, int[] parameterTypes)
+        FunctionResolver resolver, Category returnType, Category[] parameterTypes)
     {
         super(resolver, returnType, parameterTypes);
     }

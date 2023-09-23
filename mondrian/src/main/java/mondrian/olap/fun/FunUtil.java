@@ -541,12 +541,8 @@ public class FunUtil extends Util {
    *              FunDefBase}.
    * @return An array {@link Category} codes.
    */
-  public static int decodeReturnCategory( String flags ) {
-    final int returnCategory = FunUtil.decodeCategory( flags, 1 );
-    if ( ( returnCategory & Category.MASK) != returnCategory ) {
-      throw Util.newInternal( new StringBuilder("bad return code flag in flags '")
-          .append(flags).append("'").toString() );
-    }
+  public static Category decodeReturnCategory( String flags ) {
+    final Category returnCategory = FunUtil.decodeCategory( flags, 1 );
     return returnCategory;
   }
 
@@ -590,7 +586,7 @@ public class FunUtil extends Util {
    * @param offset 0-based offset of character within string
    * @return A {@link Category}
    */
-  public static int decodeCategory( String flags, int offset ) {
+  public static Category decodeCategory( String flags, int offset ) {
     char c = flags.charAt( offset );
     switch ( c ) {
       case 'a':
@@ -606,19 +602,19 @@ public class FunUtil extends Util {
       case 'm':
         return Category.MEMBER;
       case 'N':
-        return Category.NUMERIC | Category.CONSTANT;
+        return Category.NUMERIC; //Was Constant
       case 'n':
         return Category.NUMERIC;
       case 'I':
-        return Category.NUMERIC | Category.INTEGER | Category.CONSTANT;
+        return Category.INTEGER ;//Was Constant
       case 'i':
-        return Category.NUMERIC | Category.INTEGER;
+        return  Category.INTEGER;
       case 'x':
         return Category.SET;
       case '#':
-        return Category.STRING | Category.CONSTANT;
-      case 'S':
         return Category.STRING;
+      case 'S':
+        return Category.STRING;//Was Constant
       case 't':
         return Category.TUPLE;
       case 'v':
@@ -649,8 +645,8 @@ public class FunUtil extends Util {
    *              FunDefBase}.
    * @return An array {@link Category} codes.
    */
-  public static int[] decodeParameterCategories( String flags ) {
-    int[] parameterCategories = new int[ flags.length() - 2 ];
+  public static Category[] decodeParameterCategories( String flags ) {
+	  Category[] parameterCategories = new Category[ flags.length() - 2 ];
     for ( int i = 0; i < parameterCategories.length; i++ ) {
       parameterCategories[ i ] = FunUtil.decodeCategory( flags, i + 2 );
     }
@@ -1507,19 +1503,19 @@ public class FunUtil extends Util {
       && !( funDef instanceof ParenthesesFunDef )
       && query != null
       && query.nativeCrossJoinVirtualCube() ) {
-      int[] paramCategories = funDef.getParameterCategories();
+    	Category[] paramCategories = funDef.getParameterCategories();
       if ( paramCategories.length > 0 ) {
-        final int cat0 = paramCategories[ 0 ];
+        final Category cat0 = paramCategories[ 0 ];
         final Expression arg0 = args[ 0 ];
         switch ( cat0 ) {
-          case Category.DIMENSION, Category.HIERARCHY:
+          case DIMENSION, HIERARCHY:
             if ( arg0 instanceof DimensionExpression dimensionExpr
               && dimensionExpr.getDimension().isMeasures()
               && !( funDef instanceof HierarchyCurrentMemberFunDef ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
-          case Category.MEMBER:
+          case MEMBER:
             if ( arg0 instanceof MemberExpression memberExpr
               && memberExpr.getMember().isMeasure()
               && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
@@ -1531,7 +1527,7 @@ public class FunUtil extends Util {
     }
   }
 
-  private static boolean isMemberOrSet( int category ) {
+  private static boolean isMemberOrSet( Category category ) {
     return category == Category.MEMBER || category == Category.SET;
   }
 
@@ -1584,9 +1580,9 @@ public class FunUtil extends Util {
 
   static FunctionDefinition createDummyFunDef(
     FunctionResolver resolver,
-    int returnCategory,
+    Category returnCategory,
     Expression[] args ) {
-    final int[] argCategories = Expressions.categoriesOf( args );
+    final Category[] argCategories = Expressions.categoriesOf( args );
     return new FunDefBase( resolver, returnCategory, argCategories ) {
     };
   }

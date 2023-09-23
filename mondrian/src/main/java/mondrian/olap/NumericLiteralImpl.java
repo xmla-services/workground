@@ -64,7 +64,7 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 	}
 
 	@Override
-	public int getCategory() {
+	public Category getCategory() {
 		return Category.NUMERIC;
 	}
 

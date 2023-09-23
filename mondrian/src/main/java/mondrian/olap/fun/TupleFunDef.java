@@ -43,10 +43,10 @@ import mondrian.olap.type.TypeUtil;
  * @since 3 March, 2002
  */
 public class TupleFunDef extends FunDefBase {
-    private final int[] argTypes;
+    private final Category[] argTypes;
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private TupleFunDef(int[] argTypes) {
+    private TupleFunDef(Category[] argTypes) {
         super(
             "()",
             "(<Member> [, <Member>]...)",
@@ -58,12 +58,12 @@ public class TupleFunDef extends FunDefBase {
     }
 
     @Override
-	public int getReturnCategory() {
+	public Category getReturnCategory() {
         return Category.TUPLE;
     }
 
     @Override
-	public int[] getParameterCategories() {
+	public Category[] getParameterCategories() {
         return argTypes;
     }
 
@@ -149,7 +149,7 @@ public class TupleFunDef extends FunDefBase {
             if (args.length == 1 && !(args[0].getType() instanceof MemberType)) {
                 return new ParenthesesFunDef(args[0].getCategory());
             } else {
-                final int[] argTypes = new int[args.length];
+                final Category[] argTypes = new Category[args.length];
                 boolean hasSet = false;
                 for (int i = 0; i < args.length; i++) {
                     // Arg must be a member:

@@ -602,8 +602,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
                                 new Expression[] {
                                         defaultExp,
                                     SymbolLiteralImpl.create(
-                                                Category.instance.getName(
-                                                        TypeUtil.typeToCategory(type)))});
+                                                        TypeUtil.typeToCategory(type).getName())});
                 defaultExp = getValidator().validate(defaultExp, true);
             }
             calc = compileScalar(defaultExp, true);

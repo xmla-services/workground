@@ -112,7 +112,7 @@ public abstract class MultiResolver implements FunctionResolver {
     {
 outer:
         for (String signature : signatures) {
-            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        	Category[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if (parameterTypes.length != args.length) {
                 continue;
             }
@@ -124,7 +124,7 @@ outer:
                     continue outer;
                 }
             }
-            int returnType = FunUtil.decodeReturnCategory(signature);
+            Category returnType = FunUtil.decodeReturnCategory(signature);
             FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return createFunDef(args, dummy);
         }
@@ -134,7 +134,7 @@ outer:
     @Override
 	public boolean requiresExpression(int k) {
         for (String signature : signatures) {
-            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        	Category[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)
                 && parameterTypes[k] == Category.SET)
             {

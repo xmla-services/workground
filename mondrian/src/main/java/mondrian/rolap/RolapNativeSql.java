@@ -147,7 +147,8 @@ public class RolapNativeSql {
             if (!(exp instanceof Literal)) {
                 return null;
             }
-            if ((exp.getCategory() & Category.NUMERIC) == 0) {
+            System.out.println(exp.getCategory());
+            if (exp.getCategory() == Category.INTEGER) {//TODO: REVIEW BITWISE
                 return null;
             }
             Literal literal = (Literal) exp;
@@ -421,11 +422,11 @@ public class RolapNativeSql {
      * Contains utility methods to compile FunCall expressions into SQL.
      */
     abstract class FunCallSqlCompilerBase implements SqlCompiler {
-        int category;
+    	Category category;
         String mdx;
         int argCount;
 
-        FunCallSqlCompilerBase(int category, String mdx, int argCount) {
+        FunCallSqlCompilerBase(Category category, String mdx, int argCount) {
             this.category = category;
             this.mdx = mdx;
             this.argCount = argCount;
@@ -435,7 +436,7 @@ public class RolapNativeSql {
          * @return true if exp is a matching FunCall
          */
         protected boolean match(Expression exp) {
-            if ((exp.getCategory() & category) == 0) {
+            if (exp.getCategory() != category) {//TODO: REVIEW BITWISE
                 return false;
             }
             if (!(exp instanceof FunctionCall fc)) {
@@ -481,7 +482,7 @@ public class RolapNativeSql {
         String sql;
 
         protected FunCallSqlCompiler(
-            int category, String mdx, String sql,
+        		Category category, String mdx, String sql,
             int argCount, SqlCompiler argumentCompiler)
         {
             super(category, mdx, argCount);
@@ -519,7 +520,7 @@ public class RolapNativeSql {
      */
     class UnaryOpSqlCompiler extends FunCallSqlCompiler {
         protected UnaryOpSqlCompiler(
-            int category,
+            Category category,
             String mdx,
             String sql,
             SqlCompiler argumentCompiler)
@@ -533,7 +534,7 @@ public class RolapNativeSql {
      */
     class ParenthesisSqlCompiler extends FunCallSqlCompiler {
         protected ParenthesisSqlCompiler(
-            int category,
+        		Category category,
             SqlCompiler argumentCompiler)
         {
             super(category, "()", "", 1, argumentCompiler);
@@ -554,7 +555,7 @@ public class RolapNativeSql {
         private final SqlCompiler compiler;
 
         protected InfixOpSqlCompiler(
-            int category,
+        		Category category,
             String mdx,
             String sql,
             SqlCompiler argumentCompiler)
@@ -587,7 +588,7 @@ public class RolapNativeSql {
         private final SqlCompiler compiler;
 
         protected IsEmptySqlCompiler(
-            int category, String mdx,
+        		Category category, String mdx,
             SqlCompiler argumentCompiler)
         {
             super(category, mdx, 1);
@@ -617,7 +618,7 @@ public class RolapNativeSql {
 
         SqlCompiler valueCompiler;
 
-        IifSqlCompiler(int category, SqlCompiler valueCompiler) {
+        IifSqlCompiler(Category category, SqlCompiler valueCompiler) {
             super(category, "iif", 3);
             this.valueCompiler = valueCompiler;
         }

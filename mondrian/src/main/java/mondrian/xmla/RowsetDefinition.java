@@ -4719,32 +4719,32 @@ TODO: see above
             Byte("Byte subtype"),
             Array("Array subtype");
 
-            public static VarType forCategory(int category) {
+            public static VarType forCategory(Category category) {
                 switch (category) {
-                case Category.UNKNOWN:
+                case UNKNOWN:
                     // expression == unknown ???
                     // case Category.Expression:
                     return Empty;
-                case Category.ARRAY:
+                case ARRAY:
                     return Array;
-                case Category.DIMENSION,
-                Category.HIERARCHY,
-                Category.LEVEL,
-                Category.MEMBER,
-                Category.SET,
-                Category.TUPLE,
-                Category.CUBE,
-                Category.VALUE:
+                case DIMENSION,
+                HIERARCHY,
+                LEVEL,
+                MEMBER,
+                SET,
+                TUPLE,
+                CUBE,
+                VALUE:
                     return Variant;
-                case Category.LOGICAL:
+                case LOGICAL:
                     return Boolean;
-                case Category.NUMERIC:
+                case NUMERIC:
                     return Double;
-                case Category.STRING, Category.SYMBOL, Category.CONSTANT:
+                case STRING, SYMBOL:
                     return String;
-                case Category.DATE_TIME:
+                case DATE_TIME:
                     return Date;
-                case Category.INTEGER, Category.MASK:
+                case INTEGER:
                     return Integer;
                 default:
                     break;

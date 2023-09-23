@@ -55,7 +55,7 @@ public class ParameterFunDef extends FunDefBase {
         FunctionDefinition funDef,
         String parameterName,
         Type type,
-        int returnCategory,
+        Category returnCategory,
         Expression exp,
         String description)
     {
@@ -191,12 +191,12 @@ public class ParameterFunDef extends FunDefBase {
 		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             Expression typeArg = args[1];
-            int category;
+            Category category;
             Type type = typeArg.getType();
             switch (typeArg.getCategory()) {
-            case Category.DIMENSION:
-            case Category.HIERARCHY:
-            case Category.LEVEL:
+            case DIMENSION:
+            case HIERARCHY:
+            case LEVEL:
                 Dimension dimension = type.getDimension();
                 if (!ParameterFunDef.isConstant(typeArg)) {
                     throw FunUtil.newEvalException(
@@ -220,7 +220,7 @@ public class ParameterFunDef extends FunDefBase {
                 category = Category.MEMBER;
                 break;
 
-            case Category.SYMBOL:
+            case SYMBOL:
                 String s = (String) ((Literal) typeArg).getValue();
                 if (s.equalsIgnoreCase("NUMERIC")) {
                     category = Category.NUMERIC;
@@ -246,7 +246,7 @@ public class ParameterFunDef extends FunDefBase {
             Validator validator =
                 Util.createSimpleValidator(BuiltinFunTable.instance());
             final List<Conversion> conversionList = new ArrayList<>();
-            String typeName = Category.instance.getName(category).toUpperCase();
+            String typeName = category.getName().toUpperCase();
             if (!validator.canConvert(2, exp, category, conversionList)) {
                 throw FunUtil.newEvalException(
                     dummyFunDef,

@@ -70,7 +70,7 @@ public class HierarchyExpressionImpl extends AbstractExpression implements Expre
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return Category.HIERARCHY;
     }
 

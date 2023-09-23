@@ -48,8 +48,8 @@ class PropertiesFunDef extends FunDefBase {
         String signature,
         String description,
         Syntax syntax,
-        int returnType,
-        int[] parameterTypes)
+        Category returnType,
+        Category[] parameterTypes)
     {
         super(name, signature, description, syntax, returnType, parameterTypes);
     }
@@ -90,7 +90,7 @@ class PropertiesFunDef extends FunDefBase {
      * Resolves calls to the <code>PROPERTIES</code> MDX function.
      */
     private static class ResolverImpl extends ResolverBase {
-        private static final int[] PARAMETER_TYPES = {
+        private static final Category[] PARAMETER_TYPES = {
             Category.MEMBER, Category.STRING
         };
 
@@ -104,7 +104,7 @@ class PropertiesFunDef extends FunDefBase {
 
         private boolean matches(
             Expression[] args,
-            int[] parameterTypes,
+            Category[] parameterTypes,
             Validator validator,
             List<Conversion> conversions)
         {
@@ -130,7 +130,7 @@ class PropertiesFunDef extends FunDefBase {
             if (!matches(args, ResolverImpl.PARAMETER_TYPES, validator, conversions)) {
                 return null;
             }
-            int returnType = deducePropertyCategory(args[0], args[1]);
+            Category returnType = deducePropertyCategory(args[0], args[1]);
             return new PropertiesFunDef(
                 getName(), getSignature(), getDescription(), getSyntax(),
                 returnType, ResolverImpl.PARAMETER_TYPES);
@@ -145,7 +145,7 @@ class PropertiesFunDef extends FunDefBase {
          * @param propertyNameExp Expression for the name of the property
          * @return Category of the property
          */
-        private int deducePropertyCategory(
+        private Category deducePropertyCategory(
             Expression memberExp,
             Expression propertyNameExp)
         {

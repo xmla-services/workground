@@ -70,7 +70,7 @@ public class DimensionExpressionImpl extends AbstractExpression implements Expre
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return Category.DIMENSION;
     }
 

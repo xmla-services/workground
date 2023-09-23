@@ -293,7 +293,7 @@ public interface SchemaReader {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category,
+        Category category,
         MatchType matchType);
 
     /**
@@ -318,7 +318,7 @@ public interface SchemaReader {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        int category);
+        Category category);
 
     /**
      * Should only be called by implementations of

@@ -36,7 +36,7 @@ import mondrian.calc.impl.GenericCalc;
 public class CoalesceEmptyFunDef extends FunDefBase {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    public CoalesceEmptyFunDef(ResolverBase resolverBase, int type, int[] types)
+    public CoalesceEmptyFunDef(ResolverBase resolverBase, Category type, Category[] types)
     {
         super(resolverBase,  type, types);
     }
@@ -85,9 +85,9 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             if (args.length < 1) {
                 return null;
             }
-            final int[] types = {Category.NUMERIC, Category.STRING};
-            final int[] argTypes = new int[args.length];
-            for (int type : types) {
+            final Category[] types = {Category.NUMERIC, Category.STRING};
+            final Category[] argTypes = new Category[args.length];
+            for (Category type : types) {
                 int matchingArgs = 0;
                 conversions.clear();
                 for (int i = 0; i < args.length; i++) {

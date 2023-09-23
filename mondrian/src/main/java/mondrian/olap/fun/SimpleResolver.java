@@ -69,7 +69,7 @@ class SimpleResolver implements FunctionResolver {
         Validator validator,
         List<Conversion> conversions)
     {
-        int[] parameterTypes = funDef.getParameterCategories();
+    	Category[] parameterTypes = funDef.getParameterCategories();
         if (parameterTypes.length != args.length) {
             return null;
         }
@@ -85,7 +85,7 @@ class SimpleResolver implements FunctionResolver {
 
     @Override
 	public boolean requiresExpression(int k) {
-        int[] parameterTypes = funDef.getParameterCategories();
+    	Category[] parameterTypes = funDef.getParameterCategories();
         return (k >= parameterTypes.length)
             || (parameterTypes[k] != Category.SET);
     }

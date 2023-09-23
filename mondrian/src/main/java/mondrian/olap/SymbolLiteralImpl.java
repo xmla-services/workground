@@ -42,7 +42,7 @@ public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements Sy
 	}
 
 	@Override
-	public int getCategory() {
+	public Category getCategory() {
 		return Category.SYMBOL;
 	}
 

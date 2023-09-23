@@ -48,7 +48,7 @@ import mondrian.resource.MondrianResource;
 class StrToSetFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private StrToSetFunDef(int[] parameterTypes) {
+    private StrToSetFunDef(Category[] parameterTypes) {
         super(
             "StrToSet",
             "<Set> StrToSet(<String>[, <Hierarchy>...])",
@@ -186,7 +186,7 @@ class StrToSetFunDef extends FunDefBase {
                     return null;
                 }
             }
-            int[] argTypes = new int[args.length];
+            Category[] argTypes = new Category[args.length];
             argTypes[0] = Category.STRING;
             for (int i = 1; i < argTypes.length; i++) {
                 argTypes[i] = Category.HIERARCHY;
@@ -196,7 +196,7 @@ class StrToSetFunDef extends FunDefBase {
 
         @Override
 		public FunctionDefinition getRepresentativeFunDef() {
-            return new StrToSetFunDef(new int[] {Category.STRING});
+            return new StrToSetFunDef(new Category[] {Category.STRING});
         }
     }
 }

@@ -70,7 +70,7 @@ public class NamedSetExpressionImpl extends AbstractExpression implements Expres
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return Category.SET;
     }
 

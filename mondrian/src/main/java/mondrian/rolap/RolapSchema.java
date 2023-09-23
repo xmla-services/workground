@@ -880,7 +880,7 @@ public class RolapSchema implements Schema {
     private <T extends OlapElement> T lookup(
         RolapCube cube,
         SchemaReader reader,
-        int category,
+        Category category,
         String id)
     {
         List<Segment> segments = Util.parseIdentifier(id);

@@ -51,7 +51,7 @@ class AncestorsFunDef extends FunDefBase {
     }
 
     @Override
-	public int getReturnCategory() {
+	public Category getReturnCategory() {
         return Category.SET;
     }
 

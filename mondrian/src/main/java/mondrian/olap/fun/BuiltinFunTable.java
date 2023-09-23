@@ -105,7 +105,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 "Dummy function representing the empty expression",
                 Syntax.Empty,
                 Category.EMPTY,
-                new int[0])
+                new Category[0])
             {
             }
         );

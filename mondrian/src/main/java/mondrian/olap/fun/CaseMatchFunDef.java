@@ -12,6 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Category;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -107,8 +108,8 @@ class CaseMatchFunDef extends FunDefBase {
             if (args.length < 3) {
                 return null;
             }
-            int valueType = args[0].getCategory();
-            int returnType = args[2].getCategory();
+            Category valueType = args[0].getCategory();
+            Category returnType = args[2].getCategory();
             int j = 0;
             int clauseCount = (args.length - 1) / 2;
             int mismatchingArgs = 0;

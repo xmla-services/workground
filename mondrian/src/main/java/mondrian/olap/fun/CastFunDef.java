@@ -147,7 +147,7 @@ public class CastFunDef extends FunDefBase {
                 return null;
             }
             String typeName = (String) literal.getValue();
-            int returnCategory;
+            Category returnCategory;
             if (typeName.equalsIgnoreCase("String")) {
                 returnCategory = Category.STRING;
             } else if (typeName.equalsIgnoreCase("Numeric")) {
@@ -168,7 +168,7 @@ public class CastFunDef extends FunDefBase {
     private static class CastCalcImpl extends GenericCalc {
         private final Calc calc;
         private final Type targetType;
-        private final int targetCategory;
+        private final Category targetCategory;
 
         public CastCalcImpl(Expression arg, Calc calc, Type targetType) {
             super(arg.getType());
@@ -185,15 +185,15 @@ public class CastFunDef extends FunDefBase {
         @Override
 		public Object evaluate(Evaluator evaluator) {
             switch (targetCategory) {
-            case Category.STRING:
+            case STRING:
                 return evaluateString(evaluator);
-            case Category.INTEGER:
+            case INTEGER:
                 return evaluateInteger(evaluator);
-            case Category.NUMERIC:
+            case NUMERIC:
                 return evaluateDouble(evaluator);
-            case Category.DATE_TIME:
+            case DATE_TIME:
                 return evaluateDateTime(evaluator);
-            case Category.LOGICAL:
+            case LOGICAL:
                 return evaluateBoolean(evaluator);
             default:
                 throw Util.newInternal("category " + targetCategory);

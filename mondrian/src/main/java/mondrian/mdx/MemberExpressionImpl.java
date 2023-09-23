@@ -74,7 +74,7 @@ public class MemberExpressionImpl extends AbstractExpression implements Expressi
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return Category.MEMBER;
     }
 

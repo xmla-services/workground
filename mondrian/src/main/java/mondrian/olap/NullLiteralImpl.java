@@ -40,7 +40,7 @@ public class NullLiteralImpl extends AbstractLiteralImpl<Object> implements Null
 	}
 
 	@Override
-	public int getCategory() {
+	public Category getCategory() {
 		return Category.NULL;
 	}
 

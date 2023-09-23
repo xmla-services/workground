@@ -137,7 +137,7 @@ class PropertiesFunctionTest {
     verifyGenerateWithMemberCaptionPropertyFunction( context, "Generate([Store].CurrentMember, [Store].[Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.STRING, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  private void verifyMemberCaptionPropertyFunction(TestingContext context, String propertyQuery, int expectedCategory, Type expectedReturnType, String expectedResult ) {
+  private void verifyMemberCaptionPropertyFunction(TestingContext context, String propertyQuery, Category expectedCategory, Type expectedReturnType, String expectedResult ) {
 	connection = context.createConnection();
     query = connection.parseQuery( generateQueryString( propertyQuery ) );
     assertNotNull( query );
@@ -152,7 +152,7 @@ class PropertiesFunctionTest {
     assertEquals( expectedResult, result.getCell( ZERO_POS ).getFormattedValue() );
   }
 
-  private void verifyGenerateWithMemberCaptionPropertyFunction( TestingContext context,  String functionQuery, int expectedCategory, Type expectedReturnType, String expectedResult ) {
+  private void verifyGenerateWithMemberCaptionPropertyFunction( TestingContext context,  String functionQuery, Category expectedCategory, Type expectedReturnType, String expectedResult ) {
     connection = context.createConnection();
     try {
       query = connection.parseQuery( generateQueryString( functionQuery ) );

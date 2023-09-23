@@ -53,7 +53,7 @@ public final class NameResolver {
         OlapElement parent,
         List<IdentifierSegment> segments,
         boolean failIfNotFound,
-        int category,
+        Category category,
         MatchType matchType,
         List<Namespace> namespaces)
     {
@@ -153,15 +153,15 @@ public final class NameResolver {
      * @param element Element
      * @return Element of the desired category, or null
      */
-    private OlapElement nullify(int category, OlapElement element) {
+    private OlapElement nullify(Category category, OlapElement element) {
         switch (category) {
-        case Category.UNKNOWN:
+        case UNKNOWN:
             return element;
-        case Category.MEMBER:
+        case MEMBER:
             return element instanceof Member ? element : null;
-        case Category.LEVEL:
+        case LEVEL:
             return element instanceof Level ? element : null;
-        case Category.HIERARCHY:
+        case HIERARCHY:
             if (element instanceof Hierarchy) {
                 return element;
             } else if (element instanceof Dimension dimension) {
@@ -173,9 +173,9 @@ public final class NameResolver {
             } else {
                 return null;
             }
-        case Category.DIMENSION:
+        case DIMENSION:
             return element instanceof Dimension ? element : null;
-        case Category.SET:
+        case SET:
             return element instanceof NamedSet ? element : null;
         default:
             throw Util.newInternal("unexpected: " + category);

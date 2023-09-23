@@ -66,36 +66,36 @@ public class FunctionServiceImpl implements FunctionService {
     @Override
     @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
     public void addResolver(FunctionResolver resolver) {
-        funInfoList.add(FunInfoImpl.make(resolver));
-        if (resolver.getSyntax() == Syntax.Property) {
-            propertyWords.add(resolver.getName().toUpperCase());
-        }
-        resolverList.add(resolver);
-        final String[] reservedWordsInner = resolver.getReservedWords();
-        Collections.addAll(reservedWordList, reservedWordsInner);
+//        funInfoList.add(FunInfoImpl.make(resolver));
+//        if (resolver.getSyntax() == Syntax.Property) {
+//            propertyWords.add(resolver.getName().toUpperCase());
+//        }
+//        resolverList.add(resolver);
+//        final String[] reservedWordsInner = resolver.getReservedWords();
+//        Collections.addAll(reservedWordList, reservedWordsInner);
     }
 
     @Override
     @Reference(service = FunctionResolver.class, cardinality = ReferenceCardinality.MULTIPLE )
     public void removeResolver(FunctionResolver resolver) {
-        FunInfo funInfo = FunInfoImpl.make(resolver);
-        funInfoList.removeIf(f -> f.compareTo(funInfo) == 0);
-        resolverList.removeIf(r -> r.compareTo(resolver) == 0);
-        if (resolver.getSyntax() == Syntax.Property) {
-            final String pw = resolver.getName().toUpperCase();
-            // check if other resolvers have property words
-            if (resolverList.stream().noneMatch(r -> r.getSyntax() == Syntax.Property
-                && pw.equals(r.getName().toUpperCase()))) {
-                propertyWords.remove(pw);
-            }
-        }
-        final String[] reservedWordsInner = resolver.getReservedWords();
-        for (String reservedWord : reservedWordsInner) {
-            if (resolverList.stream().noneMatch(r ->
-                Stream.of(r.getReservedWords()).anyMatch(w -> w.equals(reservedWord)))) {
-                reservedWordList.remove(reservedWord);
-            }
-        }
+//        FunInfo funInfo = FunInfo.make(resolver);
+//        funInfoList.removeIf(f -> f.compareTo(funInfo) == 0);
+//        resolverList.removeIf(r -> r.compareTo(resolver) == 0);
+//        if (resolver.getSyntax() == Syntax.Property) {
+//            final String pw = resolver.getName().toUpperCase();
+//            // check if other resolvers have property words
+//            if (resolverList.stream().noneMatch(r -> r.getSyntax() == Syntax.Property
+//                && pw.equals(r.getName().toUpperCase()))) {
+//                propertyWords.remove(pw);
+//            }
+//        }
+//        final String[] reservedWordsInner = resolver.getReservedWords();
+//        for (String reservedWord : reservedWordsInner) {
+//            if (resolverList.stream().noneMatch(r ->
+//                Stream.of(r.getReservedWords()).anyMatch(w -> w.equals(reservedWord)))) {
+//                reservedWordList.remove(reservedWord);
+//            }
+//        }
     }
 
     @Override

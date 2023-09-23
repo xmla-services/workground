@@ -70,7 +70,7 @@ public class LevelExpressionImpl extends AbstractExpression implements Expressio
     }
 
     @Override
-	public int getCategory() {
+	public Category getCategory() {
         return Category.LEVEL;
     }
 
