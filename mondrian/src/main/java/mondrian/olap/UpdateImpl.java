@@ -23,6 +23,7 @@ package mondrian.olap;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 

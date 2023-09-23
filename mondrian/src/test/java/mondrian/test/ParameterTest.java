@@ -37,8 +37,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
@@ -54,9 +56,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Parameter;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
 

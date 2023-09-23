@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Format;
 

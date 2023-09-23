@@ -10,12 +10,12 @@
 package mondrian.udf;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 
 /**

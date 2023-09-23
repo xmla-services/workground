@@ -15,9 +15,8 @@ package org.eclipse.daanse.olap.calc.base;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-
-import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingValueCalc<T> extends AbstractProfilingCalc<T> {
 

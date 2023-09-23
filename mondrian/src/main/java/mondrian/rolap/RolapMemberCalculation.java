@@ -9,10 +9,10 @@
 
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Expression;
 import mondrian.olap.fun.AggregateFunDef;
 
 /**

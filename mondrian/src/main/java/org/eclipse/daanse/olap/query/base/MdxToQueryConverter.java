@@ -43,15 +43,19 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Subcube;
 
 import mondrian.mdx.UnresolvedFunCallImpl;
 import mondrian.olap.CellPropertyImpl;
-import mondrian.olap.Expression;
 import mondrian.olap.FormulaImpl;
 import mondrian.olap.IdImpl;
 import mondrian.olap.NullLiteralImpl;
@@ -61,10 +65,6 @@ import mondrian.olap.StringLiteralImpl;
 import mondrian.olap.SubcubeImpl;
 import mondrian.olap.SymbolLiteralImpl;
 import mondrian.olap.Syntax;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
-import mondrian.olap.api.SubtotalVisibility;
 
 public class MdxToQueryConverter {
 

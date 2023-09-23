@@ -37,9 +37,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.Segment;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

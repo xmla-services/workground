@@ -11,16 +11,16 @@ package mondrian.olap.type;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
-
 /**
  * TypeWrappingExp expression which exists only to wrap a
- * {@link mondrian.olap.type.Type}.
+ * {@link org.eclipse.daanse.olap.api.type.Type}.
  *
  * @author jhyde
  * @since Sep 26, 2005

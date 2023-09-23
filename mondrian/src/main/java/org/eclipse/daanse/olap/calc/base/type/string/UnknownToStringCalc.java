@@ -15,10 +15,9 @@
 package org.eclipse.daanse.olap.calc.base.type.string;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.base.nested.AbstractProfilingNestedStringCalc;
-
-import mondrian.olap.type.Type;
 
 public class UnknownToStringCalc extends AbstractProfilingNestedStringCalc<Calc<?>> {
 

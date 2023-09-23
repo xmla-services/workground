@@ -17,9 +17,9 @@ package org.eclipse.daanse.olap.calc.api.compiler;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 
-import mondrian.olap.Validator;
 import mondrian.util.CreationException;
 
 /**

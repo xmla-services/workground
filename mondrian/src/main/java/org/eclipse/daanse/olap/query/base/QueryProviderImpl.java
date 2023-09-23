@@ -15,7 +15,6 @@ package org.eclipse.daanse.olap.query.base;
 
 import mondrian.olap.DmvQueryImpl;
 import mondrian.olap.DrillThroughImpl;
-import mondrian.olap.Expression;
 import mondrian.olap.ExplainImpl;
 import mondrian.olap.QueryAxisImpl;
 import mondrian.olap.QueryImpl;
@@ -27,6 +26,7 @@ import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;

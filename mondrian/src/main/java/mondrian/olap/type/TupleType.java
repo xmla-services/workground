@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.resource.MondrianResource;
 

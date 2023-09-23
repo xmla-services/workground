@@ -13,14 +13,11 @@ package org.eclipse.daanse.function;
 
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.api.Segment;
 import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.fun.ParenthesesFunDef;
@@ -31,7 +28,6 @@ import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy;
@@ -42,6 +38,8 @@ import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -49,12 +47,14 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
@@ -132,7 +132,7 @@ public class FunUtil extends Util {
      * @return Exception that can be used as a cell result
      */
     public static RuntimeException newEvalException(
-        mondrian.olap.FunctionDefinition funDef,
+        org.eclipse.daanse.olap.api.function.FunctionDefinition funDef,
         String message ) {
         XOMUtil.discard( funDef ); // TODO: use this
         return new MondrianEvaluationException( message );

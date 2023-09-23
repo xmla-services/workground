@@ -13,9 +13,13 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.QueryComponent;
 import org.eclipse.daanse.olap.api.query.component.WrapExpression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.BooleanCalc;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DateTimeCalc;
@@ -33,11 +37,7 @@ import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIteratorCalc;
 import org.eclipse.daanse.olap.calc.api.todo.TupleListCalc;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Parameter;
 import mondrian.olap.AbstractQueryPart;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 
 /**
  * Abstract implementation of {@link org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler}
@@ -193,7 +193,7 @@ public class DelegatingExpCompiler implements ExpressionCompiler {
      * <p>If we didn't do this, the decorator would get forgotten at the first
      * level of recursion. It's not pretty, and I thought about other ways
      * of combining Visitor + Decorator. For instance, I tried replacing
-     * {@link #afterCompile(mondrian.olap.Expression, mondrian.calc.Calc, boolean)}
+     * {@link #afterCompile(org.eclipse.daanse.olap.api.query.component.Expression, mondrian.calc.Calc, boolean)}
      * with a callback (Strategy), but the exit points in ExpCompiler not
      * clear because there are so many methods.
      *

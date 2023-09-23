@@ -11,9 +11,22 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.api;
+package org.eclipse.daanse.olap.api;
 
-public interface NameSegment extends Segment{
+public enum Quoting {
+    /**
+     * Unquoted identifier, for example "Measures".
+     */
+    UNQUOTED,
 
-    String getName();
+    /**
+     * Quoted identifier, for example "[Measures]".
+     */
+    QUOTED,
+
+    /**
+     * Identifier quoted with an ampersand to indicate a key value, for
+     * example the second segment in "[Employees].&amp;[89]".
+     */
+    KEY
 }

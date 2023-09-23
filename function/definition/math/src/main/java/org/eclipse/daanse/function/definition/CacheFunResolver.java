@@ -13,13 +13,14 @@
  */
 package org.eclipse.daanse.function.definition;
 
-import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
-import mondrian.olap.type.Type;
+
 import org.eclipse.daanse.function.FunDef;
 import org.eclipse.daanse.function.FunctionResolver;
 import org.eclipse.daanse.function.ResolverBase;
 import org.eclipse.daanse.function.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import java.util.List;
 

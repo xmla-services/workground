@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import mondrian.olap.api.Segment;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.OlapElement;
 import org.olap4j.OlapException;
@@ -34,7 +35,6 @@ import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.NamedSet;
 import org.olap4j.metadata.Schema;
 
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 
 /**
@@ -85,7 +85,7 @@ class MondrianOlap4jCube
             new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        final mondrian.olap.SchemaReader schemaReader =
+        final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
             .withLocus();
         for (org.eclipse.daanse.olap.api.element.Dimension dimension
@@ -104,7 +104,7 @@ class MondrianOlap4jCube
             new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        final mondrian.olap.SchemaReader schemaReader =
+        final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
             .withLocus();
         for (org.eclipse.daanse.olap.api.element.Dimension dimension
@@ -130,7 +130,7 @@ class MondrianOlap4jCube
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         try {
-            final mondrian.olap.SchemaReader schemaReader =
+            final org.eclipse.daanse.olap.api.SchemaReader schemaReader =
                 olap4jConnection.getMondrianConnection().getSchemaReader()
                 .withLocus();
             final MondrianOlap4jLevel measuresLevel =

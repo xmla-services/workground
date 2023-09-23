@@ -28,10 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.Segment;
-
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.CacheControl.MemberEditCommand;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -58,7 +58,6 @@ import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.SchemaReader;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.server.Execution;
 import mondrian.server.Locus;

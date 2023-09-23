@@ -10,12 +10,15 @@ package mondrian.olap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Command;
+import org.eclipse.daanse.olap.api.SubtotalVisibility;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CalculatedFormula;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
 import org.eclipse.daanse.olap.api.query.component.DmvQuery;
 import org.eclipse.daanse.olap.api.query.component.DrillThrough;
 import org.eclipse.daanse.olap.api.query.component.Explain;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -27,8 +30,6 @@ import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 import org.eclipse.daanse.olap.api.query.component.Update;
 import org.eclipse.daanse.olap.api.query.component.UpdateClause;
 
-import mondrian.olap.api.Command;
-import mondrian.olap.api.SubtotalVisibility;
 import mondrian.parser.MdxParserValidator;
 import mondrian.server.Statement;
 

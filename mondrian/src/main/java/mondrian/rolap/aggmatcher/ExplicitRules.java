@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
-
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAggForeignKey;
@@ -52,7 +52,6 @@ import mondrian.olap.Category;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;

@@ -25,10 +25,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import mondrian.olap.api.Quoting;
-
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;

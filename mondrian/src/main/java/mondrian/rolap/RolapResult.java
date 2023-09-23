@@ -27,12 +27,16 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
@@ -62,16 +66,12 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.DimensionType;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.Expression;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Parameter;
 import mondrian.olap.Property;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
-import mondrian.olap.api.NameSegment;
 import mondrian.olap.fun.AbstractAggregateFunDef;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
@@ -278,7 +278,7 @@ public class RolapResult extends ResultBase {
 
         HashMap<Member, Member> subcubeHierarchyMembers = new HashMap<>();
 
-        mondrian.olap.type.Type memberType1 =
+        org.eclipse.daanse.olap.api.type.Type memberType1 =
                 new mondrian.olap.type.MemberType(
                         hierarchy.getDimension(),
                         hierarchy,

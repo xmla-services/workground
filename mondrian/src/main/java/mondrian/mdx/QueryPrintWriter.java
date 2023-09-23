@@ -14,7 +14,7 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import mondrian.olap.Parameter;
+import org.eclipse.daanse.olap.api.Parameter;
 
 /**
  * PrintWriter used for unparsing queries. Remembers which parameters have

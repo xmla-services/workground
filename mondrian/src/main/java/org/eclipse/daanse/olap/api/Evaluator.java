@@ -37,14 +37,13 @@ import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.calc.api.compiler.ParameterSlot;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
-import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
 import mondrian.olap.QueryTiming;
-import mondrian.olap.SchemaReader;
 
 /**
  * An <code>Evaluator</code> holds the context necessary to evaluate an

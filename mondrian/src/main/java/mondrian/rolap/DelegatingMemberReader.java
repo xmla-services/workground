@@ -14,7 +14,7 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Member;
 

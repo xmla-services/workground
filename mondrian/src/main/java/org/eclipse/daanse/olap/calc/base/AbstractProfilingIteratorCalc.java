@@ -18,8 +18,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 
-import mondrian.olap.type.Type;
-//TODO: may be removed writer can calculate its won because has access to the objects
+import org.eclipse.daanse.olap.api.type.Type;
 
 public abstract class AbstractProfilingIteratorCalc<T> extends AbstractProfilingCalc<T> {
 

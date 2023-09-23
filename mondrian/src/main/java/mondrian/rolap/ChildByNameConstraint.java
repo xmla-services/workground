@@ -13,7 +13,8 @@ package mondrian.rolap;
 import java.util.Arrays;
 import java.util.List;
 
-import mondrian.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.NameSegment;
+
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 

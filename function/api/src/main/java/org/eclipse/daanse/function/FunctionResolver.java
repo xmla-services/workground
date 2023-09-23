@@ -11,10 +11,11 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Expression;
 import mondrian.olap.Syntax;
 
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
  * A <code>Resolver</code> converts a function name, invocation type, and set

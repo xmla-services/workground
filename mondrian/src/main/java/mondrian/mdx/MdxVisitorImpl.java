@@ -10,6 +10,7 @@
 package mondrian.mdx;
 
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.HierarchyExpression;
 import org.eclipse.daanse.olap.api.query.component.Id;
@@ -23,8 +24,6 @@ import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
-
-import mondrian.olap.Expression;
 
 /**
  * Default implementation of the visitor interface, {@link QueryComponentVisitor}.

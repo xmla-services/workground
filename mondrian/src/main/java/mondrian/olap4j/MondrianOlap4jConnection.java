@@ -34,6 +34,7 @@ import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
@@ -95,7 +96,6 @@ import org.slf4j.LoggerFactory;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.AbstractLiteralImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
@@ -675,7 +675,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return olap4jSchemaInner;
     }
 
-    Type toOlap4j(mondrian.olap.type.Type type) {
+    Type toOlap4j(org.eclipse.daanse.olap.api.type.Type type) {
         if (type instanceof mondrian.olap.type.BooleanType) {
             return new BooleanType();
         } else if (type instanceof mondrian.olap.type.CubeType cubeType) {
@@ -749,7 +749,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             hierarchy);
     }
 
-    Type[] toOlap4j(mondrian.olap.type.Type[] mondrianTypes) {
+    Type[] toOlap4j(org.eclipse.daanse.olap.api.type.Type[] mondrianTypes) {
         final Type[] types = new Type[mondrianTypes.length];
         for (int i = 0; i < types.length; i++) {
             types[i] = toOlap4j(mondrianTypes[i]);

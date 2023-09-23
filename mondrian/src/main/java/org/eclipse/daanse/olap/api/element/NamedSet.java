@@ -14,9 +14,9 @@
 
 package org.eclipse.daanse.olap.api.element;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 
 /**
  * A named set of members or tuples.

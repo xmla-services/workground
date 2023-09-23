@@ -14,32 +14,32 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ParameterExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
-import mondrian.olap.FunCall;
-import mondrian.olap.FunctionDefinition;
-import mondrian.olap.Parameter;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.Type;
 
 /**
  * A <code>ParameterFunDef</code> is a pseudo-function describing calls to
  * <code>Parameter</code> and <code>ParamRef</code> functions. It exists only
- * fleetingly, and is then converted into a {@link mondrian.olap.Parameter}.
+ * fleetingly, and is then converted into a {@link org.eclipse.daanse.olap.api.Parameter}.
  * For internal use only.
  *
  * @author jhyde
@@ -101,12 +101,12 @@ public class ParameterFunDef extends FunDefBase {
             // e.g. "[Time]"
             return true;
         }
-        if (typeArg instanceof FunCall hierarchyCall) {
+        if (typeArg instanceof FunctionCall hierarchyCall) {
             if (hierarchyCall.getFunName().equals("Hierarchy")
                 && hierarchyCall.getArgCount() > 0
-                && hierarchyCall.getArg(0) instanceof FunCall)
+                && hierarchyCall.getArg(0) instanceof FunctionCall)
             {
-                FunCall currentMemberCall = (FunCall) hierarchyCall.getArg(0);
+                FunctionCall currentMemberCall = (FunctionCall) hierarchyCall.getArg(0);
                 if (currentMemberCall.getFunName().equals("CurrentMember")
                     && currentMemberCall.getArgCount() > 0
                     && currentMemberCall.getArg(0) instanceof DimensionExpression)

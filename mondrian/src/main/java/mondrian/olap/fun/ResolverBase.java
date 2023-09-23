@@ -11,7 +11,8 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+
 import mondrian.olap.Syntax;
 
 /**

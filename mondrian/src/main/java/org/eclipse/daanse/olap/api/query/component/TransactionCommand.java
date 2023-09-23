@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.api.Command;
+import org.eclipse.daanse.olap.api.Command;
 
 public non-sealed interface TransactionCommand extends QueryComponent {
 

@@ -18,9 +18,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import mondrian.olap.api.Quoting;
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.Quoting;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.HierarchyAccess;
 import org.eclipse.daanse.olap.api.access.Role;
@@ -51,7 +52,6 @@ import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.RoleImpl;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 

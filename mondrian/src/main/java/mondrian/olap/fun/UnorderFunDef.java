@@ -9,11 +9,10 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-
-import mondrian.olap.FunctionDefinition;
 
 /**
  * Definition of the <code>Unorder</code> MDX function.

@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -63,7 +64,6 @@ import org.opencube.junit5.SchemaUtil;
 import mondrian.olap.Category;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.SchemaReader;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;

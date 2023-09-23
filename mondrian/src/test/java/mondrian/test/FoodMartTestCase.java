@@ -18,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import mondrian.olap.api.Segment;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -31,7 +32,6 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.IdImpl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryImpl;
-import mondrian.olap.SchemaReader;
 
 /**
  * <code>FoodMartTestCase</code> is a unit test which runs against the FoodMart

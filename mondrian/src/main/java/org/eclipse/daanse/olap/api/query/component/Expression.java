@@ -27,15 +27,17 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api.query.component;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 
-import mondrian.olap.type.Type;
+import mondrian.olap.Category;
 
 /**
  * An {@link Expression} is an MDX expression.

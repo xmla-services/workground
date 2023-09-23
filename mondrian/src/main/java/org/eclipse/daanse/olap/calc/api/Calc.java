@@ -29,9 +29,8 @@ package org.eclipse.daanse.olap.calc.api;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
-
-import mondrian.olap.type.Type;
 
 /**
  * <code>Calc</code> is the base class for all calculable expressions.
@@ -39,7 +38,7 @@ import mondrian.olap.type.Type;
  * <h3>Logical and physical expression languages</h3>
  *
  * Mondrian has two expression languages:<ul>
- * <li>The logical language of parsed MDX fragments ({@link mondrian.olap.Expression}).
+ * <li>The logical language of parsed MDX fragments ({@link org.eclipse.daanse.olap.api.query.component.Expression}).
  * <li>The phyiscal language of compiled expressions ({@link Calc}).
  * </ul></p>
  *
@@ -121,7 +120,7 @@ public interface Calc<E> {
      * whether the compiled expression is returning a mutable list. If a mutable
      * list is required, the compiler can create a mutable copy.
      *
-     * @see ExpressionCompiler#compileList(mondrian.olap.Expression, boolean)
+     * @see ExpressionCompiler#compileList(org.eclipse.daanse.olap.api.query.component.Expression, boolean)
      */
     ResultStyle getResultStyle();
 

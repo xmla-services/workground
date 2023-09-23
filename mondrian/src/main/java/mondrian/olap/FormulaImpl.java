@@ -18,26 +18,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
 import mondrian.olap.type.DecimalType;
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCalculatedMember;
@@ -480,7 +484,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
             }
         }
 
-        if (exp instanceof FunCall call && call.getFunName().equals("-")
+        if (exp instanceof FunctionCall call && call.getFunName().equals("-")
                 && call.getSyntax() == Syntax.Prefix) {
                 final Number number = quickEval(call.getArg(0));
                 if (number == null) {
@@ -650,7 +654,7 @@ public class FormulaImpl extends AbstractQueryPart implements Formula {
                     return hasCyclicReference(exp1, expList);
                 }
             }
-            if (expr instanceof FunCall funCall) {
+            if (expr instanceof FunctionCall funCall) {
                 Expression[] exps = funCall.getArgs();
                 for (int i = 0; i < exps.length; i++) {
                     if (hasCyclicReference(

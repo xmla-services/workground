@@ -26,6 +26,11 @@ import java.util.Set;
 import org.apache.commons.collections.collection.CompositeCollection;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -35,9 +40,13 @@ import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.NamedSet;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.CellProperty;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
@@ -52,6 +61,7 @@ import org.eclipse.daanse.olap.api.query.component.UnresolvedFunCall;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -67,14 +77,11 @@ import mondrian.mdx.LevelExpressionImpl;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpressionImpl;
 import mondrian.mdx.UnresolvedFunCallImpl;
-import mondrian.olap.api.NameSegment;
-import mondrian.olap.api.Segment;
 import mondrian.olap.fun.ParameterFunDef;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnectionProperties;
@@ -1989,7 +1996,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.Validator} that works within a
+     * Implementation of {@link org.eclipse.daanse.olap.api.Validator} that works within a
      * particular query.
      *
      * <p>It's unlikely that we would want a validator that is
@@ -2329,7 +2336,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          *
          * @param call Function call
          */
-        private void registerAliasArgs(FunCall call) {
+        private void registerAliasArgs(FunctionCall call) {
             for (Expression exp : call.getArgs()) {
                 registerAlias((QueryComponent) call, exp);
             }
@@ -2343,7 +2350,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
          * @param exp Expression that may be an "AS"
          */
         private void registerAlias(QueryComponent parent, Expression exp) {
-            if (exp instanceof FunCall call2 && call2.getSyntax() == Syntax.Infix
+            if (exp instanceof FunctionCall call2 && call2.getSyntax() == Syntax.Infix
                 && call2.getFunName().equals("AS")) {
                 // Scope is the function enclosing the 'AS' expression.
                 // For example, in

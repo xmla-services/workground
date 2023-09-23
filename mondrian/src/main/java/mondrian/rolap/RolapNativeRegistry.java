@@ -16,8 +16,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+
 import mondrian.olap.NativeEvaluator;
 
 /**

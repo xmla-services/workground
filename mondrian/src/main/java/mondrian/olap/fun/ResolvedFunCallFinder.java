@@ -12,11 +12,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
 
 import mondrian.mdx.MdxVisitorImpl;
-import mondrian.olap.Expression;
 
 /**
  * Visitor class used to locate a resolved function call within an

@@ -17,11 +17,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ConstantCalc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.profile.CalculationProfile;
-
-import mondrian.olap.type.Type;
 
 public abstract class AbstractProfilingConstantCalc<T> extends AbstractProfilingCalc<T> implements ConstantCalc<T> {
 

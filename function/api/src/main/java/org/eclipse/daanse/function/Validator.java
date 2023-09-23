@@ -11,20 +11,20 @@
 
 package org.eclipse.daanse.function;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionTable;
-import mondrian.olap.Parameter;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
-import mondrian.olap.type.Type;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Parameter;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.function.FunctionTable;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.Formula;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 import org.eclipse.daanse.olap.api.query.component.ParameterExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
+import org.eclipse.daanse.olap.api.type.Type;
 
 /**
  * Provides context necessary to resolve identifiers to objects, function

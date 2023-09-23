@@ -14,17 +14,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.base.AbstractProfilingCalc;
 
 import mondrian.calc.impl.DelegatingExpCompiler;
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 
 /**
  * The <code>ResultStyleCompiler</code> can be used to assure that

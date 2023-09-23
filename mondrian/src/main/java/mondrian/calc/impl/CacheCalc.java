@@ -10,10 +10,10 @@
 package mondrian.calc.impl;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.type.Type;
 
 /**
  * Calculation which retrieves the value of an underlying calculation

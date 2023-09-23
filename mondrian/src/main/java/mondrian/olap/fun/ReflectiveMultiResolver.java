@@ -14,8 +14,9 @@ package mondrian.olap.fun;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+
 import mondrian.olap.Util;
 
 /**

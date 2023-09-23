@@ -13,6 +13,8 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Validator;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.MemberProperty;
 
 /**

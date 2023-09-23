@@ -17,6 +17,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
@@ -28,8 +29,6 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.SchemaReader;
 
 class RolapCubeHierarchyTest {
 

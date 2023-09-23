@@ -20,6 +20,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
@@ -28,9 +30,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingExpression;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.mdx.ResolvedFunCallImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunCall;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
@@ -438,7 +438,7 @@ public class RolapNativeSql {
             if ((exp.getCategory() & category) == 0) {
                 return false;
             }
-            if (!(exp instanceof FunCall fc)) {
+            if (!(exp instanceof FunctionCall fc)) {
                 return false;
             }
             if (!mdx.equalsIgnoreCase(fc.getFunName())) {
@@ -461,7 +461,7 @@ public class RolapNativeSql {
             if (!match(exp)) {
                 return null;
             }
-            Expression[] args = ((FunCall) exp).getArgs();
+            Expression[] args = ((FunctionCall) exp).getArgs();
             StringBuilder[] sqls = new StringBuilder[args.length];
             for (int i = 0; i < args.length; i++) {
                 sqls[i] = compiler.compile(args[i]);
@@ -627,7 +627,7 @@ public class RolapNativeSql {
             if (!match(exp)) {
                 return null;
             }
-            Expression[] args = ((FunCall) exp).getArgs();
+            Expression[] args = ((FunctionCall) exp).getArgs();
             StringBuilder cond = booleanCompiler.compile(args[0]);
             StringBuilder val1 = valueCompiler.compile(args[1]);
             StringBuilder val2 = valueCompiler.compile(args[2]);

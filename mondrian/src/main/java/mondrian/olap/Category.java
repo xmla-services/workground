@@ -16,6 +16,8 @@ import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
 /**
  * <code>Category</code> enumerates the possible expression types.
@@ -25,7 +27,7 @@ import org.eclipse.daanse.olap.api.element.Member;
  * {@link FunctionDefinition#getReturnCategory()}.
  *
  * <p>For modern code, the more descriptive type system
- * ({@link mondrian.olap.type.Type}) is preferred.
+ * ({@link org.eclipse.daanse.olap.api.type.Type}) is preferred.
  *
  * @author jhyde
  * @since Feb 21, 2003

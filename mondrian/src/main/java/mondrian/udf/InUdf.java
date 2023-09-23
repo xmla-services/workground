@@ -13,13 +13,13 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.type.Type;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.BooleanType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 
 /**

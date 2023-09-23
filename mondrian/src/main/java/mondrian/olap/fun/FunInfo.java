@@ -15,7 +15,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.FunctionDefinition;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 
@@ -155,7 +156,7 @@ public class FunInfo implements FunctionInfo {
 
     /**
      * Returns the type of value returned by this function. Values are the same
-     * as those returned by {@link mondrian.olap.Expression#getCategory()}.
+     * as those returned by {@link org.eclipse.daanse.olap.api.query.component.Expression#getCategory()}.
      */
     @Override
 	public int[] getReturnCategories() {
@@ -164,7 +165,7 @@ public class FunInfo implements FunctionInfo {
 
     /**
      * Returns the types of the arguments of this function. Values are the same
-     * as those returned by {@link mondrian.olap.Expression#getCategory()}. The
+     * as those returned by {@link org.eclipse.daanse.olap.api.query.component.Expression#getCategory()}. The
      * 0<sup>th</sup> argument of methods and properties are the object they
      * are applied to. Infix operators have two arguments, and prefix operators
      * have one argument.

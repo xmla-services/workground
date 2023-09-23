@@ -13,8 +13,6 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Expression;
-
 import java.util.List;
 
 public non-sealed interface DmvQuery extends QueryComponent {

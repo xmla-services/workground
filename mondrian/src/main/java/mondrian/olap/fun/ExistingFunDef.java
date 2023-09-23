@@ -14,9 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
@@ -25,9 +28,6 @@ import org.eclipse.daanse.olap.calc.api.todo.TupleList;
 
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.TupleCollections;
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
-import mondrian.olap.type.Type;
 
 /**
  * Existing keyword limits a set to what exists within the current context, ie

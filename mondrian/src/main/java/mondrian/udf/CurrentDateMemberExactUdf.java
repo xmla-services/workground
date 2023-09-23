@@ -9,12 +9,12 @@
 
 package mondrian.udf;
 
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingUserDefinedFunction;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.StringType;
-import mondrian.olap.type.Type;
 import mondrian.util.Format;
 
 /**

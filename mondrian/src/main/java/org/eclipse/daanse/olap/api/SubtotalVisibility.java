@@ -11,7 +11,7 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package mondrian.olap.api;
+package org.eclipse.daanse.olap.api;
 
 /**
  * <code>SubtotalVisibility</code> enumerates the allowed values of

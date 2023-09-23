@@ -18,14 +18,14 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.todo.TupleIterable;
 
 import mondrian.mdx.ResolvedFunCallImpl;
-import mondrian.olap.Expression;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.olap.type.SetType;
-import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AndPredicate;
 import mondrian.rolap.agg.ListColumnPredicate;

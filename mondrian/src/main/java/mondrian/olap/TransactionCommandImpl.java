@@ -20,10 +20,9 @@
 
 package mondrian.olap;
 
-import mondrian.olap.api.Command;
-
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Command;
 import org.eclipse.daanse.olap.api.query.component.TransactionCommand;
 
 public class TransactionCommandImpl extends AbstractQueryPart implements TransactionCommand {

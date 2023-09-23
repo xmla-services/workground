@@ -28,9 +28,9 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.Collection;
 import java.util.List;
 
-import mondrian.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.result.Axis;

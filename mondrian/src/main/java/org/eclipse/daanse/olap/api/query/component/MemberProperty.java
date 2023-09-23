@@ -13,8 +13,7 @@
  */
 package org.eclipse.daanse.olap.api.query.component;
 
-import mondrian.olap.Expression;
-import mondrian.olap.Validator;
+import org.eclipse.daanse.olap.api.Validator;
 
 public non-sealed interface MemberProperty extends QueryComponent{
 

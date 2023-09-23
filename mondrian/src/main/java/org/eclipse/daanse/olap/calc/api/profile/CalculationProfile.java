@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
-
-import mondrian.olap.type.Type;
 
 public interface CalculationProfile {
 

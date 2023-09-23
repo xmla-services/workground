@@ -11,6 +11,7 @@ package mondrian.udf;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,6 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 
 

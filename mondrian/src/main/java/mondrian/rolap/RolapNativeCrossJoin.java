@@ -16,13 +16,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Member;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.fun.NonEmptyCrossJoinFunDef;
 import mondrian.rolap.sql.CrossJoinArg;

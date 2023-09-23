@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.NameSegment;
+import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Level;
 
-import mondrian.olap.api.NameSegment;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.CrossJoinArgFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;

@@ -13,15 +13,18 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import mondrian.olap.api.SubtotalVisibility;
-
+import org.eclipse.daanse.olap.api.SubtotalVisibility;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.AxisOrdinal;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
+import org.eclipse.daanse.olap.api.query.component.FunctionCall;
 import org.eclipse.daanse.olap.api.query.component.Id;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.QueryAxis;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
 import org.eclipse.daanse.olap.calc.api.compiler.ExpressionCompiler;
@@ -33,7 +36,6 @@ import mondrian.olap.type.DimensionType;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 
@@ -155,7 +157,7 @@ public class QueryAxisImpl extends AbstractQueryPart implements QueryAxis {
                     slicer});
         }
 
-        if (slicer instanceof FunCall funCall
+        if (slicer instanceof FunctionCall funCall
             && funCall.getSyntax() == Syntax.Parentheses)
         {
             slicer =

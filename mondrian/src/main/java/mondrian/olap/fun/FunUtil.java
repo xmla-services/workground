@@ -22,18 +22,24 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Evaluator;
+import org.eclipse.daanse.olap.api.SchemaReader;
+import org.eclipse.daanse.olap.api.Segment;
+import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.element.OlapElement;
+import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
+import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.LevelExpression;
 import org.eclipse.daanse.olap.api.query.component.Literal;
 import org.eclipse.daanse.olap.api.query.component.MemberExpression;
 import org.eclipse.daanse.olap.api.query.component.Query;
 import org.eclipse.daanse.olap.api.query.component.ResolvedFunCall;
+import org.eclipse.daanse.olap.api.type.Type;
 import org.eclipse.daanse.olap.calc.api.Calc;
 import org.eclipse.daanse.olap.calc.api.DoubleCalc;
 import org.eclipse.daanse.olap.calc.api.ResultStyle;
@@ -47,22 +53,16 @@ import org.olap4j.impl.IdentifierParser.Builder;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.HierarchyExpressionImpl;
 import mondrian.olap.Category;
-import mondrian.olap.Expression;
-import mondrian.olap.FunctionDefinition;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
-import mondrian.olap.Validator;
-import mondrian.olap.api.Segment;
 import mondrian.olap.fun.sort.OrderKey;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy;
@@ -1703,7 +1703,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, of the form '(member, member, ...)'. There must be precisely one member for each hierarchy.
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
+   * @param evaluator   Evaluator, provides a {@link org.eclipse.daanse.olap.api.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param i           Position to start parsing in string
    * @param members     Output array of members
@@ -1733,7 +1733,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
+   * @param evaluator   Evaluator, provides a {@link org.eclipse.daanse.olap.api.SchemaReader} and {@link org.eclipse.daanse.olap.api.element.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members
