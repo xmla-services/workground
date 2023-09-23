@@ -180,7 +180,7 @@ class SqlConstraintUtilsTest {
 
     private Expression makeUnsupportedExpressionForCalculatedMember() {
         Expression nullFunDefExpr = new ResolvedFunCallImpl(
-            new NullFunDef(), new Expression[]{}, new NullType());
+            new NullFunDef(), new Expression[]{}, NullType.INSTANCE);
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -282,7 +282,7 @@ class SqlConstraintUtilsTest {
                 memberExpr), "MemberExpr");
 
         Expression nullFunDefExpr = new ResolvedFunCallImpl(
-            new NullFunDef(), new Expression[]{}, new NullType());
+            new NullFunDef(), new Expression[]{}, NullType.INSTANCE);
         assertEquals(
             false,
             SqlConstraintUtils.isSupportedExpressionForCalculatedMember(
@@ -290,7 +290,7 @@ class SqlConstraintUtilsTest {
 
         // ResolvedFunCall arguments
         final Expression argUnsupported = new ResolvedFunCallImpl(
-            new NullFunDef(), new Expression[]{}, new NullType());
+            new NullFunDef(), new Expression[]{}, NullType.INSTANCE);
         final Expression argSupported = new MemberExpressionImpl(Mockito.mock(Member.class));
         assertEquals(
             false,

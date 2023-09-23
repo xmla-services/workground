@@ -125,8 +125,8 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
 	public Type[] getParameterTypes() {
         return new Type[] {
             new HierarchyType(null, null),
-            new StringType(),
-            new SymbolType()
+            StringType.INSTANCE,
+            SymbolType.INSTANCE
         };
     }
 

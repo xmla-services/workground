@@ -11,39 +11,30 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of a numeric expression.
- *
- * @author jhyde
- * @since Feb 17, 2005
- */
 public class NumericType extends ScalarType {
 
-    /**
-     * Creates a numeric type.
-     */
-    public NumericType() {
-        this("NUMERIC");
-    }
+	public static final NumericType INSTANCE = new NumericType();
 
-    protected NumericType(String digest) {
-        super(digest);
-    }
+	private NumericType() {
+		this("NUMERIC");
+	}
 
-    @Override
+	protected NumericType(String digest) {
+		super(digest);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
-        return obj instanceof NumericType
-            && toString().equals(obj.toString());
-    }
+		return obj instanceof NumericType && toString().equals(obj.toString());
+	}
 
-    @Override
+	@Override
 	public boolean isInstance(Object value) {
-        return value instanceof Number
-            || value instanceof Character;
-    }
+		return value instanceof Number || value instanceof Character;
+	}
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

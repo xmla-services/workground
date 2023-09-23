@@ -4682,11 +4682,11 @@ class BasicQueryTest extends FoodMartTestCase {
     }
 
     public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     public Type[] getParameterTypes() {
-      return new Type[] { new NumericType() };
+      return new Type[] { NumericType.INSTANCE };
     }
 
     public Object execute( Evaluator evaluator, Argument[] arguments ) {
@@ -4727,7 +4727,7 @@ class BasicQueryTest extends FoodMartTestCase {
     }
 
     public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     public Type[] getParameterTypes() {

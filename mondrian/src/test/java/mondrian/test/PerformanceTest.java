@@ -918,7 +918,7 @@ public class PerformanceTest {
 
     @Override
 	public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     @Override

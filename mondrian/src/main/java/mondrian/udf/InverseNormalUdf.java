@@ -68,12 +68,12 @@ public class InverseNormalUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] types) {
-        return new NumericType();
+        return NumericType.INSTANCE;
     }
 
     @Override
 	public Type[] getParameterTypes() {
-        return new Type[] {new NumericType()};
+        return new Type[] {NumericType.INSTANCE};
     }
 
     @Override

@@ -89,7 +89,7 @@ class TopCountNativeEvaluatorTest {
             .isValidContext(any(RolapEvaluator.class));
 
         Expression[] arguments = new Expression[] {
-            new TypeWrapperExp(new EmptyType()),
+            new TypeWrapperExp(EmptyType.INSTANCE),
             NumericLiteralImpl.create(BigDecimal.ONE)
         };
 

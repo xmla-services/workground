@@ -38,7 +38,7 @@ class PropertiesFunctionTest {
   private Result result;
   private Connection connection;
   private Expression resolvedFun;
-  private static final StringType STRING_TYPE = new StringType();
+  private static final StringType STRING_TYPE = StringType.INSTANCE;
 
   // The "Time" dimention in foodmart schema contains two hierarchies.
   // The first hierarchy doesn't have a name. By default, a hierarchy has the same name as its dimension, so the first

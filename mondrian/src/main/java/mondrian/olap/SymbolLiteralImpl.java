@@ -47,7 +47,7 @@ public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements Sy
 
 	@Override
 	public Type getType() {
-		return new SymbolType();
+		return SymbolType.INSTANCE;
 	}
 
 	@Override
@@ -59,6 +59,6 @@ public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements Sy
 	public Calc<String> accept(ExpressionCompiler compiler) {
 
 		// why is this not a symbolType?
-		return new ConstantStringCalc(new StringType(), getValue());
+		return new ConstantStringCalc(StringType.INSTANCE, getValue());
 	}
 }

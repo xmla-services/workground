@@ -600,9 +600,9 @@ public class RolapSchema implements Schema {
             }
             Type type;
             if (ParameterTypeEnum.STRING.equals(xmlParameter.type())) {
-                type = new StringType();
+                type = StringType.INSTANCE;
             } else if (ParameterTypeEnum.NUMERIC.equals(xmlParameter.type())) {
-                type = new NumericType();
+                type = NumericType.INSTANCE;
             } else {
                 type = new MemberType(null, null, null, null);
             }

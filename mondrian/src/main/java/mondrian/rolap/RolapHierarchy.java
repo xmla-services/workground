@@ -950,7 +950,7 @@ public class RolapHierarchy extends HierarchyBase {
                 role.getAccessDetails(this);
             final RollupPolicy rollupPolicy =
                 hierarchyAccess.getRollupPolicy();
-            final NumericType returnType = new NumericType();
+            final NumericType returnType = NumericType.INSTANCE;
             switch (rollupPolicy) {
             case FULL:
                 return new SmartRestrictedMemberReader(

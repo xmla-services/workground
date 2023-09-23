@@ -9,19 +9,14 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of an expression representing a date, time or timestamp.
- *
- * @author jhyde
- * @since Jan 2, 2008
- */
+
 public class DateTimeType extends ScalarType {
-    /**
-     * Creates a DateTime type.
-     */
-    public DateTimeType() {
-        super("DATETIME");
-    }
+	
+	public static final DateTimeType INSTANCE = new DateTimeType();
+
+	private DateTimeType() {
+		super("DATETIME");
+	}
 
     @Override
 	public boolean equals(Object obj) {

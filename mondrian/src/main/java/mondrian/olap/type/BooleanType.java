@@ -11,32 +11,27 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of a boolean expression.
- *
- * @author jhyde
- * @since Feb 17, 2005
- */
+
 public class BooleanType extends ScalarType {
-    /**
-     * Creates a BooleanType.
-     */
-    public BooleanType() {
-        super("BOOLEAN");
-    }
 
-    @Override
+	public static final BooleanType INSTANCE = new BooleanType();
+
+	private BooleanType() {
+		super("BOOLEAN");
+	}
+
+	@Override
 	public boolean equals(Object obj) {
-        return obj instanceof BooleanType;
-    }
+		return obj instanceof BooleanType;
+	}
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 
-    @Override
+	@Override
 	public boolean isInstance(Object value) {
-        return value instanceof Boolean;
-    }
+		return value instanceof Boolean;
+	}
 }

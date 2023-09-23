@@ -11,18 +11,10 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of a symbolic expression.
- *
- * @author jhyde
- * @since Feb 17, 2005
- */
 public class SymbolType extends ScalarType {
+	public static final SymbolType INSTANCE = new SymbolType();
 
-    /**
-     * Creates a symbol type.
-     */
-    public SymbolType() {
-        super("SYMBOL");
-    }
+	private SymbolType() {
+		super("SYMBOL");
+	}
 }

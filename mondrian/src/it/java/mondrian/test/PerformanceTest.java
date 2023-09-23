@@ -849,7 +849,7 @@ class PerformanceTest extends FoodMartTestCase {
     }
 
     public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     public Type[] getParameterTypes() {

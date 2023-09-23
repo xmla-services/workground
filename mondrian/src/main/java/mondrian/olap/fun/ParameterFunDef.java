@@ -139,22 +139,22 @@ public class ParameterFunDef extends FunDefBase {
             if (names.length == 1) {
                 final String name = names[0];
                 if (name.equals("NUMERIC")) {
-                    return new NumericType();
+                    return NumericType.INSTANCE;
                 }
                 if (name.equals("STRING")) {
-                    return new StringType();
+                    return StringType.INSTANCE;
                 }
             }
         } else if (args[1] instanceof Literal literal) {
             if (literal.getValue().equals("NUMERIC")) {
-                return new NumericType();
+                return NumericType.INSTANCE;
             } else if (literal.getValue().equals("STRING")) {
-                return new StringType();
+                return StringType.INSTANCE;
             }
         } else if (args[1] instanceof MemberExpression) {
             return new MemberType(null, null, null, null);
         }
-        return new StringType();
+        return StringType.INSTANCE;
     }
 
     /**
@@ -224,11 +224,11 @@ public class ParameterFunDef extends FunDefBase {
                 String s = (String) ((Literal) typeArg).getValue();
                 if (s.equalsIgnoreCase("NUMERIC")) {
                     category = Category.NUMERIC;
-                    type = new NumericType();
+                    type = NumericType.INSTANCE;
                     break;
                 } else if (s.equalsIgnoreCase("STRING")) {
                     category = Category.STRING;
-                    type = new StringType();
+                    type = StringType.INSTANCE;
                     break;
                 }
                 // fall through and throw error

@@ -23,7 +23,7 @@ public class ConstantCalcs {
 
 		}
 		else if (type instanceof BooleanType bt) {
-			return new ConstantBooleanCalc( null);
+			return new ConstantBooleanCalc( BooleanType.INSTANCE,null);
 
 		}else {
 			throw new RuntimeException(type.toString()+" --- "+type.getClass());

@@ -54,7 +54,7 @@ public class CurrentDateStringUdf implements UserDefinedFunction {
 
     @Override
 	public Type[] getParameterTypes() {
-        return new Type[] { new StringType() };
+        return new Type[] { StringType.INSTANCE };
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CurrentDateStringUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {
-        return new StringType();
+        return StringType.INSTANCE;
     }
 
     @Override
