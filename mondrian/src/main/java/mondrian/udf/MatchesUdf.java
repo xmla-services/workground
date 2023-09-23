@@ -49,8 +49,8 @@ public class MatchesUdf implements UserDefinedFunction {
     @Override
 	public Type[] getParameterTypes() {
         return new Type[] {
-            new StringType(),
-            new StringType()
+            StringType.INSTANCE,
+            StringType.INSTANCE
         };
     }
 
@@ -62,7 +62,7 @@ public class MatchesUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {
-        return new BooleanType();
+        return BooleanType.INSTANCE;
     }
 
     @Override

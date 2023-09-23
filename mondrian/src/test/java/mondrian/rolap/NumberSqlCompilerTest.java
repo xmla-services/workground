@@ -69,7 +69,7 @@ class NumberSqlCompilerTest {
 
     @Test
     void testRejectsNonLiteral() {
-        Expression exp = new TypeWrapperExp(new NullType());
+        Expression exp = new TypeWrapperExp(NullType.INSTANCE);
         assertNull(compiler.compile(exp));
     }
 

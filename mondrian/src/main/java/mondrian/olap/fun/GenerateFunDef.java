@@ -80,7 +80,7 @@ class GenerateFunDef extends FunDefBase {
         final Type type = args[1].getType();
         if (type instanceof StringType || type instanceof NumericType) {
             // Generate(<Set>, <String>[, <String>])
-            return new StringType();
+            return StringType.INSTANCE;
         } else {
             final Type memberType = TypeUtil.toMemberOrTupleType(type);
             return new SetType(memberType);
@@ -107,7 +107,7 @@ class GenerateFunDef extends FunDefBase {
             if (call.getArgCount() == 3) {
                 delimCalc = compiler.compileString(call.getArg(2));
             } else {
-                delimCalc = new ConstantStringCalc(new StringType(), "");
+                delimCalc = new ConstantStringCalc(StringType.INSTANCE, "");
             }
 
             return new GenerateStringCalcImpl(

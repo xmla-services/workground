@@ -5211,12 +5211,12 @@ public class BasicQueryTest {
 
     @Override
 	public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     @Override
 	public Type[] getParameterTypes() {
-      return new Type[] { new NumericType() };
+      return new Type[] { NumericType.INSTANCE };
     }
 
     @Override
@@ -5263,7 +5263,7 @@ public class BasicQueryTest {
 
     @Override
 	public Type getReturnType( Type[] parameterTypes ) {
-      return new NumericType();
+      return NumericType.INSTANCE;
     }
 
     @Override

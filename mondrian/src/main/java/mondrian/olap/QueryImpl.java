@@ -1980,7 +1980,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         extends ParameterImpl
     {
         public ConnectionParameterImpl(String name, AbstractLiteralImpl defaultValue) {
-            super(name, defaultValue, "Connection property", new StringType());
+            super(name, defaultValue, "Connection property", StringType.INSTANCE);
         }
 
         @Override

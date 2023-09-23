@@ -26,7 +26,7 @@ import mondrian.olap.type.StringType;
 
 public class StringLiteralImpl extends AbstractLiteralImpl<String> implements StringLiteral {
     public static final StringLiteralImpl EMPTY_STRING_LITERAL = new StringLiteralImpl("");
-    private static final StringType TYPE=new StringType();
+    private static final StringType TYPE=StringType.INSTANCE;
 	protected StringLiteralImpl(String text) {
 		super(text);
 	}

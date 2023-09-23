@@ -69,7 +69,7 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 
 	@Override
 	public Type getType() {
-		return new NumericType();
+		return NumericType.INSTANCE;
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 	
 	@Override
 	public Calc<?> accept(ExpressionCompiler compiler) {
-		return new ConstantDoubleCalc(new NumericType(), getValue().doubleValue());
+		return new ConstantDoubleCalc(NumericType.INSTANCE, getValue().doubleValue());
 	}
 
 	@Override

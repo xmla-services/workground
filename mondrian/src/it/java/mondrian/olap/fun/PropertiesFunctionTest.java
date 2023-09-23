@@ -29,7 +29,7 @@ class PropertiesFunctionTest extends FoodMartTestCase {
   private Result result;
   private Connection connection;
   private Exp resolvedFun;
-  private static final StringType STRING_TYPE = new StringType();
+  private static final StringType STRING_TYPE = StringType.INSTANCE;
 
   @Override
   protected void setUp() throws Exception {

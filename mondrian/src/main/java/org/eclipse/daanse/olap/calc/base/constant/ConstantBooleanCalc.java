@@ -20,8 +20,8 @@ import mondrian.olap.type.BooleanType;
 
 public class ConstantBooleanCalc extends AbstractProfilingConstantCalc<Boolean> implements BooleanCalc {
 
-	public ConstantBooleanCalc(Boolean value) {
-		super(value, new BooleanType());
+	public ConstantBooleanCalc( BooleanType type,Boolean value) {
+		super(value, type);
 	}
 
 }

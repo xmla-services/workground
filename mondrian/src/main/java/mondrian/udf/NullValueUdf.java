@@ -44,7 +44,7 @@ public class NullValueUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {
-        return new NumericType();
+        return NumericType.INSTANCE;
     }
 
     @Override

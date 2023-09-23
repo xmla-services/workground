@@ -48,7 +48,7 @@ public class ValUdf implements UserDefinedFunction {
 
     @Override
 	public Type[] getParameterTypes() {
-        return new Type[] { new NumericType() };
+        return new Type[] { NumericType.INSTANCE };
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ValUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {
-        return new NumericType();
+        return NumericType.INSTANCE;
     }
 
     @Override

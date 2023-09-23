@@ -77,6 +77,7 @@ import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
 import mondrian.olap.fun.sort.Sorter;
+import mondrian.olap.type.NumericType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TypeWrapperExp;
@@ -314,7 +315,7 @@ public class RolapResult extends ResultBase {
                     return true;
                   }
                 };
-        final mondrian.olap.type.NumericType returnType = new mondrian.olap.type.NumericType();
+        final mondrian.olap.type.NumericType returnType =NumericType.INSTANCE;
         final Calc partialCalc =
                 new RolapHierarchy.LimitedRollupAggregateCalc(returnType, tupleListCalc);
         Expression partialExp =

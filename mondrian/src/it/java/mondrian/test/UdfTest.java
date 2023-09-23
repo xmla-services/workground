@@ -1399,11 +1399,11 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type getReturnType(Type[] parameterTypes) {
-            return new NumericType();
+            return NumericType.INSTANCE;
         }
 
         public Type[] getParameterTypes() {
-            return new Type[] {new NumericType()};
+            return new Type[] {NumericType.INSTANCE};
         }
 
         public Object execute(Evaluator evaluator, Argument[] arguments) {
@@ -1438,11 +1438,11 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type getReturnType(Type[] parameterTypes) {
-            return new NumericType();
+            return NumericType.INSTANCE;
         }
 
         public Type[] getParameterTypes() {
-            return new Type[] {new NumericType()};
+            return new Type[] {NumericType.INSTANCE};
         }
 
         public Object execute(Evaluator evaluator, Argument[] arguments) {
@@ -1513,7 +1513,7 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type getReturnType(Type[] parameterTypes) {
-            return new NumericType();
+            return NumericType.INSTANCE;
         }
 
         public String[] getReservedWords() {
@@ -1521,7 +1521,7 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type[] getParameterTypes() {
-            return new Type[] {new NumericType()};
+            return new Type[] {NumericType.INSTANCE};
         }
 
         public Object execute(Evaluator evaluator, Argument[] arguments) {
@@ -1557,12 +1557,12 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type getReturnType(Type[] parameterTypes) {
-            return new StringType();
+            return StringType.INSTANCE;
         }
 
         public Type[] getParameterTypes() {
             return new Type[] {
-                new NumericType(), new StringType()
+                NumericType.INSTANCE, StringType.INSTANCE
             };
         }
 
@@ -1736,7 +1736,7 @@ class UdfTest extends FoodMartTestCase {
         }
 
         public Type getReturnType(Type[] arg0) {
-            return new StringType();
+            return StringType.INSTANCE;
         }
 
         public Syntax getSyntax() {

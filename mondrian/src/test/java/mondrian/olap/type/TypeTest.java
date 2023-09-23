@@ -72,13 +72,13 @@ class TypeTest {
             new HierarchyType(customersDimension, hierarchy);
         final DimensionType dimensionType =
             new DimensionType(customersDimension);
-        final StringType stringType = new StringType();
+        final StringType stringType = StringType.INSTANCE;
         final ScalarType scalarType = new ScalarType();
-        final NumericType numericType = new NumericType();
-        final DateTimeType dateTimeType = new DateTimeType();
+        final NumericType numericType = NumericType.INSTANCE;
+        final DateTimeType dateTimeType = DateTimeType.INSTANCE;
         final DecimalType decimalType = new DecimalType(10, 2);
         final DecimalType integerType = new DecimalType(7, 0);
-        final NullType nullType = new NullType();
+        final NullType nullType = NullType.INSTANCE;
         final MemberType unknownMemberType = MemberType.Unknown;
         final TupleType tupleType =
             new TupleType(
@@ -88,7 +88,7 @@ class TypeTest {
         final LevelType unknownLevelType = LevelType.Unknown;
         final HierarchyType unknownHierarchyType = HierarchyType.Unknown;
         final DimensionType unknownDimensionType = DimensionType.Unknown;
-        final BooleanType booleanType = new BooleanType();
+        final BooleanType booleanType = BooleanType.INSTANCE;
         Type[] types = {
             memberType,
             levelType,

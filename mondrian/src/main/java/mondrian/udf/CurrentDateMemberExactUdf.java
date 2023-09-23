@@ -56,7 +56,7 @@ public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
 	public Type[] getParameterTypes() {
         return new Type[] {
             new HierarchyType(null, null),
-            new StringType()
+            StringType.INSTANCE
         };
     }
 

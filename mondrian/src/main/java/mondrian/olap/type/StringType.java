@@ -11,18 +11,10 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of a string expression.
- *
- * @author jhyde
- * @since Feb 17, 2005
- */
 public class StringType extends ScalarType {
 
-    /**
-     * Creates a string type.
-     */
-    public StringType() {
+	public static final StringType INSTANCE = new StringType();
+    private StringType() {
         super("STRING");
     }
 

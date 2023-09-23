@@ -379,9 +379,9 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 			if (o != null) {
 				s = o.toString();
 			}
-			return new ConstantStringCalc(new StringType(), s);
+			return new ConstantStringCalc(StringType.INSTANCE, s);
 		}else {
-			return new UnknownToStringCalc(new StringType(),  calc);
+			return new UnknownToStringCalc(StringType.INSTANCE,  calc);
 		}
 	}
 
@@ -474,7 +474,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 			}else {
 				throw new RuntimeException("wring type. was: "+o);
 			}
-            return 	new ConstantBooleanCalc(b);
+            return 	new ConstantBooleanCalc(BooleanType.INSTANCE,b);
         }
         //
 
@@ -507,7 +507,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
 				throw new RuntimeException("wring type. was: "+o);
 			}
 
-            return 	new ConstantDoubleCalc(new NumericType(),d);
+            return 	new ConstantDoubleCalc(NumericType.INSTANCE,d);
 
         }
         if (calc instanceof DoubleCalc doubleCalc) {
@@ -517,7 +517,7 @@ public class AbstractExpCompiler implements ExpressionCompiler {
             return new IntegerToDoubleCalc(exp.getType(),  integerCalc);
         }
 
-		return new UnknownToDoubleCalc(new NumericType(), calc);
+		return new UnknownToDoubleCalc(NumericType.INSTANCE, calc);
 
      //   throw Util.newInternal("cannot cast " + exp);
     }

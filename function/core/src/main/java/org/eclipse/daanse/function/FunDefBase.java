@@ -329,17 +329,17 @@ public  class FunDefBase implements FunDef {
     static Type castType(Type type, int category) {
         switch (category) {
             case Category.LOGICAL:
-                return new BooleanType();
+                return BooleanType.INSTANCE;
             case Category.NUMERIC:
-                return new NumericType();
+                return NumericType.INSTANCE;
             case Category.NUMERIC | Category.INTEGER:
                 return new DecimalType(Integer.MAX_VALUE, 0);
             case Category.STRING:
-                return new StringType();
+                return StringType.INSTANCE;
             case Category.DATE_TIME:
-                return new DateTimeType();
+                return DateTimeType.INSTANCE;
             case Category.SYMBOL:
-                return new SymbolType();
+                return SymbolType.INSTANCE;
             case Category.VALUE:
                 return new ScalarType();
             case Category.CUBE:
@@ -388,7 +388,7 @@ public  class FunDefBase implements FunDef {
                 }
                 return null;
             case Category.EMPTY:
-                return new EmptyType();
+                return EmptyType.INSTANCE;
             default:
                 throw Category.instance.badValue(category);
         }

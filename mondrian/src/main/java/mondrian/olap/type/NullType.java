@@ -11,21 +11,15 @@
 
 package mondrian.olap.type;
 
-/**
- * The type of a null expression.
- *
- * @author medstat
- * @since Aug 21, 2006
- */
+
 public class NullType extends ScalarType
 {
-    /**
-     * Creates a null type.
-     */
-    public NullType()
-    {
-        super("<NULLTYPE>");
-    }
+
+	public static final NullType INSTANCE = new NullType();
+
+	private NullType() {
+		super("<NULLTYPE>");
+	}
 
     @Override
 	public boolean equals(Object obj) {

@@ -73,7 +73,7 @@ public class InUdf implements UserDefinedFunction {
 
     @Override
 	public Type getReturnType(Type[] parameterTypes) {
-        return new BooleanType();
+        return BooleanType.INSTANCE;
     }
 
     @Override

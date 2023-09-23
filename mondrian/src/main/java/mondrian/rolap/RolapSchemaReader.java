@@ -862,7 +862,7 @@ ElevatorSimplifyer.simplifyEvaluator(calc, evaluator);
                 name,
                 NullLiteralImpl.nullValue,
                 new StringBuilder("System property '").append(name).append("'").toString(),
-                new StringType());
+                StringType.INSTANCE);
             this.system = system;
             this.propertyDefinition =
                 system
