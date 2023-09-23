@@ -131,7 +131,7 @@ public class TupleType implements Type {
                 }
             }
         }
-        return new ScalarType();
+        return ScalarType.INSTANCE;
     }
 
     @Override
@@ -189,7 +189,7 @@ public class TupleType implements Type {
             for (int i = elementTypes.size();
                 i < that.elementTypes.length; i++)
             {
-                elementTypes.add(new ScalarType());
+                elementTypes.add(ScalarType.INSTANCE);
             }
         }
         return new TupleType(

@@ -105,7 +105,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       call.getArgCount() > 3
         ? compiler.compileScalar( call.getArg( 3 ), true )
         : new ValueCalc(
-               new ScalarType()  );
+               ScalarType.INSTANCE  );
     return new AbstractListCalc(
     		call.getType(),
       new Calc[] { tupleListCalc, integerCalc, orderCalc } ) {
