@@ -73,7 +73,7 @@ class TypeTest {
         final DimensionType dimensionType =
             new DimensionType(customersDimension);
         final StringType stringType = StringType.INSTANCE;
-        final ScalarType scalarType = new ScalarType();
+        final ScalarType scalarType = ScalarType.INSTANCE;
         final NumericType numericType = NumericType.INSTANCE;
         final DateTimeType dateTimeType = DateTimeType.INSTANCE;
         final DecimalType decimalType = new DecimalType(10, 2);

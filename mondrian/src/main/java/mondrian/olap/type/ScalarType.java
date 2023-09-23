@@ -29,20 +29,12 @@ import org.eclipse.daanse.olap.api.type.Type;
 public class ScalarType implements Type {
     private final String digest;
 
-    /**
-     * Creates a ScalarType.
-     */
-    public ScalarType() {
+	public static final ScalarType INSTANCE = new ScalarType();
+
+    private ScalarType() {
         this("SCALAR");
     }
 
-    /**
-     * Creates a ScalarType (or subtype) with a given digest.
-     *
-     * <p>The digest is used for {@link #toString()} and {@link #hashCode()}.
-     *
-     * @param digest Description of this type
-     */
     protected ScalarType(String digest) {
         this.digest = digest;
     }

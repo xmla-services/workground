@@ -460,7 +460,7 @@ public class RolapResult extends ResultBase {
           tupleList = AggregateFunDef.AggregateCalc.optimizeTupleList( evaluator, tupleList, false );
           evaluator.setSlicerTuples( tupleList );
 
-          final Calc valueCalc = new ValueCalc( new ScalarType() ) ;
+          final Calc valueCalc = new ValueCalc( ScalarType.INSTANCE ) ;
 
           final List<Member> prevSlicerMembers = new ArrayList<>();
 

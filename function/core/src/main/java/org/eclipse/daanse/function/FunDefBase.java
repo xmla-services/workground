@@ -341,7 +341,7 @@ public  class FunDefBase implements FunDef {
             case Category.SYMBOL:
                 return SymbolType.INSTANCE;
             case Category.VALUE:
-                return new ScalarType();
+                return ScalarType.INSTANCE;
             case Category.CUBE:
                 if (type instanceof Cube cube) {
                     return new CubeType(cube);

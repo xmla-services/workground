@@ -159,7 +159,7 @@ public class MemberType implements Type {
     public Type getValueType() {
         // todo: when members have more type information (double vs. integer
         // vs. string), return better type if member != null.
-        return new ScalarType();
+        return ScalarType.INSTANCE;
     }
 
     @Override
