@@ -52,7 +52,7 @@ import org.eclipse.daanse.mdx.model.api.UpdateStatement;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
-import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.MdxExpression;
 import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
@@ -675,7 +675,7 @@ SelectQueryAxesClause parseSelectQueryAxesClause :
 
 Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause :
 {
-  Expression expression = null;
+  MdxExpression expression = null;
 }
   < WHERE > expression = parseExpression
   {
@@ -718,7 +718,7 @@ SelectCellPropertyListClause parseSelectCellPropertyListClause :
 CreateMemberBodyClause parseCreateMemberBodyClause :
 {
  CompoundId compoundId = null;
- Expression expression = null;
+ MdxExpression expression = null;
  List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<>();
  MemberPropertyDefinition memberPropertyDefinition = null;
 }
@@ -742,7 +742,7 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
 MemberPropertyDefinition parseMemberPropertyDefinition :
 {
   ObjectIdentifier objectIdentifier;
-  Expression expression;
+  MdxExpression expression;
 }
   objectIdentifier = parseIdentifier < EQ > expression = parseExpression
   {
@@ -759,9 +759,9 @@ FormulaExpression parseFormulaExpression :
 ;
 
 
-Expression parseExpression :
+MdxExpression parseExpression :
 {
-  Expression expression;
+  MdxExpression expression;
   ObjectIdentifier objectIdentifier;
 }
   expression = parseUnaliasedExpression
@@ -781,9 +781,9 @@ Expression parseExpression :
 ;
 
 
-Expression parseExpressionOrEmpty :
+MdxExpression parseExpressionOrEmpty :
 {
-  Expression expression;
+  MdxExpression expression;
 }
   expression = parseExpression
   {
@@ -799,10 +799,10 @@ Expression parseExpressionOrEmpty :
 
 // Comma-separated list of expressions, some of which may be empty. Used
 // for functions.
-List < Expression > expOrEmptyList :
+List < MdxExpression > expOrEmptyList :
 {
-  Expression expression;
-  List < Expression > list = new LinkedList<>();
+  MdxExpression expression;
+  List < MdxExpression > list = new LinkedList<>();
 }
   expression = parseExpressionOrEmpty
   {
@@ -822,10 +822,10 @@ List < Expression > expOrEmptyList :
 
 
 // List of expressions, none of which may be empty.
-List < Expression > expList :
+List < MdxExpression > expList :
 {
-  Expression expression;
-  List < Expression > list = new LinkedList<>();
+  MdxExpression expression;
+  List < MdxExpression > list = new LinkedList<>();
 }
   expression = parseExpression
   {
@@ -844,9 +844,9 @@ List < Expression > expList :
 ;
 
 
-Expression parseExpressionEof :
+MdxExpression parseExpressionEof :
 {
-  Expression expression;
+  MdxExpression expression;
 }
   expression = parseExpression < EOF >
   {
@@ -968,10 +968,10 @@ CompoundId parseCompoundId :
 
 // ----------------------------------------------------------------------------
 // Expressions
-Expression parseUnaliasedExpression :
+MdxExpression parseUnaliasedExpression :
 {
-  Expression x;
-  Expression y;
+  MdxExpression x;
+  MdxExpression y;
 }
   x = parseTerm5
   (
@@ -1005,10 +1005,10 @@ Expression parseUnaliasedExpression :
 ;
 
 
-Expression parseTerm5 :
+MdxExpression parseTerm5 :
 {
-  Expression x;
-  Expression y;
+  MdxExpression x;
+  MdxExpression y;
 }
   x = parseTerm4
   (
@@ -1026,9 +1026,9 @@ Expression parseTerm5 :
 ;
 
 
-Expression parseTerm4 :
+MdxExpression parseTerm4 :
 {
-  Expression x;
+  MdxExpression x;
 }
   x = parseTerm3
   {
@@ -1044,10 +1044,10 @@ Expression parseTerm4 :
 ;
 
 
-Expression parseTerm3 :
+MdxExpression parseTerm3 :
 {
-  Expression x;
-  Expression y;
+  MdxExpression x;
+  MdxExpression y;
   Token op;
 }
   x = parseTerm2
@@ -1158,10 +1158,10 @@ Expression parseTerm3 :
 ;
 
 
-Expression parseTerm2 :
+MdxExpression parseTerm2 :
 {
-  Expression x;
-  Expression y;
+  MdxExpression x;
+  MdxExpression y;
 }
   x = parseTerm
   (
@@ -1193,10 +1193,10 @@ Expression parseTerm2 :
 ;
 
 
-Expression parseTerm :
+MdxExpression parseTerm :
 {
-  Expression x;
-  Expression y;
+  MdxExpression x;
+  MdxExpression y;
 }
   x = parseFactor
   (
@@ -1221,9 +1221,9 @@ Expression parseTerm :
 ;
 
 
-Expression parseFactor :
+MdxExpression parseFactor :
 {
-  Expression p;
+  MdxExpression p;
 }
   p = parsePrimary
   {
@@ -1250,9 +1250,9 @@ Expression parseFactor :
 ;
 
 
-Expression parsePrimary :
+MdxExpression parsePrimary :
 {
-  Expression expression;
+  MdxExpression expression;
 }
   expression = parseAtom
   (
@@ -1264,10 +1264,10 @@ Expression parsePrimary :
 ;
 
 
-Expression objectIdentifierOrFuncall(Expression left) :
+MdxExpression objectIdentifierOrFuncall(MdxExpression left) :
 {
   ObjectIdentifier objectIdentifier;
-  List < Expression > argList = null;
+  List < MdxExpression > argList = null;
 }
   objectIdentifier = parseIdentifier
   (
@@ -1299,11 +1299,11 @@ NumericLiteral parseNumericLiteral :
 ;
 
 
-Expression parseAtom :
+MdxExpression parseAtom :
 {
-  Expression expression;
+  MdxExpression expression;
   NameObjectIdentifier nameObjectIdentifier;
-  List < Expression > expressions;
+  List < MdxExpression > expressions;
 }
   < SINGLE_QUOTED_STRING >
   {
@@ -1393,10 +1393,10 @@ Expression parseAtom :
 ;
 
 
-Expression parseCaseExpression :
+MdxExpression parseCaseExpression :
 {
-  Expression expression, expression2;
-  List < Expression > expressions = new ArrayList <> ();
+  MdxExpression expression, expression2;
+  List < MdxExpression > expressions = new ArrayList <> ();
   boolean match = false;
 }
   < CASE >
@@ -1440,7 +1440,7 @@ Expression parseCaseExpression :
 CreateSetBodyClause parseCreateSetBodyClause :
 {
  CompoundId compoundId = null;
- Expression expression = null;
+ MdxExpression expression = null;
  //List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<>();
  //MemberPropertyDefinition memberPropertyDefinition = null;
 }
@@ -1507,9 +1507,9 @@ UpdateStatement parseUpdateStatement :
 
 UpdateClause updateClause :
 {
-    Expression t = null;
-    Expression v = null;
-    Expression w = null;
+    MdxExpression t = null;
+    MdxExpression v = null;
+    MdxExpression w = null;
     Allocation a = Allocation.NO_ALLOCATION;
 }
 
@@ -1540,7 +1540,7 @@ DMVStatement parseDMVStatement :
   CompoundId c;
   List<CompoundId> columns = new ArrayList<>();
   NameObjectIdentifier tableId = null;
-  Expression expression = null;
+  MdxExpression expression = null;
 }
   < SELECT >
 (
@@ -1566,7 +1566,7 @@ SelectQueryAxisClause parseSelectQueryAxisClause :
 {
   boolean nonEmpty = false;
   SelectDimensionPropertyListClause selectDimensionPropertyListClause = null;
-  Expression expression;
+  MdxExpression expression;
   int n;
   Axis axis;
 }
