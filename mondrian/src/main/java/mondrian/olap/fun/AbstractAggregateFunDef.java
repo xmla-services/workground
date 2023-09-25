@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -50,7 +50,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
 
     @Override
 	protected Expression validateArg(
-        Validator validator, Expression[] args, int i, Category category)
+        Validator validator, Expression[] args, int i, DataType category)
     {
         // If expression cache is enabled, wrap first expression (the set)
         // in a function which will use the expression cache.

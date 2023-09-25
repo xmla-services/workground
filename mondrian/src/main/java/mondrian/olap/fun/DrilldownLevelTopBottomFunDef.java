@@ -15,7 +15,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -98,7 +98,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       compiler.compileInteger( call.getArg( 1 ) );
     final LevelCalc levelCalc =
       call.getArgCount() > 2
-        && call.getArg( 2 ).getCategory() != Category.EMPTY
+        && call.getArg( 2 ).getCategory() != DataType.EMPTY
         ? compiler.compileLevel( call.getArg( 2 ) )
         : null;
     final Calc orderCalc =

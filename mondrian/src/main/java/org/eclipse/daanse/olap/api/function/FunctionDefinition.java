@@ -31,7 +31,7 @@ package org.eclipse.daanse.olap.api.function;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -62,10 +62,10 @@ public interface FunctionDefinition {
     String getDescription();
 
     /**
-     * Returns the {@link Category} code of the value returned by this
+     * Returns the {@link DataType} code of the value returned by this
      * function.
      */
-    Category getReturnCategory();
+    DataType getReturnCategory();
 
     /**
      * Returns the types of the arguments of this function. Values are the same
@@ -74,7 +74,7 @@ public interface FunctionDefinition {
      * to. Infix operators have two arguments, and prefix operators have one
      * argument.
      */
-    Category[] getParameterCategories();
+    DataType[] getParameterCategories();
 
     /**
      * Creates an expression which represents a call to this function with

@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -67,8 +67,8 @@ import mondrian.resource.MondrianResource;
 public class SetFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    SetFunDef(FunctionResolver resolver, Category[] argTypes) {
-        super(resolver, Category.SET, argTypes);
+    SetFunDef(FunctionResolver resolver, DataType[] argTypes) {
+        super(resolver, DataType.SET, argTypes);
     }
 
     @Override
@@ -370,7 +370,7 @@ public class SetFunDef extends FunDefBase {
      */
     public static ResolvedFunCall wrapAsSet(Expression... args) {
         assert args.length > 0;
-        final Category[] categories = new Category[args.length];
+        final DataType[] categories = new DataType[args.length];
         Type type = null;
         for (int i = 0; i < args.length; i++) {
             final Expression arg = args[i];
@@ -485,24 +485,24 @@ public class SetFunDef extends FunDefBase {
             Validator validator,
             List<Conversion> conversions)
         {
-        	Category[] parameterTypes = new Category[args.length];
+        	DataType[] parameterTypes = new DataType[args.length];
             for (int i = 0; i < args.length; i++) {
                 if (validator.canConvert(
-                        i, args[i], Category.MEMBER, conversions))
+                        i, args[i], DataType.MEMBER, conversions))
                 {
-                    parameterTypes[i] = Category.MEMBER;
+                    parameterTypes[i] = DataType.MEMBER;
                     continue;
                 }
                 if (validator.canConvert(
-                        i, args[i], Category.TUPLE, conversions))
+                        i, args[i], DataType.TUPLE, conversions))
                 {
-                    parameterTypes[i] = Category.TUPLE;
+                    parameterTypes[i] = DataType.TUPLE;
                     continue;
                 }
                 if (validator.canConvert(
-                        i, args[i], Category.SET, conversions))
+                        i, args[i], DataType.SET, conversions))
                 {
-                    parameterTypes[i] = Category.SET;
+                    parameterTypes[i] = DataType.SET;
                     continue;
                 }
                 return null;

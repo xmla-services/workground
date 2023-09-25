@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -253,7 +253,7 @@ class SqlConstraintUtilsTest {
 
         Expression parenthesesArg = new MemberExpressionImpl(parenthesesInnerMember);
 
-        FunctionDefinition funDef = new ParenthesesFunDef(Category.MEMBER);
+        FunctionDefinition funDef = new ParenthesesFunDef(DataType.MEMBER);
         Expression[] args = new Expression[]{parenthesesArg};
         Type returnType = new DecimalType(1, 1);
         Expression memberExp = new ResolvedFunCallImpl(funDef, args, returnType);
@@ -306,7 +306,7 @@ class SqlConstraintUtilsTest {
         final Expression[] args2Different = new Expression[]{argUnsupported, argSupported};
 
         final ParenthesesFunDef parenthesesFunDef =
-            new ParenthesesFunDef(Category.MEMBER);
+            new ParenthesesFunDef(DataType.MEMBER);
         Type parenthesesReturnType = new DecimalType(1, 1);
         Expression parenthesesExpr = new ResolvedFunCallImpl(
             parenthesesFunDef, noArgs, parenthesesReturnType);

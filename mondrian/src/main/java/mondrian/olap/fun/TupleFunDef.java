@@ -15,7 +15,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -43,27 +43,27 @@ import mondrian.olap.type.TypeUtil;
  * @since 3 March, 2002
  */
 public class TupleFunDef extends FunDefBase {
-    private final Category[] argTypes;
+    private final DataType[] argTypes;
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private TupleFunDef(Category[] argTypes) {
+    private TupleFunDef(DataType[] argTypes) {
         super(
             "()",
             "(<Member> [, <Member>]...)",
             "Parenthesis operator constructs a tuple.  If there is only one member, the expression is equivalent to the member expression.",
             Syntax.Parentheses,
-            Category.TUPLE,
+            DataType.TUPLE,
             argTypes);
         this.argTypes = argTypes;
     }
 
     @Override
-	public Category getReturnCategory() {
-        return Category.TUPLE;
+	public DataType getReturnCategory() {
+        return DataType.TUPLE;
     }
 
     @Override
-	public Category[] getParameterCategories() {
+	public DataType[] getParameterCategories() {
         return argTypes;
     }
 
@@ -149,7 +149,7 @@ public class TupleFunDef extends FunDefBase {
             if (args.length == 1 && !(args[0].getType() instanceof MemberType)) {
                 return new ParenthesesFunDef(args[0].getCategory());
             } else {
-                final Category[] argTypes = new Category[args.length];
+                final DataType[] argTypes = new DataType[args.length];
                 boolean hasSet = false;
                 for (int i = 0; i < args.length; i++) {
                     // Arg must be a member:
@@ -158,19 +158,19 @@ public class TupleFunDef extends FunDefBase {
                     // Not OK:
                     //  ([Gender].[S], [Store].[Store City]) (member, level)
                     if (validator.canConvert(
-                            i, args[i], Category.MEMBER, conversions)) {
-                        argTypes[i] = Category.MEMBER;
+                            i, args[i], DataType.MEMBER, conversions)) {
+                        argTypes[i] = DataType.MEMBER;
                     } else if(validator.canConvert(
-                            i, args[i], Category.SET, conversions)){
+                            i, args[i], DataType.SET, conversions)){
                         hasSet = true;
-                        argTypes[i] = Category.SET;
+                        argTypes[i] = DataType.SET;
                     }
                     else {
                         return null;
                     }
                 }
                 if(hasSet){
-                    FunctionDefinition dummy = FunUtil.createDummyFunDef(this, Category.SET, args);
+                    FunctionDefinition dummy = FunUtil.createDummyFunDef(this, DataType.SET, args);
                     return new CrossJoinFunDef(dummy);
                 }
                 else {

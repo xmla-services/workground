@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.bouncycastle.crypto.RuntimeCryptoException;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Validator;
@@ -55,7 +55,7 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
     }
 
     @Override
-	public Category getCategory() {
+	public DataType getCategory() {
         return TypeUtil.typeToCategory(parameter.getType());
     }
 
@@ -125,7 +125,7 @@ public class ParameterExpressionImpl extends AbstractExpression implements Param
         }
         final String name = parameter.getName();
         final Type type = parameter.getType();
-        final Category category = TypeUtil.typeToCategory(type);
+        final DataType category = TypeUtil.typeToCategory(type);
         if (def) {
             pw.print(new StringBuilder("Parameter(").append(Util.quoteForMdx(name)).append(", ").toString());
             switch (category) {

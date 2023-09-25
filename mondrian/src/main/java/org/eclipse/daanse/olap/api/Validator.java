@@ -113,7 +113,7 @@ public interface Validator {
     boolean canConvert(
         int ordinal,
         Expression fromExp,
-        Category to,
+        DataType to,
         List<FunctionResolver.Conversion> conversions);
 
     /**

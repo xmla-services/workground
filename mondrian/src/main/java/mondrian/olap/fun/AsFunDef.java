@@ -11,7 +11,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -87,7 +87,7 @@ class AsFunDef extends FunDefBase {
             List<Conversion> conversions)
         {
             if (!validator.canConvert(
-                    0, args[0], Category.SET, conversions))
+                    0, args[0], DataType.SET, conversions))
             {
                 return null;
             }

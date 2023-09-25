@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -70,8 +70,8 @@ public class DimensionExpressionImpl extends AbstractExpression implements Expre
     }
 
     @Override
-	public Category getCategory() {
-        return Category.DIMENSION;
+	public DataType getCategory() {
+        return DataType.DIMENSION;
     }
 
     @Override

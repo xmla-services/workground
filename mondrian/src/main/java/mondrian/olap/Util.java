@@ -92,7 +92,7 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -621,7 +621,7 @@ public class Util extends XOMUtil {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category)
+        DataType category)
     {
         return lookupCompound(
             schemaReader, parent, names, failIfNotFound, category,
@@ -639,8 +639,8 @@ public class Util extends XOMUtil {
      *   "Product Department", "Produce"}
      * @param failIfNotFound If the element is not found, determines whether
      *   to return null or throw an error
-     * @param category Type of returned element, a {@link Category} value;
-     *   {@link Category#UNKNOWN} if it doesn't matter.
+     * @param category Type of returned element, a {@link DataType} value;
+     *   {@link DataType#UNKNOWN} if it doesn't matter.
      *
      * @pre parent != null
      * @post !(failIfNotFound && return == null)
@@ -652,7 +652,7 @@ public class Util extends XOMUtil {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType)
     {
         Util.assertPrecondition(parent != null, "parent != null");
@@ -671,14 +671,14 @@ public class Util extends XOMUtil {
 
         // First look up a member from the cache of calculated members
         // (cubes and queries both have them).
-        if (category == Category.MEMBER || category == Category.UNKNOWN) {
+        if (category == DataType.MEMBER || category == DataType.UNKNOWN) {
             Member member = schemaReader.getCalculatedMember(names);
             if (member != null) {
                 return member;
             }
         }
         // Likewise named set.
-        if (category == Category.SET || category == Category.UNKNOWN) {
+        if (category == DataType.SET || category == DataType.UNKNOWN) {
             NamedSet namedSet = schemaReader.getNamedSet(names);
             if (namedSet != null) {
                 return namedSet;
@@ -753,7 +753,7 @@ public class Util extends XOMUtil {
 
                 if (!failIfNotFound) {
                     return null;
-                } else if (category == Category.MEMBER) {
+                } else if (category == DataType.MEMBER) {
                     throw MondrianResource.instance().MemberNotFound.ex(
                         quoteMdxIdentifier(names));
                 } else {
@@ -898,7 +898,7 @@ public class Util extends XOMUtil {
                             : null;
             final Member member =
                     (Member) schemaReaderSansAc.lookupCompound(
-                            cube, segmentsButOne, false, Category.MEMBER);
+                            cube, segmentsButOne, false, DataType.MEMBER);
             if (member != null
                     && propertyName != null
                     && isValidProperty(propertyName, member.getLevel()))
@@ -909,7 +909,7 @@ public class Util extends XOMUtil {
             }
             final Level level =
                     (Level) schemaReaderSansAc.lookupCompound(
-                            cube, segmentsButOne, false, Category.LEVEL);
+                            cube, segmentsButOne, false, DataType.LEVEL);
             if (level != null
                     && propertyName != null
                     && isValidProperty(propertyName, level))
@@ -923,7 +923,7 @@ public class Util extends XOMUtil {
         // dimension) in the cube. Use a schema reader without restrictions.
         OlapElement olapElement =
                 schemaReaderSansAc.lookupCompound(
-                        cube, segments, false, Category.UNKNOWN);
+                        cube, segments, false, DataType.UNKNOWN);
 
         if(olapElement == null) {
             // if we're in the middle of loading the schema, the property has
@@ -938,7 +938,7 @@ public class Util extends XOMUtil {
                     List<Segment> partialName =
                             segments.subList(0, nameLen);
                     olapElement = schemaReaderSansAc.lookupCompound(
-                            cube, partialName, false, Category.UNKNOWN);
+                            cube, partialName, false, DataType.UNKNOWN);
                     nameLen--;
                 }
                 if (olapElement != null) {
@@ -1975,7 +1975,7 @@ public class Util extends XOMUtil {
 
 
     public static RuntimeException newElementNotFoundException(
-    		Category category,
+    		DataType category,
         IdentifierNode identifierNode)
     {
         String type;
@@ -3019,7 +3019,7 @@ public class Util extends XOMUtil {
             @Override
 			public boolean canConvert(
                 int ordinal, Expression fromExp,
-                Category to,
+                DataType to,
                 List<FunctionResolver.Conversion> conversions)
             {
                 return true;

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -199,7 +199,7 @@ abstract class ValidatorImpl implements Validator {
         // Compute signature first. It makes debugging easier.
         final String signature =
             syntax.getSignature(
-                funName, Category.UNKNOWN, Expressions.categoriesOf(args));
+                funName, DataType.UNKNOWN, Expressions.categoriesOf(args));
 
         // Resolve function by its upper-case name first.  If there is only one
         // function with that name, stop immediately.  If there is more than
@@ -278,7 +278,7 @@ abstract class ValidatorImpl implements Validator {
 
     @Override
 	public boolean canConvert(
-        int ordinal, Expression fromExp, Category to, List<FunctionResolver.Conversion> conversions)
+        int ordinal, Expression fromExp, DataType to, List<FunctionResolver.Conversion> conversions)
     {
         return TypeUtil.canConvert(
             ordinal,
@@ -312,8 +312,8 @@ abstract class ValidatorImpl implements Validator {
                     return false;
                 }
                 final FunctionDefinition funDef = funCall.getFunDef();
-                final Category[] parameterTypes = funDef.getParameterCategories();
-                return parameterTypes[k] != Category.SET;
+                final DataType[] parameterTypes = funDef.getParameterCategories();
+                return parameterTypes[k] != DataType.SET;
             }
         } else if (parent instanceof UnresolvedFunCallImpl funCall) {
             if (funCall.getSyntax() == Syntax.Parentheses

@@ -17,7 +17,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -148,7 +148,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     @Override
 	public final OlapElement lookupCompound(
         OlapElement parent, List<Segment> names,
-        boolean failIfNotFound, Category category)
+        boolean failIfNotFound, DataType category)
     {
         return lookupCompound(
             parent, names, failIfNotFound, category, MatchType.EXACT);
@@ -159,7 +159,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType)
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -186,7 +186,7 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
 
     public OlapElement lookupCompoundInternal(
         OlapElement parent, List<Segment> names,
-        boolean failIfNotFound, Category category, MatchType matchType)
+        boolean failIfNotFound, DataType category, MatchType matchType)
     {
         return schemaReader.lookupCompound(
             parent, names, failIfNotFound, category, matchType);

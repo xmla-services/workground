@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
@@ -767,14 +767,14 @@ public class ExplicitRules {
                                 cube,
                                 names,
                                 false,
-                                Category.LEVEL);
+                                DataType.LEVEL);
                         if (level == null) {
                             Hierarchy hierarchy = (Hierarchy)
                                 schemaReader.lookupCompound(
                                     cube,
                                     names.subList(0, 1),
                                     false,
-                                    Category.HIERARCHY);
+                                    DataType.HIERARCHY);
                             if (hierarchy == null) {
                                 msgRecorder.reportError(
                                     mres.UnknownHierarchyName.str(
@@ -967,7 +967,7 @@ public class ExplicitRules {
                             cube,
                             names,
                             false,
-                            Category.MEMBER);
+                            DataType.MEMBER);
                         if (member == null) {
                             if (!(names.get(0) instanceof NameSegment nameSegment
                                     && nameSegment.getName()

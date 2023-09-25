@@ -11,7 +11,7 @@ package mondrian.olap;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.element.Cube;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -43,8 +43,8 @@ public final class NameResolver {
      *   "Product Department", "Produce"}
      * @param failIfNotFound If the element is not found, determines whether
      *   to return null or throw an error
-     * @param category Type of returned element, a {@link Category} value;
-     *   {@link Category#UNKNOWN} if it doesn't matter.
+     * @param category Type of returned element, a {@link DataType} value;
+     *   {@link DataType#UNKNOWN} if it doesn't matter.
      * @param matchType Match type
      * @param namespaces Namespaces wherein to find child element at each step
      * @return OLAP element with given name, or null if not found
@@ -53,7 +53,7 @@ public final class NameResolver {
         OlapElement parent,
         List<IdentifierSegment> segments,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType,
         List<Namespace> namespaces)
     {
@@ -153,7 +153,7 @@ public final class NameResolver {
      * @param element Element
      * @return Element of the desired category, or null
      */
-    private OlapElement nullify(Category category, OlapElement element) {
+    private OlapElement nullify(DataType category, OlapElement element) {
         switch (category) {
         case UNKNOWN:
             return element;

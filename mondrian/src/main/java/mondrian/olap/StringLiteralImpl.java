@@ -15,7 +15,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.query.component.StringLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -42,8 +42,8 @@ public class StringLiteralImpl extends AbstractLiteralImpl<String> implements St
 	}
 
 	@Override
-	public Category getCategory() {
-		return Category.STRING;
+	public DataType getCategory() {
+		return DataType.STRING;
 	}
 
 	@Override

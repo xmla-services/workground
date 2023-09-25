@@ -11,7 +11,7 @@ package mondrian.olap.type;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
@@ -39,7 +39,7 @@ public class TypeWrapperExp implements Expression {
     }
 
     @Override
-    public Category getCategory() {
+    public DataType getCategory() {
         throw new UnsupportedOperationException();
     }
 

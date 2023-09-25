@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -28,26 +28,26 @@ import org.eclipse.daanse.olap.query.base.Expressions;
  * @since Jun 14, 2002
  */
 class ValueFunDef extends FunDefBase {
-    private final Category[] argTypes;
+    private final DataType[] argTypes;
 
-    ValueFunDef(Category[] argTypes) {
+    ValueFunDef(DataType[] argTypes) {
         super(
             "_Value()",
             "_Value([<Member>, ...])",
             "Pseudo-function which evaluates a tuple.",
             Syntax.Parentheses,
-            Category.NUMERIC,
+            DataType.NUMERIC,
             argTypes);
         this.argTypes = argTypes;
     }
 
     @Override
-	public Category getReturnCategory() {
-        return Category.TUPLE;
+	public DataType getReturnCategory() {
+        return DataType.TUPLE;
     }
 
     @Override
-	public Category[] getParameterCategories() {
+	public DataType[] getParameterCategories() {
         return argTypes;
     }
 

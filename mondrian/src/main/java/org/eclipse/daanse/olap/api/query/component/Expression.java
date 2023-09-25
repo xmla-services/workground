@@ -31,7 +31,7 @@ package org.eclipse.daanse.olap.api.query.component;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -46,11 +46,11 @@ public interface Expression {
     Expression cloneExp();
 
     /**
-     * Returns the {@link Category} of the expression.
+     * Returns the {@link DataType} of the expression.
      *
      * @post Category.instance().isValid(return)
      */
-    Category getCategory();
+    DataType getCategory();
 
     /**
      * Returns the type of this expression. Never null.

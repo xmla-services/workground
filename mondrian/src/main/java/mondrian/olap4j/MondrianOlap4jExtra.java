@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.element.MetaElement;
 import org.eclipse.daanse.olap.api.function.FunctionInfo;
@@ -121,8 +121,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                 continue;
             }
 
-            Category[][] paramCategories = fi.getParameterCategories();
-            Category[] returnCategories = fi.getReturnCategories();
+            DataType[][] paramCategories = fi.getParameterCategories();
+            DataType[] returnCategories = fi.getReturnCategories();
 
             // Convert Windows newlines in 'description' to UNIX format.
             String description = fi.getDescription();
@@ -146,12 +146,12 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                         fi.getName()));
             } else {
                 for (int i = 0; i < paramCategories.length; i++) {
-                	Category[] pc = paramCategories[i];
-                	Category returnCategory = returnCategories[i];
+                	DataType[] pc = paramCategories[i];
+                	DataType returnCategory = returnCategories[i];
 
                     buf.setLength(0);
                     for (int j = 0; j < pc.length; j++) {
-                    	Category v = pc[j];
+                    	DataType v = pc[j];
                         if (j > 0) {
                             buf.append(", ");
                         }

@@ -282,8 +282,8 @@ public interface SchemaReader {
      *     "Product Department", "Produce"}
      * @param failIfNotFound If the element is not found, determines whether
      *      to return null or throw an error
-     * @param category Type of returned element, a {@link Category} value;
-     *      {@link Category#UNKNOWN} if it doesn't matter.
+     * @param category Type of returned element, a {@link DataType} value;
+     *      {@link DataType#UNKNOWN} if it doesn't matter.
      * @param matchType indicates the match mode; if not specified, EXACT
      *
      * @pre parent != null
@@ -293,7 +293,7 @@ public interface SchemaReader {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType);
 
     /**
@@ -308,8 +308,8 @@ public interface SchemaReader {
      *     "Product Department", "Produce"}
      * @param failIfNotFound If the element is not found, determines whether
      *      to return null or throw an error
-     * @param category Type of returned element, a {@link Category} value;
-     *      {@link Category#UNKNOWN} if it doesn't matter.
+     * @param category Type of returned element, a {@link DataType} value;
+     *      {@link DataType#UNKNOWN} if it doesn't matter.
      *
      * @pre parent != null
      * @post !(failIfNotFound && return == null)
@@ -318,7 +318,7 @@ public interface SchemaReader {
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category);
+        DataType category);
 
     /**
      * Should only be called by implementations of

@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -50,12 +50,12 @@ public class CacheFunDef extends FunDefBase {
         String signature,
         String description,
         Syntax syntax,
-        Category category,
+        DataType category,
         Type type)
     {
         super(
             name, signature, description, syntax,
-            category, new Category[] {category});
+            category, new DataType[] {category});
         XOMUtil.discard(type);
     }
 
@@ -122,7 +122,7 @@ public class CacheFunDef extends FunDefBase {
                 return null;
             }
             final Expression exp = args[0];
-            final Category category = exp.getCategory();
+            final DataType category = exp.getCategory();
             final Type type = exp.getType();
             return new CacheFunDef(
                 CacheFunDef.NAME, CacheFunDef.SIGNATURE_VALUE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX,

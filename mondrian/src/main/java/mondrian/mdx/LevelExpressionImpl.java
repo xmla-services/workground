@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.query.component.Expression;
@@ -70,8 +70,8 @@ public class LevelExpressionImpl extends AbstractExpression implements Expressio
     }
 
     @Override
-	public Category getCategory() {
-        return Category.LEVEL;
+	public DataType getCategory() {
+        return DataType.LEVEL;
     }
 
     @Override

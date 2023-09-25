@@ -35,7 +35,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.daanse.olap.api.CacheControl;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -1386,7 +1386,7 @@ public class RolapCube extends CubeBase {
                     this,
                     Util.parseIdentifier(dimName),
                     false,
-                    Category.HIERARCHY);
+                    DataType.HIERARCHY);
         }
         if (hierarchy == null) {
             throw MondrianResource.instance().CalcMemberHasBadDimension.ex(
@@ -1409,7 +1409,7 @@ public class RolapCube extends CubeBase {
                     this,
                     Util.parseIdentifier(parentFqName),
                     false,
-                    Category.UNKNOWN);
+                    DataType.UNKNOWN);
 
             if (parent == null) {
                 throw MondrianResource.instance()
@@ -3320,7 +3320,7 @@ public class RolapCube extends CubeBase {
                     RolapCube.this,
                     uniqueNameParts,
                     failIfNotFound,
-                    Category.MEMBER,
+                    DataType.MEMBER,
                     matchType);
             if (member == null) {
                 assert !failIfNotFound;
@@ -3331,7 +3331,7 @@ public class RolapCube extends CubeBase {
             } else {
                 if (failIfNotFound) {
                     throw Util.newElementNotFoundException(
-                        Category.MEMBER,
+                        DataType.MEMBER,
                         new IdentifierNode(
                             Util.toOlap4j(uniqueNameParts)));
                 }

@@ -15,7 +15,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.query.component.SymbolLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -42,8 +42,8 @@ public class SymbolLiteralImpl extends AbstractLiteralImpl<String> implements Sy
 	}
 
 	@Override
-	public Category getCategory() {
-		return Category.SYMBOL;
+	public DataType getCategory() {
+		return DataType.SYMBOL;
 	}
 
 	@Override

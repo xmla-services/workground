@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -48,24 +48,24 @@ import mondrian.olap.Util;
  * @since Jan 5, 2008
 */
 public class JavaFunDef extends FunDefBase {
-    private static final Map<Class, Category> mapClazzToCategory =
+    private static final Map<Class, DataType> mapClazzToCategory =
         new HashMap<>();
     private static final String CLASS_NAME = JavaFunDef.class.getName();
 
     static {
-        JavaFunDef.mapClazzToCategory.put(String.class, Category.STRING);
-        JavaFunDef.mapClazzToCategory.put(Double.class, Category.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(double.class, Category.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(Integer.class, Category.INTEGER);
-        JavaFunDef.mapClazzToCategory.put(int.class, Category.INTEGER);
-        JavaFunDef.mapClazzToCategory.put(boolean.class, Category.LOGICAL);
-        JavaFunDef.mapClazzToCategory.put(Object.class, Category.VALUE);
-        JavaFunDef.mapClazzToCategory.put(Date.class, Category.DATE_TIME);
-        JavaFunDef.mapClazzToCategory.put(float.class, Category.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(long.class, Category.NUMERIC);
-        JavaFunDef.mapClazzToCategory.put(double[].class, Category.ARRAY);
-        JavaFunDef.mapClazzToCategory.put(char.class, Category.STRING);
-        JavaFunDef.mapClazzToCategory.put(byte.class, Category.INTEGER);
+        JavaFunDef.mapClazzToCategory.put(String.class, DataType.STRING);
+        JavaFunDef.mapClazzToCategory.put(Double.class, DataType.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(double.class, DataType.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(Integer.class, DataType.INTEGER);
+        JavaFunDef.mapClazzToCategory.put(int.class, DataType.INTEGER);
+        JavaFunDef.mapClazzToCategory.put(boolean.class, DataType.LOGICAL);
+        JavaFunDef.mapClazzToCategory.put(Object.class, DataType.VALUE);
+        JavaFunDef.mapClazzToCategory.put(Date.class, DataType.DATE_TIME);
+        JavaFunDef.mapClazzToCategory.put(float.class, DataType.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(long.class, DataType.NUMERIC);
+        JavaFunDef.mapClazzToCategory.put(double[].class, DataType.ARRAY);
+        JavaFunDef.mapClazzToCategory.put(char.class, DataType.STRING);
+        JavaFunDef.mapClazzToCategory.put(byte.class, DataType.INTEGER);
     }
 
     private final Method method;
@@ -84,8 +84,8 @@ public class JavaFunDef extends FunDefBase {
         String name,
         String desc,
         Syntax syntax,
-        Category returnCategory,
-        Category[] paramCategories,
+        DataType returnCategory,
+        DataType[] paramCategories,
         Method method)
     {
         super(name, null, desc, syntax, returnCategory, paramCategories);
@@ -107,16 +107,16 @@ public class JavaFunDef extends FunDefBase {
         return new JavaMethodCalc(call, calcs, method);
     }
 
-    private static Category getCategory(Class clazz) {
+    private static DataType getCategory(Class clazz) {
         return JavaFunDef.mapClazzToCategory.get(clazz);
     }
 
-    private static Category getReturnCategory(Method m) {
+    private static DataType getReturnCategory(Method m) {
         return JavaFunDef.getCategory(m.getReturnType());
     }
 
-    private static Category[] getParameterCategories(Method m) {
-    	Category[] arr = new Category[m.getParameterTypes().length];
+    private static DataType[] getParameterCategories(Method m) {
+    	DataType[] arr = new DataType[m.getParameterTypes().length];
         for (int i = 0; i < m.getParameterTypes().length; i++) {
             arr[i] = JavaFunDef.getCategory(m.getParameterTypes()[i]);
         }
@@ -134,9 +134,9 @@ public class JavaFunDef extends FunDefBase {
             Util.getAnnotation(
                 method, new StringBuilder(JavaFunDef.CLASS_NAME).append("$SyntaxDef").toString(), Syntax.Function);
 
-        Category returnCategory = JavaFunDef.getReturnCategory(method);
+        DataType returnCategory = JavaFunDef.getReturnCategory(method);
 
-        Category[] paramCategories = JavaFunDef.getParameterCategories(method);
+        DataType[] paramCategories = JavaFunDef.getParameterCategories(method);
 
         return new JavaFunDef(
             name, desc, syntax, returnCategory, paramCategories, method);

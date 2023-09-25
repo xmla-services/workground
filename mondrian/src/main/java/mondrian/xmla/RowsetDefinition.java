@@ -45,7 +45,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.impl.ArrayNamedListImpl;
@@ -4719,7 +4719,7 @@ TODO: see above
             Byte("Byte subtype"),
             Array("Array subtype");
 
-            public static VarType forCategory(Category category) {
+            public static VarType forCategory(DataType category) {
                 switch (category) {
                 case UNKNOWN:
                     // expression == unknown ???

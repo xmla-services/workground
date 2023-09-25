@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -207,44 +207,44 @@ public class TypeUtil {
     }
 
     /**
-     * Converts a {@link Type} value to a {@link Category} ordinal.
+     * Converts a {@link Type} value to a {@link DataType} ordinal.
      *
      * @param type Type
      * @return category ordinal
      */
-    public static Category typeToCategory(Type type) {
+    public static DataType typeToCategory(Type type) {
         if (type instanceof NullType) {
-            return Category.NULL;
+            return DataType.NULL;
         } else if (type instanceof EmptyType) {
-            return Category.EMPTY;
+            return DataType.EMPTY;
         } else if (type instanceof DateTimeType) {
-            return Category.DATE_TIME;
+            return DataType.DATE_TIME;
         } else if (type instanceof DecimalType decimalType
             && decimalType.getScale() == 0)
         {
-            return Category.INTEGER;
+            return DataType.INTEGER;
         } else if (type instanceof NumericType) {
-            return Category.NUMERIC;
+            return DataType.NUMERIC;
         } else if (type instanceof BooleanType) {
-            return Category.LOGICAL;
+            return DataType.LOGICAL;
         } else if (type instanceof DimensionType) {
-            return Category.DIMENSION;
+            return DataType.DIMENSION;
         } else if (type instanceof HierarchyType) {
-            return Category.HIERARCHY;
+            return DataType.HIERARCHY;
         } else if (type instanceof MemberType) {
-            return Category.MEMBER;
+            return DataType.MEMBER;
         } else if (type instanceof LevelType) {
-            return Category.LEVEL;
+            return DataType.LEVEL;
         } else if (type instanceof SymbolType) {
-            return Category.SYMBOL;
+            return DataType.SYMBOL;
         } else if (type instanceof StringType) {
-            return Category.STRING;
+            return DataType.STRING;
         } else if (type instanceof ScalarType) {
-            return Category.VALUE;
+            return DataType.VALUE;
         } else if (type instanceof SetType) {
-            return Category.SET;
+            return DataType.SET;
         } else if (type instanceof TupleType) {
-            return Category.TUPLE;
+            return DataType.TUPLE;
         } else {
             throw Util.newInternal("Unknown type " + type);
         }
@@ -292,10 +292,10 @@ public class TypeUtil {
     public static boolean canConvert(
         int ordinal,
         Type fromType,
-        Category to,
+        DataType to,
         List<FunctionResolver.Conversion> conversions)
     {
-        final Category from = typeToCategory(fromType);
+        final DataType from = typeToCategory(fromType);
         if (from == to) {
             return true;
         }
@@ -339,13 +339,13 @@ public class TypeUtil {
         }
     }
 
-	private static boolean convertFromNull(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromNull(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		// now null supports members as well as scalars; but scalar is
 		// preferred
 		if (to.isScalar()) {
 			return true;
-		} else if (to == Category.MEMBER) {
+		} else if (to == DataType.MEMBER) {
 			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
 			return true;
 		} else {
@@ -353,8 +353,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromValue(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromValue(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		switch (to) {
 		case STRING:
 		case NUMERIC:
@@ -366,8 +366,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromTuple(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromTuple(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		switch (to) {
 		case NUMERIC:
 		    conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
@@ -386,7 +386,7 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromDateTime(Category to) {
+	private static boolean convertFromDateTime(DataType to) {
 		switch (to) {
 		case VALUE:
 		    return true;
@@ -396,7 +396,7 @@ public class TypeUtil {
 	}
 
 
-	private static boolean convertFromString(Category to) {
+	private static boolean convertFromString(DataType to) {
 		switch (to) {
 		case VALUE:
 			return true;
@@ -406,7 +406,7 @@ public class TypeUtil {
 	}
 
 
-	private static boolean convertFromInteger(Category to) {
+	private static boolean convertFromInteger(DataType to) {
 		switch (to) {
 		case VALUE, NUMERIC:
 
@@ -416,8 +416,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromNumeric(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromNumeric(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		switch (to) {
 		case LOGICAL:
 			conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
@@ -431,8 +431,8 @@ public class TypeUtil {
 
 
 
-	private static boolean convertFromMember(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromMember(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		switch (to) {
 		case DIMENSION, HIERARCHY, LEVEL, TUPLE:
 		    conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
@@ -454,8 +454,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromLogical(Category to) {
-		return Category.VALUE == to;
+	private static boolean convertFromLogical(DataType to) {
+		return DataType.VALUE == to;
 	}
 
 	private static boolean convertFromSet() {
@@ -471,8 +471,8 @@ public class TypeUtil {
 		return false;
 	}
 
-	private static boolean convertFromLevel(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromLevel(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		switch (to) {
 		case DIMENSION:
 			// It's more difficult to convert to a dimension than a
@@ -489,8 +489,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromHierarchy(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from) {
+	private static boolean convertFromHierarchy(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from) {
 		// Seems funny that you can 'downcast' from a hierarchy, doesn't
 		// it? But we add an implicit 'CurrentMember', for example,
 		// '[Product].PrevMember' actually means
@@ -504,8 +504,8 @@ public class TypeUtil {
 		}
 	}
 
-	private static boolean convertFromDimension(int ordinal, Category to, List<FunctionResolver.Conversion> conversions,
-			final Category from, RuntimeException e) {
+	private static boolean convertFromDimension(int ordinal, DataType to, List<FunctionResolver.Conversion> conversions,
+			final DataType from, RuntimeException e) {
 		// We can go from Dimension to Hierarchy if the dimension has a
 		// default hierarchy. From there, we can go to Member or Tuple.
 		// Even if the dimension does not have a default hierarchy, we claim
@@ -568,8 +568,8 @@ public class TypeUtil {
      * Implementation of {@link org.eclipse.daanse.olap.api.function.FunctionResolver.Conversion}.
      */
     private static class ConversionImpl implements FunctionResolver.Conversion {
-        final Category from;
-        final Category to;
+        final DataType from;
+        final DataType to;
         /**
          * Which argument. Arguments are 0-based, and in particular the 'this'
          * of a call of member or method call syntax is argument 0. Argument -1
@@ -595,8 +595,8 @@ public class TypeUtil {
          * @param e Exception
          */
         public ConversionImpl(
-        		Category from,
-        		Category to,
+        		DataType from,
+        		DataType to,
             int ordinal,
             int cost,
             RuntimeException e)
@@ -623,7 +623,7 @@ public class TypeUtil {
         @Override
 		public void apply(Validator validator, List<Expression> args) {
             final Expression arg = args.get(ordinal);
-            if ((from == Category.MEMBER || from == Category.TUPLE) && to == Category.SET) {
+            if ((from == DataType.MEMBER || from == DataType.TUPLE) && to == DataType.SET) {
                 final Expression newArg =
                     validator.validate(
                         new UnresolvedFunCallImpl(

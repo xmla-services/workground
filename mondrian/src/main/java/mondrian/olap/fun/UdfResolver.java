@@ -14,7 +14,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -76,12 +76,12 @@ public class UdfResolver implements FunctionResolver {
     @Override
 	public String getSignature() {
         Type[] parameterTypes = udf.getParameterTypes();
-        Category[] parameterCategories = new Category[parameterTypes.length];
+        DataType[] parameterCategories = new DataType[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
             parameterCategories[i] = TypeUtil.typeToCategory(parameterTypes[i]);
         }
         Type returnType = udf.getReturnType(parameterTypes);
-        Category returnCategory = TypeUtil.typeToCategory(returnType);
+        DataType returnCategory = TypeUtil.typeToCategory(returnType);
         return getSyntax().getSignature(
             getName(),
             returnCategory,
@@ -96,7 +96,7 @@ public class UdfResolver implements FunctionResolver {
     @Override
 	public FunctionDefinition getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
-        Category[] parameterCategories = new Category[parameterTypes.length];
+        DataType[] parameterCategories = new DataType[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
             parameterCategories[i] = TypeUtil.typeToCategory(parameterTypes[i]);
         }
@@ -114,13 +114,13 @@ public class UdfResolver implements FunctionResolver {
         if (args.length != parameterTypes.length) {
             return null;
         }
-        Category[] parameterCategories = new Category[parameterTypes.length];
+        DataType[] parameterCategories = new DataType[parameterTypes.length];
         Type[] castArgTypes = new Type[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             Type parameterType = parameterTypes[i];
             final Expression arg = args[i];
             final Type argType = arg.getType();
-            final Category parameterCategory =
+            final DataType parameterCategory =
                 TypeUtil.typeToCategory(parameterType);
             if (!validator.canConvert(
                     i, arg, parameterCategory, conversions))
@@ -155,7 +155,7 @@ public class UdfResolver implements FunctionResolver {
     private class UdfFunDef extends FunDefBase {
         private Type returnType;
 
-        public UdfFunDef(Category[] parameterCategories, Type returnType) {
+        public UdfFunDef(DataType[] parameterCategories, Type returnType) {
             super(
                 UdfResolver.this,
                 TypeUtil.typeToCategory(returnType),

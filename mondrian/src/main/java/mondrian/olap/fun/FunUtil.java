@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -188,7 +188,7 @@ public class FunUtil extends Util {
     }
     Expression arg = call.getArg( i );
     if ( !( arg instanceof Literal)
-      || arg.getCategory() != Category.SYMBOL) {
+      || arg.getCategory() != DataType.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
@@ -230,7 +230,7 @@ public class FunUtil extends Util {
     }
     Expression arg = call.getArg( i );
     if ( !( arg instanceof Literal )
-      || arg.getCategory() != Category.SYMBOL) {
+      || arg.getCategory() != DataType.SYMBOL) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
         new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
@@ -534,15 +534,15 @@ public class FunUtil extends Util {
    * Decodes the signature of a function into a category code which describes the return type of the operator.
    *
    * <p>For example, <code>decodeReturnType("fnx")</code> returns
-   * <code>{@link Category#NUMERIC}</code>, indicating this function has a
+   * <code>{@link DataType#NUMERIC}</code>, indicating this function has a
    * numeric return value.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
    *              FunDefBase}.
-   * @return An array {@link Category} codes.
+   * @return An array {@link DataType} codes.
    */
-  public static Category decodeReturnCategory( String flags ) {
-    final Category returnCategory = FunUtil.decodeCategory( flags, 1 );
+  public static DataType decodeReturnCategory( String flags ) {
+    final DataType returnCategory = FunUtil.decodeCategory( flags, 1 );
     return returnCategory;
   }
 
@@ -552,81 +552,81 @@ public class FunUtil extends Util {
    * <p>The codes are:
    * <table border="1">
    *
-   * <tr><td>a</td><td>{@link Category#ARRAY}</td></tr>
+   * <tr><td>a</td><td>{@link DataType#ARRAY}</td></tr>
    *
-   * <tr><td>d</td><td>{@link Category#DIMENSION}</td></tr>
+   * <tr><td>d</td><td>{@link DataType#DIMENSION}</td></tr>
    *
-   * <tr><td>h</td><td>{@link Category#HIERARCHY}</td></tr>
+   * <tr><td>h</td><td>{@link DataType#HIERARCHY}</td></tr>
    *
-   * <tr><td>l</td><td>{@link Category#LEVEL}</td></tr>
+   * <tr><td>l</td><td>{@link DataType#LEVEL}</td></tr>
    *
-   * <tr><td>b</td><td>{@link Category#LOGICAL}</td></tr>
+   * <tr><td>b</td><td>{@link DataType#LOGICAL}</td></tr>
    *
-   * <tr><td>m</td><td>{@link Category#MEMBER}</td></tr>
+   * <tr><td>m</td><td>{@link DataType#MEMBER}</td></tr>
    *
-   * <tr><td>N</td><td>Constant {@link Category#NUMERIC}</td></tr>
+   * <tr><td>N</td><td>Constant {@link DataType#NUMERIC}</td></tr>
    *
-   * <tr><td>n</td><td>{@link Category#NUMERIC}</td></tr>
+   * <tr><td>n</td><td>{@link DataType#NUMERIC}</td></tr>
    *
-   * <tr><td>x</td><td>{@link Category#SET}</td></tr>
+   * <tr><td>x</td><td>{@link DataType#SET}</td></tr>
    *
-   * <tr><td>#</td><td>Constant {@link Category#STRING}</td></tr>
+   * <tr><td>#</td><td>Constant {@link DataType#STRING}</td></tr>
    *
-   * <tr><td>S</td><td>{@link Category#STRING}</td></tr>
+   * <tr><td>S</td><td>{@link DataType#STRING}</td></tr>
    *
-   * <tr><td>t</td><td>{@link Category#TUPLE}</td></tr>
+   * <tr><td>t</td><td>{@link DataType#TUPLE}</td></tr>
    *
-   * <tr><td>v</td><td>{@link Category#VALUE}</td></tr>
+   * <tr><td>v</td><td>{@link DataType#VALUE}</td></tr>
    *
-   * <tr><td>y</td><td>{@link Category#SYMBOL}</td></tr>
+   * <tr><td>y</td><td>{@link DataType#SYMBOL}</td></tr>
    *
    * </table>
    *
    * @param flags  Encoded signature string
    * @param offset 0-based offset of character within string
-   * @return A {@link Category}
+   * @return A {@link DataType}
    */
-  public static Category decodeCategory( String flags, int offset ) {
+  public static DataType decodeCategory( String flags, int offset ) {
     char c = flags.charAt( offset );
     switch ( c ) {
       case 'a':
-        return Category.ARRAY;
+        return DataType.ARRAY;
       case 'd':
-        return Category.DIMENSION;
+        return DataType.DIMENSION;
       case 'h':
-        return Category.HIERARCHY;
+        return DataType.HIERARCHY;
       case 'l':
-        return Category.LEVEL;
+        return DataType.LEVEL;
       case 'b':
-        return Category.LOGICAL;
+        return DataType.LOGICAL;
       case 'm':
-        return Category.MEMBER;
+        return DataType.MEMBER;
       case 'N':
-        return Category.NUMERIC; //Was Constant
+        return DataType.NUMERIC; //Was Constant
       case 'n':
-        return Category.NUMERIC;
+        return DataType.NUMERIC;
       case 'I':
-        return Category.INTEGER ;//Was Constant
+        return DataType.INTEGER ;//Was Constant
       case 'i':
-        return  Category.INTEGER;
+        return  DataType.INTEGER;
       case 'x':
-        return Category.SET;
+        return DataType.SET;
       case '#':
-        return Category.STRING;
+        return DataType.STRING;
       case 'S':
-        return Category.STRING;//Was Constant
+        return DataType.STRING;//Was Constant
       case 't':
-        return Category.TUPLE;
+        return DataType.TUPLE;
       case 'v':
-        return Category.VALUE;
+        return DataType.VALUE;
       case 'y':
-        return Category.SYMBOL;
+        return DataType.SYMBOL;
       case 'U':
-        return Category.NULL;
+        return DataType.NULL;
       case 'e':
-        return Category.EMPTY;
+        return DataType.EMPTY;
       case 'D':
-        return Category.DATE_TIME;
+        return DataType.DATE_TIME;
       default:
         throw Util.newInternal(
           new StringBuilder("unknown type code '").append(c)
@@ -639,14 +639,14 @@ public class FunUtil extends Util {
    *
    * <p>Each character is decoded using {@link #decodeCategory(String, int)}.
    * For example, <code>decodeParameterTypes("nx")</code> returns
-   * <code>{{@link Category#NUMERIC}, {@link Category#SET}}</code>.
+   * <code>{{@link DataType#NUMERIC}, {@link DataType#SET}}</code>.
    *
    * @param flags The signature of an operator, as used by the {@code flags} parameter used to construct a {@link
    *              FunDefBase}.
-   * @return An array {@link Category} codes.
+   * @return An array {@link DataType} codes.
    */
-  public static Category[] decodeParameterCategories( String flags ) {
-	  Category[] parameterCategories = new Category[ flags.length() - 2 ];
+  public static DataType[] decodeParameterCategories( String flags ) {
+	  DataType[] parameterCategories = new DataType[ flags.length() - 2 ];
     for ( int i = 0; i < parameterCategories.length; i++ ) {
       parameterCategories[ i ] = FunUtil.decodeCategory( flags, i + 2 );
     }
@@ -1503,9 +1503,9 @@ public class FunUtil extends Util {
       && !( funDef instanceof ParenthesesFunDef )
       && query != null
       && query.nativeCrossJoinVirtualCube() ) {
-    	Category[] paramCategories = funDef.getParameterCategories();
+    	DataType[] paramCategories = funDef.getParameterCategories();
       if ( paramCategories.length > 0 ) {
-        final Category cat0 = paramCategories[ 0 ];
+        final DataType cat0 = paramCategories[ 0 ];
         final Expression arg0 = args[ 0 ];
         switch ( cat0 ) {
           case DIMENSION, HIERARCHY:
@@ -1527,8 +1527,8 @@ public class FunUtil extends Util {
     }
   }
 
-  private static boolean isMemberOrSet( Category category ) {
-    return category == Category.MEMBER || category == Category.SET;
+  private static boolean isMemberOrSet( DataType category ) {
+    return category == DataType.MEMBER || category == DataType.SET;
   }
 
   static void appendTuple( StringBuilder buf, Member[] members ) {
@@ -1580,9 +1580,9 @@ public class FunUtil extends Util {
 
   static FunctionDefinition createDummyFunDef(
     FunctionResolver resolver,
-    Category returnCategory,
+    DataType returnCategory,
     Expression[] args ) {
-    final Category[] argCategories = Expressions.categoriesOf( args );
+    final DataType[] argCategories = Expressions.categoriesOf( args );
     return new FunDefBase( resolver, returnCategory, argCategories ) {
     };
   }

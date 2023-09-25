@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -460,7 +460,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category)
+        DataType category)
     {
         return lookupCompound(
             parent, names, failIfNotFound, category, MatchType.EXACT);
@@ -471,7 +471,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType)
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -495,7 +495,7 @@ public class RolapSchemaReader
         OlapElement parent,
         List<Segment> names,
         boolean failIfNotFound,
-        Category category,
+        DataType category,
         MatchType matchType)
     {
         return Util.lookupCompound(

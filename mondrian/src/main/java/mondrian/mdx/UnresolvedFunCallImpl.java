@@ -11,7 +11,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -86,7 +86,7 @@ public class UnresolvedFunCallImpl extends AbstractExpression implements Unresol
     }
 
     @Override
-	public Category getCategory() {
+	public DataType getCategory() {
         throw new UnsupportedOperationException();
     }
 

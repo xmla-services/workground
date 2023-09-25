@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -60,7 +60,7 @@ class OrderFunDef extends FunDefBase {
   private static final String TIMING_NAME = OrderFunDef.class.getSimpleName();
     public static final String CALC_IMPL = "CurrentMemberCalc";
 
-    public OrderFunDef( ResolverBase resolverBase, Category type, Category[] types ) {
+    public OrderFunDef( ResolverBase resolverBase, DataType type, DataType[] types ) {
     super( resolverBase, type, types );
   }
 
@@ -124,7 +124,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
       arg = call.getArg( j );
       key = compiler.compileScalar( arg, true );
       j++;
-      if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != Category.SYMBOL) ) {
+      if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != DataType.SYMBOL) ) {
         dir = Flag.ASC;
       } else {
         dir = FunUtil.getLiteralArg( call, j, Flag.ASC, Flag.class );
@@ -348,7 +348,7 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
   private static class ResolverImpl extends ResolverBase {
     private final String[] reservedWords;
-    static Category[] argTypes;
+    static DataType[] argTypes;
 
     private ResolverImpl() {
       super( "Order", "Order(<Set> {, <Key Specification>}...)",
@@ -358,38 +358,38 @@ public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler ) {
 
     @Override
 	public FunctionDefinition resolve( Expression[] args, Validator validator, List<Conversion> conversions ) {
-      ResolverImpl.argTypes = new Category[args.length];
+      ResolverImpl.argTypes = new DataType[args.length];
 
       if ( args.length < 2 ) {
         return null;
       }
       // first arg must be a set
-      if ( !validator.canConvert( 0, args[0], Category.SET, conversions ) ) {
+      if ( !validator.canConvert( 0, args[0], DataType.SET, conversions ) ) {
         return null;
       }
-      ResolverImpl.argTypes[0] = Category.SET;
+      ResolverImpl.argTypes[0] = DataType.SET;
       // after fist args, should be: value [, symbol]
       int i = 1;
       while ( i < args.length ) {
-        if ( !validator.canConvert( i, args[i], Category.VALUE, conversions ) ) {
+        if ( !validator.canConvert( i, args[i], DataType.VALUE, conversions ) ) {
           return null;
         } else {
-          ResolverImpl.argTypes[i] = Category.VALUE;
+          ResolverImpl.argTypes[i] = DataType.VALUE;
           i++;
         }
         // if symbol is not specified, skip to the next
         if ( ( i == args.length ) ) {
           // done, will default last arg to ASC
         } else {
-          if ( !validator.canConvert( i, args[i], Category.SYMBOL, conversions ) ) {
+          if ( !validator.canConvert( i, args[i], DataType.SYMBOL, conversions ) ) {
             // continue, will default sort flag for prev arg to ASC
           } else {
-            ResolverImpl.argTypes[i] = Category.SYMBOL;
+            ResolverImpl.argTypes[i] = DataType.SYMBOL;
             i++;
           }
         }
       }
-      return new OrderFunDef( this, Category.SET, ResolverImpl.argTypes );
+      return new OrderFunDef( this, DataType.SET, ResolverImpl.argTypes );
     }
 
     @Override

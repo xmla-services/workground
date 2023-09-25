@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -83,7 +83,7 @@ class SetItemFunDef extends FunDefBase {
             // All args must be strings.
             for (int i = 1; i < args.length; i++) {
                 if (!validator.canConvert(
-                        i, args[i], Category.STRING, conversions))
+                        i, args[i], DataType.STRING, conversions))
                 {
                     return null;
                 }
@@ -92,7 +92,7 @@ class SetItemFunDef extends FunDefBase {
                 throw Util.newError(
                     "Argument count does not match set's cardinality " + arity);
             }
-            final Category category = arity == 1 ? Category.MEMBER : Category.TUPLE;
+            final DataType category = arity == 1 ? DataType.MEMBER : DataType.TUPLE;
             FunctionDefinition dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }

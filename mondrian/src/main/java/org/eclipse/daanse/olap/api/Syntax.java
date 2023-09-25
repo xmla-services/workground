@@ -51,7 +51,7 @@ public enum Syntax {
 
         @Override
 		public String getSignature(
-            String name, Category returnType, Category[] argTypes)
+            String name, DataType returnType, DataType[] argTypes)
         {
             // e.g. "<Set>.Current"
             return new StringBuilder(getTypeDescription(argTypes[0])).append(".").append(name).toString();
@@ -81,10 +81,10 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             // e.g. "<Member>.Lead(<Numeric Expression>)"
-            return new StringBuilder(returnType == Category.UNKNOWN
+            return new StringBuilder(returnType == DataType.UNKNOWN
                     ? ""
                     : new StringBuilder(getTypeDescription(returnType)).append(" ").toString())
                 .append(getTypeDescription(argTypes[0])).append(".")
@@ -108,7 +108,7 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             // e.g. "<Numeric Expression> / <Numeric Expression>"
             return new StringBuilder(getTypeDescription(argTypes[0])).append(" ").append(name).append(" ")
@@ -131,7 +131,7 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             // e.g. "- <Numeric Expression>"
             return new StringBuilder(name).append(" ").append(getTypeDescription(argTypes[0])).toString();
@@ -153,7 +153,7 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             // e.g. "<Expression> IS NULL"
             return new StringBuilder(getTypeDescription(argTypes[0])).append(" ").append(name).toString();
@@ -167,7 +167,7 @@ public enum Syntax {
      */
     Braces {
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             return new StringBuilder("{").append(getTypeDescriptionCommaList(argTypes, 0)).append("}").toString();
         }
@@ -185,7 +185,7 @@ public enum Syntax {
      */
     Parentheses {
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             return new StringBuilder("(").append(getTypeDescriptionCommaList(argTypes, 0)).append(")").toString();
         }
@@ -241,10 +241,10 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             String s = getTypeDescription(argTypes[0]);
-            if (argTypes[0] == Category.LOGICAL) {
+            if (argTypes[0] == DataType.LOGICAL) {
                 return new StringBuilder("CASE WHEN ").append(s).append(" THEN <Expression> ... END").toString();
             } else {
                 return new StringBuilder("CASE ").append(s).append(" WHEN ").append(s)
@@ -274,7 +274,7 @@ public enum Syntax {
         }
 
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             return "CAST(<Expression> AS <Type>)";
         }
@@ -308,7 +308,7 @@ public enum Syntax {
             assert args.length == 0;
         }
         @Override
-		public String getSignature(String name, Category returnType, Category[] argTypes)
+		public String getSignature(String name, DataType returnType, DataType[] argTypes)
         {
             return "";
         }};
@@ -333,9 +333,9 @@ public enum Syntax {
      * @param argTypes Categories of the function's arguments
      * @return Function signature
      */
-    public String getSignature(String name, Category returnType, Category[] argTypes) {
+    public String getSignature(String name, DataType returnType, DataType[] argTypes) {
         // e.g. "StripCalculatedMembers(<Set>)"
-        return new StringBuilder((returnType == Category.UNKNOWN
+        return new StringBuilder((returnType == DataType.UNKNOWN
                 ? ""
                 : new StringBuilder(getTypeDescription(returnType)).append(" ").toString()))
             .append(name).append("(").append(getTypeDescriptionCommaList(argTypes, 0))
@@ -348,12 +348,12 @@ public enum Syntax {
                  && ((FunctionCall) args[0]).getSyntax() == Syntax.Parentheses);
     }
 
-    private static String getTypeDescription(Category type) {
+    private static String getTypeDescription(DataType type) {
         return new StringBuilder("<").append(type.getPrittyName())
             .append(">").toString();
     }
 
-    private static String getTypeDescriptionCommaList(Category[] types, int start) {
+    private static String getTypeDescriptionCommaList(DataType[] types, int start) {
         int initialSize = (types.length - start) * 16;
         StringBuilder sb =
             new StringBuilder(initialSize > 0 ? initialSize : 16);

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.query.component.DimensionExpression;
@@ -148,7 +148,7 @@ public class RolapNativeSql {
                 return null;
             }
             System.out.println(exp.getCategory());
-            if (exp.getCategory() == Category.INTEGER) {//TODO: REVIEW BITWISE
+            if (exp.getCategory() == DataType.INTEGER) {//TODO: REVIEW BITWISE
                 return null;
             }
             Literal literal = (Literal) exp;
@@ -246,7 +246,7 @@ public class RolapNativeSql {
 
         protected MatchingSqlCompiler()
         {
-            super(Category.LOGICAL, "MATCHES", 2);
+            super(DataType.LOGICAL, "MATCHES", 2);
         }
 
         @Override
@@ -422,11 +422,11 @@ public class RolapNativeSql {
      * Contains utility methods to compile FunCall expressions into SQL.
      */
     abstract class FunCallSqlCompilerBase implements SqlCompiler {
-    	Category category;
+    	DataType category;
         String mdx;
         int argCount;
 
-        FunCallSqlCompilerBase(Category category, String mdx, int argCount) {
+        FunCallSqlCompilerBase(DataType category, String mdx, int argCount) {
             this.category = category;
             this.mdx = mdx;
             this.argCount = argCount;
@@ -482,7 +482,7 @@ public class RolapNativeSql {
         String sql;
 
         protected FunCallSqlCompiler(
-        		Category category, String mdx, String sql,
+        		DataType category, String mdx, String sql,
             int argCount, SqlCompiler argumentCompiler)
         {
             super(category, mdx, argCount);
@@ -520,7 +520,7 @@ public class RolapNativeSql {
      */
     class UnaryOpSqlCompiler extends FunCallSqlCompiler {
         protected UnaryOpSqlCompiler(
-            Category category,
+            DataType category,
             String mdx,
             String sql,
             SqlCompiler argumentCompiler)
@@ -534,7 +534,7 @@ public class RolapNativeSql {
      */
     class ParenthesisSqlCompiler extends FunCallSqlCompiler {
         protected ParenthesisSqlCompiler(
-        		Category category,
+        		DataType category,
             SqlCompiler argumentCompiler)
         {
             super(category, "()", "", 1, argumentCompiler);
@@ -555,7 +555,7 @@ public class RolapNativeSql {
         private final SqlCompiler compiler;
 
         protected InfixOpSqlCompiler(
-        		Category category,
+        		DataType category,
             String mdx,
             String sql,
             SqlCompiler argumentCompiler)
@@ -588,7 +588,7 @@ public class RolapNativeSql {
         private final SqlCompiler compiler;
 
         protected IsEmptySqlCompiler(
-        		Category category, String mdx,
+        		DataType category, String mdx,
             SqlCompiler argumentCompiler)
         {
             super(category, mdx, 1);
@@ -618,7 +618,7 @@ public class RolapNativeSql {
 
         SqlCompiler valueCompiler;
 
-        IifSqlCompiler(Category category, SqlCompiler valueCompiler) {
+        IifSqlCompiler(DataType category, SqlCompiler valueCompiler) {
             super(category, "iif", 3);
             this.valueCompiler = valueCompiler;
         }
@@ -664,59 +664,59 @@ public class RolapNativeSql {
         numericCompiler.add(new StoredMeasureSqlCompiler());
         numericCompiler.add(new CalculatedMemberSqlCompiler(numericCompiler));
         numericCompiler.add(
-            new ParenthesisSqlCompiler(Category.NUMERIC, numericCompiler));
+            new ParenthesisSqlCompiler(DataType.NUMERIC, numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.NUMERIC, "+", "+", numericCompiler));
+                DataType.NUMERIC, "+", "+", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.NUMERIC, "-", "-", numericCompiler));
+                DataType.NUMERIC, "-", "-", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.NUMERIC, "/", "/", numericCompiler));
+                DataType.NUMERIC, "/", "/", numericCompiler));
         numericCompiler.add(
             new InfixOpSqlCompiler(
-                Category.NUMERIC, "*", "*", numericCompiler));
+                DataType.NUMERIC, "*", "*", numericCompiler));
         numericCompiler.add(
-            new IifSqlCompiler(Category.NUMERIC, numericCompiler));
+            new IifSqlCompiler(DataType.NUMERIC, numericCompiler));
 
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "<", "<", numericCompiler));
+                DataType.LOGICAL, "<", "<", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "<=", "<=", numericCompiler));
+                DataType.LOGICAL, "<=", "<=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, ">", ">", numericCompiler));
+                DataType.LOGICAL, ">", ">", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, ">=", ">=", numericCompiler));
+                DataType.LOGICAL, ">=", ">=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "=", "=", numericCompiler));
+                DataType.LOGICAL, "=", "=", numericCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "<>", "<>", numericCompiler));
+                DataType.LOGICAL, "<>", "<>", numericCompiler));
         booleanCompiler.add(
             new IsEmptySqlCompiler(
-                Category.LOGICAL, "IsEmpty", numericCompiler));
+                DataType.LOGICAL, "IsEmpty", numericCompiler));
 
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "and", "AND", booleanCompiler));
+                DataType.LOGICAL, "and", "AND", booleanCompiler));
         booleanCompiler.add(
             new InfixOpSqlCompiler(
-                Category.LOGICAL, "or", "OR", booleanCompiler));
+                DataType.LOGICAL, "or", "OR", booleanCompiler));
         booleanCompiler.add(
             new UnaryOpSqlCompiler(
-                Category.LOGICAL, "not", "NOT", booleanCompiler));
+                DataType.LOGICAL, "not", "NOT", booleanCompiler));
         booleanCompiler.add(
             new MatchingSqlCompiler());
         booleanCompiler.add(
-            new ParenthesisSqlCompiler(Category.LOGICAL, booleanCompiler));
+            new ParenthesisSqlCompiler(DataType.LOGICAL, booleanCompiler));
         booleanCompiler.add(
-            new IifSqlCompiler(Category.LOGICAL, booleanCompiler));
+            new IifSqlCompiler(DataType.LOGICAL, booleanCompiler));
     }
 
     /**

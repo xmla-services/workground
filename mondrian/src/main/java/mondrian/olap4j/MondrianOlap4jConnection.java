@@ -30,7 +30,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.access.Role;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -1129,7 +1129,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
             if (exp instanceof AbstractLiteralImpl literal) {
                 final Object value = literal.getValue();
-                if (literal.getCategory() == Category.SYMBOL) {
+                if (literal.getCategory() == DataType.SYMBOL) {
                     return LiteralNode.createSymbol(
                         null, (String) literal.getValue());
                 } else if (value instanceof Number number) {

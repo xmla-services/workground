@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Dimension;
@@ -55,7 +55,7 @@ public class ParameterFunDef extends FunDefBase {
         FunctionDefinition funDef,
         String parameterName,
         Type type,
-        Category returnCategory,
+        DataType returnCategory,
         Expression exp,
         String description)
     {
@@ -120,7 +120,7 @@ public class ParameterFunDef extends FunDefBase {
 
     public static String getParameterName(Expression[] args) {
         if (args[0] instanceof Literal
-            && args[0].getCategory() == Category.STRING)
+            && args[0].getCategory() == DataType.STRING)
         {
             return (String) ((Literal) args[0]).getValue();
         } else {
@@ -191,7 +191,7 @@ public class ParameterFunDef extends FunDefBase {
 		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             Expression typeArg = args[1];
-            Category category;
+            DataType category;
             Type type = typeArg.getType();
             switch (typeArg.getCategory()) {
             case DIMENSION:
@@ -217,17 +217,17 @@ public class ParameterFunDef extends FunDefBase {
                         type.getHierarchy(),
                         type.getLevel(),
                         null);
-                category = Category.MEMBER;
+                category = DataType.MEMBER;
                 break;
 
             case SYMBOL:
                 String s = (String) ((Literal) typeArg).getValue();
                 if (s.equalsIgnoreCase("NUMERIC")) {
-                    category = Category.NUMERIC;
+                    category = DataType.NUMERIC;
                     type = NumericType.INSTANCE;
                     break;
                 } else if (s.equalsIgnoreCase("STRING")) {
-                    category = Category.STRING;
+                    category = DataType.STRING;
                     type = StringType.INSTANCE;
                     break;
                 }
@@ -253,14 +253,14 @@ public class ParameterFunDef extends FunDefBase {
                     new StringBuilder("Default value of parameter '").append(parameterName)
                     .append("' is inconsistent with its type, ").append(typeName).toString());
             }
-            if (exp.getCategory() == Category.SET
-                && category == Category.MEMBER)
+            if (exp.getCategory() == DataType.SET
+                && category == DataType.MEMBER)
             {
                 // Default value is a set; take this an indication that
                 // the type is 'set of <member type>'.
                 type = new SetType(type);
             }
-            if (category == Category.MEMBER) {
+            if (category == DataType.MEMBER) {
                 Type expType = exp.getType();
                 if (expType instanceof SetType) {
                     expType = ((SetType) expType).getElementType();
@@ -280,7 +280,7 @@ public class ParameterFunDef extends FunDefBase {
             String parameterDescription = null;
             if (args.length > 3) {
                 if (args[3] instanceof Literal
-                    && args[3].getCategory() == Category.STRING)
+                    && args[3].getCategory() == DataType.STRING)
                 {
                     parameterDescription =
                         (String) ((Literal) args[3]).getValue();
@@ -320,7 +320,7 @@ public class ParameterFunDef extends FunDefBase {
 		protected FunctionDefinition createFunDef(Expression[] args, FunctionDefinition dummyFunDef) {
             String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
-                dummyFunDef, parameterName, null, Category.UNKNOWN, null,
+                dummyFunDef, parameterName, null, DataType.UNKNOWN, null,
                 null);
         }
     }

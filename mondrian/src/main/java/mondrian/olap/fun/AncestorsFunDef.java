@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.api.element.Member;
@@ -51,8 +51,8 @@ class AncestorsFunDef extends FunDefBase {
     }
 
     @Override
-	public Category getReturnCategory() {
-        return Category.SET;
+	public DataType getReturnCategory() {
+        return DataType.SET;
     }
 
     @Override

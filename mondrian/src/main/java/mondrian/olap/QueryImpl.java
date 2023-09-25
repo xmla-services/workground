@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -982,7 +982,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
         QueryImpl query)
         throws NumberFormatException
     {
-    	Category category = TypeUtil.typeToCategory(type);
+    	DataType category = TypeUtil.typeToCategory(type);
         switch (category) {
         case NUMERIC:
             if (value instanceof Number || value == null) {
@@ -1844,7 +1844,7 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             OlapElement parent,
             List<Segment> names,
             boolean failIfNotFound,
-            Category category,
+            DataType category,
             MatchType matchType)
         {
             if (matchType == MatchType.EXACT) {
@@ -1856,13 +1856,13 @@ public class QueryImpl extends AbstractQueryPart implements Query {
                 }
             }
             // First look to ourselves.
-            if ((Category.UNKNOWN == category || Category.MEMBER == category) && parent == query.cube) {
+            if ((DataType.UNKNOWN == category || DataType.MEMBER == category) && parent == query.cube) {
                 final Member calculatedMember = getCalculatedMember(names);
                 if (calculatedMember != null) {
                     return calculatedMember;
                 }
             }
-            if ((Category.UNKNOWN == category || Category.SET == category) && parent == query.cube) {
+            if ((DataType.UNKNOWN == category || DataType.SET == category) && parent == query.cube) {
                 final NamedSet namedSet = getNamedSet(names);
                 if (namedSet != null) {
                     return namedSet;
@@ -2108,10 +2108,10 @@ public class QueryImpl extends AbstractQueryPart implements Query {
             OlapElement parent,
             final List<Segment> names,
             boolean failIfNotFound,
-            Category category,
+            DataType category,
             MatchType matchType)
         {
-            if ( Category.SET == category || Category.UNKNOWN == category ) {
+            if ( DataType.SET == category || DataType.UNKNOWN == category ) {
                 final ScopedNamedSet namedSet =
                     queryValidator.getQuery().lookupScopedNamedSet(
                         names, queryValidator.getScopeStack());

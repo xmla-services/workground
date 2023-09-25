@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -120,7 +120,7 @@ class AccessControlTest {
         Dimension genderDimension =
             (Dimension) schemaReader.lookupCompound(
                 salesCube, Segment.toList("Gender"), true,
-                Category.DIMENSION);
+                DataType.DIMENSION);
         role.grant(genderDimension, Access.NONE);
         role.makeImmutable();
         connection.setRole(role);
@@ -510,7 +510,7 @@ class AccessControlTest {
         final Hierarchy hierarchy =
             (Hierarchy) schemaReader.lookupCompound(
                 cube, Util.parseIdentifier(hierarchyName), fail,
-                Category.HIERARCHY);
+                DataType.HIERARCHY);
 
         final Access actualAccess = role.getAccess(hierarchy);
         assertEquals(expectedAccess, actualAccess, cubeName);
@@ -530,7 +530,7 @@ class AccessControlTest {
         final Hierarchy hierarchy =
             (Hierarchy) schemaReader.lookupCompound(
                 cube, Util.parseIdentifier(hierarchyName), fail,
-                Category.HIERARCHY);
+                DataType.HIERARCHY);
 
         return role.getAccessDetails(hierarchy);
     }
