@@ -176,12 +176,12 @@ UpdateStatement :
 INJECT UpdateClause :
    implements org.eclipse.daanse.mdx.model.api.select.UpdateClause
 {
-    public org.eclipse.daanse.mdx.model.api.expression.Expression tupleExp() {
-      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(0);
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression tupleExp() {
+      return (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getChild(0);
     }
 
-    public org.eclipse.daanse.mdx.model.api.expression.Expression valueExp() {
-          return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression valueExp() {
+          return (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getChild(2);
     }
 
     public org.eclipse.daanse.mdx.model.api.select.Allocation allocation() {
@@ -196,10 +196,10 @@ INJECT UpdateClause :
           throw new IllegalStateException("Allocation parsing error");
     }
 
-    public org.eclipse.daanse.mdx.model.api.expression.Expression weight() {
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression weight() {
           Node by = firstChildOfType(BY);
                   return by == null ? null
-                                       : (org.eclipse.daanse.mdx.model.api.expression.Expression) by.nextSibling();
+                                       : (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) by.nextSibling();
     }
 }
 
@@ -233,10 +233,10 @@ INJECT DMVStatement :
        return (NameObjectIdentifier) firstChildOfType(DOT).nextSibling();
     }
 
-    public org.eclipse.daanse.mdx.model.api.expression.Expression where() {
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression where() {
         Node where = firstChildOfType(WHERE);
         return where == null ? null
-                             : (org.eclipse.daanse.mdx.model.api.expression.Expression) where.nextSibling();
+                             : (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) where.nextSibling();
     }
 }
 
@@ -267,8 +267,8 @@ INJECT SelectQueryAxisClause :
        return getChild(0).getType() == NON && getChild(1).getType() == EMPTY;
     }
 
-    public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
-        return firstChildOfType(org.eclipse.daanse.mdx.model.api.expression.Expression.class);
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression expression() {
+        return firstChildOfType(org.eclipse.daanse.mdx.model.api.expression.MdxExpression.class);
     };
 
     public Axis axis() {
@@ -355,8 +355,8 @@ INJECT CreateSetBodyClause :
       return (CompoundId) getChild(0);
    }
 
-   public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
-      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
+   public org.eclipse.daanse.mdx.model.api.expression.MdxExpression expression() {
+      return (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getChild(2);
    }
 }
 
@@ -392,8 +392,8 @@ SelectCellPropertyListClause SelectCellPropertyListClause# :
 INJECT SelectSlicerAxisClause :
    implements org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 {
-    public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
-      return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(1);
+    public org.eclipse.daanse.mdx.model.api.expression.MdxExpression expression() {
+      return (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getChild(1);
     }
 }
 
@@ -600,8 +600,8 @@ INJECT CreateMemberBodyClause :
     return (CompoundId) getChild(0);
   }
 
-  public org.eclipse.daanse.mdx.model.api.expression.Expression expression() {
-     return (org.eclipse.daanse.mdx.model.api.expression.Expression) getChild(2);
+  public org.eclipse.daanse.mdx.model.api.expression.MdxExpression expression() {
+     return (org.eclipse.daanse.mdx.model.api.expression.MdxExpression) getChild(2);
   }
 
   public java.util.List<MemberPropertyDefinition> memberPropertyDefinitions() {
