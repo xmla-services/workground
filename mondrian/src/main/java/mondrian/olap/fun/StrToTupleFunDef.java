@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -47,12 +47,12 @@ import mondrian.resource.MondrianResource;
 class StrToTupleFunDef extends FunDefBase {
     static final ResolverImpl Resolver = new ResolverImpl();
 
-    private StrToTupleFunDef(Category[] parameterTypes) {
+    private StrToTupleFunDef(DataType[] parameterTypes) {
         super(
             "StrToTuple",
             null,
             "Constructs a tuple from a string.",
-            Syntax.Function, Category.TUPLE, parameterTypes);
+            Syntax.Function, DataType.TUPLE, parameterTypes);
     }
 
     @Override
@@ -179,17 +179,17 @@ class StrToTupleFunDef extends FunDefBase {
                     return null;
                 }
             }
-            Category[] argTypes = new Category[args.length];
-            argTypes[0] = Category.STRING;
+            DataType[] argTypes = new DataType[args.length];
+            argTypes[0] = DataType.STRING;
             for (int i = 1; i < argTypes.length; i++) {
-                argTypes[i] = Category.HIERARCHY;
+                argTypes[i] = DataType.HIERARCHY;
             }
             return new StrToTupleFunDef(argTypes);
         }
 
         @Override
 		public FunctionDefinition getRepresentativeFunDef() {
-            return new StrToTupleFunDef(new Category[] {Category.STRING});
+            return new StrToTupleFunDef(new DataType[] {DataType.STRING});
         }
     }
 }

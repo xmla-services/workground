@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -112,7 +112,7 @@ public abstract class MultiResolver implements FunctionResolver {
     {
 outer:
         for (String signature : signatures) {
-        	Category[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        	DataType[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if (parameterTypes.length != args.length) {
                 continue;
             }
@@ -124,7 +124,7 @@ outer:
                     continue outer;
                 }
             }
-            Category returnType = FunUtil.decodeReturnCategory(signature);
+            DataType returnType = FunUtil.decodeReturnCategory(signature);
             FunctionDefinition dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return createFunDef(args, dummy);
         }
@@ -134,9 +134,9 @@ outer:
     @Override
 	public boolean requiresExpression(int k) {
         for (String signature : signatures) {
-        	Category[] parameterTypes = FunUtil.decodeParameterCategories(signature);
+        	DataType[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)
-                && parameterTypes[k] == Category.SET)
+                && parameterTypes[k] == DataType.SET)
             {
                 return false;
             }

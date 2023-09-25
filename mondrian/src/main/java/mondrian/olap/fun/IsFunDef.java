@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.element.Member;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -41,7 +41,7 @@ class IsFunDef extends FunDefBase {
 
     @Override
 	public Calc compileCall( ResolvedFunCall call, ExpressionCompiler compiler) {
-        final Category category = call.getArg(0).getCategory();
+        final DataType category = call.getArg(0).getCategory();
         switch (category) {
         case TUPLE:
             final TupleCalc tupleCalc0 = compiler.compileTuple(call.getArg(0));

@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -67,12 +67,12 @@ class ExtractFunDef extends FunDefBase {
             if (args.length < 2) {
                 return null;
             }
-            if (!validator.canConvert(0, args[0], Category.SET, conversions)) {
+            if (!validator.canConvert(0, args[0], DataType.SET, conversions)) {
                 return null;
             }
             for (int i = 1; i < args.length; ++i) {
                 if (!validator.canConvert(
-                        0, args[i], Category.HIERARCHY, conversions))
+                        0, args[i], DataType.HIERARCHY, conversions))
                 {
                     return null;
                 }
@@ -93,16 +93,16 @@ class ExtractFunDef extends FunDefBase {
                 new ArrayList<>();
             ExtractFunDef.findExtractedHierarchies(
                 args, extractedHierarchies, extractedOrdinals);
-            Category[] parameterTypes = new Category[args.length];
-            parameterTypes[0] = Category.SET;
+            DataType[] parameterTypes = new DataType[args.length];
+            parameterTypes[0] = DataType.SET;
             Arrays.fill(
-                parameterTypes, 1, parameterTypes.length, Category.HIERARCHY);
-            return new ExtractFunDef(this, Category.SET, parameterTypes);
+                parameterTypes, 1, parameterTypes.length, DataType.HIERARCHY);
+            return new ExtractFunDef(this, DataType.SET, parameterTypes);
         }
     };
 
     private ExtractFunDef(
-        FunctionResolver resolver, Category returnType, Category[] parameterTypes)
+        FunctionResolver resolver, DataType returnType, DataType[] parameterTypes)
     {
         super(resolver, returnType, parameterTypes);
     }

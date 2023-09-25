@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.query.component.NumericLiteral;
 import org.eclipse.daanse.olap.api.query.component.visit.QueryComponentVisitor;
 import org.eclipse.daanse.olap.api.type.Type;
@@ -64,8 +64,8 @@ public class NumericLiteralImpl extends AbstractLiteralImpl<BigDecimal> implemen
 	}
 
 	@Override
-	public Category getCategory() {
-		return Category.NUMERIC;
+	public DataType getCategory() {
+		return DataType.NUMERIC;
 	}
 
 	@Override

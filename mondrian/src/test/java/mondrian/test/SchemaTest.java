@@ -34,7 +34,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -4945,7 +4945,7 @@ class SchemaTest {
                 Util.parseIdentifier(
                     "[Store Size in SQFT].[Store Sqft]"),
                 true,
-                Category.LEVEL),
+                DataType.LEVEL),
             true);
         assertEquals(
             "[[Store Size in SQFT].[#null], "

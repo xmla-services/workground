@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.NameSegment;
 import org.eclipse.daanse.olap.api.Quoting;
 import org.eclipse.daanse.olap.api.Segment;
@@ -65,8 +65,8 @@ public class IdImpl
     }
 
     @Override
-	public Category getCategory() {
-        return Category.UNKNOWN;
+	public DataType getCategory() {
+        return DataType.UNKNOWN;
     }
 
     @Override

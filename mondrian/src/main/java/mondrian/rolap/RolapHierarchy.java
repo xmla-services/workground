@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
 import org.eclipse.daanse.olap.api.NameSegment;
@@ -485,7 +485,7 @@ public class RolapHierarchy extends HierarchyBase {
                 this,
                 uniqueNameParts,
                 false,
-                Category.MEMBER,
+                DataType.MEMBER,
                 MatchType.EXACT);
 
             // Next look up within global context. Works for qualified names,
@@ -496,7 +496,7 @@ public class RolapHierarchy extends HierarchyBase {
                     new DummyElement(),
                     uniqueNameParts,
                     false,
-                    Category.MEMBER,
+                    DataType.MEMBER,
                     MatchType.EXACT);
             }
             if (defaultMember == null) {

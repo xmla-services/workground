@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
@@ -81,7 +81,7 @@ class DimensionsStringFunDef extends FunDefBase {
             evaluator.getCube(),
             Util.parseIdentifier(name),
             false,
-            Category.HIERARCHY);
+            DataType.HIERARCHY);
         if (o instanceof Hierarchy hierarchy) {
             return hierarchy;
         } else if (o == null) {

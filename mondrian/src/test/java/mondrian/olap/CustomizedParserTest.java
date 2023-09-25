@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class CustomizedParserTest {
 
     CustomizedFunctionTable getCustomizedFunctionTable(Set<String> funNameSet) {
         Set<FunctionDefinition> specialFunctions = new HashSet<>();
-        specialFunctions.add(new ParenthesesFunDef(Category.NUMERIC));
+        specialFunctions.add(new ParenthesesFunDef(DataType.NUMERIC));
 
         CustomizedFunctionTable cftab =
             new CustomizedFunctionTable(funNameSet, specialFunctions);

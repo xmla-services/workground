@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -104,8 +104,8 @@ public abstract class FunDefBase implements FunctionDefinition {
     private final String name;
     final String signature;
     private final String description;
-    protected final Category returnCategory;
-    protected final Category[] parameterCategories;
+    protected final DataType returnCategory;
+    protected final DataType[] parameterCategories;
     private Context context;
 
     /**
@@ -118,9 +118,9 @@ public abstract class FunDefBase implements FunctionDefinition {
      *                       "Returns the set of all members in a dimension."
      * @param syntax         Syntactic type of the operator (for
      *                       example, function, method, infix operator)
-     * @param returnCategory The {@link Category} of the value returned by this
+     * @param returnCategory The {@link DataType} of the value returned by this
      *                       operator.
-     * @param parameterCategories An array of {@link Category} codes, one for
+     * @param parameterCategories An array of {@link DataType} codes, one for
      *                       each parameter.
      */
     FunDefBase(
@@ -128,8 +128,8 @@ public abstract class FunDefBase implements FunctionDefinition {
         String signature,
         String description,
         Syntax syntax,
-        Category returnCategory,
-        Category[] parameterCategories)
+        DataType returnCategory,
+        DataType[] parameterCategories)
     {
         assert name != null;
         assert syntax != null;
@@ -217,7 +217,7 @@ public abstract class FunDefBase implements FunctionDefinition {
      * @param returnType Return type
      * @param parameterTypes Parameter types
      */
-    FunDefBase(FunctionResolver resolver, Category returnType, Category[] parameterTypes) {
+    FunDefBase(FunctionResolver resolver, DataType returnType, DataType[] parameterTypes) {
         this(
             resolver.getName(),
             null,
@@ -259,18 +259,18 @@ public abstract class FunDefBase implements FunctionDefinition {
     }
 
     @Override
-	public Category getReturnCategory() {
+	public DataType getReturnCategory() {
         return returnCategory;
     }
 
     @Override
-	public Category[] getParameterCategories() {
+	public DataType[] getParameterCategories() {
         return parameterCategories;
     }
 
     @Override
 	public Expression createCall(Validator validator, Expression[] args) {
-    	Category[] categories = getParameterCategories();
+    	DataType[] categories = getParameterCategories();
         Util.assertTrue(categories.length == args.length);
         for (int i = 0; i < args.length; i++) {
             args[i] = validateArg(validator, args, i, categories[i]);
@@ -291,14 +291,14 @@ public abstract class FunDefBase implements FunctionDefinition {
      * @param validator Validator
      * @param args Arguments to this function
      * @param i Ordinal of argument
-     * @param category Expected {@link Category category} of argument
+     * @param category Expected {@link DataType category} of argument
      * @return Validated argument
      */
     protected Expression validateArg(
         Validator validator,
         Expression[] args,
         int i,
-        Category category)
+        DataType category)
     {
         return args[i];
     }
@@ -315,7 +315,7 @@ public abstract class FunDefBase implements FunctionDefinition {
 	 * @param category Desired category
 	 * @return Type after conversion to desired category
 	 */
-	static Type castType(Type type, Category category) {
+	static Type castType(Type type, DataType category) {
 		switch (category) {
 		case LOGICAL:
 			return BooleanType.INSTANCE;

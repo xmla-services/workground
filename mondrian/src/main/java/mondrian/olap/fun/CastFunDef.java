@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -147,15 +147,15 @@ public class CastFunDef extends FunDefBase {
                 return null;
             }
             String typeName = (String) literal.getValue();
-            Category returnCategory;
+            DataType returnCategory;
             if (typeName.equalsIgnoreCase("String")) {
-                returnCategory = Category.STRING;
+                returnCategory = DataType.STRING;
             } else if (typeName.equalsIgnoreCase("Numeric")) {
-                returnCategory = Category.NUMERIC;
+                returnCategory = DataType.NUMERIC;
             } else if (typeName.equalsIgnoreCase("Boolean")) {
-                returnCategory = Category.LOGICAL;
+                returnCategory = DataType.LOGICAL;
             } else if (typeName.equalsIgnoreCase("Integer")) {
-                returnCategory = Category.INTEGER;
+                returnCategory = DataType.INTEGER;
             } else {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
@@ -168,7 +168,7 @@ public class CastFunDef extends FunDefBase {
     private static class CastCalcImpl extends GenericCalc {
         private final Calc calc;
         private final Type targetType;
-        private final Category targetCategory;
+        private final DataType targetCategory;
 
         public CastCalcImpl(Expression arg, Calc calc, Type targetType) {
             super(arg.getType());

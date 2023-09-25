@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -48,8 +48,8 @@ class PropertiesFunDef extends FunDefBase {
         String signature,
         String description,
         Syntax syntax,
-        Category returnType,
-        Category[] parameterTypes)
+        DataType returnType,
+        DataType[] parameterTypes)
     {
         super(name, signature, description, syntax, returnType, parameterTypes);
     }
@@ -90,8 +90,8 @@ class PropertiesFunDef extends FunDefBase {
      * Resolves calls to the <code>PROPERTIES</code> MDX function.
      */
     private static class ResolverImpl extends ResolverBase {
-        private static final Category[] PARAMETER_TYPES = {
-            Category.MEMBER, Category.STRING
+        private static final DataType[] PARAMETER_TYPES = {
+            DataType.MEMBER, DataType.STRING
         };
 
         private ResolverImpl() {
@@ -104,7 +104,7 @@ class PropertiesFunDef extends FunDefBase {
 
         private boolean matches(
             Expression[] args,
-            Category[] parameterTypes,
+            DataType[] parameterTypes,
             Validator validator,
             List<Conversion> conversions)
         {
@@ -130,7 +130,7 @@ class PropertiesFunDef extends FunDefBase {
             if (!matches(args, ResolverImpl.PARAMETER_TYPES, validator, conversions)) {
                 return null;
             }
-            Category returnType = deducePropertyCategory(args[0], args[1]);
+            DataType returnType = deducePropertyCategory(args[0], args[1]);
             return new PropertiesFunDef(
                 getName(), getSignature(), getDescription(), getSyntax(),
                 returnType, ResolverImpl.PARAMETER_TYPES);
@@ -139,45 +139,45 @@ class PropertiesFunDef extends FunDefBase {
         /**
          * Deduces the category of a property. This is possible only if the
          * name is a string literal, and the member's hierarchy is unambigous.
-         * If the type cannot be deduced, returns {@link Category#VALUE}.
+         * If the type cannot be deduced, returns {@link DataType#VALUE}.
          *
          * @param memberExp Expression for the member
          * @param propertyNameExp Expression for the name of the property
          * @return Category of the property
          */
-        private Category deducePropertyCategory(
+        private DataType deducePropertyCategory(
             Expression memberExp,
             Expression propertyNameExp)
         {
             if (!(propertyNameExp instanceof Literal)) {
-                return Category.VALUE;
+                return DataType.VALUE;
             }
             String propertyName =
                 (String) ((Literal) propertyNameExp).getValue();
             Hierarchy hierarchy = memberExp.getType().getHierarchy();
             if (hierarchy == null) {
-                return Category.VALUE;
+                return DataType.VALUE;
             }
             Level[] levels = hierarchy.getLevels();
             Property property = Util.lookupProperty(
                 levels[levels.length - 1], propertyName);
             if (property == null) {
                 // we'll likely get a runtime error
-                return Category.VALUE;
+                return DataType.VALUE;
             } else {
                 switch (property.getType()) {
                 case TYPE_BOOLEAN:
-                    return Category.LOGICAL;
+                    return DataType.LOGICAL;
                 case TYPE_NUMERIC:
                 case TYPE_INTEGER:
                 case TYPE_LONG:
-                    return Category.NUMERIC;
+                    return DataType.NUMERIC;
                 case TYPE_STRING:
-                    return Category.STRING;
+                    return DataType.STRING;
                 case TYPE_DATE:
                 case TYPE_TIME:
                 case TYPE_TIMESTAMP:
-                    return Category.DATE_TIME;
+                    return DataType.DATE_TIME;
                 default:
                     throw Util.badValue(property.getType());
                 }

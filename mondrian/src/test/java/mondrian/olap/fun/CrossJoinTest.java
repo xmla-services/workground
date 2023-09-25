@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -441,12 +441,12 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Category getReturnCategory() {
+	public DataType getReturnCategory() {
       throw new UnsupportedOperationException();
     }
 
     @Override
-	public Category[] getParameterCategories() {
+	public DataType[] getParameterCategories() {
       throw new UnsupportedOperationException();
     }
 
@@ -491,13 +491,13 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
 
     @Override
-	public Category getReturnCategory() {
-      return Category.UNKNOWN;
+	public DataType getReturnCategory() {
+      return DataType.UNKNOWN;
     }
 
     @Override
-	public Category[] getParameterCategories() {
-      return new Category[ 0 ];
+	public DataType[] getParameterCategories() {
+      return new DataType[ 0 ];
     }
 
     @Override

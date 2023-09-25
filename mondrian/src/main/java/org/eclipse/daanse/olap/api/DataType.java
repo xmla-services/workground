@@ -11,7 +11,8 @@
 
 package org.eclipse.daanse.olap.api;
 
-public enum Category {
+//TODO: REMOVE and use New Type System. when this is free from inner values
+public enum DataType {
 
 	ARRAY("array", "Array"), //
 	CUBE("cube", "Cube"), //
@@ -38,7 +39,7 @@ public enum Category {
 	private String name;
 	private String prittyName;
 
-	Category(String name, String prittyName) {
+	DataType(String name, String prittyName) {
 		this.name = name;
 		this.prittyName = prittyName;
 	}

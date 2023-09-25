@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Syntax;
@@ -104,8 +104,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 "",
                 "Dummy function representing the empty expression",
                 Syntax.Empty,
-                Category.EMPTY,
-                new Category[0])
+                DataType.EMPTY,
+                new DataType[0])
             {
             }
         );
@@ -278,7 +278,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         cube,
                         Util.parseIdentifier(s),
                         false,
-                        Category.LEVEL)
+                        DataType.LEVEL)
                     // lookupCompound barfs if "s" doesn't have matching
                     // brackets, so don't even try
                     : null;

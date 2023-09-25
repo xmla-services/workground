@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -62,7 +62,7 @@ public class VisualTotalsFunDef extends FunDefBase {
 
     @Override
 	protected Expression validateArg(
-        Validator validator, Expression[] args, int i, Category category)
+        Validator validator, Expression[] args, int i, DataType category)
     {
         final Expression validatedArg =
             super.validateArg(validator, args, i, category);

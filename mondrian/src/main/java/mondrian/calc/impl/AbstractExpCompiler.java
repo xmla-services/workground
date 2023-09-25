@@ -18,7 +18,7 @@ import java.util.Objects;
 
 import mondrian.olap.SymbolLiteralImpl;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Syntax;

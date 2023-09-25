@@ -13,7 +13,7 @@ package mondrian.mdx;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -146,7 +146,7 @@ public final class ResolvedFunCallImpl extends AbstractExpression implements  Re
     }
 
     @Override
-	public final Category getCategory() {
+	public final DataType getCategory() {
         return funDef.getReturnCategory();
     }
 

@@ -1045,12 +1045,12 @@ public Calc compileCall( final ResolvedFunCall call, ExpressionCompiler compiler
       } else {
         for (int i = 0; i < args.length; i++) {
           if (!validator.canConvert(
-                  i, args[i], org.eclipse.daanse.olap.api.Category.SET, conversions)) {
+                  i, args[i], org.eclipse.daanse.olap.api.DataType.SET, conversions)) {
             return null;
           }
         }
 
-        FunctionDefinition dummy = FunUtil.createDummyFunDef(this, org.eclipse.daanse.olap.api.Category.SET, args);
+        FunctionDefinition dummy = FunUtil.createDummyFunDef(this, org.eclipse.daanse.olap.api.DataType.SET, args);
         return new CrossJoinFunDef(dummy);
       }
     }

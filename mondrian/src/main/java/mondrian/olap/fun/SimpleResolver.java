@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
 import org.eclipse.daanse.olap.api.function.FunctionDefinition;
@@ -69,7 +69,7 @@ class SimpleResolver implements FunctionResolver {
         Validator validator,
         List<Conversion> conversions)
     {
-    	Category[] parameterTypes = funDef.getParameterCategories();
+    	DataType[] parameterTypes = funDef.getParameterCategories();
         if (parameterTypes.length != args.length) {
             return null;
         }
@@ -85,8 +85,8 @@ class SimpleResolver implements FunctionResolver {
 
     @Override
 	public boolean requiresExpression(int k) {
-    	Category[] parameterTypes = funDef.getParameterCategories();
+    	DataType[] parameterTypes = funDef.getParameterCategories();
         return (k >= parameterTypes.length)
-            || (parameterTypes[k] != Category.SET);
+            || (parameterTypes[k] != DataType.SET);
     }
 }

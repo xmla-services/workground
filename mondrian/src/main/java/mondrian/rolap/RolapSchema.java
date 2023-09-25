@@ -34,7 +34,7 @@ import java.util.Set;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.Quoting;
@@ -782,7 +782,7 @@ public class RolapSchema implements Schema {
             : cubeGrant.dimensionGrants())
         {
             Dimension dimension =
-                lookup(cube, reader, Category.DIMENSION, grant.dimension());
+                lookup(cube, reader, DataType.DIMENSION, grant.dimension());
             role.grant(
                 dimension,
                 getAccess(grant.access().name(), dimensionAllowed));
@@ -803,7 +803,7 @@ public class RolapSchema implements Schema {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchyGrant grant)
     {
         Hierarchy hierarchy =
-            lookup(cube, reader, Category.HIERARCHY, grant.hierarchy());
+            lookup(cube, reader, DataType.HIERARCHY, grant.hierarchy());
         final Access hierarchyAccess =
             getAccess(grant.access().getValue(), hierarchyAllowed);
         Level topLevel = findLevelForHierarchyGrant(
@@ -880,7 +880,7 @@ public class RolapSchema implements Schema {
     private <T extends OlapElement> T lookup(
         RolapCube cube,
         SchemaReader reader,
-        Category category,
+        DataType category,
         String id)
     {
         List<Segment> segments = Util.parseIdentifier(id);
@@ -902,7 +902,7 @@ public class RolapSchema implements Schema {
             throw Util.newError(
                 new StringBuilder("You may only specify '").append(desc).append("' if access='custom'").toString());
         }
-        return lookup(cube, schemaReader, Category.LEVEL, name);
+        return lookup(cube, schemaReader, DataType.LEVEL, name);
     }
 
     private Access getAccess(String accessString, Set<Access> allowed) {

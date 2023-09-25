@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -127,10 +127,10 @@ class CaseTestFunDef extends FunDefBase {
             int j = 0;
             int clauseCount = args.length / 2;
             int mismatchingArgs = 0;
-            Category returnType = args[1].getCategory();
+            DataType returnType = args[1].getCategory();
             for (int i = 0; i < clauseCount; i++) {
                 if (!validator.canConvert(
-                        j, args[j++], Category.LOGICAL, conversions))
+                        j, args[j++], DataType.LOGICAL, conversions))
                 {
                     mismatchingArgs++;
                 }

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.access.RollupPolicy;
@@ -108,7 +108,7 @@ class RolapSchemaTest {
         return new RolapSchema(key, md5, rolapConnectionMock);
     }
 
-    private SchemaReader mockSchemaReader(Category category, OlapElement element) {
+    private SchemaReader mockSchemaReader(DataType category, OlapElement element) {
         SchemaReader reader = mock(SchemaReader.class);
         when(reader.withLocus()).thenReturn(reader);
         when(reader.lookupCompound(
@@ -215,7 +215,7 @@ class RolapSchemaTest {
                 any(MappingHierarchyGrant.class));
 
         final Dimension dimension = mock(Dimension.class);
-        SchemaReader reader = mockSchemaReader(org.eclipse.daanse.olap.api.Category.DIMENSION, dimension);
+        SchemaReader reader = mockSchemaReader(org.eclipse.daanse.olap.api.DataType.DIMENSION, dimension);
 
         RolapCube cube = mockCube(schema);
         when(cube.getSchemaReader(any())).thenReturn(reader);
@@ -407,7 +407,7 @@ class RolapSchemaTest {
         Dimension dimension = mock(Dimension.class);
         when(hierarchy.getDimension()).thenReturn(dimension);
 
-        SchemaReader reader = mockSchemaReader(Category.HIERARCHY, hierarchy);
+        SchemaReader reader = mockSchemaReader(DataType.HIERARCHY, hierarchy);
 
         Member member = mock(Member.class);
         when(member.getHierarchy()).thenReturn(hierarchy);

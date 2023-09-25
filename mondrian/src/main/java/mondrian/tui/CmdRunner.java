@@ -35,7 +35,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Parameter;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -343,7 +343,7 @@ public class CmdRunner {
     }
 
     public void loadParameter(QueryImpl query, Parameter param) {
-    	Category category = TypeUtil.typeToCategory(param.getType());
+    	DataType category = TypeUtil.typeToCategory(param.getType());
         String name = param.getName();
         String value = CmdRunner.paraNameValues.get(name);
         debug(new StringBuilder("loadParameter: name=").append(name).append(", value=").append(value).toString());

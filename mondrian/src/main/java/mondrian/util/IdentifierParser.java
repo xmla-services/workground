@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.Segment;
 import org.eclipse.daanse.olap.api.element.Cube;
@@ -72,7 +72,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             Member member =
                 (Member) Util.lookupCompound(
                     schemaReader, cube, mondrianSegmentList, !ignoreInvalid,
-                    Category.MEMBER);
+                    DataType.MEMBER);
             if (member == null) {
                 assert ignoreInvalid;
                 if (expectedHierarchy != null) {
@@ -85,7 +85,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
                             mondrianSegmentList.subList(0, i);
                         OlapElement olapElement =
                             schemaReader.lookupCompound(
-                                cube, partialName, false, Category.UNKNOWN);
+                                cube, partialName, false, DataType.UNKNOWN);
                         if (olapElement != null) {
                             return olapElement.getHierarchy().getNullMember();
                         }

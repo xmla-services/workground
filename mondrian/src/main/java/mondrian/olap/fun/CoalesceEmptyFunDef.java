@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.Syntax;
 import org.eclipse.daanse.olap.api.Validator;
@@ -36,7 +36,7 @@ import mondrian.calc.impl.GenericCalc;
 public class CoalesceEmptyFunDef extends FunDefBase {
     static final ResolverBase Resolver = new ResolverImpl();
 
-    public CoalesceEmptyFunDef(ResolverBase resolverBase, Category type, Category[] types)
+    public CoalesceEmptyFunDef(ResolverBase resolverBase, DataType type, DataType[] types)
     {
         super(resolverBase,  type, types);
     }
@@ -85,9 +85,9 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             if (args.length < 1) {
                 return null;
             }
-            final Category[] types = {Category.NUMERIC, Category.STRING};
-            final Category[] argTypes = new Category[args.length];
-            for (Category type : types) {
+            final DataType[] types = {DataType.NUMERIC, DataType.STRING};
+            final DataType[] argTypes = new DataType[args.length];
+            for (DataType type : types) {
                 int matchingArgs = 0;
                 conversions.clear();
                 for (int i = 0; i < args.length; i++) {

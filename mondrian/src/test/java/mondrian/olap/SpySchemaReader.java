@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Category;
+import org.eclipse.daanse.olap.api.DataType;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.Evaluator;
 import org.eclipse.daanse.olap.api.MatchType;
@@ -147,13 +147,13 @@ public class SpySchemaReader implements SchemaReader {
 	}
 
 	@Override
-	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, Category category,
+	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, DataType category,
                                       MatchType matchType) {
 		return delegate.lookupCompound(parent, names, failIfNotFound, category, matchType);
 	}
 
 	@Override
-	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, Category category) {
+	public OlapElement lookupCompound(OlapElement parent, List<Segment> names, boolean failIfNotFound, DataType category) {
 		return delegate.lookupCompound(parent, names, failIfNotFound, category);
 	}
 
