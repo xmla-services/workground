@@ -26,7 +26,6 @@
 	bnd.identity;id='org.apache.felix.scr',\
 	bnd.identity;id='org.eclipse.daanse.xmla.ws.jakarta.basic',\
 	bnd.identity;id='org.eclipse.daanse.xmla.ws.jakarta.basic-tests',\
-	bnd.identity;id='com.osgifx.console.agent',\
 	bnd.identity;id='org.apache.felix.http.jetty',\
 	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard',\
 	bnd.identity;id='org.eclipse.daanse.ws.handler',\
@@ -47,7 +46,6 @@
 -runbundles: \
 	assertj-core;version='[3.24.2,3.24.3)',\
 	com.fasterxml.woodstox.woodstox-core;version='[6.2.6,6.2.7)',\
-	com.osgifx.console.agent;version='[2.2.7,2.2.8)',\
 	com.sun.activation.jakarta.activation;version='[2.0.1,2.0.2)',\
 	com.sun.istack.commons-runtime;version='[4.0.1,4.0.2)',\
 	com.sun.xml.bind.jaxb-core;version='[3.0.2,3.0.3)',\
