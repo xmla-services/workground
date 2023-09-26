@@ -190,12 +190,12 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
 
     @Override
 	public String getDatabaseProductName() throws SQLException {
-        return olap4jConnection.mondrianServer.getVersion().getProductName();
+        return "";
     }
 
     @Override
 	public String getDatabaseProductVersion() throws SQLException {
-        return olap4jConnection.mondrianServer.getVersion().getVersionString();
+        return "";
     }
 
     @Override
@@ -1067,12 +1067,12 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
 
     @Override
 	public int getDatabaseMajorVersion() throws SQLException {
-        return olap4jConnection.mondrianServer.getVersion().getMajorVersion();
+        return 0;
     }
 
     @Override
 	public int getDatabaseMinorVersion() throws SQLException {
-        return olap4jConnection.mondrianServer.getVersion().getMinorVersion();
+        return 0;
     }
 
     @Override

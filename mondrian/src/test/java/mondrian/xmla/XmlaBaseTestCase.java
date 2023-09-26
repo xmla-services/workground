@@ -932,9 +932,8 @@ System.out.println("Got CONTINUE");
      *    (e.g. "2.3.0.0") replaced with "${mondrianVersion}"
      */
     public static String maskVersion(String str) {
-        MondrianServer.MondrianVersion mondrianVersion =
-            MondrianServer.forId(null).getVersion();
-        String versionString = mondrianVersion.getVersionString();
+
+        String versionString = "";
         // regex characters that wouldn't be expected before or after the
         // version string.  This avoids a false match when the version
         // string digits appear in other contexts (e.g. $3.56)

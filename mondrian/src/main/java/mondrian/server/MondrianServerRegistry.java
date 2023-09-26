@@ -79,60 +79,7 @@ public class MondrianServerRegistry {
 
     public int getSchemaVersion() { return MondrianServerVersion.SCHEMA_VERSION; }
 
-    public MondrianServer.MondrianVersion getVersion() {
-        if (logger.isDebugEnabled()){
-            logger.debug(" Vendor: " + MondrianServerVersion.VENDOR);
-            final String title = MondrianServerVersion.NAME;
-            logger.debug("  Title: " + title);
-            final String versionString = MondrianServerVersion.VERSION;
-            logger.debug("Version: " + versionString);
-            final int majorVersion = MondrianServerVersion.MAJOR_VERSION;
-            logger.debug(String.format("Major Version: %d", majorVersion));
-            final int minorVersion = MondrianServerVersion.MINOR_VERSION;
-            logger.debug(String.format("Minor Version: %d", minorVersion));
-        }
-        final StringBuilder sb = new StringBuilder();
-        try {
-            Integer.parseInt(MondrianServerVersion.VERSION);
-            sb.append(MondrianServerVersion.VERSION);
-        } catch (NumberFormatException e) {
-            // Version is not a number (e.g. "TRUNK-SNAPSHOT").
-            // Fall back on VersionMajor, VersionMinor, if present.
-            final String versionMajor =
-                String.valueOf(MondrianServerVersion.MAJOR_VERSION);
-            final String versionMinor =
-                String.valueOf(MondrianServerVersion.MINOR_VERSION);
-            if (versionMajor != null) {
-                sb.append(versionMajor);
-            }
-            if (versionMinor != null) {
-                sb.append(".").append(versionMinor);
-            }
-        }
-        return new MondrianServer.MondrianVersion() {
-            @Override
-			public String getVersionString() {
-                return sb.toString();
-            }
-            @Override
-			public String getProductName() {
-                return MondrianServerVersion.NAME;
-            }
-            @Override
-			public int getMinorVersion() {
-                return MondrianServerVersion.MINOR_VERSION;
-            }
-            @Override
-			public int getMajorVersion() {
-                return MondrianServerVersion.MAJOR_VERSION;
-            }
-            public int getSchemaVersion() {
-                return MondrianServerVersion.SCHEMA_VERSION;
-            }
-        };
-    }
-
-    public MondrianServer createWithRepository(
+   public MondrianServer createWithRepository(
         RepositoryContentFinder contentFinder,
         CatalogLocator catalogLocator)
     {
