@@ -631,12 +631,6 @@
 		<classifier>runtime</classifier>
 		<scope>test</scope>
       </dependency>
-      <dependency>
-        <groupId>com.osgifx</groupId>
-        <artifactId>com.osgifx.console.agent</artifactId>
-        <version>2.2.7</version>
-        <scope>runtime</scope>
-      </dependency>
 			<!-- Webconsole -->
       <dependency>
         <groupId>org.apache.felix</groupId>
