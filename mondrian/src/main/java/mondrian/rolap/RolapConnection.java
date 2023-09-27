@@ -1,20 +1,35 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2001-2005 Julian Hyde
-// Copyright (C) 2005-2020 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2001-2005 Julian Hyde
+ * Copyright (C) 2005-2020 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * For more information please visit the Project: Hitachi Vantara - Mondrian
+ * 
+ * ---- All changes after Fork in 2023 ------------------------
+ * 
+ * Project: Eclipse daanse
+ * 
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors after Fork in 2023:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+
 package mondrian.rolap;
 
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +41,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.CacheControl;
 import org.eclipse.daanse.olap.api.Context;
 import org.eclipse.daanse.olap.api.SchemaReader;
@@ -42,7 +56,6 @@ import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eclipse.daanse.olap.calc.api.todo.TupleCursor;
 import org.eclipse.daanse.olap.calc.api.todo.TupleList;
-import org.eigenbase.util.property.StringProperty;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,11 +63,9 @@ import org.slf4j.LoggerFactory;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.TupleCollections;
 import mondrian.olap.ConnectionBase;
-import mondrian.olap.DriverManager;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryImpl;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.olap.ResultBase;
@@ -67,27 +78,13 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.server.StatementImpl;
-import mondrian.spi.DataSourceResolver;
-import mondrian.spi.impl.JndiDataSourceResolver;
-import mondrian.util.ClassResolver;
 import mondrian.util.FilteredIterableList;
 import mondrian.util.LockBox;
 import mondrian.util.MemoryMonitor;
 import mondrian.util.MemoryMonitorFactory;
 import mondrian.util.Pair;
 
-/**
- * A <code>RolapConnection</code> is a connection to a Mondrian OLAP Server.
- *
- * <p>Typically, you create a connection via
- * {@link DriverManager#getConnection(String, mondrian.spi.CatalogLocator)}.
- * {@link RolapConnectionProperties} describes allowable keywords.</p>
- *
- * @author jhyde
- * @see RolapSchema
- * @see DriverManager
- * @since 2 October, 2002
- */
+
 public class RolapConnection extends ConnectionBase {
   private static final Logger LOGGER =
     LoggerFactory.getLogger( RolapConnection.class );
@@ -106,7 +103,6 @@ public class RolapConnection extends ConnectionBase {
   private Scenario scenario;
   private boolean closed = false;
 
-  private static DataSourceResolver dataSourceResolver;
   private final int id;
   private final Statement internalStatement;
 
@@ -242,41 +238,6 @@ public class RolapConnection extends ConnectionBase {
       }
     } else {
       this.internalStatement = createInternalStatement( true );
-
-      // We are creating an internal connection. Now is a great time to
-      // make sure that the JDBC credentials are valid, for this
-      // connection and for external connections built on top of this.
-      java.sql.Statement statement = null;
-      try(Connection conn = this.context.getDataSource().getConnection()) {
-        Dialect dialect =context.getDialect();
-          if ( dialect.getDialectName().equals("derby")) {
-          // TODO replace that crutch
-          // Derby requires a little extra prodding to do the
-          // validation to detect an error.
-          statement = conn.createStatement();
-          statement.executeQuery( "select * from bogustable" );
-        }
-      } catch ( SQLException e ) {
-        if ( e.getMessage().equals(
-          "Table/View 'BOGUSTABLE' does not exist." ) ) {
-          // Ignore. This exception comes from Derby when the
-          // connection is valid. If the connection were invalid, we
-          // would receive an error such as "Schema 'BOGUSUSER' does
-          // not exist"
-        } else {
-          throw Util.newError(
-            e,
-            "Error while creating SQL connection: "  );
-        }
-      } finally {
-        try {
-          if ( statement != null ) {
-            statement.close();
-          }
-        } catch ( SQLException e ) {
-          // ignore
-        }
-      }
     }
 
     if ( roleInner == null ) {
@@ -295,20 +256,7 @@ public class RolapConnection extends ConnectionBase {
     setRole( roleInner );
   }
 
-  @Override
-  protected void finalize() throws Throwable {
-    try {
-      super.finalize();
-      close();
-    } catch ( Throwable t ) {
-      LOGGER.info(
-        MondrianResource.instance()
-          .FinalizerErrorRolapConnection.baseMessage,
-        t );
-    }
-  }
-
-  /**
+   /**
    * Returns the identifier of this connection. Unique within the lifetime of
    * this JVM.
    *
@@ -323,52 +271,7 @@ protected Logger getLogger() {
     return LOGGER;
   }
 
-  /**
-   * Returns the instance of the {@link mondrian.spi.DataSourceResolver}
-   * plugin.
-   *
-   * @return data source resolver
-   */
-  private static synchronized DataSourceResolver getDataSourceResolver() {
-    if ( dataSourceResolver == null ) {
-      final StringProperty property =
-        MondrianProperties.instance().DataSourceResolverClass;
-      final String className =
-        property.get(
-          JndiDataSourceResolver.class.getName() );
-      try {
-        dataSourceResolver =
-          ClassResolver.INSTANCE.instantiateSafe( className );
-      } catch ( ClassCastException e ) {
-        throw Util.newInternal(
-          e,
-          new StringBuilder("Plugin class specified by property ")
-              .append(property.getPath())
-              .append(" must implement ")
-              .append(DataSourceResolver.class.getName()).toString() );
-      }
-    }
-    return dataSourceResolver;
-  }
-
-  /**
-   * Appends "key=value" to a buffer, if value is not null.
-   *
-   * @param buf   Buffer
-   * @param key   Key
-   * @param value Value
-   */
-  private static void appendKeyValue(
-    StringBuilder buf,
-    String key,
-    Object value ) {
-    if ( value != null ) {
-      if ( buf.length() > 0 ) {
-        buf.append( "; " );
-      }
-      buf.append( key ).append( '=' ).append( value );
-    }
-  }
+ 
 
   /**
    * Creates a {@link Properties} object containing all of the JDBC
@@ -694,101 +597,6 @@ public Statement getInternalStatement() {
     return statement;
   }
 
-  /**
-   * Implementation of {@link DataSource} which calls the good ol'
-   * {@link java.sql.DriverManager}.
-   *
-   * <p>Overrides {@link #hashCode()} and {@link #equals(Object)} so that
-   * {@link Dialect} objects can be cached more effectively.
-   */
-  private static class DriverManagerDataSource implements DataSource {
-    private final String jdbcConnectString;
-    private PrintWriter logWriter;
-    private int loginTimeout;
-    private Properties jdbcProperties;
-
-    public DriverManagerDataSource(
-      String jdbcConnectString,
-      Properties properties ) {
-      this.jdbcConnectString = jdbcConnectString;
-      this.jdbcProperties = properties;
-    }
-
-    @Override
-    public int hashCode() {
-      int h = loginTimeout;
-      h = Util.hash( h, jdbcConnectString );
-      h = Util.hash( h, jdbcProperties );
-      return h;
-    }
-
-    @Override
-    public boolean equals( Object obj ) {
-      if ( obj instanceof DriverManagerDataSource that ) {
-        return this.loginTimeout == that.loginTimeout
-          && this.jdbcConnectString.equals( that.jdbcConnectString )
-          && this.jdbcProperties.equals( that.jdbcProperties );
-      }
-      return false;
-    }
-
-    @Override
-	public Connection getConnection() throws SQLException {
-      return 
-        java.sql.DriverManager.getConnection(
-          jdbcConnectString, jdbcProperties ) ;
-    }
-
-    @Override
-	public Connection getConnection( String username, String password )
-      throws SQLException {
-      if ( jdbcProperties == null ) {
-        return java.sql.DriverManager.getConnection(
-          jdbcConnectString, username, password );
-      } else {
-        Properties temp = (Properties) jdbcProperties.clone();
-        temp.put( "user", username );
-        temp.put( "password", password );
-        return java.sql.DriverManager.getConnection(
-          jdbcConnectString, temp );
-      }
-    }
-
-    @Override
-	public PrintWriter getLogWriter() throws SQLException {
-      return logWriter;
-    }
-
-    @Override
-	public void setLogWriter( PrintWriter out ) throws SQLException {
-      logWriter = out;
-    }
-
-    @Override
-	public void setLoginTimeout( int seconds ) throws SQLException {
-      loginTimeout = seconds;
-    }
-
-    @Override
-	public int getLoginTimeout() throws SQLException {
-      return loginTimeout;
-    }
-
-    @Override
-	public java.util.logging.Logger getParentLogger() {
-      return java.util.logging.Logger.getLogger( "" );
-    }
-
-    @Override
-	public <T> T unwrap( Class<T> iface ) throws SQLException {
-      throw new SQLException( "not a wrapper" );
-    }
-
-    @Override
-	public boolean isWrapperFor( Class<?> iface ) throws SQLException {
-      return false;
-    }
-  }
 
   @Override
 public DataSource getDataSource() {
@@ -945,113 +753,7 @@ public Context getContext() {
     }
   }
 
-  /**
-   * Data source that delegates all methods to an underlying data source.
-   */
-  private abstract static class DelegatingDataSource implements DataSource {
-    protected final DataSource dataSource;
-
-    public DelegatingDataSource( DataSource dataSource ) {
-      this.dataSource = dataSource;
-    }
-
-    @Override
-	public Connection getConnection() throws SQLException {
-      return dataSource.getConnection();
-    }
-
-    @Override
-	public Connection getConnection(
-      String username,
-      String password )
-      throws SQLException {
-      return dataSource.getConnection( username, password );
-    }
-
-    @Override
-	public PrintWriter getLogWriter() throws SQLException {
-      return dataSource.getLogWriter();
-    }
-
-    @Override
-	public void setLogWriter( PrintWriter out ) throws SQLException {
-      dataSource.setLogWriter( out );
-    }
-
-    @Override
-	public void setLoginTimeout( int seconds ) throws SQLException {
-      dataSource.setLoginTimeout( seconds );
-    }
-
-    @Override
-	public int getLoginTimeout() throws SQLException {
-      return dataSource.getLoginTimeout();
-    }
-
-    // JDBC 4.0 support (JDK 1.6 and higher)
-    @Override
-	public <T> T unwrap( Class<T> iface ) throws SQLException {
-      if ( Util.JDBC_VERSION >= 0x0400 ) {
-        // Do
-        //              return dataSource.unwrap(iface);
-        // via reflection.
-        try {
-          Method method =
-            DataSource.class.getMethod( "unwrap", Class.class );
-          return iface.cast( method.invoke( dataSource, iface ) );
-        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
-          throw Util.newInternal( e, "While invoking unwrap" );
-        }
-      } else {
-        if ( iface.isInstance( dataSource ) ) {
-          return iface.cast( dataSource );
-        } else {
-          return null;
-        }
-      }
-    }
-
-    // JDBC 4.0 support (JDK 1.6 and higher)
-    @Override
-	public boolean isWrapperFor( Class<?> iface ) throws SQLException {
-      if ( Util.JDBC_VERSION >= 0x0400 ) {
-        // Do
-        //              return dataSource.isWrapperFor(iface);
-        // via reflection.
-        try {
-          Method method =
-            DataSource.class.getMethod(
-              "isWrapperFor", boolean.class );
-          return (Boolean) method.invoke( dataSource, iface );
-        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
-          throw Util.newInternal( e, "While invoking isWrapperFor" );
-        }
-      } else {
-        return iface.isInstance( dataSource );
-      }
-    }
-
-    // JDBC 4.1 support (JDK 1.7 and higher)
-    @Override
-	public java.util.logging.Logger getParentLogger() {
-      if ( Util.JDBC_VERSION >= 0x0401 ) {
-        // Do
-        // via reflection.
-        try {
-          Method method =
-            DataSource.class.getMethod( "getParentLogger" );
-          return (java.util.logging.Logger) method.invoke( dataSource );
-        } catch ( IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
-          throw Util.newInternal( e, "While invoking getParentLogger" );
-        }
-      } else {
-        // Can't throw SQLFeatureNotSupportedException... it doesn't
-        // exist before JDBC 4.1.
-        throw new UnsupportedOperationException();
-      }
-    }
-  }
-
+ 
   private static String getJdbcConnectionString( Util.PropertyList connectInfo ) {
 
     String jdbc = connectInfo.get( RolapConnectionProperties.Jdbc.name() );
