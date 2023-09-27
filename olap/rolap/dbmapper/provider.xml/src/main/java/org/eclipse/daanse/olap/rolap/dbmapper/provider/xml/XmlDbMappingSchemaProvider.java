@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 
 @Component(service = DatabaseMappingSchemaProvider.class)
@@ -32,11 +33,11 @@ public class XmlDbMappingSchemaProvider implements DatabaseMappingSchemaProvider
 
 	@Activate
 	public void activate(Config config) throws IOException, JAXBException {
-		URL url = new URL(config.url());
+		URL url = URI.create(config.url()).toURL();
 		try (InputStream in = url.openStream()) {
 			schema = reader.read(in);
 		} catch (Exception e) {
-            LOGGER.error("XmlDbMappingSchemaProvider activation error");
+			LOGGER.error("XmlDbMappingSchemaProvider activation error");
 			throw e;
 		}
 	}

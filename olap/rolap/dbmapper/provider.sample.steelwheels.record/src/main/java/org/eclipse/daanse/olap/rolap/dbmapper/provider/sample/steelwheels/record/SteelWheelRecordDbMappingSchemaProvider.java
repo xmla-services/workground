@@ -174,7 +174,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .hasAll(true)
         .primaryKey("CUSTOMERNUMBER")
         .primaryKeyTable("")
-        .table(TABLE_1)
+        .relation(TABLE_1)
         .levels(List.of(LEVEL_1_1, LEVEL_1_2, LEVEL_1_3, LEVEL_1_4))
         .build();
     private static final HierarchyR HIERARCHY_2 = HierarchyRBuilder
@@ -182,7 +182,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .hasAll(true)
         .allMemberName("All Customers")
         .primaryKey("CUSTOMMERNUMBER")
-        .table(TABLE_2)
+        .relation(TABLE_2)
         .levels(List.of(LEVEL_2))
         .build();
     private static final HierarchyR HIERARCHY_3 = HierarchyRBuilder
@@ -192,7 +192,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .primaryKey("PRODUCTCODE")
         .primaryKeyTable("product")
         .caption("")
-        .table(TABLE_3)
+        .relation(TABLE_3)
         .levels(List.of(LEVEL_3_1, LEVEL_3_2, LEVEL_3_3))
         .build();
     private static final HierarchyR HIERARCHY_4 = HierarchyRBuilder
@@ -200,7 +200,7 @@ public class SteelWheelRecordDbMappingSchemaProvider implements DatabaseMappingS
         .hasAll(true)
         .allMemberName("All Years")
         .primaryKey("TIME_ID")
-        .table(TABLE_4)
+        .relation(TABLE_4)
         .levels(List.of(LEVEL_4_1, LEVEL_4_2, LEVEL_4_3))
         .build();
     private static final HierarchyR HIERARCHY_5 = HierarchyRBuilder

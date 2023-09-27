@@ -48,5 +48,5 @@ public interface MappingCube {
 
     MappingRelation fact();
 
-    Iterable<MappingAction> actions();
+    List<MappingAction> actions();
 }

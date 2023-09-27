@@ -17,22 +17,14 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingHierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingInlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingMemberReaderParameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingView;
 
 public record HierarchyR(String name,
                          String caption,
                          String description,
                          List<MappingAnnotation> annotations,
-                         MappingTable table,
-                         MappingView view,
-                         MappingJoin join,
-                         MappingInlineTable inlineTable,
                          List<MappingLevel> levels,
                          List<MappingMemberReaderParameter> memberReaderParameters,
                          boolean hasAll,

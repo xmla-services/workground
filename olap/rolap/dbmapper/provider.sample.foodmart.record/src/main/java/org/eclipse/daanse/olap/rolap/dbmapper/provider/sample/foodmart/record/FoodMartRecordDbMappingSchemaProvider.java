@@ -1321,7 +1321,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .primaryKey(PROMOTION_ID)
         .defaultMember(ALL_MEDIA)
-        .table(TABLE_1)
+        .relation(TABLE_1)
         .levels(List.of(LEVEL_1_1))
         .build();
     private static final HierarchyR HIERARCHY_2 = HierarchyRBuilder
@@ -1330,7 +1330,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .allMemberName("All Promotions")
         .primaryKey(PROMOTION_ID)
         .defaultMember("[All Promotions]")
-        .table(TABLE_2)
+        .relation(TABLE_2)
         .levels(List.of(LEVEL_1_2))
         .build();
     private static final HierarchyR HIERARCHY_3 = HierarchyRBuilder
@@ -1338,7 +1338,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Customors")
         .primaryKey("customor_id")
-        .table(TABLE_3)
+        .relation(TABLE_3)
         .levels(List.of(LEVEL_1_3_A,
             LEVEL_1_3_B,
             LEVEL_1_3_C,
@@ -1348,7 +1348,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_4)
+        .relation(TABLE_4)
         .levels(List.of(LEVEL_1_4))
         .build();
     private static final HierarchyR HIERARCHY_5 = HierarchyRBuilder
@@ -1356,7 +1356,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Genders")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5)
+        .relation(TABLE_5)
         .levels(List.of(LEVEL_1_5))
         .build();
     private static final HierarchyR HIERARCHY_6 = HierarchyRBuilder
@@ -1364,14 +1364,14 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Merital Status")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_6)
+        .relation(TABLE_6)
         .levels(List.of(LEVEL_1_6))
         .build();
     private static final HierarchyR HIERARCHY_7 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_7)
+        .relation(TABLE_7)
         .levels(List.of(LEVEL_1_7))
         .build();
     private static final HierarchyR HIERARCHY_3_1 = HierarchyRBuilder
@@ -1388,7 +1388,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(false)
         .primaryKey("the_date")
-        .table(TABLE_4_1)
+        .relation(TABLE_4_1)
         .levels(List.of(
             LEVEL_4_1_A,
             LEVEL_4_1_B,
@@ -1399,7 +1399,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .primaryKey(EMPLOYEE_ID)
         .primaryKeyTable(EMPLOYEE)
-        .join(JOIN_4_2)
+        .relation(JOIN_4_2)
         .levels(List.of(
             LEVEL_4_2_A,
             LEVEL_4_2_B,
@@ -1411,7 +1411,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .primaryKey(EMPLOYEE_ID)
         .primaryKeyTable(EMPLOYEE)
-        .join(JOIN_4_3)
+        .relation(JOIN_4_3)
         .levels(List.of(LEVEL_4_3))
         .build();
     private static final HierarchyR HIERARCHY_4_4 = HierarchyRBuilder
@@ -1419,7 +1419,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .primaryKeyTable(EMPLOYEE)
         .primaryKey(EMPLOYEE_ID)
-        .join(JOIN_4_4)
+        .relation(JOIN_4_4)
         .levels(List.of(LEVEL_4_4))
         .build();
     private static final HierarchyR HIERARCHY_4_5 = HierarchyRBuilder
@@ -1427,7 +1427,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Position")
         .primaryKey(EMPLOYEE_ID)
-        .table(TABLE_4_5)
+        .relation(TABLE_4_5)
         .levels(List.of(LEVEL_4_5_A,
             LEVEL_4_5_B))
         .build();
@@ -1435,7 +1435,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(DEPARTMENT_ID)
-        .table(TABLE_4_6)
+        .relation(TABLE_4_6)
         .levels(List.of(LEVEL_4_6))
         .build();
     private static final HierarchyR HIERARCHY_4_7 = HierarchyRBuilder
@@ -1443,14 +1443,14 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberCaption("All Employees")
         .primaryKey(EMPLOYEE_ID)
-        .table(TABLE_4_7)
+        .relation(TABLE_4_7)
         .levels(List.of(LEVEL_4_7))
         .build();
     private static final HierarchyR HIERARCHY_5_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey(STORE_ID_KEY)
-        .table(TABLE_5_1)
+        .relation(TABLE_5_1)
         .levels(List.of(LEVEL_5_1_A,
             LEVEL_5_1_B,
             LEVEL_5_1_C,
@@ -1460,7 +1460,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(STORE_ID_KEY)
-        .table(TABLE_5_2)
+        .relation(TABLE_5_2)
         .levels(List.of(LEVEL_5_2_A,
             LEVEL_5_2_B,
             LEVEL_5_2_C))
@@ -1470,7 +1470,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName(ALL_MEDIA)
         .primaryKey(PROMOTION_ID)
-        .table(TABLE_5_3)
+        .relation(TABLE_5_3)
         .levels(List.of(LEVEL_5_3))
         .build();
     private static final HierarchyR HIERARCHY_5_4 = HierarchyRBuilder
@@ -1478,7 +1478,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Promotions")
         .primaryKey(PROMOTION_ID)
-        .table(TABLE_5_4)
+        .relation(TABLE_5_4)
         .levels(List.of(LEVEL_5_4))
         .build();
     private static final HierarchyR HIERARCHY_5_5 = HierarchyRBuilder
@@ -1486,7 +1486,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Customers")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5_5)
+        .relation(TABLE_5_5)
         .levels(List.of(LEVEL_5_5_A,
             LEVEL_5_5_B,
             LEVEL_5_5_C,
@@ -1496,7 +1496,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5_6)
+        .relation(TABLE_5_6)
         .levels(List.of(LEVEL_5_6))
         .build();
     private static final HierarchyR HIERARCHY_5_7 = HierarchyRBuilder
@@ -1504,7 +1504,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Gender")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5_7)
+        .relation(TABLE_5_7)
         .levels(List.of(LEVEL_5_7))
         .build();
     private static final HierarchyR HIERARCHY_5_8 = HierarchyRBuilder
@@ -1512,14 +1512,14 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Marital Status")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5_8)
+        .relation(TABLE_5_8)
         .levels(List.of(LEVEL_5_8))
         .build();
     private static final HierarchyR HIERARCHY_5_9 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_5_9)
+        .relation(TABLE_5_9)
         .levels(List.of(LEVEL_5_9))
         .build();
     private static final HierarchyR HIERARCHY_6_1 = HierarchyRBuilder
@@ -1527,14 +1527,14 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .hasAll(true)
         .allMemberName("All Gender")
         .primaryKey(CUSTOMER_ID)
-        .table(TABLE_6_1)
+        .relation(TABLE_6_1)
         .levels(List.of(LEVEL_6_1))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_1 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey(STORE_ID_KEY)
-        .table(TABLE_SHARED_1)
+        .relation(TABLE_SHARED_1)
         .levels(List.of(LEVEL_SHARED_1_A,
             LEVEL_SHARED_1_B,
             LEVEL_SHARED_1_C,
@@ -1545,21 +1545,21 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(STORE_ID_KEY)
-        .table(TABLE_SHARED_2)
+        .relation(TABLE_SHARED_2)
         .levels(List.of(LEVEL_SHARED_2))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_3 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey(STORE_ID_KEY)
-        .table(TABLE_SHARED_3)
+        .relation(TABLE_SHARED_3)
         .levels(List.of(LEVEL_SHARED_3))
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_4_1 = HierarchyRBuilder
         .builder()
         .hasAll(false)
         .primaryKey(TIME_ID_KEY)
-        .table(TABLE_SHARED_4_A)
+        .relation(TABLE_SHARED_4_A)
         .levels(List.of(LEVEL_SHARED_4_A_1,
             LEVEL_SHARED_4_A_2,
             LEVEL_SHARED_4_A_3
@@ -1569,7 +1569,7 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
         .builder()
         .hasAll(true)
         .primaryKey(TIME_ID_KEY)
-        .table(TABLE_SHARED_4_B)
+        .relation(TABLE_SHARED_4_B)
         .levels(List.of(LEVEL_SHARED_4_B_1,
             LEVEL_SHARED_4_B_2,
             LEVEL_SHARED_4_B_3
@@ -1583,13 +1583,13 @@ public class FoodMartRecordDbMappingSchemaProvider implements DatabaseMappingSch
             LEVEL_SHARED_5_4,
             LEVEL_SHARED_5_5,
             LEVEL_SHARED_5_6))
-        .join(JOIN_SHARED_1)
+        .relation(JOIN_SHARED_1)
         .build();
     private static final HierarchyR HIERARCHY_SCHEMA_6 = HierarchyRBuilder
         .builder()
         .hasAll(true)
         .primaryKey("warehouse_id")
-        .table(TABLE_SHARED_6)
+        .relation(TABLE_SHARED_6)
         .levels(List.of(LEVEL_SHARED_6_1,
             LEVEL_SHARED_6_2,
             LEVEL_SHARED_6_3,

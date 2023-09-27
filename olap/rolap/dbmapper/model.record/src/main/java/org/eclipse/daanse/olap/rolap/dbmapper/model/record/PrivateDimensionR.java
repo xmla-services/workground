@@ -29,7 +29,6 @@ public record PrivateDimensionR(String name,
                                 List<MappingAnnotation> annotations,
                                 List<MappingHierarchy> hierarchies,
                                 boolean visible,
-                                List<MappingAnnotation> annotation,
                                 String usagePrefix
                                 )
         implements MappingPrivateDimension {
