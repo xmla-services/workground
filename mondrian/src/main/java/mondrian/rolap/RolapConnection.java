@@ -734,9 +734,9 @@ public Statement getInternalStatement() {
 
     @Override
 	public Connection getConnection() throws SQLException {
-      return new org.apache.commons.dbcp.DelegatingConnection(
+      return 
         java.sql.DriverManager.getConnection(
-          jdbcConnectString, jdbcProperties ) );
+          jdbcConnectString, jdbcProperties ) ;
     }
 
     @Override

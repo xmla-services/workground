@@ -33,7 +33,6 @@ class NativeFilterAgainstAggTableTest extends BatchTestCase {
     private PropertySaver5 propSaver;
     @BeforeAll
     public static void beforeAll() {
-        RolapConnectionPool.instance().clearPool();
     }
 
     @BeforeEach

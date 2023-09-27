@@ -162,11 +162,7 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
             // will choke on canceled queries and throw a OutOfMemoryError.
             // We can't protect ourselves against this. That's a bug on their
             // side.
-            if (t.getMessage().equals(
-                    "org.apache.commons.dbcp.DelegatingStatement is closed."))
-            {
-                return;
-            }
+
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("",
                     MondrianResource.instance()
