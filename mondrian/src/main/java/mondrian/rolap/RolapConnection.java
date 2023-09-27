@@ -598,6 +598,7 @@ public Statement getInternalStatement() {
   }
 
 
+  @Deprecated() //finf a better way for agg manager. 
   @Override
 public DataSource getDataSource() {
       return getContext().getDataSource();
