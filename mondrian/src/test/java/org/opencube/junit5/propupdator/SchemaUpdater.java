@@ -117,9 +117,6 @@ public class SchemaUpdater implements PropertyUpdater {
 
 				throw new RuntimeException(e);
 			}
-		} else {
-			content = propertyList.get(RolapConnectionProperties.CatalogName.name());
-
 		}
 		content = function.apply(content);
 		// maybe write temp file
