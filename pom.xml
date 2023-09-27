@@ -967,7 +967,6 @@
     <module>org.eclipse.daanse.repackage.eigenbase.xom</module>
     <module>org.eclipse.daanse.repackage.eigenbase.resgen</module>
     <module>org.eclipse.daanse.repackage.eigenbase.properties</module>
-    <module>org.eclipse.daanse.repackage.apache.commons.dbcp</module>
     <module>org.eclipse.daanse.repackage.dockerjava</module>
     <module>org.eclipse.daanse.repackage.rhino.engine</module>
     <module>function</module>

@@ -104,12 +104,8 @@ class RolapConnectionTest {
             connection = dataSource.getConnection();
             fail("Expected exception");
         } catch (SQLException e) {
-            if (e.getClass().getName().equals(
-                    "org.apache.commons.dbcp.DbcpException"))
-            {
-                // This is expected. (We use string-comparison so that the
-                // compiler doesn't warn about using a deprecated class.)
-            } else if (e.getClass() == SQLException.class
+
+          if (e.getClass() == SQLException.class
                 && e.getCause() == null
                 && e.getMessage() != null
                 && e.getMessage().equals(""))
@@ -124,7 +120,6 @@ class RolapConnectionTest {
             if (connection != null) {
                 connection.close();
             }
-            RolapConnectionPool.instance().clearPool();
         }
     }
 

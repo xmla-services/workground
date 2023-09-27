@@ -21,8 +21,8 @@ import org.eclipse.daanse.olap.api.SchemaReader;
 import org.eclipse.daanse.olap.api.element.Hierarchy;
 import org.eclipse.daanse.olap.api.element.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingRelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingTable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -168,7 +168,7 @@ class RolapCubeHierarchyTest {
     Hierarchy rolapHierarchy_hierarchy = null;
     String rolapHierarchy_uniqueName = "TheDimUniqueName";
     Level[] rolapHierarchy_levels = new Level[]{};
-    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingRelation.class);
+    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingTable.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
     String subName = null;
@@ -176,7 +176,7 @@ class RolapCubeHierarchyTest {
     int ordinal = 0;
 
     RolapCube factCube = mock(RolapCube.class);
-    MappingRelationOrJoin factCube_Fact = mock(MappingRelation.class);
+    MappingRelationOrJoin factCube_Fact = mock(MappingTable.class);
     boolean factCube_Fact_equals = false;
 
     // check
@@ -224,7 +224,7 @@ class RolapCubeHierarchyTest {
     Hierarchy rolapHierarchy_hierarchy = null;
     String rolapHierarchy_uniqueName = "TheDimUniqueName";
     Level[] rolapHierarchy_levels = new Level[]{};
-    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingRelation.class);
+    MappingRelationOrJoin rolapHierarchy_relation = mock(MappingTable.class);
 
     String subName = null;
 
