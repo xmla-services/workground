@@ -13,6 +13,19 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.basic;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.db.jdbc.metadata.impl.Column;
@@ -51,18 +64,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaCreatorSer
 import org.eclipse.daanse.olap.rolap.dbmapper.schemacreator.api.SchemaInitData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class SchemaCreatorServiceImpl implements SchemaCreatorService {
 
@@ -181,7 +182,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             List.of(),
             hierarchies,
             true,
-            List.of(),
             null);
     }
 
@@ -640,7 +640,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
                         List.of(),
                         hierarchyList,
                         true,
-                        List.of(),
                         null));
                 }
             }
@@ -656,10 +655,6 @@ public class SchemaCreatorServiceImpl implements SchemaCreatorService {
             getHierarchyCaption(tableName, columnName),
             getHierarchyDescription(tableName, columnName),
             List.of(),
-            null,
-            null,
-            null,
-            null,
             getHierarchyLevels(schemaName, relation, tableName, columnName, jmds),
             List.of(),
             true,

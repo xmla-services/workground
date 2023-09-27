@@ -24,7 +24,9 @@
     <module>model.jaxb</module>
     <module>model.record</module>
     <module>provider.api</module>
+    <module>provider.simple</module>
     <module>provider.xml</module>
+    <module>provider.modifier</module>
     <module>provider.sample.foodmart.xml</module>
     <module>provider.sample.foodmart.record</module>
     <module>provider.sample.steelwheels.xml</module>

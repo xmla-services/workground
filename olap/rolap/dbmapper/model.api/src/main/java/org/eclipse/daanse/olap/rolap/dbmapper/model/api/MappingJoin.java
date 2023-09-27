@@ -15,7 +15,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.api;
 
 import java.util.List;
 
-public interface MappingJoin extends MappingRelationOrJoin {
+public non-sealed interface MappingJoin extends MappingRelationOrJoin {
 
     List<MappingRelationOrJoin> relations();
 
