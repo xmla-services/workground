@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingAnnotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingCellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.MappingFormula;
 
 public record CalculatedMemberR(String name,
@@ -32,7 +33,7 @@ public record CalculatedMemberR(String name,
                                 List<MappingCalculatedMemberProperty> calculatedMemberProperties,
                                 String hierarchy,
                                 String parent,
-                                CellFormatterR cellFormatter,
+                                MappingCellFormatter cellFormatter,
                                 MappingFormula formulaElement)
         implements MappingCalculatedMember {
 
