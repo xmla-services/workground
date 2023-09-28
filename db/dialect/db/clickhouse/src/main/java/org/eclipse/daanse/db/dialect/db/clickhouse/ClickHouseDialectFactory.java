@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='CLICKHOUSE'",
     "database.product:String='CLICKHOUSE'" })
 @Component(service = DialectFactory.class)
-public class ClickHouseDialectFactory extends AbstractDialectFactory {
+public class ClickHouseDialectFactory extends AbstractDialectFactory<ClickHouseDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "CLICKHOUSE";
 
     @Override

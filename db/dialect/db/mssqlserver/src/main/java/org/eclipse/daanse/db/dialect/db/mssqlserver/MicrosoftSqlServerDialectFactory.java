@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='MSSQL'",
     "database.product:String='MSSQL'" })
 @Component(service = DialectFactory.class)
-public class MicrosoftSqlServerDialectFactory extends AbstractDialectFactory {
+public class MicrosoftSqlServerDialectFactory extends AbstractDialectFactory<MicrosoftSqlServerDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "MSSQL";
 
     @Override

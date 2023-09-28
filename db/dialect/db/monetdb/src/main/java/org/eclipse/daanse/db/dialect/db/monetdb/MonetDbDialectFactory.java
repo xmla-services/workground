@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='MONETDB'",
     "database.product:String='MONETDB'" })
 @Component(service = DialectFactory.class)
-public class MonetDbDialectFactory extends AbstractDialectFactory {
+public class MonetDbDialectFactory extends AbstractDialectFactory<MonetDbDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "MONETDB";
 
     @Override

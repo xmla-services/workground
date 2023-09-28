@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='HIVE'",
     "database.product:String='HIVE'" })
 @Component(service = DialectFactory.class)
-public class HiveDialectFactory extends AbstractDialectFactory {
+public class HiveDialectFactory extends AbstractDialectFactory<HiveDialect>{
 
     private static final String SUPPORTED_PRODUCT_NAME = "HIVE";
 

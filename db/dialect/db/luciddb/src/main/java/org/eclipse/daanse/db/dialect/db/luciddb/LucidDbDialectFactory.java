@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='LUCIDDB'",
     "database.product:String='LUCIDDB'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class LucidDbDialectFactory extends AbstractDialectFactory {
+public class LucidDbDialectFactory extends AbstractDialectFactory<LucidDbDialect> {
 
     private static final String SUPPORTED_PRODUCT_NAME = "LUCIDDB";
 

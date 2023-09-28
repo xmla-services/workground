@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='INGRES'",
     "database.product:String='INGRES'" })
 @Component(service = DialectFactory.class)
-public class IngresDialectFactory extends AbstractDialectFactory {
+public class IngresDialectFactory extends AbstractDialectFactory<IngresDialect> {
 
     private static final String SUPPORTED_PRODUCT_NAME = "INGRES";
 
