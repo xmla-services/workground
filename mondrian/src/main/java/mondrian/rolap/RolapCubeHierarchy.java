@@ -753,7 +753,6 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             MemberChildrenConstraint constraint)
         {
             synchronized (cacheHelper) {
-                checkCacheStatus();
 
                 List<RolapMember> missed = new ArrayList<>();
                 for (RolapMember parentMember : parentMembers) {
@@ -783,7 +782,6 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             TupleConstraint constraint)
         {
             synchronized (cacheHelper) {
-                checkCacheStatus();
 
                 List<RolapMember> members =
                     rolapCubeCacheHelper.getLevelMembersFromCache(
@@ -922,31 +920,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             return rolapHierarchy.getMemberReader().getMemberCount();
         }
 
-        @Override
-		protected void checkCacheStatus() {
-            synchronized (cacheHelper) {
-                // if necessary, flush all caches:
-                //   - shared SmartMemberReader RolapMember cache
-                //   - local key to cube member RolapCubeMember cache
-                //   - cube source RolapCubeMember cache
-                //   - local regular RolapMember cache, used when cube
-                //     specific joins occur
 
-                if (cacheHelper.getChangeListener() != null &&
-                    cacheHelper.getChangeListener().isHierarchyChanged(
-                        getHierarchy())) {
-                    cacheHelper.flushCache();
-                    rolapCubeCacheHelper.flushCache();
-                    if (rolapHierarchy.getMemberReader()
-                        instanceof SmartMemberReader smartMemberReader
-                        && smartMemberReader.getMemberCache()
-                        instanceof MemberCacheHelper helper)
-                    {
-                            helper.flushCache();
-                    }
-                }
-            }
-        }
     }
 
     /**

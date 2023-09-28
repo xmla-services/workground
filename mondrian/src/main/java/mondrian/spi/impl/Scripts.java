@@ -11,8 +11,6 @@ package mondrian.spi.impl;
 
 import mondrian.olap.Util;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.DataSourceChangeListener;
-import mondrian.spi.DataSourceResolver;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
@@ -108,51 +106,7 @@ public class Scripts {
             "formatCell(value)");
     }
 
-    /**
-     * Creates an implementation of the {@link DataSourceChangeListener} SPI
-     * based on a script.
-     *
-     * @param script Script
-     * @return data source change listener
-     */
-    public static DataSourceChangeListener dataSourceChangeListener(
-        ScriptDefinition script)
-    {
-        final String code;
-        switch (script.language) {
-        case JAVASCRIPT:
-            code =
-                new StringBuilder("function isHierarchyChanged(hierarchy) {\n")
-                    .append("  return false;\n")
-                    .append("}\n")
-                    .append("function isAggregationChanged(aggregation) {\n")
-                    .append("  return false;\n")
-                    .append("}\n").toString();
-            break;
-        default:
-            throw Util.unexpected(script.language);
-        }
-        return create(
-            script,
-            DataSourceChangeListener.class,
-            code);
-    }
 
-    /**
-     * Creates an implementation of the {@link DataSourceResolver} SPI based on
-     * a script.
-     *
-     * @param script Script
-     * @return data source resolver
-     */
-    public static DataSourceResolver dataSourceResolver(
-        ScriptDefinition script)
-    {
-        return create(
-            script,
-            DataSourceResolver.class,
-            simple(script, "lookup(dataSourceName)"));
-    }
 
     /**
      * Creates an implementation of the {@link DynamicSchemaProcessor} SPI based

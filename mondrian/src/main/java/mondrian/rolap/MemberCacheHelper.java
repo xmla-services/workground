@@ -30,7 +30,6 @@ import mondrian.rolap.cache.SmartCache;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
-import mondrian.spi.DataSourceChangeListener;
 import mondrian.util.Pair;
 
 /**
@@ -57,7 +56,6 @@ public class MemberCacheHelper implements MemberCache {
     /** a cache for all members to ensure uniqueness */
     SmartCache<Object, RolapMember> mapKeyToMember;
     RolapHierarchy rolapHierarchy;
-    DataSourceChangeListener changeListener;
 
     /** maps a level to its members */
     public final SmartMemberListCache<RolapLevel, List<RolapMember>>
@@ -79,12 +77,6 @@ public class MemberCacheHelper implements MemberCache {
         this.mapParentToNamedChildren =
             new SmartIncrementalCache<>();
 
-        if (rolapHierarchy != null) {
-            changeListener =
-                rolapHierarchy.getRolapSchema().getDataSourceChangeListener();
-        } else {
-            changeListener = null;
-        }
     }
 
     @Override
@@ -92,9 +84,6 @@ public class MemberCacheHelper implements MemberCache {
         Object key,
         boolean mustCheckCacheStatus)
     {
-        if (mustCheckCacheStatus) {
-            checkCacheStatus();
-        }
         return mapKeyToMember.get(key);
     }
 
@@ -117,11 +106,7 @@ public class MemberCacheHelper implements MemberCache {
         return getMember(key, true);
     }
 
-    public synchronized void checkCacheStatus() {
-        if (changeListener != null && changeListener.isHierarchyChanged(rolapHierarchy)) {
-            flushCache();
-        }
-    }
+
 
     /**
      * Deprecated in favor of
@@ -261,13 +246,6 @@ public class MemberCacheHelper implements MemberCache {
 //        }
     }
 
-    public DataSourceChangeListener getChangeListener() {
-        return changeListener;
-    }
-
-    public void setChangeListener(DataSourceChangeListener listener) {
-        changeListener = listener;
-    }
 
     @Override
 	public boolean isMutable()

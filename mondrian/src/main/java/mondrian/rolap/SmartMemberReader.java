@@ -142,16 +142,13 @@ public class SmartMemberReader implements MemberReader {
         return getMembersInLevel(level, constraint);
     }
 
-    protected void checkCacheStatus() {
-        cacheHelper.checkCacheStatus();
-    }
+
 
     @Override
 	public List<RolapMember> getMembersInLevel(
         RolapLevel level, TupleConstraint constraint)
     {
         synchronized (cacheHelper) {
-            checkCacheStatus();
 
             List<RolapMember> members =
                 cacheHelper.getLevelMembersFromCache(level, constraint);
@@ -212,7 +209,6 @@ public class SmartMemberReader implements MemberReader {
         MemberChildrenConstraint constraint)
     {
         synchronized (cacheHelper) {
-            checkCacheStatus();
 
             List<RolapMember> missed = new ArrayList<>();
             for (RolapMember parentMember : parentMembers) {

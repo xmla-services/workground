@@ -15,7 +15,6 @@ import java.util.List;
 
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
-import mondrian.spi.DataSourceChangeListener;
 
 /**
  * Encapsulation of member caching for no caching.
@@ -58,10 +57,7 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
         return getMember(key, true);
     }
 
-    @Override
-	public synchronized void checkCacheStatus() {
-        // empty
-    }
+
 
     @Override
 	public void putLevelMembersInCache(
@@ -97,15 +93,7 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
         return null;
     }
 
-    @Override
-	public DataSourceChangeListener getChangeListener() {
-        return changeListener;
-    }
 
-    @Override
-	public void setChangeListener(DataSourceChangeListener listener) {
-        changeListener = listener;
-    }
 
     @Override
 	public boolean isMutable() {
