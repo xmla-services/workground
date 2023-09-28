@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='VECTORWISE'",
     "database.product:String='VECTORWISE'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class VectorwiseDialectFactory extends AbstractDialectFactory {
+public class VectorwiseDialectFactory extends AbstractDialectFactory<VectorwiseDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "VECTORWISE";
 
     @Override

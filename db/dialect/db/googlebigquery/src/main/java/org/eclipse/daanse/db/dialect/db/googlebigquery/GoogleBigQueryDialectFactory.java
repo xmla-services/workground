@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
     "database.product:String='GOOGLEBIGQUERY'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class GoogleBigQueryDialectFactory extends AbstractDialectFactory {
+public class GoogleBigQueryDialectFactory extends AbstractDialectFactory<GoogleBigQueryDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "GOOGLEBIGQUERY";
 
     @Override

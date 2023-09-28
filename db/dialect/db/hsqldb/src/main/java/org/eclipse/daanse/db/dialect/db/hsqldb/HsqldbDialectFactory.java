@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='HSQLDB'",
     "database.product:String='HSQLDB'" })
 @Component(service = DialectFactory.class)
-public class HsqldbDialectFactory extends AbstractDialectFactory {
+public class HsqldbDialectFactory extends AbstractDialectFactory<HsqldbDialect>{
     private static final String SUPPORTED_PRODUCT_NAME = "HSQLDB";
 
     @Override

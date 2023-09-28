@@ -28,7 +28,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='VERTICA'",
     "database.product:String='VERTICA'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class VerticaDialectFactory extends AbstractDialectFactory {
+public class VerticaDialectFactory extends AbstractDialectFactory<VerticaDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "VERTICA";
     @Override
     public Optional<Dialect> tryCreateDialect(Connection connection) {

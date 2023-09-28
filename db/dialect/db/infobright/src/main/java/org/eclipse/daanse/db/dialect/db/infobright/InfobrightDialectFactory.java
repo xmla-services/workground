@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='MYSQL'",
     "database.product:String='INFOBRIGHT'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class InfobrightDialectFactory extends AbstractDialectFactory {
+public class InfobrightDialectFactory extends AbstractDialectFactory<InfobrightDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "INFOBRIGHT";
 
     @Override

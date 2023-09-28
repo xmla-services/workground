@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='SQLSTREAM'",
     "database.product:String='SQLSTREAM'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class SqlStreamDialectFactory extends AbstractDialectFactory {
+public class SqlStreamDialectFactory extends AbstractDialectFactory<SqlStreamDialect>{
     private static final String SUPPORTED_PRODUCT_NAME = "SQLSTREAM";
 
     @Override

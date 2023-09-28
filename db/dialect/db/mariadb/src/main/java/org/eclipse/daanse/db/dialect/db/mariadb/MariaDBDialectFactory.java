@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='MARIADB'",
     "database.product:String='MARIADB'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class MariaDBDialectFactory extends AbstractDialectFactory {
+public class MariaDBDialectFactory extends AbstractDialectFactory<MariaDBDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "MARIADB";
 
     @Override

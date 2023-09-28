@@ -26,7 +26,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='NEOVIEW'",
     "database.product:String='NEOVIEW'" })
 @Component(service = DialectFactory.class, scope = ServiceScope.PROTOTYPE)
-public class NeoviewDialectFactory extends AbstractDialectFactory {
+public class NeoviewDialectFactory extends AbstractDialectFactory<NeoviewDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "NEOVIEW";
 
     @Override

@@ -25,7 +25,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = DialectFactory.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
     "database.product:String='REDSHIFT'" })
 @Component(service = DialectFactory.class)
-public class RedshiftDialectFactory extends AbstractDialectFactory {
+public class RedshiftDialectFactory extends AbstractDialectFactory<RedshiftDialect> {
     private static final String SUPPORTED_PRODUCT_NAME = "REDSHIFT";
 
     @Override
